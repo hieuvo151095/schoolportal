@@ -88,12 +88,14 @@ export function useReviewUpload<TRow extends object>(
     config.persist(finalRows, effectiveContextValue)
     const { tenFileExport } = downloadSyncJson(config, finalRows, effectiveContextValue, session.maTruong)
 
+    const soDongThanhCong = config.countSuccessRows ? config.countSuccessRows(finalRows) : finalRows.length
+
     appendLichSuDongBo({
       id: `${config.entityKey}-${Date.now()}`,
       thoiDiem: new Date().toISOString(),
       loaiDuLieu: config.entityKey,
       nienKhoaHoacKy: effectiveContextValue,
-      soDongThanhCong: finalRows.length,
+      soDongThanhCong,
       soDongLoi: initialRowCount - finalRows.length,
       tenFileExport,
       nguoiThucHien: session.taiKhoan || session.tenTruong,

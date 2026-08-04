@@ -89,6 +89,32 @@ export interface HoaDonRow {
   xacNhanBoi: string | null
 }
 
+/** 1 dòng khoản phí thuộc 1 hoá đơn — nhiều dòng có thể cùng chung soHoaDon (quan hệ 1-nhiều).
+ * Tổng soTien của các dòng cùng soHoaDon phải khớp HoaDonRow.soTien của hoá đơn đó. */
+export interface HoaDonKhoanPhiRow {
+  soHoaDon: string
+  maPhi: string
+  soTien: number
+}
+
+/** Đúng 1 dòng trong file upload Hoá đơn — gộp field header hoá đơn (lặp lại trên mọi dòng
+ * cùng Mã HĐ) + 1 dòng khoản phí (maPhi/soTien). Sau khi review, các dòng cùng soHoaDon được
+ * gộp lại thành 1 HoaDonRow (soTien = tổng) + nhiều HoaDonKhoanPhiRow, xem hoaDonUploadConfig.ts. */
+export interface HoaDonUploadLineRow {
+  soHoaDon: string
+  maHocSinh: string
+  ky: string
+  hanThanhToan: string
+  hinhThucThanhToan: HinhThucThanhToan | null
+  ngayThanhToan: string | null
+  trangThai: TrangThaiHoaDon
+  daTra: number
+  taoBoi: string
+  xacNhanBoi: string | null
+  maPhi: string
+  soTien: number
+}
+
 export type LoaiDuLieuDongBo = 'danhMucPhi' | 'hocSinh' | 'hoaDon'
 
 export interface LichSuDongBoEntry {

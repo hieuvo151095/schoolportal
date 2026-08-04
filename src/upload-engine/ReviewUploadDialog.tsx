@@ -12,7 +12,9 @@ import {
   DialogSurface,
   DialogTitle,
   MessageBar,
+  MessageBarActions,
   MessageBarBody,
+  MessageBarTitle,
   createTableColumn,
   makeStyles,
   tokens,
@@ -20,6 +22,7 @@ import {
 } from '@fluentui/react-components'
 import { CheckmarkCircleRegular, DeleteRegular } from '@fluentui/react-icons'
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { TableHeaderRow } from '../components/TableHeaderRow'
 import type { ReviewRowWithErrors } from './useReviewUpload'
 import type { UploadEntityConfig } from './types'
@@ -80,9 +83,29 @@ export function ReviewUploadDialog<TRow extends object>({
   onConfirm,
 }: ReviewUploadDialogProps<TRow>) {
   const styles = useStyles()
+  const navigate = useNavigate()
   const [page, setPage] = useState(0)
   const totalPages = Math.max(1, Math.ceil(reviewRows.length / PAGE_SIZE))
   const pageRows = reviewRows.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
+
+  /** Gom nhóm lỗi khoá ngoại (Mã phí/Mã HS chưa đồng bộ...) theo module nguồn, đếm số giá trị
+   * DUY NHẤT bị thiếu — dùng cho banner điều hướng riêng, nổi bật hơn bảng lỗi thông thường. */
+  const crossRefGroups = useMemo(() => {
+    const groups = new Map<string, { route: string; values: Set<string> }>()
+    for (const row of reviewRows) {
+      for (const error of row.errors) {
+        if (!error.crossRef) continue
+        const group = groups.get(error.crossRef.entityLabel) ?? { route: error.crossRef.route, values: new Set<string>() }
+        group.values.add(error.crossRef.value)
+        groups.set(error.crossRef.entityLabel, group)
+      }
+    }
+    return Array.from(groups.entries()).map(([entityLabel, { route, values }]) => ({
+      entityLabel,
+      route,
+      count: values.size,
+    }))
+  }, [reviewRows])
 
   const columns = useMemo<TableColumnDefinition<ReviewRowWithErrors>[]>(() => {
     const fieldColumns = config.fields.map((field) =>
@@ -139,6 +162,24 @@ export function ReviewUploadDialog<TRow extends object>({
               </MessageBar>
             ) : (
               <>
+                {crossRefGroups.length > 0 && (
+                  <MessageBar intent="error" shape="square">
+                    <MessageBarBody>
+                      <MessageBarTitle>
+                        Phát hiện {crossRefGroups.map((g) => `${g.count} ${g.entityLabel.toLowerCase() === 'học sinh' ? 'Mã HS' : 'Mã phí'}`).join(' / ')} chưa được đồng bộ.
+                      </MessageBarTitle>
+                      Vui lòng chuyển sang tab tương ứng để đồng bộ dữ liệu còn thiếu trước, sau đó quay lại đồng bộ {config.entityLabel}.
+                    </MessageBarBody>
+                    <MessageBarActions>
+                      {crossRefGroups.map((g) => (
+                        <Button key={g.entityLabel} appearance="outline" onClick={() => navigate(g.route)}>
+                          Đi tới {g.entityLabel}
+                        </Button>
+                      ))}
+                    </MessageBarActions>
+                  </MessageBar>
+                )}
+
                 <Body1>Kiểm tra {reviewRows.length} dòng đã đọc từ file. Xoá dòng lỗi nếu cần — hệ thống tự kiểm tra lại.</Body1>
 
                 {dataDerived && (

@@ -147,25 +147,59 @@ export function computeCrossRowErrors<TRow extends object>(
       if (!field.customValidator) continue
       const message = field.customValidator(row.coerced[field.key], row.coerced, allCoerced)
       if (message) {
-        addError(row.id, { rowIndex: row.excelRowNumber, columnLabel: field.columnLabel, message })
+        addError(row.id, {
+          rowIndex: row.excelRowNumber,
+          columnLabel: field.columnLabel,
+          message,
+          ...(field.crossRef
+            ? { crossRef: { ...field.crossRef, value: String(row.coerced[field.key] ?? '') } }
+            : {}),
+        })
       }
     }
   }
 
   if (config.uniqueKey) {
+    const keys = Array.isArray(config.uniqueKey) ? config.uniqueKey : [config.uniqueKey]
+    const columnLabel = keys
+      .map((k) => config.fields.find((f) => f.key === k)?.columnLabel ?? String(k))
+      .join(' + ')
     const seen = new Map<string, number>()
-    const field = config.fields.find((f) => f.key === config.uniqueKey)
     for (const row of rows) {
-      const value = String(row.coerced[config.uniqueKey as string] ?? '')
-      if (!value) continue
+      const parts = keys.map((k) => String(row.coerced[k as string] ?? ''))
+      if (parts.some((p) => !p)) continue
+      const value = parts.join('::')
       if (seen.has(value)) {
         addError(row.id, {
           rowIndex: row.excelRowNumber,
-          columnLabel: field?.columnLabel ?? String(config.uniqueKey),
+          columnLabel,
           message: `Trùng giá trị với dòng ${seen.get(value)} trong cùng file`,
         })
       } else {
         seen.set(value, row.excelRowNumber)
+      }
+    }
+  }
+
+  if (config.groupConsistencyCheck) {
+    const { groupKey, fields: fieldsToMatch } = config.groupConsistencyCheck
+    const firstByGroup = new Map<string, { excelRowNumber: number; coerced: Record<string, unknown> }>()
+    for (const row of rows) {
+      const groupValue = String(row.coerced[groupKey as string] ?? '')
+      if (!groupValue) continue
+      const first = firstByGroup.get(groupValue)
+      if (!first) {
+        firstByGroup.set(groupValue, row)
+        continue
+      }
+      for (const fieldKey of fieldsToMatch) {
+        if (row.coerced[fieldKey as string] === first.coerced[fieldKey as string]) continue
+        const fieldConfig = config.fields.find((f) => f.key === fieldKey)
+        addError(row.id, {
+          rowIndex: row.excelRowNumber,
+          columnLabel: fieldConfig?.columnLabel ?? String(fieldKey),
+          message: `Không khớp với dòng ${first.excelRowNumber} (cùng ${String(groupKey)} '${groupValue}')`,
+        })
       }
     }
   }

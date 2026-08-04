@@ -1,9 +1,16 @@
-import type { HinhThucThanhToan, HoaDonRow, TrangThaiHoaDon } from '../types/domain'
+import type { HinhThucThanhToan, HoaDonKhoanPhiRow, HoaDonRow, TrangThaiHoaDon } from '../types/domain'
+
+interface KhoanPhiSpec {
+  maPhi: string
+  soTien: number
+}
 
 interface HoaDonSeedSpec {
   soHoaDon: string
   maHocSinh: string
-  soTien: number
+  /** 1 hoặc nhiều khoản phí — tổng soTien các khoản phí = soTien của hoá đơn. Mã phí khớp đúng
+   * buildDanhMucPhiSeed(). */
+  khoanPhi: KhoanPhiSpec[]
   trangThai: TrangThaiHoaDon
   hinhThucThanhToan: HinhThucThanhToan | null
   daTra: number
@@ -14,12 +21,16 @@ interface HoaDonSeedSpec {
 }
 
 // Đa dạng trạng thái (không đồng loạt 1 giá trị), mã HS khớp đúng buildHocSinhSeed() —
-// tham khảo cách sinh dữ liệu đa dạng ở module Thu Học phí bên dashportal.
+// tham khảo cách sinh dữ liệu đa dạng ở module Thu Học phí bên dashportal. HD00001/HD00004 có
+// nhiều khoản phí để demo popup breakdown, các hoá đơn còn lại chỉ 1 khoản phí.
 const SPECS: HoaDonSeedSpec[] = [
   {
     soHoaDon: 'HD00001',
     maHocSinh: 'HS0001',
-    soTien: 500000,
+    khoanPhi: [
+      { maPhi: 'KT001', soTien: 100000 },
+      { maPhi: 'NK001', soTien: 400000 },
+    ],
     trangThai: 'Đã thanh toán',
     hinhThucThanhToan: 'Chuyển khoản',
     daTra: 500000,
@@ -30,7 +41,7 @@ const SPECS: HoaDonSeedSpec[] = [
   {
     soHoaDon: 'HD00002',
     maHocSinh: 'HS0002',
-    soTien: 500000,
+    khoanPhi: [{ maPhi: 'HP001', soTien: 500000 }],
     trangThai: 'Đã thanh toán',
     hinhThucThanhToan: 'Tiền mặt',
     daTra: 500000,
@@ -41,7 +52,7 @@ const SPECS: HoaDonSeedSpec[] = [
   {
     soHoaDon: 'HD00003',
     maHocSinh: 'HS0003',
-    soTien: 500000,
+    khoanPhi: [{ maPhi: 'HP001', soTien: 500000 }],
     trangThai: 'Chưa thanh toán',
     hinhThucThanhToan: null,
     daTra: 0,
@@ -52,7 +63,10 @@ const SPECS: HoaDonSeedSpec[] = [
   {
     soHoaDon: 'HD00004',
     maHocSinh: 'HS0004',
-    soTien: 500000,
+    khoanPhi: [
+      { maPhi: 'KT001', soTien: 100000 },
+      { maPhi: 'NK001', soTien: 400000 },
+    ],
     trangThai: 'Thanh toán một phần',
     hinhThucThanhToan: 'QR Code',
     daTra: 200000,
@@ -63,7 +77,7 @@ const SPECS: HoaDonSeedSpec[] = [
   {
     soHoaDon: 'HD00005',
     maHocSinh: 'HS0005',
-    soTien: 500000,
+    khoanPhi: [{ maPhi: 'HP001', soTien: 500000 }],
     trangThai: 'Chưa thanh toán',
     hinhThucThanhToan: null,
     daTra: 0,
@@ -74,7 +88,7 @@ const SPECS: HoaDonSeedSpec[] = [
   {
     soHoaDon: 'HD00006',
     maHocSinh: 'HS0006',
-    soTien: 300000,
+    khoanPhi: [{ maPhi: 'BT001', soTien: 300000 }],
     trangThai: 'Đã thanh toán',
     hinhThucThanhToan: 'Ví điện tử',
     daTra: 300000,
@@ -85,7 +99,7 @@ const SPECS: HoaDonSeedSpec[] = [
   {
     soHoaDon: 'HD00007',
     maHocSinh: 'HS0007',
-    soTien: 300000,
+    khoanPhi: [{ maPhi: 'BT001', soTien: 300000 }],
     trangThai: 'Thanh toán một phần',
     hinhThucThanhToan: 'Tiền mặt',
     daTra: 150000,
@@ -96,7 +110,7 @@ const SPECS: HoaDonSeedSpec[] = [
   {
     soHoaDon: 'HD00008',
     maHocSinh: 'HS0008',
-    soTien: 500000,
+    khoanPhi: [{ maPhi: 'HP001', soTien: 500000 }],
     trangThai: 'Đã thanh toán',
     hinhThucThanhToan: 'Chuyển khoản',
     daTra: 500000,
@@ -107,7 +121,7 @@ const SPECS: HoaDonSeedSpec[] = [
   {
     soHoaDon: 'HD00009',
     maHocSinh: 'HS0009',
-    soTien: 500000,
+    khoanPhi: [{ maPhi: 'HP001', soTien: 500000 }],
     trangThai: 'Chưa thanh toán',
     hinhThucThanhToan: null,
     daTra: 0,
@@ -118,7 +132,7 @@ const SPECS: HoaDonSeedSpec[] = [
   {
     soHoaDon: 'HD00010',
     maHocSinh: 'HS0010',
-    soTien: 500000,
+    khoanPhi: [{ maPhi: 'HP001', soTien: 500000 }],
     trangThai: 'Đã thanh toán',
     hinhThucThanhToan: 'Tiền mặt',
     daTra: 500000,
@@ -128,32 +142,40 @@ const SPECS: HoaDonSeedSpec[] = [
   },
 ]
 
+function ngayThanhToanCua(spec: HoaDonSeedSpec, nam: number, thang: number): string | null {
+  if (spec.ngayThanhToanTruocHan === null) return null
+  const d = new Date(nam, thang - 1, 5 - spec.ngayThanhToanTruocHan)
+  return d.toISOString().slice(0, 10)
+}
+
 /** Dữ liệu hoá đơn mẫu cố định (deterministic) cho 1 Kỳ "MM/YYYY" — mã HS khớp đúng
- * buildHocSinhSeed() để không vi phạm khoá ngoại. Hạn thanh toán cố định ngày 5 mỗi kỳ. */
+ * buildHocSinhSeed() để không vi phạm khoá ngoại. Hạn thanh toán cố định ngày 5 mỗi kỳ. soTien
+ * = tổng các khoản phí, xem buildHoaDonKhoanPhiSeed(). */
 export function buildHoaDonSeed(ky: string): HoaDonRow[] {
   const [thangStr, namStr] = ky.split('/')
   const nam = Number(namStr)
   const thang = Number(thangStr)
   const hanThanhToan = `${namStr}-${thangStr.padStart(2, '0')}-05`
 
-  return SPECS.map((spec) => {
-    let ngayThanhToan: string | null = null
-    if (spec.ngayThanhToanTruocHan !== null) {
-      const d = new Date(nam, thang - 1, 5 - spec.ngayThanhToanTruocHan)
-      ngayThanhToan = d.toISOString().slice(0, 10)
-    }
-    return {
-      soHoaDon: spec.soHoaDon,
-      maHocSinh: spec.maHocSinh,
-      ky,
-      hanThanhToan,
-      soTien: spec.soTien,
-      hinhThucThanhToan: spec.hinhThucThanhToan,
-      ngayThanhToan,
-      trangThai: spec.trangThai,
-      daTra: spec.daTra,
-      taoBoi: spec.taoBoi,
-      xacNhanBoi: spec.xacNhanBoi,
-    }
-  })
+  return SPECS.map((spec) => ({
+    soHoaDon: spec.soHoaDon,
+    maHocSinh: spec.maHocSinh,
+    ky,
+    hanThanhToan,
+    soTien: spec.khoanPhi.reduce((sum, kp) => sum + kp.soTien, 0),
+    hinhThucThanhToan: spec.hinhThucThanhToan,
+    ngayThanhToan: ngayThanhToanCua(spec, nam, thang),
+    trangThai: spec.trangThai,
+    daTra: spec.daTra,
+    taoBoi: spec.taoBoi,
+    xacNhanBoi: spec.xacNhanBoi,
+  }))
+}
+
+/** Breakdown khoản phí tương ứng với buildHoaDonSeed(ky) — dùng cho popup "Xem chi tiết". Không
+ * phụ thuộc ky vì nội dung khoản phí giống nhau mọi kỳ trong dữ liệu mẫu, chỉ khác nơi lưu trữ. */
+export function buildHoaDonKhoanPhiSeed(): HoaDonKhoanPhiRow[] {
+  return SPECS.flatMap((spec) =>
+    spec.khoanPhi.map((kp) => ({ soHoaDon: spec.soHoaDon, maPhi: kp.maPhi, soTien: kp.soTien })),
+  )
 }
