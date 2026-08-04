@@ -22,6 +22,11 @@ const useStyles = makeStyles({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  // Đẩy nút xuống đáy card bất kể nội dung phía trên dài ngắn khác nhau — cả 3 nút
+  // "Đồng bộ ngay" luôn thẳng hàng ngang.
+  action: {
+    marginTop: 'auto',
+  },
 })
 
 interface SyncStatusGridProps {
@@ -49,12 +54,18 @@ export function SyncStatusGrid({ danhMucPhi, hocSinh, hoaDon }: SyncStatusGridPr
             <SyncStatusBadge synced={status.synced} />
           </div>
           <Body1>
-            {status.contextLabel}: {status.synced ? `${status.rowCount} dòng` : 'chưa có dữ liệu'}
+            {status.contextLabel}:{' '}
+            {status.synced
+              ? status.chuKy === 'nienKhoa'
+                ? 'đã có dữ liệu'
+                : `${status.rowCount} dòng`
+              : 'chưa có dữ liệu'}
           </Body1>
           <Caption1>
             {status.lastSyncAt ? `Lần đồng bộ gần nhất: ${formatDateTime(status.lastSyncAt)}` : 'Chưa từng đồng bộ'}
           </Caption1>
           <Button
+            className={styles.action}
             appearance="secondary"
             size="small"
             iconPosition="after"

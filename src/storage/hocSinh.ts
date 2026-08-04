@@ -1,3 +1,4 @@
+import { buildHocSinhSeed } from '../mock-data/hocSinhSeed'
 import type { HocSinhRow } from '../types/domain'
 import { STORAGE_KEYS } from './keys'
 
@@ -25,5 +26,14 @@ export function getHocSinhByNienKhoa(nienKhoa: string): HocSinhRow[] {
 export function saveHocSinhByNienKhoa(nienKhoa: string, rows: HocSinhRow[]): void {
   const store = readStore()
   store[nienKhoa] = rows
+  localStorage.setItem(STORAGE_KEYS.hocSinh, JSON.stringify(store))
+}
+
+/** Sinh sẵn dữ liệu mẫu cho 1 niên khoá nếu chưa có dữ liệu — để Tab "Danh sách" không trống
+ * khi demo lần đầu, và làm khoá ngoại sẵn có cho dữ liệu mẫu Hoá đơn. Idempotent. */
+export function ensureSeededHocSinh(nienKhoa: string): void {
+  const store = readStore()
+  if (store[nienKhoa]?.length) return
+  store[nienKhoa] = buildHocSinhSeed()
   localStorage.setItem(STORAGE_KEYS.hocSinh, JSON.stringify(store))
 }

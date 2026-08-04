@@ -8,6 +8,10 @@ export function formatDateTime(isoString: string): string {
   return new Date(isoString).toLocaleString('vi-VN')
 }
 
+export function formatDate(isoString: string): string {
+  return new Date(isoString).toLocaleDateString('vi-VN')
+}
+
 export function formatCurrency(amount: number): string {
   return amount.toLocaleString('vi-VN') + ' đ'
 }

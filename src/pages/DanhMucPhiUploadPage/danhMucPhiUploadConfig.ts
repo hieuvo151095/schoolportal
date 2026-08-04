@@ -8,6 +8,9 @@ import {
   type NguonThu,
   type NhomPhi,
 } from '../../types/domain'
+import { getNienKhoaOptions } from '../../utils/nienKhoa'
+
+const NIEN_KHOA_OPTIONS = getNienKhoaOptions()
 
 const DON_VI_TINH_LIST: DonViTinh[] = ['tháng', 'giờ', 'lần', 'ngày', 'năm', 'chuyến']
 const NGUON_THU_LIST: NguonThu[] = ['Học phí', 'Dịch vụ', 'Bán trú']
@@ -76,6 +79,14 @@ const fields: UploadFieldConfig<KhoanPhiRow>[] = [
     required: true,
     enumValues: DANH_MUC_KHOAN_THU_LIST,
     exampleValues: ['Học phí', 'Bán trú'],
+  },
+  {
+    key: 'nienKhoa',
+    columnLabel: 'Niên khoá',
+    type: 'enum',
+    required: true,
+    enumValues: NIEN_KHOA_OPTIONS,
+    exampleValues: [NIEN_KHOA_OPTIONS[0], NIEN_KHOA_OPTIONS[0]],
   },
   {
     key: 'thamChieuPhapLy',

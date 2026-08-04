@@ -30,6 +30,8 @@ export type DanhMucKhoanThu =
 
 export type HinhThucThanhToan = 'Tiền mặt' | 'Chuyển khoản' | 'Ví điện tử' | 'QR Code'
 
+export type GioiTinh = 'Nam' | 'Nữ'
+
 /** Nhãn hiển thị cho nhân viên trường. Khi export JSON, 'Chưa thanh toán' được map sang
  * enum thật của dashportal ('Đã gửi') — xem upload-engine/exportJson.ts. */
 export type TrangThaiHoaDon = 'Đã thanh toán' | 'Thanh toán một phần' | 'Chưa thanh toán'
@@ -70,6 +72,7 @@ export interface HocSinhRow {
   hoTen: string
   lop: string
   khoi: string
+  gioiTinh: GioiTinh
 }
 
 export interface HoaDonRow {
@@ -88,16 +91,15 @@ export interface HoaDonRow {
 
 export type LoaiDuLieuDongBo = 'danhMucPhi' | 'hocSinh' | 'hoaDon'
 
-export type TrangThaiDongBo = 'Thành công' | 'Thành công có cảnh báo' | 'Thất bại'
-
 export interface LichSuDongBoEntry {
   id: string
   thoiDiem: string
   loaiDuLieu: LoaiDuLieuDongBo
   nienKhoaHoacKy: string
   soDongThanhCong: number
+  /** Số dòng bị phát hiện lỗi và đã xoá khỏi file trong bước review, trước khi đồng bộ —
+   * KHÔNG phải dòng lỗi còn sót lại (flow review luôn chặn đồng bộ khi còn lỗi). */
   soDongLoi: number
-  trangThai: TrangThaiDongBo
   tenFileExport: string
   nguoiThucHien: string
 }

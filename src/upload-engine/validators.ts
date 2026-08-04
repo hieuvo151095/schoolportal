@@ -1,12 +1,26 @@
 import type { ParsedFile } from './parseFile'
 import type { FieldType, RowError, UploadEntityConfig, UploadFieldConfig } from './types'
 
-export interface ValidationResult {
+export interface ReviewRow {
+  /** Id ổn định cho key React / thao tác xoá — dựa theo số dòng Excel gốc. */
+  id: string
+  excelRowNumber: number
+  /** Dòng đã coerce theo type, keyed theo field.key — CHƯA gắn context (nienKhoa/ky). */
+  coerced: Record<string, unknown>
+  /** Lỗi field-level (required/type/enum/min) — cố định, không đổi khi các dòng khác bị xoá. */
+  fieldErrors: RowError[]
+}
+
+export interface CoerceAllResult {
   missingColumns: string[]
-  errors: RowError[]
-  /** Dòng đã coerce theo type, keyed theo field.key — CHƯA gắn context (nienKhoa/ky).
-   * Chỉ có giá trị đáng tin cậy khi errors và missingColumns đều rỗng. */
-  coercedRows: Record<string, unknown>[]
+  rows: ReviewRow[]
+}
+
+/** Context (Niên khoá/Kỳ) được coi là "đọc từ chính dữ liệu file" khi contextField.key trùng với
+ * 1 field thật trong danh sách cột upload (Danh mục Phí, Hoá đơn) — khác với Học sinh, nơi Niên
+ * khoá vẫn là giá trị chọn từ ngoài (không có field tương ứng trong HocSinhRow). */
+export function isContextDataDerived<TRow extends object>(config: UploadEntityConfig<TRow>): boolean {
+  return config.fields.some((field) => field.key === config.contextField.key)
 }
 
 function isEmpty(value: unknown): boolean {
@@ -84,64 +98,96 @@ function coerceAndValidateField(
   }
 }
 
-export function validateRows<TRow extends object>(
+/** Coerce toàn bộ dòng theo type (required/type/enum/min) — LUÔN trả về đủ mọi dòng (không bail
+ * sớm khi có lỗi), để pop-up review có thể hiện toàn bộ file kèm lỗi và cho phép xoá từng dòng. */
+export function coerceAllRows<TRow extends object>(
   parsedFile: ParsedFile,
   config: UploadEntityConfig<TRow>,
-): ValidationResult {
+): CoerceAllResult {
   const missingColumns = config.fields
     .filter((field) => !parsedFile.headers.includes(field.columnLabel))
     .map((field) => field.columnLabel)
 
   if (missingColumns.length > 0) {
-    return { missingColumns, errors: [], coercedRows: [] }
+    return { missingColumns, rows: [] }
   }
 
-  const errors: RowError[] = []
-  const coercedRows: Record<string, unknown>[] = []
-
-  for (const parsedRow of parsedFile.rows) {
+  const rows: ReviewRow[] = parsedFile.rows.map((parsedRow) => {
     const coerced: Record<string, unknown> = {}
+    const fieldErrors: RowError[] = []
     for (const field of config.fields as UploadFieldConfig<Record<string, unknown>>[]) {
       const { value, error } = coerceAndValidateField(field, parsedRow.data[field.columnLabel], parsedRow.excelRowNumber)
       coerced[field.key] = value
-      if (error) errors.push(error)
+      if (error) fieldErrors.push(error)
     }
-    coercedRows.push(coerced)
+    return { id: `row-${parsedRow.excelRowNumber}`, excelRowNumber: parsedRow.excelRowNumber, coerced, fieldErrors }
+  })
+
+  return { missingColumns: [], rows }
+}
+
+/** Lỗi phụ thuộc vào TẬP DÒNG hiện tại (customValidator FK/... + trùng khoá trong file) — tính
+ * lại mỗi khi tập dòng đổi (vd sau khi xoá 1 dòng), khác với fieldErrors cố định. */
+export function computeCrossRowErrors<TRow extends object>(
+  config: UploadEntityConfig<TRow>,
+  rows: ReviewRow[],
+): Map<string, RowError[]> {
+  const errorsByRowId = new Map<string, RowError[]>()
+
+  function addError(rowId: string, error: RowError) {
+    const list = errorsByRowId.get(rowId) ?? []
+    list.push(error)
+    errorsByRowId.set(rowId, list)
   }
 
-  // customValidator chạy sau khi toàn bộ dòng đã coerce, để có thể đối chiếu FK/trùng lặp toàn file.
-  parsedFile.rows.forEach((parsedRow, index) => {
-    const coerced = coercedRows[index]
+  const allCoerced = rows.map((row) => row.coerced)
+
+  for (const row of rows) {
     for (const field of config.fields as UploadFieldConfig<Record<string, unknown>>[]) {
       if (!field.customValidator) continue
-      const message = field.customValidator(coerced[field.key], coerced, coercedRows)
+      const message = field.customValidator(row.coerced[field.key], row.coerced, allCoerced)
       if (message) {
-        errors.push({ rowIndex: parsedRow.excelRowNumber, columnLabel: field.columnLabel, message })
+        addError(row.id, { rowIndex: row.excelRowNumber, columnLabel: field.columnLabel, message })
       }
     }
-  })
+  }
 
   if (config.uniqueKey) {
     const seen = new Map<string, number>()
-    parsedFile.rows.forEach((parsedRow, index) => {
-      const value = String(coercedRows[index][config.uniqueKey as string] ?? '')
-      if (!value) return
+    const field = config.fields.find((f) => f.key === config.uniqueKey)
+    for (const row of rows) {
+      const value = String(row.coerced[config.uniqueKey as string] ?? '')
+      if (!value) continue
       if (seen.has(value)) {
-        const field = config.fields.find((f) => f.key === config.uniqueKey)
-        errors.push({
-          rowIndex: parsedRow.excelRowNumber,
+        addError(row.id, {
+          rowIndex: row.excelRowNumber,
           columnLabel: field?.columnLabel ?? String(config.uniqueKey),
           message: `Trùng giá trị với dòng ${seen.get(value)} trong cùng file`,
         })
       } else {
-        seen.set(value, parsedRow.excelRowNumber)
+        seen.set(value, row.excelRowNumber)
       }
-    })
+    }
   }
 
-  if (errors.length > 0) {
-    return { missingColumns: [], errors, coercedRows: [] }
+  // 1 lần đồng bộ chỉ áp dụng cho đúng 1 Niên khoá/Kỳ — nếu context đọc từ dữ liệu file, mọi dòng
+  // phải cùng giá trị với dòng đầu tiên; dòng lệch bị đánh dấu lỗi (tái dùng cơ chế xoá dòng lỗi
+  // hiện có) thay vì âm thầm tách nhóm hay tự chọn 1 giá trị đại diện.
+  if (isContextDataDerived(config) && rows.length > 0) {
+    const contextKey = config.contextField.key
+    const contextFieldConfig = config.fields.find((f) => f.key === contextKey)
+    const firstValue = rows[0].coerced[contextKey]
+    for (const row of rows) {
+      const value = row.coerced[contextKey]
+      if (value && firstValue && value !== firstValue) {
+        addError(row.id, {
+          rowIndex: row.excelRowNumber,
+          columnLabel: contextFieldConfig?.columnLabel ?? config.contextField.label,
+          message: `Không khớp ${config.contextField.label} với dòng đầu tiên trong file ('${firstValue}') — 1 lần đồng bộ chỉ áp dụng cho 1 ${config.contextField.label.toLowerCase()}`,
+        })
+      }
+    }
   }
 
-  return { missingColumns: [], errors: [], coercedRows }
+  return errorsByRowId
 }

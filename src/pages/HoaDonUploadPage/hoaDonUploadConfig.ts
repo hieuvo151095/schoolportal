@@ -3,6 +3,9 @@ import { saveHoaDonByKy } from '../../storage/hoaDon'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
 import type { HinhThucThanhToan, HoaDonRow, TrangThaiHoaDon } from '../../types/domain'
 import type { UploadEntityConfig, UploadFieldConfig } from '../../upload-engine/types'
+import { getKyOptions } from '../../utils/ky'
+
+const KY_OPTIONS = getKyOptions()
 
 const HINH_THUC_THANH_TOAN_LIST: HinhThucThanhToan[] = ['Tiền mặt', 'Chuyển khoản', 'Ví điện tử', 'QR Code']
 const TRANG_THAI_LIST: TrangThaiHoaDon[] = ['Đã thanh toán', 'Thanh toán một phần', 'Chưa thanh toán']
@@ -35,6 +38,14 @@ const fields: UploadFieldConfig<HoaDonRow>[] = [
       if (!exists) return `Mã học sinh không tồn tại trong danh sách Học sinh đã đồng bộ (niên khoá ${nienKhoa})`
       return null
     },
+  },
+  {
+    key: 'ky',
+    columnLabel: 'Kỳ',
+    type: 'enum',
+    required: true,
+    enumValues: KY_OPTIONS,
+    exampleValues: [KY_OPTIONS[KY_OPTIONS.length - 1], KY_OPTIONS[KY_OPTIONS.length - 1]],
   },
   {
     key: 'hanThanhToan',

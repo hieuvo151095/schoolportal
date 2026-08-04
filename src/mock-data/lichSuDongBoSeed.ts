@@ -1,4 +1,4 @@
-import type { LichSuDongBoEntry, LoaiDuLieuDongBo, TrangThaiDongBo } from '../types/domain'
+import type { LichSuDongBoEntry, LoaiDuLieuDongBo } from '../types/domain'
 import { getKyOptions } from '../utils/ky'
 import { getNienKhoaOptions } from '../utils/nienKhoa'
 
@@ -9,6 +9,10 @@ const SUCCESS_COUNT_BASE: Record<LoaiDuLieuDongBo, number> = {
   hocSinh: 180,
   hoaDon: 240,
 }
+
+// Số dòng bị loại bỏ trong bước review trước khi đồng bộ, lặp lại theo chu kỳ để tạo dữ liệu
+// mẫu đa dạng (0 = file sạch ngay từ đầu, >0 = có sửa/xoá dòng lỗi trước khi xác nhận).
+const SO_DONG_LOI_CYCLE = [0, 0, 2, 0, 1, 0]
 
 function sanitizeForFileName(value: string): string {
   return value.replace(/[/\\]/g, '-')
@@ -21,11 +25,8 @@ function buildEntry(
   index: number,
   daysAgo: number,
 ): LichSuDongBoEntry {
-  const trangThaiCycle: TrangThaiDongBo[] = ['Thành công', 'Thành công', 'Thành công có cảnh báo', 'Thành công', 'Thất bại', 'Thành công']
-  const trangThai = trangThaiCycle[index % trangThaiCycle.length]
-  const baseCount = SUCCESS_COUNT_BASE[loaiDuLieu] + index
-  const soDongThanhCong = trangThai === 'Thất bại' ? 0 : baseCount
-  const soDongLoi = trangThai === 'Thành công' ? 0 : trangThai === 'Thất bại' ? baseCount : Math.max(1, Math.floor(baseCount * 0.05))
+  const soDongThanhCong = SUCCESS_COUNT_BASE[loaiDuLieu] + index
+  const soDongLoi = SO_DONG_LOI_CYCLE[index % SO_DONG_LOI_CYCLE.length]
 
   const thoiDiem = new Date()
   thoiDiem.setDate(thoiDiem.getDate() - daysAgo)
@@ -40,7 +41,6 @@ function buildEntry(
     nienKhoaHoacKy: contextValue,
     soDongThanhCong,
     soDongLoi,
-    trangThai,
     tenFileExport: `dong-bo_${sanitizeForFileName(maTruong)}_${loaiDuLieu}_${sanitizeForFileName(contextValue)}_${timestamp}.json`,
     nguoiThucHien: NGUOI_THUC_HIEN_LIST[index % NGUOI_THUC_HIEN_LIST.length],
   }

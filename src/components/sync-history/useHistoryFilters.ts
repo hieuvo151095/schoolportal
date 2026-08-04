@@ -1,10 +1,8 @@
 import { useState } from 'react'
-import type { TrangThaiDongBo } from '../../types/domain'
 
 export interface HistoryFilters {
   q: string
   context: string
-  trangThai: TrangThaiDongBo[]
   tuNgay: string
   denNgay: string
 }
@@ -12,7 +10,6 @@ export interface HistoryFilters {
 export const HISTORY_FILTER_DEFAULTS: HistoryFilters = {
   q: '',
   context: 'all',
-  trangThai: [],
   tuNgay: '',
   denNgay: '',
 }

@@ -1,6 +1,8 @@
 import { saveHocSinhByNienKhoa } from '../../storage/hocSinh'
-import type { HocSinhRow } from '../../types/domain'
+import type { GioiTinh, HocSinhRow } from '../../types/domain'
 import type { UploadEntityConfig, UploadFieldConfig } from '../../upload-engine/types'
+
+const GIOI_TINH_LIST: GioiTinh[] = ['Nam', 'Nữ']
 
 const fields: UploadFieldConfig<HocSinhRow>[] = [
   {
@@ -31,6 +33,14 @@ const fields: UploadFieldConfig<HocSinhRow>[] = [
     required: true,
     exampleValues: ['6', '6'],
   },
+  {
+    key: 'gioiTinh',
+    columnLabel: 'Giới tính',
+    type: 'enum',
+    required: true,
+    enumValues: GIOI_TINH_LIST,
+    exampleValues: ['Nam', 'Nữ'],
+  },
 ]
 
 export const hocSinhUploadConfig: UploadEntityConfig<HocSinhRow> = {
@@ -44,6 +54,7 @@ export const hocSinhUploadConfig: UploadEntityConfig<HocSinhRow> = {
     hoTen: row.hoTen as string,
     lop: row.lop as string,
     khoi: row.khoi as string,
+    gioiTinh: row.gioiTinh as GioiTinh,
   }),
   persist: (rows, nienKhoa) => saveHocSinhByNienKhoa(nienKhoa, rows),
 }

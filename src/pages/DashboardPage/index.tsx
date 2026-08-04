@@ -1,7 +1,9 @@
 import { Body1, Card, Subtitle2, Title2, makeStyles, tokens } from '@fluentui/react-components'
 import { formatCurrency } from '../../utils/date'
 import { HoSoTruongCard } from './HoSoTruongCard'
+import { MiniKpiRow } from './MiniKpiRow'
 import { SyncStatusGrid } from './SyncStatusGrid'
+import { ThuTrendChart } from './ThuTrendChart'
 import { getDashboardSummary } from './useDashboardSummary'
 
 const useStyles = makeStyles({
@@ -38,7 +40,7 @@ export function DashboardPage() {
         <HoSoTruongCard />
 
         <Card className={styles.kpiCard}>
-          <Subtitle2>Công nợ hiện tại</Subtitle2>
+          <Subtitle2>Số tiền còn phải thu</Subtitle2>
           <Body1 as="p" style={{ fontSize: '26px', fontWeight: 700 }}>
             {formatCurrency(summary.tongCongNo)}
           </Body1>
@@ -46,7 +48,11 @@ export function DashboardPage() {
         </Card>
       </div>
 
+      <MiniKpiRow miniKpi={summary.miniKpi} />
+
       <SyncStatusGrid danhMucPhi={summary.danhMucPhi} hocSinh={summary.hocSinh} hoaDon={summary.hoaDon} />
+
+      <ThuTrendChart points={summary.xuHuongThu} />
     </div>
   )
 }
