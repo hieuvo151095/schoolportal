@@ -1,5 +1,6 @@
 import {
   Badge,
+  Button,
   Card,
   DataGrid,
   DataGridBody,
@@ -26,7 +27,9 @@ import { getHoSoTruong } from '../../storage/hoSoTruong'
 import type { HinhThucThanhToan, HoaDonRow, TrangThaiHoaDon } from '../../types/domain'
 import { formatCurrency, formatDate } from '../../utils/date'
 import { DEFAULT_KY, getKyOptions } from '../../utils/ky'
+import { COL_HANH_DONG, COL_NGUOI_KEP, COL_TRANG_THAI_RONG } from '../../utils/tableColumnSizes'
 import { useFilterDraft } from '../../utils/useFilterDraft'
+import { HoaDonBreakdownDialog } from './HoaDonBreakdownDialog'
 import { ReminderBanner } from './ReminderBanner'
 
 const TAT_CA = 'all'
@@ -54,7 +57,16 @@ const useStyles = makeStyles({
   tableScroll: {
     overflowX: 'auto',
   },
+  nowrapCell: {
+    whiteSpace: 'nowrap',
+  },
 })
+
+const columnSizingOptions = {
+  trangThai: COL_TRANG_THAI_RONG,
+  taoXacNhan: COL_NGUOI_KEP,
+  danhMucPhi: COL_HANH_DONG,
+}
 
 interface DanhSachFilters {
   q: string
@@ -80,58 +92,75 @@ const FILTER_DEFAULTS: DanhSachFilters = {
   ngayTtDen: '',
 }
 
-const columns: TableColumnDefinition<DisplayRow>[] = [
-  createTableColumn<DisplayRow>({ columnId: 'soHoaDon', renderHeaderCell: () => 'Mã HĐ', renderCell: (item) => item.soHoaDon }),
-  createTableColumn<DisplayRow>({
-    columnId: 'hocSinh',
-    renderHeaderCell: () => 'Học sinh',
-    renderCell: (item) => `${item.hoTenHocSinh || item.maHocSinh} (${item.maHocSinh})`,
-  }),
-  createTableColumn<DisplayRow>({ columnId: 'ky', renderHeaderCell: () => 'Kỳ', renderCell: (item) => item.ky }),
-  createTableColumn<DisplayRow>({
-    columnId: 'hanThanhToan',
-    renderHeaderCell: () => 'Hạn thanh toán',
-    renderCell: (item) => formatDate(item.hanThanhToan),
-  }),
-  createTableColumn<DisplayRow>({
-    columnId: 'soTien',
-    renderHeaderCell: () => 'Số tiền',
-    renderCell: (item) => formatCurrency(item.soTien),
-  }),
-  createTableColumn<DisplayRow>({
-    columnId: 'hinhThucThanhToan',
-    renderHeaderCell: () => 'Hình thức thanh toán',
-    renderCell: (item) => item.hinhThucThanhToan ?? '—',
-  }),
-  createTableColumn<DisplayRow>({
-    columnId: 'ngayThanhToan',
-    renderHeaderCell: () => 'Ngày thanh toán',
-    renderCell: (item) => (item.ngayThanhToan ? formatDate(item.ngayThanhToan) : '—'),
-  }),
-  createTableColumn<DisplayRow>({
-    columnId: 'trangThai',
-    renderHeaderCell: () => 'Trạng thái',
-    renderCell: (item) => (
-      <Badge appearance="tint" color={TRANG_THAI_COLOR[item.trangThai]}>
-        {item.trangThai}
-      </Badge>
-    ),
-  }),
-  createTableColumn<DisplayRow>({
-    columnId: 'daTra',
-    renderHeaderCell: () => 'Số tiền đã trả',
-    renderCell: (item) => (item.trangThai === 'Thanh toán một phần' ? formatCurrency(item.daTra) : '—'),
-  }),
-  createTableColumn<DisplayRow>({
-    columnId: 'taoXacNhan',
-    renderHeaderCell: () => 'Tạo bởi / Xác nhận bởi',
-    renderCell: (item) => `${item.taoBoi} / ${item.xacNhanBoi ?? '—'}`,
-  }),
-]
+function buildColumns(onXemChiTiet: (row: DisplayRow) => void): TableColumnDefinition<DisplayRow>[] {
+  return [
+    createTableColumn<DisplayRow>({ columnId: 'soHoaDon', renderHeaderCell: () => 'Mã HĐ', renderCell: (item) => item.soHoaDon }),
+    createTableColumn<DisplayRow>({
+      columnId: 'hocSinh',
+      renderHeaderCell: () => 'Học sinh',
+      renderCell: (item) => `${item.hoTenHocSinh || item.maHocSinh} (${item.maHocSinh})`,
+    }),
+    createTableColumn<DisplayRow>({ columnId: 'ky', renderHeaderCell: () => 'Kỳ', renderCell: (item) => item.ky }),
+    createTableColumn<DisplayRow>({
+      columnId: 'hanThanhToan',
+      renderHeaderCell: () => 'Hạn thanh toán',
+      renderCell: (item) => formatDate(item.hanThanhToan),
+    }),
+    createTableColumn<DisplayRow>({
+      columnId: 'soTien',
+      renderHeaderCell: () => 'Số tiền',
+      renderCell: (item) => formatCurrency(item.soTien),
+    }),
+    createTableColumn<DisplayRow>({
+      columnId: 'hinhThucThanhToan',
+      renderHeaderCell: () => 'Hình thức thanh toán',
+      renderCell: (item) => item.hinhThucThanhToan ?? '—',
+    }),
+    createTableColumn<DisplayRow>({
+      columnId: 'ngayThanhToan',
+      renderHeaderCell: () => 'Ngày thanh toán',
+      renderCell: (item) => (item.ngayThanhToan ? formatDate(item.ngayThanhToan) : '—'),
+    }),
+    createTableColumn<DisplayRow>({
+      columnId: 'trangThai',
+      renderHeaderCell: () => 'Trạng thái',
+      renderCell: (item) => (
+        <Badge appearance="tint" color={TRANG_THAI_COLOR[item.trangThai]} style={{ whiteSpace: 'nowrap' }}>
+          {item.trangThai}
+        </Badge>
+      ),
+    }),
+    createTableColumn<DisplayRow>({
+      columnId: 'daTra',
+      renderHeaderCell: () => 'Số tiền đã trả',
+      renderCell: (item) => (item.trangThai === 'Thanh toán một phần' ? formatCurrency(item.daTra) : '—'),
+    }),
+    createTableColumn<DisplayRow>({
+      columnId: 'taoXacNhan',
+      renderHeaderCell: () => 'Tạo bởi / Xác nhận bởi',
+      renderCell: (item) => (
+        <span style={{ whiteSpace: 'nowrap' }}>
+          {item.taoBoi} / {item.xacNhanBoi ?? '—'}
+        </span>
+      ),
+    }),
+    createTableColumn<DisplayRow>({
+      columnId: 'danhMucPhi',
+      renderHeaderCell: () => 'Danh mục phí',
+      renderCell: (item) => (
+        <Button appearance="outline" size="small" onClick={() => onXemChiTiet(item)}>
+          Xem chi tiết
+        </Button>
+      ),
+    }),
+  ]
+}
 
 export function DanhSachTab() {
   const styles = useStyles()
   const kyOptions = getKyOptions()
+  const [selectedRow, setSelectedRow] = useState<DisplayRow | null>(null)
+  const columns = useMemo(() => buildColumns(setSelectedRow), [setSelectedRow])
 
   ensureSeededHoaDon(DEFAULT_KY)
 
@@ -277,7 +306,13 @@ export function DanhSachTab() {
           </MessageBar>
         ) : (
           <div className={styles.tableScroll}>
-            <DataGrid items={filteredRows} columns={columns} getRowId={(item) => `${item.ky}-${item.soHoaDon}`} resizableColumns>
+            <DataGrid
+              items={filteredRows}
+              columns={columns}
+              getRowId={(item) => `${item.ky}-${item.soHoaDon}`}
+              resizableColumns
+              columnSizingOptions={columnSizingOptions}
+            >
               <TableHeaderRow />
               <DataGridBody<DisplayRow>>
                 {({ item, rowId }) => (
@@ -290,6 +325,8 @@ export function DanhSachTab() {
           </div>
         )}
       </Card>
+
+      <HoaDonBreakdownDialog row={selectedRow} onClose={() => setSelectedRow(null)} />
     </div>
   )
 }
