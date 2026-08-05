@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { SyncHistorySection } from '../../components/sync-history/SyncHistorySection'
 import { getKyOptions } from '../../utils/ky'
 import { DanhSachTab } from './DanhSachTab'
-import { hoaDonUploadConfig } from './hoaDonUploadConfig'
 
 const useStyles = makeStyles({
   root: {
@@ -18,14 +17,7 @@ type TabValue = 'danh-sach' | 'lich-su'
 export function HoaDonUploadPage() {
   const styles = useStyles()
   const [tab, setTab] = useState<TabValue>('danh-sach')
-  const [listKey, setListKey] = useState(0)
-  const [historyKey, setHistoryKey] = useState(0)
   const kyOptions = getKyOptions()
-
-  function handleConfirmed() {
-    setListKey((k) => k + 1)
-    setHistoryKey((k) => k + 1)
-  }
 
   return (
     <div className={styles.root}>
@@ -37,16 +29,13 @@ export function HoaDonUploadPage() {
       </TabList>
 
       {tab === 'danh-sach' ? (
-        <DanhSachTab key={listKey} />
+        <DanhSachTab />
       ) : (
         <SyncHistorySection
-          key={historyKey}
           loaiDuLieu="hoaDon"
           contextLabel="Kỳ báo cáo"
           contextOptions={kyOptions}
           successCountLabel="Số hoá đơn thành công"
-          uploadConfig={hoaDonUploadConfig}
-          onConfirmed={handleConfirmed}
         />
       )}
     </div>

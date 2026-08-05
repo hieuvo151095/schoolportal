@@ -18,6 +18,7 @@ import {
   type TableColumnDefinition,
 } from '@fluentui/react-components'
 import { useMemo, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { FilterBar } from '../../components/FilterBar'
 import { RangeFilterField } from '../../components/RangeFilterField'
 import { TableHeaderRow } from '../../components/TableHeaderRow'
@@ -25,10 +26,14 @@ import { ensureSeededHoaDon, getHoaDonStore } from '../../storage/hoaDon'
 import { getHocSinhByNienKhoa } from '../../storage/hocSinh'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
 import type { HinhThucThanhToan, HoaDonRow, TrangThaiHoaDon } from '../../types/domain'
+import { ReviewUploadDialog } from '../../upload-engine/ReviewUploadDialog'
+import { UploadActionsRow } from '../../upload-engine/UploadActionsRow'
+import { useReviewUpload } from '../../upload-engine/useReviewUpload'
 import { formatCurrency, formatDate } from '../../utils/date'
 import { DEFAULT_KY, getKyOptions } from '../../utils/ky'
 import { COL_HANH_DONG, COL_NGUOI_KEP, COL_TRANG_THAI_RONG } from '../../utils/tableColumnSizes'
 import { useFilterDraft } from '../../utils/useFilterDraft'
+import { hoaDonUploadConfig } from './hoaDonUploadConfig'
 import { HoaDonBreakdownDialog } from './HoaDonBreakdownDialog'
 import { ReminderBanner } from './ReminderBanner'
 
@@ -43,7 +48,20 @@ const TRANG_THAI_COLOR: Record<TrangThaiHoaDon, 'success' | 'warning' | 'informa
   'Chưa thanh toán': 'informative',
 }
 
+/** Rỗng hoặc chọn đủ cả 3 trạng thái đều tương đương "không lọc" — hiện "Tất cả" cho cả 2 case.
+ * Chọn đúng 1 trạng thái thì hiện tên trạng thái đó; chọn 2 thì hiện "Đã chọn N mục" (tên đầy đủ
+ * của nhiều trạng thái cộng lại quá dài, làm vỡ layout Dropdown). */
+function trangThaiDisplayValue(selected: TrangThaiHoaDon[]): string {
+  if (selected.length === 0 || selected.length === TRANG_THAI_LIST.length) return 'Tất cả'
+  if (selected.length === 1) return selected[0]
+  return `Đã chọn ${selected.length} mục`
+}
+
 type DisplayRow = HoaDonRow & { hoTenHocSinh: string; lop: string }
+
+interface HoaDonNavState {
+  presetTrangThai?: TrangThaiHoaDon[]
+}
 
 const useStyles = makeStyles({
   root: {
@@ -53,12 +71,20 @@ const useStyles = makeStyles({
   },
   tableCard: {
     padding: tokens.spacingHorizontalL,
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: tokens.spacingVerticalM,
   },
   tableScroll: {
     overflowX: 'auto',
   },
   nowrapCell: {
     whiteSpace: 'nowrap',
+  },
+  uploadRow: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    columnGap: tokens.spacingHorizontalS,
   },
 })
 
@@ -72,7 +98,7 @@ interface DanhSachFilters {
   q: string
   lop: string
   ky: string
-  trangThai: string
+  trangThai: TrangThaiHoaDon[]
   hinhThuc: string
   hanTu: string
   hanDen: string
@@ -80,16 +106,18 @@ interface DanhSachFilters {
   ngayTtDen: string
 }
 
-const FILTER_DEFAULTS: DanhSachFilters = {
-  q: '',
-  lop: TAT_CA,
-  ky: TAT_CA,
-  trangThai: TAT_CA,
-  hinhThuc: TAT_CA,
-  hanTu: '',
-  hanDen: '',
-  ngayTtTu: '',
-  ngayTtDen: '',
+function buildFilterDefaults(presetTrangThai?: TrangThaiHoaDon[]): DanhSachFilters {
+  return {
+    q: '',
+    lop: TAT_CA,
+    ky: TAT_CA,
+    trangThai: presetTrangThai ?? [],
+    hinhThuc: TAT_CA,
+    hanTu: '',
+    hanDen: '',
+    ngayTtTu: '',
+    ngayTtDen: '',
+  }
 }
 
 function buildColumns(onXemChiTiet: (row: DisplayRow) => void): TableColumnDefinition<DisplayRow>[] {
@@ -159,10 +187,17 @@ function buildColumns(onXemChiTiet: (row: DisplayRow) => void): TableColumnDefin
 export function DanhSachTab() {
   const styles = useStyles()
   const kyOptions = getKyOptions()
+  const location = useLocation()
+  const presetTrangThai = (location.state as HoaDonNavState | null)?.presetTrangThai
   const [selectedRow, setSelectedRow] = useState<DisplayRow | null>(null)
   const columns = useMemo(() => buildColumns(setSelectedRow), [setSelectedRow])
 
   ensureSeededHoaDon(DEFAULT_KY)
+
+  /** Bump sau mỗi lần đồng bộ thành công để allRows đọc lại storage — nút upload giờ nằm ngay
+   * trong tab này (không còn ở tab Lịch sử đồng bộ), nên component không remount qua key nữa. */
+  const [refreshTick, setRefreshTick] = useState(0)
+  const review = useReviewUpload(hoaDonUploadConfig, undefined, () => setRefreshTick((t) => t + 1))
 
   const hoSo = getHoSoTruong()
   const hocSinhLookup = useMemo(() => {
@@ -184,14 +219,14 @@ export function DanhSachTab() {
         hoTenHocSinh: hocSinhLookup.get(row.maHocSinh)?.hoTen ?? '',
         lop: hocSinhLookup.get(row.maHocSinh)?.lop ?? '',
       }))
-  }, [hocSinhLookup])
+  }, [hocSinhLookup, refreshTick])
 
   const lopOptions = useMemo(
     () => Array.from(new Set(allRows.map((row) => row.lop).filter(Boolean))).sort(),
     [allRows],
   )
 
-  const [filters, setFilters] = useState<DanhSachFilters>(FILTER_DEFAULTS)
+  const [filters, setFilters] = useState<DanhSachFilters>(() => buildFilterDefaults(presetTrangThai))
   const [draft, setDraft] = useFilterDraft<DanhSachFilters>(filters)
 
   const filteredRows = useMemo(() => {
@@ -207,7 +242,7 @@ export function DanhSachTab() {
       }
       if (filters.lop !== TAT_CA && row.lop !== filters.lop) return false
       if (filters.ky !== TAT_CA && row.ky !== filters.ky) return false
-      if (filters.trangThai !== TAT_CA && row.trangThai !== filters.trangThai) return false
+      if (filters.trangThai.length > 0 && !filters.trangThai.includes(row.trangThai)) return false
       if (filters.hinhThuc !== TAT_CA && row.hinhThucThanhToan !== filters.hinhThuc) return false
       if (filters.hanTu && row.hanThanhToan < filters.hanTu) return false
       if (filters.hanDen && row.hanThanhToan > filters.hanDen) return false
@@ -219,13 +254,21 @@ export function DanhSachTab() {
 
   return (
     <div className={styles.root}>
+      {review.confirmSummary && (
+        <MessageBar intent="success">
+          <MessageBarBody>
+            Đã đồng bộ thành công {review.confirmSummary.soDong} dòng. Đã tải về file: {review.confirmSummary.tenFileExport}
+          </MessageBarBody>
+        </MessageBar>
+      )}
+
       <ReminderBanner />
 
       <FilterBar
         onApply={() => setFilters(draft)}
         onReset={() => {
-          setDraft(FILTER_DEFAULTS)
-          setFilters(FILTER_DEFAULTS)
+          setDraft(buildFilterDefaults())
+          setFilters(buildFilterDefaults())
         }}
       >
         <Field label="Tìm kiếm">
@@ -261,9 +304,16 @@ export function DanhSachTab() {
         </Field>
         <Field label="Trạng thái">
           <Dropdown
-            value={draft.trangThai === TAT_CA ? 'Tất cả' : draft.trangThai}
-            selectedOptions={[draft.trangThai]}
-            onOptionSelect={(_, data) => data.optionValue && setDraft({ trangThai: data.optionValue })}
+            multiselect
+            value={trangThaiDisplayValue(draft.trangThai)}
+            selectedOptions={draft.trangThai.length === TRANG_THAI_LIST.length ? [TAT_CA, ...draft.trangThai] : draft.trangThai}
+            onOptionSelect={(_, data) => {
+              if (data.optionValue === TAT_CA) {
+                setDraft({ trangThai: data.selectedOptions.includes(TAT_CA) ? [...TRANG_THAI_LIST] : [] })
+                return
+              }
+              setDraft({ trangThai: data.selectedOptions.filter((v) => v !== TAT_CA) as TrangThaiHoaDon[] })
+            }}
           >
             <Option value={TAT_CA}>Tất cả</Option>
             {TRANG_THAI_LIST.map((option) => (
@@ -300,6 +350,10 @@ export function DanhSachTab() {
       </FilterBar>
 
       <Card className={styles.tableCard}>
+        <div className={styles.uploadRow}>
+          <UploadActionsRow config={hoaDonUploadConfig} processing={review.processing} onFileSelected={review.handleFile} />
+        </div>
+
         {filteredRows.length === 0 ? (
           <MessageBar intent="info">
             <MessageBarBody>Chưa có dữ liệu khớp bộ lọc.</MessageBarBody>
@@ -327,6 +381,20 @@ export function DanhSachTab() {
       </Card>
 
       <HoaDonBreakdownDialog row={selectedRow} onClose={() => setSelectedRow(null)} />
+
+      <ReviewUploadDialog
+        config={hoaDonUploadConfig}
+        open={review.open}
+        fileName={review.fileName}
+        missingColumns={review.missingColumns}
+        reviewRows={review.reviewRows}
+        hasErrors={review.hasErrors}
+        dataDerived={review.dataDerived}
+        detectedContextValue={review.detectedContextValue}
+        onDeleteRow={review.deleteRow}
+        onCancel={review.cancel}
+        onConfirm={review.confirm}
+      />
     </div>
   )
 }

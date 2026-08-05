@@ -21,9 +21,13 @@ import { TableHeaderRow } from '../../components/TableHeaderRow'
 import { ensureSeededDanhMucPhi, getDanhMucPhiStore } from '../../storage/danhMucPhi'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
 import type { KhoanPhiRow, NguonThu, NhomPhi } from '../../types/domain'
+import { ReviewUploadDialog } from '../../upload-engine/ReviewUploadDialog'
+import { UploadActionsRow } from '../../upload-engine/UploadActionsRow'
+import { useReviewUpload } from '../../upload-engine/useReviewUpload'
 import { formatCurrency } from '../../utils/date'
-import { useFilterDraft } from '../../utils/useFilterDraft'
 import { getNienKhoaOptions } from '../../utils/nienKhoa'
+import { useFilterDraft } from '../../utils/useFilterDraft'
+import { danhMucPhiUploadConfig } from './danhMucPhiUploadConfig'
 
 const NGUON_THU_LIST: NguonThu[] = ['Học phí', 'Dịch vụ', 'Bán trú']
 const NHOM_PHI_LIST: NhomPhi[] = ['Thu theo tháng', 'Thu theo năm', 'Thu không định kỳ']
@@ -37,9 +41,17 @@ const useStyles = makeStyles({
   },
   tableCard: {
     padding: tokens.spacingHorizontalL,
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: tokens.spacingVerticalM,
   },
   tableScroll: {
     overflowX: 'auto',
+  },
+  uploadRow: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    columnGap: tokens.spacingHorizontalS,
   },
 })
 
@@ -78,7 +90,13 @@ export function DanhSachTab() {
   const nienKhoaOptions = getNienKhoaOptions()
 
   if (hoSo) ensureSeededDanhMucPhi(hoSo.nienKhoa)
-  const allRows = useMemo(() => Object.values(getDanhMucPhiStore()).flat(), [])
+
+  /** Bump sau mỗi lần đồng bộ thành công để allRows đọc lại storage — nút upload giờ nằm ngay
+   * trong tab này (không còn ở tab Lịch sử đồng bộ), nên component không remount qua key nữa. */
+  const [refreshTick, setRefreshTick] = useState(0)
+  const review = useReviewUpload(danhMucPhiUploadConfig, undefined, () => setRefreshTick((t) => t + 1))
+
+  const allRows = useMemo(() => Object.values(getDanhMucPhiStore()).flat(), [refreshTick])
 
   const [filters, setFilters] = useState<DanhSachFilters>(FILTER_DEFAULTS)
   const [draft, setDraft] = useFilterDraft<DanhSachFilters>(filters)
@@ -98,6 +116,14 @@ export function DanhSachTab() {
 
   return (
     <div className={styles.root}>
+      {review.confirmSummary && (
+        <MessageBar intent="success">
+          <MessageBarBody>
+            Đã đồng bộ thành công {review.confirmSummary.soDong} dòng. Đã tải về file: {review.confirmSummary.tenFileExport}
+          </MessageBarBody>
+        </MessageBar>
+      )}
+
       <FilterBar
         onApply={() => setFilters(draft)}
         onReset={() => {
@@ -153,6 +179,10 @@ export function DanhSachTab() {
       </FilterBar>
 
       <Card className={styles.tableCard}>
+        <div className={styles.uploadRow}>
+          <UploadActionsRow config={danhMucPhiUploadConfig} processing={review.processing} onFileSelected={review.handleFile} />
+        </div>
+
         {filteredRows.length === 0 ? (
           <MessageBar intent="info">
             <MessageBarBody>Chưa có dữ liệu khớp bộ lọc.</MessageBarBody>
@@ -172,6 +202,20 @@ export function DanhSachTab() {
           </div>
         )}
       </Card>
+
+      <ReviewUploadDialog
+        config={danhMucPhiUploadConfig}
+        open={review.open}
+        fileName={review.fileName}
+        missingColumns={review.missingColumns}
+        reviewRows={review.reviewRows}
+        hasErrors={review.hasErrors}
+        dataDerived={review.dataDerived}
+        detectedContextValue={review.detectedContextValue}
+        onDeleteRow={review.deleteRow}
+        onCancel={review.cancel}
+        onConfirm={review.confirm}
+      />
     </div>
   )
 }

@@ -31,8 +31,8 @@ const PAGE_SIZE = 50
 
 const useStyles = makeStyles({
   surface: {
-    maxWidth: '90vw',
-    width: '1100px',
+    maxWidth: '96vw',
+    width: '1800px',
   },
   tableScroll: {
     overflowX: 'auto',
@@ -53,7 +53,15 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     rowGap: tokens.spacingVerticalM,
   },
+  missingCodesList: {
+    marginTop: tokens.spacingVerticalXS,
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: tokens.spacingVerticalXXS,
+  },
 })
+
+const ERROR_COLUMN_SIZING = { minWidth: 360, defaultWidth: 480, idealWidth: 480 }
 
 interface ReviewUploadDialogProps<TRow extends object> {
   config: UploadEntityConfig<TRow>
@@ -88,8 +96,9 @@ export function ReviewUploadDialog<TRow extends object>({
   const totalPages = Math.max(1, Math.ceil(reviewRows.length / PAGE_SIZE))
   const pageRows = reviewRows.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
 
-  /** Gom nhóm lỗi khoá ngoại (Mã phí/Mã HS chưa đồng bộ...) theo module nguồn, đếm số giá trị
-   * DUY NHẤT bị thiếu — dùng cho banner điều hướng riêng, nổi bật hơn bảng lỗi thông thường. */
+  /** Gom nhóm lỗi khoá ngoại (Mã phí/Mã HS chưa đồng bộ...) theo module nguồn, đếm + liệt kê các
+   * giá trị DUY NHẤT bị thiếu — dùng cho banner điều hướng riêng, nổi bật hơn bảng lỗi thông
+   * thường, và cho danh sách mã cụ thể hiện ngay dưới banner (không cần cuộn hết bảng để đếm). */
   const crossRefGroups = useMemo(() => {
     const groups = new Map<string, { route: string; values: Set<string> }>()
     for (const row of reviewRows) {
@@ -104,6 +113,7 @@ export function ReviewUploadDialog<TRow extends object>({
       entityLabel,
       route,
       count: values.size,
+      values: Array.from(values).sort(),
     }))
   }, [reviewRows])
 
@@ -169,6 +179,13 @@ export function ReviewUploadDialog<TRow extends object>({
                         Phát hiện {crossRefGroups.map((g) => `${g.count} ${g.entityLabel.toLowerCase() === 'học sinh' ? 'Mã HS' : 'Mã phí'}`).join(' / ')} chưa được đồng bộ.
                       </MessageBarTitle>
                       Vui lòng chuyển sang tab tương ứng để đồng bộ dữ liệu còn thiếu trước, sau đó quay lại đồng bộ {config.entityLabel}.
+                      <div className={styles.missingCodesList}>
+                        {crossRefGroups.map((g) => (
+                          <div key={g.entityLabel}>
+                            {g.entityLabel.toLowerCase() === 'học sinh' ? 'Mã HS còn thiếu' : 'Mã phí còn thiếu'}: {g.values.join(', ')}
+                          </div>
+                        ))}
+                      </div>
                     </MessageBarBody>
                     <MessageBarActions>
                       {crossRefGroups.map((g) => (
@@ -198,6 +215,7 @@ export function ReviewUploadDialog<TRow extends object>({
                     columns={columns}
                     getRowId={(item) => item.id}
                     resizableColumns
+                    columnSizingOptions={{ __errors: ERROR_COLUMN_SIZING }}
                   >
                     <TableHeaderRow />
                     <DataGridBody<ReviewRowWithErrors>>

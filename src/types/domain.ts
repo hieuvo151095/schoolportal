@@ -73,6 +73,7 @@ export interface HocSinhRow {
   lop: string
   khoi: string
   gioiTinh: GioiTinh
+  nienKhoa: string
 }
 
 export interface HoaDonRow {

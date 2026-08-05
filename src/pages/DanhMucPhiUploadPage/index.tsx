@@ -2,7 +2,6 @@ import { Tab, TabList, Title2, makeStyles, tokens, type SelectTabData } from '@f
 import { useState } from 'react'
 import { SyncHistorySection } from '../../components/sync-history/SyncHistorySection'
 import { getNienKhoaOptions } from '../../utils/nienKhoa'
-import { danhMucPhiUploadConfig } from './danhMucPhiUploadConfig'
 import { DanhSachTab } from './DanhSachTab'
 
 const useStyles = makeStyles({
@@ -18,14 +17,7 @@ type TabValue = 'danh-sach' | 'lich-su'
 export function DanhMucPhiUploadPage() {
   const styles = useStyles()
   const [tab, setTab] = useState<TabValue>('danh-sach')
-  const [listKey, setListKey] = useState(0)
-  const [historyKey, setHistoryKey] = useState(0)
   const nienKhoaOptions = getNienKhoaOptions()
-
-  function handleConfirmed() {
-    setListKey((k) => k + 1)
-    setHistoryKey((k) => k + 1)
-  }
 
   return (
     <div className={styles.root}>
@@ -37,16 +29,13 @@ export function DanhMucPhiUploadPage() {
       </TabList>
 
       {tab === 'danh-sach' ? (
-        <DanhSachTab key={listKey} />
+        <DanhSachTab />
       ) : (
         <SyncHistorySection
-          key={historyKey}
           loaiDuLieu="danhMucPhi"
           contextLabel="Niên khoá"
           contextOptions={nienKhoaOptions}
           successCountLabel="Số dòng thành công"
-          uploadConfig={danhMucPhiUploadConfig}
-          onConfirmed={handleConfirmed}
         />
       )}
     </div>

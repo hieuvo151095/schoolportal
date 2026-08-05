@@ -36,6 +36,6 @@ export function saveHocSinhByNienKhoa(nienKhoa: string, rows: HocSinhRow[]): voi
 export function ensureSeededHocSinh(nienKhoa: string): void {
   const store = readStore()
   if (store[nienKhoa]?.length) return
-  store[nienKhoa] = buildHocSinhSeed()
+  store[nienKhoa] = buildHocSinhSeed(nienKhoa)
   localStorage.setItem(STORAGE_KEYS.hocSinh, JSON.stringify(store))
 }

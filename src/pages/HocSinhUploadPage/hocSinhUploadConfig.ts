@@ -1,7 +1,9 @@
 import { getHocSinhByNienKhoa, saveHocSinhByNienKhoa } from '../../storage/hocSinh'
 import type { GioiTinh, HocSinhRow } from '../../types/domain'
 import type { UploadEntityConfig, UploadFieldConfig } from '../../upload-engine/types'
+import { getNienKhoaOptions } from '../../utils/nienKhoa'
 
+const NIEN_KHOA_OPTIONS = getNienKhoaOptions()
 const GIOI_TINH_LIST: GioiTinh[] = ['Nam', 'Nữ']
 
 const fields: UploadFieldConfig<HocSinhRow>[] = [
@@ -41,6 +43,14 @@ const fields: UploadFieldConfig<HocSinhRow>[] = [
     enumValues: GIOI_TINH_LIST,
     exampleValues: ['Nam', 'Nữ'],
   },
+  {
+    key: 'nienKhoa',
+    columnLabel: 'Niên khoá',
+    type: 'enum',
+    required: true,
+    enumValues: NIEN_KHOA_OPTIONS,
+    exampleValues: [NIEN_KHOA_OPTIONS[0], NIEN_KHOA_OPTIONS[0]],
+  },
 ]
 
 export const hocSinhUploadConfig: UploadEntityConfig<HocSinhRow> = {
@@ -50,12 +60,13 @@ export const hocSinhUploadConfig: UploadEntityConfig<HocSinhRow> = {
   uniqueKey: 'maHocSinh',
   existingDataCheck: { key: 'maHocSinh', getExistingRows: (nienKhoa) => getHocSinhByNienKhoa(nienKhoa) },
   contextField: { key: 'nienKhoa', label: 'Niên khoá' },
-  buildRow: (row) => ({
+  buildRow: (row, nienKhoa) => ({
     maHocSinh: row.maHocSinh as string,
     hoTen: row.hoTen as string,
     lop: row.lop as string,
     khoi: row.khoi as string,
     gioiTinh: row.gioiTinh as GioiTinh,
+    nienKhoa,
   }),
   persist: (rows, nienKhoa) => saveHocSinhByNienKhoa(nienKhoa, rows),
 }

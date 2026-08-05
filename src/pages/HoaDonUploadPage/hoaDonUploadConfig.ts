@@ -38,7 +38,7 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
       const nienKhoa = getHoSoTruong()?.nienKhoa
       if (!nienKhoa) return 'Chưa có niên khoá hoạt động trong Hồ sơ trường'
       const exists = getHocSinhByNienKhoa(nienKhoa).some((hs) => hs.maHocSinh === value)
-      if (!exists) return `Mã học sinh không tồn tại trong danh sách Học sinh đã đồng bộ (niên khoá ${nienKhoa})`
+      if (!exists) return 'Mã học sinh chưa tồn tại trong Danh sách học sinh'
       return null
     },
   },
@@ -119,7 +119,7 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
       const nienKhoa = getHoSoTruong()?.nienKhoa
       if (!nienKhoa) return 'Chưa có niên khoá hoạt động trong Hồ sơ trường'
       const exists = getDanhMucPhiByNienKhoa(nienKhoa).some((kp) => kp.maPhi === value)
-      if (!exists) return `Mã phí không tồn tại trong Danh mục Phí đã đồng bộ (niên khoá ${nienKhoa})`
+      if (!exists) return 'Mã phí chưa tồn tại trong Danh mục phí'
       return null
     },
   },

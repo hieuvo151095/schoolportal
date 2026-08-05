@@ -1,4 +1,5 @@
-import { Body1, Card, Subtitle2, Title2, makeStyles, tokens } from '@fluentui/react-components'
+import { Body1, Button, Card, Subtitle2, Title2, makeStyles, tokens } from '@fluentui/react-components'
+import { useNavigate } from 'react-router-dom'
 import { formatCurrency } from '../../utils/date'
 import { HoSoTruongCard } from './HoSoTruongCard'
 import { MiniKpiRow } from './MiniKpiRow'
@@ -30,6 +31,7 @@ const useStyles = makeStyles({
 
 export function DashboardPage() {
   const styles = useStyles()
+  const navigate = useNavigate()
   const summary = getDashboardSummary()
 
   return (
@@ -44,7 +46,14 @@ export function DashboardPage() {
           <Body1 as="p" style={{ fontSize: '26px', fontWeight: 700 }}>
             {formatCurrency(summary.tongCongNo)}
           </Body1>
-          <Body1>Toàn bộ các kỳ đã đồng bộ</Body1>
+          <Button
+            appearance="outline"
+            onClick={() =>
+              navigate('/hoa-don', { state: { presetTrangThai: ['Chưa thanh toán', 'Thanh toán một phần'] } })
+            }
+          >
+            Kiểm tra
+          </Button>
         </Card>
       </div>
 

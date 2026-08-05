@@ -8,8 +8,6 @@ import {
   Dropdown,
   Field,
   Input,
-  MessageBar,
-  MessageBarBody,
   Option,
   Subtitle2,
   createTableColumn,
@@ -17,7 +15,7 @@ import {
   tokens,
   type TableColumnDefinition,
 } from '@fluentui/react-components'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { FilterBar } from '../../components/FilterBar'
 import { RangeFilterField } from '../../components/RangeFilterField'
 import { ensureSeeded, getLichSuDongBoByLoai } from '../../storage/lichSuDongBo'
@@ -25,10 +23,6 @@ import { getSession } from '../../storage/session'
 import type { LichSuDongBoEntry, LoaiDuLieuDongBo } from '../../types/domain'
 import { formatDateTime } from '../../utils/date'
 import { useFilterDraft } from '../../utils/useFilterDraft'
-import { ReviewUploadDialog } from '../../upload-engine/ReviewUploadDialog'
-import { UploadActionsRow } from '../../upload-engine/UploadActionsRow'
-import { useReviewUpload } from '../../upload-engine/useReviewUpload'
-import type { UploadEntityConfig } from '../../upload-engine/types'
 import { TableHeaderRow } from '../TableHeaderRow'
 import { HISTORY_FILTER_DEFAULTS, useHistoryFilters, type HistoryFilters } from './useHistoryFilters'
 
@@ -44,16 +38,6 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     rowGap: tokens.spacingVerticalM,
   },
-  uploadRow: {
-    display: 'flex',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    columnGap: tokens.spacingHorizontalM,
-    flexWrap: 'wrap',
-  },
-  uploadContextField: {
-    maxWidth: '220px',
-  },
   tableScroll: {
     overflowX: 'auto',
   },
@@ -62,27 +46,21 @@ const useStyles = makeStyles({
   },
 })
 
-interface SyncHistorySectionProps<TRow extends object> {
+interface SyncHistorySectionProps {
   loaiDuLieu: LoaiDuLieuDongBo
   contextLabel: string
   contextOptions: string[]
   successCountLabel: string
-  uploadConfig: UploadEntityConfig<TRow>
-  /** Chỉ cần thiết khi context (Niên khoá/Kỳ) không đọc được từ chính dữ liệu file — vd Học
-   * sinh. Danh mục Phí/Hoá đơn bỏ qua prop này vì tự phát hiện từ file lúc upload. */
-  defaultContextValue?: string
-  onConfirmed: () => void
 }
 
-export function SyncHistorySection<TRow extends object>({
+/** Bảng lịch sử đồng bộ (đọc-only) — thao tác tải file mẫu/tải lên nằm ở Tab "Danh sách...",
+ * không còn ở đây (xem UploadActionsRow trong từng DanhSachTab tương ứng). */
+export function SyncHistorySection({
   loaiDuLieu,
   contextLabel,
   contextOptions,
   successCountLabel,
-  uploadConfig,
-  defaultContextValue,
-  onConfirmed,
-}: SyncHistorySectionProps<TRow>) {
+}: SyncHistorySectionProps) {
   const styles = useStyles()
 
   const session = getSession()
@@ -91,9 +69,6 @@ export function SyncHistorySection<TRow extends object>({
 
   const { filters, apply, reset } = useHistoryFilters()
   const [draft, setDraft] = useFilterDraft<HistoryFilters>(filters)
-
-  const [contextDongBo, setContextDongBo] = useState(defaultContextValue ?? '')
-  const review = useReviewUpload(uploadConfig, contextDongBo, onConfirmed)
 
   const columns = useMemo<TableColumnDefinition<LichSuDongBoEntry>[]>(
     () => [
@@ -190,34 +165,6 @@ export function SyncHistorySection<TRow extends object>({
       </FilterBar>
 
       <Card className={styles.tableCard}>
-        <div className={styles.uploadRow}>
-          {!review.dataDerived && (
-            <Field label={`${contextLabel} áp dụng khi tải file lên`} className={styles.uploadContextField}>
-              <Dropdown
-                value={contextDongBo}
-                selectedOptions={[contextDongBo]}
-                onOptionSelect={(_, data) => data.optionValue && setContextDongBo(data.optionValue)}
-              >
-                {contextOptions.map((option) => (
-                  <Option key={option} value={option}>
-                    {option}
-                  </Option>
-                ))}
-              </Dropdown>
-            </Field>
-          )}
-          <UploadActionsRow config={uploadConfig} processing={review.processing} onFileSelected={review.handleFile} />
-        </div>
-
-        {review.confirmSummary && (
-          <MessageBar intent="success">
-            <MessageBarBody>
-              Đã đồng bộ thành công {review.confirmSummary.soDong} dòng. Đã tải về file:{' '}
-              {review.confirmSummary.tenFileExport}
-            </MessageBarBody>
-          </MessageBar>
-        )}
-
         {filteredEntries.length === 0 ? (
           <Body1>Không có lần đồng bộ nào khớp bộ lọc.</Body1>
         ) : (
@@ -248,20 +195,6 @@ export function SyncHistorySection<TRow extends object>({
           </div>
         )}
       </Card>
-
-      <ReviewUploadDialog
-        config={uploadConfig}
-        open={review.open}
-        fileName={review.fileName}
-        missingColumns={review.missingColumns}
-        reviewRows={review.reviewRows}
-        hasErrors={review.hasErrors}
-        dataDerived={review.dataDerived}
-        detectedContextValue={review.detectedContextValue}
-        onDeleteRow={review.deleteRow}
-        onCancel={review.cancel}
-        onConfirm={review.confirm}
-      />
     </div>
   )
 }
