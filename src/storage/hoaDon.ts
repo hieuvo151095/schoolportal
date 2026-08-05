@@ -26,10 +26,12 @@ export function getHoaDonByKy(ky: string): HoaDonRow[] {
   return readStore()[ky] ?? []
 }
 
-/** Ghi đè toàn bộ hoá đơn của 1 kỳ — mỗi lần đồng bộ thay thế hoàn toàn dữ liệu cũ. */
+/** Thêm hoá đơn mới vào 1 kỳ — nối vào dữ liệu cũ, không xoá dữ liệu đã có
+ * (uploadConfig.existingDataCheck đã chặn trùng soHoaDon với dữ liệu cũ từ trước, nên rows truyền
+ * vào đây luôn là hoá đơn mới hoàn toàn). */
 export function saveHoaDonByKy(ky: string, rows: HoaDonRow[]): void {
   const store = readStore()
-  store[ky] = rows
+  store[ky] = [...(store[ky] ?? []), ...rows]
   localStorage.setItem(STORAGE_KEYS.hoaDon, JSON.stringify(store))
 }
 

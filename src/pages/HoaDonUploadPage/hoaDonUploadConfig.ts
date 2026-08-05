@@ -1,6 +1,6 @@
 import { getDanhMucPhiByNienKhoa } from '../../storage/danhMucPhi'
 import { getHocSinhByNienKhoa } from '../../storage/hocSinh'
-import { saveHoaDonByKy } from '../../storage/hoaDon'
+import { getHoaDonByKy, saveHoaDonByKy } from '../../storage/hoaDon'
 import { saveHoaDonKhoanPhiByKy } from '../../storage/hoaDonKhoanPhi'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
 import type { HinhThucThanhToan, HoaDonKhoanPhiRow, HoaDonRow, HoaDonUploadLineRow, TrangThaiHoaDon } from '../../types/domain'
@@ -170,6 +170,7 @@ export const hoaDonUploadConfig: UploadEntityConfig<HoaDonUploadLineRow> = {
   entityLabel: 'Hoá đơn',
   fields,
   uniqueKey: ['soHoaDon', 'maPhi'],
+  existingDataCheck: { key: 'soHoaDon', getExistingRows: (ky) => getHoaDonByKy(ky) },
   groupConsistencyCheck: {
     groupKey: 'soHoaDon',
     fields: ['maHocSinh', 'hanThanhToan', 'hinhThucThanhToan', 'ngayThanhToan', 'trangThai', 'daTra', 'taoBoi', 'xacNhanBoi'],

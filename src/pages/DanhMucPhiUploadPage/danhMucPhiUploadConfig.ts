@@ -1,4 +1,4 @@
-import { saveDanhMucPhiByNienKhoa } from '../../storage/danhMucPhi'
+import { getDanhMucPhiByNienKhoa, saveDanhMucPhiByNienKhoa } from '../../storage/danhMucPhi'
 import type { UploadEntityConfig, UploadFieldConfig } from '../../upload-engine/types'
 import {
   THAM_CHIEU_PHAP_LY_LIST,
@@ -109,6 +109,7 @@ export const danhMucPhiUploadConfig: UploadEntityConfig<KhoanPhiRow> = {
   entityLabel: 'Danh mục Phí',
   fields,
   uniqueKey: 'maPhi',
+  existingDataCheck: { key: 'maPhi', getExistingRows: (nienKhoa) => getDanhMucPhiByNienKhoa(nienKhoa) },
   contextField: { key: 'nienKhoa', label: 'Niên khoá' },
   buildRow: (row, nienKhoa) => ({
     maPhi: row.maPhi as string,

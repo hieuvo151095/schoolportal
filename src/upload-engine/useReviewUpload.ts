@@ -34,15 +34,6 @@ export function useReviewUpload<TRow extends object>(
 
   const dataDerived = isContextDataDerived(config)
 
-  const crossErrors = useMemo(() => computeCrossRowErrors(config, rows), [config, rows])
-
-  const reviewRows: ReviewRowWithErrors[] = useMemo(
-    () => rows.map((row) => ({ ...row, errors: [...row.fieldErrors, ...(crossErrors.get(row.id) ?? [])] })),
-    [rows, crossErrors],
-  )
-
-  const hasErrors = reviewRows.some((row) => row.errors.length > 0)
-
   /** Niên khoá/Kỳ đọc được từ dòng đầu tiên của file — chỉ đáng tin khi không có lỗi lệch nhau
    * giữa các dòng (hasErrors đã bắt lỗi đó riêng, xem computeCrossRowErrors). */
   const detectedContextValue = useMemo(() => {
@@ -52,6 +43,18 @@ export function useReviewUpload<TRow extends object>(
   }, [dataDerived, rows, config.contextField.key])
 
   const effectiveContextValue = dataDerived ? (detectedContextValue ?? '') : (externalContextValue ?? '')
+
+  const crossErrors = useMemo(
+    () => computeCrossRowErrors(config, rows, effectiveContextValue),
+    [config, rows, effectiveContextValue],
+  )
+
+  const reviewRows: ReviewRowWithErrors[] = useMemo(
+    () => rows.map((row) => ({ ...row, errors: [...row.fieldErrors, ...(crossErrors.get(row.id) ?? [])] })),
+    [rows, crossErrors],
+  )
+
+  const hasErrors = reviewRows.some((row) => row.errors.length > 0)
 
   async function handleFile(file: File) {
     setProcessing(true)

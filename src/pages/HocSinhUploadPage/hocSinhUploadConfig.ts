@@ -1,4 +1,4 @@
-import { saveHocSinhByNienKhoa } from '../../storage/hocSinh'
+import { getHocSinhByNienKhoa, saveHocSinhByNienKhoa } from '../../storage/hocSinh'
 import type { GioiTinh, HocSinhRow } from '../../types/domain'
 import type { UploadEntityConfig, UploadFieldConfig } from '../../upload-engine/types'
 
@@ -48,6 +48,7 @@ export const hocSinhUploadConfig: UploadEntityConfig<HocSinhRow> = {
   entityLabel: 'Học sinh',
   fields,
   uniqueKey: 'maHocSinh',
+  existingDataCheck: { key: 'maHocSinh', getExistingRows: (nienKhoa) => getHocSinhByNienKhoa(nienKhoa) },
   contextField: { key: 'nienKhoa', label: 'Niên khoá' },
   buildRow: (row) => ({
     maHocSinh: row.maHocSinh as string,

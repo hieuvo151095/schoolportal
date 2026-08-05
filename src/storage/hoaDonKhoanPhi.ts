@@ -21,9 +21,11 @@ export function getHoaDonKhoanPhiBySoHoaDon(ky: string, soHoaDon: string): HoaDo
   return getHoaDonKhoanPhiByKy(ky).filter((row) => row.soHoaDon === soHoaDon)
 }
 
-/** Ghi đè toàn bộ khoản phí của 1 kỳ — mỗi lần đồng bộ Hoá đơn thay thế hoàn toàn dữ liệu cũ. */
+/** Thêm khoản phí mới vào 1 kỳ — nối vào dữ liệu cũ, không xoá dữ liệu đã có (mọi soHoaDon trong
+ * rows đều là hoá đơn mới hoàn toàn, do uploadConfig.existingDataCheck đã chặn trùng soHoaDon với
+ * dữ liệu cũ từ trước, nên không có rủi ro trùng khoản phí của 1 hoá đơn cũ đã tồn tại). */
 export function saveHoaDonKhoanPhiByKy(ky: string, rows: HoaDonKhoanPhiRow[]): void {
   const store = readStore()
-  store[ky] = rows
+  store[ky] = [...(store[ky] ?? []), ...rows]
   localStorage.setItem(STORAGE_KEYS.hoaDonKhoanPhi, JSON.stringify(store))
 }

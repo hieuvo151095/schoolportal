@@ -22,10 +22,12 @@ export function getDanhMucPhiByNienKhoa(nienKhoa: string): KhoanPhiRow[] {
   return readStore()[nienKhoa] ?? []
 }
 
-/** Ghi đè toàn bộ danh mục phí của 1 niên khoá — mỗi lần đồng bộ thay thế hoàn toàn dữ liệu cũ. */
+/** Thêm dữ liệu mới vào danh mục phí của 1 niên khoá — nối vào dữ liệu cũ, không xoá dữ liệu đã
+ * có (uploadConfig.existingDataCheck đã chặn trùng maPhi với dữ liệu cũ từ trước, nên rows truyền
+ * vào đây luôn là bản ghi mới hoàn toàn). */
 export function saveDanhMucPhiByNienKhoa(nienKhoa: string, rows: KhoanPhiRow[]): void {
   const store = readStore()
-  store[nienKhoa] = rows
+  store[nienKhoa] = [...(store[nienKhoa] ?? []), ...rows]
   localStorage.setItem(STORAGE_KEYS.danhMucPhi, JSON.stringify(store))
 }
 

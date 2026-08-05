@@ -22,10 +22,12 @@ export function getHocSinhByNienKhoa(nienKhoa: string): HocSinhRow[] {
   return readStore()[nienKhoa] ?? []
 }
 
-/** Ghi đè toàn bộ danh sách học sinh của 1 niên khoá — mỗi lần đồng bộ thay thế hoàn toàn dữ liệu cũ. */
+/** Thêm dữ liệu mới vào danh sách học sinh của 1 niên khoá — nối vào dữ liệu cũ, không xoá dữ
+ * liệu đã có (uploadConfig.existingDataCheck đã chặn trùng maHocSinh với dữ liệu cũ từ trước, nên
+ * rows truyền vào đây luôn là bản ghi mới hoàn toàn). */
 export function saveHocSinhByNienKhoa(nienKhoa: string, rows: HocSinhRow[]): void {
   const store = readStore()
-  store[nienKhoa] = rows
+  store[nienKhoa] = [...(store[nienKhoa] ?? []), ...rows]
   localStorage.setItem(STORAGE_KEYS.hocSinh, JSON.stringify(store))
 }
 

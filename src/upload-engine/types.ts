@@ -39,6 +39,12 @@ export interface UploadEntityConfig<TRow extends object> {
    * upload — vd Hoá đơn dùng tổ hợp [soHoaDon, maPhi] vì nhiều dòng được phép chia sẻ chung
    * soHoaDon (1 hoá đơn nhiều khoản phí), chỉ cấm trùng đúng 1 khoản phí trong cùng 1 hoá đơn. */
   uniqueKey?: (keyof TRow & string) | (keyof TRow & string)[]
+  /** Đối chiếu field này với dữ liệu ĐÃ ĐỒNG BỘ TRƯỚC ĐÓ (khác uniqueKey — đó chỉ kiểm tra trùng
+   * trong phạm vi file đang upload) — trùng thì báo lỗi, chặn đồng bộ, KHÔNG tự động ghi đè/gộp.
+   * Người dùng phải xoá dòng đó khỏi file nếu muốn đồng bộ tiếp các dòng còn lại. Hoá đơn dùng
+   * đúng soHoaDon (không phải tổ hợp soHoaDon+maPhi) vì 1 hoá đơn là 1 thực thể duy nhất — không
+   * cho phép "thêm khoản phí" vào hoá đơn đã đồng bộ bằng cách upload lại. */
+  existingDataCheck?: { key: keyof TRow & string; getExistingRows: (contextValue: string) => Record<string, unknown>[] }
   /** Đối chiếu các field liệt kê phải giống hệt nhau giữa mọi dòng chia sẻ chung giá trị
    * groupKey (vd mọi dòng cùng soHoaDon phải khớp Trạng thái, Hạn thanh toán...) — dùng khi 1
    * bản ghi logic (hoá đơn) được trải trên nhiều dòng file do quan hệ 1-nhiều với field khác

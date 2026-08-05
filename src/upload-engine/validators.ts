@@ -126,11 +126,14 @@ export function coerceAllRows<TRow extends object>(
   return { missingColumns: [], rows }
 }
 
-/** Lỗi phụ thuộc vào TẬP DÒNG hiện tại (customValidator FK/... + trùng khoá trong file) — tính
- * lại mỗi khi tập dòng đổi (vd sau khi xoá 1 dòng), khác với fieldErrors cố định. */
+/** Lỗi phụ thuộc vào TẬP DÒNG hiện tại (customValidator FK/... + trùng khoá trong file/với dữ
+ * liệu cũ) — tính lại mỗi khi tập dòng đổi (vd sau khi xoá 1 dòng), khác với fieldErrors cố định.
+ * `contextValue` (niên khoá/kỳ hiệu lực của lần upload này) dùng để tra dữ liệu đã đồng bộ trước
+ * đó cho existingDataCheck — bỏ qua check này nếu context chưa xác định được (rỗng). */
 export function computeCrossRowErrors<TRow extends object>(
   config: UploadEntityConfig<TRow>,
   rows: ReviewRow[],
+  contextValue: string,
 ): Map<string, RowError[]> {
   const errorsByRowId = new Map<string, RowError[]>()
 
@@ -178,6 +181,25 @@ export function computeCrossRowErrors<TRow extends object>(
       } else {
         seen.set(value, row.excelRowNumber)
       }
+    }
+  }
+
+  if (config.existingDataCheck && contextValue) {
+    const { key, getExistingRows } = config.existingDataCheck
+    const columnLabel = config.fields.find((f) => f.key === key)?.columnLabel ?? String(key)
+    const existingValues = new Set(
+      getExistingRows(contextValue)
+        .map((existingRow) => String(existingRow[key] ?? ''))
+        .filter(Boolean),
+    )
+    for (const row of rows) {
+      const value = String(row.coerced[key] ?? '')
+      if (!value || !existingValues.has(value)) continue
+      addError(row.id, {
+        rowIndex: row.excelRowNumber,
+        columnLabel,
+        message: `${columnLabel} '${value}' đã tồn tại trong dữ liệu ${config.entityLabel} đã đồng bộ trước đó (${config.contextField.label} ${contextValue})`,
+      })
     }
   }
 
