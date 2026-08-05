@@ -26,6 +26,22 @@ export function getHoaDonByKy(ky: string): HoaDonRow[] {
   return readStore()[ky] ?? []
 }
 
+/** Toàn bộ hoá đơn (mọi kỳ) chưa qua module "Đồng bộ" — dùng ở module Đồng bộ. */
+export function getHoaDonChoDongBo(): HoaDonRow[] {
+  return Object.values(readStore()).flat().filter((row) => !row.daDongBo)
+}
+
+/** Set daDongBo=true cho đúng các hoá đơn được liệt kê (theo ky+soHoaDon) — dùng khi xác nhận
+ * đồng bộ thành công ở module "Đồng bộ". Bỏ qua bản ghi không tìm thấy (đã bị xoá/đổi). */
+export function markHoaDonDaDongBo(items: { ky: string; soHoaDon: string }[]): void {
+  const store = readStore()
+  for (const { ky, soHoaDon } of items) {
+    const row = store[ky]?.find((r) => r.soHoaDon === soHoaDon)
+    if (row) row.daDongBo = true
+  }
+  localStorage.setItem(STORAGE_KEYS.hoaDon, JSON.stringify(store))
+}
+
 /** Thêm hoá đơn mới vào 1 kỳ — nối vào dữ liệu cũ, không xoá dữ liệu đã có
  * (uploadConfig.existingDataCheck đã chặn trùng soHoaDon với dữ liệu cũ từ trước, nên rows truyền
  * vào đây luôn là hoá đơn mới hoàn toàn). */

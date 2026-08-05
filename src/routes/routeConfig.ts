@@ -1,4 +1,5 @@
 import {
+  ArrowSyncRegular,
   ClipboardTaskRegular,
   DataBarVerticalRegular,
   DocumentBulletListRegular,
@@ -17,6 +18,7 @@ export const navTree: NavLeaf[] = [
   { path: '/danh-muc-phi', label: 'Danh mục Phí', icon: FolderRegular },
   { path: '/hoc-sinh', label: 'Học sinh', icon: ClipboardTaskRegular },
   { path: '/hoa-don', label: 'Hoá đơn', icon: DocumentBulletListRegular },
+  { path: '/dong-bo', label: 'Đồng bộ', icon: ArrowSyncRegular },
 ]
 
 export interface BreadcrumbTrailItem {

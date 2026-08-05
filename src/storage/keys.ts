@@ -5,5 +5,5 @@ export const STORAGE_KEYS = {
   hocSinh: 'schoolportal:hoc-sinh',
   hoaDon: 'schoolportal:hoa-don',
   hoaDonKhoanPhi: 'schoolportal:hoa-don-khoan-phi',
-  lichSuDongBo: 'schoolportal:lich-su-dong-bo',
+  dongBoLichSu: 'schoolportal:dong-bo-lich-su',
 } as const

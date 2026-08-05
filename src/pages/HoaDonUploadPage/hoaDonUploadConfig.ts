@@ -12,13 +12,6 @@ const KY_OPTIONS = getKyOptions()
 const HINH_THUC_THANH_TOAN_LIST: HinhThucThanhToan[] = ['Tiền mặt', 'Chuyển khoản', 'Ví điện tử', 'QR Code']
 const TRANG_THAI_LIST: TrangThaiHoaDon[] = ['Đã thanh toán', 'Thanh toán một phần', 'Chưa thanh toán']
 
-/** Enum thật của dashportal không có 'Chưa thanh toán' — map sang 'Đã gửi' khi export JSON. */
-const TRANG_THAI_EXPORT_MAP: Record<TrangThaiHoaDon, string> = {
-  'Đã thanh toán': 'Đã thanh toán',
-  'Thanh toán một phần': 'Thanh toán một phần',
-  'Chưa thanh toán': 'Đã gửi',
-}
-
 const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
   {
     key: 'soHoaDon',
@@ -40,6 +33,10 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
       const exists = getHocSinhByNienKhoa(nienKhoa).some((hs) => hs.maHocSinh === value)
       if (!exists) return 'Mã học sinh chưa tồn tại trong Danh sách học sinh'
       return null
+    },
+    comboboxOptions: () => {
+      const nienKhoa = getHoSoTruong()?.nienKhoa
+      return nienKhoa ? getHocSinhByNienKhoa(nienKhoa).map((hs) => hs.maHocSinh) : []
     },
   },
   {
@@ -122,6 +119,10 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
       if (!exists) return 'Mã phí chưa tồn tại trong Danh mục phí'
       return null
     },
+    comboboxOptions: () => {
+      const nienKhoa = getHoSoTruong()?.nienKhoa
+      return nienKhoa ? getDanhMucPhiByNienKhoa(nienKhoa).map((kp) => kp.maPhi) : []
+    },
   },
   {
     key: 'soTien',
@@ -134,7 +135,7 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
 ]
 
 /** Gộp các dòng file (1 dòng = 1 cặp Hoá đơn+Khoản phí) theo Mã HĐ — trả về hoá đơn (soTien =
- * tổng các khoản phí) + danh sách khoản phí phẳng, dùng khi lưu và khi export JSON. */
+ * tổng các khoản phí) + danh sách khoản phí phẳng, dùng khi lưu. */
 function groupBySoHoaDon(lines: HoaDonUploadLineRow[]): { hoaDon: HoaDonRow[]; khoanPhi: HoaDonKhoanPhiRow[] } {
   const hoaDonMap = new Map<string, HoaDonRow>()
   const khoanPhi: HoaDonKhoanPhiRow[] = []
@@ -159,6 +160,7 @@ function groupBySoHoaDon(lines: HoaDonUploadLineRow[]): { hoaDon: HoaDonRow[]; k
       daTra: line.daTra,
       taoBoi: line.taoBoi,
       xacNhanBoi: line.xacNhanBoi,
+      daDongBo: false,
     })
   }
 
@@ -196,6 +198,4 @@ export const hoaDonUploadConfig: UploadEntityConfig<HoaDonUploadLineRow> = {
     saveHoaDonKhoanPhiByKy(ky, khoanPhi)
   },
   countSuccessRows: (rows) => new Set(rows.map((r) => r.soHoaDon)).size,
-  transformForExport: (row) => ({ ...row, trangThai: TRANG_THAI_EXPORT_MAP[row.trangThai] }),
-  exportMetadataNote: "Trạng thái 'Chưa thanh toán' được map thành 'Đã gửi' để khớp enum thật của dashportal.",
 }

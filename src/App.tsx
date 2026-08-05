@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { PortalShell } from './components/PortalShell'
 import { DanhMucPhiUploadPage } from './pages/DanhMucPhiUploadPage'
 import { DashboardPage } from './pages/DashboardPage'
+import { DongBoPage } from './pages/DongBoPage'
 import { HoaDonUploadPage } from './pages/HoaDonUploadPage'
 import { HocSinhUploadPage } from './pages/HocSinhUploadPage'
 import { LoginPage } from './pages/LoginPage'
@@ -18,6 +19,7 @@ function App() {
           <Route path="/danh-muc-phi" element={<DanhMucPhiUploadPage />} />
           <Route path="/hoc-sinh" element={<HocSinhUploadPage />} />
           <Route path="/hoa-don" element={<HoaDonUploadPage />} />
+          <Route path="/dong-bo" element={<DongBoPage />} />
         </Route>
       </Route>
 

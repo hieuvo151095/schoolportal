@@ -1,6 +1,7 @@
 import { makeStyles, tokens } from '@fluentui/react-components'
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
+import { AppToaster } from './AppToaster'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
 
@@ -29,6 +30,7 @@ export function PortalShell() {
 
   return (
     <div className={styles.root}>
+      <AppToaster />
       <Sidebar collapsed={collapsed} onToggleCollapse={() => setCollapsed((value) => !value)} />
       <div className={styles.contentColumn}>
         <Header />

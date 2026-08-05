@@ -2,7 +2,6 @@ import { Body1, Button, Card, Caption1, Subtitle2, makeStyles, tokens } from '@f
 import { ArrowRightRegular } from '@fluentui/react-icons'
 import { useNavigate } from 'react-router-dom'
 import { SyncStatusBadge } from '../../components/SyncStatusBadge'
-import { formatDateTime } from '../../utils/date'
 import type { EntitySyncStatus } from './useDashboardSummary'
 
 const useStyles = makeStyles({
@@ -23,7 +22,7 @@ const useStyles = makeStyles({
     justifyContent: 'space-between',
   },
   // Đẩy nút xuống đáy card bất kể nội dung phía trên dài ngắn khác nhau — cả 3 nút
-  // "Đồng bộ ngay" luôn thẳng hàng ngang.
+  // "Nhập liệu" luôn thẳng hàng ngang.
   action: {
     marginTop: 'auto',
   },
@@ -51,18 +50,20 @@ export function SyncStatusGrid({ danhMucPhi, hocSinh, hoaDon }: SyncStatusGridPr
         <Card key={status.label} className={styles.card}>
           <div className={styles.header}>
             <Subtitle2>{status.label}</Subtitle2>
-            <SyncStatusBadge synced={status.synced} />
+            <SyncStatusBadge coDuLieu={status.coDuLieu} />
           </div>
           <Body1>
             {status.contextLabel}:{' '}
-            {status.synced
+            {status.coDuLieu
               ? status.chuKy === 'nienKhoa'
                 ? 'đã có dữ liệu'
                 : `${status.rowCount} dòng`
               : 'chưa có dữ liệu'}
           </Body1>
           <Caption1>
-            {status.lastSyncAt ? `Lần đồng bộ gần nhất: ${formatDateTime(status.lastSyncAt)}` : 'Chưa từng đồng bộ'}
+            {status.soLuongChoDongBo > 0
+              ? `${status.soLuongChoDongBo} bản ghi chờ đồng bộ`
+              : 'Không có bản ghi chờ đồng bộ'}
           </Caption1>
           <Button
             className={styles.action}
@@ -72,7 +73,7 @@ export function SyncStatusGrid({ danhMucPhi, hocSinh, hoaDon }: SyncStatusGridPr
             icon={<ArrowRightRegular />}
             onClick={() => navigate(path)}
           >
-            Đồng bộ ngay
+            Nhập liệu
           </Button>
         </Card>
       ))}

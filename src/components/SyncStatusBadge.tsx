@@ -1,13 +1,13 @@
 import { Badge } from '@fluentui/react-components'
 
 interface SyncStatusBadgeProps {
-  synced: boolean
+  coDuLieu: boolean
 }
 
-export function SyncStatusBadge({ synced }: SyncStatusBadgeProps) {
+export function SyncStatusBadge({ coDuLieu }: SyncStatusBadgeProps) {
   return (
-    <Badge appearance="filled" color={synced ? 'success' : 'warning'}>
-      {synced ? 'Đã đồng bộ' : 'Chưa đồng bộ'}
+    <Badge appearance="filled" color={coDuLieu ? 'success' : 'warning'}>
+      {coDuLieu ? 'Đã có dữ liệu' : 'Chưa có dữ liệu'}
     </Badge>
   )
 }

@@ -178,7 +178,7 @@ export function ReviewUploadDialog<TRow extends object>({
                       <MessageBarTitle>
                         Phát hiện {crossRefGroups.map((g) => `${g.count} ${g.entityLabel.toLowerCase() === 'học sinh' ? 'Mã HS' : 'Mã phí'}`).join(' / ')} chưa được đồng bộ.
                       </MessageBarTitle>
-                      Vui lòng chuyển sang tab tương ứng để đồng bộ dữ liệu còn thiếu trước, sau đó quay lại đồng bộ {config.entityLabel}.
+                      Vui lòng chuyển sang trang tương ứng để nhập dữ liệu còn thiếu trước, sau đó quay lại lưu dữ liệu {config.entityLabel}.
                       <div className={styles.missingCodesList}>
                         {crossRefGroups.map((g) => (
                           <div key={g.entityLabel}>
@@ -249,12 +249,12 @@ export function ReviewUploadDialog<TRow extends object>({
                 ) : hasErrors ? (
                   <MessageBar intent="error">
                     <MessageBarBody>
-                      Còn dòng lỗi trong file — xoá hoặc sửa lại dòng lỗi trước khi đồng bộ.
+                      Còn dòng lỗi trong file — xoá hoặc sửa lại dòng lỗi trước khi lưu dữ liệu.
                     </MessageBarBody>
                   </MessageBar>
                 ) : (
                   <MessageBar intent="success">
-                    <MessageBarBody>Sẵn sàng đồng bộ dữ liệu lên trang quản lý của Sở.</MessageBarBody>
+                    <MessageBarBody>Sẵn sàng lưu dữ liệu vào hệ thống.</MessageBarBody>
                   </MessageBar>
                 )}
               </>
@@ -270,7 +270,7 @@ export function ReviewUploadDialog<TRow extends object>({
               disabled={missingColumns.length > 0 || hasErrors || reviewRows.length === 0}
               onClick={onConfirm}
             >
-              Đồng bộ
+              Lưu dữ liệu
             </Button>
           </DialogActions>
         </DialogBody>

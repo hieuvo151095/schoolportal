@@ -9,7 +9,7 @@ export function ReminderBanner() {
     return (
       <MessageBar intent="error">
         <MessageBarBody>
-          Đã quá hạn {Math.abs(kyCanNhac.soNgayConLai)} ngày — vui lòng đồng bộ dữ liệu hoá đơn kỳ {kyCanNhac.ky} ngay.
+          Đã quá hạn {Math.abs(kyCanNhac.soNgayConLai)} ngày — vui lòng nhập dữ liệu hoá đơn kỳ {kyCanNhac.ky} ngay.
         </MessageBarBody>
       </MessageBar>
     )
@@ -18,7 +18,7 @@ export function ReminderBanner() {
   return (
     <MessageBar intent="warning">
       <MessageBarBody>
-        Còn {kyCanNhac.soNgayConLai} ngày để đồng bộ dữ liệu hoá đơn kỳ {kyCanNhac.ky}.
+        Còn {kyCanNhac.soNgayConLai} ngày để nhập dữ liệu hoá đơn kỳ {kyCanNhac.ky}.
       </MessageBarBody>
     </MessageBar>
   )

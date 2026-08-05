@@ -67,6 +67,7 @@ export const hocSinhUploadConfig: UploadEntityConfig<HocSinhRow> = {
     khoi: row.khoi as string,
     gioiTinh: row.gioiTinh as GioiTinh,
     nienKhoa,
+    daDongBo: false,
   }),
   persist: (rows, nienKhoa) => saveHocSinhByNienKhoa(nienKhoa, rows),
 }

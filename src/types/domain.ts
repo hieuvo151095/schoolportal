@@ -65,6 +65,10 @@ export interface KhoanPhiRow {
   nienKhoa: string
   thamChieuPhapLy: string
   ghiChu: string
+  /** true = đã được xác nhận qua module "Đồng bộ" (gửi lên Sở) — false = mới lưu ở bước nhập
+   * liệu, đang chờ. Bảng chính của module vẫn hiện cả 2 trạng thái, chỉ module Đồng bộ lọc theo
+   * false. */
+  daDongBo: boolean
 }
 
 export interface HocSinhRow {
@@ -74,6 +78,10 @@ export interface HocSinhRow {
   khoi: string
   gioiTinh: GioiTinh
   nienKhoa: string
+  /** true = đã được xác nhận qua module "Đồng bộ" (gửi lên Sở) — false = mới lưu ở bước nhập
+   * liệu, đang chờ. Bảng chính của module vẫn hiện cả 2 trạng thái, chỉ module Đồng bộ lọc theo
+   * false. */
+  daDongBo: boolean
 }
 
 export interface HoaDonRow {
@@ -88,6 +96,10 @@ export interface HoaDonRow {
   daTra: number
   taoBoi: string
   xacNhanBoi: string | null
+  /** true = đã được xác nhận qua module "Đồng bộ" (gửi lên Sở) — false = mới lưu ở bước nhập
+   * liệu, đang chờ. Bảng chính của module vẫn hiện cả 2 trạng thái, chỉ module Đồng bộ lọc theo
+   * false. */
+  daDongBo: boolean
 }
 
 /** 1 dòng khoản phí thuộc 1 hoá đơn — nhiều dòng có thể cùng chung soHoaDon (quan hệ 1-nhiều).
@@ -118,15 +130,33 @@ export interface HoaDonUploadLineRow {
 
 export type LoaiDuLieuDongBo = 'danhMucPhi' | 'hocSinh' | 'hoaDon'
 
-export interface LichSuDongBoEntry {
+export type TrangThaiDongBo = 'Thành công' | 'Thất bại'
+
+/** 1 lần chạy module "Đồng bộ" — gộp cả 3 loại dữ liệu (Danh mục Phí/Học sinh/Hoá đơn) trong
+ * cùng 1 lần bấm nút "Đồng bộ". Khác hẳn khái niệm "lưu dữ liệu" ở từng module nhập liệu (chỉ
+ * ghi vào localStorage với daDongBo=false, không tạo dòng lịch sử ở đây).
+ * Thành công: mọi bản ghi đã tick (soLuongDaChon) được set daDongBo=true.
+ * Thất bại: KHÔNG bản ghi nào được set true (rollback toàn bộ, giữ nguyên false để thử lại sau)
+ * — soLuongDaChon vẫn ghi lại đúng những gì ĐÃ CHỌN lúc đó (dù không thành) để mở "Chi tiết" xem
+ * lại nội dung đã tick và biết cần sửa gì trước khi thử lại. */
+export interface DongBoLichSuEntry {
   id: string
   thoiDiem: string
-  loaiDuLieu: LoaiDuLieuDongBo
-  nienKhoaHoacKy: string
-  soDongThanhCong: number
-  /** Số dòng bị phát hiện lỗi và đã xoá khỏi file trong bước review, trước khi đồng bộ —
-   * KHÔNG phải dòng lỗi còn sót lại (flow review luôn chặn đồng bộ khi còn lỗi). */
-  soDongLoi: number
-  tenFileExport: string
   nguoiThucHien: string
+  trangThai: TrangThaiDongBo
+  /** Chỉ có giá trị khi trangThai = 'Thất bại' — lý do cụ thể, hiện trong tooltip icon cạnh badge. */
+  lyDoThatBai: string | null
+  soLuongDaChon: {
+    danhMucPhi: number
+    hocSinh: number
+    hoaDon: number
+  }
+  /** Snapshot đúng những mã đã được tick chọn trong lần đồng bộ này (dù thành công hay thất
+   * bại) — dùng để mở lại "Chi tiết" xem đúng nội dung của lần đó, không phụ thuộc dữ liệu hiện
+   * tại (có thể đã đổi khác kể từ lúc đó). */
+  chiTietMa: {
+    danhMucPhi: string[]
+    hocSinh: string[]
+    hoaDon: string[]
+  }
 }

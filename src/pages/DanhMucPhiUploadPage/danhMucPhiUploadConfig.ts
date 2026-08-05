@@ -122,6 +122,7 @@ export const danhMucPhiUploadConfig: UploadEntityConfig<KhoanPhiRow> = {
     nienKhoa,
     thamChieuPhapLy: (row.thamChieuPhapLy as string) || '',
     ghiChu: (row.ghiChu as string) || '',
+    daDongBo: false,
   }),
   persist: (rows, nienKhoa) => saveDanhMucPhiByNienKhoa(nienKhoa, rows),
 }

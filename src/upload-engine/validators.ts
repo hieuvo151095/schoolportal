@@ -128,8 +128,9 @@ export function coerceAllRows<TRow extends object>(
 
 /** Lỗi phụ thuộc vào TẬP DÒNG hiện tại (customValidator FK/... + trùng khoá trong file/với dữ
  * liệu cũ) — tính lại mỗi khi tập dòng đổi (vd sau khi xoá 1 dòng), khác với fieldErrors cố định.
- * `contextValue` (niên khoá/kỳ hiệu lực của lần upload này) dùng để tra dữ liệu đã đồng bộ trước
- * đó cho existingDataCheck — bỏ qua check này nếu context chưa xác định được (rỗng). */
+ * `contextValue` (niên khoá/kỳ hiệu lực của lần upload này) dùng để tra dữ liệu ĐÃ LƯU trước đó
+ * (không phân biệt đã qua module Đồng bộ hay chưa) cho existingDataCheck — bỏ qua check này nếu
+ * context chưa xác định được (rỗng). */
 export function computeCrossRowErrors<TRow extends object>(
   config: UploadEntityConfig<TRow>,
   rows: ReviewRow[],
@@ -198,7 +199,7 @@ export function computeCrossRowErrors<TRow extends object>(
       addError(row.id, {
         rowIndex: row.excelRowNumber,
         columnLabel,
-        message: `${columnLabel} '${value}' đã tồn tại trong dữ liệu ${config.entityLabel} đã đồng bộ trước đó (${config.contextField.label} ${contextValue})`,
+        message: `${columnLabel} '${value}' đã tồn tại trong dữ liệu ${config.entityLabel} đã lưu trước đó (${config.contextField.label} ${contextValue})`,
       })
     }
   }

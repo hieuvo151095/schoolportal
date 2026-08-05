@@ -169,6 +169,7 @@ export function buildHoaDonSeed(ky: string): HoaDonRow[] {
     daTra: spec.daTra,
     taoBoi: spec.taoBoi,
     xacNhanBoi: spec.xacNhanBoi,
+    daDongBo: true,
   }))
 }
 

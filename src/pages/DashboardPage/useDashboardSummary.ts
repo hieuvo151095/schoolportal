@@ -2,16 +2,16 @@ import { getDanhMucPhiStore } from '../../storage/danhMucPhi'
 import { getHoaDonStore } from '../../storage/hoaDon'
 import { getHocSinhStore } from '../../storage/hocSinh'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
-import { getLichSuDongBo } from '../../storage/lichSuDongBo'
-import type { LoaiDuLieuDongBo } from '../../types/domain'
 import { DEFAULT_KY } from '../../utils/ky'
 
 export interface EntitySyncStatus {
   label: string
-  synced: boolean
+  coDuLieu: boolean
   contextLabel: string
   rowCount: number
-  lastSyncAt: string | null
+  /** Số bản ghi daDongBo=false (mọi niên khoá/kỳ) — nhắc người dùng còn gì cần đồng bộ ở module
+   * "Đồng bộ" (khác dòng chờ ở đúng contextLabel — soLuongChoDongBo tính trên TOÀN BỘ dữ liệu). */
+  soLuongChoDongBo: number
   /** 'nienKhoa': đồng bộ theo niên khoá (1 lần/năm) — hiện "đã có dữ liệu" thay vì đếm dòng.
    * 'ky': đồng bộ theo kỳ (hàng tháng) — vẫn hiện số dòng để theo dõi sát hơn. */
   chuKy: 'nienKhoa' | 'ky'
@@ -40,12 +40,6 @@ export interface DashboardSummary {
   xuHuongThu: ThuThangDiem[]
 }
 
-function getLastSyncAt(loaiDuLieu: LoaiDuLieuDongBo): string | null {
-  const entries = getLichSuDongBo().filter((e) => e.loaiDuLieu === loaiDuLieu)
-  if (entries.length === 0) return null
-  return entries.reduce((latest, e) => (e.thoiDiem > latest ? e.thoiDiem : latest), entries[0].thoiDiem)
-}
-
 /** "MM/YYYY" -> số YYYYMM để sắp xếp thời gian tăng dần. */
 function kyToSortKey(ky: string): number {
   const [thang, nam] = ky.split('/').map(Number)
@@ -56,8 +50,10 @@ export function getDashboardSummary(): DashboardSummary {
   const hoSo = getHoSoTruong()
   const nienKhoaHienTai = hoSo?.nienKhoa ?? ''
 
-  const danhMucPhiRows = getDanhMucPhiStore()[nienKhoaHienTai] ?? []
-  const hocSinhRows = getHocSinhStore()[nienKhoaHienTai] ?? []
+  const danhMucPhiStore = getDanhMucPhiStore()
+  const hocSinhStore = getHocSinhStore()
+  const danhMucPhiRows = danhMucPhiStore[nienKhoaHienTai] ?? []
+  const hocSinhRows = hocSinhStore[nienKhoaHienTai] ?? []
   const hoaDonRows = getHoaDonStore()[DEFAULT_KY] ?? []
 
   const hoaDonStore = getHoaDonStore()
@@ -91,26 +87,26 @@ export function getDashboardSummary(): DashboardSummary {
     nienKhoaHienTai,
     danhMucPhi: {
       label: 'Danh mục Phí',
-      synced: danhMucPhiRows.length > 0,
+      coDuLieu: danhMucPhiRows.length > 0,
       contextLabel: `Niên khoá ${nienKhoaHienTai}`,
       rowCount: danhMucPhiRows.length,
-      lastSyncAt: getLastSyncAt('danhMucPhi'),
+      soLuongChoDongBo: Object.values(danhMucPhiStore).flat().filter((r) => !r.daDongBo).length,
       chuKy: 'nienKhoa',
     },
     hocSinh: {
       label: 'Học sinh',
-      synced: hocSinhRows.length > 0,
+      coDuLieu: hocSinhRows.length > 0,
       contextLabel: `Niên khoá ${nienKhoaHienTai}`,
       rowCount: hocSinhRows.length,
-      lastSyncAt: getLastSyncAt('hocSinh'),
+      soLuongChoDongBo: Object.values(hocSinhStore).flat().filter((r) => !r.daDongBo).length,
       chuKy: 'nienKhoa',
     },
     hoaDon: {
       label: 'Hoá đơn',
-      synced: hoaDonRows.length > 0,
+      coDuLieu: hoaDonRows.length > 0,
       contextLabel: `Kỳ ${DEFAULT_KY}`,
       rowCount: hoaDonRows.length,
-      lastSyncAt: getLastSyncAt('hoaDon'),
+      soLuongChoDongBo: allHoaDon.filter((r) => !r.daDongBo).length,
       chuKy: 'ky',
     },
     tongCongNo,
