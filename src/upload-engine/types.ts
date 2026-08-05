@@ -44,7 +44,13 @@ export interface UploadEntityConfig<TRow extends object> {
    * Người dùng phải xoá dòng đó khỏi file nếu muốn đồng bộ tiếp các dòng còn lại. Hoá đơn dùng
    * đúng soHoaDon (không phải tổ hợp soHoaDon+maPhi) vì 1 hoá đơn là 1 thực thể duy nhất — không
    * cho phép "thêm khoản phí" vào hoá đơn đã đồng bộ bằng cách upload lại. */
-  existingDataCheck?: { key: keyof TRow & string; getExistingRows: (contextValue: string) => Record<string, unknown>[] }
+  existingDataCheck?: {
+    key: keyof TRow & string
+    /** Nguồn dữ liệu đã đồng bộ trước đó để đối chiếu — KHÔNG bắt buộc cùng shape với TRow (vd
+     * Hoá đơn đối chiếu soHoaDon với bảng header HoaDonRow, khác TRow là dòng khoản phí phẳng
+     * HoaDonUploadLineRow có thêm maPhi/soTien) — chỉ cần field `key` đọc được ở mỗi dòng trả về. */
+    getExistingRows: (contextValue: string) => Partial<Record<keyof TRow & string, unknown>>[]
+  }
   /** Đối chiếu các field liệt kê phải giống hệt nhau giữa mọi dòng chia sẻ chung giá trị
    * groupKey (vd mọi dòng cùng soHoaDon phải khớp Trạng thái, Hạn thanh toán...) — dùng khi 1
    * bản ghi logic (hoá đơn) được trải trên nhiều dòng file do quan hệ 1-nhiều với field khác
