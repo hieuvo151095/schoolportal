@@ -67,7 +67,13 @@ export function AddRecordDialog<TRow extends object>({ config, open, onClose, on
   const validation = useMemo(() => {
     const parsedFile: ParsedFile = {
       headers: config.fields.map((f) => f.columnLabel),
-      rows: [{ excelRowNumber: 2, data: Object.fromEntries(config.fields.map((f) => [f.columnLabel, values[f.key]])) }],
+      rows: [
+        {
+          excelRowNumber: 2,
+          sheetName: '',
+          data: Object.fromEntries(config.fields.map((f) => [f.columnLabel, values[f.key]])),
+        },
+      ],
     }
     const { rows } = coerceAllRows(parsedFile, config)
     const row = rows[0]

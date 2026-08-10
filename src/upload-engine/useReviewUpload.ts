@@ -13,9 +13,8 @@ export interface ConfirmSummary {
 }
 
 /** `externalContextValue` chỉ cần thiết khi context (Niên khoá/Kỳ) KHÔNG đọc được từ chính dữ
- * liệu file (vd Học sinh — Niên khoá là khoá lưu trữ bên ngoài, không phải field trong
- * HocSinhRow). Với Danh mục Phí/Hoá đơn, context đã có sẵn trong từng dòng file, hook tự phát
- * hiện và bỏ qua tham số này. */
+ * liệu file — hiện Hoá đơn (entity duy nhất còn dùng engine này) có context Kỳ đã có sẵn trong
+ * từng dòng file, hook tự phát hiện và bỏ qua tham số này. */
 export function useReviewUpload<TRow extends object>(
   config: UploadEntityConfig<TRow>,
   externalContextValue?: string,
@@ -57,7 +56,7 @@ export function useReviewUpload<TRow extends object>(
     setFileName(file.name)
     setConfirmSummary(null)
     try {
-      const parsed = await parseUploadFile(file)
+      const parsed = await parseUploadFile(file, config.sheetKeyField)
       const result = coerceAllRows(parsed, config)
       setMissingColumns(result.missingColumns)
       setRows(result.rows)

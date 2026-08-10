@@ -2,7 +2,7 @@ import type { HoSoTruong } from '../types/domain'
 import { getCurrentNienKhoa } from '../utils/nienKhoa'
 
 /** Danh sách trường mẫu để chọn ở màn đăng nhập — đa dạng cấp học/hệ thống đối tác để test UI.
- * Đây là bản seed ban đầu cho Hồ sơ trường, người dùng vẫn sửa được sau khi đăng nhập. */
+ * Đây là dữ liệu Hồ sơ trường (thuần xem, do Sở quản lý — trường không tự sửa). */
 export const MOCK_SCHOOLS: HoSoTruong[] = [
   {
     maTruong: 'MN001',

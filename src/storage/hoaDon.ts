@@ -3,7 +3,6 @@ import type { HoaDonRow } from '../types/domain'
 import { ensureSeededDanhMucPhi } from './danhMucPhi'
 import { saveHoaDonKhoanPhiByKy } from './hoaDonKhoanPhi'
 import { STORAGE_KEYS } from './keys'
-import { ensureSeededHocSinh } from './hocSinh'
 import { getHoSoTruong } from './hoSoTruong'
 
 type HoaDonStore = Record<string, HoaDonRow[]>
@@ -52,14 +51,12 @@ export function saveHoaDonByKy(ky: string, rows: HoaDonRow[]): void {
 }
 
 /** Sinh sẵn dữ liệu mẫu cho 1 kỳ nếu chưa có dữ liệu — để Tab "Danh sách" không trống khi demo
- * lần đầu. Đảm bảo Học sinh và Danh mục Phí đã có sẵn trước (khoá ngoại maHocSinh/maPhi).
- * Idempotent. */
+ * lần đầu. Đảm bảo Danh mục thu đã có sẵn trước (khoá ngoại maPhi). Idempotent. */
 export function ensureSeededHoaDon(ky: string): void {
   const store = readStore()
   if (store[ky]?.length) return
   const hoSo = getHoSoTruong()
   if (hoSo) {
-    ensureSeededHocSinh(hoSo.nienKhoa)
     ensureSeededDanhMucPhi(hoSo.nienKhoa)
   }
   store[ky] = buildHoaDonSeed(ky)

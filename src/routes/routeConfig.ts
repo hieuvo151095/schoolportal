@@ -1,6 +1,5 @@
 import {
   ArrowSyncRegular,
-  ClipboardTaskRegular,
   DataBarVerticalRegular,
   DocumentBulletListRegular,
   FolderRegular,
@@ -15,10 +14,9 @@ export interface NavLeaf {
 
 export const navTree: NavLeaf[] = [
   { path: '/dashboard', label: 'Tổng quan', icon: DataBarVerticalRegular },
-  { path: '/danh-muc-phi', label: 'Danh mục Phí', icon: FolderRegular },
-  { path: '/hoc-sinh', label: 'Học sinh', icon: ClipboardTaskRegular },
-  { path: '/hoa-don', label: 'Hoá đơn', icon: DocumentBulletListRegular },
-  { path: '/dong-bo', label: 'Đồng bộ', icon: ArrowSyncRegular },
+  { path: '/danh-muc-phi', label: 'Danh mục thu', icon: FolderRegular },
+  { path: '/hoa-don', label: 'Nhập dữ liệu', icon: DocumentBulletListRegular },
+  { path: '/dong-bo', label: 'Nộp báo cáo', icon: ArrowSyncRegular },
 ]
 
 export interface BreadcrumbTrailItem {

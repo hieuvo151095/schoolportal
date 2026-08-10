@@ -1,5 +1,4 @@
 import { getDanhMucPhiByNienKhoa } from '../../storage/danhMucPhi'
-import { getHocSinhByNienKhoa } from '../../storage/hocSinh'
 import { getHoaDonByKy, saveHoaDonByKy } from '../../storage/hoaDon'
 import { saveHoaDonKhoanPhiByKy } from '../../storage/hoaDonKhoanPhi'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
@@ -21,23 +20,18 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
     exampleValues: ['HD00001', 'HD00001'],
   },
   {
+    key: 'hoTenHocSinh',
+    columnLabel: 'Tên học sinh',
+    type: 'string',
+    required: true,
+    exampleValues: ['Nguyễn Văn An', 'Nguyễn Văn An'],
+  },
+  {
     key: 'maHocSinh',
-    columnLabel: 'Mã HS',
+    columnLabel: 'Mã học sinh',
     type: 'string',
     required: true,
     exampleValues: ['HS0001', 'HS0001'],
-    crossRef: { entityLabel: 'Học sinh', route: '/hoc-sinh' },
-    customValidator: (value) => {
-      const nienKhoa = getHoSoTruong()?.nienKhoa
-      if (!nienKhoa) return 'Chưa có niên khoá hoạt động trong Hồ sơ trường'
-      const exists = getHocSinhByNienKhoa(nienKhoa).some((hs) => hs.maHocSinh === value)
-      if (!exists) return 'Mã học sinh chưa tồn tại trong Danh sách học sinh'
-      return null
-    },
-    comboboxOptions: () => {
-      const nienKhoa = getHoSoTruong()?.nienKhoa
-      return nienKhoa ? getHocSinhByNienKhoa(nienKhoa).map((hs) => hs.maHocSinh) : []
-    },
   },
   {
     key: 'ky',
@@ -71,7 +65,7 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
   },
   {
     key: 'trangThai',
-    columnLabel: 'Trạng thái',
+    columnLabel: 'Trạng thái thanh toán',
     type: 'enum',
     required: true,
     enumValues: TRANG_THAI_LIST,
@@ -99,24 +93,17 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
     exampleValues: ['Nguyễn Thị Kế toán', 'Nguyễn Thị Kế toán'],
   },
   {
-    key: 'xacNhanBoi',
-    columnLabel: 'Xác nhận bởi',
-    type: 'string',
-    required: false,
-    exampleValues: ['Trần Văn Hiệu trưởng', 'Trần Văn Hiệu trưởng'],
-  },
-  {
     key: 'maPhi',
     columnLabel: 'Mã phí',
     type: 'string',
     required: true,
     exampleValues: ['HP001', 'BT001'],
-    crossRef: { entityLabel: 'Danh mục Phí', route: '/danh-muc-phi' },
+    crossRef: { entityLabel: 'Danh mục thu', route: '/danh-muc-phi' },
     customValidator: (value) => {
       const nienKhoa = getHoSoTruong()?.nienKhoa
       if (!nienKhoa) return 'Chưa có niên khoá hoạt động trong Hồ sơ trường'
       const exists = getDanhMucPhiByNienKhoa(nienKhoa).some((kp) => kp.maPhi === value)
-      if (!exists) return 'Mã phí chưa tồn tại trong Danh mục phí'
+      if (!exists) return 'Mã phí chưa tồn tại trong Danh mục thu'
       return null
     },
     comboboxOptions: () => {
@@ -151,6 +138,7 @@ function groupBySoHoaDon(lines: HoaDonUploadLineRow[]): { hoaDon: HoaDonRow[]; k
     hoaDonMap.set(line.soHoaDon, {
       soHoaDon: line.soHoaDon,
       maHocSinh: line.maHocSinh,
+      hoTenHocSinh: line.hoTenHocSinh,
       ky: line.ky,
       hanThanhToan: line.hanThanhToan,
       soTien: line.soTien,
@@ -159,7 +147,6 @@ function groupBySoHoaDon(lines: HoaDonUploadLineRow[]): { hoaDon: HoaDonRow[]; k
       trangThai: line.trangThai,
       daTra: line.daTra,
       taoBoi: line.taoBoi,
-      xacNhanBoi: line.xacNhanBoi,
       daDongBo: false,
     })
   }
@@ -175,12 +162,16 @@ export const hoaDonUploadConfig: UploadEntityConfig<HoaDonUploadLineRow> = {
   existingDataCheck: { key: 'soHoaDon', getExistingRows: (ky) => getHoaDonByKy(ky) },
   groupConsistencyCheck: {
     groupKey: 'soHoaDon',
-    fields: ['maHocSinh', 'hanThanhToan', 'hinhThucThanhToan', 'ngayThanhToan', 'trangThai', 'daTra', 'taoBoi', 'xacNhanBoi'],
+    fields: ['maHocSinh', 'hoTenHocSinh', 'hanThanhToan', 'hinhThucThanhToan', 'ngayThanhToan', 'trangThai', 'daTra', 'taoBoi'],
   },
   contextField: { key: 'ky', label: 'Kỳ' },
+  /** Mỗi sheet trong file = 1 Mã phí (tên sheet), lấy động từ Danh mục thu tại thời điểm tải
+   * template — xem HoaDonUploadPage (getSheetNames) và upload-engine/buildTemplate.ts. */
+  sheetKeyField: { key: 'maPhi', columnLabel: 'Mã phí' },
   buildRow: (row, ky) => ({
     soHoaDon: row.soHoaDon as string,
     maHocSinh: row.maHocSinh as string,
+    hoTenHocSinh: row.hoTenHocSinh as string,
     ky,
     hanThanhToan: row.hanThanhToan as string,
     hinhThucThanhToan: (row.hinhThucThanhToan as HinhThucThanhToan | null) ?? null,
@@ -188,7 +179,6 @@ export const hoaDonUploadConfig: UploadEntityConfig<HoaDonUploadLineRow> = {
     trangThai: row.trangThai as TrangThaiHoaDon,
     daTra: (row.daTra as number | null) ?? 0,
     taoBoi: row.taoBoi as string,
-    xacNhanBoi: (row.xacNhanBoi as string) || null,
     maPhi: row.maPhi as string,
     soTien: row.soTien as number,
   }),

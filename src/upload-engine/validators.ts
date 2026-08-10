@@ -17,8 +17,7 @@ export interface CoerceAllResult {
 }
 
 /** Context (Niên khoá/Kỳ) được coi là "đọc từ chính dữ liệu file" khi contextField.key trùng với
- * 1 field thật trong danh sách cột upload (Danh mục Phí, Hoá đơn) — khác với Học sinh, nơi Niên
- * khoá vẫn là giá trị chọn từ ngoài (không có field tương ứng trong HocSinhRow). */
+ * 1 field thật trong danh sách cột upload (vd Kỳ ở Hoá đơn). */
 export function isContextDataDerived<TRow extends object>(config: UploadEntityConfig<TRow>): boolean {
   return config.fields.some((field) => field.key === config.contextField.key)
 }
@@ -120,7 +119,12 @@ export function coerceAllRows<TRow extends object>(
       coerced[field.key] = value
       if (error) fieldErrors.push(error)
     }
-    return { id: `row-${parsedRow.excelRowNumber}`, excelRowNumber: parsedRow.excelRowNumber, coerced, fieldErrors }
+    return {
+      id: `row-${parsedRow.sheetName}-${parsedRow.excelRowNumber}`,
+      excelRowNumber: parsedRow.excelRowNumber,
+      coerced,
+      fieldErrors,
+    }
   })
 
   return { missingColumns: [], rows }

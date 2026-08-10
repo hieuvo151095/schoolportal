@@ -9,19 +9,22 @@ const TRANG_THAI_COLOR: Record<TrangThaiHoaDon, 'success' | 'warning' | 'informa
 }
 
 /** Cấu trúc cột DỮ LIỆU dùng chung giữa bảng chính Hoá đơn và bảng "Hoá đơn" trong pop-up module
- * Đồng bộ — CHỈ 1 nơi định nghĩa để không lệch cột giữa 2 nơi hiển thị. Không gồm cột hành động
- * "Xem chi tiết"/"Danh mục phí" (đặc thù bảng chính, không cần trong pop-up Đồng bộ) — thêm riêng
- * ở nơi gọi qua buildHoaDonActionColumn nếu cần. */
+ * Nộp báo cáo — CHỈ 1 nơi định nghĩa để không lệch cột giữa 2 nơi hiển thị. Không gồm cột hành
+ * động "Xem chi tiết" hay cột "Trạng thái" (đồng bộ/báo cáo, đặc thù bảng chính) — thêm riêng ở
+ * nơi gọi. Cột thanh toán đặt tên "Trạng thái thanh toán" (không phải "Trạng thái" đơn thuần) để
+ * không trùng với cột "Trạng thái" (Đã báo cáo/Chưa báo cáo) ở bảng chính. */
 export function buildHoaDonDataColumns<TRow extends HoaDonRow>(): TableColumnDefinition<TRow>[] {
   return [
     createTableColumn<TRow>({ columnId: 'soHoaDon', renderHeaderCell: () => 'Mã HĐ', renderCell: (item) => item.soHoaDon }),
     createTableColumn<TRow>({
-      columnId: 'hocSinh',
-      renderHeaderCell: () => 'Học sinh',
-      renderCell: (item) => {
-        const hoTen = (item as unknown as { hoTenHocSinh?: string }).hoTenHocSinh
-        return `${hoTen || item.maHocSinh} (${item.maHocSinh})`
-      },
+      columnId: 'hoTenHocSinh',
+      renderHeaderCell: () => 'Tên học sinh',
+      renderCell: (item) => item.hoTenHocSinh,
+    }),
+    createTableColumn<TRow>({
+      columnId: 'maHocSinh',
+      renderHeaderCell: () => 'Mã học sinh',
+      renderCell: (item) => item.maHocSinh,
     }),
     createTableColumn<TRow>({ columnId: 'ky', renderHeaderCell: () => 'Kỳ', renderCell: (item) => item.ky }),
     createTableColumn<TRow>({
@@ -46,7 +49,7 @@ export function buildHoaDonDataColumns<TRow extends HoaDonRow>(): TableColumnDef
     }),
     createTableColumn<TRow>({
       columnId: 'trangThai',
-      renderHeaderCell: () => 'Trạng thái',
+      renderHeaderCell: () => 'Trạng thái thanh toán',
       renderCell: (item) => (
         <Badge appearance="tint" color={TRANG_THAI_COLOR[item.trangThai]} style={{ whiteSpace: 'nowrap' }}>
           {item.trangThai}
@@ -59,13 +62,9 @@ export function buildHoaDonDataColumns<TRow extends HoaDonRow>(): TableColumnDef
       renderCell: (item) => (item.trangThai === 'Thanh toán một phần' ? formatCurrency(item.daTra) : '—'),
     }),
     createTableColumn<TRow>({
-      columnId: 'taoXacNhan',
-      renderHeaderCell: () => 'Tạo bởi / Xác nhận bởi',
-      renderCell: (item) => (
-        <span style={{ whiteSpace: 'nowrap' }}>
-          {item.taoBoi} / {item.xacNhanBoi ?? '—'}
-        </span>
-      ),
+      columnId: 'taoBoi',
+      renderHeaderCell: () => 'Tạo bởi',
+      renderCell: (item) => <span style={{ whiteSpace: 'nowrap' }}>{item.taoBoi}</span>,
     }),
   ]
 }

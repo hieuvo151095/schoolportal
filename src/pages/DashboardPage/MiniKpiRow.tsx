@@ -30,11 +30,6 @@ export function MiniKpiRow({ miniKpi }: MiniKpiRowProps) {
   return (
     <div className={styles.grid}>
       <Card className={styles.card}>
-        <Caption1>Tổng học sinh</Caption1>
-        <Body1 className={styles.value}>{miniKpi.tongHocSinh ?? '—'}</Body1>
-      </Card>
-
-      <Card className={styles.card}>
         <Caption1>Tổng số khoản phí đang áp dụng</Caption1>
         <Body1 className={styles.value}>{miniKpi.tongKhoanPhi ?? '—'}</Body1>
       </Card>

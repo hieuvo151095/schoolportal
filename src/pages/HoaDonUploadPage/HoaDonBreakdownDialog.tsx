@@ -79,7 +79,7 @@ function joinBreakdown(soHoaDon: string, ky: string, catalog: KhoanPhiRow[]): Br
 }
 
 interface HoaDonBreakdownDialogProps {
-  row: (HoaDonRow & { hoTenHocSinh: string }) | null
+  row: HoaDonRow | null
   onClose: () => void
 }
 
@@ -148,7 +148,6 @@ export function HoaDonBreakdownDialog({ row, onClose }: HoaDonBreakdownDialogPro
                 <div className={styles.summaryCol}>
                   <LabelValueField label="Hình thức thanh toán" value={row.hinhThucThanhToan ?? '—'} />
                   <LabelValueField label="Tạo bởi" value={row.taoBoi} />
-                  <LabelValueField label="Xác nhận bởi" value={row.xacNhanBoi ?? '—'} />
                 </div>
               </div>
 

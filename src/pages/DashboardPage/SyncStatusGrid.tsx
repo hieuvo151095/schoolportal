@@ -21,8 +21,8 @@ const useStyles = makeStyles({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  // Đẩy nút xuống đáy card bất kể nội dung phía trên dài ngắn khác nhau — cả 3 nút
-  // "Nhập liệu" luôn thẳng hàng ngang.
+  // Đẩy nút xuống đáy card bất kể nội dung phía trên dài ngắn khác nhau — cả 2 nút luôn thẳng
+  // hàng ngang.
   action: {
     marginTop: 'auto',
   },
@@ -30,23 +30,21 @@ const useStyles = makeStyles({
 
 interface SyncStatusGridProps {
   danhMucPhi: EntitySyncStatus
-  hocSinh: EntitySyncStatus
   hoaDon: EntitySyncStatus
 }
 
-export function SyncStatusGrid({ danhMucPhi, hocSinh, hoaDon }: SyncStatusGridProps) {
+export function SyncStatusGrid({ danhMucPhi, hoaDon }: SyncStatusGridProps) {
   const styles = useStyles()
   const navigate = useNavigate()
 
-  const entities: { status: EntitySyncStatus; path: string }[] = [
-    { status: danhMucPhi, path: '/danh-muc-phi' },
-    { status: hocSinh, path: '/hoc-sinh' },
-    { status: hoaDon, path: '/hoa-don' },
+  const entities: { status: EntitySyncStatus; path: string; buttonLabel: string }[] = [
+    { status: danhMucPhi, path: '/danh-muc-phi', buttonLabel: 'Kiểm tra' },
+    { status: hoaDon, path: '/hoa-don', buttonLabel: 'Nhập liệu' },
   ]
 
   return (
     <div className={styles.grid}>
-      {entities.map(({ status, path }) => (
+      {entities.map(({ status, path, buttonLabel }) => (
         <Card key={status.label} className={styles.card}>
           <div className={styles.header}>
             <Subtitle2>{status.label}</Subtitle2>
@@ -62,8 +60,8 @@ export function SyncStatusGrid({ danhMucPhi, hocSinh, hoaDon }: SyncStatusGridPr
           </Body1>
           <Caption1>
             {status.soLuongChoDongBo > 0
-              ? `${status.soLuongChoDongBo} bản ghi chờ đồng bộ`
-              : 'Không có bản ghi chờ đồng bộ'}
+              ? `${status.soLuongChoDongBo} bản ghi chờ báo cáo`
+              : 'Không có bản ghi chờ báo cáo'}
           </Caption1>
           <Button
             className={styles.action}
@@ -73,7 +71,7 @@ export function SyncStatusGrid({ danhMucPhi, hocSinh, hoaDon }: SyncStatusGridPr
             icon={<ArrowRightRegular />}
             onClick={() => navigate(path)}
           >
-            Nhập liệu
+            {buttonLabel}
           </Button>
         </Card>
       ))}

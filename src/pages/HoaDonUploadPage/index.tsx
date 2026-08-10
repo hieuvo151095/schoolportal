@@ -24,8 +24,8 @@ import { DongBoStatusBadge } from '../../components/DongBoStatusBadge'
 import { FilterBar } from '../../components/FilterBar'
 import { RangeFilterField } from '../../components/RangeFilterField'
 import { TableHeaderRow } from '../../components/TableHeaderRow'
+import { getDanhMucPhiByNienKhoa } from '../../storage/danhMucPhi'
 import { ensureSeededHoaDon, getHoaDonStore } from '../../storage/hoaDon'
-import { getHocSinhByNienKhoa } from '../../storage/hocSinh'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
 import type { HinhThucThanhToan, HoaDonRow, TrangThaiHoaDon } from '../../types/domain'
 import { AddRecordDialog } from '../../upload-engine/AddRecordDialog'
@@ -33,7 +33,7 @@ import { ReviewUploadDialog } from '../../upload-engine/ReviewUploadDialog'
 import { UploadActionsRow } from '../../upload-engine/UploadActionsRow'
 import { useReviewUpload } from '../../upload-engine/useReviewUpload'
 import { DEFAULT_KY, getKyOptions } from '../../utils/ky'
-import { COL_HANH_DONG, COL_NGUOI_KEP, COL_TRANG_THAI_RONG } from '../../utils/tableColumnSizes'
+import { COL_HANH_DONG, COL_TRANG_THAI_RONG } from '../../utils/tableColumnSizes'
 import { useFilterDraft } from '../../utils/useFilterDraft'
 import { DongBoDialog } from '../DongBoPage/DongBoDialog'
 import { useDongBoDialog } from '../DongBoPage/useDongBoDialog'
@@ -56,8 +56,6 @@ function trangThaiDisplayValue(selected: TrangThaiHoaDon[]): string {
   if (selected.length === 1) return selected[0]
   return `Đã chọn ${selected.length} mục`
 }
-
-type DisplayRow = HoaDonRow & { hoTenHocSinh: string; lop: string }
 
 interface HoaDonNavState {
   presetTrangThai?: TrangThaiHoaDon[]
@@ -90,13 +88,13 @@ const useStyles = makeStyles({
 
 const columnSizingOptions = {
   trangThai: COL_TRANG_THAI_RONG,
-  taoXacNhan: COL_NGUOI_KEP,
   danhMucPhi: COL_HANH_DONG,
 }
 
 interface DanhSachFilters {
-  q: string
-  lop: string
+  soHoaDon: string
+  tenHocSinh: string
+  maHocSinh: string
   ky: string
   trangThai: TrangThaiHoaDon[]
   hinhThuc: string
@@ -109,8 +107,9 @@ interface DanhSachFilters {
 
 function buildFilterDefaults(presetTrangThai?: TrangThaiHoaDon[]): DanhSachFilters {
   return {
-    q: '',
-    lop: TAT_CA,
+    soHoaDon: '',
+    tenHocSinh: '',
+    maHocSinh: '',
     ky: TAT_CA,
     trangThai: presetTrangThai ?? [],
     hinhThuc: TAT_CA,
@@ -122,10 +121,10 @@ function buildFilterDefaults(presetTrangThai?: TrangThaiHoaDon[]): DanhSachFilte
   }
 }
 
-function buildColumns(onXemChiTiet: (row: DisplayRow) => void): TableColumnDefinition<DisplayRow>[] {
+function buildColumns(onXemChiTiet: (row: HoaDonRow) => void): TableColumnDefinition<HoaDonRow>[] {
   return [
-    ...buildHoaDonDataColumns<DisplayRow>(),
-    createTableColumn<DisplayRow>({
+    ...buildHoaDonDataColumns<HoaDonRow>(),
+    createTableColumn<HoaDonRow>({
       columnId: 'danhMucPhi',
       renderHeaderCell: () => 'Danh mục phí',
       renderCell: (item) => (
@@ -134,9 +133,9 @@ function buildColumns(onXemChiTiet: (row: DisplayRow) => void): TableColumnDefin
         </Button>
       ),
     }),
-    createTableColumn<DisplayRow>({
+    createTableColumn<HoaDonRow>({
       columnId: 'daDongBo',
-      renderHeaderCell: () => 'Đồng bộ',
+      renderHeaderCell: () => 'Trạng thái',
       renderCell: (item) => <DongBoStatusBadge daDongBo={item.daDongBo} />,
     }),
   ]
@@ -147,7 +146,7 @@ export function HoaDonUploadPage() {
   const kyOptions = getKyOptions()
   const location = useLocation()
   const presetTrangThai = (location.state as HoaDonNavState | null)?.presetTrangThai
-  const [selectedRow, setSelectedRow] = useState<DisplayRow | null>(null)
+  const [selectedRow, setSelectedRow] = useState<HoaDonRow | null>(null)
   const columns = useMemo(() => buildColumns(setSelectedRow), [setSelectedRow])
   const { showSuccess } = useAppToast()
 
@@ -160,47 +159,17 @@ export function HoaDonUploadPage() {
   const [addOpen, setAddOpen] = useState(false)
 
   const hoSo = getHoSoTruong()
-  const hocSinhLookup = useMemo(() => {
-    const map = new Map<string, { hoTen: string; lop: string }>()
-    if (hoSo) {
-      for (const hs of getHocSinhByNienKhoa(hoSo.nienKhoa)) {
-        map.set(hs.maHocSinh, { hoTen: hs.hoTen, lop: hs.lop })
-      }
-    }
-    return map
-  }, [hoSo])
 
-  const allRows = useMemo(() => {
-    const store = getHoaDonStore()
-    return Object.values(store)
-      .flat()
-      .map((row) => ({
-        ...row,
-        hoTenHocSinh: hocSinhLookup.get(row.maHocSinh)?.hoTen ?? '',
-        lop: hocSinhLookup.get(row.maHocSinh)?.lop ?? '',
-      }))
-  }, [hocSinhLookup, refreshTick])
-
-  const lopOptions = useMemo(
-    () => Array.from(new Set(allRows.map((row) => row.lop).filter(Boolean))).sort(),
-    [allRows],
-  )
+  const allRows = useMemo(() => Object.values(getHoaDonStore()).flat(), [refreshTick])
 
   const [filters, setFilters] = useState<DanhSachFilters>(() => buildFilterDefaults(presetTrangThai))
   const [draft, setDraft] = useFilterDraft<DanhSachFilters>(filters)
 
   const filteredRows = useMemo(() => {
     return allRows.filter((row) => {
-      if (filters.q) {
-        const q = filters.q.toLowerCase()
-        if (
-          !row.soHoaDon.toLowerCase().includes(q) &&
-          !row.maHocSinh.toLowerCase().includes(q) &&
-          !row.hoTenHocSinh.toLowerCase().includes(q)
-        )
-          return false
-      }
-      if (filters.lop !== TAT_CA && row.lop !== filters.lop) return false
+      if (filters.soHoaDon && !row.soHoaDon.toLowerCase().includes(filters.soHoaDon.toLowerCase())) return false
+      if (filters.tenHocSinh && !row.hoTenHocSinh.toLowerCase().includes(filters.tenHocSinh.toLowerCase())) return false
+      if (filters.maHocSinh && !row.maHocSinh.toLowerCase().includes(filters.maHocSinh.toLowerCase())) return false
       if (filters.ky !== TAT_CA && row.ky !== filters.ky) return false
       if (filters.trangThai.length > 0 && !filters.trangThai.includes(row.trangThai)) return false
       if (filters.hinhThuc !== TAT_CA && row.hinhThucThanhToan !== filters.hinhThuc) return false
@@ -215,7 +184,7 @@ export function HoaDonUploadPage() {
 
   return (
     <div className={styles.root}>
-      <Title2>Hoá đơn</Title2>
+      <Title2>Nhập dữ liệu</Title2>
 
       {review.confirmSummary && (
         <MessageBar intent="success">
@@ -232,22 +201,14 @@ export function HoaDonUploadPage() {
           setFilters(buildFilterDefaults())
         }}
       >
-        <Field label="Tìm kiếm">
-          <Input value={draft.q} onChange={(_, data) => setDraft({ q: data.value })} placeholder="Mã HĐ, mã HS hoặc tên..." />
+        <Field label="Mã HĐ">
+          <Input value={draft.soHoaDon} onChange={(_, data) => setDraft({ soHoaDon: data.value })} placeholder="Mã HĐ..." />
         </Field>
-        <Field label="Lớp">
-          <Dropdown
-            value={draft.lop === TAT_CA ? 'Tất cả' : draft.lop}
-            selectedOptions={[draft.lop]}
-            onOptionSelect={(_, data) => data.optionValue && setDraft({ lop: data.optionValue })}
-          >
-            <Option value={TAT_CA}>Tất cả</Option>
-            {lopOptions.map((option) => (
-              <Option key={option} value={option}>
-                {option}
-              </Option>
-            ))}
-          </Dropdown>
+        <Field label="Tên học sinh">
+          <Input value={draft.tenHocSinh} onChange={(_, data) => setDraft({ tenHocSinh: data.value })} placeholder="Tên học sinh..." />
+        </Field>
+        <Field label="Mã học sinh">
+          <Input value={draft.maHocSinh} onChange={(_, data) => setDraft({ maHocSinh: data.value })} placeholder="Mã học sinh..." />
         </Field>
         <Field label="Kỳ">
           <Dropdown
@@ -263,7 +224,7 @@ export function HoaDonUploadPage() {
             ))}
           </Dropdown>
         </Field>
-        <Field label="Trạng thái">
+        <Field label="Trạng thái thanh toán">
           <Dropdown
             multiselect
             value={trangThaiDisplayValue(draft.trangThai)}
@@ -308,15 +269,15 @@ export function HoaDonUploadPage() {
           from={<Input type="date" value={draft.ngayTtTu} onChange={(_, data) => setDraft({ ngayTtTu: data.value })} />}
           to={<Input type="date" value={draft.ngayTtDen} onChange={(_, data) => setDraft({ ngayTtDen: data.value })} />}
         />
-        <Field label="Đồng bộ">
+        <Field label="Trạng thái báo cáo">
           <Dropdown
-            value={draft.dongBo === TAT_CA ? 'Tất cả' : draft.dongBo === CHUA_DONG_BO ? 'Chưa đồng bộ' : 'Hoàn thành'}
+            value={draft.dongBo === TAT_CA ? 'Tất cả' : draft.dongBo === CHUA_DONG_BO ? 'Chưa báo cáo' : 'Đã báo cáo'}
             selectedOptions={[draft.dongBo]}
             onOptionSelect={(_, data) => data.optionValue && setDraft({ dongBo: data.optionValue })}
           >
             <Option value={TAT_CA}>Tất cả</Option>
-            <Option value="true">Hoàn thành</Option>
-            <Option value={CHUA_DONG_BO}>Chưa đồng bộ</Option>
+            <Option value="true">Đã báo cáo</Option>
+            <Option value={CHUA_DONG_BO}>Chưa báo cáo</Option>
           </Dropdown>
         </Field>
       </FilterBar>
@@ -325,10 +286,15 @@ export function HoaDonUploadPage() {
         <div className={styles.uploadRow}>
           {filters.dongBo === CHUA_DONG_BO && (
             <Button appearance="secondary" onClick={dongBoDialog.openDialog}>
-              Bắt đầu đồng bộ
+              Nộp báo cáo
             </Button>
           )}
-          <UploadActionsRow config={hoaDonUploadConfig} processing={review.processing} onFileSelected={review.handleFile} />
+          <UploadActionsRow
+            config={hoaDonUploadConfig}
+            processing={review.processing}
+            onFileSelected={review.handleFile}
+            getSheetNames={() => (hoSo ? getDanhMucPhiByNienKhoa(hoSo.nienKhoa).map((kp) => kp.maPhi) : [])}
+          />
           <Button appearance="secondary" onClick={() => setAddOpen(true)}>
             Thêm mới
           </Button>
@@ -348,9 +314,9 @@ export function HoaDonUploadPage() {
               columnSizingOptions={columnSizingOptions}
             >
               <TableHeaderRow />
-              <DataGridBody<DisplayRow>>
+              <DataGridBody<HoaDonRow>>
                 {({ item, rowId }) => (
-                  <DataGridRow<DisplayRow> key={rowId}>
+                  <DataGridRow<HoaDonRow> key={rowId}>
                     {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
                   </DataGridRow>
                 )}
@@ -382,7 +348,6 @@ export function HoaDonUploadPage() {
         pending={dongBoDialog.pending}
         readOnly={false}
         onConfirm={dongBoDialog.confirm}
-        defaultTab="hoaDon"
       />
 
       <AddRecordDialog

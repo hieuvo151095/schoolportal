@@ -20,8 +20,8 @@ export function appendDongBoLichSu(entry: DongBoLichSuEntry): void {
 }
 
 /** Sinh sẵn vài dòng lịch sử mẫu nếu chưa có dòng nào — để bảng không trống khi demo lần đầu.
- * Gọi SAU khi 3 module Danh mục Phí/Học sinh/Hoá đơn đã ensureSeeded (dữ liệu mẫu tham chiếu
- * trong seed phải tồn tại thật để nút "Chi tiết" mở lại đúng nội dung). Idempotent. */
+ * Gọi SAU khi module Hoá đơn đã ensureSeeded (dữ liệu mẫu tham chiếu trong seed phải tồn tại
+ * thật để nút "Chi tiết" mở lại đúng nội dung). Idempotent. */
 export function ensureSeededDongBoLichSu(): void {
   if (getDongBoLichSu().length > 0) return
   localStorage.setItem(STORAGE_KEYS.dongBoLichSu, JSON.stringify(buildDongBoLichSuSeed()))

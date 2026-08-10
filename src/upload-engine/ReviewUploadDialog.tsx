@@ -176,14 +176,12 @@ export function ReviewUploadDialog<TRow extends object>({
                   <MessageBar intent="error" shape="square">
                     <MessageBarBody>
                       <MessageBarTitle>
-                        Phát hiện {crossRefGroups.map((g) => `${g.count} ${g.entityLabel.toLowerCase() === 'học sinh' ? 'Mã HS' : 'Mã phí'}`).join(' / ')} chưa được đồng bộ.
+                        Phát hiện {crossRefGroups.map((g) => `${g.count} Mã phí`).join(' / ')} chưa có trong Danh mục thu.
                       </MessageBarTitle>
-                      Vui lòng chuyển sang trang tương ứng để nhập dữ liệu còn thiếu trước, sau đó quay lại lưu dữ liệu {config.entityLabel}.
+                      Vui lòng kiểm tra lại Mã phí trong file trước khi lưu dữ liệu {config.entityLabel}.
                       <div className={styles.missingCodesList}>
                         {crossRefGroups.map((g) => (
-                          <div key={g.entityLabel}>
-                            {g.entityLabel.toLowerCase() === 'học sinh' ? 'Mã HS còn thiếu' : 'Mã phí còn thiếu'}: {g.values.join(', ')}
-                          </div>
+                          <div key={g.entityLabel}>Mã phí còn thiếu: {g.values.join(', ')}</div>
                         ))}
                       </div>
                     </MessageBarBody>

@@ -1,5 +1,3 @@
-import type { LoaiDuLieuDongBo } from '../types/domain'
-
 export type FieldType = 'string' | 'number' | 'enum' | 'date' | 'nullable-enum'
 
 export interface UploadFieldConfig<TRow> {
@@ -38,9 +36,15 @@ export interface RowError {
 }
 
 export interface UploadEntityConfig<TRow extends object> {
-  entityKey: LoaiDuLieuDongBo
+  entityKey: string
   entityLabel: string
   fields: UploadFieldConfig<TRow>[]
+  /** Khi khai báo: field này KHÔNG đọc từ 1 cột trong file — mỗi SHEET trong file coi là 1 giá
+   * trị của field này (tên sheet = giá trị), áp dụng cho MỌI dòng trong sheet đó. Dùng cho Hoá
+   * đơn — mỗi sheet = 1 Mã phí, người dùng khỏi phải gõ tay Mã phí từng dòng. Chỉ ảnh hưởng luồng
+   * upload file (parseFile/buildTemplate) — không ảnh hưởng AddRecordDialog (form nhập tay 1
+   * dòng vẫn hiện field này như field string/enum bình thường qua comboboxOptions). */
+  sheetKeyField?: { key: keyof TRow & string; columnLabel: string }
   /** Field (hoặc tổ hợp nhiều field) dùng làm khoá kiểm tra trùng lặp trong phạm vi 1 file đang
    * upload — vd Hoá đơn dùng tổ hợp [soHoaDon, maPhi] vì nhiều dòng được phép chia sẻ chung
    * soHoaDon (1 hoá đơn nhiều khoản phí), chỉ cấm trùng đúng 1 khoản phí trong cùng 1 hoá đơn. */

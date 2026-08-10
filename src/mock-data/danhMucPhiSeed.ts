@@ -4,7 +4,8 @@ import type { KhoanPhiRow } from '../types/domain'
  * ở module Danh mục Phí bên dashportal (Sở), dùng để Tab "Danh sách danh mục phí" có sẵn dữ
  * liệu khi demo lần đầu. */
 export function buildDanhMucPhiSeed(nienKhoa: string): KhoanPhiRow[] {
-  const rows: Omit<KhoanPhiRow, 'nienKhoa' | 'daDongBo'>[] = [
+  const ngayCapNhat = new Date().toISOString()
+  const rows: Omit<KhoanPhiRow, 'nienKhoa' | 'ngayCapNhat'>[] = [
     {
       maPhi: 'HP001',
       tenPhi: 'Học phí tháng',
@@ -116,5 +117,5 @@ export function buildDanhMucPhiSeed(nienKhoa: string): KhoanPhiRow[] {
       ghiChu: 'Áp dụng tháng 6-7',
     },
   ]
-  return rows.map((row) => ({ ...row, nienKhoa, daDongBo: true }))
+  return rows.map((row) => ({ ...row, nienKhoa, ngayCapNhat }))
 }

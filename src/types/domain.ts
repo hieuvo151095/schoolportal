@@ -30,8 +30,6 @@ export type DanhMucKhoanThu =
 
 export type HinhThucThanhToan = 'Tiền mặt' | 'Chuyển khoản' | 'Ví điện tử' | 'QR Code'
 
-export type GioiTinh = 'Nam' | 'Nữ'
-
 /** Nhãn hiển thị cho nhân viên trường. Khi export JSON, 'Chưa thanh toán' được map sang
  * enum thật của dashportal ('Đã gửi') — xem upload-engine/exportJson.ts. */
 export type TrangThaiHoaDon = 'Đã thanh toán' | 'Thanh toán một phần' | 'Chưa thanh toán'
@@ -49,8 +47,7 @@ export interface HoSoTruong {
   xaPhuong: string
   capHoc: CapHoc
   heThongDoiTac: HeThongDoiTac
-  /** Niên khoá đang hoạt động — default cho upload Danh mục Phí/Học sinh, và là chuẩn
-   * đối chiếu khoá ngoại maHocSinh khi upload Hoá đơn. */
+  /** Niên khoá đang hoạt động — chuẩn đối chiếu khoá ngoại maPhi khi upload Hoá đơn. */
   nienKhoa: string
 }
 
@@ -65,28 +62,16 @@ export interface KhoanPhiRow {
   nienKhoa: string
   thamChieuPhapLy: string
   ghiChu: string
-  /** true = đã được xác nhận qua module "Đồng bộ" (gửi lên Sở) — false = mới lưu ở bước nhập
-   * liệu, đang chờ. Bảng chính của module vẫn hiện cả 2 trạng thái, chỉ module Đồng bộ lọc theo
-   * false. */
-  daDongBo: boolean
-}
-
-export interface HocSinhRow {
-  maHocSinh: string
-  hoTen: string
-  lop: string
-  khoi: string
-  gioiTinh: GioiTinh
-  nienKhoa: string
-  /** true = đã được xác nhận qua module "Đồng bộ" (gửi lên Sở) — false = mới lưu ở bước nhập
-   * liệu, đang chờ. Bảng chính của module vẫn hiện cả 2 trạng thái, chỉ module Đồng bộ lọc theo
-   * false. */
-  daDongBo: boolean
+  /** Thời điểm dữ liệu này được ghi nhận lần gần nhất (proxy nội bộ — schoolportal chưa có kênh
+   * đồng bộ KV thật với dashportal, xem src/types/domain.ts comment đầu file). Hiện ở cột "Ngày
+   * cập nhật" của Danh mục thu (thuần xem, không còn CRUD phía trường). */
+  ngayCapNhat: string
 }
 
 export interface HoaDonRow {
   soHoaDon: string
   maHocSinh: string
+  hoTenHocSinh: string
   ky: string
   hanThanhToan: string
   soTien: number
@@ -95,10 +80,9 @@ export interface HoaDonRow {
   trangThai: TrangThaiHoaDon
   daTra: number
   taoBoi: string
-  xacNhanBoi: string | null
-  /** true = đã được xác nhận qua module "Đồng bộ" (gửi lên Sở) — false = mới lưu ở bước nhập
-   * liệu, đang chờ. Bảng chính của module vẫn hiện cả 2 trạng thái, chỉ module Đồng bộ lọc theo
-   * false. */
+  /** true = đã được xác nhận qua module "Nộp báo cáo" (gửi lên Sở) — false = mới lưu ở bước nhập
+   * liệu, đang chờ. Bảng chính của module vẫn hiện cả 2 trạng thái, chỉ module Nộp báo cáo lọc
+   * theo false. */
   daDongBo: boolean
 }
 
@@ -116,6 +100,7 @@ export interface HoaDonKhoanPhiRow {
 export interface HoaDonUploadLineRow {
   soHoaDon: string
   maHocSinh: string
+  hoTenHocSinh: string
   ky: string
   hanThanhToan: string
   hinhThucThanhToan: HinhThucThanhToan | null
@@ -123,22 +108,15 @@ export interface HoaDonUploadLineRow {
   trangThai: TrangThaiHoaDon
   daTra: number
   taoBoi: string
-  xacNhanBoi: string | null
   maPhi: string
   soTien: number
 }
 
-export type LoaiDuLieuDongBo = 'danhMucPhi' | 'hocSinh' | 'hoaDon'
-
 export type TrangThaiDongBo = 'Thành công' | 'Thất bại'
 
-/** 1 lần chạy module "Đồng bộ" — gộp cả 3 loại dữ liệu (Danh mục Phí/Học sinh/Hoá đơn) trong
- * cùng 1 lần bấm nút "Đồng bộ". Khác hẳn khái niệm "lưu dữ liệu" ở từng module nhập liệu (chỉ
- * ghi vào localStorage với daDongBo=false, không tạo dòng lịch sử ở đây).
- * Thành công: mọi bản ghi đã tick (soLuongDaChon) được set daDongBo=true.
- * Thất bại: KHÔNG bản ghi nào được set true (rollback toàn bộ, giữ nguyên false để thử lại sau)
- * — soLuongDaChon vẫn ghi lại đúng những gì ĐÃ CHỌN lúc đó (dù không thành) để mở "Chi tiết" xem
- * lại nội dung đã tick và biết cần sửa gì trước khi thử lại. */
+/** 1 lần chạy module "Nộp báo cáo" — chỉ còn đúng 1 loại dữ liệu (Hoá đơn). Khác hẳn khái niệm
+ * "lưu dữ liệu" ở module Nhập dữ liệu (chỉ ghi vào localStorage với daDongBo=false, không tạo
+ * dòng lịch sử ở đây). Thành công: mọi hoá đơn đã tick (soLuongHoaDon) được set daDongBo=true. */
 export interface DongBoLichSuEntry {
   id: string
   thoiDiem: string
@@ -146,17 +124,9 @@ export interface DongBoLichSuEntry {
   trangThai: TrangThaiDongBo
   /** Chỉ có giá trị khi trangThai = 'Thất bại' — lý do cụ thể, hiện trong tooltip icon cạnh badge. */
   lyDoThatBai: string | null
-  soLuongDaChon: {
-    danhMucPhi: number
-    hocSinh: number
-    hoaDon: number
-  }
-  /** Snapshot đúng những mã đã được tick chọn trong lần đồng bộ này (dù thành công hay thất
-   * bại) — dùng để mở lại "Chi tiết" xem đúng nội dung của lần đó, không phụ thuộc dữ liệu hiện
-   * tại (có thể đã đổi khác kể từ lúc đó). */
-  chiTietMa: {
-    danhMucPhi: string[]
-    hocSinh: string[]
-    hoaDon: string[]
-  }
+  soLuongHoaDon: number
+  /** Snapshot đúng các Mã HĐ đã được tick chọn trong lần nộp báo cáo này — dùng để mở lại "Chi
+   * tiết" xem đúng nội dung của lần đó, không phụ thuộc dữ liệu hiện tại (có thể đã đổi khác kể
+   * từ lúc đó). */
+  maHoaDon: string[]
 }

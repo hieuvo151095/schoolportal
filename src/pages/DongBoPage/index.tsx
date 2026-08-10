@@ -27,14 +27,13 @@ import { TableHeaderRow } from '../../components/TableHeaderRow'
 import { ensureSeededDanhMucPhi } from '../../storage/danhMucPhi'
 import { ensureSeededDongBoLichSu, getDongBoLichSu } from '../../storage/dongBoLichSu'
 import { ensureSeededHoaDon } from '../../storage/hoaDon'
-import { ensureSeededHocSinh } from '../../storage/hocSinh'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
-import type { DongBoLichSuEntry, TrangThaiDongBo } from '../../types/domain'
+import type { DongBoLichSuEntry, HoaDonRow, TrangThaiDongBo } from '../../types/domain'
 import { formatDateTime } from '../../utils/date'
 import { DEFAULT_KY } from '../../utils/ky'
 import { useFilterDraft } from '../../utils/useFilterDraft'
 import { DongBoDialog } from './DongBoDialog'
-import { resolveChiTiet, type PendingData } from './dongBoLogic'
+import { resolveChiTiet } from './dongBoLogic'
 import { useDongBoDialog } from './useDongBoDialog'
 
 const TAT_CA = 'all'
@@ -81,16 +80,11 @@ interface HistoryFilters {
 
 const FILTER_DEFAULTS: HistoryFilters = { q: '', trangThai: [], tuNgay: '', denNgay: '' }
 
-const EMPTY_PENDING: PendingData = { danhMucPhi: [], hocSinh: [], hoaDon: [] }
-
 export function DongBoPage() {
   const styles = useStyles()
   const hoSo = getHoSoTruong()
 
-  if (hoSo) {
-    ensureSeededDanhMucPhi(hoSo.nienKhoa)
-    ensureSeededHocSinh(hoSo.nienKhoa)
-  }
+  if (hoSo) ensureSeededDanhMucPhi(hoSo.nienKhoa)
   ensureSeededHoaDon(DEFAULT_KY)
   ensureSeededDongBoLichSu()
 
@@ -103,7 +97,7 @@ export function DongBoPage() {
   const dongBoDialog = useDongBoDialog({ onSynced: () => setRefreshTick((t) => t + 1) })
   const [viewEntry, setViewEntry] = useState<DongBoLichSuEntry | null>(null)
 
-  const pendingForView = useMemo(() => (viewEntry ? resolveChiTiet(viewEntry.chiTietMa) : EMPTY_PENDING), [viewEntry])
+  const pendingForView = useMemo<HoaDonRow[]>(() => (viewEntry ? resolveChiTiet(viewEntry.maHoaDon) : []), [viewEntry])
 
   const filteredEntries = useMemo(() => {
     return entries
@@ -125,19 +119,9 @@ export function DongBoPage() {
         renderCell: (item) => formatDateTime(item.thoiDiem),
       }),
       createTableColumn<DongBoLichSuEntry>({
-        columnId: 'danhMucPhi',
-        renderHeaderCell: () => 'Danh mục phí',
-        renderCell: (item) => (item.soLuongDaChon.danhMucPhi > 0 ? item.soLuongDaChon.danhMucPhi : '—'),
-      }),
-      createTableColumn<DongBoLichSuEntry>({
-        columnId: 'hocSinh',
-        renderHeaderCell: () => 'Học sinh',
-        renderCell: (item) => (item.soLuongDaChon.hocSinh > 0 ? item.soLuongDaChon.hocSinh : '—'),
-      }),
-      createTableColumn<DongBoLichSuEntry>({
-        columnId: 'hoaDon',
-        renderHeaderCell: () => 'Hoá đơn',
-        renderCell: (item) => (item.soLuongDaChon.hoaDon > 0 ? item.soLuongDaChon.hoaDon : '—'),
+        columnId: 'soLuongHoaDon',
+        renderHeaderCell: () => 'Số lượng hoá đơn',
+        renderCell: (item) => (item.soLuongHoaDon > 0 ? item.soLuongHoaDon : '—'),
       }),
       createTableColumn<DongBoLichSuEntry>({
         columnId: 'nguoiThucHien',
@@ -175,7 +159,7 @@ export function DongBoPage() {
 
   return (
     <div className={styles.root}>
-      <Title2>Đồng bộ</Title2>
+      <Title2>Nộp báo cáo</Title2>
 
       <FilterBar
         onApply={() => setFilters(draft)}
@@ -209,7 +193,7 @@ export function DongBoPage() {
           </Dropdown>
         </Field>
         <RangeFilterField
-          label="Thời gian đồng bộ"
+          label="Thời gian nộp báo cáo"
           from={<Input type="date" value={draft.tuNgay} onChange={(_, data) => setDraft({ tuNgay: data.value })} />}
           to={<Input type="date" value={draft.denNgay} onChange={(_, data) => setDraft({ denNgay: data.value })} />}
         />
@@ -218,13 +202,13 @@ export function DongBoPage() {
       <Card className={styles.tableCard}>
         <div className={styles.actionRow}>
           <Button appearance="primary" onClick={dongBoDialog.openDialog}>
-            Đồng bộ dữ liệu
+            Nộp báo cáo
           </Button>
         </div>
 
         {filteredEntries.length === 0 ? (
           <MessageBar intent="info">
-            <MessageBarBody>Không có lần đồng bộ nào khớp bộ lọc.</MessageBarBody>
+            <MessageBarBody>Không có lần nộp báo cáo nào khớp bộ lọc.</MessageBarBody>
           </MessageBar>
         ) : (
           <div className={styles.tableScroll}>

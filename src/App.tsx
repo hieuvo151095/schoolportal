@@ -4,7 +4,6 @@ import { DanhMucPhiUploadPage } from './pages/DanhMucPhiUploadPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { DongBoPage } from './pages/DongBoPage'
 import { HoaDonUploadPage } from './pages/HoaDonUploadPage'
-import { HocSinhUploadPage } from './pages/HocSinhUploadPage'
 import { LoginPage } from './pages/LoginPage'
 import { ProtectedRoute } from './routes/ProtectedRoute'
 
@@ -17,7 +16,6 @@ function App() {
         <Route element={<PortalShell />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/danh-muc-phi" element={<DanhMucPhiUploadPage />} />
-          <Route path="/hoc-sinh" element={<HocSinhUploadPage />} />
           <Route path="/hoa-don" element={<HoaDonUploadPage />} />
           <Route path="/dong-bo" element={<DongBoPage />} />
         </Route>

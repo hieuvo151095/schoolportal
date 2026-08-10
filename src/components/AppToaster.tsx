@@ -22,5 +22,14 @@ export function useAppToast() {
     )
   }
 
-  return { showSuccess }
+  function showError(message: string) {
+    dispatchToast(
+      <Toast>
+        <ToastTitle>{message}</ToastTitle>
+      </Toast>,
+      { intent: 'error', toastId },
+    )
+  }
+
+  return { showSuccess, showError }
 }
