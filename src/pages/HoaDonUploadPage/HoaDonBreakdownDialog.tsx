@@ -96,8 +96,12 @@ export function HoaDonBreakdownDialog({ row, onClose }: HoaDonBreakdownDialogPro
   const tongBreakdown = useMemo(() => breakdown.reduce((sum, line) => sum + line.soTien, 0), [breakdown])
 
   const columns: TableColumnDefinition<BreakdownLine>[] = [
-    createTableColumn<BreakdownLine>({ columnId: 'maPhi', renderHeaderCell: () => 'Mã phí', renderCell: (item) => item.maPhi }),
-    createTableColumn<BreakdownLine>({ columnId: 'tenPhi', renderHeaderCell: () => 'Tên phí', renderCell: (item) => item.tenPhi }),
+    createTableColumn<BreakdownLine>({ columnId: 'maPhi', renderHeaderCell: () => 'Mã thu', renderCell: (item) => item.maPhi }),
+    createTableColumn<BreakdownLine>({
+      columnId: 'tenPhi',
+      renderHeaderCell: () => 'Danh mục thu',
+      renderCell: (item) => item.tenPhi,
+    }),
     createTableColumn<BreakdownLine>({
       columnId: 'soTien',
       renderHeaderCell: () => 'Số tiền',

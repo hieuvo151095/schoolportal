@@ -25,6 +25,18 @@ export interface UploadFieldConfig<TRow> {
    * ảnh hưởng luồng upload file — file Excel vẫn chấp nhận bất kỳ giá trị nào rồi để customValidator
    * bắt lỗi như cũ. */
   comboboxOptions?: () => string[]
+  /** Chỉ dùng ở form "Thêm mới" (AddRecordDialog) — field type='string' có khai báo này render 1
+   * ô CHỈ HIỂN THỊ (không cho gõ tay), giá trị tự tính bằng `resolve(giá trị field sourceKey)` mỗi
+   * khi field nguồn đổi (vd Tên học sinh tự điền theo Mã học sinh vừa nhập). `notFoundLabel` hiện
+   * khi sourceKey có giá trị nhưng resolve không ra kết quả — field vẫn coi là "để trống" trong
+   * validate (chặn lưu) tới khi resolve ra giá trị thật. Không ảnh hưởng luồng upload file (cột
+   * vẫn đọc thẳng từ Excel như field string bình thường, chỉ mang tính tham chiếu đối chiếu — giá
+   * trị dùng để lưu do buildRow của từng entity quyết định lại, xem hoaDonUploadConfig.ts). */
+  derivedDisplay?: {
+    sourceKey: keyof TRow & string
+    resolve: (sourceValue: string) => string | null
+    notFoundLabel: string
+  }
 }
 
 export interface RowError {

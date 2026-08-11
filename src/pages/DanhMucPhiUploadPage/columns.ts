@@ -9,20 +9,20 @@ export type DanhMucPhiDisplayRow = KhoanPhiRow & { stt: number }
 /** Danh mục thu giờ THUẦN XEM (không còn CRUD phía trường) — chỉ còn đúng 5 cột theo yêu cầu. */
 export const danhMucPhiColumns: TableColumnDefinition<DanhMucPhiDisplayRow>[] = [
   createTableColumn<DanhMucPhiDisplayRow>({ columnId: 'stt', renderHeaderCell: () => 'STT', renderCell: (item) => item.stt }),
-  createTableColumn<DanhMucPhiDisplayRow>({
-    columnId: 'ngayCapNhat',
-    renderHeaderCell: () => 'Ngày cập nhật',
-    renderCell: (item) => formatDateTime(item.ngayCapNhat),
-  }),
-  createTableColumn<DanhMucPhiDisplayRow>({ columnId: 'maPhi', renderHeaderCell: () => 'Mã phí', renderCell: (item) => item.maPhi }),
+  createTableColumn<DanhMucPhiDisplayRow>({ columnId: 'maPhi', renderHeaderCell: () => 'Mã thu', renderCell: (item) => item.maPhi }),
   createTableColumn<DanhMucPhiDisplayRow>({
     columnId: 'tenPhi',
-    renderHeaderCell: () => 'Danh mục phí',
+    renderHeaderCell: () => 'Danh mục thu',
     renderCell: (item) => item.tenPhi,
   }),
   createTableColumn<DanhMucPhiDisplayRow>({
     columnId: 'thamChieuPhapLy',
     renderHeaderCell: () => 'Tham chiếu pháp lý',
     renderCell: (item) => item.thamChieuPhapLy || '—',
+  }),
+  createTableColumn<DanhMucPhiDisplayRow>({
+    columnId: 'ngayCapNhat',
+    renderHeaderCell: () => 'Ngày cập nhật',
+    renderCell: (item) => formatDateTime(item.ngayCapNhat),
   }),
 ]

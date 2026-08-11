@@ -2,7 +2,7 @@
  * thêm/bớt field bắt buộc, tách/gộp key, đổi ý nghĩa 1 field... BẤT KỂ ai sửa, bất kể có nhớ đọc
  * comment này hay không thì cũng phải tăng. Đây là app demo/prototype — không có migrate dữ liệu
  * cũ, version lệch thì xoá sạch và để ensureSeeded* tự sinh lại từ đầu (xem ensureSchemaVersion). */
-export const DATA_SCHEMA_VERSION = 3
+export const DATA_SCHEMA_VERSION = 4
 
 const SCHEMA_VERSION_KEY = 'schoolportal:schema-version'
 const STORAGE_PREFIX = 'schoolportal:'

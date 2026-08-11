@@ -34,8 +34,13 @@ export function buildHoaDonDataColumns<TRow extends HoaDonRow>(): TableColumnDef
     }),
     createTableColumn<TRow>({
       columnId: 'soTien',
-      renderHeaderCell: () => 'Số tiền',
+      renderHeaderCell: () => 'Số tiền khoản phí',
       renderCell: (item) => formatCurrency(item.soTien),
+    }),
+    createTableColumn<TRow>({
+      columnId: 'daTra',
+      renderHeaderCell: () => 'Số tiền đã trả',
+      renderCell: (item) => formatCurrency(item.daTra),
     }),
     createTableColumn<TRow>({
       columnId: 'hinhThucThanhToan',
@@ -55,16 +60,6 @@ export function buildHoaDonDataColumns<TRow extends HoaDonRow>(): TableColumnDef
           {item.trangThai}
         </Badge>
       ),
-    }),
-    createTableColumn<TRow>({
-      columnId: 'daTra',
-      renderHeaderCell: () => 'Số tiền đã trả',
-      renderCell: (item) => (item.trangThai === 'Thanh toán một phần' ? formatCurrency(item.daTra) : '—'),
-    }),
-    createTableColumn<TRow>({
-      columnId: 'taoBoi',
-      renderHeaderCell: () => 'Tạo bởi',
-      renderCell: (item) => <span style={{ whiteSpace: 'nowrap' }}>{item.taoBoi}</span>,
     }),
   ]
 }

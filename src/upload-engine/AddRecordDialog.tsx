@@ -49,6 +49,17 @@ function buildEmptyValues<TRow extends object>(config: UploadEntityConfig<TRow>)
   return Object.fromEntries(config.fields.map((f) => [f.key, '']))
 }
 
+/** Giá trị thật sự đưa vào pipeline validate cho 1 field — field derivedDisplay không đọc từ ô
+ * gõ tay của chính nó mà tính lại từ field nguồn (vd Tên học sinh tự điền theo Mã học sinh) mỗi
+ * lần values đổi, để required-validation tự chặn lưu khi resolve không ra giá trị (mã không tồn
+ * tại) thay vì phải viết thêm 1 lớp validate riêng. */
+function resolveFieldValue<TRow extends object>(field: UploadFieldConfig<TRow>, values: Record<string, string>): string {
+  if (!field.derivedDisplay) return values[field.key]
+  const sourceValue = values[field.derivedDisplay.sourceKey] ?? ''
+  if (!sourceValue) return ''
+  return field.derivedDisplay.resolve(sourceValue) ?? ''
+}
+
 /** Form nhập liệu 1 dòng thủ công — tái dùng ĐÚNG pipeline validate của luồng upload file
  * (coerceAllRows + computeCrossRowErrors: required/type/enum/min/existingDataCheck/crossRef),
  * bằng cách dựng 1 ParsedFile "giả" chỉ có 1 dòng từ giá trị form, rồi chạy qua đúng 2 hàm đó —
@@ -71,7 +82,7 @@ export function AddRecordDialog<TRow extends object>({ config, open, onClose, on
         {
           excelRowNumber: 2,
           sheetName: '',
-          data: Object.fromEntries(config.fields.map((f) => [f.columnLabel, values[f.key]])),
+          data: Object.fromEntries(config.fields.map((f) => [f.columnLabel, resolveFieldValue(f, values)])),
         },
       ],
     }
@@ -107,6 +118,17 @@ export function AddRecordDialog<TRow extends object>({ config, open, onClose, on
         {field.required && <span className={styles.requiredMark}> *</span>}
       </>
     )
+
+    if (field.derivedDisplay) {
+      const sourceValue = values[field.derivedDisplay.sourceKey] ?? ''
+      const resolved = sourceValue ? field.derivedDisplay.resolve(sourceValue) : null
+      const displayValue = !sourceValue ? '' : (resolved ?? field.derivedDisplay.notFoundLabel)
+      return (
+        <Field key={field.key} label={label} validationState={sourceValue && !resolved ? 'error' : 'none'}>
+          <Input value={displayValue} readOnly disabled={!sourceValue} />
+        </Field>
+      )
+    }
 
     if (field.comboboxOptions) {
       const options = field.comboboxOptions()

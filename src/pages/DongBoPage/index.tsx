@@ -25,7 +25,7 @@ import { FilterBar } from '../../components/FilterBar'
 import { RangeFilterField } from '../../components/RangeFilterField'
 import { TableHeaderRow } from '../../components/TableHeaderRow'
 import { ensureSeededDanhMucPhi } from '../../storage/danhMucPhi'
-import { ensureSeededDongBoLichSu, getDongBoLichSu } from '../../storage/dongBoLichSu'
+import { ensureSeededDongBoLichSu, getDongBoLichSu, resolveDongBoDangXuLy } from '../../storage/dongBoLichSu'
 import { ensureSeededHoaDon } from '../../storage/hoaDon'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
 import type { DongBoLichSuEntry, HoaDonRow, TrangThaiDongBo } from '../../types/domain'
@@ -37,7 +37,7 @@ import { resolveChiTiet } from './dongBoLogic'
 import { useDongBoDialog } from './useDongBoDialog'
 
 const TAT_CA = 'all'
-const TRANG_THAI_LIST: TrangThaiDongBo[] = ['Thành công', 'Thất bại']
+const TRANG_THAI_LIST: TrangThaiDongBo[] = ['Đã xử lý', 'Đang xử lý']
 
 const useStyles = makeStyles({
   root: {
@@ -87,6 +87,7 @@ export function DongBoPage() {
   if (hoSo) ensureSeededDanhMucPhi(hoSo.nienKhoa)
   ensureSeededHoaDon(DEFAULT_KY)
   ensureSeededDongBoLichSu()
+  resolveDongBoDangXuLy()
 
   const [refreshTick, setRefreshTick] = useState(0)
   const entries = useMemo(() => getDongBoLichSu(), [refreshTick])
@@ -133,10 +134,10 @@ export function DongBoPage() {
         renderHeaderCell: () => 'Trạng thái',
         renderCell: (item) => (
           <span className={styles.trangThaiCell}>
-            <Badge appearance="filled" color={item.trangThai === 'Thành công' ? 'success' : 'danger'}>
+            <Badge appearance="filled" color={item.trangThai === 'Đã xử lý' ? 'success' : 'warning'}>
               {item.trangThai}
             </Badge>
-            {item.trangThai === 'Thất bại' && item.lyDoThatBai && (
+            {item.trangThai === 'Đang xử lý' && item.lyDoThatBai && (
               <Tooltip content={item.lyDoThatBai} relationship="label">
                 <InfoRegular />
               </Tooltip>
@@ -146,7 +147,7 @@ export function DongBoPage() {
       }),
       createTableColumn<DongBoLichSuEntry>({
         columnId: 'chiTiet',
-        renderHeaderCell: () => 'Chi tiết',
+        renderHeaderCell: () => 'Danh sách báo cáo',
         renderCell: (item) => (
           <Button appearance="outline" size="small" onClick={() => setViewEntry(item)}>
             Chi tiết

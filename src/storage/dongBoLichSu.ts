@@ -2,6 +2,11 @@ import { buildDongBoLichSuSeed } from '../mock-data/dongBoLichSuSeed'
 import type { DongBoLichSuEntry } from '../types/domain'
 import { STORAGE_KEYS } from './keys'
 
+/** App demo không có backend thật xử lý bất đồng bộ — mô phỏng độ trễ xử lý bằng 1 mốc thời gian
+ * cố định: 'Đang xử lý' đủ lâu (quá NGUONG_TU_CHUYEN_MS kể từ thoiDiem) thì tự chuyển 'Đã xử lý'
+ * ở lần đọc lịch sử kế tiếp (gọi resolveDongBoDangXuLy khi trang tải lại), xem DongBoPage/index.tsx. */
+const NGUONG_TU_CHUYEN_MS = 8000
+
 export function getDongBoLichSu(): DongBoLichSuEntry[] {
   const raw = localStorage.getItem(STORAGE_KEYS.dongBoLichSu)
   if (!raw) return []
@@ -25,4 +30,22 @@ export function appendDongBoLichSu(entry: DongBoLichSuEntry): void {
 export function ensureSeededDongBoLichSu(): void {
   if (getDongBoLichSu().length > 0) return
   localStorage.setItem(STORAGE_KEYS.dongBoLichSu, JSON.stringify(buildDongBoLichSuSeed()))
+}
+
+/** Tự chuyển các dòng 'Đang xử lý' đã đủ lâu (>= NGUONG_TU_CHUYEN_MS) sang 'Đã xử lý' — mô phỏng
+ * việc xử lý bất đồng bộ hoàn tất, xoá lyDoThatBai vì không còn ý nghĩa khi đã xong. Gọi khi
+ * DongBoPage tải lại (component mount/re-render), xem DongBoPage/index.tsx. */
+export function resolveDongBoDangXuLy(): void {
+  const list = getDongBoLichSu()
+  const now = Date.now()
+  let changed = false
+
+  const next = list.map((entry) => {
+    if (entry.trangThai !== 'Đang xử lý') return entry
+    if (now - new Date(entry.thoiDiem).getTime() < NGUONG_TU_CHUYEN_MS) return entry
+    changed = true
+    return { ...entry, trangThai: 'Đã xử lý' as const, lyDoThatBai: null }
+  })
+
+  if (changed) localStorage.setItem(STORAGE_KEYS.dongBoLichSu, JSON.stringify(next))
 }

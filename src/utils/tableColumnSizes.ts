@@ -1,6 +1,8 @@
 // Kích thước cột chuẩn dùng chung cho mọi DataGrid trong app — đảm bảo khoảng cách cột
 // nhất quán giữa các bảng, và đủ rộng để nội dung (badge trạng thái, tên người...) không
 // bị vỡ dòng khi cột co hẹp lại. Đối chiếu đúng theo bộ hằng số tương ứng bên dashportal.
+export const COL_STT = { minWidth: 60, defaultWidth: 70 }
+export const COL_KY = { minWidth: 70, defaultWidth: 80 }
 export const COL_MA = { minWidth: 100, defaultWidth: 110 }
 export const COL_TEN = { minWidth: 160, defaultWidth: 190 }
 export const COL_SO_TIEN = { minWidth: 130, defaultWidth: 150 }

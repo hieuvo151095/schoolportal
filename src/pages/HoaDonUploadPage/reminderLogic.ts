@@ -1,6 +1,6 @@
 import { getHoaDonByKy } from '../../storage/hoaDon'
 import { soNgayConLaiToiHan } from '../../utils/dongBo'
-import { getKyOptions } from '../../utils/ky'
+import { formatMonthYear } from '../../utils/date'
 
 export interface KyReminder {
   ky: string
@@ -9,15 +9,22 @@ export interface KyReminder {
 
 const REMINDER_WINDOW_DAYS = 5
 
-/** Kỳ cần nhắc đồng bộ nhất trong số các kỳ chưa đồng bộ: ưu tiên kỳ quá hạn/sắp hết hạn lâu
- * nhất trước (soNgayConLai nhỏ nhất — âm nhiều nhất nếu đã quá hạn). Trả về null nếu không có
- * kỳ nào trong 6 kỳ gần nhất cần nhắc (đã đồng bộ hết, hoặc còn hạn > 5 ngày). */
-export function getKyCanNhac(): KyReminder | null {
-  const candidates = getKyOptions()
-    .filter((ky) => getHoaDonByKy(ky).length === 0)
-    .map((ky) => ({ ky, soNgayConLai: soNgayConLaiToiHan(ky) }))
-    .filter((candidate) => candidate.soNgayConLai <= REMINDER_WINDOW_DAYS)
-    .sort((a, b) => a.soNgayConLai - b.soNgayConLai)
+/** Kỳ báo cáo gần nhất — kỳ liền trước tháng hiện tại (MM/YYYY), theo đúng quy tắc hạn chót
+ * "ngày 7 hằng tháng cho kỳ liền trước" (xem utils/dongBo.ts). */
+function kyBaoCaoGanNhat(): string {
+  const today = new Date()
+  return formatMonthYear(new Date(today.getFullYear(), today.getMonth() - 1, 1))
+}
 
-  return candidates[0] ?? null
+/** Nhắc nhập dữ liệu hoá đơn cho ĐÚNG kỳ báo cáo gần nhất (kỳ liền trước tháng hiện tại) — không
+ * còn quét ngược nhiều kỳ trong quá khứ để tìm kỳ quá hạn lâu nhất. Trả về null nếu kỳ đó đã có
+ * dữ liệu (không cần nhắc), hoặc còn hạn quá xa (> 5 ngày). */
+export function getKyCanNhac(): KyReminder | null {
+  const ky = kyBaoCaoGanNhat()
+  if (getHoaDonByKy(ky).length > 0) return null
+
+  const soNgayConLai = soNgayConLaiToiHan(ky)
+  if (soNgayConLai > REMINDER_WINDOW_DAYS) return null
+
+  return { ky, soNgayConLai }
 }

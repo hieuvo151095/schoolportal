@@ -17,8 +17,17 @@ import { FilterBar } from '../../components/FilterBar'
 import { TableHeaderRow } from '../../components/TableHeaderRow'
 import { ensureSeededDanhMucPhi, getDanhMucPhiStore } from '../../storage/danhMucPhi'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
+import { COL_MA, COL_NGAY, COL_STT, COL_TEN } from '../../utils/tableColumnSizes'
 import { useFilterDraft } from '../../utils/useFilterDraft'
 import { danhMucPhiColumns, type DanhMucPhiDisplayRow } from './columns'
+
+const columnSizingOptions = {
+  stt: COL_STT,
+  ngayCapNhat: COL_NGAY,
+  maPhi: COL_MA,
+  tenPhi: COL_TEN,
+  thamChieuPhapLy: COL_TEN,
+}
 
 const useStyles = makeStyles({
   root: {
@@ -79,7 +88,7 @@ export function DanhMucPhiUploadPage() {
         }}
       >
         <Field label="Tìm kiếm">
-          <Input value={draft.q} onChange={(_, data) => setDraft({ q: data.value })} placeholder="Mã phí hoặc tên danh mục..." />
+          <Input value={draft.q} onChange={(_, data) => setDraft({ q: data.value })} placeholder="Mã thu hoặc tên danh mục..." />
         </Field>
       </FilterBar>
 
@@ -90,7 +99,13 @@ export function DanhMucPhiUploadPage() {
           </MessageBar>
         ) : (
           <div className={styles.tableScroll}>
-            <DataGrid items={filteredRows} columns={danhMucPhiColumns} getRowId={(item) => item.maPhi} resizableColumns>
+            <DataGrid
+              items={filteredRows}
+              columns={danhMucPhiColumns}
+              getRowId={(item) => item.maPhi}
+              resizableColumns
+              columnSizingOptions={columnSizingOptions}
+            >
               <TableHeaderRow />
               <DataGridBody<DanhMucPhiDisplayRow>>
                 {({ item, rowId }) => (

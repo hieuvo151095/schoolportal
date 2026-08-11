@@ -24,16 +24,14 @@ import { DongBoStatusBadge } from '../../components/DongBoStatusBadge'
 import { FilterBar } from '../../components/FilterBar'
 import { RangeFilterField } from '../../components/RangeFilterField'
 import { TableHeaderRow } from '../../components/TableHeaderRow'
-import { getDanhMucPhiByNienKhoa } from '../../storage/danhMucPhi'
 import { ensureSeededHoaDon, getHoaDonStore } from '../../storage/hoaDon'
-import { getHoSoTruong } from '../../storage/hoSoTruong'
 import type { HinhThucThanhToan, HoaDonRow, TrangThaiHoaDon } from '../../types/domain'
 import { AddRecordDialog } from '../../upload-engine/AddRecordDialog'
 import { ReviewUploadDialog } from '../../upload-engine/ReviewUploadDialog'
 import { UploadActionsRow } from '../../upload-engine/UploadActionsRow'
 import { useReviewUpload } from '../../upload-engine/useReviewUpload'
 import { DEFAULT_KY, getKyOptions } from '../../utils/ky'
-import { COL_HANH_DONG, COL_TRANG_THAI_RONG } from '../../utils/tableColumnSizes'
+import { COL_HANH_DONG, COL_SO_TIEN, COL_TRANG_THAI_RONG } from '../../utils/tableColumnSizes'
 import { useFilterDraft } from '../../utils/useFilterDraft'
 import { DongBoDialog } from '../DongBoPage/DongBoDialog'
 import { useDongBoDialog } from '../DongBoPage/useDongBoDialog'
@@ -86,8 +84,14 @@ const useStyles = makeStyles({
   },
 })
 
+/** "Số tiền khoản phí" rộng hơn COL_SO_TIEN chuẩn — tên cột dài hơn "Số tiền đã trả", cần thêm
+ * chỗ để không bị vỡ dòng. */
+const COL_SO_TIEN_KHOAN_PHI = { minWidth: 150, defaultWidth: 170 }
+
 const columnSizingOptions = {
   trangThai: COL_TRANG_THAI_RONG,
+  soTien: COL_SO_TIEN_KHOAN_PHI,
+  daTra: COL_SO_TIEN,
   danhMucPhi: COL_HANH_DONG,
 }
 
@@ -126,7 +130,7 @@ function buildColumns(onXemChiTiet: (row: HoaDonRow) => void): TableColumnDefini
     ...buildHoaDonDataColumns<HoaDonRow>(),
     createTableColumn<HoaDonRow>({
       columnId: 'danhMucPhi',
-      renderHeaderCell: () => 'Danh mục phí',
+      renderHeaderCell: () => 'Danh mục thu',
       renderCell: (item) => (
         <Button appearance="outline" size="small" onClick={() => onXemChiTiet(item)}>
           Xem chi tiết
@@ -157,8 +161,6 @@ export function HoaDonUploadPage() {
   const review = useReviewUpload(hoaDonUploadConfig, undefined, () => setRefreshTick((t) => t + 1))
   const dongBoDialog = useDongBoDialog({ onSynced: () => setRefreshTick((t) => t + 1) })
   const [addOpen, setAddOpen] = useState(false)
-
-  const hoSo = getHoSoTruong()
 
   const allRows = useMemo(() => Object.values(getHoaDonStore()).flat(), [refreshTick])
 
@@ -289,12 +291,7 @@ export function HoaDonUploadPage() {
               Nộp báo cáo
             </Button>
           )}
-          <UploadActionsRow
-            config={hoaDonUploadConfig}
-            processing={review.processing}
-            onFileSelected={review.handleFile}
-            getSheetNames={() => (hoSo ? getDanhMucPhiByNienKhoa(hoSo.nienKhoa).map((kp) => kp.maPhi) : [])}
-          />
+          <UploadActionsRow config={hoaDonUploadConfig} processing={review.processing} onFileSelected={review.handleFile} />
           <Button appearance="secondary" onClick={() => setAddOpen(true)}>
             Thêm mới
           </Button>

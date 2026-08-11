@@ -1,37 +1,55 @@
-import type { DongBoLichSuEntry } from '../types/domain'
+import type { DongBoLichSuEntry, HoaDonDongBoResult } from '../types/domain'
 import { DEFAULT_KY } from '../utils/ky'
 
 const HOA_DON_MA = Array.from({ length: 10 }, (_, i) => `HD${String(i + 1).padStart(5, '0')}`)
 
-/** Sinh 2 dòng lịch sử mẫu (1 Thành công gộp toàn bộ hoá đơn seed, 1 Thất bại minh hoạ badge +
+const THANH_CONG: HoaDonDongBoResult = { trangThai: 'Thành công', lyDo: null }
+
+/** Sinh 2 dòng lịch sử mẫu (1 Đã xử lý gộp toàn bộ hoá đơn seed, 1 Đang xử lý minh hoạ badge +
  * tooltip lý do) — mã tham chiếu khớp đúng buildHoaDonSeed() để nút "Chi tiết" mở lại tra cứu ra
- * dữ liệu thật, không rỗng. */
+ * dữ liệu thật, không rỗng. Dòng 'Đang xử lý' cố tình đặt thoiDiem = hiện tại (không lùi ngày) để
+ * còn đủ mới, chưa vượt ngưỡng resolveDongBoDangXuLy() — demo được cả 2 trạng thái ngay lần đầu.
+ * Dòng 'Đã xử lý' (10 hoá đơn) cố tình gài 2 hoá đơn "Thất bại" ở cấp hoá đơn (khác trangThai TỔNG
+ * đã "Đã xử lý" xong xuôi) — minh hoạ đủ cả 2 lý do "Thất bại": trùng dữ liệu (HD00001) và lỗi hệ
+ * thống (HD00006), xem cột "Trạng thái" riêng trong pop-up "Chi tiết lần nộp báo cáo". */
 export function buildDongBoLichSuSeed(): DongBoLichSuEntry[] {
   const ky = DEFAULT_KY
 
-  const thoiDiemThanhCong = new Date()
-  thoiDiemThanhCong.setDate(thoiDiemThanhCong.getDate() - 10)
-  const thoiDiemThatBai = new Date()
-  thoiDiemThatBai.setDate(thoiDiemThatBai.getDate() - 3)
+  const thoiDiemDaXuLy = new Date()
+  thoiDiemDaXuLy.setDate(thoiDiemDaXuLy.getDate() - 10)
+  const thoiDiemDangXuLy = new Date()
+
+  const ketQuaMuoiHoaDon: Record<string, HoaDonDongBoResult> = Object.fromEntries(
+    HOA_DON_MA.map((ma) => [
+      `${ky}::${ma}`,
+      ma === 'HD00001'
+        ? { trangThai: 'Thất bại', lyDo: 'trung-du-lieu' }
+        : ma === 'HD00006'
+          ? { trangThai: 'Thất bại', lyDo: 'loi-he-thong' }
+          : THANH_CONG,
+    ]),
+  )
 
   return [
     {
       id: 'seed-dong-bo-thanh-cong',
-      thoiDiem: thoiDiemThanhCong.toISOString(),
+      thoiDiem: thoiDiemDaXuLy.toISOString(),
       nguoiThucHien: 'Nguyễn Thị Kế toán',
-      trangThai: 'Thành công',
+      trangThai: 'Đã xử lý',
       lyDoThatBai: null,
       soLuongHoaDon: HOA_DON_MA.length,
       maHoaDon: HOA_DON_MA.map((ma) => `${ky}::${ma}`),
+      ketQuaHoaDon: ketQuaMuoiHoaDon,
     },
     {
       id: 'seed-dong-bo-that-bai',
-      thoiDiem: thoiDiemThatBai.toISOString(),
+      thoiDiem: thoiDiemDangXuLy.toISOString(),
       nguoiThucHien: 'Trần Văn Hiệu phó',
-      trangThai: 'Thất bại',
+      trangThai: 'Đang xử lý',
       lyDoThatBai: 'Không kết nối được tới hệ thống Sở, vui lòng thử nộp báo cáo lại.',
       soLuongHoaDon: 1,
       maHoaDon: [`${ky}::HD00005`],
+      ketQuaHoaDon: { [`${ky}::HD00005`]: { trangThai: 'Thất bại', lyDo: 'loi-he-thong' } },
     },
   ]
 }

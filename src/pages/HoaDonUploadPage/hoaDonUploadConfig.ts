@@ -1,30 +1,60 @@
+import { findHocSinh } from '../../mock-data/hocSinhSeed'
 import { getDanhMucPhiByNienKhoa } from '../../storage/danhMucPhi'
 import { getHoaDonByKy, saveHoaDonByKy } from '../../storage/hoaDon'
 import { saveHoaDonKhoanPhiByKy } from '../../storage/hoaDonKhoanPhi'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
 import type { HinhThucThanhToan, HoaDonKhoanPhiRow, HoaDonRow, HoaDonUploadLineRow, TrangThaiHoaDon } from '../../types/domain'
 import type { UploadEntityConfig, UploadFieldConfig } from '../../upload-engine/types'
+import { formatCurrency } from '../../utils/date'
 import { getKyOptions } from '../../utils/ky'
 
 const KY_OPTIONS = getKyOptions()
 
 const HINH_THUC_THANH_TOAN_LIST: HinhThucThanhToan[] = ['Tiền mặt', 'Chuyển khoản', 'Ví điện tử', 'QR Code']
-const TRANG_THAI_LIST: TrangThaiHoaDon[] = ['Đã thanh toán', 'Thanh toán một phần', 'Chưa thanh toán']
+
+/** So Số tiền đã trả với TỔNG Số tiền khoản phí của cùng 1 hoá đơn (mọi dòng cùng soHoaDon trong
+ * `allRows` — file chỉ được tạo mới hoá đơn, không có dòng cũ đã lưu để cộng thêm, xem
+ * existingDataCheck bên dưới) — dùng để tự tính Trạng thái thanh toán, xem computeTrangThai(). */
+function tongSoTienCungHoaDon(soHoaDon: string, allRows: Record<string, unknown>[]): number {
+  return allRows
+    .filter((r) => r.soHoaDon === soHoaDon)
+    .reduce((sum, r) => sum + (typeof r.soTien === 'number' ? r.soTien : 0), 0)
+}
+
+/** Tự tính Trạng thái thanh toán từ Số tiền khoản phí (tổng cả hoá đơn) và Số tiền đã trả — daTra
+ * > soTien đã bị chặn từ bước validate (field daTra), nên ở đây chỉ còn đúng 3 trường hợp. */
+function computeTrangThai(soTien: number, daTra: number): TrangThaiHoaDon {
+  if (daTra === soTien) return 'Đã thanh toán'
+  if (daTra === 0) return 'Chưa thanh toán'
+  return 'Thanh toán một phần'
+}
 
 const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
+  {
+    key: 'maPhi',
+    columnLabel: 'Mã phí',
+    type: 'string',
+    required: true,
+    exampleValues: ['HP001', 'BT001'],
+    crossRef: { entityLabel: 'Danh mục thu', route: '/danh-muc-phi' },
+    customValidator: (value) => {
+      const nienKhoa = getHoSoTruong()?.nienKhoa
+      if (!nienKhoa) return 'Chưa có niên khoá hoạt động trong Hồ sơ trường'
+      const exists = getDanhMucPhiByNienKhoa(nienKhoa).some((kp) => kp.maPhi === value)
+      if (!exists) return 'Mã phí chưa tồn tại trong Danh mục thu'
+      return null
+    },
+    comboboxOptions: () => {
+      const nienKhoa = getHoSoTruong()?.nienKhoa
+      return nienKhoa ? getDanhMucPhiByNienKhoa(nienKhoa).map((kp) => kp.maPhi) : []
+    },
+  },
   {
     key: 'soHoaDon',
     columnLabel: 'Mã HĐ',
     type: 'string',
     required: true,
     exampleValues: ['HD00001', 'HD00001'],
-  },
-  {
-    key: 'hoTenHocSinh',
-    columnLabel: 'Tên học sinh',
-    type: 'string',
-    required: true,
-    exampleValues: ['Nguyễn Văn An', 'Nguyễn Văn An'],
   },
   {
     key: 'maHocSinh',
@@ -64,23 +94,22 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
     exampleValues: ['2026-09-01', '2026-09-01'],
   },
   {
-    key: 'trangThai',
-    columnLabel: 'Trạng thái thanh toán',
-    type: 'enum',
-    required: true,
-    enumValues: TRANG_THAI_LIST,
-    exampleValues: ['Đã thanh toán', 'Đã thanh toán'],
-  },
-  {
     key: 'daTra',
     columnLabel: 'Số tiền đã trả',
     type: 'number',
-    required: false,
+    required: true,
     min: 0,
     exampleValues: ['500000', '500000'],
-    customValidator: (value, row) => {
-      if (row.trangThai === 'Thanh toán một phần' && (value === null || value === undefined)) {
-        return 'Bắt buộc khi Trạng thái = Thanh toán một phần'
+    /** Không được vượt quá TỔNG Số tiền khoản phí của cùng hoá đơn — lỗi dữ liệu, chặn ngay từ
+     * bước validate file/form (yêu cầu II.1), không chờ tới lúc lưu. */
+    customValidator: (value, row, allRows) => {
+      const daTra = value as number | null
+      if (daTra === null) return null
+      const soHoaDon = row.soHoaDon
+      if (typeof soHoaDon !== 'string' || !soHoaDon) return null
+      const tongSoTien = tongSoTienCungHoaDon(soHoaDon, allRows)
+      if (daTra > tongSoTien) {
+        return `Số tiền đã trả (${formatCurrency(daTra)}) không được lớn hơn tổng Số tiền khoản phí của hoá đơn (${formatCurrency(tongSoTien)})`
       }
       return null
     },
@@ -93,25 +122,6 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
     exampleValues: ['Nguyễn Thị Kế toán', 'Nguyễn Thị Kế toán'],
   },
   {
-    key: 'maPhi',
-    columnLabel: 'Mã phí',
-    type: 'string',
-    required: true,
-    exampleValues: ['HP001', 'BT001'],
-    crossRef: { entityLabel: 'Danh mục thu', route: '/danh-muc-phi' },
-    customValidator: (value) => {
-      const nienKhoa = getHoSoTruong()?.nienKhoa
-      if (!nienKhoa) return 'Chưa có niên khoá hoạt động trong Hồ sơ trường'
-      const exists = getDanhMucPhiByNienKhoa(nienKhoa).some((kp) => kp.maPhi === value)
-      if (!exists) return 'Mã phí chưa tồn tại trong Danh mục thu'
-      return null
-    },
-    comboboxOptions: () => {
-      const nienKhoa = getHoSoTruong()?.nienKhoa
-      return nienKhoa ? getDanhMucPhiByNienKhoa(nienKhoa).map((kp) => kp.maPhi) : []
-    },
-  },
-  {
     key: 'soTien',
     columnLabel: 'Số tiền khoản phí',
     type: 'number',
@@ -119,10 +129,26 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
     min: 0,
     exampleValues: ['500000', '300000'],
   },
+  {
+    key: 'hoTenHocSinh',
+    columnLabel: 'Tên học sinh',
+    type: 'string',
+    required: true,
+    exampleValues: ['Nguyễn Văn An', 'Nguyễn Văn An'],
+    /** CHỈ tham chiếu ở form Thêm mới — tự điền theo Mã học sinh, không gõ tay (yêu cầu II.3). Ở
+     * file Excel vẫn là 1 cột bình thường để đối chiếu hoá đơn đúng học sinh, nhưng giá trị THẬT
+     * dùng khi lưu do buildRow tự map lại từ Mã học sinh, xem bên dưới. */
+    derivedDisplay: {
+      sourceKey: 'maHocSinh',
+      resolve: (maHocSinh) => findHocSinh(maHocSinh)?.hoTenHocSinh ?? null,
+      notFoundLabel: 'Không tìm thấy học sinh — kiểm tra lại Mã học sinh',
+    },
+  },
 ]
 
 /** Gộp các dòng file (1 dòng = 1 cặp Hoá đơn+Khoản phí) theo Mã HĐ — trả về hoá đơn (soTien =
- * tổng các khoản phí) + danh sách khoản phí phẳng, dùng khi lưu. */
+ * tổng các khoản phí, trangThai tự tính từ soTien/daTra sau khi cộng đủ) + danh sách khoản phí
+ * phẳng, dùng khi lưu. */
 function groupBySoHoaDon(lines: HoaDonUploadLineRow[]): { hoaDon: HoaDonRow[]; khoanPhi: HoaDonKhoanPhiRow[] } {
   const hoaDonMap = new Map<string, HoaDonRow>()
   const khoanPhi: HoaDonKhoanPhiRow[] = []
@@ -144,11 +170,15 @@ function groupBySoHoaDon(lines: HoaDonUploadLineRow[]): { hoaDon: HoaDonRow[]; k
       soTien: line.soTien,
       hinhThucThanhToan: line.hinhThucThanhToan,
       ngayThanhToan: line.ngayThanhToan,
-      trangThai: line.trangThai,
+      trangThai: 'Chưa thanh toán', // đặt tạm, tính lại đúng ở vòng lặp cuối khi soTien đã cộng đủ
       daTra: line.daTra,
       taoBoi: line.taoBoi,
       daDongBo: false,
     })
+  }
+
+  for (const hoaDon of hoaDonMap.values()) {
+    hoaDon.trangThai = computeTrangThai(hoaDon.soTien, hoaDon.daTra)
   }
 
   return { hoaDon: Array.from(hoaDonMap.values()), khoanPhi }
@@ -162,21 +192,19 @@ export const hoaDonUploadConfig: UploadEntityConfig<HoaDonUploadLineRow> = {
   existingDataCheck: { key: 'soHoaDon', getExistingRows: (ky) => getHoaDonByKy(ky) },
   groupConsistencyCheck: {
     groupKey: 'soHoaDon',
-    fields: ['maHocSinh', 'hoTenHocSinh', 'hanThanhToan', 'hinhThucThanhToan', 'ngayThanhToan', 'trangThai', 'daTra', 'taoBoi'],
+    fields: ['maHocSinh', 'hoTenHocSinh', 'hanThanhToan', 'hinhThucThanhToan', 'ngayThanhToan', 'daTra', 'taoBoi'],
   },
   contextField: { key: 'ky', label: 'Kỳ' },
-  /** Mỗi sheet trong file = 1 Mã phí (tên sheet), lấy động từ Danh mục thu tại thời điểm tải
-   * template — xem HoaDonUploadPage (getSheetNames) và upload-engine/buildTemplate.ts. */
-  sheetKeyField: { key: 'maPhi', columnLabel: 'Mã phí' },
   buildRow: (row, ky) => ({
     soHoaDon: row.soHoaDon as string,
     maHocSinh: row.maHocSinh as string,
-    hoTenHocSinh: row.hoTenHocSinh as string,
+    // Giá trị THẬT map lại từ Mã học sinh — cột "Tên học sinh" trong file/form chỉ tham chiếu,
+    // không phải nguồn dữ liệu chính (yêu cầu II.3). Không tìm thấy thì tạm giữ giá trị đã nhập.
+    hoTenHocSinh: findHocSinh(row.maHocSinh as string)?.hoTenHocSinh ?? (row.hoTenHocSinh as string),
     ky,
     hanThanhToan: row.hanThanhToan as string,
     hinhThucThanhToan: (row.hinhThucThanhToan as HinhThucThanhToan | null) ?? null,
     ngayThanhToan: (row.ngayThanhToan as string | null) ?? null,
-    trangThai: row.trangThai as TrangThaiHoaDon,
     daTra: (row.daTra as number | null) ?? 0,
     taoBoi: row.taoBoi as string,
     maPhi: row.maPhi as string,

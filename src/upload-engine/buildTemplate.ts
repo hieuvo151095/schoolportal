@@ -1,8 +1,19 @@
 import * as XLSX from 'xlsx'
-import type { UploadEntityConfig } from './types'
+import type { UploadEntityConfig, UploadFieldConfig } from './types'
 
 function camelToKebab(value: string): string {
   return value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+}
+
+/** Gắn comment (chú thích) vào ô header của các cột enum, liệt kê rõ giá trị hợp lệ — người điền
+ * file thấy ngay không cần đoán hoặc tra lại tài liệu (vd Hình thức/Trạng thái thanh toán). */
+function addEnumValueComments<TRow extends object>(worksheet: XLSX.WorkSheet, templateFields: UploadFieldConfig<TRow>[]): void {
+  templateFields.forEach((field, colIndex) => {
+    if (!field.enumValues || field.enumValues.length === 0) return
+    const cell = worksheet[XLSX.utils.encode_cell({ r: 0, c: colIndex })]
+    if (!cell) return
+    XLSX.utils.cell_add_comment(cell, `Giá trị hợp lệ: ${field.enumValues.join(', ')}`, 'SchoolPortal')
+  })
 }
 
 /** Xuất file .xlsx mẫu đúng cột yêu cầu, kèm 2-3 dòng ví dụ, tải về ngay ở trình duyệt.
@@ -34,6 +45,7 @@ export function downloadUploadTemplate<TRow extends object>(
 
   for (const name of names) {
     const worksheet = XLSX.utils.json_to_sheet(exampleRows, { header: templateFields.map((f) => f.columnLabel) })
+    addEnumValueComments(worksheet, templateFields)
     // Excel giới hạn 31 ký tự/tên sheet + không cho trùng tên — cắt bớt và thêm hậu tố nếu đụng.
     let sheetName = name.slice(0, 31)
     let suffix = 2
