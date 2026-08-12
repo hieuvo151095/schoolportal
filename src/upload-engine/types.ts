@@ -45,6 +45,10 @@ export interface RowError {
   columnLabel: string
   message: string
   crossRef?: { entityLabel: string; route: string; value: string }
+  /** 'error' (mặc định khi bỏ trống) = chặn lưu, bắt buộc xoá/sửa dòng. 'warning' = vẫn cho lưu,
+   * chỉ cảnh báo (vd Mã HĐ trùng dữ liệu cũ nhưng được phép ghi đè/cộng dồn, xem
+   * hoaDonUploadConfig.ts existingDataCheck.resolve). */
+  severity?: 'error' | 'warning'
 }
 
 export interface UploadEntityConfig<TRow extends object> {
@@ -63,16 +67,28 @@ export interface UploadEntityConfig<TRow extends object> {
   uniqueKey?: (keyof TRow & string) | (keyof TRow & string)[]
   /** Đối chiếu field này với dữ liệu ĐÃ LƯU TRƯỚC ĐÓ (khác uniqueKey — đó chỉ kiểm tra trùng
    * trong phạm vi file đang upload; không phân biệt daDongBo true/false, tồn tại là đủ) — trùng
-   * thì báo lỗi, chặn lưu, KHÔNG tự động ghi đè/gộp. Người dùng phải xoá dòng đó khỏi file nếu
-   * muốn lưu tiếp các dòng còn lại. Hoá đơn dùng đúng soHoaDon (không phải tổ hợp
-   * soHoaDon+maPhi) vì 1 hoá đơn là 1 thực thể duy nhất — không cho phép "thêm khoản phí" vào
-   * hoá đơn đã lưu bằng cách upload lại. */
+   * thì báo severity/message theo `resolve` (mặc định: lỗi, chặn lưu). Hoá đơn dùng đúng
+   * soHoaDon (không phải tổ hợp soHoaDon+maPhi) vì 1 hoá đơn là 1 thực thể duy nhất — không cho
+   * phép "thêm khoản phí" vào hoá đơn đã lưu bằng cách upload lại, chỉ cho cập nhật cả hoá đơn. */
   existingDataCheck?: {
     key: keyof TRow & string
     /** Nguồn dữ liệu đã lưu trước đó để đối chiếu — KHÔNG bắt buộc cùng shape với TRow (vd
      * Hoá đơn đối chiếu soHoaDon với bảng header HoaDonRow, khác TRow là dòng khoản phí phẳng
      * HoaDonUploadLineRow có thêm maPhi/soTien) — chỉ cần field `key` đọc được ở mỗi dòng trả về. */
-    getExistingRows: (contextValue: string) => Partial<Record<keyof TRow & string, unknown>>[]
+    getExistingRows: (contextValue: string) => Record<string, unknown>[]
+    /** Tuỳ biến severity + nội dung message khi khớp trùng — mặc định (không khai báo): luôn
+     * severity 'error' với message chung chung "<cột> '<giá trị>' đã tồn tại...". Khai báo hàm
+     * này để đổi hành vi theo đúng nghiệp vụ entity (vd Hoá đơn: hạ xuống 'warning' cho phép
+     * ghi đè/cộng dồn, trừ trường hợp hoá đơn cũ đã thanh toán đủ vẫn giữ 'error', xem
+     * hoaDonUploadConfig.ts). `existingRow` nhận nguyên dòng dữ liệu cũ khớp được (shape thật,
+     * không giới hạn theo TRow — tự cast lại kiểu cụ thể khi dùng). */
+    resolve?: (params: {
+      value: string
+      existingRow: Record<string, unknown>
+      row: Record<string, unknown>
+      allRows: Record<string, unknown>[]
+      contextValue: string
+    }) => { severity: 'error' | 'warning'; message: string }
   }
   /** Đối chiếu các field liệt kê phải giống hệt nhau giữa mọi dòng chia sẻ chung giá trị
    * groupKey (vd mọi dòng cùng soHoaDon phải khớp Trạng thái, Hạn thanh toán...) — dùng khi 1

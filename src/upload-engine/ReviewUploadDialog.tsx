@@ -42,6 +42,9 @@ const useStyles = makeStyles({
   errorCell: {
     color: tokens.colorPaletteRedForeground1,
   },
+  warningCell: {
+    color: tokens.colorPaletteDarkOrangeForeground1,
+  },
   pagination: {
     display: 'flex',
     alignItems: 'center',
@@ -132,14 +135,22 @@ export function ReviewUploadDialog<TRow extends object>({
       ...fieldColumns,
       createTableColumn<ReviewRowWithErrors>({
         columnId: '__errors',
-        renderHeaderCell: () => 'Lỗi',
+        renderHeaderCell: () => 'Lỗi/ Cảnh báo',
         renderCell: (item) =>
           item.errors.length === 0 ? (
             '—'
           ) : (
-            <span className={styles.errorCell}>
-              {item.errors.map((e) => `${e.columnLabel}: ${e.message}`).join('; ')}
-            </span>
+            <>
+              {item.errors.map((e, index) => (
+                <span
+                  key={index}
+                  className={(e.severity ?? 'error') === 'warning' ? styles.warningCell : styles.errorCell}
+                >
+                  {index > 0 && '; '}
+                  {e.columnLabel}: {e.message}
+                </span>
+              ))}
+            </>
           ),
       }),
       createTableColumn<ReviewRowWithErrors>({
@@ -158,7 +169,7 @@ export function ReviewUploadDialog<TRow extends object>({
         ),
       }),
     ]
-  }, [config.fields, onDeleteRow, styles.errorCell])
+  }, [config.fields, onDeleteRow, styles.errorCell, styles.warningCell])
 
   return (
     <Dialog open={open} onOpenChange={(_, data) => !data.open && onCancel()}>

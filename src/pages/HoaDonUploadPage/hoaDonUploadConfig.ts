@@ -1,12 +1,13 @@
 import { findHocSinh } from '../../mock-data/hocSinhSeed'
 import { getDanhMucPhiByNienKhoa } from '../../storage/danhMucPhi'
 import { getHoaDonByKy, saveHoaDonByKy } from '../../storage/hoaDon'
-import { saveHoaDonKhoanPhiByKy } from '../../storage/hoaDonKhoanPhi'
+import { getHoaDonKhoanPhiBySoHoaDon, saveHoaDonKhoanPhiByKy } from '../../storage/hoaDonKhoanPhi'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
 import type { HinhThucThanhToan, HoaDonKhoanPhiRow, HoaDonRow, HoaDonUploadLineRow, TrangThaiHoaDon } from '../../types/domain'
 import type { UploadEntityConfig, UploadFieldConfig } from '../../upload-engine/types'
 import { computeTrangThaiKhoanThu } from '../../utils/danhMucThu'
 import { formatCurrency } from '../../utils/date'
+import { computeTrangThaiHoaDon } from '../../utils/hoaDon'
 import { getKyOptions } from '../../utils/ky'
 
 const KY_OPTIONS = getKyOptions()
@@ -14,20 +15,13 @@ const KY_OPTIONS = getKyOptions()
 const HINH_THUC_THANH_TOAN_LIST: HinhThucThanhToan[] = ['Tiền mặt', 'Chuyển khoản', 'Ví điện tử', 'QR Code']
 
 /** So Số tiền đã trả với TỔNG Số tiền khoản phí của cùng 1 hoá đơn (mọi dòng cùng soHoaDon trong
- * `allRows` — file chỉ được tạo mới hoá đơn, không có dòng cũ đã lưu để cộng thêm, xem
- * existingDataCheck bên dưới) — dùng để tự tính Trạng thái thanh toán, xem computeTrangThai(). */
+ * `allRows`, chỉ tính trong phạm vi file đang upload — nếu hoá đơn trùng Mã HĐ với dữ liệu cũ,
+ * cộng dồn với Số tiền đã trả CŨ diễn ra sau, lúc merge, xem existingDataCheck bên dưới +
+ * storage/hoaDon.ts finalizeHoaDonMerge) — dùng để tự tính Trạng thái thanh toán. */
 function tongSoTienCungHoaDon(soHoaDon: string, allRows: Record<string, unknown>[]): number {
   return allRows
     .filter((r) => r.soHoaDon === soHoaDon)
     .reduce((sum, r) => sum + (typeof r.soTien === 'number' ? r.soTien : 0), 0)
-}
-
-/** Tự tính Trạng thái thanh toán từ Số tiền khoản phí (tổng cả hoá đơn) và Số tiền đã trả — daTra
- * > soTien đã bị chặn từ bước validate (field daTra), nên ở đây chỉ còn đúng 3 trường hợp. */
-function computeTrangThai(soTien: number, daTra: number): TrangThaiHoaDon {
-  if (daTra === soTien) return 'Đã thanh toán'
-  if (daTra === 0) return 'Chưa thanh toán'
-  return 'Thanh toán một phần'
 }
 
 const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
@@ -38,11 +32,15 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
     required: true,
     exampleValues: ['HP001', 'BT001'],
     crossRef: { entityLabel: 'Danh mục thu', route: '/danh-muc-phi' },
+    // Chặn cả Mã phí không tồn tại LẪN Mã phí đã Ngưng hoạt động (yêu cầu II.1) — trước đây chỉ
+    // kiểm tra tồn tại, không chặn Mã phí Ngưng hoạt động khi upload file (chỉ chặn ở combobox
+    // "Thêm mới" qua comboboxOptions.disabled bên dưới).
     customValidator: (value) => {
       const nienKhoa = getHoSoTruong()?.nienKhoa
       if (!nienKhoa) return 'Chưa có niên khoá hoạt động trong Hồ sơ trường'
-      const exists = getDanhMucPhiByNienKhoa(nienKhoa).some((kp) => kp.maPhi === value)
-      if (!exists) return 'Mã phí chưa tồn tại trong Danh mục thu'
+      const khoanPhi = getDanhMucPhiByNienKhoa(nienKhoa).find((kp) => kp.maPhi === value)
+      if (!khoanPhi) return 'Mã phí chưa tồn tại trong Danh mục thu'
+      if (computeTrangThaiKhoanThu(khoanPhi) === 'Ngưng hoạt động') return 'Mã phí đã Ngưng hoạt động, không thể dùng để tạo hoá đơn mới'
       return null
     },
     /** Ngưng hoạt động vẫn hiện trong danh sách nhưng disabled — không cho chọn (yêu cầu I.2). */
@@ -88,16 +86,29 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
     key: 'hinhThucThanhToan',
     columnLabel: 'Hình thức thanh toán',
     type: 'nullable-enum',
+    // Không bắt buộc tuyệt đối — hoá đơn Chưa thanh toán (Số tiền đã trả = 0) hợp lệ không có
+    // Hình thức thanh toán. Chỉ bắt buộc khi Số tiền đã trả > 0 (yêu cầu II.1), xem customValidator.
     required: false,
     enumValues: HINH_THUC_THANH_TOAN_LIST,
     exampleValues: ['Chuyển khoản', 'Chuyển khoản'],
+    customValidator: (value, row) => {
+      const daTra = row.daTra as number | null
+      if (daTra !== null && daTra > 0 && value === null) return 'Không được để trống khi Số tiền đã trả > 0'
+      return null
+    },
   },
   {
     key: 'ngayThanhToan',
     columnLabel: 'Ngày thanh toán',
     type: 'date',
+    // Tương tự Hình thức thanh toán — chỉ bắt buộc khi Số tiền đã trả > 0.
     required: false,
     exampleValues: ['2026-09-01', '2026-09-01'],
+    customValidator: (value, row) => {
+      const daTra = row.daTra as number | null
+      if (daTra !== null && daTra > 0 && value === null) return 'Không được để trống khi Số tiền đã trả > 0'
+      return null
+    },
   },
   {
     key: 'daTra',
@@ -184,7 +195,7 @@ function groupBySoHoaDon(lines: HoaDonUploadLineRow[]): { hoaDon: HoaDonRow[]; k
   }
 
   for (const hoaDon of hoaDonMap.values()) {
-    hoaDon.trangThai = computeTrangThai(hoaDon.soTien, hoaDon.daTra)
+    hoaDon.trangThai = computeTrangThaiHoaDon(hoaDon.soTien, hoaDon.daTra)
   }
 
   return { hoaDon: Array.from(hoaDonMap.values()), khoanPhi }
@@ -195,7 +206,31 @@ export const hoaDonUploadConfig: UploadEntityConfig<HoaDonUploadLineRow> = {
   entityLabel: 'Hoá đơn',
   fields,
   uniqueKey: ['soHoaDon', 'maPhi'],
-  existingDataCheck: { key: 'soHoaDon', getExistingRows: (ky) => getHoaDonByKy(ky) },
+  existingDataCheck: {
+    key: 'soHoaDon',
+    // HoaDonRow (shape thật) không khớp tĩnh với Record<string, unknown> (không có index
+    // signature) — ép kiểu unknown trước, resolve() bên dưới tự cast lại field cụ thể cần dùng.
+    getExistingRows: (ky) => getHoaDonByKy(ky) as unknown as Record<string, unknown>[],
+    // Mã HĐ trùng dữ liệu cũ (yêu cầu II.2/III):
+    // - Hoá đơn cũ đã "Đã thanh toán" đủ → vẫn CHẶN (lỗi), không cho cập nhật thêm (III.3).
+    // - Hoá đơn cũ "Thanh toán một phần"/"Chưa thanh toán" → chỉ CẢNH BÁO, cho phép lưu — dữ liệu
+    //   mới ghi đè ngay dòng cũ (storage/hoaDon.ts saveHoaDonByKy), Số tiền đã trả CŨ (nếu có)
+    //   được cộng dồn sau khi báo cáo "Đã xử lý" (finalizeHoaDonMerge, xem III.1/III.2).
+    resolve: ({ value, existingRow, contextValue }) => {
+      const trangThaiCu = existingRow.trangThai as TrangThaiHoaDon
+      if (trangThaiCu === 'Đã thanh toán') {
+        return {
+          severity: 'error',
+          message: `Mã HĐ '${value}' đã tồn tại và đã thanh toán đủ (Kỳ ${contextValue}) — không thể lưu thêm dữ liệu trùng Mã HĐ này.`,
+        }
+      }
+      const maThuCu = getHoaDonKhoanPhiBySoHoaDon(contextValue, value).map((kp) => kp.maPhi)
+      return {
+        severity: 'warning',
+        message: `Hoá đơn kỳ ${contextValue} - ${value} của học sinh ${existingRow.maHocSinh as string} với các mã thu [${maThuCu.join(', ')}] đã tồn tại. Nếu bạn tiếp tục, dữ liệu mới sẽ được cập nhật vào dòng này.`,
+      }
+    },
+  },
   groupConsistencyCheck: {
     groupKey: 'soHoaDon',
     fields: ['maHocSinh', 'hoTenHocSinh', 'hanThanhToan', 'hinhThucThanhToan', 'ngayThanhToan', 'daTra', 'taoBoi'],

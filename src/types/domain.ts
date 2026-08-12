@@ -85,6 +85,13 @@ export interface HoaDonRow {
    * liệu, đang chờ. Bảng chính của module vẫn hiện cả 2 trạng thái, chỉ module Nộp báo cáo lọc
    * theo false. */
   daDongBo: boolean
+  /** CHỈ có giá trị khi dòng này vừa ghi đè 1 hoá đơn cũ trùng Mã HĐ đang "Thanh toán một phần"
+   * (upload file phát hiện trùng — cảnh báo, không chặn, xem hoaDonUploadConfig.ts
+   * existingDataCheck). Giữ tạm Số tiền đã trả CŨ (trước khi ghi đè) để cộng dồn đúng vào `daTra`
+   * sau khi lần "Nộp báo cáo" tương ứng chuyển "Đã xử lý" (không cộng dồn ngay lúc lưu — xem
+   * storage/hoaDon.ts saveHoaDonByKy + finalizeHoaDonMerge, gọi từ storage/dongBoLichSu.ts). Xoá
+   * field này sau khi đã cộng dồn xong. */
+  daTraCu?: number
 }
 
 /** 1 dòng khoản phí thuộc 1 hoá đơn — nhiều dòng có thể cùng chung soHoaDon (quan hệ 1-nhiều).

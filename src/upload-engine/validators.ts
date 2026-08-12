@@ -190,21 +190,24 @@ export function computeCrossRowErrors<TRow extends object>(
   }
 
   if (config.existingDataCheck && contextValue) {
-    const { key, getExistingRows } = config.existingDataCheck
+    const { key, getExistingRows, resolve } = config.existingDataCheck
     const columnLabel = config.fields.find((f) => f.key === key)?.columnLabel ?? String(key)
-    const existingValues = new Set(
+    const existingByValue = new Map(
       getExistingRows(contextValue)
-        .map((existingRow) => String(existingRow[key] ?? ''))
-        .filter(Boolean),
+        .map((existingRow) => [String(existingRow[key as string] ?? ''), existingRow] as const)
+        .filter(([value]) => value),
     )
     for (const row of rows) {
       const value = String(row.coerced[key] ?? '')
-      if (!value || !existingValues.has(value)) continue
-      addError(row.id, {
-        rowIndex: row.excelRowNumber,
-        columnLabel,
-        message: `${columnLabel} '${value}' đã tồn tại trong dữ liệu ${config.entityLabel} đã lưu trước đó (${config.contextField.label} ${contextValue})`,
-      })
+      const existingRow = value ? existingByValue.get(value) : undefined
+      if (!existingRow) continue
+      const result = resolve
+        ? resolve({ value, existingRow, row: row.coerced, allRows: allCoerced, contextValue })
+        : {
+            severity: 'error' as const,
+            message: `${columnLabel} '${value}' đã tồn tại trong dữ liệu ${config.entityLabel} đã lưu trước đó (${config.contextField.label} ${contextValue})`,
+          }
+      addError(row.id, { rowIndex: row.excelRowNumber, columnLabel, message: result.message, severity: result.severity })
     }
   }
 

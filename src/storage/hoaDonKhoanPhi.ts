@@ -21,11 +21,15 @@ export function getHoaDonKhoanPhiBySoHoaDon(ky: string, soHoaDon: string): HoaDo
   return getHoaDonKhoanPhiByKy(ky).filter((row) => row.soHoaDon === soHoaDon)
 }
 
-/** Thêm khoản phí mới vào 1 kỳ — nối vào dữ liệu cũ, không xoá dữ liệu đã có (mọi soHoaDon trong
- * rows đều là hoá đơn mới hoàn toàn, do uploadConfig.existingDataCheck đã chặn trùng soHoaDon với
- * dữ liệu cũ từ trước, nên không có rủi ro trùng khoản phí của 1 hoá đơn cũ đã tồn tại). */
+/** Thêm khoản phí vào 1 kỳ. soHoaDon nào xuất hiện trong `rows` thì XOÁ hết khoản phí cũ của đúng
+ * soHoaDon đó trước khi thêm rows mới vào (upsert theo lô) — cần thiết vì hoá đơn trùng Mã HĐ với
+ * dữ liệu cũ giờ được phép ghi đè (không còn bị chặn tuyệt đối, xem storage/hoaDon.ts
+ * saveHoaDonByKy), khoản phí chi tiết theo đó cũng phải đổi theo dữ liệu MỚI, không giữ khoản phí
+ * cũ lẫn với khoản phí mới của cùng 1 hoá đơn. soHoaDon hoàn toàn mới thì hành vi y hệt append cũ. */
 export function saveHoaDonKhoanPhiByKy(ky: string, rows: HoaDonKhoanPhiRow[]): void {
   const store = readStore()
-  store[ky] = [...(store[ky] ?? []), ...rows]
+  const soHoaDonMoi = new Set(rows.map((r) => r.soHoaDon))
+  const conLai = (store[ky] ?? []).filter((r) => !soHoaDonMoi.has(r.soHoaDon))
+  store[ky] = [...conLai, ...rows]
   localStorage.setItem(STORAGE_KEYS.hoaDonKhoanPhi, JSON.stringify(store))
 }

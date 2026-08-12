@@ -97,7 +97,10 @@ export function AddRecordDialog<TRow extends object>({ config, open, onClose, on
   }, [values, config])
 
   const hasAnyInput = Object.values(values).some((v) => v.trim() !== '')
-  const isValid = hasAnyInput && validation.errors.length === 0 && !!validation.contextValue
+  // Chỉ severity 'error' mới chặn lưu — 'warning' vẫn cho "Hoàn tất" (đồng nhất với luồng upload
+  // file, xem useReviewUpload.ts hasErrors).
+  const hasBlockingErrors = validation.errors.some((e) => (e.severity ?? 'error') === 'error')
+  const isValid = hasAnyInput && !hasBlockingErrors && !!validation.contextValue
 
   function handleValueChange(key: string, value: string) {
     setValues((prev) => ({ ...prev, [key]: value }))
@@ -186,7 +189,7 @@ export function AddRecordDialog<TRow extends object>({ config, open, onClose, on
               {config.fields.map((field) => renderField(field))}
 
               {hasAnyInput && validation.errors.length > 0 && (
-                <MessageBar intent="error">
+                <MessageBar intent={hasBlockingErrors ? 'error' : 'warning'}>
                   <MessageBarBody>{validation.errors.map((e) => `${e.columnLabel}: ${e.message}`).join('; ')}</MessageBarBody>
                 </MessageBar>
               )}

@@ -49,7 +49,9 @@ export function useReviewUpload<TRow extends object>(
     [rows, crossErrors],
   )
 
-  const hasErrors = reviewRows.some((row) => row.errors.length > 0)
+  /** Chỉ severity 'error' (mặc định khi bỏ trống) mới chặn lưu — 'warning' (vd Mã HĐ trùng dữ
+   * liệu cũ, xem hoaDonUploadConfig.ts) vẫn cho phép "Lưu dữ liệu" bình thường. */
+  const hasErrors = reviewRows.some((row) => row.errors.some((e) => (e.severity ?? 'error') === 'error'))
 
   async function handleFile(file: File) {
     setProcessing(true)
