@@ -62,10 +62,11 @@ export interface KhoanPhiRow {
   nienKhoa: string
   thamChieuPhapLy: string
   ghiChu: string
-  /** Thời điểm dữ liệu này được ghi nhận lần gần nhất (proxy nội bộ — schoolportal chưa có kênh
-   * đồng bộ KV thật với dashportal, xem src/types/domain.ts comment đầu file). Hiện ở cột "Ngày
-   * cập nhật" của Danh mục thu (thuần xem, không còn CRUD phía trường). */
-  ngayCapNhat: string
+  /** Ngày bắt đầu hiệu lực của khoản thu — cùng ngayKetThuc quyết định Trạng thái "Đang hoạt
+   * động"/"Ngưng hoạt động" hiện ở Danh mục thu, xem utils/danhMucThu.ts. */
+  ngayBatDau: string
+  /** null = chưa có ngày kết thúc (còn hiệu lực vô thời hạn). */
+  ngayKetThuc: string | null
 }
 
 export interface HoaDonRow {

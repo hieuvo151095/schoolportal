@@ -17,16 +17,19 @@ import { FilterBar } from '../../components/FilterBar'
 import { TableHeaderRow } from '../../components/TableHeaderRow'
 import { ensureSeededDanhMucPhi, getDanhMucPhiStore } from '../../storage/danhMucPhi'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
-import { COL_MA, COL_NGAY, COL_STT, COL_TEN } from '../../utils/tableColumnSizes'
+import { COL_MA, COL_NGAY, COL_STT, COL_TEN, COL_TRANG_THAI_RONG } from '../../utils/tableColumnSizes'
 import { useFilterDraft } from '../../utils/useFilterDraft'
 import { danhMucPhiColumns, type DanhMucPhiDisplayRow } from './columns'
 
 const columnSizingOptions = {
   stt: COL_STT,
-  ngayCapNhat: COL_NGAY,
   maPhi: COL_MA,
   tenPhi: COL_TEN,
+  donViTinh: COL_MA,
+  ngayBatDau: COL_NGAY,
+  ngayKetThuc: COL_NGAY,
   thamChieuPhapLy: COL_TEN,
+  trangThai: COL_TRANG_THAI_RONG,
 }
 
 const useStyles = makeStyles({

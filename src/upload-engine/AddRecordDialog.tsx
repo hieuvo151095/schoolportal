@@ -140,8 +140,8 @@ export function AddRecordDialog<TRow extends object>({ config, open, onClose, on
             onOptionSelect={(_, data) => handleValueChange(field.key, data.optionValue ?? '')}
           >
             {options.map((opt) => (
-              <Option key={opt} value={opt}>
-                {opt}
+              <Option key={opt.value} value={opt.value} disabled={opt.disabled}>
+                {opt.value}
               </Option>
             ))}
           </Combobox>

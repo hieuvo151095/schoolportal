@@ -29,6 +29,7 @@ import type { HinhThucThanhToan, HoaDonRow, TrangThaiHoaDon } from '../../types/
 import { AddRecordDialog } from '../../upload-engine/AddRecordDialog'
 import { ReviewUploadDialog } from '../../upload-engine/ReviewUploadDialog'
 import { UploadActionsRow } from '../../upload-engine/UploadActionsRow'
+import { UploadFileDialog } from '../../upload-engine/UploadFileDialog'
 import { useReviewUpload } from '../../upload-engine/useReviewUpload'
 import { DEFAULT_KY, getKyOptions } from '../../utils/ky'
 import { COL_HANH_DONG, COL_SO_TIEN, COL_TRANG_THAI_RONG } from '../../utils/tableColumnSizes'
@@ -161,6 +162,7 @@ export function HoaDonUploadPage() {
   const review = useReviewUpload(hoaDonUploadConfig, undefined, () => setRefreshTick((t) => t + 1))
   const dongBoDialog = useDongBoDialog({ onSynced: () => setRefreshTick((t) => t + 1) })
   const [addOpen, setAddOpen] = useState(false)
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
 
   const allRows = useMemo(() => Object.values(getHoaDonStore()).flat(), [refreshTick])
 
@@ -291,7 +293,7 @@ export function HoaDonUploadPage() {
               Nộp báo cáo
             </Button>
           )}
-          <UploadActionsRow config={hoaDonUploadConfig} processing={review.processing} onFileSelected={review.handleFile} />
+          <UploadActionsRow processing={review.processing} onOpenUploadDialog={() => setUploadDialogOpen(true)} />
           <Button appearance="secondary" onClick={() => setAddOpen(true)}>
             Thêm mới
           </Button>
@@ -324,6 +326,14 @@ export function HoaDonUploadPage() {
       </Card>
 
       <HoaDonBreakdownDialog row={selectedRow} onClose={() => setSelectedRow(null)} />
+
+      <UploadFileDialog
+        config={hoaDonUploadConfig}
+        open={uploadDialogOpen}
+        processing={review.processing}
+        onClose={() => setUploadDialogOpen(false)}
+        onFileSelected={review.handleFile}
+      />
 
       <ReviewUploadDialog
         config={hoaDonUploadConfig}

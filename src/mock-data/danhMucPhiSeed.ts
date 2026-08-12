@@ -4,8 +4,7 @@ import type { KhoanPhiRow } from '../types/domain'
  * ở module Danh mục Phí bên dashportal (Sở), dùng để Tab "Danh sách danh mục phí" có sẵn dữ
  * liệu khi demo lần đầu. */
 export function buildDanhMucPhiSeed(nienKhoa: string): KhoanPhiRow[] {
-  const ngayCapNhat = new Date().toISOString()
-  const rows: Omit<KhoanPhiRow, 'nienKhoa' | 'ngayCapNhat'>[] = [
+  const rows: Omit<KhoanPhiRow, 'nienKhoa'>[] = [
     {
       maPhi: 'HP001',
       tenPhi: 'Học phí tháng',
@@ -16,6 +15,8 @@ export function buildDanhMucPhiSeed(nienKhoa: string): KhoanPhiRow[] {
       danhMucKhoanThu: 'Học phí',
       thamChieuPhapLy: 'NQ 04/2023/NQ-HĐND',
       ghiChu: 'Thu theo học kỳ',
+      ngayBatDau: '2023-08-01',
+      ngayKetThuc: null,
     },
     {
       maPhi: 'BT001',
@@ -27,6 +28,8 @@ export function buildDanhMucPhiSeed(nienKhoa: string): KhoanPhiRow[] {
       danhMucKhoanThu: 'Bán trú',
       thamChieuPhapLy: '',
       ghiChu: '',
+      ngayBatDau: '2023-08-01',
+      ngayKetThuc: null,
     },
     {
       maPhi: 'DD001',
@@ -38,6 +41,8 @@ export function buildDanhMucPhiSeed(nienKhoa: string): KhoanPhiRow[] {
       danhMucKhoanThu: 'Đưa đón',
       thamChieuPhapLy: '',
       ghiChu: '',
+      ngayBatDau: '2023-08-01',
+      ngayKetThuc: null,
     },
     {
       maPhi: 'BH001',
@@ -49,6 +54,9 @@ export function buildDanhMucPhiSeed(nienKhoa: string): KhoanPhiRow[] {
       danhMucKhoanThu: 'Bảo hiểm y tế',
       thamChieuPhapLy: 'NĐ 81/2021/NĐ-CP',
       ghiChu: '',
+      /** Ngưng hoạt động — demo lọc Trạng thái ở Danh mục thu + loại khỏi file mẫu Nhập dữ liệu. */
+      ngayBatDau: '2023-08-01',
+      ngayKetThuc: '2026-06-30',
     },
     {
       maPhi: 'DP001',
@@ -60,6 +68,9 @@ export function buildDanhMucPhiSeed(nienKhoa: string): KhoanPhiRow[] {
       danhMucKhoanThu: 'Đồng phục',
       thamChieuPhapLy: '',
       ghiChu: '2 bộ/năm',
+      /** Ngưng hoạt động — ngayKetThuc trước 1/6/2025, demo lọc Trạng thái ở Danh mục thu. */
+      ngayBatDau: '2023-08-01',
+      ngayKetThuc: '2025-05-31',
     },
     {
       maPhi: 'NK001',
@@ -71,6 +82,8 @@ export function buildDanhMucPhiSeed(nienKhoa: string): KhoanPhiRow[] {
       danhMucKhoanThu: 'Ngoại khoá',
       thamChieuPhapLy: '',
       ghiChu: '',
+      ngayBatDau: '2023-08-01',
+      ngayKetThuc: null,
     },
     {
       maPhi: 'NK002',
@@ -82,6 +95,9 @@ export function buildDanhMucPhiSeed(nienKhoa: string): KhoanPhiRow[] {
       danhMucKhoanThu: 'Ngoại khoá',
       thamChieuPhapLy: '',
       ghiChu: '',
+      /** Ngưng hoạt động — ngayKetThuc trước 1/6/2026, demo lọc Trạng thái ở Danh mục thu. */
+      ngayBatDau: '2024-08-01',
+      ngayKetThuc: '2026-05-31',
     },
     {
       maPhi: 'KT001',
@@ -93,6 +109,8 @@ export function buildDanhMucPhiSeed(nienKhoa: string): KhoanPhiRow[] {
       danhMucKhoanThu: 'Khoản thu khác',
       thamChieuPhapLy: '',
       ghiChu: 'Tự nguyện',
+      ngayBatDau: '2023-08-01',
+      ngayKetThuc: null,
     },
     {
       maPhi: 'HP002',
@@ -104,6 +122,8 @@ export function buildDanhMucPhiSeed(nienKhoa: string): KhoanPhiRow[] {
       danhMucKhoanThu: 'Học phí',
       thamChieuPhapLy: 'NQ 04/2023/NQ-HĐND',
       ghiChu: '',
+      ngayBatDau: '2025-08-01',
+      ngayKetThuc: null,
     },
     {
       maPhi: 'BT002',
@@ -115,7 +135,10 @@ export function buildDanhMucPhiSeed(nienKhoa: string): KhoanPhiRow[] {
       danhMucKhoanThu: 'Bán trú',
       thamChieuPhapLy: '',
       ghiChu: 'Áp dụng tháng 6-7',
+      /** Ngưng hoạt động — demo lọc Trạng thái ở Danh mục thu + loại khỏi file mẫu Nhập dữ liệu. */
+      ngayBatDau: '2026-06-01',
+      ngayKetThuc: '2026-07-31',
     },
   ]
-  return rows.map((row) => ({ ...row, nienKhoa, ngayCapNhat }))
+  return rows.map((row) => ({ ...row, nienKhoa }))
 }

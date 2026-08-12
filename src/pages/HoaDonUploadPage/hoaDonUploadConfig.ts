@@ -5,6 +5,7 @@ import { saveHoaDonKhoanPhiByKy } from '../../storage/hoaDonKhoanPhi'
 import { getHoSoTruong } from '../../storage/hoSoTruong'
 import type { HinhThucThanhToan, HoaDonKhoanPhiRow, HoaDonRow, HoaDonUploadLineRow, TrangThaiHoaDon } from '../../types/domain'
 import type { UploadEntityConfig, UploadFieldConfig } from '../../upload-engine/types'
+import { computeTrangThaiKhoanThu } from '../../utils/danhMucThu'
 import { formatCurrency } from '../../utils/date'
 import { getKyOptions } from '../../utils/ky'
 
@@ -44,9 +45,14 @@ const fields: UploadFieldConfig<HoaDonUploadLineRow>[] = [
       if (!exists) return 'Mã phí chưa tồn tại trong Danh mục thu'
       return null
     },
+    /** Ngưng hoạt động vẫn hiện trong danh sách nhưng disabled — không cho chọn (yêu cầu I.2). */
     comboboxOptions: () => {
       const nienKhoa = getHoSoTruong()?.nienKhoa
-      return nienKhoa ? getDanhMucPhiByNienKhoa(nienKhoa).map((kp) => kp.maPhi) : []
+      if (!nienKhoa) return []
+      return getDanhMucPhiByNienKhoa(nienKhoa).map((kp) => ({
+        value: kp.maPhi,
+        disabled: computeTrangThaiKhoanThu(kp) === 'Ngưng hoạt động',
+      }))
     },
   },
   {

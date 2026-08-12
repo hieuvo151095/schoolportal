@@ -21,10 +21,10 @@ export interface UploadFieldConfig<TRow> {
   crossRef?: { entityLabel: string; route: string }
   /** Chỉ dùng ở form "Thêm mới" (AddRecordDialog) — field type='string' có khai báo này sẽ render
    * Combobox chọn từ danh sách gợi ý thay vì Input gõ tay tự do (vd Mã HS/Mã phí ở Hoá đơn, chọn
-   * từ dữ liệu Học sinh/Danh mục Phí đã có, tránh gõ sai gây lỗi crossRef không đáng có). Không
-   * ảnh hưởng luồng upload file — file Excel vẫn chấp nhận bất kỳ giá trị nào rồi để customValidator
-   * bắt lỗi như cũ. */
-  comboboxOptions?: () => string[]
+   * từ dữ liệu Học sinh/Danh mục Phí đã có, tránh gõ sai gây lỗi crossRef không đáng có). `disabled`
+   * dùng để hiện nhưng không cho chọn (vd Mã phí đã Ngưng hoạt động). Không ảnh hưởng luồng upload
+   * file — file Excel vẫn chấp nhận bất kỳ giá trị nào rồi để customValidator bắt lỗi như cũ. */
+  comboboxOptions?: () => { value: string; disabled?: boolean }[]
   /** Chỉ dùng ở form "Thêm mới" (AddRecordDialog) — field type='string' có khai báo này render 1
    * ô CHỈ HIỂN THỊ (không cho gõ tay), giá trị tự tính bằng `resolve(giá trị field sourceKey)` mỗi
    * khi field nguồn đổi (vd Tên học sinh tự điền theo Mã học sinh vừa nhập). `notFoundLabel` hiện
