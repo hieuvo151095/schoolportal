@@ -1,0 +1,5 @@
+*
+!.gitignore
+!feature_list.json
+!claude-progress.md
+!harness.config.json
