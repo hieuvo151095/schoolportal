@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tạo thời khóa biểu — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="schedule" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Tạo thời khóa biểu</h1>
+    <p class="ecomd-page-header__desc body-sm">Lưu nháp để hoàn thiện dần; phát hành sẽ gửi thông báo tới phụ huynh của lớp</p>
+  </div>
+</div>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Thông tin chung</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><div class="ecomd-grid" style="--ecomd-cols: 3; --ecomd-cols-tablet: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Lớp áp dụng <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{clsOpts}}" value="{{cls}}" on-change="{{setCls}}" label="Lớp áp dụng"></x-import></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Học kỳ <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{termOpts}}" value="{{term2}}" on-change="{{setTerm}}" label="Học kỳ áp dụng"></x-import></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tên thời khóa biểu</span><input type="text" class="ecomd-text body-sm" value="Thời khóa biểu học kỳ I"><span class="ecomd-field__hint body-xs">Tự đặt theo học kỳ, có thể sửa.</span></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Áp dụng từ ngày</span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" value="01/09/2026" placeholder="dd/mm/yyyy"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Đến ngày</span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" value="15/01/2027" placeholder="dd/mm/yyyy"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span></label></div><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Hình thức</span><div class="ecomd-choices" style="--ecomd-cols: 2;"><label class="ecomd-choice"><input type="radio" name="fmt" checked="{{isGrid}}" onChange="{{pickGrid}}"><span class="ecomd-choice__icon" aria-hidden="true"><x-import component-from-global-scope="ECOMD.Icon" name="table-cells" size="{{fourteen}}"></x-import></span><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">Lưới tiết học</span><span class="ecomd-choice__desc body-xs">Xếp từng tiết từ Thứ Hai đến Thứ Bảy</span></span></label><label class="ecomd-choice"><input type="radio" name="fmt" checked="{{isFile}}" onChange="{{pickFile}}"><span class="ecomd-choice__icon" aria-hidden="true"><x-import component-from-global-scope="ECOMD.Icon" name="file-pdf" size="{{fourteen}}"></x-import></span><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">Tệp đính kèm</span><span class="ecomd-choice__desc body-xs">Tải lên PDF hoặc ảnh có sẵn của nhà trường</span></span></label></div></div></div></div>
+</section>
+<sc-if value="{{isGrid}}" hint-placeholder-val="{{true}}"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Lưới tiết học</h2><p class="ecomd-card__desc body-xs">Chọn ô để xếp môn và giáo viên; giờ của từng tiết sửa trực tiếp ở cột đầu</p></div><div class="ecomd-card__actions"><x-import component-from-global-scope="ECOMD.Button" variant="ghost" icon="copy">Sao chép từ thời khóa biểu khác</x-import></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-12);"><div class="ecomd-table-scroll ecomd-hide-compact"><table class="ecomd-timetable"><thead><tr><th class="is-time body-xs-bold" style="width: calc(var(--size-sidebar-w) * 3 / 4);">Tiết</th><sc-for list="{{days}}" as="d" hint-placeholder-count="6"><th class="{{d.thCls}}">{{d.label}}</th></sc-for></tr></thead><tbody><sc-for list="{{periods}}" as="p" hint-placeholder-count="5"><tr><td class="is-time"><div style="display: flex; flex-direction: column; gap: var(--space-6);"><span class="body-sm-semibold" style="color: var(--text-heading);">Tiết {{p.n}}</span><span style="display: flex; align-items: center; gap: var(--space-4);"><input type="text" class="ecomd-text is-sm is-num body-xs" value="{{p.from}}" aria-label="{{p.fromLabel}}"><span class="body-xs" style="color: var(--text-subtle);">–</span><input type="text" class="ecomd-text is-sm is-num body-xs" value="{{p.to}}" aria-label="{{p.toLabel}}"></span></div></td><sc-for list="{{p.cells}}" as="c" hint-placeholder-count="6"><td><sc-if value="{{c.full}}" hint-placeholder-val="{{true}}"><div class="{{c.slotCls}}"><span class="ecomd-slot__subject body-sm-semibold">{{c.s}}</span><span class="ecomd-slot__meta body-xs"><x-import component-from-global-scope="ECOMD.Icon" name="user" size="{{twelve}}"></x-import><span>{{c.t}}</span></span><span class="ecomd-slot__meta body-xs"><x-import component-from-global-scope="ECOMD.Icon" name="location-dot" size="{{twelve}}"></x-import><span>{{c.r}}</span></span></div></sc-if><sc-if value="{{c.empty}}" hint-placeholder-val="{{false}}"><button type="button" class="ecomd-slot is-empty body-xs-medium" aria-label="{{c.addLabel}}"><x-import component-from-global-scope="ECOMD.Icon" name="plus" size="{{twelve}}"></x-import><span>Chọn môn</span></button></sc-if></td></sc-for></tr></sc-for></tbody></table></div><div class="ecomd-only-compact"><div style="display: flex; flex-direction: column; gap: var(--space-12);"><x-import component-from-global-scope="ECOMD.Tabs" items="{{dayTabs}}" value="{{day}}" on-change="{{setDay}}" label="Chọn ngày" variant="segmented" class-name="is-block"></x-import><ul style="display: flex; flex-direction: column; gap: var(--space-8); margin: 0; padding: 0; list-style: none;"><sc-for list="{{dayList}}" as="c" hint-placeholder-count="5"><li style="display: grid; grid-template-columns: calc(var(--size-40) * 2 + var(--space-12)) minmax(0, 1fr); gap: var(--space-10); align-items: stretch;"><span style="display: flex; flex-direction: column; justify-content: center; gap: var(--space-2);"><span class="body-sm-semibold" style="color: var(--text-heading);">Tiết {{c.n}}</span><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums; white-space: nowrap;">{{c.time}}</span></span><sc-if value="{{c.full}}" hint-placeholder-val="{{true}}"><div class="{{c.slotCls}}"><span class="ecomd-slot__subject body-sm-semibold">{{c.s}}</span><span class="ecomd-slot__meta body-xs"><x-import component-from-global-scope="ECOMD.Icon" name="user" size="{{twelve}}"></x-import><span>{{c.t}}</span></span><span class="ecomd-slot__meta body-xs"><x-import component-from-global-scope="ECOMD.Icon" name="location-dot" size="{{twelve}}"></x-import><span>{{c.r}}</span></span></div></sc-if><sc-if value="{{c.empty}}" hint-placeholder-val="{{false}}"><button type="button" class="ecomd-slot is-empty body-xs-medium" aria-label="{{c.addLabel}}"><x-import component-from-global-scope="ECOMD.Icon" name="plus" size="{{twelve}}"></x-import><span>Chọn môn</span></button></sc-if></li></sc-for></ul></div></div><div style="display: flex; flex-wrap: wrap; gap: var(--space-8);"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="plus">Thêm tiết học</x-import></div></div></div>
+</section>
+</sc-if><sc-if value="{{isFile}}" hint-placeholder-val="{{false}}"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Tệp thời khóa biểu</h2><p class="ecomd-card__desc body-xs">Phụ huynh xem tệp này trên ứng dụng, không có lưới tiết học</p></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-12);"><button type="button" class="ecomd-dropzone"><x-import class-name="ecomd-dropzone__icon" component-from-global-scope="ECOMD.Icon" name="upload" size="{{twenty}}"></x-import><span class="ecomd-dropzone__title body-sm-medium">Kéo thả tệp vào đây hoặc <b>chọn tệp</b></span><span class="body-xs">PDF, JPG, PNG · tối đa 10 MB</span></button></div></div>
+</section>
+</sc-if>
+<div class="ecomd-form-footer"><span class="ecomd-form-footer__note body-xs">{{progress}}</span><div class="ecomd-form-footer__actions"><x-import component-from-global-scope="ECOMD.Button" variant="ghost">Hủy</x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary">Lưu nháp</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="paper-plane">Lưu và phát hành</x-import></div></div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "scenario": {"editor": "enum", "options": ["grid", "file"], "default": "grid", "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1268}}'>
+var CRUMBS = ["Học tập", "Thời khóa biểu", "Tạo mới"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { cls: 'Lớp 1A1', term2: 'Học kỳ I · 2026 – 2027', fmt: props.scenario === 'file' ? 'file' : 'grid', day: 'Thứ Hai' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var EDIT = true, TODAY = -1;
+    function FILLED(i, d) { return i < 2 || (i === 2 && d < 3); }
+    var R = [["08:00 – 08:40", [["Chào cờ và HĐTN", "Cô Lan Hương", "Sân trường"], ["Toán học", "Thầy Quang Minh", "Phòng 101"], ["Tiếng Việt", "Cô Lan Hương", "Phòng 101"], ["Tiếng Anh", "Mr. David Smith", "Lab Ngoại ngữ"], ["Toán học", "Thầy Quang Minh", "Phòng 101"], ["GDTC (thể thao)", "Thầy Tuấn Anh", "Nhà thi đấu"]]], ["08:45 – 09:25", [["Tiếng Việt", "Cô Lan Hương", "Phòng 101"], ["Tiếng Việt", "Cô Lan Hương", "Phòng 101"], ["Toán học", "Thầy Quang Minh", "Phòng 101"], ["Đạo đức", "Cô Lan Hương", "Phòng 101"], ["Tiếng Việt", "Cô Lan Hương", "Phòng 101"], ["Âm nhạc", "Cô Thùy Chi", "Phòng Âm nhạc"]]], ["09:40 – 10:20", [["Toán học", "Thầy Quang Minh", "Phòng 101"], ["Tiếng Anh", "Mr. David Smith", "Lab Ngoại ngữ"], ["Tự nhiên và Xã hội", "Cô Lan Hương", "Phòng 101"], ["Mỹ thuật", "Thầy Hoàng Nam", "Xưởng Mỹ thuật"], ["Tiếng Anh", "Mr. David Smith", "Lab Ngoại ngữ"], ["Sinh hoạt lớp", "Cô Lan Hương", "Phòng 101"]]], ["10:25 – 11:05", [["Giáo dục thể chất", "Thầy Tuấn Anh", "Sân bóng"], ["Tự nhiên và Xã hội", "Cô Lan Hương", "Phòng 101"], ["Tin học", "Thầy Hữu Thắng", "Phòng máy 1"], ["Tiếng Việt", "Cô Lan Hương", "Phòng 101"], ["Toán (luyện tập)", "Thầy Quang Minh", "Phòng 101"], ["GDTC (bóng rổ)", "Thầy Tuấn Anh", "Sân bóng"]]], ["11:10 – 11:50", [["Âm nhạc", "Cô Thùy Chi", "Phòng Âm nhạc"], ["Toán học", "Thầy Quang Minh", "Phòng 101"], ["Tiếng Anh", "Mr. David Smith", "Lab Ngoại ngữ"], ["GDTC", "Thầy Tuấn Anh", "Sân bóng"], ["HĐTN", "Cô Lan Hương", "Phòng 101"], ["Tin học", "Thầy Hữu Thắng", "Phòng máy 1"]]]], D = ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+    function cellsOf(p, i) { return p[1].map(function (c, d) { var full = FILLED(i, d); return { full: full, empty: !full, s: c[0], t: c[1], r: c[2], slotCls: 'ecomd-slot' + (EDIT ? ' is-edit' : ''), addLabel: 'Chọn môn cho tiết ' + (i + 1) + ', ' + D[d], n: i + 1, time: p[0] }; }); }
+    var periods = R.map(function (p, i) { var t = p[0].split(' – '); return { n: i + 1, time: p[0], from: t[0], to: t[1], fromLabel: 'Giờ bắt đầu tiết ' + (i + 1), toLabel: 'Giờ kết thúc tiết ' + (i + 1), cells: cellsOf(p, i) }; });
+    var dIdx = D.indexOf(st.day);
+    var dayList = periods.map(function (p) { return p.cells[dIdx]; });
+    var filled = 0; periods.forEach(function (p) { p.cells.forEach(function (c) { if (c.full) filled++; }); });
+    var days = D.map(function (d, i) { return { label: i === TODAY ? d + ' · hôm nay' : d, thCls: 'body-xs-bold' + (i === TODAY ? ' is-today' : '') }; });
+    var dayTabs = D.map(function (d, i) { return { key: d, label: 'T' + (i + 2) }; });
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      clsOpts: ['Lớp 1A1', 'Lớp 2A2', 'Lớp 3A1', 'Lớp 5A1'], cls: st.cls, setCls: function (v) { self.setState({ cls: v }); },
+      termOpts: ['Học kỳ I · 2026 – 2027', 'Học kỳ II · 2026 – 2027'], term2: st.term2, setTerm: function (v) { self.setState({ term2: v }); },
+      isGrid: st.fmt === 'grid', isFile: st.fmt === 'file', pickGrid: function () { self.setState({ fmt: 'grid' }); }, pickFile: function () { self.setState({ fmt: 'file' }); },
+      days: days, periods: periods, dayTabs: dayTabs, day: st.day, setDay: function (k) { self.setState({ day: k }); }, dayList: dayList,
+      progress: st.fmt === 'grid' ? 'Đã xếp ' + filled + ' / ' + (periods.length * 6) + ' tiết · Lưu nháp chỉ nhà trường thấy.' : 'Chưa có tệp · Lưu nháp chỉ nhà trường thấy.'
+    });
+  }
+}
+</script>
+</body>
+</html>

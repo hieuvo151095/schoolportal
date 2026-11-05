@@ -1,0 +1,2677 @@
+{
+  "title": "Đối soát - Liên cấp PT Sao Mai",
+  "headings": [],
+  "buttons": [
+    "Xuất báo cáo"
+  ],
+  "tables": [
+    {
+      "headers": [
+        "Ngày tạo phiên",
+        "Khoảng thời gian giao dịch",
+        "Số tiền (Đ)",
+        "Số giao dịch"
+      ],
+      "rowCount": 3,
+      "sampleRows": [
+        [
+          "20/10/2026 13:13",
+          "20/10/2026 15:29 - 20/10/2026 15:29",
+          "1.000.000",
+          "1 giao dịch"
+        ],
+        [
+          "10/10/2026 01:00",
+          "09/10/2026 11:59 - 09/10/2026 11:59",
+          "150.000",
+          "1 giao dịch"
+        ],
+        [
+          "09/10/2026 01:00",
+          "08/10/2026 15:25 - 08/10/2026 15:25",
+          "695.000",
+          "1 giao dịch"
+        ]
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "name": "reconciliation-date-range",
+      "placeholder": "Chọn khoảng thời gian",
+      "type": "text",
+      "value": "01/10/2026 - 28/10/2026"
+    }
+  ],
+  "nextDataProps": {
+    "pageProps": {
+      "_sentryTraceData": "32749f36d0994b59aec77764bc97ce36-a88fdc3c33ee3f4f-0",
+      "_sentryBaggage": "sentry-environment=production,sentry-release=Rw0z3ILOTVw2wbZ3T-P32,sentry-transaction=%2F%5BschoolCode%5D%2Fschool%2Freconciliation,sentry-public_key=91ae10d9d39c442386c03f2f54258dae,sentry-trace_id=32749f36d0994b59aec77764bc97ce36,sentry-sample_rate=0.1"
+    },
+    "runtimeConfig": {
+      "API_URL": "https://api-dev.ecoschool.com.vn",
+      "NEXTAUTH_URL": "https://app-dev.ecoschool.com.vn",
+      "DEPLOY_ENV": "production",
+      "APP_PARTNER": "soha"
+    },
+    "initialState": {
+      "auth": {
+        "userInfo": {},
+        "session": {},
+        "error": {},
+        "loading": true
+      },
+      "kid": {
+        "loading": false,
+        "filters": {
+          "limit": 20,
+          "page": 1,
+          "search": null,
+          "classId": null,
+          "sortObj": {
+            "name": "asc"
+          },
+          "enroll": "",
+          "startDate": "",
+          "synced": ""
+        },
+        "currentList": [],
+        "listKids": [],
+        "pagination": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "classId": 0,
+        "data": null,
+        "error": null,
+        "kidInfoForm": {
+          "name": "",
+          "birthday": "2026-10-23",
+          "start_date": "2026-10-23",
+          "gender": "male",
+          "classes": "",
+          "avatar": ""
+        },
+        "kidInfo": {},
+        "kidActivities": [],
+        "currentKidClass": [],
+        "currentKidProgressTotal": [],
+        "currentKidProgressArea": {},
+        "kidActivityFilter": {
+          "result_limit": 50,
+          "page": 1,
+          "search": null,
+          "class_id": null,
+          "date": null,
+          "kid_id": null,
+          "is_load_more": false
+        },
+        "kidActivityPagination": {},
+        "loadMoreKidActivities": false,
+        "parentInfoForm": {
+          "name": "",
+          "relation": "dad",
+          "phone": "",
+          "address": "",
+          "email": "",
+          "birthday": "",
+          "identityCardNumber": ""
+        },
+        "parentInfo": {},
+        "genderMale": "male",
+        "genderFemale": "female",
+        "relationDad": "dad",
+        "relationMom": "mum",
+        "relationOther": "other",
+        "listParents": [],
+        "success": null,
+        "dropdownListKid": [],
+        "dropdownListKidMeta": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "loadingDropdownListKid": false,
+        "kidArchivedList": [],
+        "kidArchivedListFilter": {
+          "limit": 20,
+          "page": 1,
+          "search": null,
+          "classId": null,
+          "sortObj": {
+            "name": "asc"
+          },
+          "enroll": "",
+          "startDate": "",
+          "synced": ""
+        },
+        "kidArchivedListPagination": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "attendanceReportFilter": {
+          "kidId": null,
+          "year": 2026,
+          "month": 10
+        },
+        "attendanceReport": {},
+        "progressReportList": [],
+        "progressReportListFilter": {
+          "limit": 20,
+          "page": 1,
+          "type": ""
+        },
+        "progressReportListPagination": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "loadingProgressReportList": true,
+        "kidReportProgress": {},
+        "loadingReport": false,
+        "mediaFolderList": [],
+        "mediaFilesList": [],
+        "loadingMediaList": true,
+        "lessonsTree": [],
+        "lastProcesses": [],
+        "loadingAttendanceReport": true,
+        "loadingKidLessonTree": false,
+        "kidGrowthHistory": [],
+        "kidGrowthHistoryFilter": {
+          "page": 1,
+          "limit": 10,
+          "sortObj": {
+            "recorded_at": "desc"
+          }
+        },
+        "kidGrowthHistoryPagination": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "isLoadingKidGrowthHistory": false,
+        "kidGrowthChart": [],
+        "isLoadingKidGrowthChart": false,
+        "addKidGrowthHistory": {
+          "isLoading": false
+        },
+        "editKidGrowthHistory": {
+          "isLoading": false
+        },
+        "hasMoreMediaList": true,
+        "hasMoreFolderList": true,
+        "mediaListMeta": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "perPage": 20,
+          "to": 20,
+          "total": 0
+        },
+        "folderListMeta": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "perPage": 20,
+          "to": 20,
+          "total": 0
+        },
+        "folderFilter": {
+          "search": "",
+          "page": 1,
+          "limit": 20
+        },
+        "attendanceMedia": [],
+        "attendanceMediaMeta": [],
+        "hasMoreAttendanceAlbum": false,
+        "kidAddonFee": [],
+        "archiveReasons": [],
+        "archiveKidInfo": {},
+        "listKidAccount": [],
+        "listKidAccountPagination": {},
+        "accountFilter": {
+          "page": 1,
+          "limit": 20
+        },
+        "kidAccount": {},
+        "aiAssessments": [],
+        "currentAiAssessment": null
+      },
+      "class": {
+        "loading": true,
+        "currentList": [],
+        "listCLasses": [],
+        "filters": {
+          "result_limit": 20,
+          "page": 1,
+          "search": null,
+          "teacherId": null,
+          "yearRange": null,
+          "sortObj": {
+            "name": "asc"
+          },
+          "homeroomTeacherId": null,
+          "grade": null,
+          "synced": ""
+        },
+        "listKidFilter": {
+          "sortObj": {
+            "name": "asc"
+          }
+        },
+        "pagination": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "loadingYearRanges": false,
+        "loadingDropdownClass": false,
+        "concentrateTimes": [],
+        "loadingDropdownTeacher": false,
+        "currentClass": {},
+        "currentKidList": [],
+        "data": {},
+        "error": {},
+        "success": null,
+        "selectedClassId": null,
+        "classListKidDropdown": [],
+        "classActivities": [],
+        "classPinnedActivities": [],
+        "pinnedActivitiesPagination": {},
+        "loadMorePinnedActivities": false,
+        "loadingClassPinnedActivities": false,
+        "loadMoreActivities": false,
+        "activityPagination": {},
+        "attendancePagination": [],
+        "attendanceFilter": {
+          "result_limit": 99,
+          "page": 1,
+          "class_id": null,
+          "year": 2026,
+          "month": 10,
+          "sortObj": {
+            "name": "asc"
+          },
+          "time": "2026-10"
+        },
+        "loadingCurrentKidList": true,
+        "tagAllAlbumList": [],
+        "tagAllAlbumPagination": {},
+        "currentClassFee": [],
+        "currentClassAllFee": [],
+        "classFeeKidLoading": false,
+        "classFeeLoading": false,
+        "schoolFees": [],
+        "schoolFeesMeta": {},
+        "schoolFeesLoading": false,
+        "schoolFeesDropdown": [],
+        "schoolFeeKidList": [],
+        "schollFeeKidListMeta": {},
+        "extensionClassesDropdown": {
+          "data": [],
+          "loading": false,
+          "error": null
+        },
+        "kidsExtensionList": [],
+        "loadingKidsExtension": true,
+        "extraDropdown": []
+      },
+      "lesson": {
+        "lessonSetsFilter": {
+          "result_limit": 10,
+          "page": 1,
+          "search": null,
+          "yearRange": null,
+          "classes": null,
+          "sortObj": {
+            "name": "asc"
+          }
+        },
+        "lessonSets": [],
+        "loadingDropdownLessonSet": false,
+        "lessonAreas": [],
+        "lessonAreaDetail": {},
+        "lessonGroupDetail": {},
+        "data": null,
+        "error": null,
+        "success": null,
+        "updateSuccess": null,
+        "addSuccess": null,
+        "deleteSuccess": null,
+        "deleteLessonAreaSuccess": null,
+        "updateGroupSuccess": null,
+        "message": null,
+        "lessonSet": {},
+        "newLessonGroup": {},
+        "newLessonArea": {},
+        "lessonGroup": {},
+        "newLesson": {},
+        "lesson": {},
+        "updateLesson": {},
+        "lessonArea": {},
+        "lessonStatuses": [],
+        "loadingLessonStatuses": false,
+        "lessonSetForm": {
+          "name": "",
+          "central_set_id": null
+        },
+        "loadingLessonSetForm": false,
+        "listCentralSets": [],
+        "loadingListCentralSets": false,
+        "schoolLessonSets": [],
+        "pagination": {
+          "perPage": 10,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "lessonTree": [],
+        "lessonSetLoading": true,
+        "dropdownLesson": [],
+        "lessonPlan": [],
+        "lessonPlanLoading": true,
+        "detailLessonPlan": {},
+        "detailLessonPlanLoading": true,
+        "lessonPlanPagination": {
+          "perPage": 10,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "hasMoreLessonPlan": true,
+        "lessonPlanCategories": [],
+        "lessonActivitiesByKid": [],
+        "lessonActivitiesByKidMeta": {}
+      },
+      "media": {
+        "pictures": [],
+        "error": false,
+        "success": false,
+        "data": [],
+        "kids": [],
+        "identifyList": [],
+        "detailAlbum": {},
+        "mediaListMeta": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "perPage": 20,
+          "to": 20,
+          "total": 0
+        },
+        "mediaList": [],
+        "attendanceMediaList": [],
+        "attendanceMediaListMeta": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "perPage": 20,
+          "to": 20,
+          "total": 0
+        },
+        "hasMoreMediaList": true,
+        "hasMoreAttendanceAlbum": true,
+        "loading": true,
+        "isLoadingMore": false,
+        "isLoadingMoreMediaList": false
+      },
+      "school": {
+        "exist": {
+          "code": "",
+          "name": "",
+          "website": ""
+        },
+        "data": {
+          "name": "",
+          "address": "",
+          "website": "",
+          "phoneNumber": "",
+          "email": "",
+          "language": [],
+          "avatar": "",
+          "supportInfo": "",
+          "supportEmail": "",
+          "supportPhone": ""
+        },
+        "setting": {
+          "concentration": {
+            "start": "08:00:00",
+            "end": "18:00:00"
+          },
+          "attendance": {
+            "temperature": {
+              "min": 35,
+              "max": 42
+            },
+            "noCheckinNotify": {
+              "enable": false,
+              "time": {
+                "from": "",
+                "to": ""
+              }
+            }
+          },
+          "announcement": {
+            "totalMaxSize": 15360
+          },
+          "assignment": {
+            "comment": {
+              "enable": false
+            }
+          },
+          "dashboard": {
+            "topTeacherLikesWidget": true
+          },
+          "media": {
+            "picture": 10240,
+            "video": 81920,
+            "audio": 20480,
+            "document": 20480,
+            "postMaxSize": 204800
+          },
+          "medias": {
+            "maxType": "",
+            "picture": {
+              "itemsPerMonth": ""
+            },
+            "video": {
+              "videoDurationPerMonth": ""
+            }
+          },
+          "weekdays": {
+            "monday": {
+              "name": "",
+              "start": "",
+              "end": ""
+            },
+            "tuesday": {
+              "name": "",
+              "start": "",
+              "end": ""
+            },
+            "wednesday": {
+              "name": "",
+              "start": "",
+              "end": ""
+            },
+            "thursday": {
+              "name": "",
+              "start": "",
+              "end": ""
+            },
+            "friday": {
+              "name": "",
+              "start": "",
+              "end": ""
+            },
+            "saturday": {
+              "name": "",
+              "start": "",
+              "end": ""
+            },
+            "sunday": {
+              "name": "",
+              "start": "",
+              "end": ""
+            }
+          },
+          "invoice_late": {
+            "status": "0",
+            "charge_after": "",
+            "fee": ""
+          },
+          "meal": {
+            "counting": false,
+            "label": {
+              "breakfast": "Bữa sáng",
+              "lunch": "Bữa trưa",
+              "dinner": "Bữa tối",
+              "tea": "Bữa xế",
+              "snack": "Ăn nhẹ"
+            },
+            "aiAnalysis": false,
+            "aiSuggestion": false,
+            "ages": [],
+            "price": []
+          },
+          "reportProgress": {
+            "aiAnalysis": false,
+            "aiSuggestion": false
+          },
+          "features": {
+            "codeForUsers": true,
+            "concentrations": false,
+            "manager": true,
+            "nutrition": true,
+            "s3FromClient": true,
+            "approveMedia": false,
+            "studentPortal": false,
+            "featureImportDetailsInvoice": false,
+            "poll": false,
+            "handbook": false,
+            "feedback": false,
+            "subjectTeacher": false,
+            "nutritionNeedCharge": false,
+            "freeSync": false,
+            "goodKid": false,
+            "featureRevenueAutoSync": false
+          },
+          "synced": 0,
+          "activity": {
+            "suggestContent": false
+          },
+          "communication": {
+            "attachments": {
+              "enableVideo": false,
+              "maxEachReply": 10
+            },
+            "supportTeacherCanView": false,
+            "featureCombineKidCommunication": false
+          },
+          "forcePublish": {
+            "activity": {
+              "enable": true
+            },
+            "media": {
+              "enable": false
+            }
+          },
+          "lesson": {
+            "statusByClass": false
+          },
+          "wordbook": {
+            "vi": {
+              "kid": ""
+            },
+            "en": {
+              "kid": ""
+            }
+          },
+          "schoolyear": {
+            "enable": false,
+            "current": {
+              "id": null,
+              "name": "",
+              "start": "",
+              "end": ""
+            }
+          },
+          "handbook": {
+            "maxAttachments": 10
+          },
+          "feedback": {
+            "attachments": {
+              "enableVideo": false,
+              "maxEachReply": 10
+            }
+          },
+          "invoiceSettings": {
+            "electronic": {
+              "electronicInvoice": "0",
+              "provider": "",
+              "electronicInvoiceSignature": "0"
+            },
+            "invoiceLate": {
+              "status": 0
+            },
+            "vnpay": {
+              "paymentVnpayUse": "0"
+            },
+            "invoiceRangeTime": {
+              "invoiceMonthRangeTime": "default",
+              "invoiceMonthRangeTimeFrom": "25",
+              "invoiceMonthRangeTimeTo": "24"
+            },
+            "invoiceMonthCharge": "next",
+            "absenceRefund": {
+              "type": "default",
+              "consecutiveAbsenceRefundDay": "2"
+            }
+          }
+        },
+        "error": null,
+        "loadingSchoolInfo": true,
+        "semester": [],
+        "semesterFilter": {
+          "limit": 20,
+          "page": 1
+        },
+        "semesterPagination": {
+          "from": 0,
+          "to": 0,
+          "path": "",
+          "links": [],
+          "total": 0,
+          "perPage": 0,
+          "lastPage": 0,
+          "currentPage": 0
+        }
+      },
+      "user": {
+        "userList": [],
+        "currentList": [],
+        "filters": {
+          "result_limit": 20,
+          "page": 1,
+          "search": null,
+          "role": null,
+          "sortObj": {
+            "name": "asc"
+          },
+          "synced": ""
+        },
+        "pagination": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "currentUser": {},
+        "data": {},
+        "error": null,
+        "success": null,
+        "message": null,
+        "loading": true,
+        "basicUserInfo": {},
+        "loadingCurrentUser": true,
+        "roles": [],
+        "listStaff": []
+      },
+      "activity": {
+        "currentClass": {},
+        "concentrates": [],
+        "time": "",
+        "slot": {},
+        "error": null,
+        "success": null,
+        "concentrateTimes": [],
+        "concentrateLevels": [],
+        "atValues": [],
+        "hashValues": [],
+        "suggestValues": [],
+        "teacherValues": [],
+        "currentActivities": [],
+        "loadMoreActivities": false,
+        "pinnedActivities": [],
+        "loadMorePinnedActivities": false,
+        "addSucceeded": false,
+        "activityFilter": {
+          "result_limit": 50,
+          "page": 1,
+          "search": null,
+          "class_id": null,
+          "date": null,
+          "kid_id": null,
+          "is_load_more": false,
+          "from": "",
+          "to": ""
+        },
+        "activityPagination": {},
+        "pinnedActivityPagination": {},
+        "folderList": [],
+        "mediaList": [],
+        "parentFolder": {},
+        "loading": true,
+        "isLoadingMore": false,
+        "concentrateStatus": false,
+        "listStatus": "",
+        "activityDetail": null,
+        "mediaListMeta": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "perPage": 20,
+          "to": 20,
+          "total": 0
+        },
+        "folderListMeta": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "perPage": 20,
+          "to": 20,
+          "total": 0
+        },
+        "hasMoreMediaList": true,
+        "hasMoreFolderList": true,
+        "attendanceAlbum": [],
+        "attendanceAlbumMeta": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "perPage": 5,
+          "to": 20,
+          "total": 0
+        },
+        "hasMoreAttendanceAlbum": true,
+        "comments": [],
+        "currentActivityComments": [],
+        "currentActivityCommentsMeta": {},
+        "activitySetting": {},
+        "mediaFilter": {},
+        "mediaFolderFilter": {},
+        "albumLoadingMore": false,
+        "listViewer": [],
+        "likesModal": {
+          "list": [],
+          "meta": {},
+          "activityId": null
+        }
+      },
+      "overview": {
+        "loading": true,
+        "error": {},
+        "success": null,
+        "kids": 0,
+        "teachers": 0,
+        "classes": 0,
+        "activities": 0,
+        "classKid": [],
+        "classActivity": [],
+        "listActivity": [],
+        "filter": {
+          "classId": 0,
+          "date": ""
+        },
+        "listLike": [],
+        "loadingListLike": true,
+        "listAbsence": [],
+        "loadingListAbsence": true,
+        "listEvent": [],
+        "loadingMonthBirthday": true,
+        "listMonthBirthday": [],
+        "listAlbum": [],
+        "listAlbumPagination": {},
+        "listDraftActivity": [],
+        "listDraftActivityPagination": {},
+        "dailyNews": {
+          "absent": {
+            "count": 0,
+            "approved": 0
+          },
+          "communications": {
+            "count": 0,
+            "reply": 0
+          },
+          "newActivities": 0,
+          "medicines": {
+            "count": 0,
+            "markAsDone": 0
+          },
+          "albums": 0,
+          "meal": {
+            "date": "",
+            "total": 0,
+            "classes": []
+          }
+        },
+        "dailyMeals": {
+          "date": "",
+          "total": 0,
+          "totalKids": 0,
+          "classes": []
+        },
+        "dailyAttendance": {
+          "absent": 0,
+          "checkIn": 0,
+          "checkOut": 0,
+          "kids": 0,
+          "notAttendance": 0
+        },
+        "dailyActivities": {
+          "meal": 0,
+          "sleep": 0,
+          "drink": 0,
+          "hygiene": 0,
+          "note": 0,
+          "kids": 0
+        },
+        "invoiceInfo": {},
+        "incomeExpenseInfo": {},
+        "expenseCategories": {},
+        "weeklyActivities": {},
+        "overviewInfo": {
+          "kids": 0,
+          "classes": 0,
+          "teachers": 0,
+          "parents": 0
+        },
+        "takeMedicineFilter": {},
+        "listTakeMedicine": [],
+        "listTakeMedicinePagination": {},
+        "takeMedicineDetail": {},
+        "takeMedicineHistory": {},
+        "listAbsents": [],
+        "listAbsentsPagination": {},
+        "listAbsentsFilter": {
+          "page": 1,
+          "search": "",
+          "type": "today",
+          "from": "",
+          "to": ""
+        },
+        "listAnnouncement": [],
+        "listAnnouncementPagination": {},
+        "listClassInvoice": {
+          "classes": [],
+          "total": {}
+        },
+        "media": {
+          "month": "",
+          "pictures": 0,
+          "videoDuration": 0,
+          "video": 0
+        },
+        "notAttendanceList": [],
+        "feedback": {
+          "total": 0,
+          "categories": [],
+          "statuses": []
+        },
+        "loadingFeedback": true
+      },
+      "progress": {
+        "filter": {},
+        "lessonGroups": [],
+        "lessonStatus": [],
+        "classDropdown": [],
+        "classId": 0,
+        "lessonAreaDropdown": [],
+        "lessonAreaId": 0,
+        "classInfo": {},
+        "lessonGroupProgress": [
+          {
+            "id": 0,
+            "name": "",
+            "progress": []
+          }
+        ],
+        "data": null,
+        "error": null,
+        "success": null,
+        "loading": true,
+        "progressStatistics": [],
+        "progressLessonSetStatuses": [],
+        "listKid": [],
+        "listKidFilter": {},
+        "kidHistory": [],
+        "kidHistoryPagination": {},
+        "kidHistoryLoading": false
+      },
+      "attendance": {
+        "loading": true,
+        "classDropdown": [],
+        "filters": {
+          "result_limit": 40,
+          "page": 1,
+          "search": null,
+          "class_id": null,
+          "date": null,
+          "sortObj": {
+            "name": "asc"
+          },
+          "status": null,
+          "session_id": null
+        },
+        "currentList": [],
+        "listAttendance": [],
+        "listHealthStatus": [],
+        "pagination": {
+          "perPage": 10,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0,
+          "totalAttendance": 0,
+          "totalAbsentPermit": 0,
+          "totalAbsentNonpermit": 0,
+          "totalNoInfo": 0
+        },
+        "error": null,
+        "faceRecognitions": [],
+        "faceRecognitionMeta": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "faceRecognitionFilter": {
+          "limit": 20,
+          "page": 1
+        },
+        "loadingFace": true,
+        "staffLoading": true,
+        "staffFilters": {
+          "result_limit": 20,
+          "page": 1,
+          "search": null,
+          "date": null,
+          "sortObj": {
+            "name": "asc"
+          }
+        },
+        "staffAttendanceList": [],
+        "staffPagination": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0,
+          "totalAttendance": 0,
+          "totalAbsentPermit": 0,
+          "totalAbsentNonpermit": 0,
+          "totalNoInfo": 0
+        },
+        "listStaff": [],
+        "isFetchingAllStaffsList": true,
+        "listPickupPerson": []
+      },
+      "teacher": {
+        "teacherList": [],
+        "currentList": [],
+        "filters": {
+          "result_limit": 20,
+          "page": 1,
+          "searchPhone": 1,
+          "search": null,
+          "role": null,
+          "sortObj": {
+            "name": "asc"
+          },
+          "synced": ""
+        },
+        "pagination": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "currentTeacher": {},
+        "loadingCurrentTeacher": false,
+        "data": {},
+        "error": null,
+        "success": false,
+        "message": null,
+        "loading": true,
+        "classesRemain": [],
+        "classDropdown": []
+      },
+      "reports": {
+        "loading": false,
+        "attendanceFilter": {
+          "result_limit": 99,
+          "page": 1,
+          "class_id": null,
+          "year": 2026,
+          "month": 10,
+          "sortObj": {
+            "name": "asc"
+          },
+          "time": "2026-10"
+        },
+        "progressFilter": {
+          "result_limit": 99,
+          "page": 1,
+          "class_id": null,
+          "year": 2026,
+          "month": 10,
+          "sortObj": {
+            "name": "asc"
+          },
+          "time": "2026-10"
+        },
+        "lateKidInfo": [],
+        "concentrateFilter": {
+          "result_limit": 99,
+          "page": 1,
+          "class_id": null,
+          "year": 2026,
+          "month": 10,
+          "sortObj": {
+            "name": "asc"
+          },
+          "time": "2026-10"
+        },
+        "concentrateColors": {
+          "1": "#7cfb90",
+          "2": "#6cffff",
+          "3": "#65c7ff",
+          "4": "#ffd552",
+          "5": "#f5ae6b",
+          "6": "#ff6d6d"
+        },
+        "loadMoreDetail": false,
+        "attendancePagination": {
+          "perPage": 10,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "success": null,
+        "timeHeader": [],
+        "schoolFeeTotal": 0,
+        "invoiceReportTotal": 0,
+        "invoiceReportDebt": 0,
+        "invoiceReportList": [],
+        "invoiceReportListFilters": {
+          "classId": null,
+          "from": null,
+          "to": null,
+          "search": null,
+          "sortObj": {},
+          "page": 1,
+          "resultLimit": 20,
+          "status": ""
+        },
+        "invoiceCollectionReportFilters": {
+          "from": "2026-10-01",
+          "to": "2026-10-31"
+        },
+        "loadingInvoiceCollectionReport": false,
+        "invoiceReportListPagination": {
+          "currentPage": 1,
+          "perPage": 20,
+          "path": "",
+          "links": [],
+          "from": 1,
+          "to": 1,
+          "lastPage": 1,
+          "total": 1
+        },
+        "progressReportList": [],
+        "progressReportListFilter": {
+          "limit": 20,
+          "page": 1,
+          "statuses": "",
+          "type": "",
+          "option": "periodic",
+          "from": "",
+          "to": "",
+          "template": ""
+        },
+        "extendedReportListFilter": {
+          "limit": 20,
+          "page": 1,
+          "statuses": "",
+          "type": "",
+          "from": "",
+          "to": "",
+          "template": ""
+        },
+        "progressReportListPagination": {
+          "perPage": 10,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "loadingProgressReportList": false,
+        "attendanceReportsTotal": {},
+        "synthesisReportList": [],
+        "synthesisReportListFilter": {
+          "limit": 20,
+          "page": 1
+        },
+        "synthesisReportListPagination": {
+          "perPage": 10,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "loadingSynthesisReportList": true,
+        "schoolYearList": [],
+        "schoolYearFilter": {
+          "limit": 20,
+          "page": 1
+        },
+        "schoolYearPagination": {
+          "perPage": 10,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "schoolYearStandard": [],
+        "schoolYearHealth": [],
+        "schoolYearAttendance": [],
+        "schoolYearObserve": [],
+        "schoolYearNursery": [],
+        "reportTemplate": [],
+        "reportWithTemplate": {},
+        "staffAttendanceReports": [],
+        "staffAttendanceFilter": {
+          "result_limit": 99,
+          "page": 1,
+          "class_id": null,
+          "year": 2026,
+          "month": 10,
+          "sortObj": {
+            "name": "asc"
+          },
+          "time": "2026-10"
+        },
+        "staffAttendancePagination": {
+          "perPage": 10,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "staffAttendanceReportsTotal": {},
+        "staffAttendanceReportDetail": {},
+        "staffAttendanceDate": {},
+        "listSemester": [],
+        "reportByTimeHead": [],
+        "reportByTimeBody": [],
+        "reportByPlannedHead": [],
+        "reportByPlannedBody": [],
+        "staffAttendanceHistory": [],
+        "staffAttendanceHistoryFilter": {
+          "limit": 20,
+          "page": 1
+        },
+        "staffAttendanceHistoryPagination": {
+          "perPage": 10,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        }
+      },
+      "parent": {
+        "profile": {},
+        "kid": {
+          "currentKid": null,
+          "activityListFilter": {
+            "resultLimit": 10,
+            "page": 1
+          },
+          "activityList": [],
+          "loadingActivityList": false,
+          "haveMoreActivities": false,
+          "activityListPagination": {
+            "perPage": 10,
+            "currentPage": 1,
+            "from": 0,
+            "links": [],
+            "path": "",
+            "lastPage": 0,
+            "to": 0,
+            "total": 0
+          },
+          "pinnedActivityList": [],
+          "loadingPinnedActivityList": false,
+          "haveMorePinnedActivities": false,
+          "pinnedActivityListPagination": {
+            "perPage": 10,
+            "currentPage": 1,
+            "from": 0,
+            "links": [],
+            "path": "",
+            "lastPage": 0,
+            "to": 0,
+            "total": 0
+          },
+          "currentKidProgressTotal": null,
+          "currentKidProgressArea": null,
+          "kidInvoiceList": [],
+          "kidInvoiceListFilters": {
+            "resultLimit": 20,
+            "page": 1,
+            "kidId": 0,
+            "sortObj": {
+              "name": "asc"
+            }
+          },
+          "kidInvoiceListPagination": {
+            "perPage": 10,
+            "currentPage": 1,
+            "from": 0,
+            "links": [],
+            "path": "",
+            "lastPage": 0,
+            "to": 0,
+            "total": 0
+          },
+          "kidAttendanceReportFilter": null,
+          "kidAttendanceReport": [],
+          "currentInvoice": null,
+          "progressReportList": [],
+          "loadingProgressReportList": true,
+          "progressReportListFilter": {
+            "classId": 0,
+            "from": "",
+            "to": "",
+            "search": "",
+            "sortObj": {
+              "name": "asc"
+            },
+            "page": 0,
+            "resultLimit": 0,
+            "detail": 0
+          },
+          "progressReportListPagination": {
+            "perPage": 10,
+            "currentPage": 1,
+            "from": 0,
+            "links": [],
+            "path": "",
+            "lastPage": 0,
+            "to": 0,
+            "total": 0
+          },
+          "kidReportProgress": {},
+          "countNotification": null,
+          "parentNotification": [],
+          "fetchingParentNotification": true,
+          "parentNotiPagination": null,
+          "loadMoreParentNoti": false,
+          "parentNotiFilters": {
+            "resultLimit": 50,
+            "page": 1,
+            "categoryId": 1
+          },
+          "categories": [],
+          "mediaList": [],
+          "folderList": [],
+          "loadingMediaList": true,
+          "lessonsTree": [],
+          "loadingLessonTree": false,
+          "lastProcesses": [],
+          "lessonStatuses": [],
+          "loadingKidInvoiceList": true,
+          "loadingKidInfo": false,
+          "kidGrowthHistory": [],
+          "kidGrowthHistoryFilter": {
+            "page": 1,
+            "limit": 10,
+            "sortObj": {
+              "recorded_at": "desc"
+            }
+          },
+          "kidGrowthHistoryPagination": {
+            "perPage": 10,
+            "currentPage": 1,
+            "from": 0,
+            "links": [],
+            "path": "",
+            "lastPage": 0,
+            "to": 0,
+            "total": 0
+          },
+          "isLoadingKidGrowthHistory": false,
+          "kidGrowthChart": [],
+          "isLoadingKidGrowthChart": false,
+          "hasMoreMediaList": true,
+          "hasMoreFolderList": true,
+          "mediaListMeta": {
+            "currentPage": 1,
+            "from": 1,
+            "lastPage": 1,
+            "perPage": 20,
+            "to": 20,
+            "total": 0
+          },
+          "folderListMeta": {
+            "currentPage": 1,
+            "from": 1,
+            "lastPage": 1,
+            "perPage": 20,
+            "to": 20,
+            "total": 0
+          },
+          "folderFilter": {
+            "search": "",
+            "limit": 20,
+            "page": 1
+          },
+          "loadingKidAttendanceReport": false,
+          "kidNutritions": [],
+          "kidNutritionFilter": {
+            "limit": 10,
+            "page": 1,
+            "sortName": "date",
+            "sortOrder": "desc"
+          },
+          "kidNutritionPagination": {},
+          "nutritionLoading": true,
+          "isLoadingMore": false,
+          "loadMoreNutrition": false,
+          "kidMealMenu": [],
+          "kidDaily": [],
+          "diaryPagination": {},
+          "diaryFilter": {
+            "limit": 10,
+            "page": 1,
+            "is_load_more": false,
+            "sortName": "date",
+            "sortOrder": "desc"
+          },
+          "diaryLoading": true,
+          "isLoadingDiaryMore": false,
+          "loadMoreDiary": false,
+          "attendanceMedia": [],
+          "attendanceMediaMeta": {
+            "currentPage": 1,
+            "from": 1,
+            "lastPage": 1,
+            "perPage": 20,
+            "to": 20,
+            "total": 0
+          },
+          "hasMoreAttendanceAlbum": false,
+          "comments": []
+        },
+        "conversation": {
+          "conversationList": [],
+          "conversationDetails": [],
+          "conversationReplies": [],
+          "categories": [],
+          "isFetchingCategories": false,
+          "hasMoreConversation": false,
+          "conversationListFilter": {
+            "resultLimit": 20,
+            "page": 1
+          },
+          "conversationListPagination": {
+            "from": 0,
+            "to": 0,
+            "path": "",
+            "links": [],
+            "total": 0,
+            "perPage": 0,
+            "lastPage": 0,
+            "currentPage": 0
+          },
+          "isFetchingConversationList": false,
+          "hasMoreReplies": false,
+          "isFetchingReply": false,
+          "conversationReplyFilter": {
+            "resultLimit": 20,
+            "page": 1
+          },
+          "conversationReplyPagination": {
+            "from": 0,
+            "to": 0,
+            "path": "",
+            "links": [],
+            "total": 0,
+            "perPage": 0,
+            "lastPage": 0,
+            "currentPage": 0
+          },
+          "suggestion": {},
+          "pinConversationList": []
+        },
+        "attendanceHistory": {
+          "attendanceHistory": {
+            "data": [],
+            "meta": {
+              "totalAttendance": 0,
+              "totalAbsentPermit": 0,
+              "totalAbsentNonpermit": 0,
+              "totalTotalLateTimeIn": 0
+            }
+          },
+          "attendanceHistoryLoading": false,
+          "attendanceHistoryError": null
+        }
+      },
+      "notify": {
+        "notifications": [],
+        "notification": {},
+        "userNotification": [],
+        "fetchingUserNotificaiton": true,
+        "countNotification": {},
+        "userNotiPagination": null,
+        "userNotiFilters": {
+          "resultLimit": 50,
+          "page": 1,
+          "categoryId": 1
+        },
+        "hasMoreUserNoti": false,
+        "categories": []
+      },
+      "schoolFee": {
+        "classSchoolFeeListFilters": {
+          "resultLimit": 20,
+          "page": 1,
+          "search": "",
+          "classId": null,
+          "date": null,
+          "sortObj": {
+            "name": "asc"
+          }
+        },
+        "classSchoolFeeListPagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "path": "",
+          "links": [],
+          "from": 1,
+          "to": 1,
+          "lastPage": 1,
+          "total": 1
+        },
+        "classSchoolFeeList": [],
+        "classSchoolFeeListLoading": false,
+        "kidSchoolFeeListFilters": {
+          "resultLimit": 40,
+          "page": 1,
+          "search": "",
+          "classId": null,
+          "date": null,
+          "sortObj": {
+            "name": "asc"
+          }
+        },
+        "kidSchoolFeeList": [],
+        "kidSchoolFeeListLoading": false,
+        "selectedClass": null,
+        "loadingClassSchoolFeeList": true,
+        "loadingKidSchoolFeeList": true,
+        "customFeeList": []
+      },
+      "invoice": {
+        "currentInvoice": {},
+        "loadingCurrentInvoice": false,
+        "classInvoiceList": [],
+        "invoiceInfo": {},
+        "classInvoiceListFilters": {
+          "resultLimit": 20,
+          "page": 1,
+          "classId": null,
+          "kidId": null,
+          "code": null,
+          "time": null,
+          "status": null,
+          "sortObj": {},
+          "search": "",
+          "overdue": false
+        },
+        "classInvoiceListPagination": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        },
+        "kidInvoiceList": [],
+        "kidInvoiceListFilters": {
+          "resultLimit": 20,
+          "page": 1,
+          "kidId": null,
+          "month": null,
+          "status": null,
+          "sortObj": {
+            "created_at": "desc"
+          },
+          "search": "",
+          "overdue": false
+        },
+        "kidInvoiceListPagination": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        },
+        "invoiceSetting": {},
+        "processing": false,
+        "refundKid": {},
+        "loadingRefundKid": false,
+        "kidPaidInvoices": [],
+        "loadingKidPaidInvoices": false,
+        "loadingKidInvoiceList": true,
+        "loadingInvoiceSetting": true,
+        "invoiceTypes": [],
+        "bankList": [],
+        "paymentType": [],
+        "workingDays": 0,
+        "mealDays": 0,
+        "holidays": 0,
+        "expensesListFilter": {
+          "result_limit": 20,
+          "page": 1,
+          "search": "",
+          "month": ""
+        },
+        "expensesList": [],
+        "expensesPagination": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        },
+        "currentExpense": {},
+        "currentExpenseListKid": [],
+        "currentExpenseListKidFilter": {
+          "result_limit": 20,
+          "page": 1,
+          "search": ""
+        },
+        "currentExpenseListKidPagination": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        },
+        "currentPreviewExpenseInvoice": [],
+        "listNotApplied": [],
+        "currentListInvoiceExpenses": [],
+        "invoiceExpensesFilter": {
+          "result_limit": 20,
+          "page": 1,
+          "search": ""
+        },
+        "invoiceExpensesPagination": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        },
+        "dropdownExpenses": [],
+        "mealDate": {
+          "from": "",
+          "to": ""
+        },
+        "totalAttendance": 0,
+        "paymentMethod": [],
+        "sepaySetting": {},
+        "listSepayWebhook": [],
+        "listSepayMeta": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        },
+        "listSepayFilter": {},
+        "allKidFee": {
+          "expend": [],
+          "refund": [],
+          "total": 0,
+          "message": ""
+        }
+      },
+      "conversation": {
+        "conversationList": [],
+        "conversationDetails": [],
+        "conversationReplies": [],
+        "categories": [],
+        "isFetchingCategories": false,
+        "hasMoreConversation": false,
+        "conversationListFilter": {
+          "resultLimit": 20,
+          "page": 1
+        },
+        "conversationListPagination": {
+          "from": 0,
+          "to": 0,
+          "path": "",
+          "links": [],
+          "total": 0,
+          "perPage": 0,
+          "lastPage": 0,
+          "currentPage": 0
+        },
+        "isFetchingConversationList": false,
+        "hasMoreReplies": false,
+        "isFetchingReply": true,
+        "conversationReplyFilter": {
+          "resultLimit": 20,
+          "page": 1
+        },
+        "conversationReplyPagination": {
+          "from": 0,
+          "to": 0,
+          "path": "",
+          "links": [],
+          "total": 0,
+          "perPage": 0,
+          "lastPage": 0,
+          "currentPage": 0
+        },
+        "isLoadingMore": false,
+        "allKidsList": [],
+        "allKidsListClassId": null,
+        "isFetchingAllKidsList": false,
+        "listReceivers": [],
+        "listReceiversFilter": {
+          "limit": 10,
+          "page": 1,
+          "search": ""
+        },
+        "listReceiversPagination": {},
+        "totalReceiver": null,
+        "hasChangeDetail": false,
+        "groupConversation": [],
+        "suggestion": {},
+        "pinConversationList": [],
+        "pinConversationMeta": {},
+        "conversationMissing": [],
+        "conversationMissingTeacher": []
+      },
+      "announcement": {
+        "loading": true,
+        "announcement": {},
+        "loadingAnnouncement": false,
+        "listAnnouncement": [],
+        "getAnnouncementFilter": {
+          "resultLimit": 20,
+          "page": 1,
+          "area": "",
+          "search": "",
+          "status": ""
+        },
+        "listRecipients": [],
+        "loadingListRecipients": false,
+        "pagination": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "categories": [],
+        "announcementViewers": []
+      },
+      "settingNotify": {
+        "data": {
+          "notiBirthday": {
+            "emailToTeacher": false,
+            "emailToAdmin": false,
+            "sendAt": "00:00",
+            "day": 1
+          },
+          "notiRemindAttendance": {
+            "noAttendanceNotification": false,
+            "noCheckoutNotification": false,
+            "noAttendanceTime": "00:00",
+            "noCheckoutTime": "00:00"
+          },
+          "notiTuition": {
+            "emailToAdmin": false,
+            "notificationToAdmin": false,
+            "emailToParent": false,
+            "notificationToParent": false
+          },
+          "notiCommunication": {
+            "notificationToAdmin": false
+          },
+          "notiDraftActivity": {
+            "emailToAdmin": false,
+            "notificationToAdmin": false
+          },
+          "notiDailyActivities": {
+            "emailToParent": false,
+            "notificationToParent": false,
+            "sendAt": "00:00"
+          },
+          "notiWeeklyActivities": {
+            "emailToParent": false,
+            "day": 1,
+            "sendAt": "00:00"
+          },
+          "notiMonthlyActivities": {
+            "emailToParent": false,
+            "day": 1,
+            "sendAt": "00:00"
+          },
+          "notiLikeActivity": {
+            "notificationToTeacher": false
+          },
+          "notiActivity": {
+            "notificationToParent": false
+          },
+          "notiKidProcess": {
+            "notificationToParent": false
+          },
+          "notiNutrition": {
+            "notificationToParent": false
+          },
+          "notiKidAlbum": {
+            "notificationToParent": false
+          },
+          "featureCodeForUsers": false,
+          "features": {
+            "concentrations": true,
+            "codeForUsers": true,
+            "nutrition": true
+          }
+        },
+        "loadingSettingNoti": true
+      },
+      "systemAnnouncement": {
+        "announcements": [],
+        "fetchingAnnouncement": false,
+        "hasMoreAnnouncement": false,
+        "announcementsFilters": {
+          "resultLimit": 50,
+          "page": 1
+        },
+        "isFetchingAnnouncementDetail": false
+      },
+      "nutrition": {
+        "menuList": [],
+        "loadingMenuList": false,
+        "filter": {
+          "result_limit": 10,
+          "page": 1
+        },
+        "pagination": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "currentMenu": {},
+        "loadingCurrentMenu": false,
+        "timeLife": [],
+        "combinations": [],
+        "classNutrition": [],
+        "classNutritionFilter": {
+          "result_limit": 20,
+          "page": 1,
+          "search": "",
+          "date": null,
+          "is_load_more": false
+        },
+        "classNutritionPagination": {},
+        "loading": true,
+        "isLoadingMore": false,
+        "loadMoreNutrition": false,
+        "dailyMenu": {},
+        "createMenu": {
+          "isLoading": false
+        },
+        "restrictionsData": [],
+        "classNoMenu": [],
+        "suggestion": {},
+        "foodList": [],
+        "loadingFoodList": false,
+        "foodListPagination": {},
+        "savingFoodTraceability": false,
+        "savingMealLink": false,
+        "loadingIngredientTraceability": false,
+        "ingredientTraceability": null,
+        "ingredientTraceabilityError": null,
+        "itemTraceabilityList": [],
+        "loadingItemTraceabilityList": false,
+        "itemTraceabilityListError": null,
+        "menuTraceabilityByDateList": [],
+        "loadingMenuTraceabilityByDate": false,
+        "menuTraceabilityByDateError": null
+      },
+      "nutritionSetting": {
+        "settings": []
+      },
+      "studyReducer": {
+        "loadingClassStudyObserves": true,
+        "classStudyObserves": [],
+        "loadingClassObservesSubjects": true,
+        "classObservesSubjects": [],
+        "loadingClassStudyHealth": true,
+        "classStudyHealth": [],
+        "loadingClassStudyEducate": true,
+        "classStudyEducate": []
+      },
+      "billing": {
+        "billingList": [],
+        "billingPagination": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "billingFilter": {
+          "result_limit": 20,
+          "page": 1,
+          "start": null,
+          "end": null
+        },
+        "creditList": [],
+        "creditPagination": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "creditFilter": {
+          "result_limit": 20,
+          "page": 1
+        },
+        "billingKidList": [],
+        "billingKidPagination": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "billingKidFilter": {
+          "result_limit": 20,
+          "page": 1
+        }
+      },
+      "faceRecognition": {
+        "listKid": [],
+        "listKidFilter": {
+          "limit": 20,
+          "page": 1,
+          "search": "",
+          "classId": "",
+          "enroll": ""
+        },
+        "listKidPagination": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        },
+        "listStaff": [],
+        "listStaffFilter": {
+          "limit": 20,
+          "page": 1,
+          "search": "",
+          "sortObj": {
+            "name": "desc"
+          },
+          "enroll": ""
+        },
+        "listStaffPagination": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        }
+      },
+      "holiday": {
+        "listHoliday": [],
+        "listCalendarHoliday": [],
+        "listHolidayFilter": {
+          "limit": 20,
+          "page": 1,
+          "option": "",
+          "year": "",
+          "month": ""
+        },
+        "listHolidayPagination": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        },
+        "holidayType": [],
+        "currentHoliday": {},
+        "countHoliday": 0
+      },
+      "schedules": {
+        "listSchedules": [],
+        "listSchedulesMeta": {
+          "perPage": 20,
+          "currentPage": 1,
+          "from": 0,
+          "links": [],
+          "path": "",
+          "lastPage": 0,
+          "to": 0,
+          "total": 0
+        },
+        "listFilter": {
+          "result_limit": 20,
+          "page": 1,
+          "month": "",
+          "classId": "",
+          "sortName": "create_at",
+          "sortOrder": "desc",
+          "q": ""
+        },
+        "loadingList": false,
+        "timeLife": [],
+        "currentSchedule": {},
+        "semesterWeekDays": []
+      },
+      "helpdesk": {
+        "articles": null,
+        "loading": false,
+        "error": null
+      },
+      "student": {
+        "listStudent": [],
+        "listStudentPagination": {
+          "total": 1,
+          "count": 1,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "listStudentFilter": {
+          "page": 1,
+          "search": "",
+          "limit": 20,
+          "sortObj": {
+            "last_name": "asc"
+          }
+        },
+        "studentInfo": {},
+        "listAttendance": [],
+        "loadingAttendance": true,
+        "hasMoreAttendance": false,
+        "listAttendanceFilter": {
+          "result_limit": 10,
+          "page": 1,
+          "search": ""
+        },
+        "listAttendanceMeta": {},
+        "listAttendanceTotal": {
+          "totalAbsentNonpermit": 0,
+          "totalAbsentPermit": 0,
+          "totalAttendance": 0
+        },
+        "studentReportAttendance": [],
+        "studentReportAttendanceTotal": {},
+        "studentReportAttendancePagination": {},
+        "studentReportAttendanceFilter": {
+          "result_limit": 99,
+          "page": 1,
+          "search": ""
+        },
+        "studentReportAttendanceDetail": {},
+        "StudentReportAttendanceDate": {},
+        "studentEnrollList": [],
+        "studentEnrollPagination": {
+          "total": 1,
+          "count": 1,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "listEnrollFilter": {
+          "page": 1,
+          "search": "",
+          "limit": 20,
+          "sortObj": {
+            "last_name": "asc"
+          },
+          "enrol": ""
+        }
+      },
+      "subject": {
+        "subjectList": [],
+        "subjectListMeta": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1
+        },
+        "error": null,
+        "loading": false,
+        "subjectDetail": {},
+        "subjectDetailsById": {},
+        "loadingSubjectDetailsById": {},
+        "subjectDropdown": [],
+        "subjectDropdownClassId": null,
+        "loadingSubjectDropdown": false,
+        "requiredSubjects": [],
+        "requiredSubjectsGradeId": null,
+        "requiredSubjectsLoaded": false,
+        "subjectTeachers": [],
+        "subjectTeachersMeta": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "total": 0
+        },
+        "loadingSubjectTeachers": false,
+        "subjectTeacherOptionsById": {},
+        "subjectTeacherOptionsMetaById": {},
+        "loadingSubjectTeacherOptionsById": {},
+        "loadedSubjectTeacherOptionsById": {},
+        "subjectTeacherOptionsSchoolCodeById": {},
+        "subjectTeacherOptionsQueryById": {},
+        "subjectTeacherOptionsErrorById": {}
+      },
+      "assignment": {
+        "listAssignment": [],
+        "listAssignmentFilter": {
+          "page": 1,
+          "search": "",
+          "classId": 0,
+          "kidId": "",
+          "subjectId": "",
+          "tagClass": 0,
+          "deadline": "ongoing",
+          "status": "all"
+        },
+        "listAssignmentPagination": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        },
+        "assignmentDetail": {},
+        "assigmentKidList": [],
+        "assignmentKidListMeta": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        },
+        "kidReport": {},
+        "listComment": [],
+        "listCommentPagination": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        }
+      },
+      "expenseManagement": {
+        "expenseList": [],
+        "expenseListMeta": {},
+        "expenseDetails": {},
+        "expenseCategoryDropdownList": [],
+        "expenseType": []
+      },
+      "categoryManagement": {
+        "categoryList": [],
+        "categoryListMeta": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1
+        },
+        "error": null,
+        "loading": false
+      },
+      "season": {
+        "list": [],
+        "pagination": {
+          "currentPage": 1,
+          "lastPage": 1,
+          "perPage": 50,
+          "total": 0
+        },
+        "filters": {
+          "result_limit": 50,
+          "page": 1,
+          "q": "",
+          "sortName": "start",
+          "sortOrder": "desc"
+        },
+        "seasonSelected": null,
+        "seasonStart": "",
+        "seasonEnd": "",
+        "dropdownSeason": []
+      },
+      "aiChat": {
+        "token": "",
+        "cid": "",
+        "isLoading": false,
+        "error": null,
+        "messages": [],
+        "userInfo": {},
+        "chatId": "",
+        "chatName": "",
+        "suggestedQuestions": [],
+        "isLoadingMore": false,
+        "hasMore": true,
+        "offset": 0,
+        "userId": "",
+        "role": "admin",
+        "model": "",
+        "maxTokens": 0
+      },
+      "userInfoModal": {
+        "isOpen": false,
+        "options": null
+      },
+      "poll": {
+        "listPolls": [],
+        "pollFilter": {
+          "limit": 20,
+          "page": 1
+        },
+        "pollDetail": null,
+        "listPollsPagination": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        },
+        "listVoters": [],
+        "listVotersPagination": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        },
+        "votersFilter": {
+          "limit": 20,
+          "page": 1,
+          "search": ""
+        },
+        "listHistoryVote": [],
+        "listHistoryVotePagination": {
+          "currentPage": 1,
+          "from": 1,
+          "lastPage": 1,
+          "to": 1,
+          "total": 0,
+          "perPage": 0,
+          "path": "",
+          "links": []
+        }
+      },
+      "handbook": {
+        "listCategory": [],
+        "listFilter": {
+          "result_limit": 10,
+          "page": 1,
+          "q": "",
+          "status": ""
+        },
+        "detailCategory": null,
+        "listPost": [],
+        "detailPost": null,
+        "firstPost": null
+      },
+      "feedback": {
+        "listFeedback": [],
+        "listFeedbackPagination": {
+          "total": 1,
+          "count": 1,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "listFilter": {
+          "result_limit": 20,
+          "page": 1
+        },
+        "loading": true,
+        "loadingTotal": true,
+        "listAssignee": [],
+        "loadingAssignee": true,
+        "totalList": [],
+        "listCategories": [],
+        "detailFeedback": null,
+        "loadingDetail": true,
+        "listComment": [],
+        "listCommentFilter": {
+          "result_limit": 10,
+          "page": 1
+        },
+        "listCommentMeta": {
+          "total": 1,
+          "count": 1,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "loadingComment": true,
+        "hasMoreReply": true
+      },
+      "scoreboard": {
+        "listData": [],
+        "listFilter": {
+          "page": 1,
+          "resultLimit": 20
+        },
+        "listDataPagination": {
+          "total": 1,
+          "count": 1,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "loading": true,
+        "defaultSection": null,
+        "listSection": [],
+        "sectionsByTemplateId": {},
+        "loadingSectionsByTemplate": false,
+        "sectionsByTemplateError": null,
+        "listTemplate": [],
+        "classDetail": [],
+        "classDetailPagination": {
+          "total": 1,
+          "count": 1,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1,
+          "published": 0,
+          "publishedAt": "",
+          "totalPublished": 0
+        },
+        "classFilter": {
+          "sectionId": null,
+          "subjectId": null,
+          "schoolYear": null,
+          "midTerm": 0,
+          "synthetic": 0
+        },
+        "loadingDetail": true,
+        "kidAssessment": null,
+        "loadingKidAssessment": false,
+        "kidSummary": null,
+        "evaluationCompleted": {},
+        "loadingEvaluationCompleted": {},
+        "listPublish": [],
+        "listPublishPagination": {
+          "total": 1,
+          "count": 1,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "listPublishLoading": false
+      },
+      "period": {
+        "listPeriod": [],
+        "loading": true,
+        "listPeriodPagination": {
+          "total": 0,
+          "count": 1,
+          "perPage": 1,
+          "lastPage": 1,
+          "currentPage": 1
+        },
+        "listSemester": [],
+        "dropdownSemester": [],
+        "loadingSemester": true,
+        "listSemesterPagination": {
+          "total": 0,
+          "count": 1,
+          "perPage": 1,
+          "lastPage": 1,
+          "currentPage": 1
+        }
+      },
+      "incident": {
+        "listIncident": [],
+        "listIncidentClone": [],
+        "loadingListClone": true,
+        "listIncidentPagination": {
+          "total": 1,
+          "count": 1,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "listFilter": {
+          "result_limit": 20,
+          "page": 1
+        },
+        "loading": true,
+        "loadingTotal": true,
+        "listAssignee": [],
+        "loadingAssignee": true,
+        "totalList": [],
+        "listCategories": [],
+        "loadingListCategories": true,
+        "listCategoriesPagination": {
+          "total": 1,
+          "count": 1,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "listTagsCategories": [],
+        "loadingTagsCategories": true,
+        "listTagsCategoriesPagination": {
+          "total": 1,
+          "count": 1,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "actionConfigs": [],
+        "loadingActionConfigs": true,
+        "actionConfigsPagination": {
+          "total": 1,
+          "count": 1,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "listPriorities": [],
+        "loadingListPriorities": true,
+        "listStatuses": [],
+        "detailIncident": null,
+        "loadingDetail": false,
+        "commentFilter": {
+          "result_limit": 20,
+          "page": 1
+        },
+        "loadingComment": false,
+        "incidentComments": [],
+        "commentMeta": {
+          "total": 1,
+          "count": 1,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "hasMoreReply": false
+      },
+      "grade": {
+        "gradeList": [],
+        "gradeListMeta": {
+          "total": 0,
+          "count": 0,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "listFilter": {
+          "resultLimit": 20,
+          "page": 1
+        },
+        "gradeDetail": null,
+        "loading": true,
+        "loadingDetail": false,
+        "updatingFee": false
+      },
+      "educationLevel": {
+        "educationLevelList": [],
+        "educationLevelOptions": [],
+        "loading": false,
+        "error": null
+      },
+      "syncHistory": {
+        "listSyncHistory": [],
+        "listPagination": {
+          "total": 0,
+          "count": 0,
+          "perPage": 5,
+          "lastPage": 1,
+          "currentPage": 1,
+          "kid": {
+            "failedRecords": 0,
+            "processedRecords": 0,
+            "successRecords": 0,
+            "totalRecords": 0
+          },
+          "teacher": {
+            "failedRecords": 0,
+            "processedRecords": 0,
+            "successRecords": 0,
+            "totalRecords": 0
+          },
+          "class": {
+            "failedRecords": 0,
+            "processedRecords": 0,
+            "successRecords": 0,
+            "totalRecords": 0
+          }
+        },
+        "listFilter": {
+          "result_limit": 5,
+          "page": 1
+        },
+        "loading": false,
+        "currentJob": null,
+        "loadingJobStatus": false,
+        "startingSync": false
+      },
+      "reconciliation": {
+        "list": [],
+        "filter": {
+          "reconciliation_log_id": 0,
+          "page": 1,
+          "result_limit": 20
+        },
+        "pagination": {
+          "total": 0,
+          "count": 0,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "totalAmount": 0,
+        "totalInvoices": 0,
+        "loading": false,
+        "exporting": false,
+        "sessions": [],
+        "sessionsFilter": {
+          "from": "",
+          "to": "",
+          "page": 1,
+          "result_limit": 20
+        },
+        "sessionsPagination": {
+          "total": 0,
+          "count": 0,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "sessionsTotalAmount": 0,
+        "sessionsTotalTransactions": 0,
+        "sessionsLoading": false,
+        "sessionsExporting": false
+      },
+      "reward": {
+        "weeks": [],
+        "loadingWeeks": false,
+        "items": [],
+        "filter": {
+          "class_id": 0,
+          "from": "",
+          "page": 1,
+          "result_limit": 20
+        },
+        "pagination": {
+          "total": 0,
+          "count": 0,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "publishable": false,
+        "week": null,
+        "totals": {
+          "totalKids": 0,
+          "totalMarked": 0,
+          "totalGood": 0,
+          "totalPublished": 0
+        },
+        "loadingList": false,
+        "loadingMore": false,
+        "draftByKidId": {},
+        "saveErrorsByKidId": {},
+        "saving": false,
+        "updatingStatus": false,
+        "reportItems": [],
+        "reportFilter": {
+          "class_id": 0,
+          "month": 0,
+          "year": 0,
+          "status": "published",
+          "page": 1,
+          "result_limit": 20
+        },
+        "reportPagination": {
+          "total": 0,
+          "count": 0,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "reportWeeks": [],
+        "reportTotals": {
+          "totalKids": 0,
+          "totalWeeks": 0,
+          "totalGoodWeeks": 0
+        },
+        "loadingReport": false,
+        "loadingReportMore": false,
+        "exportingReport": false
+      },
+      "revenueCategory": {
+        "list": [],
+        "dropdownList": [],
+        "pagination": {
+          "total": 0,
+          "count": 0,
+          "perPage": 20,
+          "currentPage": 1,
+          "lastPage": 1
+        },
+        "loading": false,
+        "loadingDropdown": false,
+        "syncing": false,
+        "updatingSetting": false,
+        "error": null
+      }
+    }
+  }
+}

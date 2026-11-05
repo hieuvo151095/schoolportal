@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Quản lý học phí — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="tuition" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Quản lý học phí</h1>
+    <p class="ecomd-page-header__desc body-sm">Gán khoản phí cho từng lớp, đặt mức thu mặc định và chuyển nhanh sang hóa đơn của lớp</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="layer-group">Gán khoản phí hàng loạt</x-import></div>
+</div>
+<div class="ecomd-stat-group" style="--ecomd-cols: 4;">
+  <sc-for list="{{stats}}" as="s" hint-placeholder-count="4"><x-import component-from-global-scope="ECOMD.StatCard" label="{{s.label}}" value="{{s.value}}" icon="{{s.icon}}" tone="{{s.tone}}"></x-import></sc-for>
+</div>
+<sc-if value="{{hasMissing}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="ECOMD.InlineNotice" tone="warning" action="{{fixBtn}}"><b>Lớp 1A1 chưa có khoản phí nào.</b> Hóa đơn tháng tới của 25 học sinh lớp này sẽ trống nếu chưa gán.</x-import></sc-if>
+<section class="ecomd-table-card">
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo tên lớp" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{gradeOpts}}" value="{{grade}}" on-change="{{setGrade}}" label="Khối"></x-import></div>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Lớp</th><th class="body-xs-bold">Khối</th><th class="body-xs-bold is-right">Sĩ số</th><th class="body-xs-bold">Khoản phí đã gán</th><th class="body-xs-bold is-right">Thao tác nhanh</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><a href="#" class="body-sm-semibold" style="color: var(--text-heading); text-decoration: none;">Lớp {{r.name}}</a></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Khối</span><div class="ecomd-cell__value"><span>{{r.grade}}</span></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Sĩ số</span><div class="ecomd-cell__value"><span style="white-space: nowrap; font-variant-numeric: tabular-nums;">{{r.n}} học sinh</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Khoản phí đã gán</span><div class="ecomd-cell__value"><sc-if value="{{r.fees}}" hint-placeholder-val="{{true}}"><span style="display: inline-flex; align-items: center; gap: var(--space-6); white-space: nowrap;"><x-import component-from-global-scope="ECOMD.Icon" name="coins" size="{{twelve}}" color="var(--text-subtle)"></x-import>{{r.fees}} khoản phí</span></sc-if><sc-if value="{{r.noFees}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.StatusTag" tone="warning">Chưa gán</x-import></sc-if></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Thao tác nhanh</span><div class="ecomd-cell__value"><span style="display: inline-flex; gap: var(--space-8);"><x-import component-from-global-scope="ECOMD.Button" variant="text">Gán khoản phí</x-import><x-import component-from-global-scope="ECOMD.Button" variant="text">Hóa đơn của lớp</x-import></span></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="6"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có lớp nào khớp tìm kiếm"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="lớp"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1284}}'>
+var CRUMBS = ["Tài chính", "Quản lý học phí"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'all', query: '', grade: 'Tất cả khối' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var Q = [{"id": 1, "name": "12A1", "grade": "Khối 12", "n": 4, "fees": 9}, {"id": 2, "name": "12A2", "grade": "Khối 12", "n": 32, "fees": 4}, {"id": 3, "name": "11A1", "grade": "Khối 11", "n": 30, "fees": 4}, {"id": 4, "name": "11A2", "grade": "Khối 11", "n": 28, "fees": 3}, {"id": 5, "name": "10A1", "grade": "Khối 10", "n": 35, "fees": 4}, {"id": 6, "name": "9A1", "grade": "Khối 9", "n": 31, "fees": 3}, {"id": 7, "name": "8A1", "grade": "Khối 8", "n": 29, "fees": 3}, {"id": 8, "name": "7A1", "grade": "Khối 7", "n": 33, "fees": 3}, {"id": 9, "name": "6A1", "grade": "Khối 6", "n": 34, "fees": 4}, {"id": 10, "name": "5A1", "grade": "Khối 5", "n": 30, "fees": 3}, {"id": 11, "name": "2A1", "grade": "Khối 2", "n": 26, "fees": 2}, {"id": 12, "name": "1A1", "grade": "Khối 1", "n": 25, "fees": 0}];
+    var q = (st.query || '').trim().toLowerCase();
+    var list = Q.filter(function (c) { return (!q || c.name.toLowerCase().indexOf(q) >= 0) && (st.grade === 'Tất cả khối' || c.grade === st.grade); });
+    var tot = 0, tabs = []; Q.forEach(function (c) { tot += c.n; });
+    var rows = list.map(function (c) { return Object.assign({}, c, { noFees: !c.fees, actionLabel: 'Thao tác với lớp ' + c.name,
+      menu: [{ icon: 'coins', label: 'Gán, sửa khoản phí' }, { icon: 'receipt', label: 'Xem hóa đơn của lớp' }, { icon: 'copy', label: 'Sao chép khoản phí sang lớp khác' }] }); });
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20, twelve: 12, fourteen: 14,
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      rows: rows, isEmpty: rows.length === 0,
+      total: rows.length,
+      hasMissing: true, fixBtn: null,
+      stats: [{ label: 'Tổng số lớp', value: String(Q.length), icon: 'chalkboard', tone: 'neutral' }, { label: 'Học sinh toàn trường', value: String(tot), icon: 'users', tone: 'neutral' },
+        { label: 'Lớp đã gán khoản phí', value: String(Q.filter(function (c) { return c.fees; }).length), icon: 'circle-check', tone: 'success' }, { label: 'Lớp chưa gán', value: String(Q.filter(function (c) { return !c.fees; }).length), icon: 'triangle-exclamation', tone: 'warning' }],
+      gradeOpts: ["Tất cả khối", "Khối 12", "Khối 11", "Khối 10", "Khối 9", "Khối 8", "Khối 7", "Khối 6", "Khối 5", "Khối 2", "Khối 1"], grade: st.grade, setGrade: function (v) { self.setState({ grade: v }); },
+    });
+  }
+}
+</script>
+</body>
+</html>

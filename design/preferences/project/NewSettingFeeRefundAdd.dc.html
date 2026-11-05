@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Thêm khoản phí hoàn tiền — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<div style="height: 100vh; overflow: hidden;" aria-hidden="true"><dc-import name="NewSettingFee" scenario="Đón muộn và hoàn tiền" hint-size="100%,900px"></dc-import></div>
+<x-import component-from-global-scope="ECOMD.PopupModal" open="{{open}}" on-close="{{close}}" title="Thêm khoản phí hoàn tiền" description="Tiền các ngày vắng có phép được trừ vào hóa đơn tháng sau" icon="rotate-left" width="calc(var(--size-sidebar-w) * 2 + var(--space-48) * 2)" primary-action="{{pri}}" secondary-action="{{sec}}">
+<div class="ecomd-form"><x-import component-from-global-scope="ECOMD.InlineNotice" tone="info">Chỉ hiện các khoản phí tính theo ngày chưa có trong danh sách hoàn tiền.</x-import><div style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-8);"><x-import component-from-global-scope="ECOMD.Checkbox" label="{{allLabel}}" checked="{{allOn}}" indeterminate="{{someOn}}" on-change="{{toggleAll}}"></x-import><span class="body-xs" style="color: var(--text-subtle);">Đã chọn {{selCount}}</span></div><div style="display: flex; flex-direction: column; gap: var(--space-8);"><sc-for list="{{fees}}" as="f" hint-placeholder-count="2"><label class="{{f.cls}}"><input type="checkbox" checked="{{f.on}}" onChange="{{f.toggle}}" style="flex: none; width: var(--size-16); height: var(--size-16); margin: var(--space-2) 0 0; accent-color: var(--eco-blue-strong);"><span class="ecomd-choice__text" style="flex: 1;"><span style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-8);"><span class="ecomd-choice__title body-sm-semibold">{{f.name}}</span><span class="body-sm-semibold" style="color: var(--text-heading); font-variant-numeric: tabular-nums;">{{f.price}}</span></span><span class="ecomd-choice__desc body-xs">{{f.desc}} · mã {{f.code}}</span></span></label></sc-for></div><div class="ecomd-grid" style="--ecomd-cols: 2; --ecomd-cols-mobile: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Vắng có phép hoàn</span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm is-num" value="{{pct}}"><span class="ecomd-affix__suffix body-sm">%</span></span><span class="ecomd-field__hint body-xs">Áp dụng cho các khoản vừa chọn.</span></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Vắng không phép</span><input type="text" class="ecomd-text body-sm" value="0%" readonly="{{yes}}"></label></div></div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"open": {"editor": "boolean", "default": true, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ open: props.open !== false }, { sel: [0] }); }
+  componentDidUpdate(prev) { if (prev.open !== this.props.open) this.setState({ open: this.props.open !== false }); }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var F = [{ name: 'Bán trú thứ 7', code: 'BAN_TRU_T7', price: '150,000đ / ngày', desc: 'Chăm sóc và ăn trưa ngày thứ Bảy' }, { name: 'Ăn sáng', code: 'TIEN_AN_SANG', price: '60,000đ / ngày', desc: 'Suất ăn sáng dinh dưỡng theo ngày' }];
+    var sel = st.sel; var n = sel.length;
+    return {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      open: st.open, close: function () { self.setState({ open: false }); },
+      fees: F.map(function (f, i) { var on = sel.indexOf(i) >= 0; return Object.assign({}, f, { on: on, cls: 'ecomd-choice' + (on ? ' is-checked' : ''), toggle: function (e) { var s = self.state.sel.filter(function (x) { return x !== i; }); if (e.target.checked) s.push(i); self.setState({ sel: s }); } }); }),
+      allLabel: 'Chọn tất cả (' + F.length + ')', allOn: n === F.length, someOn: n > 0 && n < F.length, toggleAll: function (v) { self.setState({ sel: v ? [0, 1] : [] }); }, selCount: n, pct: '100',
+      pri: { label: n ? 'Thêm ' + n + ' khoản phí' : 'Thêm khoản phí', icon: 'plus', disabled: !n }, sec: { label: 'Hủy', onClick: function () { self.setState({ open: false }); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

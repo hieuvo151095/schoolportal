@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Thêm năm học — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<div style="height: 100vh; overflow: hidden;" aria-hidden="true"><dc-import name="NewAcademicYear" hint-size="100%,900px"></dc-import></div>
+<x-import component-from-global-scope="ECOMD.PopupModal" open="{{open}}" on-close="{{close}}" title="Thêm năm học" description="Khai báo thời gian năm học và các học kỳ" icon="calendar-plus" width="calc(var(--size-sidebar-w) * 2 + var(--space-48) * 2)" primary-action="{{pri}}" secondary-action="{{sec}}">
+<div class="ecomd-form"><div class="ecomd-grid" style="--ecomd-cols: 2; --ecomd-cols-mobile: 1; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tên năm học <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" value="Năm học 2028 – 2029"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Sao chép cấu hình từ</span><x-import component-from-global-scope="ECOMD.SelectField" options="{{copyOpts}}" value="{{copy}}" on-change="{{setCopy}}" label="Sao chép cấu hình"></x-import></label></div><div class="ecomd-grid" style="--ecomd-cols: 2; --ecomd-cols-mobile: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Bắt đầu <span class="ecomd-field__req" aria-hidden="true">*</span></span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" value="15/08/2028" placeholder="dd/mm/yyyy"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Kết thúc <span class="ecomd-field__req" aria-hidden="true">*</span></span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" value="31/05/2029" placeholder="dd/mm/yyyy"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span></label></div><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Học kỳ</span><div style="display: flex; flex-direction: column; gap: var(--space-8);"><sc-for list="{{terms}}" as="t" hint-placeholder-count="2"><div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-8); align-items: center;"><span class="body-sm-medium" style="color: var(--text-heading);">{{t.name}}</span><input type="text" class="ecomd-text is-sm is-num body-sm" value="{{t.from}}" aria-label="{{t.fromLabel}}"><input type="text" class="ecomd-text is-sm is-num body-sm" value="{{t.to}}" aria-label="{{t.toLabel}}"></div></sc-for></div></div><x-import component-from-global-scope="ECOMD.InlineNotice" tone="info">Năm học mới ở trạng thái Sắp tới. Lớp, khoản phí và danh mục thu được sao chép; học sinh chuyển lên khi kết chuyển năm học.</x-import></div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"open": {"editor": "boolean", "default": true, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ open: props.open !== false }, { copy: 'Năm học 2027 – 2028' }); }
+  componentDidUpdate(prev) { if (prev.open !== this.props.open) this.setState({ open: this.props.open !== false }); }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    return {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      open: st.open, close: function () { self.setState({ open: false }); },
+      copyOpts: ['Năm học 2027 – 2028', 'Năm học 2026 – 2027', 'Không sao chép'], copy: st.copy, setCopy: function (v) { self.setState({ copy: v }); },
+      terms: [{ name: 'Học kỳ I', from: '15/08/2028', to: '15/01/2029', fromLabel: 'Bắt đầu học kỳ I', toLabel: 'Kết thúc học kỳ I' }, { name: 'Học kỳ II', from: '16/01/2029', to: '31/05/2029', fromLabel: 'Bắt đầu học kỳ II', toLabel: 'Kết thúc học kỳ II' }],
+      pri: { label: 'Tạo năm học', icon: 'plus' }, sec: { label: 'Hủy', onClick: function () { self.setState({ open: false }); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

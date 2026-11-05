@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tạo hội thoại — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<div style="height: 100vh; overflow: hidden;" aria-hidden="true"><dc-import name="NewConversations" hint-size="100%,900px"></dc-import></div>
+<x-import component-from-global-scope="ECOMD.PopupModal" open="{{open}}" on-close="{{close}}" title="Cuộc trò chuyện mới" description="Nhắn riêng với phụ huynh hoặc tạo nhóm trao đổi của lớp" icon="comments" width="calc(var(--size-sidebar-w) * 2 + var(--space-48) * 2)" primary-action="{{pri}}" secondary-action="{{sec}}">
+<div class="ecomd-form"><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Loại hội thoại</span><x-import component-from-global-scope="ECOMD.Tabs" items="{{kinds}}" value="{{kind}}" on-change="{{setKind}}" label="Loại hội thoại" variant="segmented" class-name="is-block"></x-import></div><sc-if value="{{isOne}}" hint-placeholder-val="{{true}}"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Học sinh <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{kidOpts}}" value="{{kid}}" on-change="{{setKid}}" label="Học sinh"></x-import></label><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Người nhận</span><div style="display: flex; flex-direction: column; gap: var(--space-8);"><x-import component-from-global-scope="ECOMD.Checkbox" label="Đỗ Văn Nam · Bố · 0903 456 789" checked="{{p0}}" on-change="{{tgP0}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Lê Thị Hạnh · Mẹ · 0918 222 333" checked="{{p1}}" on-change="{{tgP1}}"></x-import></div><span class="ecomd-field__hint body-xs">Phụ huynh đã liên kết tài khoản ứng dụng.</span></div></sc-if><sc-if value="{{isGroup}}" hint-placeholder-val="{{false}}"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tên nhóm <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" value="Ban phụ huynh lớp 1A1"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Thành viên <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{grpOpts}}" value="{{grp}}" on-change="{{setGrp}}" label="Thành viên nhóm"></x-import><span class="ecomd-field__hint body-xs">Có thể thêm, bớt thành viên sau.</span></label></sc-if><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tin nhắn đầu tiên <span class="ecomd-field__req" aria-hidden="true">*</span></span><textarea class="ecomd-textarea body-sm" rows="3" placeholder="Nội dung gửi phụ huynh…"></textarea></label></div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"open": {"editor": "boolean", "default": true, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ open: props.open !== false }, { kind: 'one', kid: 'Đỗ Minh Khôi · Lớp 1A1', p0: true, p1: false, grp: 'Toàn bộ phụ huynh lớp 1A1 · 16 người' }); }
+  componentDidUpdate(prev) { if (prev.open !== this.props.open) this.setState({ open: this.props.open !== false }); }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    return {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      open: st.open, close: function () { self.setState({ open: false }); },
+      kinds: [{ key: 'one', label: 'Với phụ huynh', icon: 'user' }, { key: 'group', label: 'Nhóm', icon: 'user-group' }], kind: st.kind, setKind: function (k) { self.setState({ kind: k }); }, isOne: st.kind === 'one', isGroup: st.kind === 'group',
+      kidOpts: ['Đỗ Minh Khôi · Lớp 1A1', 'Lê Bảo An · Lớp 1A1', 'Trần Minh Thảo · Lớp 1A1'], kid: st.kid, setKid: function (v) { self.setState({ kid: v }); },
+      p0: st.p0, p1: st.p1, tgP0: function (v) { self.setState({ p0: v }); }, tgP1: function (v) { self.setState({ p1: v }); },
+      grpOpts: ['Toàn bộ phụ huynh lớp 1A1 · 16 người', 'Ban đại diện cha mẹ học sinh 1A1 · 5 người'], grp: st.grp, setGrp: function (v) { self.setState({ grp: v }); },
+      pri: { label: 'Bắt đầu trò chuyện', icon: 'paper-plane' }, sec: { label: 'Hủy', onClick: function () { self.setState({ open: false }); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

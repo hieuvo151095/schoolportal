@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tạo bài tập — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="assignment" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Tạo bài tập</h1>
+    <p class="ecomd-page-header__desc body-sm">Giao bài cho cả lớp hoặc từng học sinh; phụ huynh nhận thông báo và nộp bài trên ứng dụng</p>
+  </div>
+</div>
+<div class="ecomd-split is-aside" style="gap: var(--space-20); align-items: start;"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Nội dung bài tập</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Lớp <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{clsOpts}}" value="{{cls}}" on-change="{{setCls}}" label="Lớp được giao"></x-import></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Môn học <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{subOpts}}" value="{{sub}}" on-change="{{setSub}}" label="Môn học"></x-import></label></div><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tên bài tập <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" placeholder="VD: Bài tập Toán tuần 4 – Phép cộng có nhớ" value="{{name}}" onChange="{{setName}}"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Hướng dẫn làm bài</span><textarea class="ecomd-textarea body-sm" rows="4" placeholder="Yêu cầu bài tập, trang sách giáo khoa cần hoàn thành…" value="{{guide}}" onChange="{{setGuide}}" maxlength="1000"></textarea><span class="ecomd-field__meta"><span class="ecomd-field__count body-xs">{{guideCount}} / 1,000</span></span></label><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tệp đính kèm</span><button type="button" class="ecomd-dropzone"><x-import class-name="ecomd-dropzone__icon" component-from-global-scope="ECOMD.Icon" name="upload" size="{{twenty}}"></x-import><span class="ecomd-dropzone__title body-sm-medium">Kéo thả tệp vào đây hoặc <b>chọn tệp</b></span><span class="body-xs">PDF, DOCX, JPG, PNG · tối đa 25 MB mỗi tệp</span></button><span class="ecomd-field__hint body-xs">Không bắt buộc. Tối đa 5 tệp.</span></div></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Giao bài</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Giao cho <span class="ecomd-field__req" aria-hidden="true">*</span></span><div class="ecomd-choices" style="--ecomd-cols: 2;"><label class="ecomd-choice"><input type="radio" name="who" checked="{{allKids}}" onChange="{{pickAll}}"><span class="ecomd-choice__icon" aria-hidden="true"><x-import component-from-global-scope="ECOMD.Icon" name="users" size="{{fourteen}}"></x-import></span><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">Cả lớp</span><span class="ecomd-choice__desc body-xs">8 học sinh lớp 1A1</span></span></label><label class="ecomd-choice"><input type="radio" name="who" checked="{{someKids}}" onChange="{{pickSome}}"><span class="ecomd-choice__icon" aria-hidden="true"><x-import component-from-global-scope="ECOMD.Icon" name="user-check" size="{{fourteen}}"></x-import></span><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">Chọn học sinh</span><span class="ecomd-choice__desc body-xs">Chỉ giao cho một số em</span></span></label></div></div><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Hạn nộp <span class="ecomd-field__req" aria-hidden="true">*</span></span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" placeholder="dd/mm/yyyy hh:mm" value="{{due}}" onChange="{{setDue}}"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span></label><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Thời điểm gửi</span><div class="ecomd-radios" style="min-height: var(--size-40); align-items: center;"><label class="ecomd-radio body-sm"><input type="radio" name="send" checked="{{sendNow}}" onChange="{{pickNow}}"><span>Gửi ngay khi lưu</span></label><label class="ecomd-radio body-sm"><input type="radio" name="send" checked="{{sendLater}}" onChange="{{pickLater}}"><span>Hẹn giờ gửi</span></label></div></div></div><sc-if value="{{sendLater}}" hint-placeholder-val="{{false}}"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Gửi lúc</span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" value="03/11/2026 19:00" placeholder="dd/mm/yyyy"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span><span class="ecomd-field__hint body-xs">Phụ huynh nhận thông báo đúng giờ này.</span></label></sc-if></div></div>
+</section>
+</div><div style="display: flex; flex-direction: column; gap: var(--space-16);"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Phụ huynh sẽ nhận</h2><p class="ecomd-card__desc body-xs">Xem trước thông báo trên ứng dụng ECO School</p></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; gap: var(--space-12); padding: var(--space-12); border: 1px solid var(--border-default); border-radius: var(--radius-12); background: var(--bg-subtle);"><span aria-hidden="true" style="display: flex; flex: none; align-items: center; justify-content: center; width: var(--size-36); height: var(--size-36); border-radius: var(--radius-8); background: var(--semantic-info-soft); color: var(--eco-blue-strong);"><x-import component-from-global-scope="ECOMD.Icon" name="book" size="{{fourteen}}"></x-import></span><span style="display: flex; flex-direction: column; gap: var(--space-4); min-width: 0;"><span class="body-xs" style="color: var(--text-subtle);">Bài tập mới · {{cls}}</span><span class="body-sm-semibold" style="color: {{nameColor}}; overflow-wrap: anywhere;">{{namePrev}}</span><span style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-6);"><x-import component-from-global-scope="ECOMD.Tag">{{sub}}</x-import><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">Hạn nộp {{duePrev}}</span></span></span></div></div>
+</section>
+</div></div>
+<div class="ecomd-form-footer"><span class="ecomd-form-footer__note body-xs">{{footNote}}</span><div class="ecomd-form-footer__actions"><x-import component-from-global-scope="ECOMD.Button" variant="ghost">Hủy</x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary">Lưu nháp</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="paper-plane">{{sendLabel}}</x-import></div></div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1108}}'>
+var CRUMBS = ["Học tập", "Bài tập", "Tạo bài tập"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { cls: 'Lớp 1A1', sub: 'Toán', name: 'Bài tập Toán tuần 4 – Phép cộng có nhớ', guide: '', due: '07/11/2026 20:00', who: 'all', later: false }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var name = (st.name || '').trim(), due = (st.due || '').trim();
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      clsOpts: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1'], cls: st.cls, setCls: function (v) { self.setState({ cls: v }); },
+      subOpts: ['Toán', 'Tiếng Việt', 'Tiếng Anh', 'Tự nhiên và Xã hội', 'Đạo đức'], sub: st.sub, setSub: function (v) { self.setState({ sub: v }); },
+      name: st.name, setName: function (e) { self.setState({ name: e.target.value }); }, namePrev: name || 'Tên bài tập', nameColor: name ? 'var(--text-heading)' : 'var(--text-muted)',
+      guide: st.guide, guideCount: (st.guide || '').length, setGuide: function (e) { self.setState({ guide: e.target.value }); },
+      due: st.due, setDue: function (e) { self.setState({ due: e.target.value }); }, duePrev: due || 'chưa đặt',
+      allKids: st.who === 'all', someKids: st.who === 'some', pickAll: function () { self.setState({ who: 'all' }); }, pickSome: function () { self.setState({ who: 'some' }); },
+      sendNow: !st.later, sendLater: !!st.later, pickNow: function () { self.setState({ later: false }); }, pickLater: function () { self.setState({ later: true }); },
+      sendLabel: st.later ? 'Lưu và hẹn giờ' : 'Lưu và gửi',
+      footNote: (name && due) ? 'Sẵn sàng gửi tới phụ huynh ' + (st.who === 'all' ? '8 học sinh' : 'học sinh đã chọn') + '.' : 'Cần nhập tên bài tập và hạn nộp trước khi gửi.'
+    });
+  }
+}
+</script>
+</body>
+</html>

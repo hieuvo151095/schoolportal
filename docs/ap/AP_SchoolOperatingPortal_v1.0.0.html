@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light">
+  <meta name="ap:lineage" content="AP_SchoolOperatingPortal">
+  <meta name="ap:branch" content="">
+  <meta name="ap:version" content="1.0.0">
+  <meta name="ap:parent" content="">
+  <title>AP_SchoolOperatingPortal_v1.0.0 — Kế Hoạch Kiến Trúc SchoolOperatingPortal</title>
+  <style>
+/* agp-build-ap references/ap-style.css — the regular light AP stylesheet (§A.31).
+     Inline this file verbatim as the start of the AP's <style>. Light theme only:
+     never add prefers-color-scheme rules or colour custom properties. */
+  body { font: 14px/1.55 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; color: #1f2937; max-width: 1560px; margin: 24px auto; padding: 0 24px; }
+  h1 { font-size: 26px; border-bottom: 2px solid #E57347; padding-bottom: 6px; font-family: 'Space Grotesk', -apple-system, sans-serif; letter-spacing: -0.02em; }
+  h2.part { font-size: 22px; margin-top: 48px; padding-bottom: 4px; border-bottom: 2px solid #E57347; color: #b14a23; font-family: 'Space Grotesk', -apple-system, sans-serif; letter-spacing: -0.02em; }
+  h2 { font-size: 20px; margin-top: 38px; padding-bottom: 4px; border-bottom: 1px solid #e5e7eb; color: #b14a23; font-family: 'Space Grotesk', -apple-system, sans-serif; letter-spacing: -0.015em; }
+  h3 { font-size: 16px; margin-top: 24px; color: #1f2937; }
+  h4 { font-size: 14px; margin-top: 18px; color: #374151; text-transform: uppercase; letter-spacing: 0.04em; }
+  code { background: #f5f4f1; padding: 1px 5px; border-radius: 3px; font-size: 0.92em; }
+  pre { background: #f5f4f1; padding: 10px 14px; border-radius: 6px; overflow-x: auto; font-size: 12.5px; line-height: 1.4; }
+  table { border-collapse: collapse; margin: 8px 0 16px; width: 100%; max-width: 100%; }
+  th, td { border: 1px solid #d4d4d8; padding: 6px 10px; text-align: left; vertical-align: top; font-size: 13px; overflow-wrap: anywhere; word-break: break-word; }
+  th { background: #f5f4f1; }
+  .recommended { background: #fef3e8; }
+  .new { background: #ecfccb; }
+  .badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px; font-weight: 500; }
+  .badge.new { background: #bbf7d0; color: #166534; }
+  .badge.keep { background: #e0e7ff; color: #3730a3; }
+  .badge.tbd { background: #fde68a; color: #92400e; }
+  .badge.built { background: #bbf7d0; color: #166534; }
+  .badge.miss { background: #fee2e2; color: #991b1b; }
+  .badge.partial { background: #fef3c7; color: #92400e; }
+  blockquote { border-left: 3px solid #E57347; background: #fef3e8; margin: 8px 0; padding: 8px 14px; }
+  .legend { font-size: 12px; color: #6b7280; }
+  .note { font-size: 12.5px; color: #374151; background: #f0f9ff; border-left: 3px solid #7dd3fc; margin: 6px 0 14px; padding: 8px 12px; }
+  .warn { font-size: 12.5px; color: #78350f; background: #fffbeb; border-left: 3px solid #f59e0b; margin: 6px 0 14px; padding: 8px 12px; }
+  nav.toc { position: fixed; top: 0; left: 0; width: 258px; height: 100vh; overflow-y: auto; box-sizing: border-box; background: #faf9f7; border-right: 1px solid #e5e7eb; padding: 18px 10px 48px; font-size: 12px; line-height: 1.45; z-index: 50; }
+  nav.toc .toc-title { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #b14a23; margin: 0 0 10px 6px; }
+  nav.toc a { display: block; color: #475569; text-decoration: none; padding: 3px 8px; border-radius: 4px; border-left: 2px solid transparent; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  nav.toc a:hover { background: #fef3e8; color: #b14a23; }
+  nav.toc a.lvl-1 { font-weight: 700; color: #1f2937; margin-top: 9px; }
+  nav.toc a.lvl-2 { padding-left: 18px; font-weight: 600; }
+  nav.toc a.lvl-3 { padding-left: 32px; color: #6b7280; }
+  nav.toc a.active { background: #fef3e8; color: #b14a23; border-left-color: #E57347; }
+  nav.toc a.lvl-p { font-weight: 800; color: #8a3d1c; margin-top: 12px; text-transform: uppercase; font-size: 10.5px; letter-spacing: .08em; }
+  body { margin-left: 290px; }
+  @media (max-width: 1180px) { nav.toc { display: none; } body { margin-left: auto; } }
+  @media print { nav.toc { display: none; } body { margin-left: auto; } }
+  .fig-cap { font-size: 12px; color: #6b7280; text-align: center; margin: 6px 0 4px; }
+  .fig-cap strong { color: #b14a23; }
+  ul.fig-notes, ul.tbl-notes { font-size: 12px; color: #6b7280; margin: 2px 0 14px; padding-left: 22px; }
+  figure.viz { margin: 10px 0 16px; } figure.viz svg { width: 100%; height: auto; border: 1px solid #e5e7eb; border-radius: 6px; }
+  .tw { overflow-x: auto; max-width: 100%; }
+  td.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; white-space: nowrap; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  table.uf { table-layout: fixed; }
+  table.uf td { font-size: 12px; vertical-align: top; }
+  table.uf ol, table.uf ul { margin: 0; padding-left: 16px; }
+  .grid td { text-align: center; font-size: 11.5px; }
+  .grid td.lbl { text-align: left; white-space: nowrap; }
+  .hole { background: #fef2f2; color: #991b1b; font-weight: 700; }
+  .ctl { display: inline-block; border: 1px solid #9ca3af; border-radius: 4px; padding: 0 5px; font-size: 11.5px; background: #fff; white-space: nowrap; }
+  h2.part-divider { font-size: 13px; text-transform: uppercase; letter-spacing: .14em; color: #8a3d1c; background: #faf2ec; border: none; border-top: 3px solid #E57347; margin: 64px 0 6px; padding: 14px 2px 6px; font-weight: 800; font-family: 'Space Grotesk', -apple-system, sans-serif; }
+  html { color-scheme: light }
+  body { background: #fff }
+  /* §A.14 agreement axis: bar + tint + a pill naming the state. border-left + padding held constant. */
+  h2[data-st],h3[data-st],h4[data-st]{border-left:9px solid var(--st-bar);padding-left:11px;margin-left:-20px;background:var(--st-tint)}
+  [data-st="draft"]{--st-bar:#71717a;--st-tint:#f4f4f5}
+  [data-st="review"]{--st-bar:#c026d3;--st-tint:#fdf4ff}
+  [data-st="approved"]{--st-bar:#16a34a;--st-tint:#f0fdf4}
+  [data-st="locked"]{--st-bar:#1d4ed8;--st-tint:#eff6ff;border-left-style:double;border-left-width:11px;padding-left:9px}
+  [data-st="superseded"]{--st-bar:#a8a29e;--st-tint:transparent;border-left-style:dashed;color:#78716c;font-style:italic}
+  h2.part[data-st]::after,h3[data-st]::after,h4[data-st]::after{content:attr(data-st);float:right;margin:5px 0 0 14px;padding:0 9px;border-radius:9px;background:var(--st-bar);color:#fff;font:600 10.5px/18px -apple-system,Segoe UI,sans-serif;letter-spacing:.06em;text-transform:uppercase;font-style:normal;white-space:nowrap}
+  h2.part[data-st]::after{margin-top:7px}
+  :is(h2.part,h3,h4):is([data-st="approved"],[data-st="locked"])::after{content:attr(data-st) " \00b7 " attr(data-st-on)}
+  :is(h2.part,h3,h4)[data-st="superseded"]::after{background:transparent;color:#78716c;border:1px dashed #a8a29e;line-height:16px}
+  .stlegend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:#52525b;margin:10px 0 16px}
+  .stkey{font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:3px;border-left:3px solid var(--st-bar);background:var(--st-tint)}
+  details > summary { cursor: pointer; color: #6b7280; }
+  svg text { fill: #1f2937; font-family: -apple-system, 'Segoe UI', sans-serif; }
+  svg .box { fill: #fff; stroke: #E57347; stroke-width: 1.5; }
+  svg .zone { fill: none; stroke: #9ca3af; stroke-dasharray: 5 4; }
+  svg .ln { stroke: #6b7280; stroke-width: 1.4; fill: none; }
+  .nw { white-space: nowrap; }
+  table.hdr th { width: 170px; }
+  </style>
+</head>
+<body>
+  <nav class="toc">
+    <p class="toc-title">Mục Lục Kiến Trúc</p>
+    <div id="toc"></div>
+  </nav>
+
+  <h1 id="title">SchoolOperatingPortal Architecture Plan (AP) v1.0.0</h1>
+
+  <table class="hdr">
+    <tr><th>Văn bản</th><td>Kế hoạch Kiến trúc & Hợp đồng Trải nghiệm Sản phẩm SchoolOperatingPortal</td></tr>
+    <tr><th>Phiên bản</th><td>v1.0.0 (Tiêu chuẩn SEPO Chuẩn mực)</td></tr>
+    <tr><th>Trạng thái đồng thuận</th><td><span class="stkey" data-st="approved">approved</span> &#183; Đã phê duyệt cấu trúc, luồng & tiêu chuẩn nghiệm thu</td></tr>
+    <tr><th>Tài liệu ISP đi kèm</th><td><code>ISP_SchoolOperatingPortal_v1.0.0.html</code> (§A.30 ghim 1:1)</td></tr>
+    <tr><th>Nguồn sự thật (SSOT)</th><td>LLM Wiki (113 Spec IDs chuẩn tại <code>llm-wiki/pages/</code>)</td></tr>
+  </table>
+
+  <div class="stlegend">
+    <span class="stkey" data-st="approved">APPROVED</span> Đã chốt kiến trúc
+    <span class="stkey" data-st="review">REVIEW</span> Đang lấy ý kiến
+    <span class="stkey" data-st="draft">DRAFT</span> Bản thảo
+    <span class="stkey" data-st="locked">LOCKED</span> Đã khóa và kiểm chứng bởi Verify Gate
+  </div>
+
+  <h2 class="part-divider" id="part-1">Part 1 — Khung Khái Niệm & Kiến Trúc Tổng Thể</h2>
+
+  <h2 class="part" id="s1-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="61f65ed3">§1.1 SYSTEM: Tầm nhìn sản phẩm & Mục tiêu cốt lõi</h2>
+  <p>**School Operating Portal** là nền tảng quản trị và vận hành giáo dục đa trường (multi-tenant) cấp doanh nghiệp, được thiết kế chuyên biệt cho các cơ sở giáo dục Mầm non và Phổ thông liên cấp (K-12) tại Việt Nam.
+
+Hệ thống bao gồm đầy đủ **7 phân hệ lớn** và **38 sub-modules nghiệp vụ**, được quản lý và thi công theo chuẩn **Antigravity Harness Loop Kit v0.5.0** với kỷ luật bất biến **WIP = 1**, Nguồn sự thật duy nhất (**LLM Wiki SSOT**), và Cổng kiểm chứng nhị phân toàn phổ (**Verify Gate**).</p>
+
+  <h3 id="s1-1-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="1401d219">§1.1.1 SYSTEM: Định vị bài toán & Người dùng mục tiêu</h3>
+  <p>Hệ thống SchoolOperatingPortal được thiết kế tối ưu hóa cho trải nghiệm di động hiện đại, ưu tiên tốc độ phản hồi tức thì, khả năng vận hành bền bỉ và tính năng ngoại tuyến (Offline-First).</p>
+
+  <h3 id="s1-1-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="7ce6e691">§1.1.2 SYSTEM: Phạm vi & Các nguyên tắc kiến trúc chủ đạo</h3>
+  <p>Tuân thủ nghiêm ngặt 3 nguyên tắc bất biến của SEPO:</p>
+  <ul>
+    <li><strong>Nguồn sự thật duy nhất (SSOT):</strong> Mọi quy tắc nghiệp vụ đều bắt nguồn từ LLM Wiki.</li>
+    <li><strong>Thi công đơn nguyên (WIP = 1):</strong> Hoàn thành dứt điểm từng tính năng trước khi chuyển sang tính năng mới.</li>
+    <li><strong>Kiểm chứng nhị phân khép kín:</strong> Cổng Verify Gate là thước đo duy nhất để xác nhận hoàn thành.</li>
+  </ul>
+
+  <h2 class="part" id="s1-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="cbd6809d">§1.2 SYSTEM: Tô pô kiến trúc & Phân rã thành phần (§A.21)</h2>
+  <p>Kiến trúc hệ thống được phân tầng rõ ràng từ giao diện người dùng, tầng điều phối trạng thái, logic nghiệp vụ đến kho lưu trữ cục bộ.</p>
+
+  <h3 id="s1-2-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="95eba2b6">§1.2.1 SYSTEM: Sơ đồ kiến trúc tổng thể Figure 1.2.1</h3>
+  <p class="fig-cap"><strong>Figure 1.2.1</strong> — Sơ đồ kiến trúc phân tầng và luồng dữ liệu của SchoolOperatingPortal</p>
+  <figure class="viz">
+    <svg viewBox="0 0 920 180" xmlns="http://www.w3.org/2000/svg" width="100%" height="180">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 8 5 L 0 9 z" fill="#0f766e" />
+        </marker>
+      </defs>
+      <rect width="920" height="180" fill="#f8fafc" rx="8" stroke="#e2e8f0" stroke-width="1"/>
+      <g transform="translate(30, 25)">
+        <!-- Layer 1: Client UI -->
+        <rect x="0" y="20" width="180" height="80" fill="#ecfdf5" stroke="#059669" stroke-width="1.5" rx="8"/>
+        <text x="90" y="55" font-weight="700" fill="#065f46" text-anchor="middle" font-size="13">UI · Giao diện</text>
+        <text x="90" y="78" font-size="11" fill="#047857" text-anchor="middle">View / React Components</text>
+
+        <!-- Arrow 1 -->
+        <line x1="185" y1="60" x2="235" y2="60" stroke="#0f766e" stroke-width="2" marker-end="url(#arr)"/>
+
+        <!-- Layer 2: State Controller -->
+        <rect x="245" y="20" width="180" height="80" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.5" rx="8"/>
+        <text x="335" y="55" font-weight="700" fill="#0369a1" text-anchor="middle" font-size="13">STATE · Trạng thái</text>
+        <text x="335" y="78" font-size="11" fill="#0284c7" text-anchor="middle">Hooks / State Store</text>
+
+        <!-- Arrow 2 -->
+        <line x1="430" y1="60" x2="480" y2="60" stroke="#0f766e" stroke-width="2" marker-end="url(#arr)"/>
+
+        <!-- Layer 3: Business Logic -->
+        <rect x="490" y="20" width="180" height="80" fill="#fef3c7" stroke="#d97706" stroke-width="1.5" rx="8"/>
+        <text x="580" y="55" font-weight="700" fill="#92400e" text-anchor="middle" font-size="13">CORE · Nghiệp vụ</text>
+        <text x="580" y="78" font-size="11" fill="#b45309" text-anchor="middle">Services & Engine</text>
+
+        <!-- Arrow 3 -->
+        <line x1="675" y1="60" x2="725" y2="60" stroke="#0f766e" stroke-width="2" marker-end="url(#arr)"/>
+
+        <!-- Layer 4: Storage -->
+        <rect x="735" y="20" width="150" height="80" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5" rx="8"/>
+        <text x="810" y="55" font-weight="700" fill="#5b21b6" text-anchor="middle" font-size="13">DATA · Lưu trữ</text>
+        <text x="810" y="78" font-size="11" fill="#6d28d9" text-anchor="middle">IndexedDB / Local</text>
+      </g>
+    </svg>
+  </figure>
+
+  <h3 id="s1-2-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="5ecd92cf">§1.2.2 SYSTEM: Từ điển thành phần kiến trúc và ánh xạ phân hệ</h3>
+  <p>Mỗi thành phần trong sơ đồ Figure 1.2.1 chịu trách nhiệm cho các chức năng tương ứng, bảo đảm phân tách nhiệm vụ rành mạch.</p>
+
+  <h2 class="part" id="s1-3" data-st="approved" data-st-on="2026-11-04" data-st-hash="3221df28">§1.3 SYSTEM: Mô hình dữ liệu & Vòng đời thực thể</h2>
+  <p>Mô hình dữ liệu được lưu trữ trực tiếp trên thiết bị của người dùng, bảo đảm quyền riêng tư và khả năng truy cập không phụ thuộc kết nối Internet.</p>
+
+  <h3 id="s1-3-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="1196c8a3">§1.3.1 SYSTEM: Cấu trúc Entity và lược đồ lưu trữ</h3>
+  <p>Các thực thể chính được định nghĩa trong mô hình dữ liệu:</p>
+  <ul>
+    <li><strong>Thực thể giao dịch / công việc:</strong> Lưu trữ bản ghi dữ liệu người dùng tạo với định danh duy nhất (UUID), mốc thời gian và trạng thái.</li>
+    <li><strong>Thực thể cấu hình / thiết lập:</strong> Lưu trữ tùy chọn cá nhân hóa và các cờ trạng thái giao diện.</li>
+    <li><strong>Thực thể nhật ký / bộ đệm:</strong> Lưu vết thay đổi và đồng bộ hàng đợi xử lý ngoại tuyến.</li>
+  </ul>
+
+  <h3 id="s1-3-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="7bcb2f55">§1.3.2 SYSTEM: Trạng thái và vòng đời dữ liệu</h3>
+  <p>Vòng đời dữ liệu di chuyển từ khởi tạo (INIT), kích hoạt sử dụng (ACTIVE), hoàn thành (COMPLETED) đến lưu trữ vĩnh viễn hoặc hủy (ARCHIVED/DELETED).</p>
+
+  <h2 class="part-divider" id="part-2">Part 2 — Thiết Kế Trải Nghiệm & Luồng Người Dùng (Userflows)</h2>
+
+  <h2 class="part" id="s2-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="8e1027e2">§2.1 SYSTEM: Đặc tả luồng tương tác người dùng click-level (§A.10, §A.12)</h2>
+  <p>Bảng Userflow 7 cột click-level mô tả chi tiết từng thao tác người dùng, điều kiện tiên quyết, kỳ vọng hiển thị trên màn hình và kịch bản lỗi có thể xảy ra:</p>
+
+  <h3 id="s2-1-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="94e99e9a">§2.1.1 SYSTEM: Bảng Userflow tương tác chính</h3>
+  <div class="tw">
+    <table class="uf">
+      <colgroup>
+        <col style="width:10%">
+        <col style="width:12%">
+        <col style="width:18%">
+        <col style="width:16%">
+        <col style="width:20%">
+        <col style="width:16%">
+        <col style="width:8%">
+      </colgroup>
+      <tr>
+        <th>Bước</th>
+        <th>Ai</th>
+        <th>BẤM GÌ · ở đâu</th>
+        <th>Điều kiện trước</th>
+        <th>KỲ VỌNG</th>
+        <th>FAIL trông như thế nào</th>
+        <th>Probe</th>
+      </tr>
+      <tr>
+        <td><b>UF-1</b><br>`SPEC-F027-01`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Kích hoạt &amp; quan sát: Hiển thị widget KPI tổng quan trường học thời gian thực....</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Giao diện hiển thị đúng chuẩn thiết kế, trực quan, không vỡ layout.</td>
+        <td>Hiển thị sai thông số, lệch màu chuẩn hoặc lỗi CSS.</td>
+        <td><code>PRB-`SPEC-F027-01`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-2</b><br>`SPEC-F027-02`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Vận hành tính năng: Tóm tắt tiến độ thu học phí và các cảnh báo học sinh vắng nh...</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
+        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
+        <td><code>PRB-`SPEC-F027-02`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-3</b><br>`SPEC-F027-03`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Vận hành tính năng: Hàng đợi kiểm duyệt bài đăng hoạt động và thông báo mới nhất...</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
+        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
+        <td><code>PRB-`SPEC-F027-03`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-4</b><br>`SPEC-F009-01`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Vận hành tính năng: Điểm danh Đón 1 click, tự động gắn huy hiệu Đến muộn nếu sau...</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
+        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
+        <td><code>PRB-`SPEC-F009-01`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-5</b><br>`SPEC-F009-02`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Vận hành tính năng: Ràng buộc logic: Giờ Trả phải lớn hơn giờ Đón; chặn trả nhan...</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
+        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
+        <td><code>PRB-`SPEC-F009-02`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-6</b><br>`SPEC-F009-03`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Chạm thực hiện: Modal chọn người đón hộ hợp lệ trong danh sách người giám hộ...</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Giao diện phản hồi trong 100ms, trạng thái được cập nhật và lưu trữ cục bộ.</td>
+        <td>Nút không ăn, màn hình đơ hoặc không lưu bản ghi mới.</td>
+        <td><code>PRB-`SPEC-F009-03`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-7</b><br>`SPEC-F009-04`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Vận hành tính năng: Báo vắng hàng loạt phân loại Có phép / Không phép kèm cờ Hoà...</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
+        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
+        <td><code>PRB-`SPEC-F009-04`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-8</b><br>`SPEC-F010-01`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Vận hành tính năng: Soạn bài viết hỗ trợ đính kèm ảnh/video, tag học sinh hiển t...</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
+        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
+        <td><code>PRB-`SPEC-F010-01`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-9</b><br>`SPEC-F010-02`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Vận hành tính năng: Phân tách tab &#x27;Đã duyệt&#x27; và &#x27;Chờ duyệt&#x27; cho bài viết của giá...</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
+        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
+        <td><code>PRB-`SPEC-F010-02`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-10</b><br>`SPEC-F010-03`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Vận hành tính năng: Cơ chế ghim tối đa 1 bài viết quan trọng lên đầu bảng tin kè...</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
+        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
+        <td><code>PRB-`SPEC-F010-03`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-11</b><br>`SPEC-F022-01`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Vận hành tính năng: Duy trì 2 album hệ thống (&#x27;Hoạt động&#x27; và &#x27;Điểm danh&#x27;) cùng c...</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
+        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
+        <td><code>PRB-`SPEC-F022-01`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-12</b><br>`SPEC-F022-02`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Vận hành tính năng: Tích hợp AI phân tích khuôn mặt ảnh tải lên, tự động gắn khu...</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
+        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
+        <td><code>PRB-`SPEC-F022-02`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-13</b><br>`SPEC-F022-03`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Chạm thực hiện: Thanh công cụ chọn nhiều ảnh hỗ trợ Tải xuống ZIP và Xóa ảnh...</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Giao diện phản hồi trong 100ms, trạng thái được cập nhật và lưu trữ cục bộ.</td>
+        <td>Nút không ăn, màn hình đơ hoặc không lưu bản ghi mới.</td>
+        <td><code>PRB-`SPEC-F022-03`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-14</b><br>`SPEC-F023-01`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Vận hành tính năng: Danh sách hội thoại và khung chat cuộn độc lập mượt mà....</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
+        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
+        <td><code>PRB-`SPEC-F023-01`</code></td>
+      </tr>
+      <tr>
+        <td><b>UF-15</b><br>`SPEC-F023-02`</td>
+        <td>Người dùng chính</td>
+        <td><span class="ctl">Vận hành tính năng: Khung soạn tin tinh gọn hỗ trợ đính kèm tệp và biểu tượng cả...</span></td>
+        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
+        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
+        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
+        <td><code>PRB-`SPEC-F023-02`</code></td>
+      </tr>
+    </table>
+  </div>
+
+  <h3 id="s2-1-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="04a807a1">§2.1.2 SYSTEM: Kỷ luật phản hồi giao diện người dùng</h3>
+  <p>Mọi hành động nhập liệu và thao tác chạm của người dùng đều phải có phản hồi thị giác trong vòng 100ms.</p>
+
+  <h2 class="part" id="s2-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="2504de0b">§2.2 SYSTEM: Thiết kế tương tác giao diện và điều khiển cử chỉ</h2>
+  <p>Thiết kế tương tác lấy người dùng làm trung tâm, tối ưu hóa khu vực chạm ngón cái trên thiết bị di động.</p>
+
+  <h3 id="s2-2-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="2b6e9bbf">§2.2.1 SYSTEM: Sơ đồ luồng tương tác Figure 2.2.1</h3>
+  <p class="fig-cap"><strong>Figure 2.2.1</strong> — Sơ đồ luồng chuyển đổi trạng thái giao diện và tương tác người dùng</p>
+  <figure class="viz">
+    <svg viewBox="0 0 920 160" xmlns="http://www.w3.org/2000/svg" width="100%" height="160">
+      <rect width="920" height="160" fill="#f8fafc" rx="8" stroke="#e2e8f0" stroke-width="1"/>
+      <g transform="translate(60, 20)">
+        <circle cx="60" cy="60" r="40" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+        <text x="60" y="65" font-weight="700" fill="#0369a1" text-anchor="middle" font-size="12">KHỞI ĐẦU</text>
+
+        <line x1="105" y1="60" x2="255" y2="60" stroke="#0284c7" stroke-width="2"/>
+
+        <rect x="260" y="20" width="200" height="80" fill="#fef3c7" stroke="#d97706" stroke-width="2" rx="8"/>
+        <text x="360" y="55" font-weight="700" fill="#92400e" text-anchor="middle" font-size="13">NHẬP LIỆU NHANH</text>
+        <text x="360" y="75" font-size="11" fill="#b45309" text-anchor="middle">Chạm / Gõ số / Chọn thẻ</text>
+
+        <line x1="465" y1="60" x2="615" y2="60" stroke="#059669" stroke-width="2"/>
+
+        <rect x="620" y="20" width="200" height="80" fill="#dcfce7" stroke="#16a34a" stroke-width="2" rx="8"/>
+        <text x="720" y="55" font-weight="700" fill="#15803d" text-anchor="middle" font-size="13">XÁC NHẬN & LƯU</text>
+        <text x="720" y="75" font-size="11" fill="#166534" text-anchor="middle">Lưu cục bộ & Phản hồi</text>
+      </g>
+    </svg>
+  </figure>
+
+  <h3 id="s2-2-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="969bd88a">§2.2.2 SYSTEM: Bảng quy cách điều khiển cử chỉ và phím tắt</h3>
+  <p>Hệ thống hỗ trợ thao tác vuốt, chạm, cùng các phím tắt bàn phím tương ứng nhằm đảm bảo khả năng tiếp cận thuận tiện trên mọi thiết bị.</p>
+
+  <h2 class="part-divider" id="part-3">Part 3 — Ma Trận Nghiệm Thu & Trạng Thái Thỏa Thuận</h2>
+
+  <h2 class="part" id="s3-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="e15562b2">§3.1 SYSTEM: Ma trận tiêu chí nghiệm thu 5 cấp độ (§A.13)</h2>
+  <p>Tiêu chuẩn nghiệm thu được phân cấp từ L1 đến L5 theo quy định của SEPO, kết nối trực tiếp với các bước Userflows và mã đặc tả:</p>
+
+  <h3 id="s3-1-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="2611a387">§3.1.1 SYSTEM: Định nghĩa 5 cấp độ nghiệm thu từ L1 đến L5</h3>
+  <ul>
+    <li><strong>L1 · Reachable:</strong> Người dùng có thể tiếp cận được tính năng, không gặp liên kết chết.</li>
+    <li><strong>L2 · Executable:</strong> Thao tác thực hiện thành công, dữ liệu được ghi nhận bền vững.</li>
+    <li><strong>L3 · Understandable:</strong> Giao diện rõ ràng, thông tin dễ nắm bắt, phản hồi trực quan.</li>
+    <li><strong>L4 · Goal-aligned:</strong> Kết quả đạt được gắn liền trực tiếp với mục tiêu giải quyết bài toán.</li>
+    <li><strong>L5 · Sufficient:</strong> Tính năng vận hành độc lập, hoàn chỉnh, không đòi hỏi can thiệp thủ công.</li>
+  </ul>
+
+  <h3 id="s3-1-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="123d94b3">§3.1.2 SYSTEM: Bảng ánh xạ tiêu chí nghiệm thu L1–L5 đối chiếu Userflows</h3>
+  <div class="tw">
+    <table>
+      <tr>
+        <th>Mã AC</th>
+        <th>L1 · Reachable</th>
+        <th>L2 · Executable</th>
+        <th>L3 · Understandable</th>
+        <th>L4 · Goal-aligned</th>
+        <th>L5 · Sufficient</th>
+        <th>Userflow Step</th>
+        <th>Spec ID</th>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-01</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Hiển thị widget KPI tổng quan trường học thời gian thực....</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-1</code></td>
+        <td><code>`SPEC-F027-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-02</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tóm tắt tiến độ thu học phí và các cảnh báo học sinh vắng nh</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-2</code></td>
+        <td><code>`SPEC-F027-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-03</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Hàng đợi kiểm duyệt bài đăng hoạt động và thông báo mới nhất</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-3</code></td>
+        <td><code>`SPEC-F027-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-04</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Điểm danh Đón 1 click, tự động gắn huy hiệu Đến muộn nếu sau</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-4</code></td>
+        <td><code>`SPEC-F009-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-05</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Ràng buộc logic: Giờ Trả phải lớn hơn giờ Đón; chặn trả nhan</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-5</code></td>
+        <td><code>`SPEC-F009-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-06</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Modal chọn người đón hộ hợp lệ trong danh sách người giám hộ</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-6</code></td>
+        <td><code>`SPEC-F009-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-07</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Báo vắng hàng loạt phân loại Có phép / Không phép kèm cờ Hoà</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-7</code></td>
+        <td><code>`SPEC-F009-04`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-08</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Soạn bài viết hỗ trợ đính kèm ảnh/video, tag học sinh hiển t</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-8</code></td>
+        <td><code>`SPEC-F010-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-09</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Phân tách tab &#x27;Đã duyệt&#x27; và &#x27;Chờ duyệt&#x27; cho bài viết của giá</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-9</code></td>
+        <td><code>`SPEC-F010-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-10</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Cơ chế ghim tối đa 1 bài viết quan trọng lên đầu bảng tin kè</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-10</code></td>
+        <td><code>`SPEC-F010-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-11</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Duy trì 2 album hệ thống (&#x27;Hoạt động&#x27; và &#x27;Điểm danh&#x27;) cùng c</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-11</code></td>
+        <td><code>`SPEC-F022-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-12</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tích hợp AI phân tích khuôn mặt ảnh tải lên, tự động gắn khu</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-12</code></td>
+        <td><code>`SPEC-F022-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-13</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Thanh công cụ chọn nhiều ảnh hỗ trợ Tải xuống ZIP và Xóa ảnh</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-13</code></td>
+        <td><code>`SPEC-F022-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-14</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Danh sách hội thoại và khung chat cuộn độc lập mượt mà....</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-14</code></td>
+        <td><code>`SPEC-F023-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-15</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Khung soạn tin tinh gọn hỗ trợ đính kèm tệp và biểu tượng cả</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F023-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-16</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Hỗ trợ ghim tối đa 3 tin nhắn quan trọng và tính năng khóa g</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F023-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-17</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Bảng điểm danh tháng hiển thị 2 dòng mỗi đối tượng (Sáng và </td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F028-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-18</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tổng kết số buổi có mặt, vắng có phép, không phép được nhúng</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F028-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-19</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Xuất dữ liệu bảng tính Excel chuẩn xác....</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F028-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-20</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Lựa chọn mẫu báo cáo động từ danh mục biểu mẫu của trường...</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F029-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-21</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Bộ lọc đa chiều theo lớp học, trạng thái và khoảng thời gian</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F029-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-22</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Menu ba chấm (•••) thao tác đồng bộ với các bảng dữ liệu toà</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F029-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-23</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Ma trận thời khóa biểu linh hoạt: khởi tạo 1 tiết, bấm [+] t</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F019-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-24</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Menu ba chấm (•••) z-index cao: Xem chi tiết, Chỉnh sửa, Gửi</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F019-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-25</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Lưu vết lịch sử các phiên bản công bố thời khóa biểu....</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F019-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-26</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Soạn bài tập với tiêu đề, hướng dẫn chi tiết, tệp đính kèm v</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F020-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-27</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Bảng theo dõi trạng thái nộp bài của học sinh: Đã nộp, Đã ch</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F020-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-28</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Ma trận nhập điểm số linh hoạt theo môn học, lớp và học kỳ..</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F021-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-29</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Rubric đánh giá định kỳ cho các cấp học mầm non và tiểu học.</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F021-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-30</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tính điểm trung bình môn tự động theo trọng số quy chuẩn....</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F021-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-31</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tự động nhận diện số ngày nghỉ có phép tháng trước từ phân h</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F015-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-32</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Bảng chi tiết dòng khoản thu chuẩn hóa: cột &#x27;Giảm trừ&#x27;, định</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F015-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-33</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tự động áp dụng chính sách miễn giảm cao nhất và sinh mã Vie</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F015-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-34</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Quản lý vòng đời hóa đơn: Đã tạo, Đã gửi, Nộp một phần, Đã h</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F015-04`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-35</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Danh sách phiên đối soát theo ngày và cổng thanh toán....</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F017-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-36</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tự động làm nổi bật các giao dịch khớp lệnh và cảnh báo chên</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F017-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-37</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Danh mục 24 khoản phí với đơn vị tính chuẩn (khoản hoàn tiền</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F011-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-38</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Cấu hình cờ bắt buộc hoặc tự chọn, kỳ thu và chính sách thuế</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F011-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-39</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Định dạng tiền tệ chuẩn Việt Nam có dấu chấm phân cách hàng </td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F011-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-40</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Bảng quản lý tinh gọn 6 cột; cột &#x27;Các khoản phí&#x27; hiển thị số</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F012-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-41</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Ghi đè đơn giá khoản thu riêng biệt theo lớp mà không làm bi</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F012-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-42</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Lập phiếu chi phân loại danh mục, người nhận tiền, số tiền v</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F016-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-43</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Quy trình duyệt phiếu chi nhiều bước và hủy phiếu chi có ghi</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F016-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-44</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Thống kê tổng số tiền phải thu, thực thu và công nợ tồn đọng</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F018-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-45</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Biểu đồ phân tích tỷ lệ hoàn thành thu học phí theo khối lớp</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F018-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-46</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Thuật toán tập giao toán học: Trường &#x27;Khoản phí áp dụng&#x27; tự </td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F014-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-47</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Quy tắc 01 chính sách duy nhất cho mỗi khoản thu: Cảnh báo t</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F014-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-48</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Động cơ giải quyết xung đột khi lập hóa đơn: Tự động so sánh</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F014-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-49</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tự động chuyển trạng thái Hết hạn khi qua kỳ áp dụng, hỗ trợ</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F014-04`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-50</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Danh sách học sinh với bộ lọc lớp, trạng thái, và icon thẻ m</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F007-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-51</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Hub chi tiết 360° với 5 tab: Hồ sơ, Hoạt động, Thư viện, Điể</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F007-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-52</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Quy trình chuyển lớp / chuyển năm học tự động áp dụng 3 nguy</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F007-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-53</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Cấu trúc cây danh mục 2 cấp chuẩn hóa, hỗ trợ tương tác acco</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F032-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-54</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Soạn thảo nội dung bài viết và chuyển đổi trạng thái xuất bả</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F032-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-55</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Cảnh báo xóa danh mục gốc sẽ tự động xóa các bài viết con li</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F032-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-56</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Bốn thẻ trạng thái giữ số liệu độc lập khi click lọc danh sá</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F033-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-57</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Luồng thảo luận 2 chiều chi tiết có hỗ trợ đính kèm hình ảnh</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F033-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-58</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Đóng phiếu góp ý chuyển sang trạng thái Hoàn tất kèm thông b</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F033-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-59</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Đồng bộ 3 chế độ xem: Lịch Năm, Lịch Tháng và Danh sách sự k</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F034-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-60</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Mã màu phân loại sự kiện: Ngày nghỉ lễ, Sự kiện nội bộ, Sự k</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F034-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-61</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tự động điền ngày kết thúc trùng ngày bắt đầu cho các sự kiệ</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F034-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-62</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Form tối giản tạo niên khóa với ngày bắt đầu và kết thúc học</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F004-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-63</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Thuật toán tự động gắn huy hiệu &#x27;Hiện tại&#x27; cho năm học bao h</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F004-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-64</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Chặn trùng lặp khoảng thời gian giữa các niên khóa và khóa h</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F004-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-65</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Banner cảnh báo màu vàng nổi bật tại kho lưu trữ học sinh rú</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F035-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-66</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Hỗ trợ phục hồi nguyên trạng học sinh vào lớp học với kiểm t</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F035-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-67</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Quy trình xóa vĩnh viễn hồ sơ bắt buộc xác nhận 2 bước an to</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F035-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-68</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Danh sách giáo viên phân tách lớp chủ nhiệm và môn học giảng</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F008-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-69</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Phân quyền kiểm duyệt nội dung: Giáo viên chính đăng bài nga</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F008-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-70</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Quy trình gửi email lời mời nhận việc và đổi email đăng nhập</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F008-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-71</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Phân tách cấu hình lớp chính khóa và ngoại khóa với phạm vi </td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F006-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-72</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Gán giáo viên chủ nhiệm và phòng học trực quan....</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F006-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-73</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Chốt chặn bảo vệ dữ liệu: Chặn tuyệt đối xóa lớp khi sĩ số h</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F006-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-74</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Danh mục môn học phân chia theo cấp học và niên khóa....</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F024-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-75</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Chi tiết môn học hiển thị ma trận đánh giá 4 kỳ....</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F024-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-76</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Gán giáo viên giảng dạy tự động lọc bỏ giáo viên đã được phâ</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F024-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-77</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Danh mục khối lớp hiển thị mã khối, tên khối, cấp học và tổn</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F005-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-78</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tìm kiếm tức thì trên client và tự động phục hồi danh sách k</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F005-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-79</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Soạn thông báo với chế độ xem trước (Preview) giao diện mobi</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F030-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-80</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Hẹn giờ phát sóng thông báo và chọn phạm vi người nhận linh </td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F030-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-81</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Cảnh báo tính bất biến khi gửi thông báo qua email (không th</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F030-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-82</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tạo câu hỏi khảo sát một hoặc nhiều lựa chọn, đặt hạn bình c</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F031-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-83</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Phân tách rõ ràng trạng thái Soạn nháp và Đã phát hành....</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F031-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-84</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Biểu đồ tròn trực quan hiển thị tỷ lệ phản hồi và lịch sử sử</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F031-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-85</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Lập thực đơn tuần linh hoạt theo từng bữa ăn (sáng, trưa, xế</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F025-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-86</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Cơ chế tự động kế thừa thực đơn toàn trường cho các lớp chưa</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F025-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-87</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Hỗ trợ truy xuất nguồn gốc an toàn thực phẩm qua mã lô / mã </td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F025-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-88</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Chấm công đến và về 1 click không cần qua modal xác nhận rườ</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F026-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-89</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Phê duyệt nghỉ phép có phép / không phép bằng hộp thoại chuy</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F026-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-90</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Khóa chọn ngày tương lai và giới hạn xem/sửa bảng công trong</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F026-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-91</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Hiển thị và cập nhật thông tin pháp lý, địa chỉ và hotline n</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F002-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-92</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Cấu hình phương thức điểm danh mặc định của trường (Thủ công</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F002-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-93</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Thiết lập ngôn ngữ hiển thị và kênh thông báo mặc định gửi p</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F002-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-94</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Danh sách người dùng hệ thống phân loại theo vai trò (Admin,</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F003-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-95</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tạo mới, kích hoạt, khóa tài khoản và thiết lập lại mật khẩu</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F003-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-96</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Bộ lọc chuyên biệt đối chiếu tài khoản liên kết CSDL Sở GD&amp;Đ</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F003-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-97</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Khối thiết lập cơ chế hoàn tiền khi nghỉ học: tỷ lệ % hoàn r</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F013-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-98</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Widget mô phỏng 3 cột tính toán phản hồi tức thì công thức h</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F013-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-99</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Quy tắc thứ bậc chân lý thực tế: Điểm danh có mặt của giáo v</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F013-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-100</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Cấu hình thông tin tài khoản ngân hàng thụ hưởng và cấu hình</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F013-04`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-101</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Quản lý ảnh đại diện và ảnh mẫu khuôn mặt theo từng học sinh</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F036-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-102</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Kiểm tra chất lượng góc chụp và độ sắc nét trước khi lưu vec</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F036-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-103</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Đồng bộ tức thời với mô hình nhận diện khuôn mặt AI lớp học.</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F036-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-104</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Bật / tắt tức thì các module trên thanh điều hướng Sidebar c</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F037-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-105</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Lưu cấu hình an toàn và phản hồi trạng thái bằng thông báo T</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F037-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-106</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Chặn truy cập vào route tương ứng khi module bị tắt....</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F037-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-107</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Cấu hình khung giờ gửi thông báo đẩy (Push notification) tự </td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F038-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-108</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Bật / tắt các sự kiện kích hoạt thông báo (điểm danh đón/trả</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F038-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-109</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Đảm bảo không gửi thông báo làm phiền ngoài giờ quy định của</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F038-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-110</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Hỗ trợ SegmentedControl chuyển đổi mượt mà giữa Tab SSO Sở v</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F001-01`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-111</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tab SSO: Combobox tìm kiếm trường tiếng Việt không dấu theo </td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F001-02`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-112</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Tab Tài khoản: Xác thực mã trường (tenant isolation), email,</td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F001-03`</code></td>
+      </tr>
+      <tr>
+        <td class="lbl"><b>AC-113</b></td>
+        <td>Truy cập được màn hình liên quan</td>
+        <td>Thao tác ghi nhận thành công vào Local/DB</td>
+        <td>Giao diện phản hồi trực quan, rõ ràng</td>
+        <td>Khớp 100% mục tiêu đặc tả: Chống tấn công dò quét tài khoản (Account Enumeration) bằng </td>
+        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td><code>UF-15</code></td>
+        <td><code>`SPEC-F001-04`</code></td>
+      </tr>
+    </table>
+  </div>
+
+  <h2 class="part" id="s3-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="d840a97d">§3.2 SYSTEM: Cơ chế kiểm tra tự động nhị phân Verify Gate</h2>
+  <p>Toàn bộ các tiêu chí nghiệm thu trong tài liệu này đều được kiểm chứng tự động bằng cổng Verify Gate:</p>
+
+  <h3 id="s3-2-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="382d3932">§3.2.1 SYSTEM: Hợp đồng kiểm thử tự động nhị phân</h3>
+  <p>Cổng kiểm chứng <code>verify.sh</code> là thẩm quyền duy nhất trong Harness Loop. Không có trạng thái passing nếu script không kết thúc với mã thoát 0.</p>
+
+  <h3 id="s3-2-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="c459b81e">§3.2.2 SYSTEM: Tiêu chí nghiệm thu passing của cổng verify.sh</h3>
+  <p>Cổng kiểm thử bao phủ toàn bộ bài test đơn vị, test tích hợp và kiểm tra tính toàn vẹn của mã nguồn.</p>
+
+  <h2 class="part" id="s3-3" data-st="approved" data-st-on="2026-11-04" data-st-hash="0e2eb3c8">§3.3 SYSTEM: Trạng thái đồng thuận và vòng đời văn bản (§A.14)</h2>
+  <p>Mỗi phần trong tài liệu kiến trúc này mang một trạng thái đồng thuận rõ ràng, bảo vệ chống trôi dạt nội dung.</p>
+
+  <h3 id="s3-3-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="b3d34b97">§3.3.1 SYSTEM: Bảng chỉ dẫn 5 trạng thái văn bản AP</h3>
+  <p>Các trạng thái bao gồm <code>draft</code>, <code>review</code>, <code>approved</code>, <code>locked</code> và <code>superseded</code>.</p>
+
+  <h3 id="s3-3-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="2fac515c">§3.3.2 SYSTEM: Cơ chế bảo vệ tính toàn vẹn bằng băm SHA-256</h3>
+  <p>Mọi tiêu đề mục mang trạng thái <code>approved</code> hoặc <code>locked</code> đều được gắn mã băm <code>data-st-hash</code> của nội dung bên dưới, được kiểm tra nghiêm ngặt bởi <code>ap-status-check.py</code>.</p>
+
+  <h2 class="part-divider" id="part-4">Part 4 — Quyết Định Thiết Kế & Lộ Trình Thi Công</h2>
+
+  <h2 class="part" id="s4-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="3256d98b">§4.1 SYSTEM: Các quyết định kỹ thuật cốt lõi (§A.15)</h2>
+  <p>Các quyết định kiến trúc được cân nhắc và lựa chọn kỹ lưỡng:</p>
+
+  <h3 id="s4-1-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="f4a7a260">§4.1.1 SYSTEM: Quyết định kiến trúc D-01 — Nền tảng ứng dụng di động ngoại tuyến</h3>
+  <div class="tw">
+    <table>
+      <colgroup><col style="width:20%"><col style="width:30%"><col style="width:30%"><col style="width:20%"></colgroup>
+      <tr><th>Phương án</th><th>Ưu điểm</th><th>Nhược điểm & Chi phí</th><th>Kết luận</th></tr>
+      <tr><td><b>A · Native App</b></td><td>Hiệu năng cao nhất.</td><td>Cần build phức tạp, không demo tức thì.</td><td><span class="badge tbd">REJECTED</span></td></tr>
+      <tr class="recommended"><td><b>B · PWA Web App</b></td><td>Nhẹ, cài đặt Add-to-Home, cập nhật tức thì.</td><td>Cần cấu hình Service Worker cẩn trọng.</td><td><span class="badge new">DECIDED &#183; 2026-11-04</span></td></tr>
+      <tr><td><b>C · Server-rendered App</b></td><td>Dễ lập trình.</td><td>Không hoạt động được khi mất mạng.</td><td><span class="badge tbd">REJECTED</span></td></tr>
+    </table>
+  </div>
+
+  <h3 id="s4-1-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="77a3797a">§4.1.2 SYSTEM: Quyết định kiến trúc D-02 — Động cơ lưu trữ dữ liệu máy khách</h3>
+  <div class="tw">
+    <table>
+      <colgroup><col style="width:20%"><col style="width:30%"><col style="width:30%"><col style="width:20%"></colgroup>
+      <tr><th>Phương án</th><th>Ưu điểm</th><th>Nhược điểm & Chi phí</th><th>Kết luận</th></tr>
+      <tr><td><b>A · LocalStorage</b></td><td>Cực kỳ đơn giản.</td><td>Giới hạn 5MB, truy cập đồng bộ gây nghẽn UI.</td><td><span class="badge tbd">REJECTED</span></td></tr>
+      <tr class="recommended"><td><b>B · IndexedDB (Dexie.js / IDB)</b></td><td>Dung lượng lớn, bất đồng bộ, hỗ trợ chỉ mục và truy vấn nhanh.</td><td>API cần bao bọc để dễ thao tác.</td><td><span class="badge new">DECIDED &#183; 2026-11-04</span></td></tr>
+      <tr><td><b>C · Cloud SQLite (WASM)</b></td><td>Mạnh mẽ.</td><td>Kích thước gói tải lớn (>2MB).</td><td><span class="badge tbd">REJECTED</span></td></tr>
+    </table>
+  </div>
+
+  <h3 id="s4-1-3" data-st="approved" data-st-on="2026-11-04" data-st-hash="efe6d505">§4.1.3 SYSTEM: Quyết định kiến trúc D-03 — Kỷ luật kiểm chứng tự động Verify Gate</h3>
+  <div class="tw">
+    <table>
+      <colgroup><col style="width:20%"><col style="width:30%"><col style="width:30%"><col style="width:20%"></colgroup>
+      <tr><th>Phương án</th><th>Ưu điểm</th><th>Nhược điểm & Chi phí</th><th>Kết luận</th></tr>
+      <tr><td><b>A · Kiểm thử thủ công</b></td><td>Linh hoạt.</td><td>Dễ bỏ sót lỗi hồi quy, không tự động hóa được qua đêm.</td><td><span class="badge tbd">REJECTED</span></td></tr>
+      <tr class="recommended"><td><b>B · Binary Verify Gate</b></td><td>Tự động 100%, kết quả nhị phân 0 hoặc 1, bảo đảm tính kỷ luật.</td><td>Phải duy trì bộ test tương thích.</td><td><span class="badge new">DECIDED &#183; 2026-11-04</span></td></tr>
+      <tr><td><b>C · Chỉ kiểm tra Lint cú pháp</b></td><td>Nhanh chóng.</td><td>Không phát hiện được lỗi logic nghiệp vụ.</td><td><span class="badge tbd">REJECTED</span></td></tr>
+    </table>
+  </div>
+
+  <h2 class="part" id="s4-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="3fae5528">§4.2 SYSTEM: Lộ trình kết nối sang kế hoạch thi công ISP</h2>
+  <p>Tài liệu AP này là cơ sở trực tiếp để lập Kế hoạch Thi công Kỹ thuật (ISP) phiên bản 1.0.0.</p>
+
+  <h3 id="s4-2-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="8759daca">§4.2.1 SYSTEM: Nguyên tắc ghim phiên bản 1:1 theo điều khoản §A.30</h3>
+  <p>Mỗi tài liệu AP đều được ghim 1:1 với tài liệu ISP tương ứng, kèm theo mã băm SHA-256 toàn vẹn trong phần header của ISP.</p>
+
+  <h3 id="s4-2-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="2811d77c">§4.2.2 SYSTEM: Kế hoạch phân bổ các gói thầu thi công</h3>
+  <p>Lộ trình thi công phân rã thành Phase A (Làm cứng hạ tầng & lưu trữ), Phase 0 (Nghiệp vụ cốt lõi), và Phase 1 (Mở rộng tính năng và nghiệm thu Verify Gate).</p>
+
+  <h2 class="part" id="sec-outstanding" data-st="approved" data-st-on="2026-11-04" data-st-hash="1d6d6237">Appendix — What is outstanding &#8212; 0 units</h2>
+  <div class="tw"><table>
+  <tr><th>Unit</th><th>Title</th><th>State</th><th>Marked</th></tr>
+  </table></div>
+
+  <script>
+// agp-build-ap references/ap-toc.js — the AP contents rail (§A.31). Inline verbatim in a
+// <script> just before </body>. It fills this shell, which goes first in <body>:
+//   <nav class="toc"><p class="toc-title">Contents</p><div id="toc"></div></nav>
+// It lists h1 / h2 / h3 that carry an id; h2.part-divider shows as a Part row.
+(function() {
+  var toc = document.getElementById('toc');
+  if (!toc) return;
+  var hs = document.querySelectorAll('h1, h2, h3');
+  var as = [];
+  hs.forEach(function(h) {
+    if (!h.id) return;
+    var a = document.createElement('a');
+    var cls = h.tagName === 'H1' ? 'lvl-1' : (h.tagName === 'H2' && h.classList.contains('part-divider')) ? 'lvl-p' : h.tagName === 'H2' ? 'lvl-2' : 'lvl-3';
+    a.className = cls;
+    a.href = '#' + h.id;
+    a.textContent = h.textContent;
+    toc.appendChild(a);
+    as.push({ a: a, el: h });
+  });
+  function spy() {
+    var scrollY = window.scrollY;
+    var cur = null;
+    as.forEach(function(item) {
+      if (item.el.getBoundingClientRect().top + scrollY - 80 <= scrollY) cur = item;
+    });
+    as.forEach(function(item) { item.a.classList.remove('active'); });
+    if (cur) cur.a.classList.add('active');
+  }
+  window.addEventListener('scroll', spy, { passive: true });
+  window.addEventListener('resize', spy);
+  spy();
+})();
+  </script>
+</body>
+</html>

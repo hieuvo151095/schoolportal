@@ -1,0 +1,55 @@
+{
+  "version": "1.0",
+  "phase": "develop-doc-sync",
+  "topology": "epic_first_compatible",
+  "policy": "append-or-targeted-patch",
+  "required_each_code_slice": true,
+  "source_globs": [
+    "src/**",
+    "app/**",
+    "pages/**",
+    "components/**",
+    "lib/**",
+    "server/**",
+    "api/**",
+    "packages/**",
+    "tests/**"
+  ],
+  "required_doc_targets": [
+    "docs/prd.md",
+    "docs/tasks.md",
+    "docs/knowledge.md",
+    "docs/decisions.md",
+    "docs/memory.md",
+    "docs/planning/flows.md",
+    "docs/planning/screens.md",
+    "docs/planning/diagrams.md",
+    "docs/development/index.md",
+    "docs/development/development_manifest.json",
+    "docs/development/E-###-*/epic.md",
+    "docs/development/E-###-*/features/",
+    "docs/development/E-###-*/modules/",
+    "docs/development/E-###-*/pages/",
+    "docs/development/E-###-*/tasks/"
+  ],
+  "quality_gates": {
+    "require_changed_files": true,
+    "require_docs_reviewed": true,
+    "require_no_unchecked_items": true,
+    "require_legacy_docs_decision": true,
+    "require_development_docs_decision": true,
+    "require_global_docs_updated": true,
+    "require_docs_before_code": true,
+    "allow_epic_local_sync_notes": true,
+    "require_manifest_reconciled": true,
+    "forbid_placeholders": true,
+    "minimum_words": 180,
+    "require_rationale_markers": [
+      "because",
+      "impact",
+      "evidence",
+      "risk",
+      "decision"
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Thêm chính sách miễn giảm — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<div style="height: 100vh; overflow: hidden;" aria-hidden="true"><dc-import name="NewDiscount" hint-size="100%,900px"></dc-import></div>
+<x-import component-from-global-scope="ECOMD.PopupModal" open="{{open}}" on-close="{{close}}" title="Thêm chính sách miễn giảm" description="Chọn đối tượng, khoản phí và mức ưu đãi trừ vào hóa đơn" icon="percent" width="calc(var(--size-sidebar-w) * 8 / 3)" primary-action="{{pri}}" secondary-action="{{sec}}">
+<div class="ecomd-form"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tên chính sách <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" placeholder="VD: Miễn giảm 50% học phí diện chính sách" value="{{name}}" onChange="{{setName}}"></label><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Áp dụng cho <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.Tabs" items="{{groups}}" value="{{group}}" on-change="{{setGroup}}" label="Nhóm áp dụng" variant="segmented" class-name="is-block"></x-import><div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-8);"><sc-for list="{{chips}}" as="c" hint-placeholder-count="1"><span class="ecomd-chip body-sm"><span>{{c.label}}</span><span class="ecomd-chip__meta body-xs">{{c.meta}}</span><x-import component-from-global-scope="ECOMD.IconButton" icon="xmark" label="{{c.rm}}"></x-import></span></sc-for><x-import component-from-global-scope="ECOMD.Button" variant="text" icon="plus">{{addLabel}}</x-import></div></div><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Khoản phí áp dụng <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{feeOpts}}" value="{{fee}}" on-change="{{setFee}}" label="Khoản phí áp dụng"></x-import><span class="ecomd-field__hint body-xs">Chỉ hiện 5 khoản phí mà mọi lớp đã chọn đều đóng (trong 24 khoản phí toàn trường).</span></label><div class="ecomd-grid" style="--ecomd-cols: 2; --ecomd-cols-tablet: 2; gap: var(--space-16);"><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Cách giảm <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.Tabs" items="{{kinds}}" value="{{kind}}" on-change="{{setKind}}" label="Cách giảm" variant="segmented" class-name="is-block"></x-import></div><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Mức giảm <span class="ecomd-field__req" aria-hidden="true">*</span></span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm is-num" value="{{rate}}" onChange="{{setRate}}"><span class="ecomd-affix__suffix body-sm">{{suffix}}</span></span></label></div><sc-if value="{{hasConflict}}" hint-placeholder-val="{{true}}"><div style="display: flex; flex-direction: column; gap: var(--space-10); padding: var(--space-12) var(--space-16); border: 1px solid var(--border-warning-soft); border-radius: var(--radius-12); background: var(--semantic-warning-soft);"><span class="body-sm-semibold" style="display: flex; align-items: center; gap: var(--space-8); color: var(--semantic-warning-strong);"><x-import component-from-global-scope="ECOMD.Icon" name="triangle-exclamation" size="{{fourteen}}"></x-import>2 học sinh đã có chính sách cho khoản phí này</span><span class="body-xs" style="color: var(--text-body);">Mỗi học sinh chỉ hưởng một chính sách cho một khoản thu. Khi lưu, chính sách mới sẽ thay thế chính sách hiện tại của các em dưới đây.</span><ul style="display: flex; flex-direction: column; gap: var(--space-6); margin: 0; padding: 0; list-style: none;"><sc-for list="{{conflicts}}" as="k" hint-placeholder-count="2"><li class="body-xs" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4) var(--space-8); padding: var(--space-8) var(--space-10); border-radius: var(--radius-8); background: var(--bg-surface);"><span class="body-sm-medium" style="color: var(--text-heading);">{{k.name}}</span><span style="color: var(--text-subtle);">{{k.cls}}</span><span style="flex: 1;"></span><span style="color: var(--text-subtle);">{{k.old}}</span><x-import component-from-global-scope="ECOMD.Icon" name="arrow-right" size="{{twelve}}" color="var(--text-muted)"></x-import><span class="body-xs-semibold" style="color: var(--text-heading);">{{newRate}}</span></li></sc-for></ul><x-import component-from-global-scope="ECOMD.Checkbox" label="Tôi đồng ý thay thế chính sách hiện tại của 2 học sinh" checked="{{agree}}" on-change="{{setAgree}}"></x-import></div></sc-if></div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"open": {"editor": "boolean", "default": true, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ open: props.open !== false }, { name: 'Giảm 20% học phí lớp 10A1', group: 'cls', fee: 'Học phí chính khóa · mức chuẩn 2,500,000đ', kind: 'pct', rate: '20', agree: false }); }
+  componentDidUpdate(prev) { if (prev.open !== this.props.open) this.setState({ open: this.props.open !== false }); }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var pct = st.kind === 'pct';
+    var conflict = st.fee.indexOf('Học phí chính khóa') === 0;
+    return {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      open: st.open, close: function () { self.setState({ open: false }); },
+      name: st.name, setName: function (e) { self.setState({ name: e.target.value }); },
+      groups: [{ key: 'cls', label: 'Theo lớp', icon: 'chalkboard' }, { key: 'kid', label: 'Theo học sinh', icon: 'user-graduate' }], group: st.group, setGroup: function (k) { self.setState({ group: k }); },
+      chips: st.group === 'cls' ? [{ label: 'Lớp 10A1', meta: 'Khối 10 · 32 học sinh', rm: 'Bỏ lớp 10A1' }] : [{ label: 'Nguyễn Gia Huy', meta: 'Lớp 10A1', rm: 'Bỏ học sinh Nguyễn Gia Huy' }],
+      addLabel: st.group === 'cls' ? 'Chọn lớp' : 'Chọn học sinh',
+      feeOpts: ['Học phí chính khóa · mức chuẩn 2,500,000đ', 'Tiền ăn bán trú · mức chuẩn 850,000đ', 'Tiếng Anh tăng cường · mức chuẩn 800,000đ', 'Xe đưa đón · mức chuẩn 1,200,000đ', 'Đồng phục hè · mức chuẩn 450,000đ'], fee: st.fee, setFee: function (v) { self.setState({ fee: v }); },
+      kinds: [{ key: 'pct', label: 'Theo %' }, { key: 'amt', label: 'Số tiền' }], kind: st.kind, setKind: function (k) { self.setState({ kind: k, rate: k === 'pct' ? '20' : '500,000' }); },
+      rate: st.rate, setRate: function (e) { self.setState({ rate: e.target.value }); }, suffix: pct ? '%' : 'đ', newRate: 'Mới ' + st.rate + (pct ? '%' : 'đ'),
+      hasConflict: conflict, conflicts: [{ name: 'Nguyễn Gia Huy', cls: 'Lớp 10A1', old: 'Học bổng tài năng học thuật 50%' }, { name: 'Lê Bảo Anh', cls: 'Lớp 10A1', old: 'Học bổng tài năng học thuật 50%' }],
+      agree: !!st.agree, setAgree: function (v) { self.setState({ agree: !!v }); },
+      pri: { label: 'Tạo chính sách', icon: 'check', disabled: !(st.name || '').trim() || (conflict && !st.agree) }, sec: { label: 'Hủy', onClick: function () { self.setState({ open: false }); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

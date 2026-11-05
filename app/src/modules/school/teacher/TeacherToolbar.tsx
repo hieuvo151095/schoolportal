@@ -1,0 +1,68 @@
+/**
+ * Teacher Directory Toolbar
+ * Design System: [DS] ECO ME DASHBOARD v1.1.0 (FilterBar, SearchField, SelectField, Button)
+ */
+
+import React from 'react';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { setFilter } from '../../../store/slices/teacherSlice';
+import { FilterBar } from '../../../components/ds';
+
+interface TeacherToolbarProps {
+  schoolCode: string;
+  onOpenExtendedFilter: () => void;
+}
+
+export const TeacherToolbar: React.FC<TeacherToolbarProps> = ({
+  onOpenExtendedFilter,
+}) => {
+  const dispatch = useAppDispatch();
+  const filter = useAppSelector((state) => state.teacher.filter);
+
+  return (
+    <FilterBar
+      search={{
+        placeholder: 'Tìm theo họ tên, email, mã NV, CCCD...',
+        value: filter.search || '',
+        onChange: (val) => dispatch(setFilter({ search: val })),
+      }}
+      filters={[
+        {
+          options: [
+            { label: 'Tất cả lớp học', value: 'all' },
+            { label: 'Lớp 1A1', value: 'lop-1a1' },
+            { label: 'Lớp 1A2', value: 'lop-1a2' },
+            { label: 'Lớp 2A1', value: 'lop-2a1' },
+            { label: 'Lớp Vẽ Sáng Tạo', value: 'lop-nk-ve' },
+          ],
+          value: filter.classId || 'all',
+          onChange: (val) => dispatch(setFilter({ classId: val })),
+        },
+        {
+          options: [
+            { label: 'Tất cả phân quyền', value: 'all' },
+            { label: 'Giáo viên chính', value: 'chinh' },
+            { label: 'Giáo viên hỗ trợ', value: 'ho_tro' },
+          ],
+          value: filter.permissionTier || 'all',
+          onChange: (val) => dispatch(setFilter({ permissionTier: val })),
+        },
+        {
+          options: [
+            { label: 'Tất cả trạng thái', value: 'all' },
+            { label: 'Đang làm việc', value: 'dang_lam_viec' },
+            { label: 'Tạm nghỉ', value: 'tam_nghi' },
+            { label: 'Đã nghỉ việc', value: 'da_nghi_viec' },
+          ],
+          value: filter.status || 'all',
+          onChange: (val) => dispatch(setFilter({ status: val })),
+        },
+      ]}
+      advanced={{
+        label: 'Lọc mở rộng',
+        active: filter.csdlSoOnly,
+        onClick: onOpenExtendedFilter,
+      }}
+    />
+  );
+};

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Giáo viên — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="teacher" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Giáo viên</h1>
+    <p class="ecomd-page-header__desc body-sm">Hồ sơ, phân công lớp và phân quyền của giáo viên</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="plus">Thêm giáo viên</x-import></div>
+</div>
+<section class="ecomd-table-card">
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Lọc theo trạng thái"></x-import>
+<sc-if value="{{noSel}}" hint-placeholder-val="{{true}}"><div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo tên, mã nhân viên, email" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{classOpts}}" value="{{cls}}" on-change="{{setCls}}" label="Lọc theo lớp"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{roleOpts}}" value="{{role}}" on-change="{{setRole}}" label="Lọc theo phân quyền"></x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="filter">Bộ lọc khác</x-import></div></sc-if>
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{false}}"><div class="ecomd-table-card__bulk"><span class="body-sm-semibold">Đã chọn {{selCount}} giáo viên</span><span style="flex: 1;"></span><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="chalkboard">Phân công lớp</x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="user-clock">Chuyển tạm nghỉ</x-import><x-import component-from-global-scope="ECOMD.Button" variant="ghost" on-click="{{clearSel}}">Bỏ chọn</x-import></div></sc-if>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="is-check"><x-import component-from-global-scope="ECOMD.Checkbox" aria-label="Chọn tất cả" checked="{{allChecked}}" indeterminate="{{someChecked}}" on-change="{{toggleAll}}"></x-import></th><th class="body-xs-bold is-primary">Giáo viên</th><th class="body-xs-bold">Chủ nhiệm</th><th class="body-xs-bold">Phụ trách</th><th class="body-xs-bold">Phân quyền</th><th class="body-xs-bold">Trạng thái</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr class="{{r.cls}}"><td class="is-check"><x-import component-from-global-scope="ECOMD.Checkbox" aria-label="{{r.checkLabel}}" checked="{{r.checked}}" on-change="{{r.toggle}}"></x-import></td><td class="body-sm is-primary"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.Person" name="{{r.name}}" meta="{{r.meta}}" href="#"></x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Chủ nhiệm</span><div class="ecomd-cell__value"><sc-if value="{{r.home}}" hint-placeholder-val="{{true}}"><span>{{r.home}}</span></sc-if><sc-if value="{{r.noHome}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Không"></x-import></sc-if></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Phụ trách</span><div class="ecomd-cell__value"><sc-if value="{{r.hasClasses}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="ECOMD.DataTable.Tags"><sc-for list="{{r.classes}}" as="c" hint-placeholder-count="2"><x-import component-from-global-scope="ECOMD.Tag">{{c}}</x-import></sc-for></x-import></sc-if><sc-if value="{{r.noClasses}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Chưa phân công"></x-import></sc-if></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Phân quyền</span><div class="ecomd-cell__value"><span>{{r.role}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Trạng thái</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.tone}}">{{r.status}}</x-import></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="7"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có giáo viên nào khớp tìm kiếm"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="giáo viên"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "scenario": {"editor": "enum", "options": ["Mặc định", "Đang chọn nhiều", "Không có kết quả"], "default": "Mặc định", "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Nhà trường", "Giáo viên"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'all', cls: 'Tất cả lớp', role: 'Tất cả phân quyền', query: props.scenario === 'Không có kết quả' ? 'Phan Thanh' : '', sel: props.scenario === 'Đang chọn nhiều' ? [2, 4] : [] }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var T = [
+      { id: 1, code: 'GV-2024-001', name: 'Nguyễn Thị Mai', email: 'mai.nguyen@finviet.edu.vn', home: 'Lớp 1A1', classes: ['Lớp 1A1', 'Lớp 1A2'], role: 'Giáo viên chính', status: 'active' },
+      { id: 2, code: 'GV-2024-002', name: 'Trần Văn Dũng', email: 'dung.tran@finviet.edu.vn', home: 'Lớp 1A2', classes: ['Lớp 1A2', 'Lớp 2A1'], role: 'Giáo viên chính', status: 'active' },
+      { id: 3, code: 'GV-2025-003', name: 'Lê Hoàng Yến', email: 'yen.le@finviet.edu.vn', home: 'Lớp 2A1', classes: ['Lớp 2A1'], role: 'Giáo viên chính', status: 'active' },
+      { id: 4, code: 'GV-2025-004', name: 'Phạm Quỳnh Nga', email: 'nga.pham@finviet.edu.vn', home: '', classes: ['Lớp 1A1', 'Lớp 1A2'], role: 'Giáo viên hỗ trợ', status: 'active' },
+      { id: 5, code: 'GV-2023-005', name: 'Hoàng Minh Đức', email: 'duc.hoang@finviet.edu.vn', home: '', classes: ['Lớp Vẽ Sáng Tạo'], role: 'Giáo viên chính', status: 'paused' },
+      { id: 6, code: 'GV-2022-006', name: 'Vũ Thu Hằng', email: 'hang.vu@finviet.edu.vn', home: '', classes: [], role: 'Giáo viên hỗ trợ', status: 'left' },
+      { id: 7, code: '', name: 'Đặng Hoài An', email: 'an.dang@finviet.edu.vn', home: '', classes: ['Lớp 1A1'], role: 'Giáo viên hỗ trợ', status: 'active' }
+    ];
+    var ST = { active: ['Đang làm việc', 'success'], paused: ['Tạm nghỉ', 'warning'], left: ['Đã nghỉ việc', 'neutral'] };
+    var q = (st.query || '').trim().toLowerCase();
+    var base = T.filter(function (t) {
+      return (!q || (t.name + ' ' + t.email + ' ' + t.code).toLowerCase().indexOf(q) >= 0)
+        && (st.cls === 'Tất cả lớp' || t.classes.indexOf(st.cls) >= 0 || t.home === st.cls)
+        && (st.role === 'Tất cả phân quyền' || t.role === st.role);
+    });
+    var tabs = [['all', 'Tất cả'], ['active', 'Đang làm việc'], ['paused', 'Tạm nghỉ'], ['left', 'Đã nghỉ việc']].map(function (d) {
+      return { key: d[0], label: d[1], count: base.filter(function (t) { return d[0] === 'all' || t.status === d[0]; }).length };
+    });
+    var list = base.filter(function (t) { return st.tab === 'all' || t.status === st.tab; });
+    var sel = st.sel;
+    var rows = list.map(function (t) {
+      var main = t.role === 'Giáo viên chính', on = sel.indexOf(t.id) >= 0;
+      return {
+        name: t.name, meta: (t.code || 'Chưa có mã NV') + ' · ' + t.email,
+        home: t.home, noHome: !t.home, classes: t.classes, hasClasses: t.classes.length > 0, noClasses: !t.classes.length,
+        role: t.role, status: ST[t.status][0], tone: ST[t.status][1], checked: on, cls: on ? 'is-selected' : '',
+        checkLabel: 'Chọn giáo viên ' + t.name, actionLabel: 'Thao tác với giáo viên ' + t.name,
+        toggle: function (v) { var n = sel.filter(function (x) { return x !== t.id; }); if (v) n.push(t.id); self.setState({ sel: n }); },
+        menu: [
+          { icon: 'eye', label: 'Xem hồ sơ' }, { icon: 'chalkboard', label: 'Phân công lớp học' }, { icon: 'envelope', label: 'Đổi email đăng nhập' },
+          { icon: 'shield-halved', label: main ? 'Chuyển sang Giáo viên hỗ trợ…' : 'Chuyển sang Giáo viên chính…' },
+          { icon: 'user-clock', label: t.status === 'active' ? 'Chuyển sang Tạm nghỉ…' : 'Kích hoạt Đang làm việc…' },
+          { divider: true }, { icon: 'trash-can', label: 'Xóa giáo viên…', tone: 'danger' }
+        ]
+      };
+    });
+    var ids = list.map(function (t) { return t.id; });
+    var nOn = ids.filter(function (i) { return sel.indexOf(i) >= 0; }).length;
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20, total: rows.length,
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      classOpts: ['Tất cả lớp', 'Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Lớp Vẽ Sáng Tạo'], cls: st.cls, setCls: function (v) { self.setState({ cls: v }); },
+      roleOpts: ['Tất cả phân quyền', 'Giáo viên chính', 'Giáo viên hỗ trợ'], role: st.role, setRole: function (v) { self.setState({ role: v }); },
+      rows: rows, isEmpty: rows.length === 0,
+      noSel: sel.length === 0, hasSel: sel.length > 0, selCount: sel.length, clearSel: function () { self.setState({ sel: [] }); },
+      allChecked: ids.length > 0 && nOn === ids.length, someChecked: nOn > 0 && nOn < ids.length,
+      toggleAll: function (v) { self.setState({ sel: v ? ids : [] }); }
+    });
+  }
+}
+</script>
+</body>
+</html>

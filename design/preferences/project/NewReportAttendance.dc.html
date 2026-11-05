@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Báo cáo điểm danh — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="report-attendance" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Báo cáo điểm danh</h1>
+    <p class="ecomd-page-header__desc body-sm">Chuyên cần theo ngày, buổi của học sinh và nhân viên trong tháng, kèm số lần đón muộn</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="file-excel">Xuất Excel</x-import></div>
+</div>
+<div class="ecomd-stat-group" style="--ecomd-cols: 4;">
+  <sc-for list="{{stats}}" as="s" hint-placeholder-count="4"><x-import component-from-global-scope="ECOMD.StatCard" label="{{s.label}}" value="{{s.value}}" icon="{{s.icon}}" tone="{{s.tone}}"></x-import></sc-for>
+</div>
+<section class="ecomd-table-card">
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.Tabs" items="{{who}}" value="{{whoV}}" on-change="{{setWho}}" label="Đối tượng" variant="segmented"></x-import><span style="flex: 1;"></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{clsOpts}}" value="{{cls}}" on-change="{{setCls}}" label="Lớp"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{monthOpts}}" value="{{month}}" on-change="{{setMonth}}" label="Tháng"></x-import></div>
+<div class="body-sm-semibold" style="padding: 0 var(--space-16) var(--space-12); color: var(--text-heading);">Lớp Lá · tháng 09/2026 · 22 ngày học</div>
+<div class="ecomd-scroll" style="overflow-x: auto; overflow-y: visible;">
+<table style="width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums;">
+<thead><tr style="background: var(--bg-subtle);">
+  <th class="body-xs-bold" style="position: sticky; left: 0; z-index: 1; z-index: 2; min-width: calc(var(--size-40) * 5); padding: var(--space-8) var(--space-16); border-bottom: 1px solid var(--border-default); border-right: 1px solid var(--border-default); background: var(--bg-subtle); color: var(--text-nav); text-align: left;">Học sinh</th>
+  <th class="body-xs-bold" style="padding: var(--space-8) var(--space-4); border-bottom: 1px solid var(--border-default); color: var(--text-nav); text-align: center; white-space: nowrap;">Buổi</th>
+  <sc-for list="{{days}}" as="d" hint-placeholder-count="30"><th scope="col" class="body-2xs" style="padding: var(--space-6) var(--space-2); min-width: var(--size-32); border-bottom: 1px solid var(--border-default); background: {{d.bg}}; color: {{d.fg}}; text-align: center;"><span style="display: block;">{{d.dow}}</span><span class="body-xs-bold" style="display: block;">{{d.d}}</span></th></sc-for>
+</tr></thead>
+<tbody>
+<sc-for list="{{mrows}}" as="r" hint-placeholder-count="10"><tr style="border-top: 1px solid {{r.line}};">
+  <sc-if value="{{r.first}}" hint-placeholder-val="{{true}}"><th scope="rowgroup" rowspan="2" style="position: sticky; left: 0; z-index: 1; padding: var(--space-12) var(--space-16); border-right: 1px solid var(--border-default); background: var(--bg-surface); text-align: left; vertical-align: top; font-weight: inherit;">
+    <span style="display: flex; flex-direction: column; gap: var(--space-2);"><a href="#" class="body-sm-semibold" style="color: var(--text-heading); text-decoration: none;">{{r.nick}}</a><span class="body-xs" style="color: var(--text-subtle);">{{r.name}}</span><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">{{r.phone}}</span>
+    <span class="body-xs" style="display: flex; flex-wrap: wrap; gap: var(--space-4) var(--space-10); margin-top: var(--space-6); color: var(--text-body);"><span style="display: inline-flex; align-items: center; gap: var(--space-4);"><x-import component-from-global-scope="ECOMD.Icon" name="check" size="{{twelve}}" color="var(--semantic-success)"></x-import>{{r.ok}}</span><span style="display: inline-flex; align-items: center; gap: var(--space-4);"><x-import component-from-global-scope="ECOMD.Icon" name="circle-minus" size="{{twelve}}" color="var(--semantic-info)"></x-import>{{r.cp}}</span><span style="display: inline-flex; align-items: center; gap: var(--space-4);"><x-import component-from-global-scope="ECOMD.Icon" name="circle-xmark" size="{{twelve}}" color="var(--semantic-danger)"></x-import>{{r.kp}}</span><span style="display: inline-flex; align-items: center; gap: var(--space-4);"><x-import component-from-global-scope="ECOMD.Icon" name="clock" size="{{twelve}}" color="var(--semantic-warning)"></x-import>{{r.late}}</span></span></span>
+  </th></sc-if>
+  <td class="body-xs" style="padding: var(--space-8); color: var(--text-subtle); text-align: center; white-space: nowrap;">{{r.part}}</td>
+  <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="30"><td title="{{c.title}}" style="padding: var(--space-8) var(--space-2); background: {{c.bg}}; color: {{c.color}}; text-align: center;"><sc-if value="{{c.has}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="ECOMD.Icon" name="{{c.icon}}" size="{{twelve}}"></x-import></sc-if></td></sc-for>
+</tr></sc-for>
+</tbody>
+</table>
+</div>
+<ul class="body-xs" aria-label="Chú thích" style="display: flex; flex-wrap: wrap; gap: var(--space-8) var(--space-20); margin: 0; padding: var(--space-12) var(--space-16); border-top: 1px solid var(--border-default); list-style: none; color: var(--text-subtle);">
+  <li style="display: inline-flex; align-items: center; gap: var(--space-6);"><x-import component-from-global-scope="ECOMD.Icon" name="check" size="{{twelve}}" color="var(--semantic-success)"></x-import>Có mặt</li>
+  <li style="display: inline-flex; align-items: center; gap: var(--space-6);"><x-import component-from-global-scope="ECOMD.Icon" name="circle-minus" size="{{twelve}}" color="var(--semantic-info)"></x-import>Vắng có phép</li>
+  <li style="display: inline-flex; align-items: center; gap: var(--space-6);"><x-import component-from-global-scope="ECOMD.Icon" name="circle-xmark" size="{{twelve}}" color="var(--semantic-danger)"></x-import>Vắng không phép</li>
+  <li style="display: inline-flex; align-items: center; gap: var(--space-6);"><x-import component-from-global-scope="ECOMD.Icon" name="clock" size="{{twelve}}" color="var(--semantic-warning)"></x-import>Đến hoặc về muộn (tính phụ phí đón muộn)</li>
+  <li style="display: inline-flex; align-items: center; gap: var(--space-6);"><span aria-hidden="true" style="width: var(--size-12); height: var(--size-12); border-radius: var(--radius-4); background: var(--bg-muted);"></span>Ngày nghỉ cuối tuần</li>
+</ul>
+</section>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1013}}'>
+var CRUMBS = ["Vận hành", "BC Điểm danh"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { who: 'kid', cls: 'Lớp Lá', month: 'Tháng 09/2026' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var D = [{"d": 1, "dow": "T3", "off": false}, {"d": 2, "dow": "T4", "off": false}, {"d": 3, "dow": "T5", "off": false}, {"d": 4, "dow": "T6", "off": false}, {"d": 5, "dow": "T7", "off": true}, {"d": 6, "dow": "CN", "off": true}, {"d": 7, "dow": "T2", "off": false}, {"d": 8, "dow": "T3", "off": false}, {"d": 9, "dow": "T4", "off": false}, {"d": 10, "dow": "T5", "off": false}, {"d": 11, "dow": "T6", "off": false}, {"d": 12, "dow": "T7", "off": true}, {"d": 13, "dow": "CN", "off": true}, {"d": 14, "dow": "T2", "off": false}, {"d": 15, "dow": "T3", "off": false}, {"d": 16, "dow": "T4", "off": false}, {"d": 17, "dow": "T5", "off": false}, {"d": 18, "dow": "T6", "off": false}, {"d": 19, "dow": "T7", "off": true}, {"d": 20, "dow": "CN", "off": true}, {"d": 21, "dow": "T2", "off": false}, {"d": 22, "dow": "T3", "off": false}, {"d": 23, "dow": "T4", "off": false}, {"d": 24, "dow": "T5", "off": false}, {"d": 25, "dow": "T6", "off": false}, {"d": 26, "dow": "T7", "off": true}, {"d": 27, "dow": "CN", "off": true}, {"d": 28, "dow": "T2", "off": false}, {"d": 29, "dow": "T3", "off": false}, {"d": 30, "dow": "T4", "off": false}];
+    var R = [{"i": 1, "part": "Sáng", "first": true, "cells": ["ok", "ok", "ok", "late", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok"], "nick": "An (Bé 25)", "name": "Nguyễn Hoàng Huyền My", "phone": "0120 671 641 12", "ok": 22, "cp": 0, "kp": 0, "late": 2}, {"i": 1, "part": "Chiều", "first": false, "cells": ["ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "late", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok"], "nick": "An (Bé 25)", "name": "Nguyễn Hoàng Huyền My", "phone": "0120 671 641 12", "ok": 22, "cp": 0, "kp": 0, "late": 2}, {"i": 2, "part": "Sáng", "first": true, "cells": ["ok", "ok", "ok", "late", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "cp", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok"], "nick": "Anh (Út)", "name": "Trần Mỹ Anh", "phone": "1122 334 455 01", "ok": 21, "cp": 1, "kp": 0, "late": 2}, {"i": 2, "part": "Chiều", "first": false, "cells": ["ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "late", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "cp", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok"], "nick": "Anh (Út)", "name": "Trần Mỹ Anh", "phone": "1122 334 455 01", "ok": 21, "cp": 1, "kp": 0, "late": 2}, {"i": 3, "part": "Sáng", "first": true, "cells": ["ok", "ok", "ok", "late", "off", "off", "ok", "cp", "cp", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok"], "nick": "Anh (Bé 03)", "name": "Trần Mỹ Anh", "phone": "1122 334 455 05", "ok": 20, "cp": 2, "kp": 0, "late": 1}, {"i": 3, "part": "Chiều", "first": false, "cells": ["ok", "ok", "ok", "ok", "off", "off", "ok", "cp", "cp", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok"], "nick": "Anh (Bé 03)", "name": "Trần Mỹ Anh", "phone": "1122 334 455 05", "ok": 20, "cp": 2, "kp": 0, "late": 1}, {"i": 4, "part": "Sáng", "first": true, "cells": ["ok", "ok", "ok", "late", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "kp", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok"], "nick": "Minh Anh", "name": "Đỗ Tuấn", "phone": "0919 293 1188", "ok": 21, "cp": 0, "kp": 1, "late": 4}, {"i": 4, "part": "Chiều", "first": false, "cells": ["ok", "late", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "kp", "late", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "late", "off", "off", "ok", "ok", "ok"], "nick": "Minh Anh", "name": "Đỗ Tuấn", "phone": "0919 293 1188", "ok": 21, "cp": 0, "kp": 1, "late": 4}, {"i": 5, "part": "Sáng", "first": true, "cells": ["ok", "ok", "ok", "late", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok"], "nick": "Anh (Bé 31)", "name": "Trần Hoàng Anh", "phone": "0988 776 655", "ok": 22, "cp": 0, "kp": 0, "late": 2}, {"i": 5, "part": "Chiều", "first": false, "cells": ["ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "late", "ok", "ok", "off", "off", "ok", "ok", "ok", "ok", "ok", "off", "off", "ok", "ok", "ok"], "nick": "Anh (Bé 31)", "name": "Trần Hoàng Anh", "phone": "0988 776 655", "ok": 22, "cp": 0, "kp": 0, "late": 2}];
+    var CM = {"ok": ["check", "var(--semantic-success)", "Có mặt"], "cp": ["circle-minus", "var(--semantic-info)", "Vắng có phép"], "kp": ["circle-xmark", "var(--semantic-danger)", "Vắng không phép"], "late": ["clock", "var(--semantic-warning)", "Đến hoặc về muộn"]};
+    var tot = { ok: 0, cp: 0, kp: 0, late: 0 };
+    R.forEach(function (r) { if (r.first) { tot.ok += r.ok; tot.cp += r.cp; tot.kp += r.kp; tot.late += r.late; } });
+    return Object.assign(this.shell(), {
+      twelve: 12,
+      stats: [
+        { label: 'Lượt có mặt (ngày học)', value: String(tot.ok), icon: 'user-check', tone: 'success' },
+        { label: 'Vắng có phép', value: String(tot.cp), icon: 'circle-minus', tone: 'info' },
+        { label: 'Vắng không phép', value: String(tot.kp), icon: 'circle-xmark', tone: 'neutral' },
+        { label: 'Đến hoặc về muộn', value: tot.late + ' lần', icon: 'clock', tone: 'warning' }],
+      who: [{ key: 'kid', label: 'Học sinh', icon: 'graduation-cap' }, { key: 'staff', label: 'Nhân viên', icon: 'id-badge' }], whoV: st.who, setWho: function (k) { self.setState({ who: k }); },
+      clsOpts: ['Lớp Lá', 'Lớp Chồi (1A1)', 'Nhà trẻ'], cls: st.cls, setCls: function (v) { self.setState({ cls: v }); },
+      monthOpts: ['Tháng 09/2026', 'Tháng 08/2026', 'Tháng 10/2026'], month: st.month, setMonth: function (v) { self.setState({ month: v }); },
+      days: D.map(function (d) { return Object.assign({}, d, { bg: d.off ? 'var(--bg-muted)' : 'var(--bg-subtle)', fg: d.off ? 'var(--text-muted)' : 'var(--text-nav)' }); }),
+      mrows: R.map(function (r) { return Object.assign({}, r, { line: r.first ? 'var(--border-default)' : 'var(--border-subtle)',
+        cells: r.cells.map(function (c) { var m = CM[c]; return { has: !!m, icon: m ? m[0] : '', color: m ? m[1] : '', title: m ? m[2] : 'Nghỉ cuối tuần', bg: c === 'off' ? 'var(--bg-muted)' : 'transparent' }; }) }); })
+    });
+  }
+}
+</script>
+</body>
+</html>

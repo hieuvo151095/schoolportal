@@ -1,0 +1,392 @@
+/**
+ * Mock Data Seed for Academics Homework Assignment (Bài Tập)
+ * Provides Vietnamese curriculum subjects, realistic classes, student submissions, and assignments.
+ */
+
+import type { HomeworkAssignment } from '../types/assignment.ts';
+
+export interface SubjectItem {
+  id: string;
+  name: string;
+  code: string;
+  icon?: string;
+  gradeLevels: number[]; // e.g. [1, 2, 3, 4, 5]
+}
+
+export const mockSubjects: SubjectItem[] = [
+  { id: 'sub-01', name: 'Toán', code: 'MATH', gradeLevels: [1, 2, 3, 4, 5] },
+  { id: 'sub-02', name: 'Tiếng Việt', code: 'LIT', gradeLevels: [1, 2, 3, 4, 5] },
+  { id: 'sub-03', name: 'Tiếng Anh', code: 'ENG', gradeLevels: [1, 2, 3, 4, 5] },
+  { id: 'sub-04', name: 'Tự nhiên và Xã hội', code: 'SCI', gradeLevels: [1, 2, 3] },
+  { id: 'sub-05', name: 'Khoa học', code: 'SCI_UPPER', gradeLevels: [4, 5] },
+  { id: 'sub-06', name: 'Tin học', code: 'CS', gradeLevels: [3, 4, 5] },
+  { id: 'sub-07', name: 'Lịch sử và Địa lý', code: 'HIST_GEO', gradeLevels: [4, 5] },
+  { id: 'sub-08', name: 'Mĩ thuật', code: 'ART', gradeLevels: [1, 2, 3, 4, 5] },
+  { id: 'sub-09', name: 'Âm nhạc', code: 'MUSIC', gradeLevels: [1, 2, 3, 4, 5] },
+];
+
+export interface StudentEnrollment {
+  id: string;
+  studentCode: string;
+  name: string;
+  nickname?: string;
+  classId: string;
+  className: string;
+  avatar?: string;
+}
+
+export const mockClassStudents: StudentEnrollment[] = [
+  { id: 'stu-001', studentCode: 'HS001', name: 'Nguyễn Minh Quân', nickname: 'Bim', classId: '1a1', className: 'Lớp 1A1' },
+  { id: 'stu-002', studentCode: 'HS002', name: 'Trần Bảo Ngọc', nickname: 'Bống', classId: '1a1', className: 'Lớp 1A1' },
+  { id: 'stu-003', studentCode: 'HS003', name: 'Lê Hoàng Nam', nickname: 'Nhím', classId: '1a1', className: 'Lớp 1A1' },
+  { id: 'stu-004', studentCode: 'HS004', name: 'Phạm Thu Hà', nickname: 'Miu', classId: '1a1', className: 'Lớp 1A1' },
+  { id: 'stu-005', studentCode: 'HS005', name: 'Vũ Hải Đăng', nickname: 'Ken', classId: '1a1', className: 'Lớp 1A1' },
+  { id: 'stu-006', studentCode: 'HS006', name: 'Đặng Gia Huy', nickname: 'Sóc', classId: '1a1', className: 'Lớp 1A1' },
+  { id: 'stu-007', studentCode: 'HS007', name: 'Bùi Mai Linh', nickname: 'Su', classId: '1a1', className: 'Lớp 1A1' },
+  { id: 'stu-008', studentCode: 'HS008', name: 'Ngô Tuấn Kiệt', nickname: 'Tin', classId: '1a1', className: 'Lớp 1A1' },
+  { id: 'stu-009', studentCode: 'HS009', name: 'Hoàng Thảo My', nickname: 'Bông', classId: '2a2', className: 'Lớp 2A2' },
+  { id: 'stu-010', studentCode: 'HS010', name: 'Đỗ Đức Trí', nickname: 'Tí', classId: '2a2', className: 'Lớp 2A2' },
+];
+
+export const mockAssignments: HomeworkAssignment[] = [
+  {
+    id: 'asg-001',
+    classId: '1a1',
+    className: 'Lớp 1A1',
+    subjectId: 'sub-01',
+    subjectName: 'Toán',
+    title: 'Bài tập Toán tuần 3: Phép cộng có nhớ trong phạm vi 100',
+    description: '<p>Các em hoàn thành các bài tập trong phiếu đính kèm (trang 1 và trang 2). Chú ý đặt tính thẳng cột và kiểm tra kết quả cẩn thận trước khi nộp.</p>',
+    dueDate: '2026-09-25T23:59:00Z',
+    status: 'da_gui',
+    audienceType: 'whole_class',
+    targetStudentIds: ['stu-001', 'stu-002', 'stu-003', 'stu-004', 'stu-005', 'stu-006', 'stu-007', 'stu-008'],
+    attachments: [
+      {
+        id: 'att-01',
+        name: 'Phieu_Bai_Tap_Toan_Tuan_3.pdf',
+        url: '/docs/phieu-toan-tuan-3.pdf',
+        sizeBytes: 1450000,
+        type: 'pdf',
+      },
+    ],
+    submissions: [
+      {
+        id: 'subm-001',
+        studentId: 'stu-001',
+        studentName: 'Nguyễn Minh Quân',
+        studentCode: 'HS001',
+        nickname: 'Bim',
+        status: 'cham_diem',
+        submittedAt: '2026-09-20T14:30:00Z',
+        isLate: false,
+        submissionFile: {
+          name: 'NguyenMinhQuan_BaiTapToan.pdf',
+          url: '/submissions/quan-toan.pdf',
+          sizeBytes: 850000,
+        },
+        score: 9.5,
+        teacherComment: 'Con làm bài rất cẩn thận, trình bày sạch sẽ và tính đúng các phép tính có nhớ!',
+        evaluatedAt: '2026-09-21T09:15:00Z',
+        evaluatedBy: 'Cô Nguyễn Thị Mai',
+      },
+      {
+        id: 'subm-002',
+        studentId: 'stu-002',
+        studentName: 'Trần Bảo Ngọc',
+        studentCode: 'HS002',
+        nickname: 'Bống',
+        status: 'cham_diem',
+        submittedAt: '2026-09-21T16:00:00Z',
+        isLate: false,
+        submissionFile: {
+          name: 'BaoNgoc_Toan_Tuan3.jpg',
+          url: '/submissions/ngoc-toan.jpg',
+          sizeBytes: 1200000,
+        },
+        score: 8.5,
+        teacherComment: 'Con làm tốt bài 1 và bài 2. Bài 3 cần chú ý cộng thêm số nhớ ở hàng chục nhé.',
+        evaluatedAt: '2026-09-22T08:30:00Z',
+        evaluatedBy: 'Cô Nguyễn Thị Mai',
+      },
+      {
+        id: 'subm-003',
+        studentId: 'stu-003',
+        studentName: 'Lê Hoàng Nam',
+        studentCode: 'HS003',
+        nickname: 'Nhím',
+        status: 'da_nop',
+        submittedAt: '2026-09-22T10:15:00Z',
+        isLate: false,
+        submissionFile: {
+          name: 'HoangNam_BaiLam.pdf',
+          url: '/submissions/nam-toan.pdf',
+          sizeBytes: 940000,
+        },
+      },
+      {
+        id: 'subm-004',
+        studentId: 'stu-004',
+        studentName: 'Phạm Thu Hà',
+        studentCode: 'HS004',
+        nickname: 'Miu',
+        status: 'chua_nop',
+      },
+      {
+        id: 'subm-005',
+        studentId: 'stu-005',
+        studentName: 'Vũ Hải Đăng',
+        studentCode: 'HS005',
+        nickname: 'Ken',
+        status: 'chua_nop',
+      },
+      {
+        id: 'subm-006',
+        studentId: 'stu-006',
+        studentName: 'Đặng Gia Huy',
+        studentCode: 'HS006',
+        nickname: 'Sóc',
+        status: 'chua_nop',
+      },
+      {
+        id: 'subm-007',
+        studentId: 'stu-007',
+        studentName: 'Bùi Mai Linh',
+        studentCode: 'HS007',
+        nickname: 'Su',
+        status: 'chua_nop',
+      },
+      {
+        id: 'subm-008',
+        studentId: 'stu-008',
+        studentName: 'Ngô Tuấn Kiệt',
+        studentCode: 'HS008',
+        nickname: 'Tin',
+        status: 'chua_nop',
+      },
+    ],
+    comments: [
+      {
+        id: 'cmt-01',
+        assignmentId: 'asg-001',
+        authorId: 'tch-01',
+        authorName: 'Cô Nguyễn Thị Mai',
+        authorRole: 'teacher',
+        content: 'Phụ huynh nhắc các con làm bài tập phiếu trang 2 bài số 4 dạng toán có lời văn nhé.',
+        createdAt: '2026-09-18T16:00:00Z',
+      },
+      {
+        id: 'cmt-02',
+        assignmentId: 'asg-001',
+        authorId: 'par-01',
+        authorName: 'Mẹ em Minh Quân',
+        authorRole: 'parent',
+        content: 'Dạ em cảm ơn cô, cháu đã hoàn thành và nộp bài rồi ạ!',
+        createdAt: '2026-09-20T15:10:00Z',
+      },
+    ],
+    createdBy: 'Cô Nguyễn Thị Mai',
+    createdAt: '2026-09-18T08:00:00Z',
+    updatedAt: '2026-09-18T08:00:00Z',
+  },
+  {
+    id: 'asg-002',
+    classId: '1a1',
+    className: 'Lớp 1A1',
+    subjectId: 'sub-02',
+    subjectName: 'Tiếng Việt',
+    title: 'Bài tập Tiếng Việt: Luyện viết chính tả bài "Mùa thảo quả"',
+    description: '<p>Luyện viết 1 đoạn văn từ "Gió tây lướt thướt..." đến "...màu đỏ chót". Viết chữ hoa cẩn thận, nắn nót, đúng độ cao ô ly.</p>',
+    dueDate: '2026-09-10T17:00:00Z', // Past due
+    status: 'da_gui',
+    audienceType: 'whole_class',
+    targetStudentIds: ['stu-001', 'stu-002', 'stu-003', 'stu-004', 'stu-005', 'stu-006', 'stu-007', 'stu-008'],
+    attachments: [],
+    submissions: [
+      {
+        id: 'subm-021',
+        studentId: 'stu-001',
+        studentName: 'Nguyễn Minh Quân',
+        studentCode: 'HS001',
+        nickname: 'Bim',
+        status: 'cham_diem',
+        submittedAt: '2026-09-09T18:00:00Z',
+        isLate: false,
+        score: 10.0,
+        teacherComment: 'Chữ viết tròn đều, sạch đẹp, đúng chính tả.',
+        evaluatedAt: '2026-09-11T10:00:00Z',
+        evaluatedBy: 'Cô Nguyễn Thị Mai',
+      },
+      {
+        id: 'subm-022',
+        studentId: 'stu-002',
+        studentName: 'Trần Bảo Ngọc',
+        studentCode: 'HS002',
+        nickname: 'Bống',
+        status: 'cham_diem',
+        submittedAt: '2026-09-10T11:00:00Z',
+        isLate: false,
+        score: 9.0,
+        teacherComment: 'Bài viết tốt, chú ý dấu thanh ở âm o.',
+        evaluatedAt: '2026-09-11T10:15:00Z',
+        evaluatedBy: 'Cô Nguyễn Thị Mai',
+      },
+      {
+        id: 'subm-023',
+        studentId: 'stu-003',
+        studentName: 'Lê Hoàng Nam',
+        studentCode: 'HS003',
+        nickname: 'Nhím',
+        status: 'cham_diem',
+        submittedAt: '2026-09-11T08:00:00Z', // Submitted after due date
+        isLate: true,
+        score: 8.0,
+        teacherComment: 'Nộp bài trễ 1 ngày. Chữ viết khá tốt.',
+        evaluatedAt: '2026-09-11T10:30:00Z',
+        evaluatedBy: 'Cô Nguyễn Thị Mai',
+      },
+      {
+        id: 'subm-024',
+        studentId: 'stu-004',
+        studentName: 'Phạm Thu Hà',
+        studentCode: 'HS004',
+        status: 'chua_nop',
+      },
+      {
+        id: 'subm-025',
+        studentId: 'stu-005',
+        studentName: 'Vũ Hải Đăng',
+        studentCode: 'HS005',
+        status: 'chua_nop',
+      },
+      {
+        id: 'subm-026',
+        studentId: 'stu-006',
+        studentName: 'Đặng Gia Huy',
+        studentCode: 'HS006',
+        status: 'chua_nop',
+      },
+      {
+        id: 'subm-027',
+        studentId: 'stu-007',
+        studentName: 'Bùi Mai Linh',
+        studentCode: 'HS007',
+        status: 'chua_nop',
+      },
+      {
+        id: 'subm-028',
+        studentId: 'stu-008',
+        studentName: 'Ngô Tuấn Kiệt',
+        studentCode: 'HS008',
+        status: 'chua_nop',
+      },
+    ],
+    comments: [],
+    createdBy: 'Cô Nguyễn Thị Mai',
+    createdAt: '2026-09-08T08:00:00Z',
+    updatedAt: '2026-09-08T08:00:00Z',
+  },
+  {
+    id: 'asg-003',
+    classId: '1a1',
+    className: 'Lớp 1A1',
+    subjectId: 'sub-03',
+    subjectName: 'Tiếng Anh',
+    title: 'Tiếng Anh: Vocabulary Unit 2 - Family & Friends',
+    description: '<p>Luyện phát âm và ghi nhớ 8 từ vựng chủ đề Family: father, mother, brother, sister, grandfather, grandmother, uncle, aunt.</p>',
+    dueDate: '2026-09-30T23:59:00Z',
+    scheduledSendDate: '2026-09-23T07:00:00Z',
+    status: 'chua_gui', // Scheduled
+    audienceType: 'specific_students',
+    targetStudentIds: ['stu-001', 'stu-003', 'stu-005'],
+    attachments: [
+      {
+        id: 'att-03',
+        name: 'Unit2_Family_Flashcards.pdf',
+        url: '/docs/unit2-flashcards.pdf',
+        sizeBytes: 2100000,
+        type: 'pdf',
+      },
+    ],
+    submissions: [
+      {
+        id: 'subm-031',
+        studentId: 'stu-001',
+        studentName: 'Nguyễn Minh Quân',
+        studentCode: 'HS001',
+        status: 'chua_nop',
+      },
+      {
+        id: 'subm-032',
+        studentId: 'stu-003',
+        studentName: 'Lê Hoàng Nam',
+        studentCode: 'HS003',
+        status: 'chua_nop',
+      },
+      {
+        id: 'subm-033',
+        studentId: 'stu-005',
+        studentName: 'Vũ Hải Đăng',
+        studentCode: 'HS005',
+        status: 'chua_nop',
+      },
+    ],
+    comments: [],
+    createdBy: 'Thầy David Miller',
+    createdAt: '2026-09-19T09:00:00Z',
+    updatedAt: '2026-09-19T09:00:00Z',
+  },
+  {
+    id: 'asg-004',
+    classId: '1a1',
+    className: 'Lớp 1A1',
+    subjectId: 'sub-01',
+    subjectName: 'Toán',
+    title: '[Bản nháp] Ôn tập cuối tuần: Phép trừ có nhớ trong phạm vi 100',
+    description: '<p>Bài tập nháp chuẩn bị giao cho học sinh vào thứ Sáu tuần này.</p>',
+    dueDate: '2026-09-28T23:59:00Z',
+    status: 'da_tao', // Draft
+    audienceType: 'whole_class',
+    targetStudentIds: [],
+    attachments: [],
+    submissions: [],
+    comments: [],
+    createdBy: 'Cô Nguyễn Thị Mai',
+    createdAt: '2026-09-21T14:00:00Z',
+    updatedAt: '2026-09-21T14:00:00Z',
+  },
+  {
+    id: 'asg-005',
+    classId: '2a2',
+    className: 'Lớp 2A2',
+    subjectId: 'sub-04',
+    subjectName: 'Tự nhiên và Xã hội',
+    title: 'TN&XH: Quan sát và ghi chép sự phát triển của cây đậu tương',
+    description: '<p>Các em ngâm hạt đậu tương, trồng vào chậu nhỏ và ghi nhật ký phát triển trong 5 ngày đầu tiên.</p>',
+    dueDate: '2026-09-26T17:00:00Z',
+    status: 'da_gui',
+    audienceType: 'whole_class',
+    targetStudentIds: ['stu-009', 'stu-010'],
+    attachments: [],
+    submissions: [
+      {
+        id: 'subm-051',
+        studentId: 'stu-009',
+        studentName: 'Hoàng Thảo My',
+        studentCode: 'HS009',
+        status: 'chua_nop',
+      },
+      {
+        id: 'subm-052',
+        studentId: 'stu-010',
+        studentName: 'Đỗ Đức Trí',
+        studentCode: 'HS010',
+        status: 'chua_nop',
+      },
+    ],
+    comments: [],
+    createdBy: 'Cô Phạm Hoàng Lan',
+    createdAt: '2026-09-17T11:00:00Z',
+    updatedAt: '2026-09-17T11:00:00Z',
+  },
+];

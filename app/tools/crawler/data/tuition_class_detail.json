@@ -1,0 +1,16 @@
+{
+  "title": "Chi tiết lớp học - Liên cấp PT Sao Mai",
+  "tables": [
+    {
+      "headers": [
+        "Học sinh",
+        "Phụ huynh"
+      ],
+      "rows": [
+        [
+          "Chưa có học sinh"
+        ]
+      ]
+    }
+  ]
+}

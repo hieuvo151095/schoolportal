@@ -1,0 +1,285 @@
+import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faArrowLeft,
+  faSave,
+  faPaperPlane,
+  faLock,
+  faFileUpload,
+  faTrashAlt,
+  faExclamationCircle,
+  faFilePdf,
+} from '@fortawesome/free-solid-svg-icons';
+import PortalLayout from '../../../../../components/layout/PortalLayout';
+import { useAppSelector, useAppDispatch } from '../../../../../store';
+import { updateArticle } from '../../../../../store/slices/parentHandbookSlice';
+import { validateArticle } from '../../../../../utils/parentHandbookValidation';
+import { HandbookFileAttachment } from '../../../../../types/parentHandbook';
+
+export default function EditHandbookArticlePage() {
+  const router = useRouter();
+  const { schoolCode, articleId } = router.query;
+  const currentSchoolCode = (schoolCode as string) || 'demo';
+
+  const dispatch = useAppDispatch();
+  const { categories, articles } = useAppSelector((state) => state.parentHandbook);
+
+  const existingArticle = articles.find((a) => a.id === articleId);
+
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [attachments, setAttachments] = useState<HandbookFileAttachment[]>([]);
+  const [newAttachmentName, setNewAttachmentName] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (existingArticle) {
+      setSelectedCategoryId(existingArticle.categoryId);
+      setTitle(existingArticle.title);
+      setContent(existingArticle.content);
+      setAttachments(existingArticle.attachments || []);
+    }
+  }, [existingArticle]);
+
+  if (!existingArticle) {
+    return (
+      <PortalLayout>
+        <div className="flex-1 p-8 text-center">
+          <p className="text-sm text-slate-500 mb-4">Không tìm thấy bài viết yêu cầu.</p>
+          <button
+            type="button"
+            onClick={() => router.push(`/${currentSchoolCode}/school/handbook`)}
+            className="px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg"
+          >
+            Quay lại Sổ tay PH
+          </button>
+        </div>
+      </PortalLayout>
+    );
+  }
+
+  const targetCategory = categories.find((c) => c.id === selectedCategoryId);
+  const parentCategory = targetCategory?.parentCategoryId
+    ? categories.find((c) => c.id === targetCategory.parentCategoryId)
+    : null;
+
+  const handleAddAttachment = () => {
+    if (!newAttachmentName.trim()) return;
+    const newAtt: HandbookFileAttachment = {
+      id: `att-${Date.now()}`,
+      name: newAttachmentName.trim().endsWith('.pdf')
+        ? newAttachmentName.trim()
+        : `${newAttachmentName.trim()}.pdf`,
+      url: '#',
+      size: '1.5 MB',
+      mimeType: 'application/pdf',
+    };
+    setAttachments((prev) => [...prev, newAtt]);
+    setNewAttachmentName('');
+  };
+
+  const handleRemoveAttachment = (id: string) => {
+    setAttachments((prev) => prev.filter((a) => a.id !== id));
+  };
+
+  const handleSave = (status: 'draft' | 'published') => {
+    const payload = {
+      id: existingArticle.id,
+      title,
+      content,
+      categoryId: selectedCategoryId,
+      status,
+      attachments,
+    };
+
+    const validation = validateArticle(payload, categories);
+    if (!validation.isValid) {
+      setError(validation.error || 'Vui lòng kiểm tra lại thông tin.');
+      return;
+    }
+
+    dispatch(updateArticle(payload));
+    router.push(`/${currentSchoolCode}/school/handbook`);
+  };
+
+  return (
+    <PortalLayout>
+      <Head>
+        <title>Chỉnh Sửa Bài Viết | Sổ Tay PH</title>
+      </Head>
+
+      <div className="flex-1 overflow-y-auto p-4 lg:p-6 bg-[#F8FAFC]">
+        {/* Header Navigation */}
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => router.push(`/${currentSchoolCode}/school/handbook`)}
+              className="w-9 h-9 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-colors shadow-2xs"
+            >
+              <FontAwesomeIcon icon={faArrowLeft} className="text-xs" />
+            </button>
+            <div>
+              <h1 className="text-lg font-bold text-slate-800">Chỉnh sửa bài viết Sổ tay PH</h1>
+              <p className="text-xs text-slate-500">Cập nhật nội quy hoặc hướng dẫn dành cho phụ huynh</p>
+            </div>
+          </div>
+
+          {/* Dual Save Buttons (BR08) */}
+          <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => handleSave('draft')}
+              className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg transition-colors shadow-2xs"
+            >
+              <FontAwesomeIcon icon={faSave} className="text-slate-400 text-xs" />
+              <span>Lưu nháp</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleSave('published')}
+              className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-900 bg-[#FEC020] hover:bg-amber-400 active:bg-amber-500 rounded-lg transition-colors shadow-xs"
+            >
+              <FontAwesomeIcon icon={faPaperPlane} className="text-xs" />
+              <span>Lưu &amp; Xuất bản</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Error Alert */}
+        {error && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 flex items-center gap-2">
+            <FontAwesomeIcon icon={faExclamationCircle} className="shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Main Composer Workspace */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-6">
+          {/* Destination Category Breadcrumbs (BR07) */}
+          <div>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              Danh mục bài viết <span className="text-red-500">*</span>
+            </label>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+              <div className="flex items-center gap-2 px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-lg text-xs font-medium text-slate-700 select-none">
+                <FontAwesomeIcon icon={faLock} className="text-amber-500 text-xs" />
+                <span>
+                  {parentCategory
+                    ? `${parentCategory.name} > ${targetCategory?.name}`
+                    : targetCategory?.name || 'Chưa chọn danh mục'}
+                </span>
+              </div>
+
+              <select
+                value={selectedCategoryId}
+                onChange={(e) => {
+                  setSelectedCategoryId(e.target.value);
+                  setError(null);
+                }}
+                className="px-3 py-2 text-xs text-slate-700 bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-amber-400"
+              >
+                {categories.map((c) => {
+                  const parent = c.parentCategoryId
+                    ? categories.find((p) => p.id === c.parentCategoryId)
+                    : null;
+                  return (
+                    <option key={c.id} value={c.id}>
+                      {parent ? `↳ ${c.name} (${parent.name})` : `📁 ${c.name}`}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          </div>
+
+          {/* Article Title Input */}
+          <div>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              Tiêu đề bài viết <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                setError(null);
+              }}
+              placeholder="Nhập tiêu đề quy chế, hướng dẫn hoặc nội quy..."
+              className="w-full px-3.5 py-2.5 text-sm text-slate-900 font-semibold bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-amber-400 placeholder:text-slate-400"
+            />
+          </div>
+
+          {/* Rich Content Editor */}
+          <div>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              Nội dung bài viết (HTML / Văn bản) <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              value={content}
+              onChange={(e) => {
+                setContent(e.target.value);
+                setError(null);
+              }}
+              rows={12}
+              placeholder="Nhập nội dung bài viết, điều khoản quy định..."
+              className="w-full px-3.5 py-3 text-xs font-mono text-slate-800 bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-amber-400 leading-relaxed placeholder:text-slate-400"
+            />
+          </div>
+
+          {/* File Attachments Uploader */}
+          <div className="pt-2 border-t border-slate-100">
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+              Tài liệu đính kèm (PDF, Word)
+            </label>
+
+            <div className="flex items-center gap-2 mb-3">
+              <input
+                type="text"
+                value={newAttachmentName}
+                onChange={(e) => setNewAttachmentName(e.target.value)}
+                placeholder="Tên tài liệu đính kèm..."
+                className="flex-1 px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-amber-400"
+              />
+              <button
+                type="button"
+                onClick={handleAddAttachment}
+                className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+              >
+                <FontAwesomeIcon icon={faFileUpload} />
+                <span>Thêm tệp</span>
+              </button>
+            </div>
+
+            {attachments.length > 0 && (
+              <div className="space-y-2">
+                {attachments.map((file) => (
+                  <div
+                    key={file.id}
+                    className="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs"
+                  >
+                    <div className="flex items-center gap-2">
+                      <FontAwesomeIcon icon={faFilePdf} className="text-red-500" />
+                      <span className="font-medium text-slate-800">{file.name}</span>
+                      <span className="text-[10px] text-slate-400">({file.size})</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveAttachment(file.id)}
+                      className="text-slate-400 hover:text-red-500 transition-colors p-1"
+                    >
+                      <FontAwesomeIcon icon={faTrashAlt} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </PortalLayout>
+  );
+}

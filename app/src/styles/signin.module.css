@@ -1,0 +1,499 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background-color: #fdf1f0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* ---------- Decorative Floating Clouds ---------- */
+.cloudWrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.cloud1 {
+  position: absolute;
+  top: 12%;
+  left: 2%;
+  opacity: 0.85;
+}
+
+.cloud2 {
+  position: absolute;
+  top: 50%;
+  left: 3%;
+  opacity: 0.85;
+}
+
+.cloud3 {
+  position: absolute;
+  top: 8%;
+  right: 4%;
+  opacity: 0.85;
+}
+
+.cloud4 {
+  position: absolute;
+  top: 52%;
+  right: 2%;
+  opacity: 0.85;
+}
+
+.cloud5 {
+  position: absolute;
+  bottom: 4%;
+  right: 14%;
+  opacity: 0.8;
+}
+
+/* ---------- Main Card Container ---------- */
+.card {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: 860px;
+  min-height: 480px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow:
+    0 20px 48px -12px rgba(12, 74, 141, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+/* ---------- Promo panel (Left Illustration) ---------- */
+.promo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #ffc20e;
+  display: flex;
+  overflow: hidden;
+}
+
+.promoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* ---------- Form panel (Right Section) ---------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  padding: 34px 40px 22px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.logoWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.logoImg {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.heading {
+  margin: 0 0 20px;
+  text-align: center;
+  color: #0c4a8d;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Tab Buttons ---------- */
+.tabs {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.tabBtn {
+  flex: 1;
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease-in-out;
+  border: 1px solid #d5d9e2;
+  background: #ffffff;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  outline: none;
+  font-family: inherit;
+}
+
+.tabBtn:hover:not(.tabBtnActive) {
+  border-color: #a0aec0;
+  background: #f7fafc;
+}
+
+.tabBtnActive {
+  background: #0070d2 !important;
+  color: #ffffff !important;
+  border-color: #0070d2 !important;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 112, 210, 0.28);
+}
+
+/* ---------- Form Controls ---------- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.formBody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Customize DS Inputs within Signin Form */
+.formBody :global(.ecomd-textfield__input) {
+  background-color: #f4f6f8;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  height: 42px;
+  font-size: 14px;
+}
+
+.formBody :global(.ecomd-textfield__input:focus) {
+  background-color: #ffffff;
+  border-color: #0070d2;
+  box-shadow: 0 0 0 1px #0070d2;
+}
+
+/* SSO Combobox open focus state matching Image 2 */
+.formBody :global(.ecomd-combobox.is-open .ecomd-textfield__input) {
+  border-color: #00bcd4 !important;
+  box-shadow: 0 0 0 1px #00bcd4 !important;
+  background-color: #ffffff !important;
+}
+
+.formBody :global(.ecomd-combobox__list) {
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 1px solid #e2e8f0;
+}
+
+.formBody :global(.ecomd-combobox__option.is-active) {
+  background-color: #f0f7ff;
+}
+
+.phoneLoginRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -6px;
+  margin-bottom: 2px;
+}
+
+.phoneLoginLink {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #0070d2;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.phoneLoginLink:hover {
+  text-decoration: underline;
+}
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-8);
+  padding: var(--space-10) var(--space-12);
+  border: 1px solid var(--border-danger-soft);
+  border-radius: var(--radius-8);
+  background: var(--semantic-danger-soft);
+  color: var(--semantic-danger-strong);
+}
+
+.submitBtn {
+  height: 44px;
+  width: 100%;
+  border-radius: 6px;
+  background-color: #0070d2;
+  border: 1px solid #0070d2;
+  color: #ffffff;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+  font-family: inherit;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background-color: #005fb3;
+}
+
+.submitBtn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ---------- Footer & Language Switcher ---------- */
+.footerLang {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  margin-top: auto;
+  padding-top: 18px;
+  color: #718096;
+}
+
+.langItem {
+  cursor: pointer;
+}
+
+.langActive {
+  color: #0070d2;
+  font-weight: 600;
+}
+
+.langDivider {
+  color: #cbd5e0;
+}
+
+.demo {
+  margin-top: 14px;
+  padding: 8px 10px;
+  border: 1px dashed #cbd5e0;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 11.5px;
+}
+
+.demo code {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+@media (max-width: 860px) {
+  .page {
+    padding: 16px;
+  }
+  .card {
+    grid-template-columns: 1fr;
+    max-width: 440px;
+    min-height: 0;
+  }
+  .promo {
+    display: none;
+  }
+  .panel {
+    padding: 28px 24px 20px;
+  }
+}
+
+/* ==========================================================================
+   SSO Portal of Sở (Mock HCMEDU SSO)
+   ========================================================================== */
+.ssoPage {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #8e8e8e;
+  box-sizing: border-box;
+}
+
+.ssoCard {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: 38px 36px 30px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.14);
+  box-sizing: border-box;
+}
+
+.ssoEmblemWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.ssoEmblemImg {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.ssoBrandSubtitle {
+  color: #1877f2;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ssoSchoolTitle {
+  margin: 0;
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: #222222;
+  line-height: 1.3;
+}
+
+.ssoAppSubtitle {
+  margin: 4px 0 24px;
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 13.5px;
+  color: #555555;
+}
+
+.ssoForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ssoLabelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.ssoLabelText {
+  font-size: 13.5px;
+  color: #333333;
+  font-weight: 500;
+}
+
+.ssoRequiredText {
+  color: #ff0000;
+  font-size: 12px;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.ssoInput {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  background: #f7f7f7;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #1a202c;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.ssoInput:focus {
+  background: #ffffff;
+  border-color: #333333;
+}
+
+.ssoSubmitBtn {
+  width: 100%;
+  height: 42px;
+  margin-top: 6px;
+  background: #2e2e2e;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+}
+
+.ssoSubmitBtn:hover:not(:disabled) {
+  background: #1a1a1a;
+}
+
+.ssoSubmitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.ssoPowered {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: #718096;
+  line-height: 1.5;
+}
+
+.ssoPoweredLink {
+  color: #1877f2;
+  text-decoration: none;
+  font-weight: 500;
+  display: block;
+}
+
+.ssoPoweredLink:hover {
+  text-decoration: underline;
+}
+
+.ssoBack {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.recaptchaBadge {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  pointer-events: none;
+}

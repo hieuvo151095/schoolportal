@@ -1,0 +1,33 @@
+<!-- @dsCard group="Biểu mẫu" height=220 subtitle="Công tắc nhị phân On/Off · phản hồi tức thì" -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Switch</title>
+<link rel="stylesheet" href="../tokens.css" />
+<link rel="stylesheet" href="../bundle.css" />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body { background: var(--bg-canvas); font-family: var(--font-sans); color: var(--text-body); display: flex; align-items: center; justify-content: center; padding: var(--space-24); }
+  .list { display: flex; flex-direction: column; gap: var(--space-16); padding: var(--space-20); background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-12); min-width: 320px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); }
+</style>
+</head>
+<body>
+<div class="list">
+  <label class="row">
+    <span class="body-sm">Xuất hóa đơn điện tử SInvoice</span>
+    <input type="checkbox" class="ecomd-switch" checked />
+  </label>
+  <label class="row">
+    <span class="body-sm">Điểm danh nhận diện khuôn mặt</span>
+    <input type="checkbox" class="ecomd-switch" checked />
+  </label>
+  <label class="row">
+    <span class="body-sm">Tự động gửi thông báo học phí</span>
+    <input type="checkbox" class="ecomd-switch" />
+  </label>
+</div>
+</body>
+</html>

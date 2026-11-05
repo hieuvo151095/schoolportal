@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Môn học — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="subjects" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Môn học</h1>
+    <p class="ecomd-page-header__desc body-sm">Danh mục môn học GDPT 2018, phân công giáo viên bộ môn và ma trận đánh giá</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.SelectField" options="{{yearOpts}}" value="{{year}}" on-change="{{setYear}}" label="Năm học"></x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="plus">Thêm môn học</x-import></div>
+</div>
+<section class="ecomd-table-card">
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Cấp học"></x-import>
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo tên môn, mã môn" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{gradeOpts}}" value="{{grade}}" on-change="{{setGrade}}" label="Lọc theo khối"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{kindOpts}}" value="{{kind}}" on-change="{{setKind}}" label="Lọc theo phân loại"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{evalOpts}}" value="{{ev}}" on-change="{{setEv}}" label="Lọc theo hình thức đánh giá"></x-import></div>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Môn học</th><th class="body-xs-bold">Phân loại</th><th class="body-xs-bold">Khối áp dụng</th><th class="body-xs-bold">Đánh giá</th><th class="body-xs-bold">Giáo viên giảng dạy</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><div style="display: flex; flex-direction: column; gap: var(--space-2);"><span style="display: flex; align-items: center; gap: var(--space-8);"><a href="#" class="body-sm-semibold" style="color: var(--text-heading); text-decoration: none;">{{r.name}}</a><x-import component-from-global-scope="ECOMD.Tag" variant="code">{{r.code}}</x-import></span><span class="body-xs" style="color: var(--text-subtle);">{{r.desc}}</span></div></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Phân loại</span><div class="ecomd-cell__value"><span>{{r.kind}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Khối áp dụng</span><div class="ecomd-cell__value"><span style="white-space: nowrap;">{{r.g}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Đánh giá</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.evTone}}">{{r.ev}}</x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Giáo viên giảng dạy</span><div class="ecomd-cell__value"><sc-if value="{{r.hasGv}}" hint-placeholder-val="{{true}}"><div style="display: flex; flex-direction: column; gap: var(--space-2);"><sc-for list="{{r.gv}}" as="g" hint-placeholder-count="1"><span style="white-space: nowrap;">{{g}}</span></sc-for></div></sc-if><sc-if value="{{r.noGv}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.StatusTag" tone="warning">Chưa phân công</x-import></sc-if></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="6"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có môn học nào khớp tìm kiếm"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="môn học"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1288}}'>
+var CRUMBS = ["Nhà trường", "Môn học"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'th', grade: 'Tất cả khối', kind: 'Tất cả phân loại', ev: 'Tất cả hình thức', year: 'Năm học 2026 – 2027', query: '' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var T = [{"id": 1, "code": "TH-TOAN", "name": "Toán học", "desc": "Chương trình Toán Tiểu học phát triển tư duy logic, hình học không gian cơ bản và giải toán có lời văn.", "kind": "Môn học", "g": "Khối 1 – 5", "graded": true, "gv": ["Nguyễn Thị Mai", "Trần Văn Dũng"]}, {"id": 2, "code": "TH-TV", "name": "Tiếng Việt", "desc": "Rèn luyện 4 kỹ năng Nghe – Nói – Đọc – Viết và bồi dưỡng tình yêu tiếng mẹ đẻ.", "kind": "Môn học", "g": "Khối 1 – 5", "graded": true, "gv": ["Nguyễn Thị Mai"]}, {"id": 3, "code": "TH-TA", "name": "Tiếng Anh", "desc": "Chương trình Tiếng Anh 10 năm theo Khung năng lực ngoại ngữ 6 bậc dùng cho Việt Nam.", "kind": "Môn học", "g": "Khối 3 – 5", "graded": true, "gv": ["Lê Hoàng Yến"]}, {"id": 4, "code": "TH-DD", "name": "Đạo đức", "desc": "Giáo dục chuẩn mực hành vi đạo đức, pháp luật và kỹ năng sống cơ bản cho học sinh.", "kind": "Môn học", "g": "Khối 1 – 5", "graded": false, "gv": ["Nguyễn Thị Mai"]}, {"id": 5, "code": "TH-TNXH", "name": "Tự nhiên và Xã hội", "desc": "Khám phá thế giới tự nhiên, môi trường xung quanh và các mối quan hệ xã hội gia đình, nhà trường.", "kind": "Môn học", "g": "Khối 1 – 3", "graded": false, "gv": ["Đặng Hoài An"]}, {"id": 6, "code": "TH-KH", "name": "Khoa học", "desc": "Nghiên cứu cơ bản về chất, năng lượng, thực vật, động vật, con người và sức khỏe.", "kind": "Môn học", "g": "Khối 4 – 5", "graded": true, "gv": ["Trần Văn Dũng"]}, {"id": 7, "code": "TH-LSDL", "name": "Lịch sử và Địa lí", "desc": "Cung cấp hiểu biết về lịch sử dựng nước và giữ nước cùng đặc điểm địa lí các vùng miền Việt Nam.", "kind": "Môn học", "g": "Khối 4 – 5", "graded": true, "gv": []}, {"id": 8, "code": "TH-THCN", "name": "Tin học và Công nghệ", "desc": "Làm quen máy tính, lập trình Scratch trực quan, an toàn mạng và thiết kế thủ công kỹ thuật.", "kind": "Môn học", "g": "Khối 3 – 5", "graded": true, "gv": ["Trần Văn Dũng"]}, {"id": 9, "code": "TH-GDTC", "name": "Giáo dục thể chất", "desc": "Rèn luyện thể lực, đội hình đội ngũ, các bài tập thể dục buổi sáng và trò chơi vận động.", "kind": "Môn học", "g": "Khối 1 – 5", "graded": false, "gv": ["Hoàng Minh Đức"]}, {"id": 10, "code": "TH-AN", "name": "Âm nhạc", "desc": "Hát, đọc nhạc, nghe nhạc và gõ đệm nhạc cụ tiết tấu.", "kind": "Môn học", "g": "Khối 1 – 5", "graded": false, "gv": ["Lê Hoàng Yến"]}, {"id": 11, "code": "TH-MT", "name": "Mĩ thuật", "desc": "Vẽ tranh, nặn hình, xé dán sáng tạo theo chủ đề thiên nhiên và gia đình.", "kind": "Môn học", "g": "Khối 1 – 5", "graded": false, "gv": ["Phạm Quỳnh Nga"]}, {"id": 12, "code": "TH-HDTN", "name": "Hoạt động trải nghiệm", "desc": "Sinh hoạt dưới cờ, sinh hoạt lớp và hoạt động giáo dục theo chủ đề trải nghiệm thực tế.", "kind": "Hoạt động GD", "g": "Khối 1 – 5", "graded": false, "gv": ["Phạm Quỳnh Nga"]}];
+    var q = (st.query || '').trim().toLowerCase();
+    var list = T.filter(function (t) { return (!q || (t.name + ' ' + t.code).toLowerCase().indexOf(q) >= 0) && (st.kind === 'Tất cả phân loại' || t.kind === st.kind)
+      && (st.ev === 'Tất cả hình thức' || (st.ev === 'Tính điểm') === t.graded); });
+    var tabs = [{ key: 'th', label: 'Tiểu học', count: list.length }, { key: 'thcs', label: 'Trung học cơ sở', count: 12 }, { key: 'thpt', label: 'Trung học phổ thông', count: 13 }, { key: 'gdtx', label: 'Giáo dục thường xuyên', count: 6 }];
+    var rows = (st.tab === 'th' ? list : []).map(function (t) { return { name: t.name, code: t.code, desc: t.desc, kind: t.kind, g: t.g,
+      ev: t.graded ? 'Tính điểm' : 'Nhận xét', evTone: t.graded ? 'info' : 'neutral', gv: t.gv, hasGv: t.gv.length > 0, noGv: !t.gv.length,
+      actionLabel: 'Thao tác với môn ' + t.name,
+      menu: [{ icon: 'eye', label: 'Xem ma trận đánh giá' }, { icon: 'chalkboard-user', label: 'Phân công giáo viên…' }, { icon: 'pen', label: 'Sửa môn học' }, { divider: true }, { icon: 'trash-can', label: 'Xóa môn học…', tone: 'danger' }] }; });
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20,
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      rows: rows, isEmpty: rows.length === 0, total: rows.length,
+      gradeOpts: ['Tất cả khối', 'Khối 1', 'Khối 2', 'Khối 3', 'Khối 4', 'Khối 5'], grade: st.grade, setGrade: function (v) { self.setState({ grade: v }); },
+      kindOpts: ['Tất cả phân loại', 'Môn học', 'Hoạt động GD'], kind: st.kind, setKind: function (v) { self.setState({ kind: v }); },
+      evalOpts: ['Tất cả hình thức', 'Tính điểm', 'Nhận xét'], ev: st.ev, setEv: function (v) { self.setState({ ev: v }); },
+      yearOpts: ['Năm học 2026 – 2027', 'Năm học 2025 – 2026'], year: st.year, setYear: function (v) { self.setState({ year: v }); }
+    });
+  }
+}
+</script>
+</body>
+</html>

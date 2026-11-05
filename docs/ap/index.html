@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tài liệu Dự án — VOI, AP & ISP | ECO School Operating Portal</title>
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --text: #0F172A;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --primary: #2563EB;
+      --primary-hover: #1D4ED8;
+      --accent-ap: #EA580C;
+      --accent-isp: #0284C7;
+      --accent-voi: #0D9488;
+      --accent-wiki: #7C3AED;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 32px 16px;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #EFF6FF;
+      color: var(--primary);
+      border: 1px solid #BFDBFE;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .header p {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .ip-info {
+      margin-top: 16px;
+      display: inline-block;
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #FDE68A;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      position: relative;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: #CBD5E1;
+    }
+    .card__tag {
+      align-self: flex-start;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+    .card--voi .card__tag { background: #CCFBF1; color: var(--accent-voi); }
+    .card--ap .card__tag { background: #FFEDD5; color: var(--accent-ap); }
+    .card--isp .card__tag { background: #E0F2FE; color: var(--accent-isp); }
+    .card--wiki .card__tag { background: #EDE9FE; color: var(--accent-wiki); }
+
+    .card h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      flex: 1;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .card__meta {
+      font-size: 12px;
+      color: #94A3B8;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 8px;
+      transition: background 0.15s ease;
+    }
+    .btn:hover {
+      background: var(--primary-hover);
+    }
+    .card--voi .btn { background: var(--accent-voi); }
+    .card--voi .btn:hover { background: #0f766e; }
+    .card--ap .btn { background: var(--accent-ap); }
+    .card--ap .btn:hover { background: #c2410c; }
+    .card--isp .btn { background: var(--accent-isp); }
+    .card--isp .btn:hover { background: #0369a1; }
+    .card--wiki .btn { background: var(--accent-wiki); }
+    .card--wiki .btn:hover { background: #6D28D9; }
+
+    .footer {
+      margin-top: 48px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="badge">🌐 ECO School Operating Portal</div>
+      <h1>Tài Liệu Dự Án: VOI · AP · ISP</h1>
+      <p>Truy cập tài liệu đặc tả kiến trúc, bản đồ giá trị và kế hoạch thi công kỹ thuật từ mạng nội bộ (IP Local).</p>
+      <div class="ip-info">
+        📍 Mạng nội bộ: <span id="current-host">Đang nhận diện...</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- Card VOI -->
+      <div class="card card--voi">
+        <span class="card__tag">Bản đồ giá trị</span>
+        <h2>VOI Project Map</h2>
+        <p>Bản đồ Value-Outcome-Impact (VOI): Hệ thống chỉ số KPI, mục tiêu kinh doanh, phân bổ phạm vi và giá trị cốt lõi của School Operating Portal.</p>
+        <div class="card__meta">
+          <span>Định dạng: HTML</span>
+          <span>Bản đồ tương tác</span>
+        </div>
+        <a href="VOI_SchoolOperatingPortal.html" class="btn">
+          Mở tài liệu VOI &rarr;
+        </a>
+      </div>
+
+      <!-- Card AP -->
+      <div class="card card--ap">
+        <span class="card__tag">Kiến trúc hệ thống</span>
+        <h2>AP Architecture Plan</h2>
+        <p>Kế hoạch Kiến trúc v1.0.0: Mô hình dữ liệu, phân rã modules, routing, state management, API contracts và ma trận truy cập.</p>
+        <div class="card__meta">
+          <span>Phiên bản: v1.0.0</span>
+          <span>Dung lượng: ~99 KB</span>
+        </div>
+        <a href="AP_SchoolOperatingPortal_v1.0.0.html" class="btn">
+          Mở tài liệu AP &rarr;
+        </a>
+      </div>
+
+      <!-- Card ISP -->
+      <div class="card card--isp">
+        <span class="card__tag">Kế hoạch thi công</span>
+        <h2>ISP Implementation Plan</h2>
+        <p>Kế hoạch Thi công Kỹ thuật v1.0.0: Quy chuẩn code, lộ trình thực thi sprint, checklist nghiệm thu, unit tests và tiêu chí bàn giao.</p>
+        <div class="card__meta">
+          <span>Phiên bản: v1.0.0</span>
+          <span>Dung lượng: ~20 KB</span>
+        </div>
+        <a href="ISP_SchoolOperatingPortal_v1.0.0.html" class="btn">
+          Mở tài liệu ISP &rarr;
+        </a>
+      </div>
+
+      <!-- Card Wiki Viewer -->
+      <div class="card card--wiki">
+        <span class="card__tag">Đồ thị tri thức</span>
+        <h2>LLM Wiki Viewer</h2>
+        <p>Bản đồ đồ thị tương tác toàn bộ wiki tri thức dự án: 50 ghi chú, 271 liên kết, phân tích khoảng cách đặc tả (gap) và màn hình.</p>
+        <div class="card__meta">
+          <span>50 nodes &bull; 271 cạnh</span>
+          <span style="color: #7C3AED; font-weight: 600;">Live & Offline</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a href="wiki-viewer.html" class="btn" style="flex: 1;">
+            Mở bản tĩnh &rarr;
+          </a>
+          <a href="http://192.168.72.218:8777/" class="btn" style="background: #5B21B6;" title="Xem server tương tác trực tiếp">
+            Live (8777) &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      ECO School Operating Portal Documentation &bull; Chế độ xem IP Local
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('current-host').textContent = window.location.origin || window.location.host;
+  </script>
+</body>
+</html>

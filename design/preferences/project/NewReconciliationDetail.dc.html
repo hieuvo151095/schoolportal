@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Chi tiết phiên đối soát — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="reconciliation" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Phiên DS-20260908-01</h1>
+    <span style="display: inline-flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-4);"><x-import component-from-global-scope="ECOMD.StatusTag" tone="success" icon="{{check}}">Khớp 100%</x-import></span>
+    <p class="ecomd-page-header__desc body-sm">Tạo lúc 01:00, 08/09/2026 · Giao dịch từ 08:30 đến 16:45, 07/09/2026</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="file-excel">Xuất Excel</x-import></div>
+</div>
+<div class="ecomd-stat-group" style="--ecomd-cols: 4;">
+  <sc-for list="{{stats}}" as="s" hint-placeholder-count="4"><x-import component-from-global-scope="ECOMD.StatCard" label="{{s.label}}" value="{{s.value}}" icon="{{s.icon}}" tone="{{s.tone}}"></x-import></sc-for>
+</div>
+<section class="ecomd-table-card">
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo mã giao dịch, học sinh" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{gateOpts}}" value="{{gate}}" on-change="{{setGate}}" label="Cổng thanh toán"></x-import></div>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table is-fit">
+<thead><tr><th class="body-xs-bold is-primary">Giao dịch</th><th class="body-xs-bold">Học sinh</th><th class="body-xs-bold is-right">Số tiền</th><th class="body-xs-bold">Đối chiếu</th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; gap: var(--space-2);"><span class="body-sm-medium" style="color: var(--text-heading); font-variant-numeric: tabular-nums;">{{r.code}}</span><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">{{r.time}}, 07/09/2026 · {{r.gate}}</span></span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Học sinh</span><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; gap: var(--space-2);"><span class="body-sm" style="color: var(--text-heading); white-space: nowrap;">{{r.name}}</span><span class="body-xs" style="color: var(--text-subtle);">{{r.meta}}</span></span></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Số tiền</span><div class="ecomd-cell__value"><span class="body-sm-semibold" style="color: var(--text-heading); white-space: nowrap; font-variant-numeric: tabular-nums;">{{r.amt}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Đối chiếu</span><div class="ecomd-cell__value"><span style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4) var(--space-8);"><x-import component-from-global-scope="ECOMD.StatusTag" tone="success" icon="check">Khớp 1 hóa đơn</x-import><x-import component-from-global-scope="ECOMD.Button" variant="text">Xem</x-import></span></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="4"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có giao dịch nào khớp bộ lọc"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<div class="ecomd-pagination body-sm"><span>Tổng <b style="font-variant-numeric: tabular-nums;">{{count}}</b> giao dịch · <b style="font-variant-numeric: tabular-nums;">{{sum}}</b></span></div></section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Tài chính", "Đối soát", "DS-20260908-01"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { query: '', gate: 'Tất cả cổng' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+    function vnd(n) { return (n < 0 ? '-' : '') + Math.abs(Math.round(n)).toLocaleString('en-US') + 'đ'; }
+    function num(v) { v = String(v == null ? '' : v).replace(/,/g, '').trim(); return v === '' || isNaN(+v) ? 0 : +v; }
+    function fmt(n) { return n ? Math.round(n).toLocaleString('en-US') : ''; }
+
+    var T = [{"code": "TX-20260907-001", "name": "Lê Bảo Nhi", "meta": "HS-0045 · Lớp Chồi 2", "amt": 4500000, "time": "09:15", "gate": "Ví FinViet"}, {"code": "TX-20260907-002", "name": "Nguyễn Nguyên Thư", "meta": "HS-2026-001 · Lớp 12A1", "amt": 5100000, "time": "11:20", "gate": "QR Ecopay"}, {"code": "TX-20260907-003", "name": "Trần Hoàng An", "meta": "HS-2026-002 · Lớp 12A1", "amt": 3200000, "time": "14:10", "gate": "Ví FinViet"}, {"code": "TX-20260907-004", "name": "Vũ Minh Khang", "meta": "HS-0088 · Lớp Mầm 1", "amt": 3000000, "time": "16:45", "gate": "QR Ecopay"}];
+    var q = (st.query || '').trim().toLowerCase();
+    var list = T.filter(function (t) { return (st.gate === 'Tất cả cổng' || t.gate === st.gate) && (!q || (t.code + ' ' + t.name).toLowerCase().indexOf(q) >= 0); });
+    var sum = 0; list.forEach(function (t) { sum += t.amt; });
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      check: 'circle-check', query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      gateOpts: ['Tất cả cổng', 'Ví FinViet', 'QR Ecopay'], gate: st.gate, setGate: function (v) { self.setState({ gate: v }); },
+      rows: list.map(function (t) { return Object.assign({}, t, { amt: vnd(t.amt) }); }), isEmpty: !list.length, count: list.length, sum: vnd(sum),
+      stats: [{ label: 'Tổng tiền phiên', value: '15,800,000đ', icon: 'coins', tone: 'neutral' }, { label: 'Giao dịch', value: '4', icon: 'receipt', tone: 'neutral' },
+              { label: 'Hóa đơn liên kết', value: '4', icon: 'file-invoice-dollar', tone: 'neutral' }, { label: 'Cổng thanh toán', value: '2', icon: 'credit-card', tone: 'neutral' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

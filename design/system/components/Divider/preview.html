@@ -1,0 +1,25 @@
+<!-- @dsCard group="Bố cục" height=220 subtitle="Đường kẻ phân cách nội dung · ngang · dọc · nhãn giữa" -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Divider</title>
+<link rel="stylesheet" href="../tokens.css" />
+<link rel="stylesheet" href="../bundle.css" />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body { background: var(--bg-canvas); font-family: var(--font-sans); color: var(--text-body); display: flex; align-items: center; justify-content: center; padding: var(--space-24); }
+  .box { width: 100%; max-width: 360px; background: var(--bg-surface); padding: var(--space-20); border: 1px solid var(--border-default); border-radius: var(--radius-12); }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="body-sm">Khối thông tin hành chính</div>
+  <hr class="ecomd-divider ecomd-divider--horizontal" />
+  <div class="body-sm">Khối cấu hình dịch vụ</div>
+  <div class="ecomd-divider--with-label">hoặc chọn phương thức khác</div>
+  <div class="body-sm" style="text-align: center; color: var(--eco-blue-strong);">Đăng nhập bằng số điện thoại</div>
+</div>
+</body>
+</html>

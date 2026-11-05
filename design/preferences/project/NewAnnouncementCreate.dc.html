@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Soạn thông báo — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="announcements" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Soạn thông báo</h1>
+    <p class="ecomd-page-header__desc body-sm">Gửi thông báo tới phụ huynh, học sinh hoặc giáo viên qua nhiều kênh</p>
+  </div>
+</div>
+<div class="ecomd-split is-aside" style="gap: var(--space-20); align-items: start;"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Nội dung</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tiêu đề <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" placeholder="VD: Lịch nghỉ Tết Dương lịch 2027" value="{{title}}" onChange="{{setTitle}}"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tóm tắt</span><input type="text" class="ecomd-text body-sm" placeholder="Một câu hiển thị trong danh sách và thông báo đẩy"><span class="ecomd-field__hint body-xs">Không bắt buộc</span></label><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Danh mục <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{catOpts}}" value="{{cat}}" on-change="{{setCat}}" label="Danh mục"></x-import></label><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Mức độ</span><x-import component-from-global-scope="ECOMD.Tabs" items="{{levels}}" value="{{level}}" on-change="{{setLevel}}" label="Mức độ ưu tiên" variant="segmented" class-name="is-block"></x-import></div></div><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Nội dung thông báo <span class="ecomd-field__req" aria-hidden="true">*</span></span><textarea class="ecomd-textarea body-sm" rows="8" placeholder="Nội dung chi tiết gửi phụ huynh…"></textarea></label><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tệp đính kèm</span><button type="button" class="ecomd-dropzone"><x-import class-name="ecomd-dropzone__icon" component-from-global-scope="ECOMD.Icon" name="upload" size="{{twenty}}"></x-import><span class="ecomd-dropzone__title body-sm-medium">Kéo thả tệp vào đây hoặc <b>chọn tệp</b></span><span class="body-xs">PDF, DOCX, XLSX, PNG, JPG · tối đa 25 MB mỗi tệp</span></button></div><x-import component-from-global-scope="ECOMD.Checkbox" label="Ghim lên đầu Bảng thông tin" checked="{{pin}}"></x-import></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Người nhận</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Phạm vi</span><x-import component-from-global-scope="ECOMD.SelectField" options="{{scopeOpts}}" value="{{scope}}" on-change="{{setScope}}" label="Phạm vi nhận"></x-import></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Nhóm</span><x-import component-from-global-scope="ECOMD.SelectField" options="{{groupOpts}}" value="{{group}}" on-change="{{setGroup}}" label="Nhóm nhận"></x-import></label></div><div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-8); padding: var(--space-10) var(--space-12); border-radius: var(--radius-8); background: var(--bg-subtle);"><span class="body-sm" style="color: var(--text-body);">Khoảng <b class="body-sm-semibold" style="color: var(--text-heading); font-variant-numeric: tabular-nums;">892</b> tài khoản sẽ nhận thông báo</span><x-import component-from-global-scope="ECOMD.Button" variant="text">Xem danh sách</x-import></div></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Kênh gửi</h2><p class="ecomd-card__desc body-xs">Chọn ít nhất 1 kênh</p></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-12);"><x-import component-from-global-scope="ECOMD.Checkbox" label="Bảng tin" description="Trang Bảng thông tin trên portal" checked="{{ch0}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Ứng dụng" description="Thông báo đẩy tới điện thoại" checked="{{ch1}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Email" description="Gửi vào hộp thư phụ huynh" checked="{{ch2}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="SMS brandname" description="Tin nhắn mang tên trường, có tính phí" checked="{{ch3}}"></x-import></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Thời điểm phát hành</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><div class="ecomd-radios"><label class="ecomd-radio body-sm"><input type="radio" name="when" checked="{{now}}" onChange="{{pickNow}}"><span>Phát hành ngay</span></label><label class="ecomd-radio body-sm"><input type="radio" name="when" checked="{{later}}" onChange="{{pickLater}}"><span>Hẹn giờ</span></label></div><sc-if value="{{later}}" hint-placeholder-val="{{false}}"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Phát hành lúc</span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" value="03/11/2026 07:00" placeholder="dd/mm/yyyy"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span></label></sc-if></div></div>
+</section>
+</div><div style="display: flex; flex-direction: column; gap: var(--space-16);"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Xem trước</h2><p class="ecomd-card__desc body-xs">Thông báo trên ứng dụng phụ huynh</p></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-8); padding: var(--space-12); border: 1px solid var(--border-default); border-radius: var(--radius-12); background: var(--bg-subtle);"><span style="display: flex; align-items: center; gap: var(--space-8);"><span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: var(--size-24); height: var(--size-24); border-radius: var(--radius-6); background: var(--semantic-info-soft); color: var(--eco-blue-strong);"><x-import component-from-global-scope="ECOMD.Icon" name="bullhorn" size="{{twelve}}"></x-import></span><span class="body-xs" style="color: var(--text-subtle);">ECO School · {{cat}}</span></span><span class="body-sm-semibold" style="color: {{titleColor}};">{{titlePrev}}</span><span class="body-xs" style="color: var(--text-subtle);">Nội dung tóm tắt hiển thị ở đây.</span></div></div>
+</section>
+</div></div>
+<div class="ecomd-form-footer"><span class="ecomd-form-footer__note body-xs">{{footNote}}</span><div class="ecomd-form-footer__actions"><x-import component-from-global-scope="ECOMD.Button" variant="ghost">Hủy</x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary">Lưu nháp</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="paper-plane">{{sendLabel}}</x-import></div></div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1554}}'>
+var CRUMBS = ["Nhà trường", "Bảng thông tin", "Soạn thông báo"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { title: 'Lịch nghỉ Tết Dương lịch 2027', cat: 'Nghỉ lễ, nghỉ hè', level: 'normal', scope: 'Toàn trường', group: 'Phụ huynh, học sinh và giáo viên', later: false }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var t = (st.title || '').trim();
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      title: st.title, setTitle: function (e) { self.setState({ title: e.target.value }); }, titlePrev: t || 'Tiêu đề thông báo', titleColor: t ? 'var(--text-heading)' : 'var(--text-muted)',
+      catOpts: ['Thông báo chung', 'Học phí và thu chi', 'Sự kiện, lễ hội', 'Khẩn cấp', 'Học tập, thi cử', 'Nghỉ lễ, nghỉ hè'], cat: st.cat, setCat: function (v) { self.setState({ cat: v }); },
+      levels: [{ key: 'normal', label: 'Thường' }, { key: 'high', label: 'Quan trọng' }, { key: 'urgent', label: 'Khẩn' }], level: st.level, setLevel: function (k) { self.setState({ level: k }); },
+      scopeOpts: ['Toàn trường', 'Theo khối lớp', 'Theo lớp', 'Toàn thể cán bộ, giáo viên'], scope: st.scope, setScope: function (v) { self.setState({ scope: v }); },
+      groupOpts: ['Phụ huynh, học sinh và giáo viên', 'Chỉ phụ huynh', 'Chỉ học sinh', 'Chỉ giáo viên phụ trách'], group: st.group, setGroup: function (v) { self.setState({ group: v }); },
+      pin: false, ch0: true, ch1: true, ch2: false, ch3: false,
+      now: !st.later, later: !!st.later, pickNow: function () { self.setState({ later: false }); }, pickLater: function () { self.setState({ later: true }); },
+      sendLabel: st.later ? 'Hẹn giờ phát hành' : 'Phát hành',
+      footNote: 'Gửi qua Bảng tin và Ứng dụng · khoảng 892 tài khoản.'
+    });
+  }
+}
+</script>
+</body>
+</html>

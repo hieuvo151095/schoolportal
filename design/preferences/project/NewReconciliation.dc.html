@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Đối soát — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="reconciliation" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Đối soát thanh toán</h1>
+    <p class="ecomd-page-header__desc body-sm">Đối chiếu giao dịch học phí qua Ví FinViet và QR Ecopay với hóa đơn, mỗi phiên là một đợt đồng bộ 24 giờ</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="file-excel">Xuất Excel</x-import></div>
+</div>
+<div class="ecomd-stat-group" style="--ecomd-cols: 4;">
+  <sc-for list="{{stats}}" as="s" hint-placeholder-count="4"><x-import component-from-global-scope="ECOMD.StatCard" label="{{s.label}}" value="{{s.value}}" icon="{{s.icon}}" tone="{{s.tone}}"></x-import></sc-for>
+</div>
+<section class="ecomd-table-card">
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="calendar-days">30/08/2026 – 11/09/2026</x-import><x-import component-from-global-scope="ECOMD.Tabs" items="{{ranges}}" value="{{range}}" on-change="{{setRange}}" label="Khoảng nhanh" variant="segmented"></x-import><span style="flex: 1;"></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{chOpts}}" value="{{ch}}" on-change="{{setCh}}" label="Kênh thanh toán"></x-import></div>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Phiên đối soát</th><th class="body-xs-bold">Giao dịch trong khoảng</th><th class="body-xs-bold is-right">Tổng tiền</th><th class="body-xs-bold is-right">Giao dịch</th><th class="body-xs-bold is-right">Hóa đơn</th><th class="body-xs-bold">Kết quả</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; gap: var(--space-2);"><a href="#" class="body-sm-medium" style="color: var(--text-heading); text-decoration: none;">{{r.code}}</a><span class="body-xs" style="color: var(--text-subtle);">Tạo lúc {{r.created}}</span></span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Giao dịch trong khoảng</span><div class="ecomd-cell__value"><span style="white-space: nowrap; font-variant-numeric: tabular-nums;">{{r.span}}</span></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Tổng tiền</span><div class="ecomd-cell__value"><span class="body-sm-semibold" style="white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--text-heading);">{{r.amt}}</span></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Giao dịch</span><div class="ecomd-cell__value"><span style="white-space: nowrap; font-variant-numeric: tabular-nums;">{{r.tx}}</span></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Hóa đơn</span><div class="ecomd-cell__value"><span style="white-space: nowrap; font-variant-numeric: tabular-nums;">{{r.inv}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Kết quả</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="success" icon="check">Khớp 100%</x-import></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.Button" variant="text">Xem chi tiết</x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="7"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có phiên nào trong khoảng này"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="phiên"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Tài chính", "Đối soát"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { range: '12d', ch: 'Tất cả kênh' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+    function vnd(n) { return (n < 0 ? '-' : '') + Math.abs(n).toLocaleString('en-US') + 'đ'; }
+
+    var S = [{"id": 1, "code": "DS-20260910-01", "created": "01:00, 10/09/2026", "span": "14:18 – 14:21, 09/09/2026", "amt": 6000, "tx": 3, "inv": 1}, {"id": 2, "code": "DS-20260908-01", "created": "01:00, 08/09/2026", "span": "08:30 – 16:45, 07/09/2026", "amt": 15800000, "tx": 4, "inv": 4}, {"id": 3, "code": "DS-20260905-01", "created": "01:00, 05/09/2026", "span": "09:15 – 17:00, 04/09/2026", "amt": 24500000, "tx": 5, "inv": 5}, {"id": 4, "code": "DS-20260901-01", "created": "01:00, 01/09/2026", "span": "10:00 – 15:30, 31/08/2026", "amt": 8200000, "tx": 2, "inv": 2}];
+    var tot = 0, tx = 0; S.forEach(function (s) { tot += s.amt; tx += s.tx; });
+    var rows = S.map(function (s) { return Object.assign({}, s, { amt: vnd(s.amt) }); });
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20, twelve: 12, rows: rows, isEmpty: !rows.length, total: rows.length,
+      stats: [{ label: 'Tổng tiền thanh toán', value: vnd(tot), icon: 'coins', tone: 'neutral' }, { label: 'Số giao dịch', value: String(tx), icon: 'receipt', tone: 'neutral' },
+        { label: 'Phiên đối soát', value: String(S.length), icon: 'scale-balanced', tone: 'neutral' }, { label: 'Độ khớp số liệu', value: '100%', icon: 'circle-check', tone: 'success' }],
+      ranges: [{ key: '12d', label: '12 ngày gần nhất' }, { key: 'month', label: 'Tháng này' }], range: st.range, setRange: function (k) { self.setState({ range: k }); },
+      chOpts: ["Tất cả kênh", "Ví FinViet", "QR Ecopay"], ch: st.ch, setCh: function (v) { self.setState({ ch: v }); },
+    });
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Thêm giáo viên — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="teacher" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Thêm giáo viên</h1>
+    <p class="ecomd-page-header__desc body-sm">Tạo tài khoản đăng nhập, phân quyền đăng bài và phân công lớp, môn</p>
+  </div>
+</div>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Tài khoản và định danh</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Họ và tên <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" placeholder="VD: Nguyễn Thị Mai"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Mã nhân viên</span><input type="text" class="ecomd-text body-sm" placeholder="VD: GV-2026-012"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Email đăng nhập <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="email" class="ecomd-text body-sm" placeholder="ten@truong.edu.vn"></label><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Mật khẩu khởi tạo <span class="ecomd-field__req" aria-hidden="true">*</span></span><span style="display: flex; gap: var(--space-8);"><input type="text" class="ecomd-text body-sm" value="Eco@2026#mai" readonly="{{yes}}"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="arrows-rotate">Tạo lại</x-import></span><span class="ecomd-field__hint body-xs">Giáo viên đổi mật khẩu ở lần đăng nhập đầu.</span></div><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Số điện thoại</span><input type="tel" class="ecomd-text body-sm" placeholder="VD: 0912 345 678"></label><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Giới tính</span><div class="ecomd-radios" style="min-height: var(--size-40); align-items: center;"><label class="ecomd-radio body-sm"><input type="radio" name="sex" checked="{{female}}" onChange="{{pickF}}"><span>Nữ</span></label><label class="ecomd-radio body-sm"><input type="radio" name="sex" checked="{{male}}" onChange="{{pickM}}"><span>Nam</span></label><label class="ecomd-radio body-sm"><input type="radio" name="sex" checked="{{other}}" onChange="{{pickO}}"><span>Khác</span></label></div></div><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Ngày sinh</span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" placeholder="dd/mm/yyyy"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Số CCCD</span><input type="text" class="ecomd-text body-sm" placeholder="12 số"></label></div></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Vai trò và kiểm duyệt bài đăng</h2><p class="ecomd-card__desc body-xs">Quyết định bài đăng hoạt động của giáo viên có cần duyệt trước khi phụ huynh thấy</p></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-choices" style="--ecomd-cols: 2;"><label class="ecomd-choice"><input type="radio" name="role" checked="{{main}}" onChange="{{pickMain}}"><span class="ecomd-choice__icon" aria-hidden="true"><x-import component-from-global-scope="ECOMD.Icon" name="user-tie" size="{{fourteen}}"></x-import></span><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">Giáo viên chính</span><span class="ecomd-choice__desc body-xs">Bài đăng, ảnh hiển thị ngay cho phụ huynh, không cần duyệt.</span></span></label><label class="ecomd-choice"><input type="radio" name="role" checked="{{assist}}" onChange="{{pickAssist}}"><span class="ecomd-choice__icon" aria-hidden="true"><x-import component-from-global-scope="ECOMD.Icon" name="user-check" size="{{fourteen}}"></x-import></span><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">Giáo viên hỗ trợ</span><span class="ecomd-choice__desc body-xs">Bài đăng vào hàng chờ để giáo viên chính hoặc ban giám hiệu duyệt.</span></span></label></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Phân công</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Lớp chủ nhiệm</span><x-import component-from-global-scope="ECOMD.SelectField" options="{{homeOpts}}" value="{{home}}" on-change="{{setHome}}" label="Lớp chủ nhiệm"></x-import></label><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Lớp giảng dạy</span><div style="display: flex; flex-wrap: wrap; gap: var(--space-8) var(--space-20);"><x-import component-from-global-scope="ECOMD.Checkbox" label="Lớp 1A1" checked="{{c0}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Lớp 1A2" checked="{{c1}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Lớp 2A1" checked="{{c2}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Lớp Vẽ sáng tạo" checked="{{c3}}"></x-import></div></div><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Môn phụ trách</span><div class="ecomd-grid" style="--ecomd-cols: 5; --ecomd-cols-tablet: 3; --ecomd-cols-mobile: 2; gap: var(--space-10) var(--space-16);"><x-import component-from-global-scope="ECOMD.Checkbox" label="Toán" checked="{{s0}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Tiếng Việt" checked="{{s1}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Tiếng Anh" checked="{{s2}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Khoa học" checked="{{s3}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Tin học" checked="{{s4}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Âm nhạc" checked="{{s5}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Mỹ thuật" checked="{{s6}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Giáo dục thể chất" checked="{{s7}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Đạo đức" checked="{{s8}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Kỹ năng sống" checked="{{s9}}"></x-import></div></div></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Chuyên môn</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Trình độ đào tạo</span><input type="text" class="ecomd-text body-sm" placeholder="VD: Cử nhân Sư phạm Tiểu học"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Chuyên ngành</span><input type="text" class="ecomd-text body-sm" placeholder="VD: Giáo dục Tiểu học"></label></div><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Ghi chú nội bộ</span><textarea class="ecomd-textarea body-sm" rows="2" placeholder="Chỉ nhà trường thấy"></textarea></label></div></div>
+</section>
+<div class="ecomd-form-footer"><span class="ecomd-form-footer__note body-xs">Giáo viên nhận email đăng nhập sau khi tạo.</span><div class="ecomd-form-footer__actions"><x-import component-from-global-scope="ECOMD.Button" variant="ghost">Hủy</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="check">Tạo giáo viên</x-import></div></div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1452}}'>
+var CRUMBS = ["Nhà trường", "Giáo viên", "Thêm giáo viên"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { sex: 'f', role: 'main', home: 'Lớp 1A1' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      female: st.sex === 'f', male: st.sex === 'm', other: st.sex === 'o', pickF: function () { self.setState({ sex: 'f' }); }, pickM: function () { self.setState({ sex: 'm' }); }, pickO: function () { self.setState({ sex: 'o' }); },
+      main: st.role === 'main', assist: st.role === 'assist', pickMain: function () { self.setState({ role: 'main' }); }, pickAssist: function () { self.setState({ role: 'assist' }); },
+      homeOpts: ['Chưa phân công', 'Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1'], home: st.home, setHome: function (v) { self.setState({ home: v }); },
+      c0: true, c1: false, c2: false, c3: false, s0: true, s1: true, s2: false, s3: false, s4: false, s5: false, s6: false, s7: false, s8: false, s9: false
+    });
+  }
+}
+</script>
+</body>
+</html>

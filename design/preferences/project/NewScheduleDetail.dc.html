@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Chi tiết thời khóa biểu — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="schedule" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Thời khóa biểu học kỳ I</h1>
+    <span style="display: inline-flex; margin-bottom: var(--space-4);"><x-import component-from-global-scope="ECOMD.StatusTag" tone="success" icon="{{check}}">Đã phát hành</x-import></span>
+    <p class="ecomd-page-header__desc body-sm">Lớp 1A1 · Học kỳ I 2026 – 2027 · Áp dụng 01/09/2026 – 15/01/2027</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="ghost" icon="clock">Lịch sử gửi (1)</x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="paper-plane">Gửi lại phụ huynh</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="pen">Chỉnh sửa</x-import></div>
+</div>
+<div class="ecomd-stat-group" style="--ecomd-cols: 4;">
+  <sc-for list="{{stats}}" as="s" hint-placeholder-count="4"><x-import component-from-global-scope="ECOMD.StatCard" label="{{s.label}}" value="{{s.value}}" icon="{{s.icon}}" tone="{{s.tone}}"></x-import></sc-for>
+</div>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Lịch học trong tuần</h2><p class="ecomd-card__desc body-xs">Thứ Hai – Thứ Bảy · 5 tiết mỗi ngày</p></div><div class="ecomd-card__actions"><x-import component-from-global-scope="ECOMD.Tag">Cập nhật 01/09/2026</x-import></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-12);"><div class="ecomd-table-scroll ecomd-hide-compact"><table class="ecomd-timetable"><thead><tr><th class="is-time body-xs-bold">Tiết</th><sc-for list="{{days}}" as="d" hint-placeholder-count="6"><th class="{{d.thCls}}">{{d.label}}</th></sc-for></tr></thead><tbody><sc-for list="{{periods}}" as="p" hint-placeholder-count="5"><tr><td class="is-time"><div style="display: flex; flex-direction: column; gap: var(--space-6);"><span class="body-sm-semibold" style="color: var(--text-heading);">Tiết {{p.n}}</span><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">{{p.time}}</span></div></td><sc-for list="{{p.cells}}" as="c" hint-placeholder-count="6"><td><sc-if value="{{c.full}}" hint-placeholder-val="{{true}}"><div class="{{c.slotCls}}"><span class="ecomd-slot__subject body-sm-semibold">{{c.s}}</span><span class="ecomd-slot__meta body-xs"><x-import component-from-global-scope="ECOMD.Icon" name="user" size="{{twelve}}"></x-import><span>{{c.t}}</span></span><span class="ecomd-slot__meta body-xs"><x-import component-from-global-scope="ECOMD.Icon" name="location-dot" size="{{twelve}}"></x-import><span>{{c.r}}</span></span></div></sc-if></td></sc-for></tr></sc-for></tbody></table></div><div class="ecomd-only-compact"><div style="display: flex; flex-direction: column; gap: var(--space-12);"><x-import component-from-global-scope="ECOMD.Tabs" items="{{dayTabs}}" value="{{day}}" on-change="{{setDay}}" label="Chọn ngày" variant="segmented" class-name="is-block"></x-import><ul style="display: flex; flex-direction: column; gap: var(--space-8); margin: 0; padding: 0; list-style: none;"><sc-for list="{{dayList}}" as="c" hint-placeholder-count="5"><li style="display: grid; grid-template-columns: calc(var(--size-40) * 2 + var(--space-12)) minmax(0, 1fr); gap: var(--space-10); align-items: stretch;"><span style="display: flex; flex-direction: column; justify-content: center; gap: var(--space-2);"><span class="body-sm-semibold" style="color: var(--text-heading);">Tiết {{c.n}}</span><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums; white-space: nowrap;">{{c.time}}</span></span><sc-if value="{{c.full}}" hint-placeholder-val="{{true}}"><div class="{{c.slotCls}}"><span class="ecomd-slot__subject body-sm-semibold">{{c.s}}</span><span class="ecomd-slot__meta body-xs"><x-import component-from-global-scope="ECOMD.Icon" name="user" size="{{twelve}}"></x-import><span>{{c.t}}</span></span><span class="ecomd-slot__meta body-xs"><x-import component-from-global-scope="ECOMD.Icon" name="location-dot" size="{{twelve}}"></x-import><span>{{c.r}}</span></span></div></sc-if></li></sc-for></ul></div></div></div></div>
+</section>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Học tập", "Thời khóa biểu", "Học kỳ I · Lớp 1A1"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { day: 'Thứ Hai' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var EDIT = false, TODAY = 0;
+    function FILLED() { return true; }
+    var R = [["08:00 – 08:40", [["Chào cờ và HĐTN", "Cô Lan Hương", "Sân trường"], ["Toán học", "Thầy Quang Minh", "Phòng 101"], ["Tiếng Việt", "Cô Lan Hương", "Phòng 101"], ["Tiếng Anh", "Mr. David Smith", "Lab Ngoại ngữ"], ["Toán học", "Thầy Quang Minh", "Phòng 101"], ["GDTC (thể thao)", "Thầy Tuấn Anh", "Nhà thi đấu"]]], ["08:45 – 09:25", [["Tiếng Việt", "Cô Lan Hương", "Phòng 101"], ["Tiếng Việt", "Cô Lan Hương", "Phòng 101"], ["Toán học", "Thầy Quang Minh", "Phòng 101"], ["Đạo đức", "Cô Lan Hương", "Phòng 101"], ["Tiếng Việt", "Cô Lan Hương", "Phòng 101"], ["Âm nhạc", "Cô Thùy Chi", "Phòng Âm nhạc"]]], ["09:40 – 10:20", [["Toán học", "Thầy Quang Minh", "Phòng 101"], ["Tiếng Anh", "Mr. David Smith", "Lab Ngoại ngữ"], ["Tự nhiên và Xã hội", "Cô Lan Hương", "Phòng 101"], ["Mỹ thuật", "Thầy Hoàng Nam", "Xưởng Mỹ thuật"], ["Tiếng Anh", "Mr. David Smith", "Lab Ngoại ngữ"], ["Sinh hoạt lớp", "Cô Lan Hương", "Phòng 101"]]], ["10:25 – 11:05", [["Giáo dục thể chất", "Thầy Tuấn Anh", "Sân bóng"], ["Tự nhiên và Xã hội", "Cô Lan Hương", "Phòng 101"], ["Tin học", "Thầy Hữu Thắng", "Phòng máy 1"], ["Tiếng Việt", "Cô Lan Hương", "Phòng 101"], ["Toán (luyện tập)", "Thầy Quang Minh", "Phòng 101"], ["GDTC (bóng rổ)", "Thầy Tuấn Anh", "Sân bóng"]]], ["11:10 – 11:50", [["Âm nhạc", "Cô Thùy Chi", "Phòng Âm nhạc"], ["Toán học", "Thầy Quang Minh", "Phòng 101"], ["Tiếng Anh", "Mr. David Smith", "Lab Ngoại ngữ"], ["GDTC", "Thầy Tuấn Anh", "Sân bóng"], ["HĐTN", "Cô Lan Hương", "Phòng 101"], ["Tin học", "Thầy Hữu Thắng", "Phòng máy 1"]]]], D = ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+    function cellsOf(p, i) { return p[1].map(function (c, d) { var full = FILLED(i, d); return { full: full, empty: !full, s: c[0], t: c[1], r: c[2], slotCls: 'ecomd-slot' + (EDIT ? ' is-edit' : ''), addLabel: 'Chọn môn cho tiết ' + (i + 1) + ', ' + D[d], n: i + 1, time: p[0] }; }); }
+    var periods = R.map(function (p, i) { var t = p[0].split(' – '); return { n: i + 1, time: p[0], from: t[0], to: t[1], fromLabel: 'Giờ bắt đầu tiết ' + (i + 1), toLabel: 'Giờ kết thúc tiết ' + (i + 1), cells: cellsOf(p, i) }; });
+    var dIdx = D.indexOf(st.day);
+    var dayList = periods.map(function (p) { return p.cells[dIdx]; });
+    var filled = 0; periods.forEach(function (p) { p.cells.forEach(function (c) { if (c.full) filled++; }); });
+    var days = D.map(function (d, i) { return { label: i === TODAY ? d + ' · hôm nay' : d, thCls: 'body-xs-bold' + (i === TODAY ? ' is-today' : '') }; });
+    var dayTabs = D.map(function (d, i) { return { key: d, label: 'T' + (i + 2) }; });
+    var teachers = {}, rooms = {}; R.forEach(function (p) { p[1].forEach(function (c) { teachers[c[1]] = 1; rooms[c[2]] = 1; }); });
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      check: 'circle-check',
+      stats: [{ label: 'Tiết mỗi tuần', value: String(filled), icon: 'clock', tone: 'neutral' }, { label: 'Giáo viên dạy', value: String(Object.keys(teachers).length), icon: 'chalkboard-user', tone: 'neutral' },
+              { label: 'Phòng và sân học', value: String(Object.keys(rooms).length), icon: 'location-dot', tone: 'neutral' }, { label: 'Lần gửi phụ huynh', value: '1', icon: 'paper-plane', tone: 'success' }],
+      days: days, periods: periods, dayTabs: dayTabs, day: st.day, setDay: function (k) { self.setState({ day: k }); }, dayList: dayList
+    });
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Thông báo — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="setting-notification" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Cấu hình thông báo</h1>
+    <p class="ecomd-page-header__desc body-sm">Thông báo tự động, lời nhắc định kỳ và kênh nhận cho toàn trường</p>
+  </div>
+</div>
+<x-import component-from-global-scope="ECOMD.InlineNotice" tone="info">Áp dụng cho <b>toàn trường</b>, gửi đồng thời trên web và ứng dụng di động. Lịch nhắc vào ngày 29, 30, 31 sẽ gửi vào ngày cuối của tháng ngắn hơn.</x-import>
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Nhóm thông báo"></x-import>
+<sc-if value="{{t_att}}" hint-placeholder-val="{{true}}"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Điểm danh</h2><p class="ecomd-card__desc body-xs">Cảnh báo giờ đón, trả trẻ và điểm danh lớp ngoại khóa</p></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Nhắc giáo viên khi trẻ chưa có mặt</span><span class="ecomd-setting__desc body-xs">Gửi giáo viên chủ nhiệm khi học sinh chưa được ghi nhận có mặt tại trường.</span></div><div class="ecomd-setting__control"><input type="text" inputmode="numeric" class="ecomd-text body-sm" value="08:00" aria-label="Giờ nhắc đón trẻ" style="width: calc(var(--size-40) * 2); text-align: center; font-variant-numeric: tabular-nums;"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Nhắc đón trẻ" checked="{{a1}}" onChange="{{tg.a1}}"></div></div><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Nhắc giáo viên khi trẻ chưa được đón</span><span class="ecomd-setting__desc body-xs">Cảnh báo học sinh chưa được phụ huynh hoặc người đón hộ quét thẻ lúc tan trường.</span></div><div class="ecomd-setting__control"><input type="text" inputmode="numeric" class="ecomd-text body-sm" value="17:00" aria-label="Giờ nhắc trả trẻ" style="width: calc(var(--size-40) * 2); text-align: center; font-variant-numeric: tabular-nums;"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Nhắc trả trẻ" checked="{{a2}}" onChange="{{tg.a2}}"></div></div><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Điểm danh lớp ngoại khóa</span><span class="ecomd-setting__desc body-xs">Gửi cập nhật khi học sinh tham gia câu lạc bộ, lớp năng khiếu.</span><div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-12); margin-top: var(--space-8);"><x-import component-from-global-scope="ECOMD.SelectField" options="{{clubOpts}}" value="{{club}}" on-change="{{setClub}}" label="Áp dụng cho lớp ngoại khóa"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Phụ huynh" checked="{{a3p}}" on-change="{{tg.a3p}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Giáo viên, quản lý lớp" checked="{{a3t}}" on-change="{{tg.a3t}}"></x-import></div></div><div class="ecomd-setting__control"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Thông báo điểm danh ngoại khóa" checked="{{a3}}" onChange="{{tg.a3}}"></div></div></div>
+</section>
+</sc-if>
+<sc-if value="{{t_bday}}" hint-placeholder-val="{{false}}"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Sinh nhật</h2><p class="ecomd-card__desc body-xs">Lời chúc và danh sách sinh nhật hằng tháng cho cán bộ, giáo viên, nhân viên</p></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Ngày, giờ gửi</span><span class="ecomd-setting__desc body-xs">Mốc gửi chung cho các thông báo sinh nhật bên dưới.</span></div><div class="ecomd-setting__control"><x-import component-from-global-scope="ECOMD.SelectField" options="{{dayOpts}}" value="{{bday}}" on-change="{{setBday}}" label="Ngày gửi trong tháng"></x-import><input type="text" inputmode="numeric" class="ecomd-text body-sm" value="09:00" aria-label="Giờ gửi" style="width: calc(var(--size-40) * 2); text-align: center; font-variant-numeric: tabular-nums;"></div></div><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Chúc mừng sinh nhật giáo viên</span><span class="ecomd-setting__desc body-xs">Gửi lời chúc tới giáo viên có sinh nhật trong tháng.</span></div><div class="ecomd-setting__control"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Nhắc sinh nhật giáo viên" checked="{{b1}}" onChange="{{tg.b1}}"></div></div><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Danh sách sinh nhật cho ban giám hiệu</span><span class="ecomd-setting__desc body-xs">Gửi danh sách cán bộ, nhân sự có sinh nhật trong tháng tới ban giám hiệu và phòng nhân sự.</span></div><div class="ecomd-setting__control"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Danh sách sinh nhật cho ban giám hiệu" checked="{{b2}}" onChange="{{tg.b2}}"></div></div></div>
+</section>
+</sc-if>
+<sc-if value="{{t_fee}}" hint-placeholder-val="{{false}}"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Học phí</h2><p class="ecomd-card__desc body-xs">Phát hành phiếu thu, gia hạn và nhắc hạn nộp</p></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Thay đổi biểu phí, phát hành phiếu thu</span><span class="ecomd-setting__desc body-xs">Gửi khi kế toán điều chỉnh khoản thu hoặc mở kỳ thu mới.</span><div style="display: flex; flex-wrap: wrap; gap: var(--space-12); margin-top: var(--space-8);"><x-import component-from-global-scope="ECOMD.Checkbox" label="Phụ huynh" checked="{{f1p}}" on-change="{{tg.f1p}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Quản trị viên" checked="{{f1a}}" on-change="{{tg.f1a}}"></x-import></div></div><div class="ecomd-setting__control"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Thông báo phát hành phiếu thu" checked="{{f1}}" onChange="{{tg.f1}}"></div></div><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Nhắc gia hạn học phí</span><span class="ecomd-setting__desc body-xs">Nhắc phụ huynh ngày gia hạn của đợt thu.</span></div><div class="ecomd-setting__control"><x-import component-from-global-scope="ECOMD.SelectField" options="{{dueOpts}}" value="{{due}}" on-change="{{setDue}}" label="Ngày nhắc gia hạn"></x-import><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Nhắc gia hạn học phí" checked="{{f2}}" onChange="{{tg.f2}}"></div></div><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Học phí đến hạn</span><span class="ecomd-setting__desc body-xs">Gửi theo mốc so với hạn đóng học phí.</span></div><div class="ecomd-setting__control"><span style="display: inline-flex; align-items: center; gap: var(--space-8);"><input type="text" class="ecomd-text body-sm" value="3" aria-label="Số ngày" style="width: calc(var(--size-40) * 2); text-align: right;"><span class="body-sm">ngày</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{whenOpts}}" value="{{when}}" on-change="{{setWhen}}" label="Trước hoặc sau hạn"></x-import><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Thông báo học phí đến hạn" checked="{{f3}}" onChange="{{tg.f3}}"></div></div></div>
+</section>
+</sc-if>
+<sc-if value="{{t_other}}" hint-placeholder-val="{{false}}"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Khác</h2><p class="ecomd-card__desc body-xs">Trao đổi, duyệt hoạt động, nhật ký và tương tác</p></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Tin nhắn mới từ phụ huynh</span><span class="ecomd-setting__desc body-xs">Thông báo đẩy tới quản trị viên khi có tin nhắn mới trong Trao đổi.</span></div><div class="ecomd-setting__control"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Tin nhắn mới" checked="{{o1}}" onChange="{{tg.o1}}"></div></div><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Hoạt động chờ duyệt</span><span class="ecomd-setting__desc body-xs">Báo ban giám hiệu và quản trị viên khi có bài viết hoặc album mới cần duyệt.</span></div><div class="ecomd-setting__control"><x-import component-from-global-scope="ECOMD.Checkbox" label="Web và app" checked="{{o2w}}" on-change="{{tg.o2w}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Email" checked="{{o2e}}" on-change="{{tg.o2e}}"></x-import><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Hoạt động chờ duyệt" checked="{{o2}}" onChange="{{tg.o2}}"></div></div><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Nhắc nhật ký hằng ngày</span><span class="ecomd-setting__desc body-xs">Nhắc giáo viên và quản lý kiểm tra nhật ký lớp.</span></div><div class="ecomd-setting__control"><input type="text" inputmode="numeric" class="ecomd-text body-sm" value="20:00" aria-label="Giờ nhắc nhật ký" style="width: calc(var(--size-40) * 2); text-align: center; font-variant-numeric: tabular-nums;"><x-import component-from-global-scope="ECOMD.Checkbox" label="Web và app" checked="{{o3w}}" on-change="{{tg.o3w}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Email" checked="{{o3e}}" on-change="{{tg.o3e}}"></x-import><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Nhắc nhật ký" checked="{{o3}}" onChange="{{tg.o3}}"></div></div><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Bài đăng được yêu thích</span><span class="ecomd-setting__desc body-xs">Báo giáo viên khi phụ huynh thả tim bài đăng, hình ảnh của lớp.</span></div><div class="ecomd-setting__control"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Bài đăng được yêu thích" checked="{{o4}}" onChange="{{tg.o4}}"></div></div></div>
+</section>
+</sc-if>
+<sc-if value="{{t_parent}}" hint-placeholder-val="{{false}}"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Phụ huynh nhận thông báo</h2><p class="ecomd-card__desc body-xs">Thông báo đẩy tới ứng dụng di động của phụ huynh</p></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Điểm danh của con</span><span class="ecomd-setting__desc body-xs">Khi giáo viên hoàn tất điểm danh đến lớp, báo vắng hoặc trả trẻ.</span></div><div class="ecomd-setting__control"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Điểm danh của con" checked="{{p1}}" onChange="{{tg.p1}}"></div></div><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Con được gắn thẻ trong hoạt động</span><span class="ecomd-setting__desc body-xs">Khi có bài đăng hoạt động, dã ngoại hoặc bài học mới gắn tên con.</span></div><div class="ecomd-setting__control"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Con được gắn thẻ" checked="{{p2}}" onChange="{{tg.p2}}"></div></div><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Con xuất hiện trong album</span><span class="ecomd-setting__desc body-xs">Khi nhận diện khuôn mặt tìm thấy con trong ảnh, video mới.</span></div><div class="ecomd-setting__control"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Con xuất hiện trong album" checked="{{p3}}" onChange="{{tg.p3}}"></div></div></div>
+</section>
+</sc-if>
+<div class="body-xs" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-12); color: var(--text-subtle);"><span>Cập nhật lần cuối 15:00, 14/10/2026 bởi Admin Finviet</span><x-import component-from-global-scope="ECOMD.Button" variant="primary">Lưu thay đổi</x-import></div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "scenario": {"editor": "enum", "options": ["Điểm danh", "Sinh nhật", "Học phí", "Khác", "Phụ huynh"], "default": "Điểm danh", "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Cấu hình", "Thông báo"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: ({'Điểm danh':'att','Sinh nhật':'bday','Học phí':'fee','Khác':'other','Phụ huynh':'parent'})[props.scenario] || 'att', sw: {"a1": true, "a2": true, "a3": true, "a3p": true, "a3t": true, "b1": true, "b2": true, "f1": true, "f1p": true, "f1a": true, "f2": true, "f3": true, "o1": true, "o2": true, "o2w": true, "o2e": false, "o3": true, "o3w": true, "o3e": false, "o4": false, "p1": true, "p2": true, "p3": true}, club: 'Tất cả lớp ngoại khóa', bday: 'Ngày 25', due: 'Ngày 16 hằng tháng', when: 'Trước hạn đóng' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var tg = {}; Object.keys(st.sw || {}).forEach(function (k) { tg[k] = function (e) { var n = Object.assign({}, self.state.sw); n[k] = e && e.target ? e.target.checked : !n[k]; self.setState({ sw: n }); }; });
+    var r = Object.assign(this.shell(), {
+      tg: tg, twelve: 12, fourteen: 14,
+      tabs: [{ key: 'att', label: 'Điểm danh' }, { key: 'bday', label: 'Sinh nhật' }, { key: 'fee', label: 'Học phí' }, { key: 'other', label: 'Khác' }, { key: 'parent', label: 'Phụ huynh' }], tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      clubOpts: ['Tất cả lớp ngoại khóa', 'Bóng rổ (thứ Ba, thứ Năm)', 'Bơi lội Dolphin (thứ Bảy)', 'Mỹ thuật sáng tạo (thứ Tư)', 'Tiếng Anh Cambridge (thứ Hai, thứ Sáu)', 'Cờ vua (Chủ nhật)'], club: st.club, setClub: function (v) { self.setState({ club: v }); },
+      dayOpts: Array.apply(null, Array(31)).map(function (_, i) { return 'Ngày ' + (i + 1); }), bday: st.bday, setBday: function (v) { self.setState({ bday: v }); },
+      dueOpts: Array.apply(null, Array(31)).map(function (_, i) { return 'Ngày ' + (i + 1) + ' hằng tháng'; }), due: st.due, setDue: function (v) { self.setState({ due: v }); },
+      whenOpts: ['Trước hạn đóng', 'Sau hạn đóng'], when: st.when, setWhen: function (v) { self.setState({ when: v }); }
+    });
+    ['att', 'bday', 'fee', 'other', 'parent'].forEach(function (k) { r['t_' + k] = st.tab === k; });
+    Object.keys(st.sw).forEach(function (k) { r[k] = st.sw[k]; });
+    return r;
+  }
+}
+</script>
+</body>
+</html>

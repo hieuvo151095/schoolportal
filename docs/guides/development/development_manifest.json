@@ -1,0 +1,310 @@
+{
+  "version": "32.0",
+  "phase": "develop",
+  "topology": "epic_first",
+  "ledger_topology": "epic_first",
+  "feature_id": "026-project-planning-school-operating-portal",
+  "id_convention": {
+    "epic": "E-001-description",
+    "feature": "F-001-001-description",
+    "module": "M-001-001-description",
+    "page": "P-001-001-description",
+    "task": "T-001-001-001-description"
+  },
+  "source_of_truth": "docs/development/E-###-*/",
+  "epics": {
+    "E-001-operations-attendance": {
+      "path": "docs/development/E-001-operations-attendance",
+      "status": "active",
+      "children": ["ISSUES-E-001-operations-attendance", "F-001-001-operations-attendance", "M-001-001-operations-attendance", "P-001-001-operations-attendance", "T-001-001-001-operations-attendance"]
+    },
+    "E-002-operations-activity": {
+      "path": "docs/development/E-002-operations-activity",
+      "status": "active",
+      "children": ["ISSUES-E-002-operations-activity", "F-002-001-operations-activity", "M-002-001-operations-activity", "P-002-001-operations-activity", "T-002-001-001-operations-activity"]
+    },
+    "E-003-operations-media": {
+      "path": "docs/development/E-003-operations-media",
+      "status": "active",
+      "children": ["ISSUES-E-003-operations-media", "F-003-001-operations-media", "M-003-001-operations-media", "P-003-001-operations-media", "T-003-001-001-operations-media"]
+    },
+    "E-004-operations-conversations": {
+      "path": "docs/development/E-004-operations-conversations",
+      "status": "active",
+      "children": ["ISSUES-E-004-operations-conversations", "F-004-001-operations-conversations", "M-004-001-operations-conversations", "P-004-001-operations-conversations", "T-004-001-001-operations-conversations"]
+    },
+    "E-005-operations-reports": {
+      "path": "docs/development/E-005-operations-reports",
+      "status": "active",
+      "children": ["ISSUES-E-005-operations-reports", "F-005-001-operations-reports", "M-005-001-operations-reports", "P-005-001-operations-reports", "T-005-001-001-operations-reports"]
+    },
+    "E-006-academics-schedule": {
+      "path": "docs/development/E-006-academics-schedule",
+      "status": "active",
+      "children": ["ISSUES-E-006-academics-schedule", "F-006-001-academics-schedule", "M-006-001-academics-schedule", "P-006-001-academics-schedule", "T-006-001-001-academics-schedule"]
+    },
+    "E-007-academics-assignment": {
+      "path": "docs/development/E-007-academics-assignment",
+      "status": "active",
+      "children": ["ISSUES-E-007-academics-assignment", "F-007-001-academics-assignment", "M-007-001-academics-assignment", "P-007-001-academics-assignment", "T-007-001-001-academics-assignment"]
+    },
+    "E-008-academics-gradebook": {
+      "path": "docs/development/E-008-academics-gradebook",
+      "status": "active",
+      "children": ["ISSUES-E-008-academics-gradebook", "F-008-001-academics-gradebook", "M-008-001-academics-gradebook", "P-008-001-academics-gradebook", "T-008-001-001-academics-gradebook"]
+    },
+    "E-009-finance-invoices": {
+      "path": "docs/development/E-009-finance-invoices",
+      "status": "active",
+      "children": ["ISSUES-E-009-finance-invoices", "F-009-001-finance-invoices", "M-009-001-finance-invoices", "P-009-001-finance-invoices", "T-009-001-001-finance-invoices"]
+    },
+    "E-010-finance-fee-catalog": {
+      "path": "docs/development/E-010-finance-fee-catalog",
+      "status": "active",
+      "children": ["ISSUES-E-010-finance-fee-catalog", "F-010-001-finance-fee-catalog", "M-010-001-finance-fee-catalog", "P-010-001-finance-fee-catalog", "T-010-001-001-finance-fee-catalog"]
+    },
+    "E-011-finance-tuition-management": {
+      "path": "docs/development/E-011-finance-tuition-management",
+      "status": "active",
+      "children": ["ISSUES-E-011-finance-tuition-management", "F-011-001-finance-tuition-management", "M-011-001-finance-tuition-management", "P-011-001-finance-tuition-management", "T-011-001-001-finance-tuition-management"]
+    },
+    "E-012-finance-expenses": {
+      "path": "docs/development/E-012-finance-expenses",
+      "status": "active",
+      "children": ["ISSUES-E-012-finance-expenses", "F-012-001-finance-expenses", "M-012-001-finance-expenses", "P-012-001-finance-expenses", "T-012-001-001-finance-expenses"]
+    },
+    "E-013-finance-reconciliation": {
+      "path": "docs/development/E-013-finance-reconciliation",
+      "status": "active",
+      "children": ["ISSUES-E-013-finance-reconciliation", "F-013-001-finance-reconciliation", "M-013-001-finance-reconciliation", "P-013-001-finance-reconciliation", "T-013-001-001-finance-reconciliation"]
+    },
+    "E-014-finance-fee-reports": {
+      "path": "docs/development/E-014-finance-fee-reports",
+      "status": "active",
+      "children": ["ISSUES-E-014-finance-fee-reports", "F-014-001-finance-fee-reports", "M-014-001-finance-fee-reports", "P-014-001-finance-fee-reports", "T-014-001-001-finance-fee-reports"]
+    },
+    "E-015-school-students": {
+      "path": "docs/development/E-015-school-students",
+      "status": "active",
+      "children": ["ISSUES-E-015-school-students", "F-015-001-school-students", "M-015-001-school-students", "P-015-001-school-students", "T-015-001-001-school-students"]
+    },
+    "E-016-school-teachers": {
+      "path": "docs/development/E-016-school-teachers",
+      "status": "active",
+      "children": ["ISSUES-E-016-school-teachers", "F-016-001-school-teachers", "M-016-001-school-teachers", "P-016-001-school-teachers", "T-016-001-001-school-teachers"]
+    },
+    "E-017-finance-discount": {
+      "path": "docs/development/E-017-finance-discount",
+      "status": "active",
+      "children": ["ISSUES-E-017-finance-discount", "F-017-001-finance-discount", "M-017-001-finance-discount", "P-017-001-finance-discount", "T-017-001-001-finance-discount"]
+    },
+    "E-018-school-menu": {
+      "path": "docs/development/E-018-school-menu",
+      "status": "active",
+      "children": ["ISSUES-E-018-school-menu", "F-018-001-school-menu", "M-018-001-school-menu", "P-018-001-school-menu", "T-018-001-001-school-menu"]
+    },
+    "E-019-settings-fee-configuration": {
+      "path": "docs/development/E-019-settings-fee-configuration",
+      "status": "active",
+      "children": ["ISSUES-E-019-settings-fee-configuration", "F-019-001-settings-fee-configuration", "M-019-001-settings-fee-configuration", "P-019-001-settings-fee-configuration", "T-019-001-001-settings-fee-configuration"]
+    },
+    "E-020-school-calendar": {
+      "path": "docs/development/E-020-school-calendar",
+      "status": "active",
+      "children": ["ISSUES-E-020-school-calendar", "F-020-001-school-calendar", "M-020-001-school-calendar", "P-020-001-school-calendar", "T-020-001-001-school-calendar"]
+    },
+    "E-021-school-class-management": {
+      "path": "docs/development/E-021-school-class-management",
+      "status": "active",
+      "children": ["ISSUES-E-021-school-class-management", "F-021-001-school-class-management", "M-021-001-school-class-management", "P-021-001-school-class-management", "T-021-001-001-school-class-management"]
+    },
+    "E-022-school-subject-management": {
+      "path": "docs/development/E-022-school-subject-management",
+      "status": "active",
+      "children": ["ISSUES-E-022-school-subject-management", "F-022-001-school-subject-management", "M-022-001-school-subject-management", "P-022-001-school-subject-management", "T-022-001-001-school-subject-management"]
+    },
+    "E-023-school-grade-management": {
+      "path": "docs/development/E-023-school-grade-management",
+      "status": "active",
+      "children": ["ISSUES-E-023-school-grade-management", "F-023-001-school-grade-management", "M-023-001-school-grade-management", "P-023-001-school-grade-management", "T-023-001-001-school-grade-management"]
+    },
+    "E-024-school-announcements": {
+      "path": "docs/development/E-024-school-announcements",
+      "status": "active",
+      "children": ["ISSUES-E-024-school-announcements", "F-024-001-school-announcements", "M-024-001-school-announcements", "P-024-001-school-announcements", "T-024-001-001-school-announcements"]
+    },
+    "E-025-school-polls": {
+      "path": "docs/development/E-025-school-polls",
+      "status": "active",
+      "children": ["ISSUES-E-025-school-polls", "F-025-001-school-polls", "M-025-001-school-polls", "P-025-001-school-polls", "T-025-001-001-school-polls"]
+    },
+    "E-026-school-staff-attendance": {
+      "path": "docs/development/E-026-school-staff-attendance",
+      "status": "active",
+      "children": ["ISSUES-E-026-school-staff-attendance", "F-026-001-school-staff-attendance", "M-026-001-school-staff-attendance", "P-026-001-school-staff-attendance", "T-026-001-001-school-staff-attendance"]
+    },
+    "E-027-school-parent-handbook": {
+      "path": "docs/development/E-027-school-parent-handbook",
+      "status": "active",
+      "children": ["ISSUES-E-027-school-parent-handbook", "F-027-001-school-parent-handbook", "M-027-001-school-parent-handbook", "P-027-001-school-parent-handbook", "T-027-001-001-school-parent-handbook"]
+    },
+    "E-028-school-parent-feedback": {
+      "path": "docs/development/E-028-school-parent-feedback",
+      "status": "active",
+      "children": [
+        "ISSUES-E-028-school-parent-feedback",
+        "F-028-001-school-parent-feedback",
+        "M-028-001-school-parent-feedback",
+        "P-028-001-school-parent-feedback",
+        "T-028-001-001-school-parent-feedback"
+      ]
+    },
+    "E-029-school-academic-year": {
+      "path": "docs/development/E-029-school-academic-year",
+      "status": "active",
+      "children": [
+        "ISSUES-E-029-school-academic-year",
+        "F-029-001-school-academic-year",
+        "M-029-001-school-academic-year",
+        "P-029-001-school-academic-year",
+        "T-029-001-001-school-academic-year"
+      ]
+    },
+    "E-030-school-archive": {
+      "path": "docs/development/E-030-school-archive",
+      "status": "active",
+      "children": [
+        "ISSUES-E-030-school-archive",
+        "F-030-001-school-archive",
+        "M-030-001-school-archive",
+        "P-030-001-school-archive",
+        "T-030-001-001-school-archive"
+      ]
+    },
+    "E-031-settings-school-profile": {
+      "path": "docs/development/E-031-settings-school-profile",
+      "status": "active",
+      "children": [
+        "ISSUES-E-031-settings-school-profile",
+        "F-031-001-settings-school-profile",
+        "M-031-001-settings-school-profile",
+        "P-031-001-settings-school-profile",
+        "T-031-001-001-settings-school-profile"
+      ]
+    },
+    "E-032-settings-accounts": {
+      "path": "docs/development/E-032-settings-accounts",
+      "status": "active",
+      "children": [
+        "ISSUES-E-032-settings-accounts",
+        "F-032-001-settings-accounts",
+        "M-032-001-settings-accounts",
+        "P-032-001-settings-accounts",
+        "T-032-001-001-settings-accounts"
+      ]
+    },
+    "E-033-settings-face-recognition": {
+      "path": "docs/development/E-033-settings-face-recognition",
+      "status": "active",
+      "children": [
+        "ISSUES-E-033-settings-face-recognition",
+        "F-033-001-settings-face-recognition",
+        "M-033-001-settings-face-recognition",
+        "P-033-001-settings-face-recognition",
+        "T-033-001-001-settings-face-recognition"
+      ]
+    },
+    "E-034-settings-features": {
+      "path": "docs/development/E-034-settings-features",
+      "status": "active",
+      "children": [
+        "ISSUES-E-034-settings-features",
+        "F-034-001-settings-features",
+        "M-034-001-settings-features",
+        "P-034-001-settings-features",
+        "T-034-001-001-settings-features"
+      ]
+    },
+    "E-035-settings-notifications": {
+      "path": "docs/development/E-035-settings-notifications",
+      "status": "active",
+      "children": [
+        "ISSUES-E-035-settings-notifications",
+        "F-035-001-settings-notifications",
+        "M-035-001-settings-notifications",
+        "P-035-001-settings-notifications",
+        "T-035-001-001-settings-notifications"
+      ]
+    }
+  },
+  "minimum_children": {
+    "features": 1,
+    "modules": 1,
+    "pages": 0,
+    "tasks": 1,
+    "issues": 1
+  },
+  "source_artifacts": [
+    "docs/prd.md",
+    "docs/tasks.md",
+    "docs/knowledge.md",
+    "docs/decisions.md",
+    "docs/memory.md",
+    "docs/planning/flows.md",
+    "docs/planning/screens.md",
+    "docs/planning/diagrams.md"
+  ],
+  "buckets": {
+    "epics": {
+      "path": "docs/development/epics",
+      "minimum_count": 1
+    },
+    "modules": {
+      "path": "docs/development/modules",
+      "minimum_count": 1
+    },
+    "features": {
+      "path": "docs/development/features",
+      "minimum_count": 1
+    },
+    "pages": {
+      "path": "docs/development/pages",
+      "minimum_count": 0
+    },
+    "tasks": {
+      "path": "docs/development/tasks",
+      "minimum_count": 1
+    }
+  },
+  "quality_gates": {
+    "require_frontmatter": true,
+    "require_owner_skill": true,
+    "require_verification": true,
+    "require_source_trace": true,
+    "require_code_scope": true,
+    "require_substantive_content": true,
+    "forbid_placeholders": true,
+    "require_completed_checklists": true,
+    "require_commentary": true,
+    "require_specific_code_paths": true,
+    "require_mermaid_diagram": true,
+    "require_jira_story": true,
+    "require_priority": true,
+    "require_relationship_labels": true,
+    "require_work_log": true,
+    "require_epic_issues": true,
+    "require_epic_issues_file": true,
+    "require_docs_before_code": true,
+    "require_epic_first_topology": true,
+    "require_canonical_ids": true,
+    "require_parent_child_trace": true,
+    "forbid_orphan_development_docs": true,
+    "minimum_words": {
+      "epics": 180,
+      "modules": 220,
+      "features": 220,
+      "pages": 180,
+      "tasks": 160
+    }
+  }
+}

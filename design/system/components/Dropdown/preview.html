@@ -1,0 +1,30 @@
+<!-- @dsCard group="Biểu mẫu" height=300 subtitle="Hộp chọn có tìm kiếm · icon tiền tố · badge trạng thái" -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dropdown</title>
+<link rel="stylesheet" href="../tokens.css" />
+<link rel="stylesheet" href="../bundle.css" />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body { background: var(--bg-canvas); font-family: var(--font-sans); color: var(--text-body); display: flex; align-items: center; justify-content: center; padding: var(--space-24); }
+  .box { width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: var(--space-16); }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="ecomd-combobox ecomd-textfield--lg is-open">
+    <div class="ecomd-textfield__control">
+      <input class="ecomd-textfield__input ecomd-combobox__input body-md" value="Liên cấp PT Sao Mai" />
+    </div>
+    <ul class="ecomd-combobox__list">
+      <li class="ecomd-combobox__option body-sm is-selected">Liên cấp PT Sao Mai (Mã: 74718702)</li>
+      <li class="ecomd-combobox__option body-sm">Trường MN Hoa Hồng (Mã: 74718333)</li>
+      <li class="ecomd-combobox__option body-sm">Trường MN Chánh Mỹ (Mã: 74718341)</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

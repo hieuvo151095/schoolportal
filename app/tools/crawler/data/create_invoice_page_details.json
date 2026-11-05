@@ -1,0 +1,66 @@
+{
+  "title": "Tạo hóa đơn - Liên cấp PT Sao Mai",
+  "url": "https://app-dev.ecoschool.com.vn/7900004033/school/invoices/create/",
+  "text": "Tổng Quan\n\nVận Hành\n\nHọc Tập\n\nThời Khóa Biểu\n\nBài Tập\n\nĐiểm & Đánh Giá\n\nTài Chính\n\nHọc Phí\n\nĐối Soát\n\nKhoản Phí\n\nDanh Mục Thu\n\nQuản Lý Học Phí\n\nKhoản Chi\n\nBáo Cáo\n\nNhà Trường\n\nCấu Hình\n\nLIÊN CẤP PT SAO MAI\n\nthế sơn 96\n\n9+\n\nLiên cấp PT Sao Mai Admin\n\nAdmin\n\nChi tiết thông báo\n\nTạo hóa đơn\n\n* Hệ thống sẽ không tạo hóa đơn cho những học sinh đã thanh toán học phí và tiền ăn trong tháng 10/2026\n\n* Hoàn tiền ăn của tháng 09/2026 dựa vào dữ liệu điểm danh trong tháng đó\n\nTạo hóa đơn cho\n\nToàn Trường\n\nTên hóa đơn\n\nTên hóa đơn tự động theo dạng \"Hóa đơn tháng 10/2026\". Nhấn \"Sửa\" để tùy chỉnh\n\nSửa\n\nNgày hóa đơn\n\nNgày hoá đơn thuộc tháng nào thì hoá đơn sẽ được ghi nhận cho tháng đó. Ví dụ ngày hoá đơn là 01/01/2023 thì hệ thống sẽ ghi nhận đó là hoá đơn tháng 01/2023\n\n*Lưu ý: Ngày hóa đơn thuộc tháng 10 thì mọi khoản phí trong hoá đơn sẽ được ghi nhận cho tháng 10\n\nNgày gửi\n\nHệ thống sẽ tự động gửi toàn bộ hoá đơn đến phụ huynh vào ngày này. Nếu không muốn hệ thống tự động gửi, vui lòng ĐỂ TRỐNG\n\nHạn thanh toán\n\nNếu hoá đơn đã được gửi và sau 02 NGÀY kể từ hạn thanh toán nhưng phụ huynh vẫn chưa thực hiện việc thanh toán, hệ thống sẽ tự động chuyển trạng thái thành hoá đơn quá hạn và gửi thông báo nhắc nhở\n\nHủy bỏ\nTạo hóa đơn\n\nThay đổi của bạn chưa được lưu. Vui lòng xác nhận rời khỏi khi chưa lưu!\n\nHủy bỏ\nXác nhận\nXác nhận tạo hóa đơn\nVui lòng xác nhận các thông tin sau:\n\nBạn đang tạo hóa đơn choToàn Trường\n\nNgày hóa đơn28/10/2026\n\nThời hạn thanh toán28/10/2026\n\nHóa đơn sẽ không được gửi tự động\n\nHủy bỏ\nXác nhận\nXác nhận tạo hóa đơn\nVui lòng xác nhận các thông tin sau:\n\nBạn đang tạo hóa đơn cho\n\nNgày hóa đơn28/10/2026\n\nThời hạn thanh toán28/10/2026\n\nHóa đơn sẽ không được gửi tự động\n\nHủy bỏ\nXác nhận\nXác nhận tạo hóa đơn\nVui lòng xác nhận các thông tin sau:\n\nBạn đang tạo hóa đơn cho\n\nNgày hóa đơn28/10/2026\n\nThời hạn thanh toán28/10/2026\n\nHóa đơn sẽ không được gửi tự động\n\nHủy bỏ\nXác nhận\nThêm giảm trừ\n\n% giảm trừ\n\n%\n\nThông tin chi phí\n\nTên chi phí\n\nTạm tính\n\nNaN Đ\n\nGiảm trừ\n\n0 Đ\n\nHủy bỏ\nÁp dụng giảm trừ\nDanh sách đã đóng học phí\n#\t\n\nHọc sinh\n\nThông tin người dùng\n\nTạo hóa đơn - Liên cấp PT Sao Mai",
+  "headings": [],
+  "labels": [],
+  "buttons": [
+    "Sửa",
+    "Hủy bỏ",
+    "Tạo hóa đơn",
+    "Hủy bỏ",
+    "Xác nhận",
+    "Hủy bỏ",
+    "Xác nhận",
+    "Hủy bỏ",
+    "Xác nhận",
+    "Hủy bỏ",
+    "Xác nhận",
+    "Hủy bỏ",
+    "Áp dụng giảm trừ"
+  ],
+  "inputs": [
+    {
+      "name": "",
+      "placeholder": "",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "name": "invoice_target",
+      "placeholder": "",
+      "type": "hidden",
+      "value": "school"
+    },
+    {
+      "name": "name",
+      "placeholder": "Tên hóa đơn",
+      "type": "text",
+      "value": "Hóa đơn tháng 10/2026"
+    },
+    {
+      "name": "start_date",
+      "placeholder": "",
+      "type": "text",
+      "value": "28/10/2026"
+    },
+    {
+      "name": "schedule_send_date",
+      "placeholder": "",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "name": "due_date",
+      "placeholder": "",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "name": "discount_total",
+      "placeholder": "",
+      "type": "number",
+      "value": ""
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Nhận diện — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="setting-face" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Đăng ký nhận diện khuôn mặt</h1>
+    <p class="ecomd-page-header__desc body-sm">Ảnh khuôn mặt của học sinh dùng cho điểm danh tự động và gắn tên trong thư viện ảnh</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="upload">Nhập ảnh hàng loạt</x-import></div>
+</div>
+<div class="ecomd-stat-group" style="--ecomd-cols: 3;">
+  <sc-for list="{{stats}}" as="s" hint-placeholder-count="3"><x-import component-from-global-scope="ECOMD.StatCard" label="{{s.label}}" value="{{s.value}}" icon="{{s.icon}}" tone="{{s.tone}}"></x-import></sc-for>
+</div>
+<section class="ecomd-table-card">
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Trạng thái đăng ký"></x-import>
+<sc-if value="{{noSel}}" hint-placeholder-val="{{true}}"><div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo tên học sinh, mã HS" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{clsOpts}}" value="{{cls}}" on-change="{{setCls}}" label="Lớp"></x-import></div></sc-if>
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{false}}"><div class="ecomd-table-card__bulk"><span class="body-sm-semibold">Đã chọn {{selCount}} học sinh</span><span style="flex: 1;"></span><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="bell">Nhắc phụ huynh gửi ảnh</x-import><x-import component-from-global-scope="ECOMD.Button" variant="ghost" on-click="{{clearSel}}">Bỏ chọn</x-import></div></sc-if>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="is-check"><x-import component-from-global-scope="ECOMD.Checkbox" aria-label="Chọn tất cả" checked="{{allChecked}}" indeterminate="{{someChecked}}" on-change="{{toggleAll}}"></x-import></th><th class="body-xs-bold is-primary">Học sinh</th><th class="body-xs-bold">Lớp</th><th class="body-xs-bold">Ảnh nhận diện</th><th class="body-xs-bold">Ngày ghi nhận</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr class="{{r.cls}}"><td class="is-check"><x-import component-from-global-scope="ECOMD.Checkbox" aria-label="{{r.checkLabel}}" checked="{{r.checked}}" on-change="{{r.toggle}}"></x-import></td><td class="body-sm is-primary"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.Person" name="{{r.name}}" meta="{{r.meta}}"></x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Lớp</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.Tag">{{r.room}}</x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Ảnh nhận diện</span><div class="ecomd-cell__value"><sc-if value="{{r.has}}" hint-placeholder-val="{{true}}"><span style="display: inline-flex; align-items: center; gap: var(--space-8);"><span role="img" aria-label="{{r.photoLabel}}" style="display: flex; align-items: center; justify-content: center; width: var(--size-40); height: var(--size-40); border-radius: var(--radius-8); background: var(--bg-muted); color: var(--text-muted);"><x-import component-from-global-scope="ECOMD.Icon" name="user" size="{{fourteen}}"></x-import></span><x-import component-from-global-scope="ECOMD.StatusTag" tone="success">Đã đăng ký</x-import></span></sc-if><sc-if value="{{r.none}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="upload">Tải ảnh lên</x-import></sc-if></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Ngày ghi nhận</span><div class="ecomd-cell__value"><sc-if value="{{r.has}}" hint-placeholder-val="{{true}}"><span style="font-variant-numeric: tabular-nums;">{{r.date}}</span></sc-if><sc-if value="{{r.none}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Chưa có"></x-import></sc-if></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="6"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có học sinh nào khớp bộ lọc"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="học sinh"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1204}}'>
+var CRUMBS = ["Cấu hình", "Nhận diện"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'all', query: '', cls: 'Tất cả lớp', sel: [] }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var FR = [{"id": 1, "code": "HS-2026-001", "name": "Nguyễn Minh Anh", "nick": "Bim Bim", "room": "Lớp 1A1", "date": "10/09/2026"}, {"id": 2, "code": "HS-2026-002", "name": "Trần Gia Bảo", "nick": "Bảo Bảo", "room": "Lớp 1A1", "date": ""}, {"id": 3, "code": "HS-2026-003", "name": "Lê Hoàng Khang", "nick": "Khang Kẹo", "room": "Lớp 1A1", "date": "12/09/2026"}, {"id": 4, "code": "HS-2026-004", "name": "Phạm Ngọc Diệp", "nick": "Diệp Chi", "room": "Lớp 1A1", "date": ""}, {"id": 5, "code": "HS-2026-005", "name": "Hoàng Quốc Dũng", "nick": "Dũng Sĩ", "room": "Lớp 1A2", "date": "15/09/2026"}, {"id": 6, "code": "HS-2026-006", "name": "Vũ Thảo My", "nick": "Miu Miu", "room": "Lớp 1A2", "date": ""}, {"id": 7, "code": "HS-2026-007", "name": "Đỗ Tuấn Kiệt", "nick": "Tí Sún", "room": "Lớp 2A1", "date": "08/09/2026"}, {"id": 8, "code": "HS-2026-008", "name": "Bùi Phương Linh", "nick": "Linh Đan", "room": "Lớp 2A1", "date": ""}, {"id": 9, "code": "HS-2026-009", "name": "Ngô Đăng Khoa", "nick": "Khoa Béo", "room": "Lớp 6A1", "date": "05/09/2026"}, {"id": 10, "code": "HS-2026-010", "name": "Dương Thùy Trang", "nick": "Trang Tây", "room": "Lớp 6A1", "date": ""}];
+    var q = (st.query || '').trim().toLowerCase();
+    var base = FR.filter(function (f) { return (!q || (f.name + ' ' + f.code + ' ' + f.nick).toLowerCase().indexOf(q) >= 0) && (st.cls === 'Tất cả lớp' || f.room === st.cls); });
+    var tabs = [['all', 'Tất cả'], ['yes', 'Đã đăng ký'], ['no', 'Chưa có ảnh']].map(function (d) { return { key: d[0], label: d[1], count: base.filter(function (f) { return d[0] === 'all' || (d[0] === 'yes') === !!f.date; }).length }; });
+    var list = base.filter(function (f) { return st.tab === 'all' || (st.tab === 'yes') === !!f.date; });
+    var ids = list.map(function (f) { return f.id; }), sel = st.sel || [], nOn = ids.filter(function (i) { return sel.indexOf(i) >= 0; }).length;
+    var rows = list.map(function (f) { var on = sel.indexOf(f.id) >= 0;
+      return { name: f.name, meta: f.nick + ' · ' + f.code, room: f.room, has: !!f.date, none: !f.date, date: f.date, photoLabel: 'Ảnh nhận diện của ' + f.name,
+        checked: on, cls: on ? 'is-selected' : '', checkLabel: 'Chọn ' + f.name, toggle: function (v) { var n = sel.filter(function (x) { return x !== f.id; }); if (v) n.push(f.id); self.setState({ sel: n }); },
+        actionLabel: 'Thao tác với ' + f.name, menu: f.date ? [{ icon: 'eye', label: 'Xem ảnh' }, { icon: 'upload', label: 'Thay ảnh' }, { divider: true }, { icon: 'trash-can', label: 'Xóa ảnh nhận diện…', tone: 'danger' }] : [{ icon: 'upload', label: 'Tải ảnh lên' }, { icon: 'bell', label: 'Nhắc phụ huynh gửi ảnh' }] }; });
+    var reg = FR.filter(function (f) { return f.date; }).length;
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20, fourteen: 14, total: rows.length, rows: rows, isEmpty: !rows.length,
+      stats: [{ label: 'Tổng học sinh', value: String(FR.length), icon: 'users', tone: 'neutral' }, { label: 'Đã đăng ký nhận diện', value: reg + ' (' + Math.round(reg / FR.length * 100) + '%)', icon: 'user-check', tone: 'success' }, { label: 'Chưa có ảnh', value: String(FR.length - reg), icon: 'camera', tone: 'warning' }],
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      clsOpts: ['Tất cả lớp', 'Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Lớp 6A1'], cls: st.cls, setCls: function (v) { self.setState({ cls: v }); },
+      noSel: sel.length === 0, hasSel: sel.length > 0, selCount: sel.length, clearSel: function () { self.setState({ sel: [] }); },
+      allChecked: ids.length > 0 && nOn === ids.length, someChecked: nOn > 0 && nOn < ids.length, toggleAll: function (v) { self.setState({ sel: v ? ids : [] }); }
+    });
+  }
+}
+</script>
+</body>
+</html>

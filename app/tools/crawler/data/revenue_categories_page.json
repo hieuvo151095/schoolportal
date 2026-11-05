@@ -1,0 +1,141 @@
+{
+  "title": "Danh mục thu - Liên cấp PT Sao Mai",
+  "headings": [],
+  "buttons": [
+    "Đồng bộ CSDL",
+    "1",
+    "2"
+  ],
+  "tables": [
+    {
+      "headers": [
+        "Tên danh mục",
+        "Trạng thái",
+        "Khoảng thời gian"
+      ],
+      "rowCount": 20,
+      "rows": [
+        [
+          "Xe đưa đón học sinh\n\nXD001\n\nTheo tuyến và nhu cầu đăng ký",
+          "Đang áp dụng",
+          "Từ 01/09/2025"
+        ],
+        [
+          "Xe đưa đón\n\nTX001",
+          "Đang áp dụng",
+          "Từ 01/01/1970"
+        ],
+        [
+          "Thư viện số và học liệu trực tuyến\n\nTV001\n\nChưa gửi đến trường",
+          "Đang áp dụng",
+          "Từ 01/09/2025"
+        ],
+        [
+          "Hoạt động trải nghiệm ngoại khóa\n\nTN001\n\nThực hiện theo kế hoạch từng khối",
+          "Đang áp dụng",
+          "Từ 01/09/2025"
+        ],
+        [
+          "Tin học và kỹ năng số\n\nTH001\n\nBao gồm học liệu và thực hành phòng máy",
+          "Đang áp dụng",
+          "Từ 01/09/2025"
+        ],
+        [
+          "Bảo hiểm xe máy 2\n\nTEST001",
+          "Đang áp dụng",
+          "Từ 18/08/2026"
+        ],
+        [
+          "Tiếng Anh tăng cường\n\nTA001\n\nÁp dụng theo lớp đăng ký",
+          "Đang áp dụng",
+          "Từ 01/09/2025"
+        ],
+        [
+          "Sổ liên lạc điện tử\n\nST001\n\nDự kiến triển khai trong học kỳ II",
+          "Đang áp dụng",
+          "Từ 01/09/2025"
+        ],
+        [
+          "Nước uống học sinh\n\nNU001\n\nNước uống tinh khiết phục vụ tại trường",
+          "Đang áp dụng",
+          "Từ 01/09/2025"
+        ],
+        [
+          "Luyện thi tăng cường\n\nLT001\n\nNgưng hoạt động theo kế hoạch chuyên môn mới",
+          "Ngừng áp dụng",
+          "01/09/2025 - 31/01/2026"
+        ],
+        [
+          "Phí học tiếng Anh tăng cường\n\nKT0014",
+          "Đang áp dụng",
+          "Từ 01/09/2026"
+        ],
+        [
+          "Tiền sách giáo khoa\n\nKT0012\n\nThu một lần trong năm học",
+          "Đang áp dụng",
+          "01/09/2025 - 30/06/2027"
+        ],
+        [
+          "Tiền ăn bán trú\n\nKT0003\n\nTính theo số ngày ăn thực tế",
+          "Đang áp dụng",
+          "01/09/2026 - 31/05/2027"
+        ],
+        [
+          "Tiền bán trú\n\nKT0002\n\nÁp dụng cho học sinh đăng ký bán trú",
+          "Ngừng áp dụng",
+          "01/01/2026 - 31/07/2026"
+        ],
+        [
+          "Tiền Học phí chính khóa\n\nKT0001\n\nThu theo từng tháng trong năm học",
+          "Đang áp dụng",
+          "03/09/2020 - 31/05/2027"
+        ],
+        [
+          "Giáo dục kỹ năng sống\n\nKN001\n\nTổ chức theo từng học kỳ",
+          "Đang áp dụng",
+          "Từ 01/09/2025"
+        ],
+        [
+          "Diễm 1\n\nK123",
+          "Đang áp dụng",
+          "Từ 17/08/2026"
+        ],
+        [
+          "Học phí chính khóa\n\nHP001\n\nThu theo tháng học thực tế",
+          "Đang áp dụng",
+          "Từ 01/09/2025"
+        ],
+        [
+          "Kỹ năng sống\n\nDV003\n\nÁp dụng theo nhu cầu đăng ký",
+          "Đang áp dụng",
+          "Từ 01/01/1970"
+        ],
+        [
+          "Nước uống học sinh\n\nDV002\n\nÁp dụng theo nhu cầu đăng ký",
+          "Đang áp dụng",
+          "Từ 01/01/1970"
+        ]
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "name": "",
+      "placeholder": "Tìm kiếm danh mục",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "name": "",
+      "placeholder": "",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "name": "revenue-category-status",
+      "placeholder": "",
+      "type": "hidden",
+      "value": ""
+    }
+  ]
+}

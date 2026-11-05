@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tài Liệu Yêu Cầu Sản Phẩm (PRD) — School Operating Portal (Tiếng Việt)</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-light.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 0;
+      color: #1e293b;
+    }
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .top-bar h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge {
+      background: #0070CE;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 9999px;
+    }
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid #cbd5e1;
+      background: white;
+      color: #334155;
+      transition: all 0.15s ease;
+    }
+    .btn:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+    .btn-primary {
+      background: #0070CE;
+      color: white;
+      border-color: #0070CE;
+    }
+    .btn-primary:hover {
+      background: #005bb5;
+      border-color: #005bb5;
+    }
+    .container {
+      max-width: 1040px;
+      margin: 32px auto;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      padding: 48px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 200;
+    }
+    @media print {
+      .top-bar { display: none; }
+      .container {
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <h1>
+      <span>Cổng Vận Hành Trường Học</span>
+      <span class="badge">PRD Tổng Thể (Tiếng Việt)</span>
+    </h1>
+    <div class="btn-group">
+      <a href="/docs/PRD_Co_Che_Hoan_Tien_Khi_Nghi_Hoc_VI.html" class="btn" style="color: #0070CE; border-color: #0070CE;">
+        🔍 PRD Hoàn Tiền Nghỉ Học
+      </a>
+      <button class="btn" onclick="copyContent()">
+        📋 Sao chép Markdown
+      </button>
+      <button class="btn" onclick="window.print()">
+        📄 In / Lưu PDF
+      </button>
+      <a href="/docs/School_Operating_Portal_PRD_VI.md" download="School_Operating_Portal_PRD_VI.md" class="btn btn-primary">
+        📥 Tải file .md
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div id="content" class="markdown-body">
+      <div style="text-align: center; padding: 40px; color: #64748b;">
+        Đang tải tài liệu PRD Tổng Thể...
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">Đã sao chép nội dung Markdown vào bộ nhớ tạm!</div>
+
+  <script>
+    let rawMarkdown = "";
+
+    fetch('/docs/School_Operating_Portal_PRD_VI.md')
+      .then(response => {
+        if (!response.ok) throw new Error("Không thể tải file markdown");
+        return response.text();
+      })
+      .then(text => {
+        rawMarkdown = text;
+        document.getElementById("content").innerHTML = marked.parse(text);
+      })
+      .catch(err => {
+        document.getElementById("content").innerHTML = `<div style="color: #ef4444; padding: 20px;">Lỗi khi tải tài liệu PRD: ${err.message}</div>`;
+      });
+
+    function copyContent() {
+      if (!rawMarkdown) return;
+      navigator.clipboard.writeText(rawMarkdown).then(() => {
+        const toast = document.getElementById("toast");
+        toast.style.display = "block";
+        setTimeout(() => {
+          toast.style.display = "none";
+        }, 2500);
+      });
+    }
+  </script>
+</body>
+</html>

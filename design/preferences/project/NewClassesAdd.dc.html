@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tạo lớp học — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<div style="height: 100vh; overflow: hidden;" aria-hidden="true"><dc-import name="NewClasses" hint-size="100%,900px"></dc-import></div>
+<x-import component-from-global-scope="ECOMD.PopupModal" open="{{open}}" on-close="{{close}}" title="Tạo lớp học" description="Năm học 2026 – 2027 · lớp mới ở trạng thái Đang hoạt động" icon="chalkboard" width="calc(var(--size-sidebar-w) * 2 + var(--space-48) * 2)" primary-action="{{pri}}" secondary-action="{{sec}}">
+<div class="ecomd-form"><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Loại lớp <span class="ecomd-field__req" aria-hidden="true">*</span></span><div class="ecomd-choices" style="--ecomd-cols: 2;"><label class="ecomd-choice"><input type="radio" name="kind" checked="{{main}}" onChange="{{pickMain}}"><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">Lớp chính khóa</span><span class="ecomd-choice__desc body-xs">Theo khối, có giáo viên chủ nhiệm</span></span></label><label class="ecomd-choice"><input type="radio" name="kind" checked="{{club}}" onChange="{{pickClub}}"><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">Ngoại khóa, câu lạc bộ</span><span class="ecomd-choice__desc body-xs">Học sinh từ nhiều lớp</span></span></label></div></div><div class="ecomd-grid" style="--ecomd-cols: 2; --ecomd-cols-mobile: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tên lớp <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" value="Lớp 1A3"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Mã lớp <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" value="LOP-1A3"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Khối <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{gradeOpts}}" value="{{grade}}" on-change="{{setGrade}}" label="Khối lớp"></x-import></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Giáo viên chủ nhiệm</span><x-import component-from-global-scope="ECOMD.SelectField" options="{{gvOpts}}" value="{{gv}}" on-change="{{setGv}}" label="Giáo viên chủ nhiệm"></x-import></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Phòng học</span><input type="text" class="ecomd-text body-sm" placeholder="VD: P.203"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Sĩ số tối đa <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm is-num" value="35"></label></div><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Ghi chú</span><textarea class="ecomd-textarea body-sm" rows="2" placeholder="Ghi chú điều hành, chỉ nhà trường thấy"></textarea><span class="ecomd-field__hint body-xs">Không bắt buộc</span></label></div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"open": {"editor": "boolean", "default": true, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ open: props.open !== false }, { kind: 'main', grade: 'Khối 1', gv: 'Cô Đỗ Thúy Hằng · chưa phân lớp' }); }
+  componentDidUpdate(prev) { if (prev.open !== this.props.open) this.setState({ open: this.props.open !== false }); }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    return {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      open: st.open, close: function () { self.setState({ open: false }); },
+      main: st.kind === 'main', club: st.kind === 'club', pickMain: function () { self.setState({ kind: 'main' }); }, pickClub: function () { self.setState({ kind: 'club' }); },
+      gradeOpts: ['Khối Mầm', 'Khối Chồi', 'Khối Lá', 'Khối 1', 'Khối 2', 'Khối 3', 'Khối 4', 'Khối 5'], grade: st.grade, setGrade: function (v) { self.setState({ grade: v }); },
+      gvOpts: ['Chưa chỉ định', 'Cô Đỗ Thúy Hằng · chưa phân lớp', 'Cô Trần Thị Thu', 'Cô Lê Thị Hoa', 'Thầy Phạm Văn Hùng'], gv: st.gv, setGv: function (v) { self.setState({ gv: v }); },
+      pri: { label: 'Tạo lớp', icon: 'plus' }, sec: { label: 'Hủy', onClick: function () { self.setState({ open: false }); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

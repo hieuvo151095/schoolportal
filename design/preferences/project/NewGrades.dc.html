@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Khối lớp — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="grades" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Khối lớp</h1>
+    <p class="ecomd-page-header__desc body-sm">Danh mục khối lớp chuẩn Bộ GD&amp;ĐT, sức chứa và phân bổ lớp toàn trường</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.SelectField" options="{{yearOpts}}" value="{{year}}" on-change="{{setYear}}" label="Niên khóa"></x-import></div>
+</div>
+<section class="ecomd-table-card">
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Cấp học"></x-import>
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm khối lớp, ví dụ: Khối 1, K10, THCS" value="{{query}}" on-change="{{setQuery}}"></x-import></div>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Khối lớp</th><th class="body-xs-bold">Cấp học</th><th class="body-xs-bold is-right">Số lớp</th><th class="body-xs-bold is-right">Số học sinh</th><th class="body-xs-bold">Đã gán GVCN</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><div style="display: flex; flex-direction: column; gap: var(--space-2);"><span style="display: flex; align-items: center; gap: var(--space-8);"><a href="#" class="body-sm-semibold" style="color: var(--text-heading); text-decoration: none;">{{r.name}}</a><x-import component-from-global-scope="ECOMD.Tag" variant="code">{{r.code}}</x-import></span><span class="body-xs" style="color: var(--text-subtle);">{{r.desc}}</span></div></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Cấp học</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.Tag">{{r.level}}</x-import></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Số lớp</span><div class="ecomd-cell__value"><span style="font-variant-numeric: tabular-nums;">{{r.cls}}</span></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Số học sinh</span><div class="ecomd-cell__value"><span style="font-variant-numeric: tabular-nums;">{{r.hs}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Đã gán GVCN</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.Meter" value="{{r.assigned}}" max="{{r.cls}}" text="{{r.ratio}}" label="Tỉ lệ lớp đã có GVCN"></x-import></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="6"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có khối lớp nào khớp tìm kiếm"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="khối lớp"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1447}}'>
+var CRUMBS = ["Nhà trường", "Khối lớp"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'all', year: 'Niên khóa 2026 – 2027', query: '' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var T = [{"code": "K01", "name": "Khối 1", "desc": "Chương trình Tiểu học lớp 1 chuẩn Thông tư 27/2020/TT-BGDĐT", "lv": "th"}, {"code": "K02", "name": "Khối 2", "desc": "Chương trình Tiểu học lớp 2 chuẩn GDPT 2018", "lv": "th"}, {"code": "K03", "name": "Khối 3", "desc": "Chương trình Tiểu học lớp 3 chuẩn GDPT 2018", "lv": "th"}, {"code": "K04", "name": "Khối 4", "desc": "Chương trình Tiểu học lớp 4 chuẩn GDPT 2018", "lv": "th"}, {"code": "K05", "name": "Khối 5", "desc": "Chương trình Tiểu học lớp 5 chuẩn bị chuyển cấp THCS", "lv": "th"}, {"code": "K06", "name": "Khối 6", "desc": "Chương trình THCS lớp 6 chuẩn đánh giá Thông tư 22/2021/TT-BGDĐT", "lv": "thcs"}, {"code": "K07", "name": "Khối 7", "desc": "Chương trình THCS lớp 7 chuẩn GDPT 2018", "lv": "thcs"}, {"code": "K08", "name": "Khối 8", "desc": "Chương trình THCS lớp 8 chuẩn GDPT 2018", "lv": "thcs"}, {"code": "K09", "name": "Khối 9", "desc": "Chương trình THCS lớp 9 ôn luyện thi tuyển sinh vào lớp 10", "lv": "thcs"}, {"code": "K10", "name": "Khối 10", "desc": "Chương trình THPT lớp 10 theo tổ hợp môn lựa chọn định hướng nghề nghiệp", "lv": "thpt"}, {"code": "K11", "name": "Khối 11", "desc": "Chương trình THPT lớp 11 phân hóa chuyên sâu", "lv": "thpt"}, {"code": "K12", "name": "Khối 12", "desc": "Chương trình THPT lớp 12 chuẩn bị kỳ thi Tốt nghiệp THPT Quốc gia", "lv": "thpt"}, {"code": "K10-GDTX", "name": "Khối 10 (GDTX)", "desc": "Chương trình GDTX cấp THPT Khối 10", "lv": "gdtx"}, {"code": "K11-GDTX", "name": "Khối 11 (GDTX)", "desc": "Chương trình GDTX cấp THPT Khối 11", "lv": "gdtx"}, {"code": "K12-GDTX", "name": "Khối 12 (GDTX)", "desc": "Chương trình GDTX cấp THPT Khối 12", "lv": "gdtx"}];
+    var LV = { th: 'Tiểu học', thcs: 'THCS', thpt: 'THPT', gdtx: 'GDTX' };
+    var q = (st.query || '').trim().toLowerCase();
+    var base = T.filter(function (t) { return !q || (t.name + ' ' + t.code + ' ' + LV[t.lv]).toLowerCase().indexOf(q) >= 0; });
+    var tabs = [['all', 'Tất cả'], ['th', 'Tiểu học'], ['thcs', 'THCS'], ['thpt', 'THPT'], ['gdtx', 'GDTX']].map(function (d) { return { key: d[0], label: d[1], count: base.filter(function (t) { return d[0] === 'all' || t.lv === d[0]; }).length }; });
+    var rows = base.filter(function (t) { return st.tab === 'all' || t.lv === st.tab; }).map(function (t) { return { name: t.name, code: t.code, desc: t.desc, level: LV[t.lv], cls: 0, hs: 0, assigned: 0, ratio: '0/0 lớp',
+      actionLabel: 'Thao tác với ' + t.name, menu: [{ icon: 'eye', label: 'Xem chi tiết khối' }, { icon: 'chalkboard', label: 'Danh sách lớp' }, { icon: 'pen', label: 'Sửa thông tin' }] }; });
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20,
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      rows: rows, isEmpty: rows.length === 0, total: rows.length,
+      yearOpts: ['Niên khóa 2026 – 2027', 'Niên khóa 2025 – 2026'], year: st.year, setYear: function (v) { self.setState({ year: v }); }
+    });
+  }
+}
+</script>
+</body>
+</html>

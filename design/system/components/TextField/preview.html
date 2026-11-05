@@ -1,0 +1,40 @@
+<!-- @dsCard group="Biểu mẫu" height=320 subtitle="Ô nhập liệu một dòng · icon · hiện ẩn mật khẩu" -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TextField</title>
+<link rel="stylesheet" href="../tokens.css" />
+<link rel="stylesheet" href="../bundle.css" />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body { background: var(--bg-canvas); font-family: var(--font-sans); color: var(--text-body); display: flex; align-items: center; justify-content: center; padding: var(--space-24); }
+  .demo-box { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: var(--space-16); padding: var(--space-24); background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-12); box-shadow: var(--shadow-sm); }
+</style>
+</head>
+<body>
+<div class="demo-box">
+  <div class="ecomd-textfield ecomd-textfield--lg">
+    <label class="ecomd-textfield__label body-xs-medium">Mã trường</label>
+    <div class="ecomd-textfield__control">
+      <input class="ecomd-textfield__input body-md" placeholder="Nhập mã trường" value="VINSCHOOL" />
+    </div>
+  </div>
+
+  <div class="ecomd-textfield ecomd-textfield--lg">
+    <label class="ecomd-textfield__label body-xs-medium">Email</label>
+    <div class="ecomd-textfield__control">
+      <input class="ecomd-textfield__input body-md" type="email" placeholder="admin@demo.edu.vn" />
+    </div>
+  </div>
+
+  <div class="ecomd-textfield ecomd-textfield--lg">
+    <label class="ecomd-textfield__label body-xs-medium">Mật khẩu</label>
+    <div class="ecomd-textfield__control">
+      <input class="ecomd-textfield__input body-md" type="password" placeholder="Mật khẩu" value="Demo@2026" />
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,988 @@
+{
+  "version": 1,
+  "app_id": "school-operating-portal",
+  "app_name": "School Operating Portal",
+  "total_features": 38,
+  "features": [
+    {
+      "id": "F003",
+      "code": "M6/SM2",
+      "name": "Quản lý Tài khoản & Phân quyền Quản trị",
+      "description": "Quản trị danh sách tài khoản nội bộ trường học (Ban Giám Hiệu, Giáo viên, Kế toán, Nhân sự), gán vai trò quyền hạn và hỗ trợ bộ lọc liên kết Cơ sở dữ liệu ngành Sở GD&ĐT.",
+      "priority": "P0",
+      "category": "Settings",
+      "route": "/setting/users",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m6-sm2-tai-khoan.md",
+      "code_files": [
+        "docs/src/types/account.ts",
+        "docs/src/utils/accountValidation.ts",
+        "docs/tests/unit/account.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1A",
+      "col": 1.75,
+      "hard_deps": "Không có",
+      "after_ids": [],
+      "order": 1,
+      "updated_at": "2026-11-04T04:46:57Z"
+    },
+    {
+      "id": "F004",
+      "code": "M5/SM13",
+      "name": "Cấu hình Niên khóa & Học kỳ",
+      "description": "Thiết lập các niên khóa và khoảng thời gian học kỳ trong năm học; tự động nhận diện năm học hiện tại theo thời gian thực và ngăn chặn chồng lấn thời gian.",
+      "priority": "P0",
+      "category": "School Admin",
+      "route": "/setting/season",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m5-sm13-nam-hoc.md",
+      "code_files": [
+        "docs/src/types/academicYear.ts",
+        "docs/src/utils/academicYearValidation.ts",
+        "docs/tests/unit/academicYear.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1A",
+      "col": 1.75,
+      "hard_deps": "Không có",
+      "after_ids": [],
+      "order": 2,
+      "updated_at": "2026-11-04T04:52:34Z"
+    },
+    {
+      "id": "F005",
+      "code": "M5/SM5",
+      "name": "Quản lý Cây Khối Lớp",
+      "description": "Quản lý hệ thống phân cấp khối lớp theo 4 cấp học (Tiểu học, THCS, THPT, Mầm non), tổng hợp sĩ số học sinh và số lớp học thuộc từng khối.",
+      "priority": "P0",
+      "category": "School Admin",
+      "route": "/school/grades",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m5-sm5-khoi-lop.md",
+      "code_files": [
+        "docs/src/types/grade.ts",
+        "docs/src/utils/gradeValidation.ts",
+        "docs/tests/unit/grade.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1A",
+      "col": 1.75,
+      "hard_deps": "Năm học (M5/SM13)",
+      "after_ids": [
+        "R-M5SM13"
+      ],
+      "order": 3,
+      "updated_at": "2026-11-04T04:54:57Z"
+    },
+    {
+      "id": "F007",
+      "code": "M5/SM1",
+      "name": "Hồ sơ Học sinh 360° & Chuyển lớp",
+      "description": "Quản lý hồ sơ gốc học sinh toàn diện qua các năm học (mã học sinh, CCCD, ngày sinh, BMI), hub chi tiết 360° gồm 5 tab ngữ cảnh và điều phối chuyển lớp/chuyển năm học an toàn.",
+      "priority": "P0",
+      "category": "School Admin",
+      "route": "/school/kid",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m5-sm1-hoc-sinh.md",
+      "code_files": [
+        "docs/src/types/student.ts",
+        "docs/src/utils/studentValidation.ts",
+        "docs/tests/unit/students.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1A",
+      "col": 2.0,
+      "hard_deps": "Năm học (M5/SM13)",
+      "after_ids": [
+        "R-M5SM13"
+      ],
+      "order": 4,
+      "updated_at": "2026-11-04T04:56:06Z"
+    },
+    {
+      "id": "F001",
+      "code": "M7/SM2",
+      "name": "Cổng Đăng nhập (SSO Sở GD&ĐT & Tài khoản Finviet)",
+      "description": "Cổng xác thực đăng nhập duy nhất cho mọi nhân sự trường học, hỗ trợ 2 luồng độc lập: Đăng nhập SSO bằng dữ liệu Sở GD&ĐT (chọn Sở, tìm trường, redirect SSO, ánh xạ CCCD) và Đăng nhập bằng tài khoản Finviet cấp (Mã trường, Email, Mật khẩu, Nhớ mật khẩu 24h).",
+      "priority": "P0",
+      "category": "Authentication",
+      "route": "/signin, /sso/login",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m7-sm2-dang-nhap.md",
+      "code_files": [
+        "docs/src/pages/signin.tsx",
+        "docs/src/pages/sso/login.tsx",
+        "docs/src/types/auth.ts",
+        "docs/tests/unit/auth.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1A",
+      "col": 2.25,
+      "hard_deps": "Tài khoản (M6/SM2)",
+      "after_ids": [
+        "R-M6SM2"
+      ],
+      "order": 5,
+      "updated_at": "2026-11-04T04:36:12Z"
+    },
+    {
+      "id": "F006",
+      "code": "M5/SM3",
+      "name": "Quản lý Lớp học (Chính khóa & Ngoại khóa)",
+      "description": "Quản lý danh sách lớp học, phân biệt rõ ràng lớp chính khóa và lớp ngoại khóa (chỉ bật điểm danh/hoạt động/ảnh), chỉ định giáo viên chủ nhiệm và chốt chặn an toàn cấm xóa lớp nếu còn sĩ số.",
+      "priority": "P0",
+      "category": "School Admin",
+      "route": "/school/class",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m5-sm3-lop-hoc.md",
+      "code_files": [
+        "docs/src/types/class.ts",
+        "docs/src/utils/classValidation.ts",
+        "docs/tests/unit/class.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1A",
+      "col": 2.25,
+      "hard_deps": "Khối lớp (M5/SM5), Năm học (M5/SM13)",
+      "after_ids": [
+        "R-M5SM5",
+        "R-M5SM13"
+      ],
+      "order": 6,
+      "updated_at": "2026-11-04T04:57:19Z"
+    },
+    {
+      "id": "F008",
+      "code": "M5/SM2",
+      "name": "Danh bạ Giáo viên & Phân quyền Kiểm duyệt",
+      "description": "Quản trị đội ngũ cán bộ giáo viên, phân công chủ nhiệm / giảng dạy bộ môn, cấp tài khoản và áp dụng cơ chế kiểm duyệt nội dung 2 cấp (Giáo viên chính tự đăng vs Giáo viên hỗ trợ chờ duyệt).",
+      "priority": "P0",
+      "category": "School Admin",
+      "route": "/school/teacher",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m5-sm2-giao-vien.md",
+      "code_files": [
+        "docs/src/types/teacher.ts",
+        "docs/src/utils/teacherValidation.ts",
+        "docs/tests/unit/teachers.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1A",
+      "col": 2.25,
+      "hard_deps": "Tài khoản (M6/SM2)",
+      "after_ids": [
+        "R-M6SM2"
+      ],
+      "order": 7,
+      "updated_at": "2026-11-04T04:58:31Z"
+    },
+    {
+      "id": "F013",
+      "code": "M6/SM3",
+      "name": "Cấu hình Hoàn tiền Nghỉ học & Cổng Thanh toán",
+      "description": "Thiết lập cơ chế hoàn tiền khi học sinh nghỉ học (tỷ lệ hoàn tiền ăn/xe theo ngày có phép vs không phép, giờ chốt Cut-off), cấu hình mã thanh toán VietQR động, Sepay và hóa đơn điện tử SInvoice.",
+      "priority": "P0",
+      "category": "Finance",
+      "route": "/setting/fee",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m6-sm3-hoc-phi.md",
+      "code_files": [
+        "docs/src/types/settingFee.ts",
+        "docs/src/utils/settingFeeValidation.ts",
+        "docs/utils/mealRefundCalculation.ts",
+        "docs/tests/unit/settingFee.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1A",
+      "col": 2.25,
+      "hard_deps": "Không có",
+      "after_ids": [],
+      "order": 8,
+      "updated_at": "2026-11-04T04:59:24Z"
+    },
+    {
+      "id": "F002",
+      "code": "M6/SM1",
+      "name": "Hồ sơ Trường học & Thiết lập Vận hành",
+      "description": "Quản lý thông tin định danh gốc của cơ sở trường học: tên trường, mã trường, địa chỉ, số điện thoại liên hệ, logo thương hiệu, ngôn ngữ thông báo mặc định và cấu hình phương thức điểm danh.",
+      "priority": "P0",
+      "category": "Settings",
+      "route": "/school/info",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m6-sm1-truong.md",
+      "code_files": [
+        "docs/src/types/schoolProfile.ts",
+        "docs/src/utils/schoolProfileValidation.ts",
+        "docs/tests/unit/schoolProfile.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1A",
+      "col": 2.5,
+      "hard_deps": "Không có",
+      "after_ids": [],
+      "order": 9,
+      "updated_at": "2026-11-04T05:00:34Z"
+    },
+    {
+      "id": "F034",
+      "code": "M5/SM12",
+      "name": "Lịch Sự kiện & Ngày nghỉ Trường học (Calendar)",
+      "description": "Quản lý lịch sự kiện và ngày nghỉ toàn trường trên 3 chế độ xem (Năm, Tháng, Danh sách sự kiện) có mã màu phân loại rõ ràng.",
+      "priority": "P0",
+      "category": "School Admin",
+      "route": "/setting/holidays",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m5-sm12-lich-su-kien.md",
+      "code_files": [
+        "docs/src/types/calendar.ts",
+        "docs/src/utils/calendarValidation.ts",
+        "docs/tests/unit/calendar.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1A",
+      "col": 2.5,
+      "hard_deps": "Không có",
+      "after_ids": [],
+      "order": 10,
+      "updated_at": "2026-11-04T05:01:54Z"
+    },
+    {
+      "id": "F011",
+      "code": "M4/SM3",
+      "name": "Danh mục Khoản phí Master (24 khoản thu)",
+      "description": "Master catalog quản lý toàn bộ 24 khoản thu của trường (3 khoản hệ thống + 21 khoản tùy chỉnh), thiết lập đơn giá chuẩn, đơn vị tính (tháng, kỳ, ngày, lần) và cờ Bắt buộc/Tự chọn.",
+      "priority": "P0",
+      "category": "Finance",
+      "route": "/school/school-fees",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m4-sm3-khoan-phi.md",
+      "code_files": [
+        "docs/src/types/schoolFee.ts",
+        "docs/src/utils/schoolFeeValidation.ts",
+        "docs/tests/unit/schoolFees.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1B",
+      "col": 3.0,
+      "hard_deps": "Không có",
+      "after_ids": [],
+      "order": 11,
+      "updated_at": "2026-11-04T05:04:47Z"
+    },
+    {
+      "id": "F012",
+      "code": "M4/SM4",
+      "name": "Quản lý Biểu phí theo Lớp học (Tuition Management)",
+      "description": "Gán gói các khoản thu và đơn giá tùy chỉnh từ Master Catalog cho từng lớp học hoặc khối lớp cụ thể trong năm học.",
+      "priority": "P0",
+      "category": "Finance",
+      "route": "/school/tuition-management",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m4-sm4-quan-ly-hoc-phi.md",
+      "code_files": [
+        "docs/src/types/tuitionManagement.ts",
+        "docs/src/utils/tuitionManagementValidation.ts",
+        "docs/tests/unit/tuitionManagement.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1B",
+      "col": 3.0,
+      "hard_deps": "Khoản phí (M4/SM3), Lớp học (M5/SM3), Học sinh (M5/SM1), Khối lớp (M5/SM5)",
+      "after_ids": [
+        "R-M4SM3",
+        "R-M5SM3",
+        "R-M5SM1",
+        "R-M5SM5"
+      ],
+      "order": 12,
+      "updated_at": "2026-11-04T05:06:01Z"
+    },
+    {
+      "id": "F015",
+      "code": "M4/SM1",
+      "name": "Lập Hóa đơn Học phí & Thu phí VietQR Động",
+      "description": "Phát hành hóa đơn thu phí học sinh (toàn trường, khối, lớp, cá nhân), tự động khấu trừ ngày ăn tháng trước (M+1), tự động áp dụng chính sách miễn giảm, hỗ trợ giảm tiền mặt cố định và tích hợp mã VietQR động.",
+      "priority": "P0",
+      "category": "Finance",
+      "route": "/school/fee",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m4-sm1-hoc-phi.md",
+      "code_files": [
+        "docs/src/types/invoice.ts",
+        "docs/src/utils/invoiceValidation.ts",
+        "docs/tests/unit/invoices.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1B",
+      "col": 3.75,
+      "hard_deps": "Khoản phí (M4/SM3), Quản lý học phí (M4/SM4), Học sinh (M5/SM1), Lớp học (M5/SM3), Khối lớp (M5/SM5), Tài khoản (M6/SM2), Học phí (M6/SM3), Lịch sự kiện (M5/SM12)",
+      "after_ids": [
+        "R-M4SM3",
+        "R-M4SM4",
+        "R-M5SM1",
+        "R-M5SM3",
+        "R-M5SM5",
+        "R-M6SM2",
+        "R-M6SM3",
+        "R-M5SM12"
+      ],
+      "order": 13,
+      "updated_at": "2026-11-04T05:08:58Z"
+    },
+    {
+      "id": "F016",
+      "code": "M4/SM5",
+      "name": "Quản lý Phiếu chi Nội bộ (Expenses)",
+      "description": "Lập, trình duyệt và theo dõi các phiếu chi tiêu nội bộ của trường học kèm chứng từ đính kèm và quy trình hủy phiếu chi an toàn.",
+      "priority": "P0",
+      "category": "Finance",
+      "route": "/school/expenses",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m4-sm5-khoan-chi.md",
+      "code_files": [
+        "docs/src/types/expense.ts",
+        "docs/src/utils/expenseValidation.ts",
+        "docs/tests/unit/expense.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1B",
+      "col": 3.75,
+      "hard_deps": "Học sinh (M5/SM1), Giáo viên (M5/SM2), Tài khoản (M6/SM2)",
+      "after_ids": [
+        "R-M5SM1",
+        "R-M5SM2",
+        "R-M6SM2"
+      ],
+      "order": 14,
+      "updated_at": "2026-11-04T05:10:29Z"
+    },
+    {
+      "id": "F017",
+      "code": "M4/SM2",
+      "name": "Đối soát Giao dịch Ngân hàng & Cổng Thanh toán",
+      "description": "Đối chiếu phiên giao dịch thanh toán từ tài khoản ngân hàng / Sepay / VietQR với hóa đơn thực thu của trường học, làm nổi bật giao dịch khớp và giao dịch lệch số liệu.",
+      "priority": "P0",
+      "category": "Finance",
+      "route": "/school/reconciliation",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m4-sm2-doi-soat.md",
+      "code_files": [
+        "docs/src/types/reconciliation.ts",
+        "docs/src/utils/reconciliationValidation.ts",
+        "docs/tests/unit/reconciliation.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1B",
+      "col": 3.75,
+      "hard_deps": "Học phí (M4/SM1), Học sinh (M5/SM1), Lớp học (M5/SM3)",
+      "after_ids": [
+        "R-M4SM1",
+        "R-M5SM1",
+        "R-M5SM3"
+      ],
+      "order": 15,
+      "updated_at": "2026-11-04T05:12:01Z"
+    },
+    {
+      "id": "F018",
+      "code": "M4/SM6",
+      "name": "Báo cáo Thu Học phí & Tỷ lệ Hoàn thành",
+      "description": "Biểu đồ trực quan và bảng số liệu theo dõi tiến độ thu học phí toàn trường và từng lớp học (Đã nộp, Nộp một phần, Còn nợ).",
+      "priority": "P0",
+      "category": "Finance",
+      "route": "/reports/fee/overview",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m4-sm6-bao-cao-hoc-phi.md",
+      "code_files": [
+        "docs/src/types/feeReport.ts",
+        "docs/src/utils/feeReportValidation.ts",
+        "docs/tests/unit/feeReports.test.mjs"
+      ],
+      "milestone": "Milestone 1",
+      "phase": "Giai đoạn 1B",
+      "col": 4.25,
+      "hard_deps": "Học phí (M4/SM1), Lớp học (M5/SM3), Học sinh (M5/SM1)",
+      "after_ids": [
+        "R-M4SM1",
+        "R-M5SM3",
+        "R-M5SM1"
+      ],
+      "order": 16,
+      "updated_at": "2026-11-04T05:13:14Z"
+    },
+    {
+      "id": "F009",
+      "code": "M2/SM1",
+      "name": "Điểm danh Học sinh Hằng ngày (Đón / Trả / Sức khỏe)",
+      "description": "Phân hệ điểm danh đón/trả trẻ hằng ngày 1 click, theo dõi thân nhiệt, phát hiện dấu hiệu sức khỏe bất thường, xác thực người đón hộ và báo vắng hàng loạt liên thông hoàn tiền.",
+      "priority": "P1",
+      "category": "Operations",
+      "route": "/class/[classId]/attendance",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m2-sm1-diem-danh.md",
+      "code_files": [
+        "docs/src/types/attendance.ts",
+        "docs/src/utils/attendanceValidation.ts",
+        "docs/tests/unit/attendance.test.mjs"
+      ],
+      "milestone": "Milestone 2",
+      "phase": "Đợt 2A",
+      "col": 5.5,
+      "hard_deps": "Trường (M6/SM1), Lớp học (M5/SM3), Học sinh (M5/SM1), Tài khoản (M6/SM2)",
+      "after_ids": [
+        "R-M6SM1",
+        "R-M5SM3",
+        "R-M5SM1",
+        "R-M6SM2"
+      ],
+      "order": 17,
+      "updated_at": "2026-11-04T06:47:56Z"
+    },
+    {
+      "id": "F010",
+      "code": "M2/SM2",
+      "name": "Bảng tin Hoạt động Lớp học",
+      "description": "Bảng tin nhật ký bài học và hoạt động trong ngày của lớp, hỗ trợ soạn thảo đa phương tiện, nhắc tên học sinh (@), gắn thẻ bài học (#) và phân luồng duyệt bài đăng.",
+      "priority": "P1",
+      "category": "Operations",
+      "route": "/class/[classId]/activity",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m2-sm2-hoat-dong.md",
+      "code_files": [
+        "docs/src/types/activity.ts",
+        "docs/src/utils/activityValidation.ts",
+        "docs/tests/unit/activity.test.mjs"
+      ],
+      "milestone": "Milestone 2",
+      "phase": "Đợt 2A",
+      "col": 5.5,
+      "hard_deps": "Lớp học (M5/SM3), Tài khoản (M6/SM2)",
+      "after_ids": [
+        "R-M5SM3",
+        "R-M6SM2"
+      ],
+      "order": 18,
+      "updated_at": "2026-11-04T06:48:47Z"
+    },
+    {
+      "id": "F023",
+      "code": "M2/SM4",
+      "name": "Kênh Trao đổi Tin nhắn Phụ huynh",
+      "description": "Kênh trao đổi thời gian thực giữa giáo viên và phụ huynh (chat 1:1, nhóm học sinh, thông báo lớp), hỗ trợ đính kèm tệp, ghim tin nhắn và lưu trữ hội thoại.",
+      "priority": "P1",
+      "category": "Operations",
+      "route": "/conversations",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m2-sm4-trao-doi.md",
+      "code_files": [
+        "docs/src/types/conversation.ts",
+        "docs/src/utils/conversationValidation.ts",
+        "docs/tests/unit/conversations.test.mjs"
+      ],
+      "milestone": "Milestone 2",
+      "phase": "Đợt 2A",
+      "col": 5.5,
+      "hard_deps": "Tài khoản (M6/SM2), Học sinh (M5/SM1), Lớp học (M5/SM3)",
+      "after_ids": [
+        "R-M6SM2",
+        "R-M5SM1",
+        "R-M5SM3"
+      ],
+      "order": 19,
+      "updated_at": "2026-11-04T06:49:25Z"
+    },
+    {
+      "id": "F026",
+      "code": "M5/SM9",
+      "name": "Điểm danh Nhân viên 1 chạm & Phê duyệt Nghỉ phép",
+      "description": "Chấm công đến/về cho cán bộ nhân viên nhà trường tức thì bằng 1 click, duyệt đơn xin nghỉ phép và hỗ trợ điều chỉnh công trong vòng 45 ngày quá khứ.",
+      "priority": "P1",
+      "category": "School Admin",
+      "route": "/school/staff-attendance",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m5-sm9-diem-danh-nv.md",
+      "code_files": [
+        "docs/src/types/staffAttendance.ts",
+        "docs/src/utils/staffAttendanceValidation.ts",
+        "docs/tests/unit/staffAttendance.test.mjs"
+      ],
+      "milestone": "Milestone 2",
+      "phase": "Đợt 2A",
+      "col": 5.5,
+      "hard_deps": "Giáo viên (M5/SM2), Tài khoản (M6/SM2)",
+      "after_ids": [
+        "R-M5SM2",
+        "R-M6SM2"
+      ],
+      "order": 20,
+      "updated_at": "2026-11-04T06:45:48Z"
+    },
+    {
+      "id": "F036",
+      "code": "M6/SM4",
+      "name": "Quản lý Dữ liệu Khuôn mặt Học sinh (Face ID)",
+      "description": "Đăng ký, cập nhật và quản lý kho ảnh mẫu khuôn mặt của học sinh phục vụ cho tính năng nhận diện AI trong thư viện ảnh lớp và điểm danh sinh trắc học.",
+      "priority": "P1",
+      "category": "Settings",
+      "route": "/setting/face-recognition",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m6-sm4-nhan-dien.md",
+      "code_files": [
+        "docs/src/types/faceRecognition.ts",
+        "docs/src/utils/faceRecognitionValidation.ts",
+        "docs/tests/unit/faceRecognition.test.mjs"
+      ],
+      "milestone": "Milestone 2",
+      "phase": "Đợt 2A",
+      "col": 5.5,
+      "hard_deps": "Học sinh (M5/SM1), Lớp học (M5/SM3)",
+      "after_ids": [
+        "R-M5SM1",
+        "R-M5SM3"
+      ],
+      "order": 21,
+      "updated_at": "2026-11-04T06:46:40Z"
+    },
+    {
+      "id": "F037",
+      "code": "M6/SM5",
+      "name": "Quản lý Bật/Tắt Tính năng Trường học (Feature Flags)",
+      "description": "Bảng công tắc cấu hình bật hoặc tắt linh hoạt từng phân hệ chức năng cho trường học (Điểm danh, Bài tập, Thực đơn, Sổ tay, Khảo sát, Đón muộn...).",
+      "priority": "P1",
+      "category": "Settings",
+      "route": "/setting/activity",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m6-sm5-tinh-nang.md",
+      "code_files": [
+        "docs/src/types/featureFlags.ts",
+        "docs/src/utils/featureFlagsValidation.ts",
+        "docs/tests/unit/featureFlags.test.mjs"
+      ],
+      "milestone": "Milestone 2",
+      "phase": "Đợt 2A",
+      "col": 5.5,
+      "hard_deps": "Năm học (M5/SM13)",
+      "after_ids": [
+        "R-M5SM13"
+      ],
+      "order": 22,
+      "updated_at": "2026-11-04T06:47:15Z"
+    },
+    {
+      "id": "F038",
+      "code": "M6/SM6",
+      "name": "Cấu hình Lịch & Quy tắc Thông báo Toàn trường",
+      "description": "Thiết lập lịch phát thông báo tự động (thông báo điểm danh, nhắc nộp học phí, thực đơn ngày mai) áp dụng cho mọi tài khoản trên toàn bộ nền tảng.",
+      "priority": "P1",
+      "category": "Settings",
+      "route": "/setting/notification",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m6-sm6-thong-bao.md",
+      "code_files": [
+        "docs/src/types/notificationSettings.ts",
+        "docs/src/utils/notificationSettingsValidation.ts",
+        "docs/tests/unit/notificationSettings.test.mjs"
+      ],
+      "milestone": "Milestone 2",
+      "phase": "Đợt 2A",
+      "col": 6.0,
+      "hard_deps": "Tài khoản (M6/SM2), Lớp học (M5/SM3)",
+      "after_ids": [
+        "R-M6SM2",
+        "R-M5SM3"
+      ],
+      "order": 23,
+      "updated_at": "2026-11-04T06:50:19Z"
+    },
+    {
+      "id": "F022",
+      "code": "M2/SM3",
+      "name": "Thư viện Media & Nhận diện Khuôn mặt AI",
+      "description": "Album hình ảnh và video lớp học tỷ lệ chuẩn 16:9, tích hợp AI tự động nhận diện khuôn mặt để gom nhóm ảnh học sinh và phân bổ vào album cá nhân.",
+      "priority": "P1",
+      "category": "Operations",
+      "route": "/class/[classId]/media",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m2-sm3-thu-vien.md",
+      "code_files": [
+        "docs/src/types/media.ts",
+        "docs/src/utils/mediaValidation.ts",
+        "docs/tests/unit/media.test.mjs"
+      ],
+      "milestone": "Milestone 2",
+      "phase": "Đợt 2A",
+      "col": 6.25,
+      "hard_deps": "Hoạt động (M2/SM2), Điểm danh (M2/SM1), Lớp học (M5/SM3), Học sinh (M5/SM1)",
+      "after_ids": [
+        "R-M2SM2",
+        "R-M2SM1",
+        "R-M5SM3",
+        "R-M5SM1"
+      ],
+      "order": 24,
+      "updated_at": "2026-11-04T06:51:26Z"
+    },
+    {
+      "id": "F028",
+      "code": "M2/SM5",
+      "name": "Báo cáo Điểm danh Tháng Học sinh & Nhân viên",
+      "description": "Xuất lưới điểm danh tháng của lớp và nhân viên theo 2 buổi sáng/chiều, nhúng thông tin tổng kết trực tiếp vào cột cố định và xuất file Excel phục vụ thanh tra lưu trữ.",
+      "priority": "P1",
+      "category": "Operations",
+      "route": "/reports/attendance",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m2-sm5-bao-cao-diem-danh.md",
+      "code_files": [
+        "docs/src/types/reports.ts",
+        "docs/src/utils/reportsValidation.ts",
+        "docs/tests/unit/reports.test.mjs"
+      ],
+      "milestone": "Milestone 2",
+      "phase": "Đợt 2A",
+      "col": 6.25,
+      "hard_deps": "Điểm danh (M2/SM1), Điểm danh NV (M5/SM9)",
+      "after_ids": [
+        "R-M2SM1",
+        "R-M5SM9"
+      ],
+      "order": 25,
+      "updated_at": "2026-11-04T06:52:25Z"
+    },
+    {
+      "id": "F029",
+      "code": "M2/SM6",
+      "name": "Báo cáo Mở rộng theo Mẫu Động",
+      "description": "Hệ thống sinh báo cáo đánh giá định kỳ theo các mẫu động cấu hình trước, hỗ trợ lọc theo khối, lớp, khoảng ngày và xuất file Excel.",
+      "priority": "P1",
+      "category": "Operations",
+      "route": "/reports/extended",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m2-sm6-bao-cao-mo-rong.md",
+      "code_files": [
+        "docs/src/types/reports.ts",
+        "docs/src/utils/reportsValidation.ts",
+        "docs/tests/unit/reports.test.mjs"
+      ],
+      "milestone": "Milestone 2",
+      "phase": "Đợt 2A",
+      "col": 6.25,
+      "hard_deps": "Học sinh (M5/SM1), Lớp học (M5/SM3)",
+      "after_ids": [
+        "R-M5SM1",
+        "R-M5SM3"
+      ],
+      "order": 26,
+      "updated_at": "2026-11-04T06:52:54Z"
+    },
+    {
+      "id": "F024",
+      "code": "M5/SM4",
+      "name": "Danh mục Môn học & Phân công Giảng dạy",
+      "description": "Tra cứu danh mục môn học chuẩn theo 4 cấp học (Tiểu học, THCS, THPT, GDTX) và phân công giáo viên phụ trách giảng dạy.",
+      "priority": "P2",
+      "category": "School Admin",
+      "route": "/school/subject",
+      "state": "pending",
+      "spec_file": "llm-wiki/pages/screens/m5-sm4-mon-hoc.md",
+      "code_files": [
+        "docs/src/types/subject.ts",
+        "docs/src/utils/subjectValidation.ts",
+        "docs/tests/unit/subject.test.mjs"
+      ],
+      "milestone": "Milestone 3",
+      "phase": "Đợt 3A",
+      "col": 6.75,
+      "hard_deps": "Năm học (M5/SM13), Khối lớp (M5/SM5), Giáo viên (M5/SM2)",
+      "after_ids": [
+        "R-M5SM13",
+        "R-M5SM5",
+        "R-M5SM2"
+      ],
+      "order": 27
+    },
+    {
+      "id": "F030",
+      "code": "M5/SM6",
+      "name": "Bảng thông tin & Lên lịch Gửi Thông báo",
+      "description": "Soạn thảo, xem trước giao diện hiển thị trên ứng dụng di động của phụ huynh, hẹn giờ phát thông báo tới toàn trường, giáo viên hoặc lớp cụ thể qua App Push và Email.",
+      "priority": "P2",
+      "category": "School Admin",
+      "route": "/announcement",
+      "state": "pending",
+      "spec_file": "llm-wiki/pages/screens/m5-sm6-bang-thong-tin.md",
+      "code_files": [
+        "docs/src/types/announcement.ts",
+        "docs/src/utils/announcementValidation.ts",
+        "docs/tests/unit/announcements.test.mjs"
+      ],
+      "milestone": "Milestone 3",
+      "phase": "Đợt 3A",
+      "col": 6.75,
+      "hard_deps": "Lớp học (M5/SM3), Giáo viên (M5/SM2), Học sinh (M5/SM1), Tài khoản (M6/SM2)",
+      "after_ids": [
+        "R-M5SM3",
+        "R-M5SM2",
+        "R-M5SM1",
+        "R-M6SM2"
+      ],
+      "order": 28
+    },
+    {
+      "id": "F032",
+      "code": "M5/SM10",
+      "name": "Sổ tay Phụ huynh Cây Tri thức 2 cấp (Handbook)",
+      "description": "Tổ chức các quy định, cẩm nang phụ huynh và câu hỏi thường gặp (FAQ) theo cấu trúc cây tri thức đúng 2 cấp (Danh mục gốc -> Danh mục con -> Bài viết).",
+      "priority": "P2",
+      "category": "School Admin",
+      "route": "/school/handbook",
+      "state": "pending",
+      "spec_file": "llm-wiki/pages/screens/m5-sm10-so-tay-ph.md",
+      "code_files": [
+        "docs/src/types/parentHandbook.ts",
+        "docs/src/utils/parentHandbookValidation.ts",
+        "docs/tests/unit/parentHandbook.test.mjs"
+      ],
+      "milestone": "Milestone 3",
+      "phase": "Đợt 3A",
+      "col": 6.75,
+      "hard_deps": "Tài khoản (M6/SM2)",
+      "after_ids": [
+        "R-M6SM2"
+      ],
+      "order": 29
+    },
+    {
+      "id": "F033",
+      "code": "M5/SM11",
+      "name": "Hòm thư Góp ý Phụ huynh & Thảo luận 2 chiều",
+      "description": "Tiếp nhận phiếu phản ánh góp ý từ phụ huynh theo 8 lĩnh vực, phân công cán bộ xử lý, đặt mức ưu tiên và trao đổi thảo luận 2 chiều minh bạch.",
+      "priority": "P2",
+      "category": "School Admin",
+      "route": "/school/feedback",
+      "state": "pending",
+      "spec_file": "llm-wiki/pages/screens/m5-sm11-gop-y.md",
+      "code_files": [
+        "docs/src/types/feedback.ts",
+        "docs/src/utils/feedbackValidation.ts",
+        "docs/tests/unit/feedback.test.mjs"
+      ],
+      "milestone": "Milestone 3",
+      "phase": "Đợt 3A",
+      "col": 6.75,
+      "hard_deps": "Học sinh (M5/SM1), Lớp học (M5/SM3), Năm học (M5/SM13), Giáo viên (M5/SM2), Tài khoản (M6/SM2)",
+      "after_ids": [
+        "R-M5SM1",
+        "R-M5SM3",
+        "R-M5SM13",
+        "R-M5SM2",
+        "R-M6SM2"
+      ],
+      "order": 30
+    },
+    {
+      "id": "F019",
+      "code": "M3/SM1",
+      "name": "Thời khóa biểu Tuần & Lịch sử Phiên bản",
+      "description": "Lập lịch thời khóa biểu tuần theo tiết học, môn học, phòng học và giáo viên phụ trách; lưu vết lịch sử phiên bản gửi thông báo đến phụ huynh.",
+      "priority": "P2",
+      "category": "Academics",
+      "route": "/school/schedule",
+      "state": "pending",
+      "spec_file": "llm-wiki/pages/screens/m3-sm1-thoi-khoa-bieu.md",
+      "code_files": [
+        "docs/src/types/schedule.ts",
+        "docs/src/utils/scheduleValidation.ts",
+        "docs/tests/unit/schedule.test.mjs"
+      ],
+      "milestone": "Milestone 3",
+      "phase": "Đợt 3B",
+      "col": 7.25,
+      "hard_deps": "Lớp học (M5/SM3), Năm học (M5/SM13), Môn học (M5/SM4)",
+      "after_ids": [
+        "R-M5SM3",
+        "R-M5SM13",
+        "R-M5SM4"
+      ],
+      "order": 31
+    },
+    {
+      "id": "F020",
+      "code": "M3/SM2",
+      "name": "Giao Bài tập về nhà & Theo dõi Nộp bài",
+      "description": "Tạo bài tập về nhà theo môn học và lớp, đính kèm tài liệu hướng dẫn, đặt hạn nộp và theo dõi trạng thái làm bài của từng học sinh.",
+      "priority": "P2",
+      "category": "Academics",
+      "route": "/school/assignment",
+      "state": "pending",
+      "spec_file": "llm-wiki/pages/screens/m3-sm2-bai-tap.md",
+      "code_files": [
+        "docs/src/types/assignment.ts",
+        "docs/src/utils/assignmentValidation.ts",
+        "docs/tests/unit/assignment.test.mjs"
+      ],
+      "milestone": "Milestone 3",
+      "phase": "Đợt 3B",
+      "col": 7.25,
+      "hard_deps": "Lớp học (M5/SM3), Môn học (M5/SM4), Học sinh (M5/SM1)",
+      "after_ids": [
+        "R-M5SM3",
+        "R-M5SM4",
+        "R-M5SM1"
+      ],
+      "order": 32
+    },
+    {
+      "id": "F025",
+      "code": "M5/SM8",
+      "name": "Kế hoạch Thực đơn Tuần & Nguồn gốc Thực phẩm GTIN",
+      "description": "Lập thực đơn dinh dưỡng bán trú tuần trước tối đa 8 tuần (dạng lưới hoặc file tải lên), tự động kế thừa thực đơn trường cho các lớp và truy xuất nguồn gốc thực phẩm theo mã GTIN/lô.",
+      "priority": "P2",
+      "category": "School Admin",
+      "route": "/school/menu",
+      "state": "pending",
+      "spec_file": "llm-wiki/pages/screens/m5-sm8-thuc-don.md",
+      "code_files": [
+        "docs/src/types/menu.ts",
+        "docs/src/utils/menuValidation.ts",
+        "docs/tests/unit/menu.test.mjs"
+      ],
+      "milestone": "Milestone 3",
+      "phase": "Đợt 3A",
+      "col": 7.25,
+      "hard_deps": "Lớp học (M5/SM3)",
+      "after_ids": [
+        "R-M5SM3"
+      ],
+      "order": 33
+    },
+    {
+      "id": "F027",
+      "code": "M1/SM1",
+      "name": "Dashboard Tổng quan Toàn trường (Overview)",
+      "description": "Bảng điều khiển trung tâm hiển thị toàn diện các chỉ số KPI vận hành của trường: tổng số học sinh/lớp/giáo viên, tiến độ thu học phí, điểm danh hôm nay, hàng đợi duyệt bài và sinh nhật trong tháng.",
+      "priority": "P2",
+      "category": "Overview",
+      "route": "/overview",
+      "state": "pending",
+      "spec_file": "llm-wiki/pages/screens/m1-sm1-tong-quan.md",
+      "code_files": [
+        "docs/src/pages/index.tsx",
+        "docs/src/types/reports.ts"
+      ],
+      "milestone": "Milestone 3",
+      "phase": "Đợt 3B",
+      "col": 7.25,
+      "hard_deps": "Học sinh (M5/SM1), Lớp học (M5/SM3), Giáo viên (M5/SM2), Học phí (M4/SM1), Khoản chi (M4/SM5)",
+      "after_ids": [
+        "R-M5SM1",
+        "R-M5SM3",
+        "R-M5SM2",
+        "R-M4SM1",
+        "R-M4SM5"
+      ],
+      "order": 34
+    },
+    {
+      "id": "F031",
+      "code": "M5/SM7",
+      "name": "Bình chọn & Khảo sát Ý kiến Phụ huynh (Polls)",
+      "description": "Tạo các cuộc khảo sát ý kiến nhiều lựa chọn, phân tách giữa soạn nháp và phát hành, theo dõi tiến độ bình chọn qua biểu đồ tròn thời gian thực.",
+      "priority": "P2",
+      "category": "School Admin",
+      "route": "/school/poll",
+      "state": "pending",
+      "spec_file": "llm-wiki/pages/screens/m5-sm7-binh-chon.md",
+      "code_files": [
+        "docs/src/types/poll.ts",
+        "docs/src/utils/pollValidation.ts",
+        "docs/tests/unit/poll.test.mjs"
+      ],
+      "milestone": "Milestone 3",
+      "phase": "Đợt 3A",
+      "col": 7.25,
+      "hard_deps": "Lớp học (M5/SM3), Học sinh (M5/SM1)",
+      "after_ids": [
+        "R-M5SM3",
+        "R-M5SM1"
+      ],
+      "order": 35
+    },
+    {
+      "id": "F035",
+      "code": "M5/SM14",
+      "name": "Kho Lưu trữ Học sinh Thôi học / Rút hồ sơ (Archive)",
+      "description": "Kho lưu trữ độc lập danh sách học sinh đã thôi học hoặc chuyển trường, hỗ trợ phục hồi nguyên trạng vào lớp học cũ hoặc xóa vĩnh viễn an toàn 2 bước.",
+      "priority": "P2",
+      "category": "School Admin",
+      "route": "/setting/kid/archived",
+      "state": "pending",
+      "spec_file": "llm-wiki/pages/screens/m5-sm14-luu-tru.md",
+      "code_files": [
+        "docs/src/types/archive.ts",
+        "docs/src/utils/archiveValidation.ts",
+        "docs/tests/unit/archive.test.mjs"
+      ],
+      "milestone": "Milestone 3",
+      "phase": "Đợt 3A",
+      "col": 7.25,
+      "hard_deps": "Học sinh (M5/SM1)",
+      "after_ids": [
+        "R-M5SM1"
+      ],
+      "order": 36
+    },
+    {
+      "id": "F021",
+      "code": "M3/SM3",
+      "name": "Sổ điểm & Đánh giá Học tập Định kỳ",
+      "description": "Sổ điểm điện tử chuẩn Bộ Giáo dục & Đào tạo ghi nhận điểm số (miệng, 15 phút, 1 tiết, giữa kỳ, cuối kỳ) và rubric đánh giá định kỳ cho học sinh mầm non.",
+      "priority": "P2",
+      "category": "Academics",
+      "route": "/school/scoreboard",
+      "state": "pending",
+      "spec_file": "llm-wiki/pages/screens/m3-sm3-diem-danh-gia.md",
+      "code_files": [
+        "docs/src/types/gradebook.ts",
+        "docs/src/utils/gradebookValidation.ts",
+        "docs/tests/unit/gradebook.test.mjs"
+      ],
+      "milestone": "Milestone 3",
+      "phase": "Đợt 3B",
+      "col": 7.5,
+      "hard_deps": "Lớp học (M5/SM3), Môn học (M5/SM4), Học sinh (M5/SM1), Năm học (M5/SM13), Khối lớp (M5/SM5), Giáo viên (M5/SM2)",
+      "after_ids": [
+        "R-M5SM3",
+        "R-M5SM4",
+        "R-M5SM1",
+        "R-M5SM13",
+        "R-M5SM5",
+        "R-M5SM2"
+      ],
+      "order": 37
+    },
+    {
+      "id": "F014",
+      "code": "M4/SM8",
+      "name": "Chính sách Miễn giảm & Động cơ Tự động Áp dụng Mức cao nhất",
+      "description": "Quản lý các chính sách miễn giảm học phí (% hoặc VNĐ) theo lớp hoặc học sinh cụ thể; thực thi thuật toán tập giao 24 khoản phí và động cơ giải quyết xung đột tự động áp dụng mức ưu đãi cao nhất khi học sinh có từ 2 chính sách hợp lệ.",
+      "priority": "P2",
+      "category": "Finance",
+      "route": "/school/discount",
+      "state": "passing",
+      "spec_file": "llm-wiki/pages/screens/m4-sm8-mien-giam.md",
+      "code_files": [
+        "docs/src/types/discount.ts",
+        "docs/src/utils/discountValidation.ts",
+        "docs/tests/unit/discount.test.mjs"
+      ],
+      "milestone": "Milestone 3",
+      "phase": "Đợt 3B",
+      "col": 99,
+      "hard_deps": "Không có",
+      "after_ids": [],
+      "order": 38,
+      "updated_at": "2026-11-04T05:07:37Z"
+    }
+  ]
+}

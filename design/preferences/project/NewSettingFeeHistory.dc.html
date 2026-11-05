@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Lịch sử thanh toán Sepay — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="setting-fee" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Lịch sử thanh toán Sepay</h1>
+    <p class="ecomd-page-header__desc body-sm">Giao dịch học phí trực tuyến qua Sepay và VietQR, tự gạch nợ vào hóa đơn</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.SelectField" options="{{monthOpts}}" value="{{month}}" on-change="{{setMonth}}" label="Tháng"></x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="file-excel">Xuất Excel</x-import></div>
+</div>
+<div class="ecomd-stat-group" style="--ecomd-cols: 3;">
+  <sc-for list="{{stats}}" as="s" hint-placeholder-count="3"><x-import component-from-global-scope="ECOMD.StatCard" label="{{s.label}}" value="{{s.value}}" icon="{{s.icon}}" tone="{{s.tone}}"></x-import></sc-for>
+</div>
+<section class="ecomd-table-card"><x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Trạng thái giao dịch"></x-import>
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo hóa đơn, học sinh, mã giao dịch" value="{{query}}" on-change="{{setQuery}}"></x-import></div><div class="ecomd-table-scroll">
+<table class="ecomd-table is-fit">
+<thead><tr><th class="body-xs-bold is-primary">Giao dịch</th><th class="body-xs-bold">Học sinh và hóa đơn</th><th class="body-xs-bold is-right">Số tiền</th><th class="body-xs-bold">Trạng thái</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; gap: var(--space-2);"><span class="body-sm-medium" style="color: var(--text-heading); font-variant-numeric: tabular-nums;">{{r.bank}}</span><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">{{r.time}}</span></span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Học sinh và hóa đơn</span><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; gap: var(--space-2);"><span class="body-sm" style="color: var(--text-heading); white-space: nowrap;">{{r.name}}</span><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">{{r.cls}} · <a href="#" style="color: var(--text-link); text-decoration: none; white-space: nowrap;">{{r.inv}}</a></span></span></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Số tiền</span><div class="ecomd-cell__value"><span class="body-sm-semibold" style="color: {{r.amtColor}}; white-space: nowrap; font-variant-numeric: tabular-nums;">{{r.amt}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Trạng thái</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.tone}}" icon="{{r.icon}}">{{r.status}}</x-import></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="5"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có giao dịch nào khớp bộ lọc"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<div class="ecomd-pagination body-sm"><span>{{count}} giao dịch · đã thu <b style="font-variant-numeric: tabular-nums;">{{sum}}</b></span></div></section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Cấu hình", "Học phí", "Lịch sử thanh toán Sepay"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { month: 'Tháng 09/2026', tab: 'all', query: '' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+    function vnd(n) { return (n < 0 ? '-' : '') + Math.abs(Math.round(n)).toLocaleString('en-US') + 'đ'; }
+    function num(v) { v = String(v == null ? '' : v).replace(/,/g, '').trim(); return v === '' || isNaN(+v) ? 0 : +v; }
+    function fmt(n) { return n ? Math.round(n).toLocaleString('en-US') : ''; }
+
+    var T = [{"time": "09:42, 29/09/2026", "inv": "HD-2026-09-0012", "name": "Nguyễn Gia Hân", "cls": "Lớp 1A1", "amt": 4500000, "bank": "MB-9923841", "st": "ok"}, {"time": "08:15, 29/09/2026", "inv": "HD-2026-09-0045", "name": "Trần Bảo Nam", "cls": "Lớp 1A1", "amt": 5200000, "bank": "VCB-8837192", "st": "ok"}, {"time": "16:30, 28/09/2026", "inv": "HD-2026-09-0089", "name": "Lê Hoàng Yến", "cls": "Lớp 2A2", "amt": 4800000, "bank": "TCB-5542109", "st": "ok"}, {"time": "14:05, 28/09/2026", "inv": "HD-2026-09-0102", "name": "Phạm Minh Khang", "cls": "Lớp 3A1", "amt": 3900000, "bank": "ACB-1129384", "st": "wait"}, {"time": "11:20, 27/09/2026", "inv": "HD-2026-09-0034", "name": "Vũ Đức Duy", "cls": "Lớp 1A2", "amt": 5100000, "bank": "BIDV-7738291", "st": "fail"}, {"time": "10:11, 26/09/2026", "inv": "HD-2026-09-0056", "name": "Hoàng Thùy Linh", "cls": "Lớp 4A1", "amt": 4750000, "bank": "MB-1029384", "st": "ok"}];
+    var SS = { ok: ['Thành công', 'success', 'circle-check'], wait: ['Đang xử lý', 'warning', 'clock'], fail: ['Thất bại', 'danger', 'circle-xmark'] };
+    var q = (st.query || '').trim().toLowerCase();
+    var base = T.filter(function (t) { return !q || (t.inv + ' ' + t.name + ' ' + t.bank).toLowerCase().indexOf(q) >= 0; });
+    var list = base.filter(function (t) { return st.tab === 'all' || t.st === st.tab; });
+    var ok = 0; T.forEach(function (t) { if (t.st === 'ok') ok += t.amt; });
+    var sum = 0; list.forEach(function (t) { if (t.st === 'ok') sum += t.amt; });
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      monthOpts: ['Tháng 09/2026', 'Tháng 10/2026', 'Tháng 08/2026'], month: st.month, setMonth: function (v) { self.setState({ month: v }); },
+      stats: [{ label: 'Đã thu qua Sepay', value: vnd(ok), icon: 'coins', tone: 'neutral' }, { label: 'Giao dịch thành công', value: '4 / 6', icon: 'circle-check', tone: 'success' }, { label: 'Cần kiểm tra', value: '1 chờ · 1 lỗi', icon: 'triangle-exclamation', tone: 'warning' }],
+      tabs: [['all', 'Tất cả'], ['ok', 'Thành công'], ['wait', 'Đang xử lý'], ['fail', 'Thất bại']].map(function (d) { return { key: d[0], label: d[1], count: base.filter(function (t) { return d[0] === 'all' || t.st === d[0]; }).length }; }),
+      tab: st.tab, setTab: function (k) { self.setState({ tab: k }); }, query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      rows: list.map(function (t) { var s = SS[t.st]; return Object.assign({}, t, { amt: vnd(t.amt), amtColor: t.st === 'fail' ? 'var(--text-muted)' : 'var(--text-heading)', status: s[0], tone: s[1], icon: s[2], actionLabel: 'Thao tác với giao dịch ' + t.bank,
+        menu: t.st === 'ok' ? [{ icon: 'eye', label: 'Xem hóa đơn' }, { icon: 'download', label: 'Tải chứng từ' }] : [{ icon: 'eye', label: 'Xem hóa đơn' }, { icon: 'arrows-rotate', label: 'Kiểm tra lại với ngân hàng' }, { icon: 'check', label: 'Gạch nợ thủ công…' }] }); }),
+      isEmpty: !list.length, count: list.length, sum: vnd(sum)
+    });
+  }
+}
+</script>
+</body>
+</html>

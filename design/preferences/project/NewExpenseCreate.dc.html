@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tạo phiếu chi — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="expenses" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Tạo phiếu chi</h1>
+    <p class="ecomd-page-header__desc body-sm">Lập phiếu hoàn tiền cho phụ huynh hoặc chi tiêu nội bộ; phiếu cần hiệu trưởng duyệt trước khi chi</p>
+  </div>
+</div>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Thông tin chung</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tên phiếu chi <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" value="Hoàn tiền ăn tháng 11/2025 – em Cao Ngọc Minh" placeholder="VD: Hoàn tiền học phí tháng 11/2025 – em Nguyễn Văn A"></label><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Ngày lập <span class="ecomd-field__req" aria-hidden="true">*</span></span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" value="02/11/2026" placeholder="dd/mm/yyyy"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Danh mục chi <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{catOpts}}" value="{{cat}}" on-change="{{setCat}}" label="Danh mục chi"></x-import></label></div><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Loại phiếu chi <span class="ecomd-field__req" aria-hidden="true">*</span></span><div class="ecomd-choices" style="--ecomd-cols: 2;"><label class="ecomd-choice"><input type="radio" name="kind" checked="{{isRefund}}" onChange="{{pickRefund}}"><span class="ecomd-choice__icon" aria-hidden="true"><x-import component-from-global-scope="ECOMD.Icon" name="rotate-left" size="{{fourteen}}"></x-import></span><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">Hoàn tiền</span><span class="ecomd-choice__desc body-xs">Học phí, tiền ăn, xe đưa đón… trả lại phụ huynh</span></span></label><label class="ecomd-choice"><input type="radio" name="kind" checked="{{isOther}}" onChange="{{pickOther}}"><span class="ecomd-choice__icon" aria-hidden="true"><x-import component-from-global-scope="ECOMD.Icon" name="receipt" size="{{fourteen}}"></x-import></span><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">Chi khác</span><span class="ecomd-choice__desc body-xs">Mua sắm, phụ cấp, chi hoạt động</span></span></label></div></div></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Người nhận</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Đối tượng <span class="ecomd-field__req" aria-hidden="true">*</span></span><div class="ecomd-radios" style="min-height: var(--size-32); align-items: center;"><label class="ecomd-radio body-sm"><input type="radio" name="to" checked="{{toKid}}" onChange="{{pickKid}}"><span>Học sinh</span></label><label class="ecomd-radio body-sm"><input type="radio" name="to" checked="{{toStaff}}" onChange="{{pickStaff}}"><span>Nhân viên, giáo viên</span></label></div></div><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">{{whoLabel}} <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{whoOpts}}" value="{{who}}" on-change="{{setWho}}" label="Người được chi"></x-import></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Người nhận tiền <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" value="{{payee}}" placeholder="VD: Nguyễn Văn Toàn (bố)"><span class="ecomd-field__hint body-xs">{{payeeHint}}</span></label></div><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Ghi chú nội bộ</span><textarea class="ecomd-textarea body-sm" rows="2" placeholder="Căn cứ lập phiếu chi, chỉ nhà trường thấy"></textarea><span class="ecomd-field__hint body-xs">Không bắt buộc</span></label></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Các khoản chi</h2><p class="ecomd-card__desc body-xs">Thành tiền = đơn giá × số lượng</p></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><div class="ecomd-table-scroll"><table class="ecomd-table is-dense"><thead><tr><th class="body-xs-bold is-primary">Nội dung chi</th><th class="body-xs-bold">Ghi chú</th><th class="body-xs-bold is-right">Đơn giá</th><th class="body-xs-bold is-right">Số lượng</th><th class="body-xs-bold">Đơn vị</th><th class="body-xs-bold is-right">Thành tiền</th><th class="body-xs-bold is-actions"><span class="ecomd-sr">Xóa dòng</span></th></tr></thead><tbody><sc-for list="{{lines}}" as="l" hint-placeholder-count="2"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value" style="width: 100%;"><input type="text" class="ecomd-text body-sm" value="{{l.name}}" placeholder="Nội dung khoản chi" aria-label="{{l.nameLabel}}" onChange="{{l.setName}}"></div></td><td class="body-sm is-wide"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Ghi chú</span><div class="ecomd-cell__value"><input type="text" class="ecomd-text body-sm" value="{{l.note}}" placeholder="Không bắt buộc" aria-label="{{l.noteLabel}}" style="min-width: calc(var(--size-sidebar-w) * 3 / 4);"></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Đơn giá</span><div class="ecomd-cell__value"><input type="text" inputmode="numeric" class="ecomd-text is-num body-sm" value="{{l.priceTxt}}" placeholder="0" aria-label="{{l.priceLabel}}" onChange="{{l.setPrice}}" style="width: calc(var(--size-40) * 5 / 2); text-align: right;"></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Số lượng</span><div class="ecomd-cell__value"><input type="text" inputmode="numeric" class="ecomd-text is-num body-sm" value="{{l.qty}}" aria-label="{{l.qtyLabel}}" onChange="{{l.setQty}}" style="width: calc(var(--size-40) * 3 / 2);"></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Đơn vị</span><div class="ecomd-cell__value"><input type="text" class="ecomd-text body-sm" value="{{l.unit}}" aria-label="{{l.unitLabel}}" style="width: calc(var(--size-40) * 2);"></div></td><td class="body-sm is-right is-wide"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Thành tiền</span><div class="ecomd-cell__value"><span class="body-sm-semibold" style="color: var(--text-heading); white-space: nowrap; font-variant-numeric: tabular-nums;">{{l.total}}</span></div></td><td class="body-sm is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.IconButton" icon="trash-can" label="{{l.rmLabel}}" on-click="{{l.remove}}"></x-import></div></td></tr></sc-for></tbody></table></div><div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--space-16);"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="plus" on-click="{{addLine}}">Thêm dòng chi</x-import><dl class="body-sm" style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-8) 0; margin: 0 0 0 auto; width: 100%; max-width: calc(var(--size-sidebar-w) * 3 / 2);"><dt style="color: var(--text-heading); padding-top: var(--space-8); border-top: 1px solid var(--border-default);" class="body-sm-semibold">Tổng chi</dt><dd class="title-md" style="margin: 0; padding-left: var(--space-24); text-align: right; font-variant-numeric: tabular-nums; color: var(--text-heading); padding-top: var(--space-8); border-top: 1px solid var(--border-default);">{{sum}}</dd></dl></div></div></div>
+</section>
+<div class="ecomd-form-footer"><span class="ecomd-form-footer__note body-xs">{{footNote}}</span><div class="ecomd-form-footer__actions"><x-import component-from-global-scope="ECOMD.Button" variant="ghost">Hủy</x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary">Lưu nháp</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="paper-plane">Lưu và trình duyệt</x-import></div></div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1344}}'>
+var CRUMBS = ["Tài chính", "Khoản chi", "Tạo phiếu chi"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { kind: 'refund', to: 'kid', cat: 'Học phí', kid: 'Cao Ngọc Minh · Lớp Mầm 1 · HS-0012', staff: 'Lê Thị Thảo · Tổ trưởng Tự nhiên', lines: [{ name: 'Hoàn tiền ăn vắng có phép tháng 11 (10 ngày)', note: 'Đã trừ ngày nghỉ ốm theo đơn phép', price: 45000, qty: 10, unit: 'ngày' }, { name: '', note: '', price: 0, qty: 1, unit: 'lần' }] }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+    function vnd(n) { return (n < 0 ? '-' : '') + Math.abs(Math.round(n)).toLocaleString('en-US') + 'đ'; }
+    function num(v) { v = String(v == null ? '' : v).replace(/,/g, '').trim(); return v === '' || isNaN(+v) ? 0 : +v; }
+    function fmt(n) { return n ? Math.round(n).toLocaleString('en-US') : ''; }
+
+    function upd(i, k) { return function (e) { var v = e.target.value; var n = self.state.lines.map(function (x) { return Object.assign({}, x); }); n[i][k] = (k === 'price' || k === 'qty') ? num(v) : v; self.setState({ lines: n }); }; }
+    var sum = 0;
+    var lines = st.lines.map(function (l, i) { var t = l.price * l.qty; sum += t;
+      return { name: l.name, note: l.note, priceTxt: fmt(l.price), qty: String(l.qty), unit: l.unit, total: t ? vnd(t) : '0đ',
+        nameLabel: 'Nội dung chi dòng ' + (i + 1), noteLabel: 'Ghi chú dòng ' + (i + 1), priceLabel: 'Đơn giá dòng ' + (i + 1), qtyLabel: 'Số lượng dòng ' + (i + 1), unitLabel: 'Đơn vị dòng ' + (i + 1), rmLabel: 'Xóa dòng ' + (i + 1),
+        setName: upd(i, 'name'), setPrice: upd(i, 'price'), setQty: upd(i, 'qty'),
+        remove: function () { self.setState({ lines: self.state.lines.filter(function (x, j) { return j !== i; }) }); } }; });
+    var kid = st.to === 'kid';
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      lines: lines, isEmpty: !lines.length, sum: vnd(sum),
+      addLine: function () { self.setState({ lines: self.state.lines.concat([{ name: '', note: '', price: 0, qty: 1, unit: 'lần' }]) }); },
+      catOpts: ['Học phí', 'Cơ sở vật chất', 'Đồng phục', 'Sự kiện và ngoại khóa', 'Mặc định'], cat: st.cat, setCat: function (v) { self.setState({ cat: v }); },
+      isRefund: st.kind === 'refund', isOther: st.kind === 'other', pickRefund: function () { self.setState({ kind: 'refund' }); }, pickOther: function () { self.setState({ kind: 'other' }); },
+      toKid: kid, toStaff: !kid, pickKid: function () { self.setState({ to: 'kid' }); }, pickStaff: function () { self.setState({ to: 'staff' }); },
+      whoLabel: kid ? 'Học sinh' : 'Nhân viên, giáo viên', whoOpts: kid ? ['Cao Ngọc Minh · Lớp Mầm 1 · HS-0012', 'Trần Bảo Nam · Lớp Lá 2 · HS-0024', 'Nguyễn Mai Chi · Lớp 1A1 · HS-0035'] : ['Lê Thị Thảo · Tổ trưởng Tự nhiên', 'Nguyễn Minh Trí · Quản lý cơ sở vật chất'],
+      who: kid ? st.kid : st.staff, setWho: function (v) { self.setState(kid ? { kid: v } : { staff: v }); },
+      payee: kid ? 'Nguyễn Văn Toàn (bố)' : '', payeeHint: kid ? 'Phụ huynh nhận thông báo khi phiếu được chi.' : 'Để trống nếu chính nhân viên nhận tiền.',
+      footNote: lines.length + ' khoản chi · tổng ' + vnd(sum) + ' · cần hiệu trưởng duyệt.'
+    });
+  }
+}
+</script>
+</body>
+</html>

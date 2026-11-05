@@ -1,0 +1,187 @@
+/* ECO FINVIET Design System — Canonical Design Tokens */
+/* Extracted from ECO Design System / ECO-FINVIET-Design-System.html */
+
+:root, [data-theme="light"] {
+  /* Brand Core Colors */
+  --eco-blue: #006fda;
+  --eco-yellow: #ffca00;
+  --artic-blue: #4ac3ff;
+  --deep-aqua: #00c1c1;
+  --orange-citrus: #f78700;
+
+  /* Semantic State Colors */
+  --color-danger: #c0263a;
+  --color-danger-bright: #e5252b;
+  --color-warning-text: #e8590c;
+  --eco-gold: #fac515;
+  --eco-link: var(--eco-blue);
+
+  /* Typography / Content Colors */
+  --text-primary: #1f1f1f;
+  --text-secondary: #595959;
+  --text-tertiary: #8c8c8c;
+  --text-disabled: #bfbfbf;
+  --text-inverse: #ffffff;
+  --text-label: #141414;
+
+  /* Surfaces & Backgrounds */
+  --bg-canvas: #f5f5f5;
+  --bg-sunken: #fafafa;
+  --bg-surface: #ffffff;
+  --bg-solid: #1f1f1f;
+  --bg-overlay: rgba(0, 0, 0, 0.45);
+  --bg-input-soft: #f6f7fb;
+  --bg-neutral-soft: #f3f4f8;
+
+  /* Borders & Dividers */
+  --border-default: #d9d9d9;
+  --border-subtle: #f0f0f0;
+
+  /* Elevation Shadows */
+  --shadow-xs: 0 1px 2px rgba(31, 31, 31, 0.08);
+  --shadow-sm: 0 2px 4px rgba(31, 31, 31, 0.08), 0 1px 2px rgba(31, 31, 31, 0.06);
+  --shadow-md: 0 4px 8px rgba(31, 31, 31, 0.10), 0 2px 4px rgba(31, 31, 31, 0.06);
+  --shadow-lg: 0 8px 16px rgba(31, 31, 31, 0.12), 0 4px 8px rgba(31, 31, 31, 0.06);
+  --shadow-xl: 0 16px 32px rgba(31, 31, 31, 0.16), 0 6px 12px rgba(31, 31, 31, 0.08);
+
+  /* Backward Compatibility Aliases for Legacy Code */
+  --color-primary-yellow: var(--eco-yellow);
+  --color-primary-yellow-hover: #fecd4d;
+  --color-primary-yellow-active: #e6ac19;
+  --color-primary-blue: var(--eco-blue);
+  --color-primary-blue-hover: #1a94ff;
+  --color-semantic-green: #00ab56;
+  --color-semantic-red: var(--color-danger);
+  --color-semantic-orange: var(--orange-citrus);
+  --color-bg-light: var(--bg-canvas);
+  --color-card-bg: var(--bg-surface);
+  --color-border: var(--border-default);
+}
+
+:root {
+  /* Spacing Scale (4px baseline grid) */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+
+  /* Corner Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Font Families */
+  --font-sans: 'Inter', 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans-native: 'SF Pro', 'Inter', 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: var(--font-sans-native);
+  --font-body: var(--font-sans);
+
+  /* Typography Scale Styles */
+  --text-h1: 700 64px/76px var(--font-sans-native);
+  --text-h2: 700 48px/58px var(--font-sans-native);
+  --text-h3: 700 36px/44px var(--font-sans-native);
+  --text-h4: 700 24px/30px var(--font-sans-native);
+  --text-body-l: 400 18px/24px var(--font-sans-native);
+  --text-body-m: 400 16px/22px var(--font-sans-native);
+  --text-body-s: 400 14px/20px var(--font-sans-native);
+  --text-body-xs: 400 12px/16px var(--font-sans-native);
+  --text-amount: 700 32px/48px var(--font-sans-native);
+}
+
+/* Typography Utility Classes from ECO Design System */
+.eco-h1 {
+  font-family: var(--font-sans-native);
+  font-size: 64px;
+  line-height: 76px;
+  font-weight: 700;
+  letter-spacing: -1.3px;
+}
+
+.eco-h2 {
+  font-family: var(--font-sans-native);
+  font-size: 48px;
+  line-height: 58px;
+  font-weight: 700;
+  letter-spacing: -0.8px;
+}
+
+.eco-h3 {
+  font-family: var(--font-sans-native);
+  font-size: 36px;
+  line-height: 44px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+.eco-h4 {
+  font-family: var(--font-sans-native);
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 700;
+  letter-spacing: 0px;
+}
+
+.eco-amount {
+  font-family: var(--font-sans-native);
+  font-size: 32px;
+  line-height: 48px;
+  font-weight: 700;
+  letter-spacing: 0px;
+}
+
+.eco-body-l {
+  font-family: var(--font-sans-native);
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  letter-spacing: 0px;
+}
+
+.eco-body-m {
+  font-family: var(--font-sans-native);
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 400;
+  letter-spacing: 0px;
+}
+
+.eco-body-s {
+  font-family: var(--font-sans-native);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+
+.eco-body-xs {
+  font-family: var(--font-sans-native);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+
+/* Animations */
+@keyframes eco-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes eco-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Cấu hình học phí — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="setting-fee" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Cấu hình học phí</h1>
+    <p class="ecomd-page-header__desc body-sm">Ghi chú hóa đơn, thanh toán tự động, hóa đơn điện tử, phí đón muộn, hoàn tiền và email đối soát</p>
+  </div>
+</div>
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Nhóm cấu hình"></x-import>
+<sc-if value="{{tInv}}" hint-placeholder-val="{{true}}"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Ghi chú trên phiếu báo học phí</h2><p class="ecomd-card__desc body-xs">Hiển thị ở chân phiếu báo và thông báo học phí gửi phụ huynh</p></div><div class="ecomd-card__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary">Lưu</x-import></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-8);"><label><span class="ecomd-sr">Nội dung ghi chú</span><textarea class="ecomd-textarea body-sm" rows="3" placeholder="Nhập nội dung ghi chú gửi phụ huynh">Quý phụ huynh vui lòng hoàn tất học phí trước ngày 10 hằng tháng. Mọi thắc mắc xin liên hệ phòng Kế toán: 028 3822 9999.</textarea></label><span class="body-xs" style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-8); color: var(--text-subtle);"><span>Cập nhật 08:30, 15/09/2026 bởi Nguyễn Thu Trang (Kế toán trưởng)</span><span>134 / 500 ký tự</span></span></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Thanh toán tự động Sepay</h2><p class="ecomd-card__desc body-xs">Gạch nợ hóa đơn ngay khi phụ huynh chuyển khoản hoặc quét VietQR</p></div><div class="ecomd-card__actions"><x-import component-from-global-scope="ECOMD.StatusTag" tone="success" icon="check">Đang kết nối</x-import><x-import component-from-global-scope="ECOMD.Button" variant="text">Lịch sử thanh toán</x-import></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Khóa bí mật (Sepay secret key)</span><span style="display: flex; gap: var(--space-8);"><input type="text" class="ecomd-text body-sm" value="sepay_sec_••••••••••••••••" readonly="{{yes}}"><x-import component-from-global-scope="ECOMD.IconButton" icon="copy" label="Sao chép khóa" size="md"></x-import></span><span class="ecomd-field__hint body-xs">Dùng để xác thực webhook thanh toán. Quản trị viên hệ thống cấp.</span></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Webhook nhận biến động số dư</span><span style="display: flex; gap: var(--space-8);"><input type="text" class="ecomd-text body-sm" value="https://api.ecoschool.edu.vn/demo/api/1.0/webhook/sepay/pay-in" readonly="{{yes}}"><x-import component-from-global-scope="ECOMD.IconButton" icon="copy" label="Sao chép địa chỉ" size="md"></x-import></span></label></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Hóa đơn điện tử Viettel SInvoice</h2><p class="ecomd-card__desc body-xs">Tài khoản phát hành hóa đơn điện tử tự động</p></div><div class="ecomd-card__actions"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Bật hóa đơn điện tử" checked="{{einv}}" onChange="{{tg.einv}}"><x-import component-from-global-scope="ECOMD.Button" variant="secondary">Lưu</x-import></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><div class="ecomd-grid" style="--ecomd-cols: 3; --ecomd-cols-tablet: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Mã số thuế *</span><input type="text" class="ecomd-text body-sm" placeholder="VD: 0108998877"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tên tài khoản *</span><input type="text" class="ecomd-text body-sm" placeholder="VD: ECO_SCHOOL_HN"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Mật khẩu kết nối *</span><input type="password" class="ecomd-text body-sm" value="••••••••••••"><span class="ecomd-field__hint body-xs">Được mã hóa, không hiển thị lại.</span></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Mẫu số hóa đơn *</span><input type="text" class="ecomd-text body-sm" placeholder="VD: 1/001"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Loại hóa đơn *</span><input type="text" class="ecomd-text body-sm" placeholder="VD: C26TAA"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Ký hiệu hóa đơn *</span><input type="text" class="ecomd-text body-sm" placeholder="VD: AA/26E"></label></div><x-import component-from-global-scope="ECOMD.Checkbox" label="Tự phát hành hóa đơn điện tử khi hóa đơn học phí được thanh toán đủ" checked="{{autoInv}}" on-change="{{tg.autoInv}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Tách hóa đơn theo nhóm khoản phí (học phí chính khóa, dịch vụ ngoại khóa)" checked="{{splitInv}}" on-change="{{tg.splitInv}}"></x-import></div></div>
+</section>
+</div></sc-if>
+<sc-if value="{{tLate}}" hint-placeholder-val="{{false}}"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Phí đón muộn</h2><p class="ecomd-card__desc body-xs">Tính phí giữ trẻ khi phụ huynh đón sau giờ đóng cửa</p></div><div class="ecomd-card__actions"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Bật tính phí đón muộn" checked="{{lateFee}}" onChange="{{tg.lateFee}}"></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><x-import component-from-global-scope="ECOMD.Tabs" items="{{lateModes}}" value="{{lateMode}}" on-change="{{setLateMode}}" label="Cách tính" variant="segmented"></x-import><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Làm tròn theo block</span><x-import component-from-global-scope="ECOMD.SelectField" options="{{blockOpts}}" value="{{block}}" on-change="{{setBlock}}" label="Block tính phí"></x-import><span class="ecomd-field__hint body-xs">Mỗi block chưa đủ vẫn tính tròn một block.</span></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Số tiền mỗi học sinh mỗi giờ</span><input type="text" class="ecomd-text body-sm" value="50,000đ"><span class="ecomd-field__hint body-xs">Áp dụng sau giờ đóng cửa của từng ngày.</span></label></div></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Hoàn tiền khi học sinh nghỉ</h2><p class="ecomd-card__desc body-xs">Tự tính tiền hoàn và trừ vào hóa đơn tháng sau (M+1)</p></div><div class="ecomd-card__actions"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Bật hoàn tiền khi nghỉ" checked="{{refund}}" onChange="{{tg.refund}}"></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><x-import component-from-global-scope="ECOMD.InlineNotice" tone="info">Chỉ khoản phí tính theo <b>ngày</b> mới áp dụng được. Điểm danh của giáo viên được ưu tiên hơn đơn báo vắng: phụ huynh đã báo vắng nhưng bé vẫn đến lớp thì không hoàn tiền.</x-import><div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Khoản phí</th><th class="body-xs-bold">Vắng có phép</th><th class="body-xs-bold">Vắng không phép</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{refunds}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column;"><span class="body-sm-medium" style="color: var(--text-heading);">{{r.name}}</span><span class="body-xs" style="color: var(--text-subtle);">{{r.price}}</span></span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Vắng có phép</span><div class="ecomd-cell__value"><span style="display: inline-flex; align-items: center; gap: var(--space-6);"><input type="text" class="ecomd-text body-sm" value="{{r.pct}}" aria-label="{{r.pctLabel}}" style="width: calc(var(--size-40) * 2); text-align: right;">%</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Vắng không phép</span><div class="ecomd-cell__value"><span style="color: var(--text-subtle);">0% (mặc định)</span></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.IconButton" icon="trash-can" label="{{r.rmLabel}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="4"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có dữ liệu"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-16);"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="plus">Thêm khoản phí hoàn tiền</x-import><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Báo vắng trước ít nhất</span><span style="display: inline-flex; align-items: center; gap: var(--space-8);"><input type="text" class="ecomd-text body-sm" value="12" style="width: calc(var(--size-40) * 2); text-align: right;"><span class="body-sm">giờ trước giờ mở cửa</span></span></label></div></div></div>
+</section>
+</div></sc-if>
+<sc-if value="{{tMail}}" hint-placeholder-val="{{false}}"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Email nhận biên bản đối soát</h2><p class="ecomd-card__desc body-xs">Kế toán và ban giám hiệu nhận báo cáo đối soát học phí mỗi kỳ (tối đa 3 email)</p></div><div class="ecomd-card__actions"><span class="body-xs" style="color: var(--text-subtle);">{{mailCount}} / 3 email</span></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-12);"><ul style="display: flex; flex-direction: column; gap: var(--space-8); margin: 0; padding: 0; list-style: none;"><sc-for list="{{mails}}" as="m" hint-placeholder-count="2"><li class="body-sm" style="display: flex; align-items: center; gap: var(--space-8); padding: var(--space-8) var(--space-12); border: 1px solid var(--border-default); border-radius: var(--radius-8);"><x-import component-from-global-scope="ECOMD.Icon" name="envelope" size="{{fourteen}}" color="var(--text-subtle)"></x-import><span style="flex: 1; min-width: 0; overflow-wrap: anywhere; color: var(--text-heading);">{{m.addr}}</span><x-import component-from-global-scope="ECOMD.IconButton" icon="xmark" label="{{m.rm}}" on-click="{{m.remove}}"></x-import></li></sc-for></ul><span style="display: flex; gap: var(--space-8);"><input type="email" class="ecomd-text body-sm" placeholder="ten@truong.edu.vn" aria-label="Email mới"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="plus">Thêm email</x-import></span></div></div>
+</section>
+</sc-if>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "scenario": {"editor": "enum", "options": ["Hóa đơn và thanh toán", "Đón muộn và hoàn tiền", "Email đối soát"], "default": "Hóa đơn và thanh toán", "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1086}}'>
+var CRUMBS = ["Cấu hình", "Học phí"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: props.scenario === 'Đón muộn và hoàn tiền' ? 'late' : props.scenario === 'Email đối soát' ? 'mail' : 'inv', sw: { autoInv: true, splitInv: false, einv: true, lateFee: true, refund: true }, lateMode: 'fixed', block: '30 phút', mails: ['ketoan.ecoschool@gmail.com', 'hieutruong.ecoschool@edu.vn'] }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var tg = {}; Object.keys(st.sw || {}).forEach(function (k) { tg[k] = function (e) { var n = Object.assign({}, self.state.sw); n[k] = e && e.target ? e.target.checked : !n[k]; self.setState({ sw: n }); }; });
+    var mails = st.mails || [];
+    return Object.assign(this.shell(), {
+      tg: tg, twelve: 12, fourteen: 14,
+      yes: true, autoInv: st.sw.autoInv, splitInv: st.sw.splitInv, einv: st.sw.einv, lateFee: st.sw.lateFee, refund: st.sw.refund,
+      tabs: [{ key: 'inv', label: 'Hóa đơn và thanh toán' }, { key: 'late', label: 'Đón muộn và hoàn tiền' }, { key: 'mail', label: 'Email đối soát' }], tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      tInv: st.tab === 'inv', tLate: st.tab === 'late', tMail: st.tab === 'mail',
+      lateModes: [{ key: 'fixed', label: 'Theo block thời gian' }, { key: 'tier', label: 'Bậc thang theo khung giờ' }], lateMode: st.lateMode, setLateMode: function (k) { self.setState({ lateMode: k }); },
+      blockOpts: ['5 phút', '10 phút', '15 phút', '30 phút', '45 phút', '60 phút'], block: st.block, setBlock: function (v) { self.setState({ block: v }); },
+      refunds: [{ name: 'Tiền ăn bán trú (trưa)', price: '40,000đ / ngày · mặc định', pct: '100', pctLabel: 'Tỉ lệ hoàn tiền ăn khi vắng có phép', rmLabel: 'Bỏ tiền ăn khỏi hoàn tiền' },
+                { name: 'Phí đưa đón 2A8', price: '20,000đ / ngày', pct: '50', pctLabel: 'Tỉ lệ hoàn phí đưa đón khi vắng có phép', rmLabel: 'Bỏ phí đưa đón khỏi hoàn tiền' }],
+      mails: mails.map(function (a) { return { addr: a, rm: 'Xóa ' + a, remove: function () { self.setState({ mails: mails.filter(function (x) { return x !== a; }) }); } }; }), mailCount: mails.length
+    });
+  }
+}
+</script>
+</body>
+</html>

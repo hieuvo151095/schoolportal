@@ -1,0 +1,192 @@
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faSearch,
+  faFilter,
+  faPlus,
+  faSchool,
+  faUsers,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons';
+import { ClassTaxonomy, GradeLevel, ClassFilterState } from '../../../types/class';
+
+interface ClassToolbarProps {
+  activeTaxonomy: ClassTaxonomy;
+  onSelectTaxonomy: (taxonomy: ClassTaxonomy) => void;
+  curricularCount: number;
+  extracurricularCount: number;
+  gradeLevels: GradeLevel[];
+  filterCriteria: ClassFilterState;
+  onUpdateFilter: (filter: Partial<ClassFilterState>) => void;
+  onResetFilter: () => void;
+  onOpenCreate: () => void;
+  onOpenFilterDrawer: () => void;
+  activeFilterCount: number;
+}
+
+export const ClassToolbar: React.FC<ClassToolbarProps> = ({
+  activeTaxonomy,
+  onSelectTaxonomy,
+  curricularCount,
+  extracurricularCount,
+  gradeLevels,
+  filterCriteria,
+  onUpdateFilter,
+  onResetFilter,
+  onOpenCreate,
+  onOpenFilterDrawer,
+  activeFilterCount,
+}) => {
+  return (
+    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 mb-6">
+      {/* Top row: Tab Switcher & Action CTA */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+        {/* Dual Taxonomy Segmented Control */}
+        <div className="flex items-center bg-slate-100 p-1 rounded-xl">
+          <button
+            type="button"
+            onClick={() => onSelectTaxonomy('chinh_khoa')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+              activeTaxonomy === 'chinh_khoa'
+                ? 'bg-white text-blue-700 shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <FontAwesomeIcon icon={faSchool} className="text-xs" />
+            <span>Lớp chính khóa</span>
+            <span
+              className={`px-2 py-0.5 rounded-full text-xs font-bold ${
+                activeTaxonomy === 'chinh_khoa'
+                  ? 'bg-blue-100 text-blue-800'
+                  : 'bg-slate-200 text-slate-600'
+              }`}
+            >
+              {curricularCount}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onSelectTaxonomy('ngoai_khoa')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+              activeTaxonomy === 'ngoai_khoa'
+                ? 'bg-white text-amber-700 shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <FontAwesomeIcon icon={faUsers} className="text-xs" />
+            <span>Lớp ngoại khóa & CLB</span>
+            <span
+              className={`px-2 py-0.5 rounded-full text-xs font-bold ${
+                activeTaxonomy === 'ngoai_khoa'
+                  ? 'bg-amber-100 text-amber-800'
+                  : 'bg-slate-200 text-slate-600'
+              }`}
+            >
+              {extracurricularCount}
+            </span>
+          </button>
+        </div>
+
+        {/* Primary Action Button */}
+        <button
+          type="button"
+          onClick={onOpenCreate}
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors"
+        >
+          <FontAwesomeIcon icon={faPlus} />
+          <span>Thêm lớp mới</span>
+        </button>
+      </div>
+
+      {/* Bottom row: Filter Controls & Search */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-3">
+        <div className="flex flex-wrap items-center gap-3 flex-1">
+          {/* Reactive Grade Level dropdown (only for Curricular) */}
+          {activeTaxonomy === 'chinh_khoa' && (
+            <div className="w-full sm:w-48">
+              <select
+                value={filterCriteria.gradeLevelId || ''}
+                onChange={(e) =>
+                  onUpdateFilter({ gradeLevelId: e.target.value ? e.target.value : undefined })
+                }
+                className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+              >
+                <option value="">Tất cả khối lớp</option>
+                {gradeLevels.map((grd) => (
+                  <option key={grd.id} value={grd.id}>
+                    {grd.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Search bar */}
+          <div className="relative flex-1 min-w-[240px]">
+            <FontAwesomeIcon
+              icon={faSearch}
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none"
+            />
+            <input
+              type="text"
+              value={filterCriteria.searchQuery || ''}
+              onChange={(e) => onUpdateFilter({ searchQuery: e.target.value })}
+              placeholder={
+                activeTaxonomy === 'chinh_khoa'
+                  ? 'Tìm theo tên lớp, mã lớp, GVCN, phòng...'
+                  : 'Tìm theo tên CLB, lĩnh vực, phụ trách, phòng...'
+              }
+              className="w-full h-10 pl-9 pr-9 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+            />
+            {filterCriteria.searchQuery && (
+              <button
+                type="button"
+                onClick={() => onUpdateFilter({ searchQuery: '' })}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
+              >
+                <FontAwesomeIcon icon={faTimes} className="text-xs" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Filter Drawer Trigger & Clear Filters */}
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={onOpenFilterDrawer}
+            className={`flex items-center gap-2 px-3.5 py-2 h-10 border rounded-lg text-sm font-medium transition-colors ${
+              activeFilterCount > 0
+                ? 'border-blue-300 bg-blue-50 text-blue-700 font-semibold'
+                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            <FontAwesomeIcon icon={faFilter} className="text-xs" />
+            <span>Bộ lọc</span>
+            {activeFilterCount > 0 && (
+              <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center font-bold">
+                {activeFilterCount}
+              </span>
+            )}
+          </button>
+
+          {(filterCriteria.searchQuery ||
+            filterCriteria.gradeLevelId ||
+            filterCriteria.status ||
+            filterCriteria.teacherRole ||
+            filterCriteria.teacherId ||
+            filterCriteria.csdlStatus) && (
+            <button
+              type="button"
+              onClick={onResetFilter}
+              className="text-xs font-semibold text-rose-600 hover:text-rose-700 hover:underline px-2 py-1"
+            >
+              Đặt lại
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Báo cáo mở rộng — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="report-extended" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Báo cáo mở rộng</h1>
+    <p class="ecomd-page-header__desc body-sm">Biểu mẫu đánh giá năng lực ngôn ngữ, tư duy toán học, nhận xét định kỳ và thư tuần gửi phụ huynh</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="plus">Tạo báo cáo</x-import></div>
+</div>
+<section class="ecomd-table-card">
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Trạng thái báo cáo"></x-import>
+<sc-if value="{{noSel}}" hint-placeholder-val="{{true}}"><div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm học sinh theo tên hoặc mã" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{tplOpts}}" value="{{tpl}}" on-change="{{setTpl}}" label="Lọc theo mẫu báo cáo"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{periodOpts}}" value="{{period}}" on-change="{{setPeriod}}" label="Kỳ đánh giá"></x-import></div></sc-if>
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{false}}"><div class="ecomd-table-card__bulk"><span class="body-sm-semibold">Đã chọn {{selCount}} báo cáo</span><span style="flex: 1;"></span><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="paper-plane">Gửi phụ huynh</x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="file-pdf">Tải PDF</x-import><x-import component-from-global-scope="ECOMD.Button" variant="ghost" on-click="{{clearSel}}">Bỏ chọn</x-import></div></sc-if>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="is-check"><x-import component-from-global-scope="ECOMD.Checkbox" aria-label="Chọn tất cả" checked="{{allChecked}}" indeterminate="{{someChecked}}" on-change="{{toggleAll}}"></x-import></th><th class="body-xs-bold is-primary">Học sinh</th><th class="body-xs-bold">Mẫu báo cáo</th><th class="body-xs-bold">Kỳ đánh giá</th><th class="body-xs-bold">Người cập nhật</th><th class="body-xs-bold">Trạng thái</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr class="{{r.cls}}"><td class="is-check"><x-import component-from-global-scope="ECOMD.Checkbox" aria-label="{{r.checkLabel}}" checked="{{r.checked}}" on-change="{{r.toggle}}"></x-import></td><td class="body-sm is-primary"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.Person" name="{{r.name}}" meta="{{r.meta}}" href="#"></x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Mẫu báo cáo</span><div class="ecomd-cell__value"><span style="color: var(--text-heading);">{{r.tpl}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Kỳ đánh giá</span><div class="ecomd-cell__value"><span style="white-space: nowrap; font-variant-numeric: tabular-nums;">01/09 – 30/09/2026</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Người cập nhật</span><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column;"><span>{{r.by}}</span><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">{{r.at}}</span></span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Trạng thái</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.tone}}">{{r.status}}</x-import></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="7"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có báo cáo nào khớp bộ lọc"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="báo cáo"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 931}}'>
+var CRUMBS = ["Vận hành", "BC Mở rộng"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'all', query: '', tpl: 'Tất cả mẫu báo cáo', period: 'Tháng 09/2026', sel: [] }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var E = [{"id": 1, "name": "Lê Gia Huy", "meta": "5 tuổi 8 tháng · Lớp 1A1 (Chồi)", "tpl": "Lĩnh vực ngôn ngữ Tiếng Việt", "st": "done", "by": "Cô Nguyễn Mai", "at": "12/09/2026"}, {"id": 2, "name": "Trần Minh Khôi", "meta": "5 tuổi 9 tháng · Lớp 1A1 (Chồi)", "tpl": "Lĩnh vực Toán và tư duy logic", "st": "sent", "by": "Cô Thu Thủy", "at": "12/09/2026"}, {"id": 3, "name": "Nguyễn Minh Anh", "meta": "5 tuổi 6 tháng · Lớp 1A1 (Chồi)", "tpl": "English language report", "st": "draft", "by": "Cô Nguyễn Mai", "at": "12/09/2026"}, {"id": 4, "name": "Hoàng Đức Minh", "meta": "6 tuổi 2 tháng · Lớp 1A2 (Khối 1)", "tpl": "Lĩnh vực Toán và tư duy logic", "st": "done", "by": "Cô Lê Thanh Thảo", "at": "12/09/2026"}, {"id": 5, "name": "Lê Quốc Bảo", "meta": "7 tuổi 1 tháng · Lớp 2A1 (Khối 2)", "tpl": "Thư tuần và rèn luyện kỹ năng sống", "st": "sent", "by": "Thầy Trần Quốc Tuấn", "at": "12/09/2026"}, {"id": 6, "name": "Nguyễn Việt Hoàng", "meta": "11 tuổi 5 tháng · Lớp 6A1 (Khối 6)", "tpl": "Năng lực Toán và tư duy logic", "st": "done", "by": "Cô Trần Mai Linh", "at": "12/09/2026"}, {"id": 7, "name": "Nguyễn Ngọc Mai (Bé Bông)", "meta": "4 tuổi 8 tháng · Lớp Lá 1 (Mầm non)", "tpl": "Lĩnh vực ngôn ngữ Tiếng Việt mầm non", "st": "sent", "by": "Cô Nguyễn Thu Hà", "at": "11/09/2026"}];
+    var SS = { draft: ['Bản nháp', 'neutral'], done: ['Hoàn tất', 'success'], sent: ['Đã gửi phụ huynh', 'info'] };
+    var q = (st.query || '').trim().toLowerCase();
+    var base = E.filter(function (e) { return (!q || e.name.toLowerCase().indexOf(q) >= 0) && (st.tpl === 'Tất cả mẫu báo cáo' || e.tpl.indexOf(st.tpl.replace('Mẫu: ', '')) >= 0); });
+    var tabs = [['all', 'Tất cả'], ['draft', 'Bản nháp'], ['done', 'Hoàn tất'], ['sent', 'Đã gửi phụ huynh']].map(function (d) { return { key: d[0], label: d[1], count: base.filter(function (e) { return d[0] === 'all' || e.st === d[0]; }).length }; });
+    var list = base.filter(function (e) { return st.tab === 'all' || e.st === st.tab; });
+    var ids = list.map(function (e) { return e.id; }), sel = st.sel || [];
+    var nOn = ids.filter(function (i) { return sel.indexOf(i) >= 0; }).length;
+    var rows = list.map(function (e) { var on = sel.indexOf(e.id) >= 0;
+      return Object.assign({}, e, { status: SS[e.st][0], tone: SS[e.st][1], checked: on, cls: on ? 'is-selected' : '', checkLabel: 'Chọn báo cáo của ' + e.name,
+        toggle: function (v) { var n = sel.filter(function (x) { return x !== e.id; }); if (v) n.push(e.id); self.setState({ sel: n }); },
+        actionLabel: 'Thao tác với báo cáo của ' + e.name,
+        menu: [{ icon: 'eye', label: 'Xem báo cáo' }, { icon: 'pen', label: 'Sửa đánh giá' }, { icon: 'paper-plane', label: e.st === 'sent' ? 'Gửi lại phụ huynh' : 'Gửi phụ huynh' }, { icon: 'file-pdf', label: 'Tải PDF' }, { icon: 'copy', label: 'Nhân bản cho kỳ sau' }, { divider: true }, { icon: 'trash-can', label: 'Xóa báo cáo…', tone: 'danger' }] }); });
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20,
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      tplOpts: ['Tất cả mẫu báo cáo', 'Mẫu: Lĩnh vực ngôn ngữ', 'Mẫu: Toán và tư duy logic', 'Mẫu: Thư tuần', 'Mẫu: English language report'], tpl: st.tpl, setTpl: function (v) { self.setState({ tpl: v }); },
+      periodOpts: ['Tháng 09/2026', 'Tháng 10/2026', 'Học kỳ I'], period: st.period, setPeriod: function (v) { self.setState({ period: v }); },
+      rows: rows, isEmpty: rows.length === 0, total: rows.length,
+      noSel: sel.length === 0, hasSel: sel.length > 0, selCount: sel.length, clearSel: function () { self.setState({ sel: [] }); },
+      allChecked: ids.length > 0 && nOn === ids.length, someChecked: nOn > 0 && nOn < ids.length, toggleAll: function (v) { self.setState({ sel: v ? ids : [] }); }
+    });
+  }
+}
+</script>
+</body>
+</html>

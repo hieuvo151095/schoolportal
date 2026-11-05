@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tạo album — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<div style="height: 100vh; overflow: hidden;" aria-hidden="true"><dc-import name="NewMedia" hint-size="100%,900px"></dc-import></div>
+<x-import component-from-global-scope="ECOMD.PopupModal" open="{{open}}" on-close="{{close}}" title="Tạo album mới" description="Gom ảnh, video theo sự kiện để phụ huynh xem trên ứng dụng" icon="images" width="calc(var(--size-sidebar-w) * 2 + var(--space-48) * 2)" primary-action="{{pri}}" secondary-action="{{sec}}">
+<div class="ecomd-form"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tên album <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" placeholder="VD: Dã ngoại làng gốm Bát Tràng" value="{{name}}" onChange="{{setName}}"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Mô tả</span><textarea class="ecomd-textarea body-sm" rows="2" placeholder="Hoạt động chính, địa điểm hoặc ghi chú cho phụ huynh" value="{{desc}}" onChange="{{setDesc}}" maxlength="300"></textarea><span class="ecomd-field__meta"><span class="ecomd-field__hint body-xs">Không bắt buộc</span><span class="ecomd-field__count body-xs">{{descCount}} / 300</span></span></label><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Ai được xem album</span><div class="ecomd-choices" style="--ecomd-cols: 3;"><label class="ecomd-choice"><input type="radio" name="scope" checked="{{sClass}}" onChange="{{pickClass}}"><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">Lớp 1A1</span><span class="ecomd-choice__desc body-xs">Phụ huynh lớp này</span></span></label><label class="ecomd-choice"><input type="radio" name="scope" checked="{{sSchool}}" onChange="{{pickSchool}}"><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">Toàn trường</span><span class="ecomd-choice__desc body-xs">Mọi phụ huynh</span></span></label><label class="ecomd-choice"><input type="radio" name="scope" checked="{{sMulti}}" onChange="{{pickMulti}}"><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">Một số lớp</span><span class="ecomd-choice__desc body-xs">Chọn lớp cụ thể</span></span></label></div></div><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Ảnh bìa</span><div class="ecomd-grid" style="--ecomd-cols: 5; --ecomd-cols-tablet: 5; --ecomd-cols-mobile: 3; gap: var(--space-8);"><sc-for list="{{covers}}" as="c" hint-placeholder-count="4"><button type="button" class="{{c.cls}}" aria-label="{{c.label}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}"><span style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: var(--text-muted);"><x-import component-from-global-scope="ECOMD.Icon" name="image" size="{{twenty}}"></x-import></span><sc-if value="{{c.on}}" hint-placeholder-val="{{false}}"><span class="ecomd-pick__check"><x-import component-from-global-scope="ECOMD.Icon" name="check" size="{{twelve}}"></x-import></span></sc-if></button></sc-for><button type="button" class="ecomd-dropzone" style="padding: var(--space-8); aspect-ratio: 4 / 3;"><x-import component-from-global-scope="ECOMD.Icon" name="upload" size="{{fourteen}}"></x-import><span class="body-xs-medium">Tải ảnh</span></button></div><span class="ecomd-field__hint body-xs">Chọn từ ảnh mới nhất của lớp hoặc tải ảnh khác lên.</span></div></div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"open": {"editor": "boolean", "default": true, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ open: props.open !== false }, { name: 'Dã ngoại làng gốm Bát Tràng', desc: '', scope: 'class', cover: 0 }); }
+  componentDidUpdate(prev) { if (prev.open !== this.props.open) this.setState({ open: this.props.open !== false }); }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var covers = [0, 1, 2, 3].map(function (i) { var on = st.cover === i; return { on: on, cls: 'ecomd-pick' + (on ? ' is-checked' : ''), label: 'Ảnh bìa ' + (i + 1), pick: function () { self.setState({ cover: i }); } }; });
+    return {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      open: st.open, close: function () { self.setState({ open: false }); },
+      name: st.name, setName: function (e) { self.setState({ name: e.target.value }); },
+      desc: st.desc, descCount: (st.desc || '').length, setDesc: function (e) { self.setState({ desc: e.target.value }); },
+      sClass: st.scope === 'class', sSchool: st.scope === 'school', sMulti: st.scope === 'multi',
+      pickClass: function () { self.setState({ scope: 'class' }); }, pickSchool: function () { self.setState({ scope: 'school' }); }, pickMulti: function () { self.setState({ scope: 'multi' }); },
+      covers: covers,
+      pri: { label: 'Tạo album', icon: 'plus', disabled: !(st.name || '').trim() }, sec: { label: 'Hủy', onClick: function () { self.setState({ open: false }); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

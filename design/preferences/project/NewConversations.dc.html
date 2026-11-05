@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Trao đổi — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="conversations" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-panes">
+  <div class="ecomd-panes__pane">
+    <div style="display: flex; flex-direction: column; gap: var(--space-12); padding: var(--space-16); border-bottom: 1px solid var(--border-default);">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-8);"><h1 class="title-md" style="margin: 0; color: var(--text-heading);">Trao đổi</h1><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="plus">Tạo mới</x-import></div>
+      <x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo học sinh, nhóm" value="{{query}}" on-change="{{setQuery}}"></x-import>
+      <div style="display: flex; flex-wrap: wrap; gap: var(--space-8);"><x-import component-from-global-scope="ECOMD.SelectField" options="{{clsOpts}}" value="{{cls}}" on-change="{{setCls}}" label="Lọc theo lớp"></x-import><x-import component-from-global-scope="ECOMD.Tabs" items="{{kinds}}" value="{{kind}}" on-change="{{setKind}}" label="Loại hội thoại" variant="segmented"></x-import></div>
+    </div>
+    <nav class="ecomd-scroll" aria-label="Danh sách hội thoại">
+      <sc-for list="{{convs}}" as="c" hint-placeholder-count="6"><a href="#" onClick="{{c.pick}}" aria-current="{{c.current}}" style="display: flex; align-items: flex-start; gap: var(--space-12); padding: var(--space-12) var(--space-16); border-bottom: 1px solid var(--border-subtle); background: {{c.bg}}; text-decoration: none;">
+        <sc-if value="{{c.group}}" hint-placeholder-val="{{false}}"><span aria-hidden="true" style="display: flex; flex: none; align-items: center; justify-content: center; width: var(--size-40); height: var(--size-40); border-radius: var(--radius-full); background: var(--bg-muted); color: var(--text-nav);"><x-import component-from-global-scope="ECOMD.Icon" name="users" size="{{sixteen}}"></x-import></span></sc-if>
+        <sc-if value="{{c.person}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="ECOMD.Avatar" name="{{c.short}}"></x-import></sc-if>
+        <span style="display: flex; flex: 1; min-width: 0; flex-direction: column; gap: var(--space-2);">
+          <span style="display: flex; align-items: center; gap: var(--space-6);"><span class="{{c.nameCls}}" style="flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--text-heading);">{{c.name}}</span><sc-if value="{{c.star}}" hint-placeholder-val="{{false}}"><span title="Đã đánh dấu" style="display: flex; color: var(--text-muted);"><x-import component-from-global-scope="ECOMD.Icon" name="star" size="{{twelve}}"></x-import></span></sc-if><span class="body-xs" style="flex: none; color: var(--text-subtle);">{{c.time}}</span></span>
+          <span style="display: flex; align-items: center; gap: var(--space-8);"><span class="body-xs" style="flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--text-subtle);">{{c.last}}</span><sc-if value="{{c.hasUnread}}" hint-placeholder-val="{{false}}"><span class="body-xs-bold" aria-label="{{c.unreadLabel}}" style="flex: none; min-width: var(--size-20); box-sizing: border-box; padding: 0 var(--space-6); border-radius: var(--radius-full); background: var(--eco-blue-strong); color: var(--text-inverse); text-align: center;">{{c.unread}}</span></sc-if></span>
+        </span>
+      </a></sc-for>
+    </nav>
+  </div>
+  <div class="ecomd-panes__pane">
+    <div style="display: flex; flex-direction: column; gap: var(--space-12); padding: var(--space-16); border-bottom: 1px solid var(--border-default);">
+      <div style="display: flex; align-items: center; gap: var(--space-12);">
+        <span style="display: flex; flex: 1; min-width: 0; flex-wrap: wrap; align-items: center; gap: var(--space-8);"><h2 class="title-md" style="margin: 0; color: var(--text-heading);">{{cur.name}}</h2><x-import component-from-global-scope="ECOMD.Tag">{{cur.cls}}</x-import></span>
+        <x-import component-from-global-scope="ECOMD.IconButton" icon="magnifying-glass" label="Tìm trong hội thoại" size="md"></x-import>
+        <x-import component-from-global-scope="ECOMD.IconButton" icon="gear" label="Cài đặt hội thoại" size="md"></x-import>
+      </div>
+      <x-import component-from-global-scope="ECOMD.Tabs" items="{{mtypes}}" value="{{mtype}}" on-change="{{setMtype}}" label="Loại tin nhắn" variant="segmented"></x-import>
+    </div>
+    <sc-if value="{{hasPinned}}" hint-placeholder-val="{{true}}"><div style="padding: var(--space-12) var(--space-16) 0;"><x-import component-from-global-scope="ECOMD.InlineNotice" tone="warning" action="{{pinAction}}">Hội thoại có <b>2 yêu cầu cần xử lý</b>: dặn thuốc và báo vắng.</x-import></div></sc-if>
+    <div class="ecomd-scroll" role="log" aria-label="Tin nhắn" style="display: flex; flex-direction: column-reverse;"><div style="display: flex; flex-direction: column; gap: var(--space-16); padding: var(--space-16);">
+      <sc-for list="{{msgs}}" as="m" hint-placeholder-count="4"><div style="display: flex; flex-direction: column; gap: var(--space-4); align-items: {{m.align}};">
+        <span class="body-xs" style="color: var(--text-subtle);"><b class="body-xs-semibold" style="color: var(--text-nav);">{{m.who}}</b> · {{m.time}}</span>
+        <div class="body-sm" style="max-width: 75%; padding: var(--space-10) var(--space-14); border-radius: var(--radius-12); background: {{m.bg}}; border: 1px solid {{m.bd}}; color: var(--text-heading);">{{m.text}}
+          <sc-if value="{{m.isMed}}" hint-placeholder-val="{{false}}"><div style="display: flex; flex-direction: column; gap: var(--space-8); margin-top: var(--space-10); padding: var(--space-12); border-radius: var(--radius-8); background: var(--bg-surface); border: 1px solid var(--border-default);">
+            <span style="display: flex; align-items: center; gap: var(--space-8);"><span class="body-sm-semibold" style="flex: 1; display: inline-flex; align-items: center; gap: var(--space-6);"><x-import component-from-global-scope="ECOMD.Icon" name="capsules" size="{{fourteen}}" color="var(--text-subtle)"></x-import>Dặn thuốc</span><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{medTone}}">{{medLabel}}</x-import></span>
+            <span class="body-xs" style="color: var(--text-body);">Xịt mũi muối biển · 1 lần sau bữa trưa · Thuốc để trong balo của bé</span>
+            <sc-if value="{{medOpen}}" hint-placeholder-val="{{true}}"><span><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="check" on-click="{{medDone}}">Đã cho bé dùng thuốc</x-import></span></sc-if>
+          </div></sc-if>
+          <sc-if value="{{m.isLeave}}" hint-placeholder-val="{{false}}"><div style="display: flex; flex-direction: column; gap: var(--space-8); margin-top: var(--space-10); padding: var(--space-12); border-radius: var(--radius-8); background: var(--bg-surface); border: 1px solid var(--border-default);">
+            <span style="display: flex; align-items: center; gap: var(--space-8);"><span class="body-sm-semibold" style="flex: 1; display: inline-flex; align-items: center; gap: var(--space-6);"><x-import component-from-global-scope="ECOMD.Icon" name="user-clock" size="{{fourteen}}" color="var(--text-subtle)"></x-import>Đơn báo vắng</span><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{leaveTone}}">{{leaveLabel}}</x-import></span>
+            <dl class="body-xs" style="display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-4) var(--space-12); margin: 0; color: var(--text-body);"><dt style="color: var(--text-subtle);">Học sinh</dt><dd style="margin: 0;">Đỗ Nam</dd><dt style="color: var(--text-subtle);">Ngày nghỉ</dt><dd style="margin: 0;">Thứ Hai, 02/11/2026 (cả ngày)</dd><dt style="color: var(--text-subtle);">Lý do</dt><dd style="margin: 0;">Về quê có việc gia đình</dd></dl>
+            <sc-if value="{{leaveOpen}}" hint-placeholder-val="{{true}}"><div style="display: flex; flex-wrap: wrap; gap: var(--space-8);"><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="check" on-click="{{leaveOk}}">Xác nhận cho nghỉ</x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" on-click="{{leaveNo}}">Từ chối</x-import></div></sc-if>
+          </div></sc-if>
+        </div>
+        <span class="body-2xs" style="color: var(--text-muted);">{{m.state}}</span>
+      </div></sc-for>
+    </div></div>
+    <div style="display: flex; align-items: flex-end; gap: var(--space-8); padding: var(--space-12) var(--space-16); border-top: 1px solid var(--border-default);">
+      <x-import component-from-global-scope="ECOMD.IconButton" icon="paperclip" label="Đính kèm tệp" size="md"></x-import>
+      <label style="flex: 1; min-width: 0;"><span class="ecomd-sr">Nội dung tin nhắn</span><textarea class="ecomd-textarea body-sm" rows="1" placeholder="Nhập tin nhắn" style="min-height: var(--size-40); padding-top: var(--space-8); padding-bottom: var(--space-8); resize: none;"></textarea></label>
+      <x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="paper-plane">Gửi</x-import>
+    </div>
+  </div>
+</div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Vận hành", "Trao đổi"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { query: '', cls: 'Tất cả các lớp', kind: 'all', cur: 1, mtype: 'all', leave: 'open', med: 'open' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var C = [{"id": 1, "name": "Phụ huynh Đỗ Nam", "cls": "Lớp 1A1", "group": false, "star": true, "time": "10:45", "last": "Dạ em cảm ơn cô giáo nhiều ạ!", "unread": 0}, {"id": 2, "name": "Phụ huynh Lê Bảo An", "cls": "Lớp 1A1", "group": false, "star": false, "time": "08:10", "last": "Cô ơi hôm nay cho con gửi lại bình nước ở lớp nhé ạ", "unread": 1}, {"id": 3, "name": "Ban đại diện cha mẹ học sinh 1A1", "cls": "Lớp 1A1", "group": true, "star": true, "time": "Hôm qua", "last": "Cô Mai Anh: Kế hoạch dã ngoại thứ Sáu đã được BGH duyệt rồi ạ", "unread": 0}, {"id": 4, "name": "Phụ huynh Trần Minh Thảo", "cls": "Lớp 1A1", "group": false, "star": true, "time": "28/10", "last": "Cô đã cho cháu uống siro ho lúc 11h rồi nhé mẹ", "unread": 0}, {"id": 5, "name": "CLB Mỹ thuật & Sáng tạo nhí", "cls": "Lớp 1A1", "group": true, "star": false, "time": "27/10", "last": "Nhờ phụ huynh chuẩn bị 1 hộp màu sáp dầu cho buổi học thứ Tư", "unread": 2}, {"id": 6, "name": "Ban phụ huynh lớp 1A2", "cls": "Lớp 1A2", "group": true, "star": true, "time": "09:15", "last": "Cô Thảo: Thứ Hai tuần tới các con mặc đồng phục lễ nhé ạ", "unread": 0}, {"id": 7, "name": "Ban phụ huynh lớp 2A1", "cls": "Lớp 2A1", "group": true, "star": true, "time": "Hôm qua", "last": "Thầy Tuấn: Danh sách tham gia ngày hội sách 2026 đã chốt", "unread": 1}];
+    var MSG = [{"me": false, "who": "Mẹ Đỗ Nam", "time": "07:30", "kind": "msg", "text": "Chào cô Mai Anh ạ! Hôm nay thời tiết chuyển mùa, bé Nam hơi sổ mũi nhẹ một chút ạ."}, {"me": true, "who": "Cô Nguyễn Mai Anh", "time": "07:45", "kind": "msg", "text": "Chào mẹ! Cô đã ghi nhận tình hình của bé Nam. Trong ngày cô sẽ chú ý giữ ấm và theo dõi nhiệt độ của con nhé."}, {"me": false, "who": "Mẹ Đỗ Nam", "time": "08:00", "kind": "med", "text": "Em có gửi trong balo bé 1 lọ xịt mũi muối biển. Nhờ cô xịt cho bé 1 lần sau giờ ăn trưa giúp em với ạ."}, {"me": true, "who": "Cô Nguyễn Mai Anh", "time": "08:15", "kind": "msg", "text": "Dạ cô nhận được rồi, mẹ yên tâm nhé!"}, {"me": false, "who": "Mẹ Đỗ Nam", "time": "09:15", "kind": "leave", "text": "Thưa cô, thứ Hai tuần tới (02/11) gia đình có việc về quê nên em xin phép cho bé Nam nghỉ học 1 ngày ạ."}, {"me": false, "who": "Mẹ Đỗ Nam", "time": "10:45", "kind": "msg", "text": "Dạ em cảm ơn cô giáo nhiều ạ!"}];
+    var q = (st.query || '').trim().toLowerCase();
+    var convs = C.filter(function (c) { return (!q || c.name.toLowerCase().indexOf(q) >= 0) && (st.cls === 'Tất cả các lớp' || c.cls === st.cls) && (st.kind === 'all' || (st.kind === 'unread' ? c.unread > 0 : c.group)); });
+    var cur = C.filter(function (c) { return c.id === st.cur; })[0] || C[0];
+    var full = cur.id === 1;
+    var msgs = full ? MSG : [{ me: false, who: cur.name, time: cur.time, kind: 'msg', text: cur.last }];
+    msgs = msgs.filter(function (m) { return st.mtype === 'all' || (st.mtype === 'leave' ? m.kind === 'leave' : st.mtype === 'med' ? m.kind === 'med' : m.kind === 'msg'); });
+    var lv = st.leave || 'open', md = st.med || 'open';
+    return Object.assign(this.shell(), {
+      twelve: 12, fourteen: 14, sixteen: 16,
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      clsOpts: ['Tất cả các lớp', 'Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1'], cls: st.cls, setCls: function (v) { self.setState({ cls: v }); },
+      kinds: [{ key: 'all', label: 'Tất cả' }, { key: 'unread', label: 'Chưa đọc' }, { key: 'group', label: 'Nhóm' }], kind: st.kind, setKind: function (k) { self.setState({ kind: k }); },
+      convs: convs.map(function (c) { var on = c.id === cur.id;
+        return Object.assign({}, c, { person: !c.group, short: c.name.replace('Phụ huynh ', ''), current: on ? 'true' : undefined, bg: on ? 'var(--bg-selected)' : 'transparent',
+          nameCls: c.unread ? 'body-sm-bold' : 'body-sm-medium', hasUnread: c.unread > 0, unreadLabel: c.unread + ' tin chưa đọc',
+          pick: function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState({ cur: c.id }); } }); }),
+      cur: cur, hasPinned: full && (lv === 'open' || md === 'open'),
+      pinAction: null,
+      mtypes: [{ key: 'all', label: 'Tất cả' }, { key: 'msg', label: 'Tin nhắn' }, { key: 'leave', label: 'Báo vắng' }, { key: 'med', label: 'Dặn thuốc' }], mtype: st.mtype, setMtype: function (k) { self.setState({ mtype: k }); },
+      msgs: msgs.map(function (m) { return Object.assign({}, m, { align: m.me ? 'flex-end' : 'flex-start', bg: m.me ? 'var(--bg-selected)' : 'var(--bg-subtle)', bd: m.me ? 'var(--border-info-soft)' : 'var(--border-default)',
+        isMed: m.kind === 'med', isLeave: m.kind === 'leave', state: m.me ? 'Phụ huynh đã xem' : 'Đã nhận' }); }),
+      leaveOpen: lv === 'open', leaveTone: lv === 'open' ? 'warning' : lv === 'ok' ? 'success' : 'neutral', leaveLabel: lv === 'open' ? 'Chờ xử lý' : lv === 'ok' ? 'Đã xác nhận' : 'Đã từ chối',
+      leaveOk: function () { self.setState({ leave: 'ok' }); }, leaveNo: function () { self.setState({ leave: 'no' }); },
+      medOpen: md === 'open', medTone: md === 'open' ? 'warning' : 'success', medLabel: md === 'open' ? 'Chờ thực hiện' : 'Đã cho dùng 12:10', medDone: function () { self.setState({ med: 'done' }); }
+    });
+  }
+}
+</script>
+</body>
+</html>

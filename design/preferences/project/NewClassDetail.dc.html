@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Chi tiết lớp — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="classes" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Lớp 1A</h1>
+    <span style="display: inline-flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-4);"><x-import component-from-global-scope="ECOMD.StatusTag" tone="success">Đang hoạt động</x-import><x-import component-from-global-scope="ECOMD.Tag">Chính khóa</x-import></span>
+    <p class="ecomd-page-header__desc body-sm">LOP-1A · Khối 1 · Phòng P.201 · Năm học 2025 – 2026</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="pen">Sửa thông tin lớp</x-import></div>
+</div>
+<div class="ecomd-grid" style="--ecomd-cols: 5; --ecomd-cols-tablet: 3; --ecomd-cols-mobile: 2; gap: var(--space-12);"><a href="#" class="ecomd-card" style="flex-direction: row; align-items: flex-start; gap: var(--space-12); padding: var(--space-14) var(--space-16); text-decoration: none;"><span style="display: flex; flex: none; align-items: center; justify-content: center; width: var(--size-36); height: var(--size-36); border-radius: var(--radius-8); background: var(--bg-muted); color: var(--text-nav);"><x-import component-from-global-scope="ECOMD.Icon" name="calendar-check" size="{{fourteen}}"></x-import></span><span style="display: flex; flex-direction: column; gap: var(--space-2); min-width: 0;"><span class="body-sm-semibold" style="color: var(--text-heading);">Điểm danh</span><span class="body-xs" style="color: var(--text-subtle);">Đến, về, nhiệt độ, đưa đón</span></span></a><a href="#" class="ecomd-card" style="flex-direction: row; align-items: flex-start; gap: var(--space-12); padding: var(--space-14) var(--space-16); text-decoration: none;"><span style="display: flex; flex: none; align-items: center; justify-content: center; width: var(--size-36); height: var(--size-36); border-radius: var(--radius-8); background: var(--bg-muted); color: var(--text-nav);"><x-import component-from-global-scope="ECOMD.Icon" name="clipboard-list" size="{{fourteen}}"></x-import></span><span style="display: flex; flex-direction: column; gap: var(--space-2); min-width: 0;"><span class="body-sm-semibold" style="color: var(--text-heading);">Hoạt động</span><span class="body-xs" style="color: var(--text-subtle);">Nhật ký lớp, tương tác phụ huynh</span></span></a><a href="#" class="ecomd-card" style="flex-direction: row; align-items: flex-start; gap: var(--space-12); padding: var(--space-14) var(--space-16); text-decoration: none;"><span style="display: flex; flex: none; align-items: center; justify-content: center; width: var(--size-36); height: var(--size-36); border-radius: var(--radius-8); background: var(--bg-muted); color: var(--text-nav);"><x-import component-from-global-scope="ECOMD.Icon" name="images" size="{{fourteen}}"></x-import></span><span style="display: flex; flex-direction: column; gap: var(--space-2); min-width: 0;"><span class="body-sm-semibold" style="color: var(--text-heading);">Thư viện ảnh</span><span class="body-xs" style="color: var(--text-subtle);">Album và nhận diện khuôn mặt</span></span></a><a href="#" class="ecomd-card" style="flex-direction: row; align-items: flex-start; gap: var(--space-12); padding: var(--space-14) var(--space-16); text-decoration: none;"><span style="display: flex; flex: none; align-items: center; justify-content: center; width: var(--size-36); height: var(--size-36); border-radius: var(--radius-8); background: var(--bg-muted); color: var(--text-nav);"><x-import component-from-global-scope="ECOMD.Icon" name="clock" size="{{fourteen}}"></x-import></span><span style="display: flex; flex-direction: column; gap: var(--space-2); min-width: 0;"><span class="body-sm-semibold" style="color: var(--text-heading);">Thời khóa biểu</span><span class="body-xs" style="color: var(--text-subtle);">Lịch học hằng tuần</span></span></a><a href="#" class="ecomd-card" style="flex-direction: row; align-items: flex-start; gap: var(--space-12); padding: var(--space-14) var(--space-16); text-decoration: none;"><span style="display: flex; flex: none; align-items: center; justify-content: center; width: var(--size-36); height: var(--size-36); border-radius: var(--radius-8); background: var(--bg-muted); color: var(--text-nav);"><x-import component-from-global-scope="ECOMD.Icon" name="receipt" size="{{fourteen}}"></x-import></span><span style="display: flex; flex-direction: column; gap: var(--space-2); min-width: 0;"><span class="body-sm-semibold" style="color: var(--text-heading);">Học phí lớp</span><span class="body-xs" style="color: var(--text-subtle);">Biểu phí và định mức thu</span></span></a></div><section class="ecomd-table-card"><x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Thông tin lớp"></x-import>
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm học sinh theo tên, mã" value="{{query}}" on-change="{{setQuery}}"></x-import><span style="flex: 1;"></span><span style="display: flex; align-items: center; gap: var(--space-10); min-width: calc(var(--size-sidebar-w) * 3 / 4);"><span class="body-xs" style="color: var(--text-subtle); white-space: nowrap;">Sĩ số 30 / 35</span><span style="display: block; flex: 1;"><x-import component-from-global-scope="ECOMD.Meter" value="{{thirty}}" max="{{thirtyFive}}" show-label="{{no}}" label="Sĩ số lớp"></x-import></span></span><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="user-plus">Thêm học sinh</x-import></div><x-import component-from-global-scope="ECOMD.EmptyState" icon="users" label="Không tìm thấy học sinh nào"></x-import></section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Nhà trường", "Lớp học", "Lớp 1A"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'kids' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      thirty: 30, thirtyFive: 35, query: '', setQuery: function () {},
+      tabs: [{ key: 'kids', label: 'Học sinh', count: 30 }, { key: 'fees', label: 'Biểu phí áp dụng' }, { key: 'teachers', label: 'Phân công giáo viên' }], tab: st.tab, setTab: function (k) { self.setState({ tab: k }); }
+    });
+  }
+}
+</script>
+</body>
+</html>

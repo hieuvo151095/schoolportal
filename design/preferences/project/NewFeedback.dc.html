@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Góp ý — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="feedback" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Góp ý phụ huynh</h1>
+    <p class="ecomd-page-header__desc body-sm">Tiếp nhận, phân loại và giải quyết đề xuất, phản ánh từ phụ huynh</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.SelectField" options="{{yearOpts}}" value="{{year}}" on-change="{{setYear}}" label="Năm học"></x-import></div>
+</div>
+<section class="ecomd-table-card">
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Trạng thái xử lý"></x-import>
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm mã, tiêu đề, học sinh, phụ huynh" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{prioOpts}}" value="{{prio}}" on-change="{{setPrio}}" label="Độ ưu tiên"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{ownerOpts}}" value="{{owner}}" on-change="{{setOwner}}" label="Người xử lý"></x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="filter">Bộ lọc khác</x-import></div>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Góp ý</th><th class="body-xs-bold">Học sinh / phụ huynh</th><th class="body-xs-bold">Ưu tiên</th><th class="body-xs-bold">Người xử lý</th><th class="body-xs-bold">Đang chờ</th><th class="body-xs-bold">Trạng thái</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><div style="display: flex; flex-direction: column; gap: var(--space-2); max-width: calc(var(--size-sidebar-w) * 1.4);"><a href="#" class="body-sm-semibold" style="color: var(--text-heading); text-decoration: none;">{{r.title}}</a><span class="body-xs" style="color: var(--text-subtle);">{{r.meta}}</span></div></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Học sinh / phụ huynh</span><div class="ecomd-cell__value"><div><div class="body-sm-medium" style="color: var(--text-heading);">{{r.kid}}</div><div class="body-xs" style="color: var(--text-subtle);">{{r.parent}}</div></div></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Ưu tiên</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.pTone}}">{{r.prio}}</x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Người xử lý</span><div class="ecomd-cell__value"><sc-if value="{{r.hasOwner}}" hint-placeholder-val="{{true}}"><span style="white-space: nowrap;">{{r.owner}}</span></sc-if><sc-if value="{{r.noOwner}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.StatusTag" tone="warning">Chưa giao</x-import></sc-if></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Đang chờ</span><div class="ecomd-cell__value"><span style="white-space: nowrap;">{{r.wait}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Trạng thái</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.tone}}">{{r.status}}</x-import></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="7"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có góp ý nào khớp bộ lọc"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="góp ý"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1170}}'>
+var CRUMBS = ["Nhà trường", "Góp ý"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'all', year: 'Năm học 2026 – 2027', prio: 'Tất cả ưu tiên', owner: 'Tất cả người xử lý', query: '' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var T = [{"code": "GY-2026-001", "title": "Góp ý về khẩu phần ăn bán trú buổi trưa", "kind": "Chất lượng dịch vụ", "kid": "Nguyễn Hoàng Nam", "cls": "6A1", "par": "Nguyễn Văn Hùng", "rel": "Bố", "st": "new", "wait": "school", "owner": "", "prio": "normal", "at": "06/10/2026 15:30"}, {"code": "GY-2026-002", "title": "Đề xuất bổ sung thêm sách khoa học vũ trụ cho thư viện", "kind": "Nội dung học tập", "kid": "Trần Bảo Anh", "cls": "7A2", "par": "Trần Thị Mai", "rel": "Mẹ", "st": "doing", "wait": "parent", "owner": "Cô Trần Thị Thu Hà", "prio": "low", "at": "05/10/2026 21:10"}, {"code": "GY-2026-003", "title": "Phản ánh an toàn lái xe đưa đón tuyến xe số 04", "kind": "Thái độ, hành vi", "kid": "Lê Minh Khôi", "cls": "8A3", "par": "Lê Tuấn Vũ", "rel": "Bố", "st": "done", "wait": "school", "owner": "Thầy Nguyễn Văn An", "prio": "urgent", "at": "04/10/2026 14:45"}, {"code": "GY-2026-004", "title": "Hỏi thêm về quy trình xin bảo lưu kết quả học tập", "kind": "Quy trình", "kid": "Phạm Quỳnh Chi", "cls": "9A1", "par": "Phạm Quốc Bảo", "rel": "Bố", "st": "reopen", "wait": "school", "owner": "Cô Phạm Mai Anh", "prio": "high", "at": "01/10/2026 17:20"}, {"code": "GY-2026-005", "title": "Góp ý giao diện phần mềm sổ liên lạc điện tử", "kind": "Trải nghiệm người dùng", "kid": "Vũ Đức Anh", "cls": "7A1", "par": "Vũ Văn Thanh", "rel": "Bố", "st": "new", "wait": "school", "owner": "", "prio": "normal", "at": "07/10/2026 18:00"}, {"code": "GY-2026-006", "title": "Đề xuất tổ chức câu lạc bộ Kỹ năng sống cuối tuần", "kind": "Kỹ năng", "kid": "Đặng Ngọc Hân", "cls": "6A2", "par": "Đặng Quốc Huy", "rel": "Bố", "st": "doing", "wait": "school", "owner": "Thầy Lê Quang Huy", "prio": "normal", "at": "05/10/2026 16:40"}, {"code": "GY-2026-007", "title": "Định hướng phát triển tiếng Anh chuẩn Cambridge cho khối 6", "kind": "Chiến lược", "kid": "Bùi Gia Khiêm", "cls": "6A1", "par": "Bùi Văn Tiến", "rel": "Bố", "st": "doing", "wait": "parent", "owner": "Thầy Nguyễn Văn An", "prio": "high", "at": "03/10/2026 18:15"}, {"code": "GY-2026-008", "title": "Góp ý về bảng tin và thông báo họp phụ huynh", "kind": "Hình thức trình bày", "kid": "Lý Thùy Dung", "cls": "8A2", "par": "Lý Quốc Đạt", "rel": "Bố", "st": "done", "wait": "school", "owner": "Cô Phạm Mai Anh", "prio": "low", "at": "28/09/2026 15:00"}];
+    var ST = { new: ['Yêu cầu mới', 'info'], doing: ['Đang xử lý', 'warning'], reopen: ['Mở lại', 'danger'], done: ['Hoàn tất', 'success'] };
+    var PR = { urgent: ['Khẩn cấp', 'danger'], high: ['Cao', 'warning'], normal: ['Trung bình', 'info'], low: ['Thấp', 'neutral'] };
+    var q = (st.query || '').trim().toLowerCase();
+    var base = T.filter(function (t) { return (!q || (t.code + ' ' + t.title + ' ' + t.kid + ' ' + t.par).toLowerCase().indexOf(q) >= 0)
+      && (st.prio === 'Tất cả ưu tiên' || PR[t.prio][0] === st.prio) && (st.owner === 'Tất cả người xử lý' || (st.owner === 'Chưa giao' ? !t.owner : t.owner === st.owner)); });
+    var tabs = [['all', 'Tất cả'], ['new', 'Yêu cầu mới'], ['doing', 'Đang xử lý'], ['reopen', 'Mở lại'], ['done', 'Hoàn tất']].map(function (d) { return { key: d[0], label: d[1], count: base.filter(function (t) { return d[0] === 'all' || t.st === d[0]; }).length }; });
+    var rows = base.filter(function (t) { return st.tab === 'all' || t.st === st.tab; }).map(function (t) { return {
+      title: t.title, meta: '#' + t.code + ' · ' + t.kind + ' · ' + t.at, kid: t.kid + ' · ' + t.cls, parent: t.par + ' (' + t.rel + ')',
+      prio: PR[t.prio][0], pTone: PR[t.prio][1], owner: t.owner, hasOwner: !!t.owner, noOwner: !t.owner,
+      wait: t.st === 'done' ? 'Đã đóng' : (t.wait === 'school' ? 'Nhà trường trả lời' : 'Phụ huynh trả lời'),
+      status: ST[t.st][0], tone: ST[t.st][1], actionLabel: 'Thao tác với góp ý ' + t.code,
+      menu: [{ icon: 'eye', label: 'Mở hội thoại' }, { icon: 'reply', label: 'Trả lời phụ huynh' }, { icon: 'user-check', label: 'Giao người xử lý…' }, { icon: 'flag', label: 'Đổi độ ưu tiên…' }].concat(t.st === 'done' ? [{ icon: 'rotate-left', label: 'Mở lại' }] : [{ icon: 'circle-check', label: 'Đánh dấu hoàn tất' }]) }; });
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20,
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      rows: rows, isEmpty: rows.length === 0, total: rows.length,
+      yearOpts: ['Năm học 2026 – 2027', 'Năm học 2025 – 2026'], year: st.year, setYear: function (v) { self.setState({ year: v }); },
+      prioOpts: ['Tất cả ưu tiên', 'Khẩn cấp', 'Cao', 'Trung bình', 'Thấp'], prio: st.prio, setPrio: function (v) { self.setState({ prio: v }); },
+      ownerOpts: ['Tất cả người xử lý', 'Chưa giao', 'Thầy Nguyễn Văn An', 'Cô Trần Thị Thu Hà', 'Thầy Lê Quang Huy', 'Cô Phạm Mai Anh'], owner: st.owner, setOwner: function (v) { self.setState({ owner: v }); }
+    });
+  }
+}
+</script>
+</body>
+</html>

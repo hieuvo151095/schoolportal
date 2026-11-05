@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Điểm danh nhân viên — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="staff-attendance" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Điểm danh nhân viên</h1>
+    <p class="ecomd-page-header__desc body-sm">Sổ điểm danh hằng ngày của giáo viên, bảo mẫu, nhân viên văn phòng và ban giám hiệu</p>
+  </div>
+  <div class="ecomd-page-header__actions"><span style="display: inline-flex; align-items: center; gap: var(--space-4);"><x-import component-from-global-scope="ECOMD.IconButton" icon="chevron-left" label="Ngày trước" size="md"></x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="calendar-days">Thứ Sáu, 30/10/2026</x-import><x-import component-from-global-scope="ECOMD.IconButton" icon="chevron-right" label="Ngày sau" size="md"></x-import></span><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="file-excel">Xuất Excel</x-import></div>
+</div>
+<section class="ecomd-table-card">
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Tình trạng điểm danh"></x-import>
+<sc-if value="{{noSel}}" hint-placeholder-val="{{true}}"><div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo tên, biệt danh, mã NV" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{roleOpts}}" value="{{role}}" on-change="{{setRole}}" label="Lọc theo vai trò"></x-import></div></sc-if>
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{false}}"><div class="ecomd-table-card__bulk"><span class="body-sm-semibold">Đã chọn {{selCount}} nhân viên</span><span style="flex: 1;"></span><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="arrow-right-to-bracket" on-click="{{bulkIn}}">Check-in cho người đã chọn</x-import><x-import component-from-global-scope="ECOMD.Button" variant="ghost" on-click="{{clearSel}}">Bỏ chọn</x-import></div></sc-if>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="is-check"><x-import component-from-global-scope="ECOMD.Checkbox" aria-label="Chọn tất cả" checked="{{allChecked}}" indeterminate="{{someChecked}}" on-change="{{toggleAll}}"></x-import></th><th class="body-xs-bold is-primary">Nhân viên</th><th class="body-xs-bold">Vai trò</th><th class="body-xs-bold">Giờ vào</th><th class="body-xs-bold">Giờ ra</th><th class="body-xs-bold">Tình trạng</th><th class="body-xs-bold">Ghi chú</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr class="{{r.cls}}"><td class="is-check"><x-import component-from-global-scope="ECOMD.Checkbox" aria-label="{{r.checkLabel}}" checked="{{r.checked}}" on-change="{{r.toggle}}"></x-import></td><td class="body-sm is-primary"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.Person" name="{{r.nick}}" meta="{{r.meta}}"></x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Vai trò</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.Tags"><sc-for list="{{r.roles}}" as="c" hint-placeholder-count="1"><x-import component-from-global-scope="ECOMD.Tag">{{c}}</x-import></sc-for></x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Giờ vào</span><div class="ecomd-cell__value"><sc-if value="{{r.inHas}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; gap: var(--space-6); font-variant-numeric: tabular-nums; color: var(--text-heading);"><x-import component-from-global-scope="ECOMD.Icon" name="clock" size="{{twelve}}" color="var(--text-subtle)"></x-import>{{r.in}}</span></sc-if><sc-if value="{{r.inBtn}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="arrow-right-to-bracket" on-click="{{r.checkIn}}" disabled="{{r.inOff}}">Check-in</x-import></sc-if><sc-if value="{{r.inNone}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Không áp dụng"></x-import></sc-if></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Giờ ra</span><div class="ecomd-cell__value"><sc-if value="{{r.outHas}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; gap: var(--space-6); font-variant-numeric: tabular-nums; color: var(--text-heading);"><x-import component-from-global-scope="ECOMD.Icon" name="clock" size="{{twelve}}" color="var(--text-subtle)"></x-import>{{r.out}}</span></sc-if><sc-if value="{{r.outBtn}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="arrow-right-from-bracket" on-click="{{r.checkOut}}" disabled="{{r.outOff}}">Check-out</x-import></sc-if><sc-if value="{{r.outNone}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Không áp dụng"></x-import></sc-if></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Tình trạng</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.tone}}">{{r.status}}</x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Ghi chú</span><div class="ecomd-cell__value"><sc-if value="{{r.hasNote}}" hint-placeholder-val="{{false}}"><span class="body-xs" style="color: var(--text-body);">{{r.note}}</span></sc-if><sc-if value="{{r.noNote}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Chưa có"></x-import></sc-if></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="8"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có nhân viên nào khớp tìm kiếm"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="nhân viên"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1836}}'>
+var CRUMBS = ["Nhà trường", "Điểm danh NV"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'all', role: 'Tất cả vai trò', query: '', sel: [], times: {} }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var T = [{"id": 1, "nick": "Bác Đức Bảo Vệ", "name": "Hoàng Văn Đức", "code": "", "roles": ["Nhân viên"], "inT": "06:30", "outT": "18:00", "abs": "", "note": "Ca trực cổng trường sáng"}, {"id": 2, "nick": "Bác Phú Tài Vụ", "name": "Châu Vĩnh Phú", "code": "NV004", "roles": ["Nhân viên"], "inT": "", "outT": "", "abs": "", "note": ""}, {"id": 3, "nick": "Cô Bích Y Tế", "name": "Đỗ Thị Bích", "code": "NV002", "roles": ["Nhân viên"], "inT": "07:15", "outT": "", "abs": "", "note": "Kiểm tra tủ thuốc y tế các lớp"}, {"id": 4, "nick": "Cô Cẩm Tú", "name": "Trịnh Cẩm Tú", "code": "NV003", "roles": ["Nhân viên"], "inT": "", "outT": "", "abs": "", "note": ""}, {"id": 5, "nick": "Cô Gia Hân", "name": "Lý Gia Hân", "code": "GV005", "roles": ["Giáo viên"], "inT": "", "outT": "", "abs": "", "note": ""}, {"id": 6, "nick": "Cô Hường", "name": "Lê Thu Hường", "code": "GV003", "roles": ["Giáo viên"], "inT": "", "outT": "", "abs": "leave", "note": "Đã báo cô Mai Anh dạy thay"}, {"id": 7, "nick": "Cô Lan", "name": "Vũ Thị Ngọc Lan", "code": "GV004", "roles": ["Giáo viên"], "inT": "", "outT": "", "abs": "absent", "note": ""}, {"id": 8, "nick": "Cô Mai Anh", "name": "Nguyễn Thị Mai Anh", "code": "GV001", "roles": ["Quản lý", "Giáo viên"], "inT": "07:45", "outT": "17:15", "abs": "", "note": "Dạy tiết 1 – 2 lớp 6A1"}, {"id": 9, "nick": "Cô Minh Châu", "name": "Tạ Minh Châu", "code": "GV008", "roles": ["Giáo viên"], "inT": "", "outT": "", "abs": "", "note": ""}, {"id": 10, "nick": "Cô Minh Trang", "name": "Kiều Minh Trang", "code": "", "roles": ["Nhân viên"], "inT": "", "outT": "", "abs": "", "note": ""}, {"id": 11, "nick": "Cô Thu Trang", "name": "Dương Thu Trang", "code": "KT001", "roles": ["Quản lý", "Nhân viên"], "inT": "", "outT": "", "abs": "", "note": ""}, {"id": 12, "nick": "Cô Thùy Dương", "name": "Đặng Thùy Dương", "code": "GV013", "roles": ["Giáo viên"], "inT": "", "outT": "", "abs": "", "note": ""}, {"id": 13, "nick": "Cô Tuyết Mai", "name": "Võ Tuyết Mai", "code": "GV010", "roles": ["Giáo viên"], "inT": "", "outT": "", "abs": "", "note": ""}, {"id": 14, "nick": "Thầy Anh Quân", "name": "Bùi Anh Quân", "code": "GV006", "roles": ["Giáo viên"], "inT": "", "outT": "", "abs": "", "note": ""}, {"id": 15, "nick": "Thầy Hải", "name": "Phan Thanh Hải", "code": "GV007", "roles": ["Giáo viên"], "inT": "", "outT": "", "abs": "", "note": ""}, {"id": 16, "nick": "Thầy Khôi", "name": "Lương Đình Khôi", "code": "GV009", "roles": ["Giáo viên"], "inT": "", "outT": "", "abs": "", "note": ""}, {"id": 17, "nick": "Thầy Minh", "name": "Trần Văn Minh", "code": "GV002", "roles": ["Giáo viên"], "inT": "07:30", "outT": "", "abs": "", "note": "Họp tổ bộ môn Toán"}, {"id": 18, "nick": "Thầy Quang Dũng", "name": "Hồ Quang Dũng", "code": "GV011", "roles": ["Giáo viên"], "inT": "", "outT": "", "abs": "", "note": ""}, {"id": 19, "nick": "Thầy Tiến Dũng", "name": "Đinh Tiến Dũng", "code": "GV012", "roles": ["Giáo viên"], "inT": "", "outT": "", "abs": "", "note": ""}, {"id": 20, "nick": "Thầy Tuấn", "name": "Phạm Quốc Tuấn", "code": "AD001", "roles": ["Admin"], "inT": "", "outT": "", "abs": "", "note": ""}];
+    var times = st.times || {};
+    T.forEach(function (t) { if (times[t.id]) { t.inT = times[t.id].inT || t.inT; t.outT = times[t.id].outT || t.outT; } });
+    function stat(t) { return t.abs === 'leave' ? 'leave' : t.abs === 'absent' ? 'absent' : t.inT ? 'in' : 'none'; }
+    var STS = { in: ['Có mặt', 'success'], none: ['Chưa check-in', 'neutral'], leave: ['Vắng có phép', 'warning'], absent: ['Vắng không phép', 'danger'] };
+    var q = (st.query || '').trim().toLowerCase();
+    var base = T.filter(function (t) { return (!q || (t.nick + ' ' + t.name + ' ' + t.code).toLowerCase().indexOf(q) >= 0) && (st.role === 'Tất cả vai trò' || t.roles.indexOf(st.role) >= 0); });
+    var tabs = [['all', 'Tất cả'], ['in', 'Có mặt'], ['none', 'Chưa check-in'], ['leave', 'Vắng có phép'], ['absent', 'Vắng không phép']].map(function (d) { return { key: d[0], label: d[1], count: base.filter(function (t) { return d[0] === 'all' || stat(t) === d[0]; }).length }; });
+    var list = base.filter(function (t) { return st.tab === 'all' || stat(t) === st.tab; });
+    var ids = list.map(function (t) { return t.id; }), sel = st.sel || [];
+    var nOn = ids.filter(function (i) { return sel.indexOf(i) >= 0; }).length;
+    function setTime(id, k) { var n = Object.assign({}, st.times || {}); n[id] = Object.assign({}, n[id] || {}); n[id][k] = k === 'inT' ? '08:05' : '17:00'; self.setState({ times: n }); }
+    var rows = list.map(function (t) { var s = stat(t), absent = s === 'leave' || s === 'absent', on = sel.indexOf(t.id) >= 0;
+      return { nick: t.nick, meta: t.name + ' · ' + (t.code || 'Chưa có mã NV'), roles: t.roles,
+        in: t.inT, inHas: !!t.inT, inBtn: !t.inT && !absent, inNone: absent, inOff: false, checkIn: function () { setTime(t.id, 'inT'); },
+        out: t.outT, outHas: !!t.outT, outBtn: !t.outT && !absent, outNone: absent, outOff: !t.inT, checkOut: function () { setTime(t.id, 'outT'); },
+        status: STS[s][0], tone: STS[s][1], note: t.note, hasNote: !!t.note, noNote: !t.note,
+        checked: on, cls: on ? 'is-selected' : '', checkLabel: 'Chọn ' + t.nick,
+        toggle: function (v) { var n = sel.filter(function (x) { return x !== t.id; }); if (v) n.push(t.id); self.setState({ sel: n }); },
+        actionLabel: 'Thao tác với ' + t.nick,
+        menu: [{ icon: 'user-clock', label: 'Báo vắng có phép…' }, { icon: 'user-xmark', label: 'Báo vắng không phép…' }, { icon: 'pen', label: 'Sửa giờ vào / ra' }, { icon: 'comment-dots', label: 'Thêm ghi chú' }] }; });
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20,
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      rows: rows, isEmpty: rows.length === 0, total: rows.length,
+      twelve: 12, roleOpts: ['Tất cả vai trò', 'Giáo viên', 'Nhân viên', 'Quản lý', 'Admin'], role: st.role, setRole: function (v) { self.setState({ role: v }); },
+      noSel: sel.length === 0, hasSel: sel.length > 0, selCount: sel.length, clearSel: function () { self.setState({ sel: [] }); },
+      bulkIn: function () { var n = Object.assign({}, st.times || {}); sel.forEach(function (id) { n[id] = Object.assign({ inT: '08:05' }, n[id] || {}); }); self.setState({ times: n, sel: [] }); },
+      allChecked: ids.length > 0 && nOn === ids.length, someChecked: nOn > 0 && nOn < ids.length, toggleAll: function (v) { self.setState({ sel: v ? ids : [] }); }
+    });
+  }
+}
+</script>
+</body>
+</html>
