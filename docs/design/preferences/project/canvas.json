@@ -1,0 +1,3656 @@
+{
+ "v": 3,
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-10-30T05:10:00Z"
+ },
+ "title": "ECO School Portal — Thiết kế lại",
+ "launch": {
+  "view": "canvas",
+  "page": "attendance"
+ },
+ "pages": [
+  {
+   "id": "attendance",
+   "name": "Vận hành 01 · Điểm danh"
+  },
+  {
+   "id": "activity",
+   "name": "Vận hành 02 · Hoạt động"
+  },
+  {
+   "id": "media",
+   "name": "Vận hành 03 · Thư viện ảnh"
+  },
+  {
+   "id": "conversations",
+   "name": "Vận hành 04 · Trao đổi"
+  },
+  {
+   "id": "report-attendance",
+   "name": "Vận hành 05 · BC Điểm danh"
+  },
+  {
+   "id": "report-extended",
+   "name": "Vận hành 06 · BC Mở rộng"
+  },
+  {
+   "id": "schedule",
+   "name": "Học tập 01 · Thời khóa biểu"
+  },
+  {
+   "id": "assignment",
+   "name": "Học tập 02 · Bài tập"
+  },
+  {
+   "id": "scoreboard",
+   "name": "Học tập 03 · Điểm & Đánh giá"
+  },
+  {
+   "id": "fee",
+   "name": "Tài chính 01 · Học phí"
+  },
+  {
+   "id": "school-fees",
+   "name": "Tài chính 02 · Khoản phí"
+  },
+  {
+   "id": "fee-categories",
+   "name": "Tài chính 03 · Danh mục thu"
+  },
+  {
+   "id": "discount",
+   "name": "Tài chính 04 · Miễn giảm"
+  },
+  {
+   "id": "tuition",
+   "name": "Tài chính 05 · Quản lý học phí"
+  },
+  {
+   "id": "expenses",
+   "name": "Tài chính 06 · Khoản chi"
+  },
+  {
+   "id": "reconciliation",
+   "name": "Tài chính 07 · Đối soát"
+  },
+  {
+   "id": "report-fee",
+   "name": "Tài chính 08 · Báo cáo học phí"
+  },
+  {
+   "id": "teacher",
+   "name": "Nhà trường 01 · Giáo viên"
+  },
+  {
+   "id": "kid",
+   "name": "Nhà trường 02 · Học sinh"
+  },
+  {
+   "id": "classes",
+   "name": "Nhà trường 03 · Lớp học"
+  },
+  {
+   "id": "subjects",
+   "name": "Nhà trường 04 · Môn học"
+  },
+  {
+   "id": "grades",
+   "name": "Nhà trường 05 · Khối lớp"
+  },
+  {
+   "id": "announcements",
+   "name": "Nhà trường 06 · Bảng thông tin"
+  },
+  {
+   "id": "poll",
+   "name": "Nhà trường 07 · Bình chọn"
+  },
+  {
+   "id": "menu",
+   "name": "Nhà trường 08 · Thực đơn"
+  },
+  {
+   "id": "staff-attendance",
+   "name": "Nhà trường 09 · Điểm danh NV"
+  },
+  {
+   "id": "handbook",
+   "name": "Nhà trường 10 · Sổ tay PH"
+  },
+  {
+   "id": "feedback",
+   "name": "Nhà trường 11 · Góp ý"
+  },
+  {
+   "id": "calendar",
+   "name": "Nhà trường 12 · Lịch sự kiện"
+  },
+  {
+   "id": "academic-year",
+   "name": "Nhà trường 13 · Năm học"
+  },
+  {
+   "id": "archive",
+   "name": "Nhà trường 14 · Lưu trữ"
+  },
+  {
+   "id": "setting-school",
+   "name": "Cấu hình 01 · Trường"
+  },
+  {
+   "id": "setting-fee",
+   "name": "Cấu hình 02 · Học phí (cấu hình)"
+  },
+  {
+   "id": "setting-users",
+   "name": "Cấu hình 03 · Tài khoản"
+  },
+  {
+   "id": "setting-face",
+   "name": "Cấu hình 04 · Nhận diện"
+  },
+  {
+   "id": "setting-activity",
+   "name": "Cấu hình 05 · Tính năng"
+  },
+  {
+   "id": "setting-notification",
+   "name": "Cấu hình 06 · Thông báo"
+  }
+ ],
+ "boards": {
+  "OldTeacher.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Giáo viên",
+   "page": "teacher"
+  },
+  "NewTeacher.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Giáo viên",
+   "page": "teacher",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldKid.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1262,
+   "title": "Hiện tại — Học sinh",
+   "page": "kid"
+  },
+  "NewKid.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1244,
+   "title": "Thiết kế mới — Học sinh",
+   "page": "kid",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldClasses.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Lớp học",
+   "page": "classes"
+  },
+  "NewClasses.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Lớp học",
+   "page": "classes",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldSubjects.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 2370,
+   "title": "Hiện tại — Môn học",
+   "page": "subjects"
+  },
+  "NewSubjects.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1288,
+   "title": "Thiết kế mới — Môn học",
+   "page": "subjects",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldGrades.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1684,
+   "title": "Hiện tại — Khối lớp",
+   "page": "grades"
+  },
+  "NewGrades.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1447,
+   "title": "Thiết kế mới — Khối lớp",
+   "page": "grades",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldAnnouncements.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1375,
+   "title": "Hiện tại — Bảng thông tin",
+   "page": "announcements"
+  },
+  "NewAnnouncements.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Bảng thông tin",
+   "page": "announcements",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldPoll.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Bình chọn",
+   "page": "poll"
+  },
+  "NewPoll.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Bình chọn",
+   "page": "poll",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldMenu.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1060,
+   "title": "Hiện tại — Thực đơn",
+   "page": "menu"
+  },
+  "NewMenu.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 967,
+   "title": "Thiết kế mới — Thực đơn",
+   "page": "menu",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldStaffAttendance.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1753,
+   "title": "Hiện tại — Điểm danh NV",
+   "page": "staff-attendance"
+  },
+  "NewStaffAttendance.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1836,
+   "title": "Thiết kế mới — Điểm danh NV",
+   "page": "staff-attendance",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldHandbook.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 2010,
+   "title": "Hiện tại — Sổ tay PH",
+   "page": "handbook"
+  },
+  "NewHandbook.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1235,
+   "title": "Thiết kế mới — Sổ tay PH",
+   "page": "handbook",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldFeedback.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1331,
+   "title": "Hiện tại — Góp ý",
+   "page": "feedback"
+  },
+  "NewFeedback.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1170,
+   "title": "Thiết kế mới — Góp ý",
+   "page": "feedback",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldCalendar.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Lịch sự kiện",
+   "page": "calendar"
+  },
+  "NewCalendar.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1017,
+   "title": "Thiết kế mới — Lịch sự kiện",
+   "page": "calendar",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldAcademicYear.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Năm học",
+   "page": "academic-year"
+  },
+  "NewAcademicYear.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Năm học",
+   "page": "academic-year",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldArchive.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Lưu trữ",
+   "page": "archive"
+  },
+  "NewArchive.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 916,
+   "title": "Thiết kế mới — Lưu trữ",
+   "page": "archive",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewTeacher-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1035,
+   "title": "Tablet 768 — Giáo viên",
+   "page": "teacher",
+   "is_interactive": true
+  },
+  "NewTeacher-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1862,
+   "title": "Mobile 390 — Giáo viên",
+   "page": "teacher",
+   "is_interactive": true
+  },
+  "NewTeacher-TabletMenu.dc.html": {
+   "x": 4358,
+   "y": 0,
+   "w": 768,
+   "h": 1024,
+   "title": "Tablet 768 · mở menu — Giáo viên",
+   "page": "teacher",
+   "is_interactive": true
+  },
+  "NewTeacher-MobileMenu.dc.html": {
+   "x": 5206,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Mobile 390 · mở menu — Giáo viên",
+   "page": "teacher",
+   "is_interactive": true
+  },
+  "NewKid-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1414,
+   "title": "Tablet 768 — Học sinh",
+   "page": "kid",
+   "is_interactive": true
+  },
+  "NewKid-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 2855,
+   "title": "Mobile 390 — Học sinh",
+   "page": "kid",
+   "is_interactive": true
+  },
+  "NewClasses-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 900,
+   "title": "Tablet 768 — Lớp học",
+   "page": "classes",
+   "is_interactive": true
+  },
+  "NewClasses-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1426,
+   "title": "Mobile 390 — Lớp học",
+   "page": "classes",
+   "is_interactive": true
+  },
+  "NewSubjects-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1682,
+   "title": "Tablet 768 — Môn học",
+   "page": "subjects",
+   "is_interactive": true
+  },
+  "NewSubjects-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 3055,
+   "title": "Mobile 390 — Môn học",
+   "page": "subjects",
+   "is_interactive": true
+  },
+  "NewGrades-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1695,
+   "title": "Tablet 768 — Khối lớp",
+   "page": "grades",
+   "is_interactive": true
+  },
+  "NewGrades-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 3188,
+   "title": "Mobile 390 — Khối lớp",
+   "page": "grades",
+   "is_interactive": true
+  },
+  "NewAnnouncements-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1272,
+   "title": "Tablet 768 — Bảng thông tin",
+   "page": "announcements",
+   "is_interactive": true
+  },
+  "NewAnnouncements-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1825,
+   "title": "Mobile 390 — Bảng thông tin",
+   "page": "announcements",
+   "is_interactive": true
+  },
+  "NewPoll-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1025,
+   "title": "Tablet 768 — Bình chọn",
+   "page": "poll",
+   "is_interactive": true
+  },
+  "NewPoll-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1666,
+   "title": "Mobile 390 — Bình chọn",
+   "page": "poll",
+   "is_interactive": true
+  },
+  "NewMenu-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1043,
+   "title": "Tablet 768 — Thực đơn",
+   "page": "menu",
+   "is_interactive": true
+  },
+  "NewMenu-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1836,
+   "title": "Mobile 390 — Thực đơn",
+   "page": "menu",
+   "is_interactive": true
+  },
+  "NewStaffAttendance-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1880,
+   "title": "Tablet 768 — Điểm danh NV",
+   "page": "staff-attendance",
+   "is_interactive": true
+  },
+  "NewStaffAttendance-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 5283,
+   "title": "Mobile 390 — Điểm danh NV",
+   "page": "staff-attendance",
+   "is_interactive": true
+  },
+  "NewHandbook-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1926,
+   "title": "Tablet 768 — Sổ tay PH",
+   "page": "handbook",
+   "is_interactive": true
+  },
+  "NewHandbook-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 2256,
+   "title": "Mobile 390 — Sổ tay PH",
+   "page": "handbook",
+   "is_interactive": true
+  },
+  "NewFeedback-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1288,
+   "title": "Tablet 768 — Góp ý",
+   "page": "feedback",
+   "is_interactive": true
+  },
+  "NewFeedback-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 2611,
+   "title": "Mobile 390 — Góp ý",
+   "page": "feedback",
+   "is_interactive": true
+  },
+  "NewCalendar-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1754,
+   "title": "Tablet 768 — Lịch sự kiện",
+   "page": "calendar",
+   "is_interactive": true
+  },
+  "NewCalendar-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 3205,
+   "title": "Mobile 390 — Lịch sự kiện",
+   "page": "calendar",
+   "is_interactive": true
+  },
+  "NewAcademicYear-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 900,
+   "title": "Tablet 768 — Năm học",
+   "page": "academic-year",
+   "is_interactive": true
+  },
+  "NewAcademicYear-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1365,
+   "title": "Mobile 390 — Năm học",
+   "page": "academic-year",
+   "is_interactive": true
+  },
+  "NewArchive-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 966,
+   "title": "Tablet 768 — Lưu trữ",
+   "page": "archive",
+   "is_interactive": true
+  },
+  "NewArchive-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1829,
+   "title": "Mobile 390 — Lưu trữ",
+   "page": "archive",
+   "is_interactive": true
+  },
+  "OldAttendance.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 957,
+   "title": "Hiện tại — Điểm danh",
+   "page": "attendance"
+  },
+  "NewAttendance.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1130,
+   "title": "Thiết kế mới — Điểm danh",
+   "page": "attendance",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldActivity.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 2067,
+   "title": "Hiện tại — Hoạt động",
+   "page": "activity"
+  },
+  "NewActivity.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 2041,
+   "title": "Thiết kế mới — Hoạt động",
+   "page": "activity",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldMedia.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Thư viện ảnh",
+   "page": "media"
+  },
+  "NewMedia.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Thư viện ảnh",
+   "page": "media",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldConversations.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Trao đổi",
+   "page": "conversations"
+  },
+  "NewConversations.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Trao đổi",
+   "page": "conversations",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldReportAttendance.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — BC Điểm danh",
+   "page": "report-attendance"
+  },
+  "NewReportAttendance.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1013,
+   "title": "Thiết kế mới — BC Điểm danh",
+   "page": "report-attendance",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldReportExtended.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — BC Mở rộng",
+   "page": "report-extended"
+  },
+  "NewReportExtended.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 931,
+   "title": "Thiết kế mới — BC Mở rộng",
+   "page": "report-extended",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewAttendance-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1202,
+   "title": "Tablet 768 — Điểm danh",
+   "page": "attendance",
+   "is_interactive": true
+  },
+  "NewAttendance-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 2573,
+   "title": "Mobile 390 — Điểm danh",
+   "page": "attendance",
+   "is_interactive": true
+  },
+  "NewActivity-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 2891,
+   "title": "Tablet 768 — Hoạt động",
+   "page": "activity",
+   "is_interactive": true
+  },
+  "NewActivity-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 3258,
+   "title": "Mobile 390 — Hoạt động",
+   "page": "activity",
+   "is_interactive": true
+  },
+  "NewMedia-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1100,
+   "title": "Tablet 768 — Thư viện ảnh",
+   "page": "media",
+   "is_interactive": true
+  },
+  "NewMedia-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1841,
+   "title": "Mobile 390 — Thư viện ảnh",
+   "page": "media",
+   "is_interactive": true
+  },
+  "NewConversations-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1964,
+   "title": "Tablet 768 — Trao đổi",
+   "page": "conversations",
+   "is_interactive": true
+  },
+  "NewConversations-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 2218,
+   "title": "Mobile 390 — Trao đổi",
+   "page": "conversations",
+   "is_interactive": true
+  },
+  "NewReportAttendance-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1099,
+   "title": "Tablet 768 — BC Điểm danh",
+   "page": "report-attendance",
+   "is_interactive": true
+  },
+  "NewReportAttendance-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1223,
+   "title": "Mobile 390 — BC Điểm danh",
+   "page": "report-attendance",
+   "is_interactive": true
+  },
+  "NewReportExtended-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1079,
+   "title": "Tablet 768 — BC Mở rộng",
+   "page": "report-extended",
+   "is_interactive": true
+  },
+  "NewReportExtended-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1892,
+   "title": "Mobile 390 — BC Mở rộng",
+   "page": "report-extended",
+   "is_interactive": true
+  },
+  "OldSchedule.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1225,
+   "title": "Hiện tại — Thời khóa biểu",
+   "page": "schedule"
+  },
+  "NewSchedule.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1336,
+   "title": "Thiết kế mới — Thời khóa biểu",
+   "page": "schedule",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldAssignment.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Bài tập",
+   "page": "assignment"
+  },
+  "NewAssignment.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 921,
+   "title": "Thiết kế mới — Bài tập",
+   "page": "assignment",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldScoreboard.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1103,
+   "title": "Hiện tại — Điểm & Đánh giá",
+   "page": "scoreboard"
+  },
+  "NewScoreboard.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Điểm & Đánh giá",
+   "page": "scoreboard",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewSchedule-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1462,
+   "title": "Tablet 768 — Thời khóa biểu",
+   "page": "schedule",
+   "is_interactive": true
+  },
+  "NewSchedule-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 3143,
+   "title": "Mobile 390 — Thời khóa biểu",
+   "page": "schedule",
+   "is_interactive": true
+  },
+  "NewAssignment-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1041,
+   "title": "Tablet 768 — Bài tập",
+   "page": "assignment",
+   "is_interactive": true
+  },
+  "NewAssignment-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1934,
+   "title": "Mobile 390 — Bài tập",
+   "page": "assignment",
+   "is_interactive": true
+  },
+  "NewScoreboard-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 900,
+   "title": "Tablet 768 — Điểm & Đánh giá",
+   "page": "scoreboard",
+   "is_interactive": true
+  },
+  "NewScoreboard-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1744,
+   "title": "Mobile 390 — Điểm & Đánh giá",
+   "page": "scoreboard",
+   "is_interactive": true
+  },
+  "OldFee.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1181,
+   "title": "Hiện tại — Học phí",
+   "page": "fee"
+  },
+  "NewFee.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1205,
+   "title": "Thiết kế mới — Học phí",
+   "page": "fee",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldSchoolFees.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1857,
+   "title": "Hiện tại — Khoản phí",
+   "page": "school-fees"
+  },
+  "NewSchoolFees.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1892,
+   "title": "Thiết kế mới — Khoản phí",
+   "page": "school-fees",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldFeeCategories.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 2289,
+   "title": "Hiện tại — Danh mục thu",
+   "page": "fee-categories"
+  },
+  "NewFeeCategories.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1754,
+   "title": "Thiết kế mới — Danh mục thu",
+   "page": "fee-categories",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldDiscount.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1299,
+   "title": "Hiện tại — Miễn giảm",
+   "page": "discount"
+  },
+  "NewDiscount.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1131,
+   "title": "Thiết kế mới — Miễn giảm",
+   "page": "discount",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldTuition.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1269,
+   "title": "Hiện tại — Quản lý học phí",
+   "page": "tuition"
+  },
+  "NewTuition.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1284,
+   "title": "Thiết kế mới — Quản lý học phí",
+   "page": "tuition",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldExpenses.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Khoản chi",
+   "page": "expenses"
+  },
+  "NewExpenses.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Khoản chi",
+   "page": "expenses",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldReconciliation.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Đối soát",
+   "page": "reconciliation"
+  },
+  "NewReconciliation.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Đối soát",
+   "page": "reconciliation",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldReportFee.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Báo cáo học phí",
+   "page": "report-fee"
+  },
+  "NewReportFee.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Báo cáo học phí",
+   "page": "report-fee",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewFee-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1431,
+   "title": "Tablet 768 — Học phí",
+   "page": "fee",
+   "is_interactive": true
+  },
+  "NewFee-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 2176,
+   "title": "Mobile 390 — Học phí",
+   "page": "fee",
+   "is_interactive": true
+  },
+  "NewSchoolFees-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 2176,
+   "title": "Tablet 768 — Khoản phí",
+   "page": "school-fees",
+   "is_interactive": true
+  },
+  "NewSchoolFees-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 4497,
+   "title": "Mobile 390 — Khoản phí",
+   "page": "school-fees",
+   "is_interactive": true
+  },
+  "NewFeeCategories-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 2108,
+   "title": "Tablet 768 — Danh mục thu",
+   "page": "fee-categories",
+   "is_interactive": true
+  },
+  "NewFeeCategories-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 4129,
+   "title": "Mobile 390 — Danh mục thu",
+   "page": "fee-categories",
+   "is_interactive": true
+  },
+  "NewDiscount-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1317,
+   "title": "Tablet 768 — Miễn giảm",
+   "page": "discount",
+   "is_interactive": true
+  },
+  "NewDiscount-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 2268,
+   "title": "Mobile 390 — Miễn giảm",
+   "page": "discount",
+   "is_interactive": true
+  },
+  "NewTuition-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1360,
+   "title": "Tablet 768 — Quản lý học phí",
+   "page": "tuition",
+   "is_interactive": true
+  },
+  "NewTuition-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 2929,
+   "title": "Mobile 390 — Quản lý học phí",
+   "page": "tuition",
+   "is_interactive": true
+  },
+  "NewExpenses-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1032,
+   "title": "Tablet 768 — Khoản chi",
+   "page": "expenses",
+   "is_interactive": true
+  },
+  "NewExpenses-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1683,
+   "title": "Mobile 390 — Khoản chi",
+   "page": "expenses",
+   "is_interactive": true
+  },
+  "NewReconciliation-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 900,
+   "title": "Tablet 768 — Đối soát",
+   "page": "reconciliation",
+   "is_interactive": true
+  },
+  "NewReconciliation-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1497,
+   "title": "Mobile 390 — Đối soát",
+   "page": "reconciliation",
+   "is_interactive": true
+  },
+  "NewReportFee-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 900,
+   "title": "Tablet 768 — Báo cáo học phí",
+   "page": "report-fee",
+   "is_interactive": true
+  },
+  "NewReportFee-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 2278,
+   "title": "Mobile 390 — Báo cáo học phí",
+   "page": "report-fee",
+   "is_interactive": true
+  },
+  "OldSettingSchool.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1124,
+   "title": "Hiện tại — Trường",
+   "page": "setting-school"
+  },
+  "NewSettingSchool.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Trường",
+   "page": "setting-school",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldSettingFee.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 3186,
+   "title": "Hiện tại — Học phí (cấu hình)",
+   "page": "setting-fee"
+  },
+  "NewSettingFee.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1086,
+   "title": "Thiết kế mới — Học phí (cấu hình)",
+   "page": "setting-fee",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldSettingUsers.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 982,
+   "title": "Hiện tại — Tài khoản",
+   "page": "setting-users"
+  },
+  "NewSettingUsers.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Tài khoản",
+   "page": "setting-users",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldSettingFace.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1232,
+   "title": "Hiện tại — Nhận diện",
+   "page": "setting-face"
+  },
+  "NewSettingFace.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1204,
+   "title": "Thiết kế mới — Nhận diện",
+   "page": "setting-face",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldSettingActivity.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Tính năng",
+   "page": "setting-activity"
+  },
+  "NewSettingActivity.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Tính năng",
+   "page": "setting-activity",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OldSettingNotification.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 2584,
+   "title": "Hiện tại — Thông báo",
+   "page": "setting-notification"
+  },
+  "NewSettingNotification.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Thông báo",
+   "page": "setting-notification",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewSettingSchool-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1312,
+   "title": "Tablet 768 — Trường",
+   "page": "setting-school",
+   "is_interactive": true
+  },
+  "NewSettingSchool-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1708,
+   "title": "Mobile 390 — Trường",
+   "page": "setting-school",
+   "is_interactive": true
+  },
+  "NewSettingFee-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1176,
+   "title": "Tablet 768 — Học phí (cấu hình)",
+   "page": "setting-fee",
+   "is_interactive": true
+  },
+  "NewSettingFee-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1648,
+   "title": "Mobile 390 — Học phí (cấu hình)",
+   "page": "setting-fee",
+   "is_interactive": true
+  },
+  "NewSettingUsers-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 961,
+   "title": "Tablet 768 — Tài khoản",
+   "page": "setting-users",
+   "is_interactive": true
+  },
+  "NewSettingUsers-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 1978,
+   "title": "Mobile 390 — Tài khoản",
+   "page": "setting-users",
+   "is_interactive": true
+  },
+  "NewSettingFace-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 1260,
+   "title": "Tablet 768 — Nhận diện",
+   "page": "setting-face",
+   "is_interactive": true
+  },
+  "NewSettingFace-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 2345,
+   "title": "Mobile 390 — Nhận diện",
+   "page": "setting-face",
+   "is_interactive": true
+  },
+  "NewSettingActivity-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 900,
+   "title": "Tablet 768 — Tính năng",
+   "page": "setting-activity",
+   "is_interactive": true
+  },
+  "NewSettingActivity-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 900,
+   "title": "Mobile 390 — Tính năng",
+   "page": "setting-activity",
+   "is_interactive": true
+  },
+  "NewSettingNotification-Tablet.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 768,
+   "h": 900,
+   "title": "Tablet 768 — Thông báo",
+   "page": "setting-notification",
+   "is_interactive": true
+  },
+  "NewSettingNotification-Mobile.dc.html": {
+   "x": 3888,
+   "y": 0,
+   "w": 390,
+   "h": 972,
+   "title": "Mobile 390 — Thông báo",
+   "page": "setting-notification",
+   "is_interactive": true
+  },
+  "OldMediaAlbum.dc.html": {
+   "x": 0,
+   "y": 2341,
+   "w": 1440,
+   "h": 900,
+   "title": "Hiện tại — Tạo album",
+   "page": "media"
+  },
+  "NewMediaAlbum.dc.html": {
+   "x": 1520,
+   "y": 2341,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Tạo album",
+   "page": "media",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewMediaAlbum-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2341,
+   "w": 768,
+   "h": 1024,
+   "title": "Tablet 768 — Tạo album",
+   "page": "media",
+   "is_interactive": true
+  },
+  "NewMediaAlbum-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2341,
+   "w": 390,
+   "h": 844,
+   "title": "Mobile 390 — Tạo album",
+   "page": "media",
+   "is_interactive": true
+  },
+  "OldReportExtendedCreate.dc.html": {
+   "x": 0,
+   "y": 2392,
+   "w": 1440,
+   "h": 991,
+   "title": "Hiện tại — Tạo báo cáo mở rộng",
+   "page": "report-extended"
+  },
+  "NewReportExtendedCreate.dc.html": {
+   "x": 1520,
+   "y": 2392,
+   "w": 1440,
+   "h": 914,
+   "title": "Thiết kế mới — Tạo báo cáo mở rộng",
+   "page": "report-extended",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewReportExtendedCreate-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2392,
+   "w": 768,
+   "h": 1460,
+   "title": "Tablet 768 — Tạo báo cáo mở rộng",
+   "page": "report-extended",
+   "is_interactive": true
+  },
+  "NewReportExtendedCreate-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2392,
+   "w": 390,
+   "h": 1743,
+   "title": "Mobile 390 — Tạo báo cáo mở rộng",
+   "page": "report-extended",
+   "is_interactive": true
+  },
+  "OldReportExtendedDetail.dc.html": {
+   "x": 0,
+   "y": 4635,
+   "w": 1440,
+   "h": 1552,
+   "title": "Hiện tại — Chi tiết báo cáo mở rộng",
+   "page": "report-extended"
+  },
+  "NewReportExtendedDetail.dc.html": {
+   "x": 1520,
+   "y": 4635,
+   "w": 1440,
+   "h": 1289,
+   "title": "Thiết kế mới — Chi tiết báo cáo mở rộng",
+   "page": "report-extended",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewReportExtendedDetail-Tablet.dc.html": {
+   "x": 3040,
+   "y": 4635,
+   "w": 768,
+   "h": 1861,
+   "title": "Tablet 768 — Chi tiết báo cáo mở rộng",
+   "page": "report-extended",
+   "is_interactive": true
+  },
+  "NewReportExtendedDetail-Mobile.dc.html": {
+   "x": 3888,
+   "y": 4635,
+   "w": 390,
+   "h": 2499,
+   "title": "Mobile 390 — Chi tiết báo cáo mở rộng",
+   "page": "report-extended",
+   "is_interactive": true
+  },
+  "OldScheduleCreate.dc.html": {
+   "x": 0,
+   "y": 3643,
+   "w": 1440,
+   "h": 900,
+   "title": "Hiện tại — Tạo thời khóa biểu",
+   "page": "schedule"
+  },
+  "NewScheduleCreate.dc.html": {
+   "x": 1520,
+   "y": 3643,
+   "w": 1440,
+   "h": 1268,
+   "title": "Thiết kế mới — Tạo thời khóa biểu",
+   "page": "schedule",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewScheduleCreate-Tablet.dc.html": {
+   "x": 3040,
+   "y": 3643,
+   "w": 768,
+   "h": 1398,
+   "title": "Tablet 768 — Tạo thời khóa biểu",
+   "page": "schedule",
+   "is_interactive": true
+  },
+  "NewScheduleCreate-Mobile.dc.html": {
+   "x": 3888,
+   "y": 3643,
+   "w": 390,
+   "h": 1639,
+   "title": "Mobile 390 — Tạo thời khóa biểu",
+   "page": "schedule",
+   "is_interactive": true
+  },
+  "OldScheduleDetail.dc.html": {
+   "x": 0,
+   "y": 5782,
+   "w": 1440,
+   "h": 1000,
+   "title": "Hiện tại — Chi tiết thời khóa biểu",
+   "page": "schedule"
+  },
+  "NewScheduleDetail.dc.html": {
+   "x": 1520,
+   "y": 5782,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Chi tiết thời khóa biểu",
+   "page": "schedule",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewScheduleDetail-Tablet.dc.html": {
+   "x": 3040,
+   "y": 5782,
+   "w": 768,
+   "h": 938,
+   "title": "Tablet 768 — Chi tiết thời khóa biểu",
+   "page": "schedule",
+   "is_interactive": true
+  },
+  "NewScheduleDetail-Mobile.dc.html": {
+   "x": 3888,
+   "y": 5782,
+   "w": 390,
+   "h": 1082,
+   "title": "Mobile 390 — Chi tiết thời khóa biểu",
+   "page": "schedule",
+   "is_interactive": true
+  },
+  "OldAssignmentCreate.dc.html": {
+   "x": 0,
+   "y": 2434,
+   "w": 1440,
+   "h": 1047,
+   "title": "Hiện tại — Tạo bài tập",
+   "page": "assignment"
+  },
+  "NewAssignmentCreate.dc.html": {
+   "x": 1520,
+   "y": 2434,
+   "w": 1440,
+   "h": 1108,
+   "title": "Thiết kế mới — Tạo bài tập",
+   "page": "assignment",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewAssignmentCreate-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2434,
+   "w": 768,
+   "h": 1304,
+   "title": "Tablet 768 — Tạo bài tập",
+   "page": "assignment",
+   "is_interactive": true
+  },
+  "NewAssignmentCreate-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2434,
+   "w": 390,
+   "h": 1531,
+   "title": "Mobile 390 — Tạo bài tập",
+   "page": "assignment",
+   "is_interactive": true
+  },
+  "OldScoreEntry.dc.html": {
+   "x": 0,
+   "y": 2244,
+   "w": 1440,
+   "h": 900,
+   "title": "Hiện tại — Nhập điểm",
+   "page": "scoreboard"
+  },
+  "NewScoreEntry.dc.html": {
+   "x": 1520,
+   "y": 2244,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Nhập điểm",
+   "page": "scoreboard",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewScoreEntry-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2244,
+   "w": 768,
+   "h": 900,
+   "title": "Tablet 768 — Nhập điểm",
+   "page": "scoreboard",
+   "is_interactive": true
+  },
+  "NewScoreEntry-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2244,
+   "w": 390,
+   "h": 1866,
+   "title": "Mobile 390 — Nhập điểm",
+   "page": "scoreboard",
+   "is_interactive": true
+  },
+  "OldFeeCreate.dc.html": {
+   "x": 0,
+   "y": 2676,
+   "w": 1440,
+   "h": 1645,
+   "title": "Hiện tại — Tạo hóa đơn",
+   "page": "fee"
+  },
+  "NewFeeCreate.dc.html": {
+   "x": 1520,
+   "y": 2676,
+   "w": 1440,
+   "h": 1594,
+   "title": "Thiết kế mới — Tạo hóa đơn",
+   "page": "fee",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewFeeCreate-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2676,
+   "w": 768,
+   "h": 1612,
+   "title": "Tablet 768 — Tạo hóa đơn",
+   "page": "fee",
+   "is_interactive": true
+  },
+  "NewFeeCreate-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2676,
+   "w": 390,
+   "h": 2798,
+   "title": "Mobile 390 — Tạo hóa đơn",
+   "page": "fee",
+   "is_interactive": true
+  },
+  "OldFeeDetail.dc.html": {
+   "x": 0,
+   "y": 5974,
+   "w": 1440,
+   "h": 976,
+   "title": "Hiện tại — Chi tiết hóa đơn",
+   "page": "fee"
+  },
+  "NewFeeDetail.dc.html": {
+   "x": 1520,
+   "y": 5974,
+   "w": 1440,
+   "h": 979,
+   "title": "Thiết kế mới — Chi tiết hóa đơn",
+   "page": "fee",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewFeeDetail-Tablet.dc.html": {
+   "x": 3040,
+   "y": 5974,
+   "w": 768,
+   "h": 1674,
+   "title": "Tablet 768 — Chi tiết hóa đơn",
+   "page": "fee",
+   "is_interactive": true
+  },
+  "NewFeeDetail-Mobile.dc.html": {
+   "x": 3888,
+   "y": 5974,
+   "w": 390,
+   "h": 2010,
+   "title": "Mobile 390 — Chi tiết hóa đơn",
+   "page": "fee",
+   "is_interactive": true
+  },
+  "OldSchoolFeesAdd.dc.html": {
+   "x": 0,
+   "y": 4997,
+   "w": 1440,
+   "h": 900,
+   "title": "Hiện tại — Thêm khoản phí",
+   "page": "school-fees"
+  },
+  "NewSchoolFeesAdd.dc.html": {
+   "x": 1520,
+   "y": 4997,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Thêm khoản phí",
+   "page": "school-fees",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewSchoolFeesAdd-Tablet.dc.html": {
+   "x": 3040,
+   "y": 4997,
+   "w": 768,
+   "h": 1024,
+   "title": "Tablet 768 — Thêm khoản phí",
+   "page": "school-fees",
+   "is_interactive": true
+  },
+  "NewSchoolFeesAdd-Mobile.dc.html": {
+   "x": 3888,
+   "y": 4997,
+   "w": 390,
+   "h": 844,
+   "title": "Mobile 390 — Thêm khoản phí",
+   "page": "school-fees",
+   "is_interactive": true
+  },
+  "OldDiscountAdd.dc.html": {
+   "x": 0,
+   "y": 2768,
+   "w": 1440,
+   "h": 900,
+   "title": "Hiện tại — Thêm chính sách miễn giảm",
+   "page": "discount"
+  },
+  "NewDiscountAdd.dc.html": {
+   "x": 1520,
+   "y": 2768,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Thêm chính sách miễn giảm",
+   "page": "discount",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewDiscountAdd-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2768,
+   "w": 768,
+   "h": 1024,
+   "title": "Tablet 768 — Thêm chính sách miễn giảm",
+   "page": "discount",
+   "is_interactive": true
+  },
+  "NewDiscountAdd-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2768,
+   "w": 390,
+   "h": 844,
+   "title": "Mobile 390 — Thêm chính sách miễn giảm",
+   "page": "discount",
+   "is_interactive": true
+  },
+  "OldExpenseCreate.dc.html": {
+   "x": 0,
+   "y": 2183,
+   "w": 1440,
+   "h": 1242,
+   "title": "Hiện tại — Tạo phiếu chi",
+   "page": "expenses"
+  },
+  "NewExpenseCreate.dc.html": {
+   "x": 1520,
+   "y": 2183,
+   "w": 1440,
+   "h": 1344,
+   "title": "Thiết kế mới — Tạo phiếu chi",
+   "page": "expenses",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewExpenseCreate-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2183,
+   "w": 768,
+   "h": 1386,
+   "title": "Tablet 768 — Tạo phiếu chi",
+   "page": "expenses",
+   "is_interactive": true
+  },
+  "NewExpenseCreate-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2183,
+   "w": 390,
+   "h": 1847,
+   "title": "Mobile 390 — Tạo phiếu chi",
+   "page": "expenses",
+   "is_interactive": true
+  },
+  "OldExpenseDetail.dc.html": {
+   "x": 0,
+   "y": 4530,
+   "w": 1440,
+   "h": 1139,
+   "title": "Hiện tại — Chi tiết phiếu chi",
+   "page": "expenses"
+  },
+  "NewExpenseDetail.dc.html": {
+   "x": 1520,
+   "y": 4530,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Chi tiết phiếu chi",
+   "page": "expenses",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewExpenseDetail-Tablet.dc.html": {
+   "x": 3040,
+   "y": 4530,
+   "w": 768,
+   "h": 1190,
+   "title": "Tablet 768 — Chi tiết phiếu chi",
+   "page": "expenses",
+   "is_interactive": true
+  },
+  "NewExpenseDetail-Mobile.dc.html": {
+   "x": 3888,
+   "y": 4530,
+   "w": 390,
+   "h": 1847,
+   "title": "Mobile 390 — Chi tiết phiếu chi",
+   "page": "expenses",
+   "is_interactive": true
+  },
+  "OldReconciliationDetail.dc.html": {
+   "x": 0,
+   "y": 1997,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Chi tiết phiên đối soát",
+   "page": "reconciliation"
+  },
+  "NewReconciliationDetail.dc.html": {
+   "x": 1520,
+   "y": 1997,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Chi tiết phiên đối soát",
+   "page": "reconciliation",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewReconciliationDetail-Tablet.dc.html": {
+   "x": 3040,
+   "y": 1997,
+   "w": 768,
+   "h": 900,
+   "title": "Tablet 768 — Chi tiết phiên đối soát",
+   "page": "reconciliation",
+   "is_interactive": true
+  },
+  "NewReconciliationDetail-Mobile.dc.html": {
+   "x": 3888,
+   "y": 1997,
+   "w": 390,
+   "h": 1327,
+   "title": "Mobile 390 — Chi tiết phiên đối soát",
+   "page": "reconciliation",
+   "is_interactive": true
+  },
+  "OldKidCreate.dc.html": {
+   "x": 0,
+   "y": 3355,
+   "w": 1440,
+   "h": 1111,
+   "title": "Hiện tại — Thêm học sinh",
+   "page": "kid"
+  },
+  "NewKidCreate.dc.html": {
+   "x": 1520,
+   "y": 3355,
+   "w": 1440,
+   "h": 1216,
+   "title": "Thiết kế mới — Thêm học sinh",
+   "page": "kid",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewKidCreate-Tablet.dc.html": {
+   "x": 3040,
+   "y": 3355,
+   "w": 768,
+   "h": 1812,
+   "title": "Tablet 768 — Thêm học sinh",
+   "page": "kid",
+   "is_interactive": true
+  },
+  "NewKidCreate-Mobile.dc.html": {
+   "x": 3888,
+   "y": 3355,
+   "w": 390,
+   "h": 2329,
+   "title": "Mobile 390 — Thêm học sinh",
+   "page": "kid",
+   "is_interactive": true
+  },
+  "OldKidDetail.dc.html": {
+   "x": 0,
+   "y": 6184,
+   "w": 1440,
+   "h": 1412,
+   "title": "Hiện tại — Hồ sơ học sinh",
+   "page": "kid"
+  },
+  "NewKidDetail.dc.html": {
+   "x": 1520,
+   "y": 6184,
+   "w": 1440,
+   "h": 1126,
+   "title": "Thiết kế mới — Hồ sơ học sinh",
+   "page": "kid",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewKidDetail-Tablet.dc.html": {
+   "x": 3040,
+   "y": 6184,
+   "w": 768,
+   "h": 1816,
+   "title": "Tablet 768 — Hồ sơ học sinh",
+   "page": "kid",
+   "is_interactive": true
+  },
+  "NewKidDetail-Mobile.dc.html": {
+   "x": 3888,
+   "y": 6184,
+   "w": 390,
+   "h": 2026,
+   "title": "Mobile 390 — Hồ sơ học sinh",
+   "page": "kid",
+   "is_interactive": true
+  },
+  "OldTeacherCreate.dc.html": {
+   "x": 0,
+   "y": 2362,
+   "w": 1440,
+   "h": 1586,
+   "title": "Hiện tại — Thêm giáo viên",
+   "page": "teacher"
+  },
+  "NewTeacherCreate.dc.html": {
+   "x": 1520,
+   "y": 2362,
+   "w": 1440,
+   "h": 1452,
+   "title": "Thiết kế mới — Thêm giáo viên",
+   "page": "teacher",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewTeacherCreate-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2362,
+   "w": 768,
+   "h": 1536,
+   "title": "Tablet 768 — Thêm giáo viên",
+   "page": "teacher",
+   "is_interactive": true
+  },
+  "NewTeacherCreate-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2362,
+   "w": 390,
+   "h": 2039,
+   "title": "Mobile 390 — Thêm giáo viên",
+   "page": "teacher",
+   "is_interactive": true
+  },
+  "OldTeacherDetail.dc.html": {
+   "x": 0,
+   "y": 4901,
+   "w": 1440,
+   "h": 1060,
+   "title": "Hiện tại — Hồ sơ giáo viên",
+   "page": "teacher"
+  },
+  "NewTeacherDetail.dc.html": {
+   "x": 1520,
+   "y": 4901,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Hồ sơ giáo viên",
+   "page": "teacher",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewTeacherDetail-Tablet.dc.html": {
+   "x": 3040,
+   "y": 4901,
+   "w": 768,
+   "h": 1164,
+   "title": "Tablet 768 — Hồ sơ giáo viên",
+   "page": "teacher",
+   "is_interactive": true
+  },
+  "NewTeacherDetail-Mobile.dc.html": {
+   "x": 3888,
+   "y": 4901,
+   "w": 390,
+   "h": 1470,
+   "title": "Mobile 390 — Hồ sơ giáo viên",
+   "page": "teacher",
+   "is_interactive": true
+  },
+  "OldClassesAdd.dc.html": {
+   "x": 0,
+   "y": 1926,
+   "w": 1440,
+   "h": 900,
+   "title": "Hiện tại — Tạo lớp học",
+   "page": "classes"
+  },
+  "NewClassesAdd.dc.html": {
+   "x": 1520,
+   "y": 1926,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Tạo lớp học",
+   "page": "classes",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewClassesAdd-Tablet.dc.html": {
+   "x": 3040,
+   "y": 1926,
+   "w": 768,
+   "h": 1024,
+   "title": "Tablet 768 — Tạo lớp học",
+   "page": "classes",
+   "is_interactive": true
+  },
+  "NewClassesAdd-Mobile.dc.html": {
+   "x": 3888,
+   "y": 1926,
+   "w": 390,
+   "h": 844,
+   "title": "Mobile 390 — Tạo lớp học",
+   "page": "classes",
+   "is_interactive": true
+  },
+  "OldClassDetail.dc.html": {
+   "x": 0,
+   "y": 3450,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Chi tiết lớp",
+   "page": "classes"
+  },
+  "NewClassDetail.dc.html": {
+   "x": 1520,
+   "y": 3450,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Chi tiết lớp",
+   "page": "classes",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewClassDetail-Tablet.dc.html": {
+   "x": 3040,
+   "y": 3450,
+   "w": 768,
+   "h": 900,
+   "title": "Tablet 768 — Chi tiết lớp",
+   "page": "classes",
+   "is_interactive": true
+  },
+  "NewClassDetail-Mobile.dc.html": {
+   "x": 3888,
+   "y": 3450,
+   "w": 390,
+   "h": 912,
+   "title": "Mobile 390 — Chi tiết lớp",
+   "page": "classes",
+   "is_interactive": true
+  },
+  "OldAnnouncementCreate.dc.html": {
+   "x": 0,
+   "y": 2325,
+   "w": 1440,
+   "h": 1621,
+   "title": "Hiện tại — Soạn thông báo",
+   "page": "announcements"
+  },
+  "NewAnnouncementCreate.dc.html": {
+   "x": 1520,
+   "y": 2325,
+   "w": 1440,
+   "h": 1554,
+   "title": "Thiết kế mới — Soạn thông báo",
+   "page": "announcements",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewAnnouncementCreate-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2325,
+   "w": 768,
+   "h": 1760,
+   "title": "Tablet 768 — Soạn thông báo",
+   "page": "announcements",
+   "is_interactive": true
+  },
+  "NewAnnouncementCreate-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2325,
+   "w": 390,
+   "h": 1995,
+   "title": "Mobile 390 — Soạn thông báo",
+   "page": "announcements",
+   "is_interactive": true
+  },
+  "OldPollCreate.dc.html": {
+   "x": 0,
+   "y": 2166,
+   "w": 1440,
+   "h": 1204,
+   "title": "Hiện tại — Tạo bình chọn",
+   "page": "poll"
+  },
+  "NewPollCreate.dc.html": {
+   "x": 1520,
+   "y": 2166,
+   "w": 1440,
+   "h": 1142,
+   "title": "Thiết kế mới — Tạo bình chọn",
+   "page": "poll",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewPollCreate-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2166,
+   "w": 768,
+   "h": 1337,
+   "title": "Tablet 768 — Tạo bình chọn",
+   "page": "poll",
+   "is_interactive": true
+  },
+  "NewPollCreate-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2166,
+   "w": 390,
+   "h": 1426,
+   "title": "Mobile 390 — Tạo bình chọn",
+   "page": "poll",
+   "is_interactive": true
+  },
+  "OldPollDetail.dc.html": {
+   "x": 0,
+   "y": 4092,
+   "w": 1440,
+   "h": 1801,
+   "title": "Hiện tại — Chi tiết bình chọn",
+   "page": "poll"
+  },
+  "NewPollDetail.dc.html": {
+   "x": 1520,
+   "y": 4092,
+   "w": 1440,
+   "h": 988,
+   "title": "Thiết kế mới — Chi tiết bình chọn",
+   "page": "poll",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewPollDetail-Tablet.dc.html": {
+   "x": 3040,
+   "y": 4092,
+   "w": 768,
+   "h": 1278,
+   "title": "Tablet 768 — Chi tiết bình chọn",
+   "page": "poll",
+   "is_interactive": true
+  },
+  "NewPollDetail-Mobile.dc.html": {
+   "x": 3888,
+   "y": 4092,
+   "w": 390,
+   "h": 2199,
+   "title": "Mobile 390 — Chi tiết bình chọn",
+   "page": "poll",
+   "is_interactive": true
+  },
+  "OldMenuCreate.dc.html": {
+   "x": 0,
+   "y": 2336,
+   "w": 1440,
+   "h": 1114,
+   "title": "Hiện tại — Tạo thực đơn",
+   "page": "menu"
+  },
+  "NewMenuCreate.dc.html": {
+   "x": 1520,
+   "y": 2336,
+   "w": 1440,
+   "h": 1286,
+   "title": "Thiết kế mới — Tạo thực đơn",
+   "page": "menu",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewMenuCreate-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2336,
+   "w": 768,
+   "h": 1316,
+   "title": "Tablet 768 — Tạo thực đơn",
+   "page": "menu",
+   "is_interactive": true
+  },
+  "NewMenuCreate-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2336,
+   "w": 390,
+   "h": 1515,
+   "title": "Mobile 390 — Tạo thực đơn",
+   "page": "menu",
+   "is_interactive": true
+  },
+  "OldMenuDetail.dc.html": {
+   "x": 0,
+   "y": 4351,
+   "w": 1440,
+   "h": 1340,
+   "title": "Hiện tại — Chi tiết thực đơn",
+   "page": "menu"
+  },
+  "NewMenuDetail.dc.html": {
+   "x": 1520,
+   "y": 4351,
+   "w": 1440,
+   "h": 996,
+   "title": "Thiết kế mới — Chi tiết thực đơn",
+   "page": "menu",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewMenuDetail-Tablet.dc.html": {
+   "x": 3040,
+   "y": 4351,
+   "w": 768,
+   "h": 1044,
+   "title": "Tablet 768 — Chi tiết thực đơn",
+   "page": "menu",
+   "is_interactive": true
+  },
+  "NewMenuDetail-Mobile.dc.html": {
+   "x": 3888,
+   "y": 4351,
+   "w": 390,
+   "h": 1150,
+   "title": "Mobile 390 — Chi tiết thực đơn",
+   "page": "menu",
+   "is_interactive": true
+  },
+  "OldFeedbackDetail.dc.html": {
+   "x": 0,
+   "y": 3111,
+   "w": 1440,
+   "h": 981,
+   "title": "Hiện tại — Chi tiết góp ý",
+   "page": "feedback"
+  },
+  "NewFeedbackDetail.dc.html": {
+   "x": 1520,
+   "y": 3111,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Chi tiết góp ý",
+   "page": "feedback",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewFeedbackDetail-Tablet.dc.html": {
+   "x": 3040,
+   "y": 3111,
+   "w": 768,
+   "h": 1235,
+   "title": "Tablet 768 — Chi tiết góp ý",
+   "page": "feedback",
+   "is_interactive": true
+  },
+  "NewFeedbackDetail-Mobile.dc.html": {
+   "x": 3888,
+   "y": 3111,
+   "w": 390,
+   "h": 1563,
+   "title": "Mobile 390 — Chi tiết góp ý",
+   "page": "feedback",
+   "is_interactive": true
+  },
+  "OldCalendarCreate.dc.html": {
+   "x": 0,
+   "y": 3705,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Thêm sự kiện",
+   "page": "calendar"
+  },
+  "NewCalendarCreate.dc.html": {
+   "x": 1520,
+   "y": 3705,
+   "w": 1440,
+   "h": 1401,
+   "title": "Thiết kế mới — Thêm sự kiện",
+   "page": "calendar",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewCalendarCreate-Tablet.dc.html": {
+   "x": 3040,
+   "y": 3705,
+   "w": 768,
+   "h": 1750,
+   "title": "Tablet 768 — Thêm sự kiện",
+   "page": "calendar",
+   "is_interactive": true
+  },
+  "NewCalendarCreate-Mobile.dc.html": {
+   "x": 3888,
+   "y": 3705,
+   "w": 390,
+   "h": 1870,
+   "title": "Mobile 390 — Thêm sự kiện",
+   "page": "calendar",
+   "is_interactive": true
+  },
+  "OldHandbookAdd.dc.html": {
+   "x": 0,
+   "y": 2756,
+   "w": 1440,
+   "h": 900,
+   "title": "Hiện tại — Thêm danh mục sổ tay",
+   "page": "handbook"
+  },
+  "NewHandbookAdd.dc.html": {
+   "x": 1520,
+   "y": 2756,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Thêm danh mục sổ tay",
+   "page": "handbook",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewHandbookAdd-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2756,
+   "w": 768,
+   "h": 1024,
+   "title": "Tablet 768 — Thêm danh mục sổ tay",
+   "page": "handbook",
+   "is_interactive": true
+  },
+  "NewHandbookAdd-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2756,
+   "w": 390,
+   "h": 844,
+   "title": "Mobile 390 — Thêm danh mục sổ tay",
+   "page": "handbook",
+   "is_interactive": true
+  },
+  "OldSettingSchoolEdit.dc.html": {
+   "x": 0,
+   "y": 2208,
+   "w": 1440,
+   "h": 1273,
+   "title": "Hiện tại — Sửa thông tin trường",
+   "page": "setting-school"
+  },
+  "NewSettingSchoolEdit.dc.html": {
+   "x": 1520,
+   "y": 2208,
+   "w": 1440,
+   "h": 1102,
+   "title": "Thiết kế mới — Sửa thông tin trường",
+   "page": "setting-school",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewSettingSchoolEdit-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2208,
+   "w": 768,
+   "h": 1094,
+   "title": "Tablet 768 — Sửa thông tin trường",
+   "page": "setting-school",
+   "is_interactive": true
+  },
+  "NewSettingSchoolEdit-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2208,
+   "w": 390,
+   "h": 1473,
+   "title": "Mobile 390 — Sửa thông tin trường",
+   "page": "setting-school",
+   "is_interactive": true
+  },
+  "OldSettingFeeHistory.dc.html": {
+   "x": 0,
+   "y": 3686,
+   "w": 1440,
+   "h": 940,
+   "title": "Hiện tại — Lịch sử thanh toán Sepay",
+   "page": "setting-fee"
+  },
+  "NewSettingFeeHistory.dc.html": {
+   "x": 1520,
+   "y": 3686,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Lịch sử thanh toán Sepay",
+   "page": "setting-fee",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewSettingFeeHistory-Tablet.dc.html": {
+   "x": 3040,
+   "y": 3686,
+   "w": 768,
+   "h": 1046,
+   "title": "Tablet 768 — Lịch sử thanh toán Sepay",
+   "page": "setting-fee",
+   "is_interactive": true
+  },
+  "NewSettingFeeHistory-Mobile.dc.html": {
+   "x": 3888,
+   "y": 3686,
+   "w": 390,
+   "h": 1663,
+   "title": "Mobile 390 — Lịch sử thanh toán Sepay",
+   "page": "setting-fee",
+   "is_interactive": true
+  },
+  "OldSettingFeeRefundAdd.dc.html": {
+   "x": 0,
+   "y": 5849,
+   "w": 1440,
+   "h": 900,
+   "title": "Hiện tại — Thêm khoản phí hoàn tiền",
+   "page": "setting-fee"
+  },
+  "NewSettingFeeRefundAdd.dc.html": {
+   "x": 1520,
+   "y": 5849,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Thêm khoản phí hoàn tiền",
+   "page": "setting-fee",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewSettingFeeRefundAdd-Tablet.dc.html": {
+   "x": 3040,
+   "y": 5849,
+   "w": 768,
+   "h": 1024,
+   "title": "Tablet 768 — Thêm khoản phí hoàn tiền",
+   "page": "setting-fee",
+   "is_interactive": true
+  },
+  "NewSettingFeeRefundAdd-Mobile.dc.html": {
+   "x": 3888,
+   "y": 5849,
+   "w": 390,
+   "h": 844,
+   "title": "Mobile 390 — Thêm khoản phí hoàn tiền",
+   "page": "setting-fee",
+   "is_interactive": true
+  },
+  "NewConversationsAdd.dc.html": {
+   "x": 1520,
+   "y": 2718,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Tạo hội thoại",
+   "page": "conversations",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewConversationsAdd-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2718,
+   "w": 768,
+   "h": 1024,
+   "title": "Tablet 768 — Tạo hội thoại",
+   "page": "conversations",
+   "is_interactive": true
+  },
+  "NewConversationsAdd-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2718,
+   "w": 390,
+   "h": 844,
+   "title": "Mobile 390 — Tạo hội thoại",
+   "page": "conversations",
+   "is_interactive": true
+  },
+  "NewAcademicYearAdd.dc.html": {
+   "x": 1520,
+   "y": 1865,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Thêm năm học",
+   "page": "academic-year",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewAcademicYearAdd-Tablet.dc.html": {
+   "x": 3040,
+   "y": 1865,
+   "w": 768,
+   "h": 1024,
+   "title": "Tablet 768 — Thêm năm học",
+   "page": "academic-year",
+   "is_interactive": true
+  },
+  "NewAcademicYearAdd-Mobile.dc.html": {
+   "x": 3888,
+   "y": 1865,
+   "w": 390,
+   "h": 844,
+   "title": "Mobile 390 — Thêm năm học",
+   "page": "academic-year",
+   "is_interactive": true
+  },
+  "NewSettingUsersAdd.dc.html": {
+   "x": 1520,
+   "y": 2478,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Thêm người dùng",
+   "page": "setting-users",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewSettingUsersAdd-Tablet.dc.html": {
+   "x": 3040,
+   "y": 2478,
+   "w": 768,
+   "h": 1024,
+   "title": "Tablet 768 — Thêm người dùng",
+   "page": "setting-users",
+   "is_interactive": true
+  },
+  "NewSettingUsersAdd-Mobile.dc.html": {
+   "x": 3888,
+   "y": 2478,
+   "w": 390,
+   "h": 844,
+   "title": "Mobile 390 — Thêm người dùng",
+   "page": "setting-users",
+   "is_interactive": true
+  },
+  "NewScheduleUpload.dc.html": {
+   "x": 1520,
+   "y": 7364,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Tải lên thời khóa biểu",
+   "page": "schedule",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewScheduleUpload-Tablet.dc.html": {
+   "x": 3040,
+   "y": 7364,
+   "w": 768,
+   "h": 1024,
+   "title": "Tablet 768 — Tải lên thời khóa biểu",
+   "page": "schedule",
+   "is_interactive": true
+  },
+  "NewScheduleUpload-Mobile.dc.html": {
+   "x": 3888,
+   "y": 7364,
+   "w": 390,
+   "h": 844,
+   "title": "Mobile 390 — Tải lên thời khóa biểu",
+   "page": "schedule",
+   "is_interactive": true
+  },
+  "NewFeeCategoriesSync.dc.html": {
+   "x": 1520,
+   "y": 4629,
+   "w": 1440,
+   "h": 900,
+   "title": "Thiết kế mới — Đồng bộ CSDL danh mục thu",
+   "page": "fee-categories",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "NewFeeCategoriesSync-Tablet.dc.html": {
+   "x": 3040,
+   "y": 4629,
+   "w": 768,
+   "h": 1024,
+   "title": "Tablet 768 — Đồng bộ CSDL danh mục thu",
+   "page": "fee-categories",
+   "is_interactive": true
+  },
+  "NewFeeCategoriesSync-Mobile.dc.html": {
+   "x": 3888,
+   "y": 4629,
+   "w": 390,
+   "h": 844,
+   "title": "Mobile 390 — Đồng bộ CSDL danh mục thu",
+   "page": "fee-categories",
+   "is_interactive": true
+  }
+ },
+ "order": [
+  "OldTeacher.dc.html",
+  "NewTeacher.dc.html",
+  "NewTeacher-Tablet.dc.html",
+  "NewTeacher-Mobile.dc.html",
+  "NewTeacher-TabletMenu.dc.html",
+  "NewTeacher-MobileMenu.dc.html",
+  "OldKid.dc.html",
+  "NewKid.dc.html",
+  "NewKid-Tablet.dc.html",
+  "NewKid-Mobile.dc.html",
+  "OldClasses.dc.html",
+  "NewClasses.dc.html",
+  "NewClasses-Tablet.dc.html",
+  "NewClasses-Mobile.dc.html",
+  "OldSubjects.dc.html",
+  "NewSubjects.dc.html",
+  "NewSubjects-Tablet.dc.html",
+  "NewSubjects-Mobile.dc.html",
+  "OldGrades.dc.html",
+  "NewGrades.dc.html",
+  "NewGrades-Tablet.dc.html",
+  "NewGrades-Mobile.dc.html",
+  "OldAnnouncements.dc.html",
+  "NewAnnouncements.dc.html",
+  "NewAnnouncements-Tablet.dc.html",
+  "NewAnnouncements-Mobile.dc.html",
+  "OldPoll.dc.html",
+  "NewPoll.dc.html",
+  "NewPoll-Tablet.dc.html",
+  "NewPoll-Mobile.dc.html",
+  "OldMenu.dc.html",
+  "NewMenu.dc.html",
+  "NewMenu-Tablet.dc.html",
+  "NewMenu-Mobile.dc.html",
+  "OldStaffAttendance.dc.html",
+  "NewStaffAttendance.dc.html",
+  "NewStaffAttendance-Tablet.dc.html",
+  "NewStaffAttendance-Mobile.dc.html",
+  "OldHandbook.dc.html",
+  "NewHandbook.dc.html",
+  "NewHandbook-Tablet.dc.html",
+  "NewHandbook-Mobile.dc.html",
+  "OldFeedback.dc.html",
+  "NewFeedback.dc.html",
+  "NewFeedback-Tablet.dc.html",
+  "NewFeedback-Mobile.dc.html",
+  "OldCalendar.dc.html",
+  "NewCalendar.dc.html",
+  "NewCalendar-Tablet.dc.html",
+  "NewCalendar-Mobile.dc.html",
+  "OldAcademicYear.dc.html",
+  "NewAcademicYear.dc.html",
+  "NewAcademicYear-Tablet.dc.html",
+  "NewAcademicYear-Mobile.dc.html",
+  "OldArchive.dc.html",
+  "NewArchive.dc.html",
+  "NewArchive-Tablet.dc.html",
+  "NewArchive-Mobile.dc.html",
+  "OldAttendance.dc.html",
+  "NewAttendance.dc.html",
+  "NewAttendance-Tablet.dc.html",
+  "NewAttendance-Mobile.dc.html",
+  "OldActivity.dc.html",
+  "NewActivity.dc.html",
+  "NewActivity-Tablet.dc.html",
+  "NewActivity-Mobile.dc.html",
+  "OldMedia.dc.html",
+  "NewMedia.dc.html",
+  "NewMedia-Tablet.dc.html",
+  "NewMedia-Mobile.dc.html",
+  "OldConversations.dc.html",
+  "NewConversations.dc.html",
+  "NewConversations-Tablet.dc.html",
+  "NewConversations-Mobile.dc.html",
+  "OldReportAttendance.dc.html",
+  "NewReportAttendance.dc.html",
+  "NewReportAttendance-Tablet.dc.html",
+  "NewReportAttendance-Mobile.dc.html",
+  "OldReportExtended.dc.html",
+  "NewReportExtended.dc.html",
+  "NewReportExtended-Tablet.dc.html",
+  "NewReportExtended-Mobile.dc.html",
+  "OldSchedule.dc.html",
+  "NewSchedule.dc.html",
+  "NewSchedule-Tablet.dc.html",
+  "NewSchedule-Mobile.dc.html",
+  "OldAssignment.dc.html",
+  "NewAssignment.dc.html",
+  "NewAssignment-Tablet.dc.html",
+  "NewAssignment-Mobile.dc.html",
+  "OldScoreboard.dc.html",
+  "NewScoreboard.dc.html",
+  "NewScoreboard-Tablet.dc.html",
+  "NewScoreboard-Mobile.dc.html",
+  "OldFee.dc.html",
+  "NewFee.dc.html",
+  "NewFee-Tablet.dc.html",
+  "NewFee-Mobile.dc.html",
+  "OldSchoolFees.dc.html",
+  "NewSchoolFees.dc.html",
+  "NewSchoolFees-Tablet.dc.html",
+  "NewSchoolFees-Mobile.dc.html",
+  "OldFeeCategories.dc.html",
+  "NewFeeCategories.dc.html",
+  "NewFeeCategories-Tablet.dc.html",
+  "NewFeeCategories-Mobile.dc.html",
+  "OldDiscount.dc.html",
+  "NewDiscount.dc.html",
+  "NewDiscount-Tablet.dc.html",
+  "NewDiscount-Mobile.dc.html",
+  "OldTuition.dc.html",
+  "NewTuition.dc.html",
+  "NewTuition-Tablet.dc.html",
+  "NewTuition-Mobile.dc.html",
+  "OldExpenses.dc.html",
+  "NewExpenses.dc.html",
+  "NewExpenses-Tablet.dc.html",
+  "NewExpenses-Mobile.dc.html",
+  "OldReconciliation.dc.html",
+  "NewReconciliation.dc.html",
+  "NewReconciliation-Tablet.dc.html",
+  "NewReconciliation-Mobile.dc.html",
+  "OldReportFee.dc.html",
+  "NewReportFee.dc.html",
+  "NewReportFee-Tablet.dc.html",
+  "NewReportFee-Mobile.dc.html",
+  "OldSettingSchool.dc.html",
+  "NewSettingSchool.dc.html",
+  "NewSettingSchool-Tablet.dc.html",
+  "NewSettingSchool-Mobile.dc.html",
+  "OldSettingFee.dc.html",
+  "NewSettingFee.dc.html",
+  "NewSettingFee-Tablet.dc.html",
+  "NewSettingFee-Mobile.dc.html",
+  "OldSettingUsers.dc.html",
+  "NewSettingUsers.dc.html",
+  "NewSettingUsers-Tablet.dc.html",
+  "NewSettingUsers-Mobile.dc.html",
+  "OldSettingFace.dc.html",
+  "NewSettingFace.dc.html",
+  "NewSettingFace-Tablet.dc.html",
+  "NewSettingFace-Mobile.dc.html",
+  "OldSettingActivity.dc.html",
+  "NewSettingActivity.dc.html",
+  "NewSettingActivity-Tablet.dc.html",
+  "NewSettingActivity-Mobile.dc.html",
+  "OldSettingNotification.dc.html",
+  "NewSettingNotification.dc.html",
+  "NewSettingNotification-Tablet.dc.html",
+  "NewSettingNotification-Mobile.dc.html",
+  "OldMediaAlbum.dc.html",
+  "NewMediaAlbum.dc.html",
+  "NewMediaAlbum-Tablet.dc.html",
+  "NewMediaAlbum-Mobile.dc.html",
+  "OldReportExtendedCreate.dc.html",
+  "NewReportExtendedCreate.dc.html",
+  "NewReportExtendedCreate-Tablet.dc.html",
+  "NewReportExtendedCreate-Mobile.dc.html",
+  "OldReportExtendedDetail.dc.html",
+  "NewReportExtendedDetail.dc.html",
+  "NewReportExtendedDetail-Tablet.dc.html",
+  "NewReportExtendedDetail-Mobile.dc.html",
+  "OldScheduleCreate.dc.html",
+  "NewScheduleCreate.dc.html",
+  "NewScheduleCreate-Tablet.dc.html",
+  "NewScheduleCreate-Mobile.dc.html",
+  "OldScheduleDetail.dc.html",
+  "NewScheduleDetail.dc.html",
+  "NewScheduleDetail-Tablet.dc.html",
+  "NewScheduleDetail-Mobile.dc.html",
+  "OldAssignmentCreate.dc.html",
+  "NewAssignmentCreate.dc.html",
+  "NewAssignmentCreate-Tablet.dc.html",
+  "NewAssignmentCreate-Mobile.dc.html",
+  "OldScoreEntry.dc.html",
+  "NewScoreEntry.dc.html",
+  "NewScoreEntry-Tablet.dc.html",
+  "NewScoreEntry-Mobile.dc.html",
+  "OldFeeCreate.dc.html",
+  "NewFeeCreate.dc.html",
+  "NewFeeCreate-Tablet.dc.html",
+  "NewFeeCreate-Mobile.dc.html",
+  "OldFeeDetail.dc.html",
+  "NewFeeDetail.dc.html",
+  "NewFeeDetail-Tablet.dc.html",
+  "NewFeeDetail-Mobile.dc.html",
+  "OldSchoolFeesAdd.dc.html",
+  "NewSchoolFeesAdd.dc.html",
+  "NewSchoolFeesAdd-Tablet.dc.html",
+  "NewSchoolFeesAdd-Mobile.dc.html",
+  "OldDiscountAdd.dc.html",
+  "NewDiscountAdd.dc.html",
+  "NewDiscountAdd-Tablet.dc.html",
+  "NewDiscountAdd-Mobile.dc.html",
+  "OldExpenseCreate.dc.html",
+  "NewExpenseCreate.dc.html",
+  "NewExpenseCreate-Tablet.dc.html",
+  "NewExpenseCreate-Mobile.dc.html",
+  "OldExpenseDetail.dc.html",
+  "NewExpenseDetail.dc.html",
+  "NewExpenseDetail-Tablet.dc.html",
+  "NewExpenseDetail-Mobile.dc.html",
+  "OldReconciliationDetail.dc.html",
+  "NewReconciliationDetail.dc.html",
+  "NewReconciliationDetail-Tablet.dc.html",
+  "NewReconciliationDetail-Mobile.dc.html",
+  "OldKidCreate.dc.html",
+  "NewKidCreate.dc.html",
+  "NewKidCreate-Tablet.dc.html",
+  "NewKidCreate-Mobile.dc.html",
+  "OldKidDetail.dc.html",
+  "NewKidDetail.dc.html",
+  "NewKidDetail-Tablet.dc.html",
+  "NewKidDetail-Mobile.dc.html",
+  "OldTeacherCreate.dc.html",
+  "NewTeacherCreate.dc.html",
+  "NewTeacherCreate-Tablet.dc.html",
+  "NewTeacherCreate-Mobile.dc.html",
+  "OldTeacherDetail.dc.html",
+  "NewTeacherDetail.dc.html",
+  "NewTeacherDetail-Tablet.dc.html",
+  "NewTeacherDetail-Mobile.dc.html",
+  "OldClassesAdd.dc.html",
+  "NewClassesAdd.dc.html",
+  "NewClassesAdd-Tablet.dc.html",
+  "NewClassesAdd-Mobile.dc.html",
+  "OldClassDetail.dc.html",
+  "NewClassDetail.dc.html",
+  "NewClassDetail-Tablet.dc.html",
+  "NewClassDetail-Mobile.dc.html",
+  "OldAnnouncementCreate.dc.html",
+  "NewAnnouncementCreate.dc.html",
+  "NewAnnouncementCreate-Tablet.dc.html",
+  "NewAnnouncementCreate-Mobile.dc.html",
+  "OldPollCreate.dc.html",
+  "NewPollCreate.dc.html",
+  "NewPollCreate-Tablet.dc.html",
+  "NewPollCreate-Mobile.dc.html",
+  "OldPollDetail.dc.html",
+  "NewPollDetail.dc.html",
+  "NewPollDetail-Tablet.dc.html",
+  "NewPollDetail-Mobile.dc.html",
+  "OldMenuCreate.dc.html",
+  "NewMenuCreate.dc.html",
+  "NewMenuCreate-Tablet.dc.html",
+  "NewMenuCreate-Mobile.dc.html",
+  "OldMenuDetail.dc.html",
+  "NewMenuDetail.dc.html",
+  "NewMenuDetail-Tablet.dc.html",
+  "NewMenuDetail-Mobile.dc.html",
+  "OldFeedbackDetail.dc.html",
+  "NewFeedbackDetail.dc.html",
+  "NewFeedbackDetail-Tablet.dc.html",
+  "NewFeedbackDetail-Mobile.dc.html",
+  "OldCalendarCreate.dc.html",
+  "NewCalendarCreate.dc.html",
+  "NewCalendarCreate-Tablet.dc.html",
+  "NewCalendarCreate-Mobile.dc.html",
+  "OldHandbookAdd.dc.html",
+  "NewHandbookAdd.dc.html",
+  "NewHandbookAdd-Tablet.dc.html",
+  "NewHandbookAdd-Mobile.dc.html",
+  "OldSettingSchoolEdit.dc.html",
+  "NewSettingSchoolEdit.dc.html",
+  "NewSettingSchoolEdit-Tablet.dc.html",
+  "NewSettingSchoolEdit-Mobile.dc.html",
+  "OldSettingFeeHistory.dc.html",
+  "NewSettingFeeHistory.dc.html",
+  "NewSettingFeeHistory-Tablet.dc.html",
+  "NewSettingFeeHistory-Mobile.dc.html",
+  "OldSettingFeeRefundAdd.dc.html",
+  "NewSettingFeeRefundAdd.dc.html",
+  "NewSettingFeeRefundAdd-Tablet.dc.html",
+  "NewSettingFeeRefundAdd-Mobile.dc.html",
+  "NewConversationsAdd.dc.html",
+  "NewConversationsAdd-Tablet.dc.html",
+  "NewConversationsAdd-Mobile.dc.html",
+  "NewAcademicYearAdd.dc.html",
+  "NewAcademicYearAdd-Tablet.dc.html",
+  "NewAcademicYearAdd-Mobile.dc.html",
+  "NewSettingUsersAdd.dc.html",
+  "NewSettingUsersAdd-Tablet.dc.html",
+  "NewSettingUsersAdd-Mobile.dc.html",
+  "NewScheduleUpload.dc.html",
+  "NewScheduleUpload-Tablet.dc.html",
+  "NewScheduleUpload-Mobile.dc.html",
+  "NewFeeCategoriesSync.dc.html",
+  "NewFeeCategoriesSync-Tablet.dc.html",
+  "NewFeeCategoriesSync-Mobile.dc.html"
+ ],
+ "notes": {
+  "t-teacher": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Giáo viên: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 5596,
+   "page": "teacher"
+  },
+  "t-kid": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Học sinh: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "kid"
+  },
+  "t-classes": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Lớp học: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "classes"
+  },
+  "t-subjects": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Môn học: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "subjects"
+  },
+  "t-grades": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Khối lớp: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "grades"
+  },
+  "t-announcements": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Bảng thông tin: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "announcements"
+  },
+  "t-poll": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Bình chọn: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "poll"
+  },
+  "t-menu": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Thực đơn: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "menu"
+  },
+  "t-staff-attendance": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Điểm danh NV: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "staff-attendance"
+  },
+  "t-handbook": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Sổ tay PH: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "handbook"
+  },
+  "t-feedback": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Góp ý: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "feedback"
+  },
+  "t-calendar": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Lịch sự kiện: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "calendar"
+  },
+  "t-academic-year": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Năm học: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "academic-year"
+  },
+  "t-archive": {
+   "x": 0,
+   "y": -300,
+   "text": "Nhà trường · Lưu trữ: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "archive"
+  },
+  "t-attendance": {
+   "x": 0,
+   "y": -300,
+   "text": "Vận hành · Điểm danh: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "attendance"
+  },
+  "t-activity": {
+   "x": 0,
+   "y": -300,
+   "text": "Vận hành · Hoạt động: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "activity"
+  },
+  "t-media": {
+   "x": 0,
+   "y": -300,
+   "text": "Vận hành · Thư viện ảnh: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "media"
+  },
+  "t-conversations": {
+   "x": 0,
+   "y": -300,
+   "text": "Vận hành · Trao đổi: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "conversations"
+  },
+  "t-report-attendance": {
+   "x": 0,
+   "y": -300,
+   "text": "Vận hành · BC Điểm danh: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "report-attendance"
+  },
+  "t-report-extended": {
+   "x": 0,
+   "y": -300,
+   "text": "Vận hành · BC Mở rộng: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "report-extended"
+  },
+  "t-schedule": {
+   "x": 0,
+   "y": -300,
+   "text": "Học tập · Thời khóa biểu: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "schedule"
+  },
+  "t-assignment": {
+   "x": 0,
+   "y": -300,
+   "text": "Học tập · Bài tập: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "assignment"
+  },
+  "t-scoreboard": {
+   "x": 0,
+   "y": -300,
+   "text": "Học tập · Điểm & Đánh giá: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "scoreboard"
+  },
+  "t-fee": {
+   "x": 0,
+   "y": -300,
+   "text": "Tài chính · Học phí: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "fee"
+  },
+  "t-school-fees": {
+   "x": 0,
+   "y": -300,
+   "text": "Tài chính · Khoản phí: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "school-fees"
+  },
+  "t-fee-categories": {
+   "x": 0,
+   "y": -300,
+   "text": "Tài chính · Danh mục thu: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "fee-categories"
+  },
+  "t-discount": {
+   "x": 0,
+   "y": -300,
+   "text": "Tài chính · Miễn giảm: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "discount"
+  },
+  "t-tuition": {
+   "x": 0,
+   "y": -300,
+   "text": "Tài chính · Quản lý học phí: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "tuition"
+  },
+  "t-expenses": {
+   "x": 0,
+   "y": -300,
+   "text": "Tài chính · Khoản chi: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "expenses"
+  },
+  "t-reconciliation": {
+   "x": 0,
+   "y": -300,
+   "text": "Tài chính · Đối soát: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "reconciliation"
+  },
+  "t-report-fee": {
+   "x": 0,
+   "y": -300,
+   "text": "Tài chính · Báo cáo học phí: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "report-fee"
+  },
+  "t-setting-school": {
+   "x": 0,
+   "y": -300,
+   "text": "Cấu hình · Trường: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "setting-school"
+  },
+  "t-setting-fee": {
+   "x": 0,
+   "y": -300,
+   "text": "Cấu hình · Học phí (cấu hình): hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "setting-fee"
+  },
+  "t-setting-users": {
+   "x": 0,
+   "y": -300,
+   "text": "Cấu hình · Tài khoản: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "setting-users"
+  },
+  "t-setting-face": {
+   "x": 0,
+   "y": -300,
+   "text": "Cấu hình · Nhận diện: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "setting-face"
+  },
+  "t-setting-activity": {
+   "x": 0,
+   "y": -300,
+   "text": "Cấu hình · Tính năng: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "setting-activity"
+  },
+  "t-setting-notification": {
+   "x": 0,
+   "y": -300,
+   "text": "Cấu hình · Thông báo: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "setting-notification"
+  },
+  "s-MediaAlbum": {
+   "x": 0,
+   "y": 2041,
+   "text": "Màn con · Tạo album: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "media"
+  },
+  "s-ReportExtendedCreate": {
+   "x": 0,
+   "y": 2092,
+   "text": "Màn con · Tạo báo cáo mở rộng: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "report-extended"
+  },
+  "s-ReportExtendedDetail": {
+   "x": 0,
+   "y": 4335,
+   "text": "Màn con · Chi tiết báo cáo mở rộng: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "report-extended"
+  },
+  "s-ScheduleCreate": {
+   "x": 0,
+   "y": 3343,
+   "text": "Màn con · Tạo thời khóa biểu: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "schedule"
+  },
+  "s-ScheduleDetail": {
+   "x": 0,
+   "y": 5482,
+   "text": "Màn con · Chi tiết thời khóa biểu: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "schedule"
+  },
+  "s-AssignmentCreate": {
+   "x": 0,
+   "y": 2134,
+   "text": "Màn con · Tạo bài tập: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "assignment"
+  },
+  "s-ScoreEntry": {
+   "x": 0,
+   "y": 1944,
+   "text": "Màn con · Nhập điểm: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "scoreboard"
+  },
+  "s-FeeCreate": {
+   "x": 0,
+   "y": 2376,
+   "text": "Màn con · Tạo hóa đơn: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "fee"
+  },
+  "s-FeeDetail": {
+   "x": 0,
+   "y": 5674,
+   "text": "Màn con · Chi tiết hóa đơn: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "fee"
+  },
+  "s-SchoolFeesAdd": {
+   "x": 0,
+   "y": 4697,
+   "text": "Màn con · Thêm khoản phí: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "school-fees"
+  },
+  "s-DiscountAdd": {
+   "x": 0,
+   "y": 2468,
+   "text": "Màn con · Thêm chính sách miễn giảm: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "discount"
+  },
+  "s-ExpenseCreate": {
+   "x": 0,
+   "y": 1883,
+   "text": "Màn con · Tạo phiếu chi: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "expenses"
+  },
+  "s-ExpenseDetail": {
+   "x": 0,
+   "y": 4230,
+   "text": "Màn con · Chi tiết phiếu chi: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "expenses"
+  },
+  "s-ReconciliationDetail": {
+   "x": 0,
+   "y": 1697,
+   "text": "Màn con · Chi tiết phiên đối soát: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "reconciliation"
+  },
+  "s-KidCreate": {
+   "x": 0,
+   "y": 3055,
+   "text": "Màn con · Thêm học sinh: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "kid"
+  },
+  "s-KidDetail": {
+   "x": 0,
+   "y": 5884,
+   "text": "Màn con · Hồ sơ học sinh: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "kid"
+  },
+  "s-TeacherCreate": {
+   "x": 0,
+   "y": 2062,
+   "text": "Màn con · Thêm giáo viên: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "teacher"
+  },
+  "s-TeacherDetail": {
+   "x": 0,
+   "y": 4601,
+   "text": "Màn con · Hồ sơ giáo viên: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "teacher"
+  },
+  "s-ClassesAdd": {
+   "x": 0,
+   "y": 1626,
+   "text": "Màn con · Tạo lớp học: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "classes"
+  },
+  "s-ClassDetail": {
+   "x": 0,
+   "y": 3150,
+   "text": "Màn con · Chi tiết lớp: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "classes"
+  },
+  "s-AnnouncementCreate": {
+   "x": 0,
+   "y": 2025,
+   "text": "Màn con · Soạn thông báo: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "announcements"
+  },
+  "s-PollCreate": {
+   "x": 0,
+   "y": 1866,
+   "text": "Màn con · Tạo bình chọn: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "poll"
+  },
+  "s-PollDetail": {
+   "x": 0,
+   "y": 3792,
+   "text": "Màn con · Chi tiết bình chọn: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "poll"
+  },
+  "s-MenuCreate": {
+   "x": 0,
+   "y": 2036,
+   "text": "Màn con · Tạo thực đơn: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "menu"
+  },
+  "s-MenuDetail": {
+   "x": 0,
+   "y": 4051,
+   "text": "Màn con · Chi tiết thực đơn: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "menu"
+  },
+  "s-FeedbackDetail": {
+   "x": 0,
+   "y": 2811,
+   "text": "Màn con · Chi tiết góp ý: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "feedback"
+  },
+  "s-CalendarCreate": {
+   "x": 0,
+   "y": 3405,
+   "text": "Màn con · Thêm sự kiện: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "calendar"
+  },
+  "s-HandbookAdd": {
+   "x": 0,
+   "y": 2456,
+   "text": "Màn con · Thêm danh mục sổ tay: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "handbook"
+  },
+  "s-SettingSchoolEdit": {
+   "x": 0,
+   "y": 1908,
+   "text": "Màn con · Sửa thông tin trường: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "setting-school"
+  },
+  "s-SettingFeeHistory": {
+   "x": 0,
+   "y": 3386,
+   "text": "Màn con · Lịch sử thanh toán Sepay: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "setting-fee"
+  },
+  "s-SettingFeeRefundAdd": {
+   "x": 0,
+   "y": 5549,
+   "text": "Màn con · Thêm khoản phí hoàn tiền: hiện tại → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "setting-fee"
+  },
+  "s-ConversationsAdd": {
+   "x": 0,
+   "y": 2418,
+   "text": "Màn con · Tạo hội thoại: nút trên portal hiện chưa hoạt động → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "conversations"
+  },
+  "s-AcademicYearAdd": {
+   "x": 0,
+   "y": 1565,
+   "text": "Màn con · Thêm năm học: nút trên portal hiện chưa hoạt động → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "academic-year"
+  },
+  "s-SettingUsersAdd": {
+   "x": 0,
+   "y": 2178,
+   "text": "Màn con · Thêm người dùng: nút trên portal hiện chưa hoạt động → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "setting-users"
+  },
+  "s-ScheduleUpload": {
+   "x": 0,
+   "y": 7064,
+   "text": "Màn con · Tải lên thời khóa biểu: nút trên portal hiện chưa hoạt động → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "schedule"
+  },
+  "s-FeeCategoriesSync": {
+   "x": 0,
+   "y": 4329,
+   "text": "Màn con · Đồng bộ CSDL danh mục thu: nút trên portal hiện chưa hoạt động → thiết kế mới (desktop, tablet, mobile)",
+   "kind": "title1",
+   "maxW": 4278,
+   "page": "fee-categories"
+  }
+ },
+ "designSystems": [
+  {
+   "title": "[DS] ECO ME DASHBOARD",
+   "namespace": "ecomd",
+   "artifact": "https://claude.ai/artifact/TbFhy6u4L1MYCA9yZ8EZFK",
+   "version": "1793607773-266d",
+   "copiedAt": "2026-11-02T13:00:00Z"
+  }
+ ]
+}

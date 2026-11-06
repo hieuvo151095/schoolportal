@@ -1,45 +1,41 @@
 ---
-title: "Sổ tay Phụ huynh Cây Tri thức 2 cấp (Handbook)"
+title: Màn Hình Sổ Tay Phụ Huynh
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - NT-11
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/school/parent-handbook
+status: missing
+updated: 2026-11-05
 ---
 
-# Sổ tay Phụ huynh Cây Tri thức 2 cấp (Handbook) (`M5/SM10`)
+# Màn Hình Sổ Tay Phụ Huynh
 
 ## Mục đích
-
-Tổ chức các quy định, cẩm nang phụ huynh và câu hỏi thường gặp (FAQ) theo cấu trúc cây tri thức đúng 2 cấp (Danh mục gốc -> Danh mục con -> Bài viết).
-
-Thuộc phân hệ **[Nhà trường](../overview/module-m5-nha-truong.md)**. Mã định danh tính năng Harness Loop: **`F032`** (Mức ưu tiên: `P2`).
+Cung cấp sổ tay điện tử chứa nội quy, hướng dẫn và quy trình liên lạc nhà trường cho phụ huynh.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/school/handbook`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/parentHandbook.ts`
-  - `docs/src/utils/parentHandbookValidation.ts`
-  - `docs/tests/unit/parentHandbook.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/school/parent-handbook` | repo:app/src/pages/[schoolCode]/school/parent-handbook.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F032-01**: Cấu trúc cây danh mục 2 cấp chuẩn hóa, hỗ trợ tương tác accordion mượt mà.
-- **SPEC-F032-02**: Soạn thảo nội dung bài viết và chuyển đổi trạng thái xuất bản.
-- **SPEC-F032-03**: Cảnh báo xóa danh mục gốc sẽ tự động xóa các bài viết con liên quan.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| NT-11 | Sổ tay phụ huynh điện tử công bố quy định và hướng dẫn của nhà trường | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F032-01` | Cấu trúc cây danh mục 2 cấp chuẩn hóa, hỗ trợ tương tác acco... | `MISSING` | repo:app/src/types/parentHandbook.ts:1 | Cần triển khai và verify |
-| `SPEC-F032-02` | Soạn thảo nội dung bài viết và chuyển đổi trạng thái xuất bả... | `MISSING` | repo:app/src/types/parentHandbook.ts:1 | Cần triển khai và verify |
-| `SPEC-F032-03` | Cảnh báo xóa danh mục gốc sẽ tự động xóa các bài viết con li... | `MISSING` | repo:app/src/types/parentHandbook.ts:1 | Cần triển khai và verify |
+| NT-11 | Sổ tay phụ huynh điện tử công bố quy định và hướng dẫn của nhà trường | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/school/parent-handbook.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Nhà trường](../overview/module-m5-nha-truong.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-school-admin.md)
+- [Thực thể liên quan](../entities/student-profile.md)

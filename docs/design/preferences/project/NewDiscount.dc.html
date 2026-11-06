@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Miễn giảm — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="discount" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Miễn giảm</h1>
+    <p class="ecomd-page-header__desc body-sm">Chính sách miễn giảm theo phần trăm hoặc số tiền cố định, áp dụng cho lớp hoặc từng học sinh</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="file-excel">Xuất Excel</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="plus">Thêm chính sách</x-import></div>
+</div>
+<div class="ecomd-stat-group" style="--ecomd-cols: 4;">
+  <sc-for list="{{stats}}" as="s" hint-placeholder-count="4"><x-import component-from-global-scope="ECOMD.StatCard" label="{{s.label}}" value="{{s.value}}" icon="{{s.icon}}" tone="{{s.tone}}"></x-import></sc-for>
+</div>
+<section class="ecomd-table-card">
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Trạng thái chính sách"></x-import>
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo tên chính sách, lý do" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{feeOpts}}" value="{{fee}}" on-change="{{setFee}}" label="Khoản phí áp dụng"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{scopeOpts}}" value="{{scope}}" on-change="{{setScope}}" label="Đối tượng"></x-import></div>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Chính sách</th><th class="body-xs-bold">Khoản phí</th><th class="body-xs-bold is-right">Mức giảm</th><th class="body-xs-bold">Áp dụng cho</th><th class="body-xs-bold">Thời hạn</th><th class="body-xs-bold">Trạng thái</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; gap: var(--space-2); min-width: 0;"><a href="#" class="body-sm-medium" style="color: var(--text-heading); text-decoration: none;">{{r.name}}</a><span class="body-xs" style="color: var(--text-subtle);">{{r.code}} · {{r.why}}</span></span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Khoản phí</span><div class="ecomd-cell__value"><span>{{r.fee}}</span></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Mức giảm</span><div class="ecomd-cell__value"><span class="body-sm-semibold" style="white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--text-heading);">{{r.lvl}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Áp dụng cho</span><div class="ecomd-cell__value"><span style="display: inline-flex; align-items: center; gap: var(--space-6); white-space: nowrap;"><x-import component-from-global-scope="ECOMD.Icon" name="{{r.scopeIcon}}" size="{{twelve}}" color="var(--text-subtle)"></x-import>{{r.who}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Thời hạn</span><div class="ecomd-cell__value"><span style="white-space: nowrap; font-variant-numeric: tabular-nums;">{{r.span}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Trạng thái</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.tone}}">{{r.status}}</x-import></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="7"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có chính sách nào khớp bộ lọc"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="chính sách"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1131}}'>
+var CRUMBS = ["Tài chính", "Miễn giảm"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'all', query: '', fee: 'Tất cả khoản phí', scope: 'Lớp và học sinh' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var D = [{"id": 1, "name": "Học bổng tài năng học thuật 50%", "code": "MG-2026-001", "why": "Đạt giải Nhất kỳ thi học sinh giỏi cấp tỉnh", "fee": "Học phí chính khóa", "lvl": "50%", "who": "2 học sinh", "span": "Năm học 2026 – 2027", "st": "on"}, {"id": 2, "name": "Giảm học phí gia đình có 2 con (20%)", "code": "MG-2026-002", "why": "Ưu đãi gia đình có nhiều con theo học tại trường", "fee": "Học phí chính khóa", "lvl": "20%", "who": "3 lớp", "span": "09/2026 – 05/2027", "st": "on"}, {"id": 3, "name": "Miễn 100% tiền ăn cho học sinh diện chính sách", "code": "MG-2026-003", "why": "Hộ nghèo có xác nhận của địa phương (NĐ 81/2021)", "fee": "Tiền ăn bán trú", "lvl": "100%", "who": "1 học sinh", "span": "Năm học 2026 – 2027", "st": "on"}, {"id": 4, "name": "Hỗ trợ xe đưa đón tuyến xa 200,000đ", "code": "MG-2026-004", "why": "Học sinh ngoại thành, cách trường trên 15 km", "fee": "Xe đưa đón", "lvl": "200,000đ", "who": "3 học sinh", "span": "Năm học 2026 – 2027", "st": "on"}, {"id": 5, "name": "Ưu đãi đóng sớm học kỳ I năm 2025 (10%)", "code": "MG-2025-010", "why": "Khuyến khích hoàn tất học phí sớm đợt tuyển sinh 2025", "fee": "Học phí chính khóa", "lvl": "10%", "who": "2 lớp", "span": "08/2025 – 10/2025", "st": "exp"}, {"id": 6, "name": "Giảm phí hoạt động trải nghiệm 150,000đ", "code": "MG-2026-006", "why": "Hỗ trợ từ quỹ khuyến học nhà trường", "fee": "Hoạt động trải nghiệm ngoại khóa", "lvl": "150,000đ", "who": "1 lớp", "span": "09/2026 – 11/2026", "st": "off"}, {"id": 7, "name": "Hỗ trợ 50% tiền ăn cho học sinh đạt giải cấp tỉnh", "code": "MG-2026-007", "why": "Bồi dưỡng học sinh năng khiếu trong đội tuyển tỉnh", "fee": "Tiền ăn bán trú", "lvl": "50%", "who": "1 học sinh", "span": "Năm học 2026 – 2027", "st": "on"}];
+    var SS = { on: ['Đang áp dụng', 'success'], off: ['Ngừng áp dụng', 'neutral'], exp: ['Hết hạn', 'warning'] };
+    var q = (st.query || '').trim().toLowerCase();
+    var base = D.filter(function (d) { return (!q || (d.name + ' ' + d.why).toLowerCase().indexOf(q) >= 0) && (st.fee === 'Tất cả khoản phí' || d.fee === st.fee) && (st.scope === 'Lớp và học sinh' || d.who.indexOf(st.scope === 'Theo lớp' ? 'lớp' : 'học sinh') >= 0); });
+    var tabs = [['all', 'Tất cả'], ['on', 'Đang áp dụng'], ['off', 'Ngừng áp dụng'], ['exp', 'Hết hạn']].map(function (k) { return { key: k[0], label: k[1], count: base.filter(function (d) { return k[0] === 'all' || d.st === k[0]; }).length }; });
+    var list = base.filter(function (d) { return st.tab === 'all' || d.st === st.tab; });
+    var rows = list.map(function (d) { return Object.assign({}, d, { status: SS[d.st][0], tone: SS[d.st][1], scopeIcon: d.who.indexOf('lớp') >= 0 ? 'chalkboard' : 'user', actionLabel: 'Thao tác với ' + d.name,
+      menu: [{ icon: 'eye', label: 'Xem danh sách thụ hưởng' }, { icon: 'pen', label: 'Sửa chính sách' }, { icon: 'copy', label: 'Nhân bản cho năm sau' }, { icon: d.st === 'on' ? 'circle-minus' : 'circle-check', label: d.st === 'on' ? 'Ngừng áp dụng' : 'Áp dụng lại' }, { divider: true }, { icon: 'trash-can', label: 'Xóa chính sách…', tone: 'danger' }] }); });
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20, twelve: 12, fourteen: 14,
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      rows: rows, isEmpty: rows.length === 0,
+      total: rows.length,
+      stats: [{ label: 'Tổng chính sách', value: String(D.length), icon: 'percent', tone: 'neutral' }, { label: 'Đang áp dụng', value: '5', icon: 'circle-check', tone: 'success' },
+        { label: 'Lớp được hưởng', value: '3', icon: 'chalkboard', tone: 'info' }, { label: 'Học sinh chỉ định', value: '5', icon: 'user-check', tone: 'info' }],
+      feeOpts: ["Tất cả khoản phí", "Học phí chính khóa", "Tiền ăn bán trú", "Xe đưa đón", "Hoạt động trải nghiệm ngoại khóa"], fee: st.fee, setFee: function (v) { self.setState({ fee: v }); },
+      scopeOpts: ["Lớp và học sinh", "Theo lớp", "Theo học sinh"], scope: st.scope, setScope: function (v) { self.setState({ scope: v }); },
+    });
+  }
+}
+</script>
+</body>
+</html>

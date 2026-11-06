@@ -1,69 +1,180 @@
-# Danh mục — LLM Wiki School Operating Portal
+# Mục Lục Toàn Bộ Tài Liệu LLM Wiki (Index)
 
-> Mỗi dòng: `- [Tiêu đề](pages/...md) — mô tả một dòng`. Cập nhật tự động theo chuẩn SCHEMA.
+> **Dự án:** School Operating Portal (Finviet / SOHA)  
+> **Chế độ:** `new` (Đặc tả mong muốn cho quá trình phát triển mới)  
+> **Cập nhật:** 2026-11-05  
+> **Hợp đồng:** Xem [SCHEMA.md](SCHEMA.md) · Nhật ký: Xem [log.md](log.md)
 
-## Điều hướng
+---
 
-- [SCHEMA](SCHEMA.md) — quy ước của wiki
-- [Mở bằng Obsidian](OBSIDIAN.md) — xem graph
-- [Nhật ký](log.md) — ingest/query/lint/decide
+## 1. Tổng Quan & Các Phân Hệ (Overview)
 
-## Overview
+- [Tổng quan dự án](pages/overview/project-overview.md) — Kiến trúc tổng thể và bản đồ phân hệ
+- [Phân hệ Tổng quan (TQ)](pages/overview/module-overview.md) — Dashboard điều hành số liệu trường
+- [Phân hệ Vận hành (VH)](pages/overview/module-operations.md) — Điểm danh, y tế, ảnh AI, trò chuyện
+- [Phân hệ Học tập (HT)](pages/overview/module-academics.md) — Thời khóa biểu, bài tập, sổ điểm
+- [Phân hệ Tài chính (TC)](pages/overview/module-finance.md) — Hóa đơn VietQR, hoàn tiền ăn, miễn giảm, CSDL Sở
+- [Phân hệ Nhà trường (NT)](pages/overview/module-school-admin.md) — Học sinh 360°, giáo viên, lớp học, niên khóa
+- [Phân hệ Cấu hình (CH)](pages/overview/module-settings.md) — Hồ sơ trường, tài khoản, tham số, AI, tính năng
+- [Phân hệ Đăng nhập & Xác thực (DN)](pages/overview/module-auth.md) — Xác thực đa trường `{schoolCode}` và RBAC
 
-- [Tổng quan School Operating Portal](pages/overview/project-overview.md) — Bức tranh tổng 7 phân hệ và 38 sub-modules
-- [Phân hệ M7: Cổng Xác Thực & Đăng Nhập](pages/overview/module-m7-dang-nhap.md) — Cổng vào hệ thống duy nhất, hỗ trợ 2 phương thức xác thực độc lập: SSO Sở GD&ĐT và Tài khoản quản trị Finviet.
-- [Phân hệ M1: Tổng Quan Điều Hành](pages/overview/module-m1-tong-quan.md) — Bảng điều khiển trung tâm hiển thị các chỉ số KPI vận hành, tỷ lệ hoàn thành học phí và tình trạng điểm danh toàn trường.
-- [Phân hệ M2: Vận Hành Lớp Học](pages/overview/module-m2-van-hanh.md) — Tập trung các nghiệp vụ hàng ngày của giáo viên và học sinh: điểm danh đón/trả, bảng tin hoạt động, thư viện ảnh AI, trao đổi phụ huynh và báo cáo vận hành.
-- [Phân hệ M3: Quản Lý Học Tập](pages/overview/module-m3-hoc-tap.md) — Tiêu chuẩn hóa thời khóa biểu tuần, giao và chấm bài tập về nhà, cùng sổ điểm đánh giá định kỳ theo quy chuẩn của Bộ GD&ĐT.
-- [Phân hệ M4: Quản Trị Tài Chính & Học Phí](pages/overview/module-m4-tai-chinh.md) — Quản lý toàn diện hóa đơn học phí VietQR động, 24 khoản phí Master, biểu phí lớp, phiếu chi nội bộ, đối soát ngân hàng, báo cáo thu và chính sách miễn giảm linh hoạt.
-- [Phân hệ M5: Quản Trị Nhà Trường](pages/overview/module-m5-nha-truong.md) — Quản trị dữ liệu gốc trường học (học sinh 360°, giáo viên, lớp, môn, khối), vận hành tri thức (bảng thông tin, bình chọn, thực đơn GTIN, điểm danh NV, sổ tay) và ý kiến, lịch, niên khóa, lưu trữ.
-- [Phân hệ M6: Cấu Hình Hệ Thống](pages/overview/module-m6-cau-hinh.md) — Thiết lập cấu hình vận hành cơ sở trường học: hồ sơ trường, tài khoản người dùng, cấu hình học phí & hoàn tiền nghỉ học M+1, nhận diện khuôn mặt mẫu, feature flags và quy tắc thông báo.
+---
 
-## Screens
+## 2. Tài Liệu Nguồn Cốt Lõi (Sources)
 
-- [F001 - Cổng Đăng nhập (SSO Sở GD&ĐT & Tài khoản Finviet)](pages/screens/m7-sm2-dang-nhap.md) — M7/SM2: Cổng xác thực đăng nhập duy nhất cho mọi nhân sự trường học, hỗ trợ 2 luồng độc ...
-- [F002 - Hồ sơ Trường học & Thiết lập Vận hành](pages/screens/m6-sm1-truong.md) — M6/SM1: Quản lý thông tin định danh gốc của cơ sở trường học: tên trường, mã trường, địa...
-- [F003 - Quản lý Tài khoản & Phân quyền Quản trị](pages/screens/m6-sm2-tai-khoan.md) — M6/SM2: Quản trị danh sách tài khoản nội bộ trường học (Ban Giám Hiệu, Giáo viên, Kế toá...
-- [F004 - Cấu hình Niên khóa & Học kỳ](pages/screens/m5-sm13-nam-hoc.md) — M5/SM13: Thiết lập các niên khóa và khoảng thời gian học kỳ trong năm học; tự động nhận d...
-- [F005 - Quản lý Cây Khối Lớp](pages/screens/m5-sm5-khoi-lop.md) — M5/SM5: Quản lý hệ thống phân cấp khối lớp theo 4 cấp học (Tiểu học, THCS, THPT, Mầm non...
-- [F006 - Quản lý Lớp học (Chính khóa & Ngoại khóa)](pages/screens/m5-sm3-lop-hoc.md) — M5/SM3: Quản lý danh sách lớp học, phân biệt rõ ràng lớp chính khóa và lớp ngoại khóa (c...
-- [F007 - Hồ sơ Học sinh 360° & Chuyển lớp](pages/screens/m5-sm1-hoc-sinh.md) — M5/SM1: Quản lý hồ sơ gốc học sinh toàn diện qua các năm học (mã học sinh, CCCD, ngày si...
-- [F008 - Danh bạ Giáo viên & Phân quyền Kiểm duyệt](pages/screens/m5-sm2-giao-vien.md) — M5/SM2: Quản trị đội ngũ cán bộ giáo viên, phân công chủ nhiệm / giảng dạy bộ môn, cấp t...
-- [F009 - Điểm danh Học sinh Hằng ngày (Đón / Trả / Sức khỏe)](pages/screens/m2-sm1-diem-danh.md) — M2/SM1: Phân hệ điểm danh đón/trả trẻ hằng ngày 1 click, theo dõi thân nhiệt, phát hiện ...
-- [F010 - Bảng tin Hoạt động Lớp học](pages/screens/m2-sm2-hoat-dong.md) — M2/SM2: Bảng tin nhật ký bài học và hoạt động trong ngày của lớp, hỗ trợ soạn thảo đa ph...
-- [F011 - Danh mục Khoản phí Master (24 khoản thu)](pages/screens/m4-sm3-khoan-phi.md) — M4/SM3: Master catalog quản lý toàn bộ 24 khoản thu của trường (3 khoản hệ thống + 21 kh...
-- [F012 - Quản lý Biểu phí theo Lớp học (Tuition Management)](pages/screens/m4-sm4-quan-ly-hoc-phi.md) — M4/SM4: Gán gói các khoản thu và đơn giá tùy chỉnh từ Master Catalog cho từng lớp học ho...
-- [F013 - Cấu hình Hoàn tiền Nghỉ học & Cổng Thanh toán](pages/screens/m6-sm3-hoc-phi.md) — M6/SM3: Thiết lập cơ chế hoàn tiền khi học sinh nghỉ học (tỷ lệ hoàn tiền ăn/xe theo ngà...
-- [F014 - Chính sách Miễn giảm & Động cơ Tự động Áp dụng Mức cao nhất](pages/screens/m4-sm8-mien-giam.md) — M4/SM8: Quản lý các chính sách miễn giảm học phí (% hoặc VNĐ) theo lớp hoặc học sinh cụ ...
-- [F015 - Lập Hóa đơn Học phí & Thu phí VietQR Động](pages/screens/m4-sm1-hoc-phi.md) — M4/SM1: Phát hành hóa đơn thu phí học sinh (toàn trường, khối, lớp, cá nhân), tự động kh...
-- [F016 - Quản lý Phiếu chi Nội bộ (Expenses)](pages/screens/m4-sm5-khoan-chi.md) — M4/SM5: Lập, trình duyệt và theo dõi các phiếu chi tiêu nội bộ của trường học kèm chứng ...
-- [F017 - Đối soát Giao dịch Ngân hàng & Cổng Thanh toán](pages/screens/m4-sm2-doi-soat.md) — M4/SM2: Đối chiếu phiên giao dịch thanh toán từ tài khoản ngân hàng / Sepay / VietQR với...
-- [F018 - Báo cáo Thu Học phí & Tỷ lệ Hoàn thành](pages/screens/m4-sm6-bao-cao-hoc-phi.md) — M4/SM6: Biểu đồ trực quan và bảng số liệu theo dõi tiến độ thu học phí toàn trường và từ...
-- [F019 - Thời khóa biểu Tuần & Lịch sử Phiên bản](pages/screens/m3-sm1-thoi-khoa-bieu.md) — M3/SM1: Lập lịch thời khóa biểu tuần theo tiết học, môn học, phòng học và giáo viên phụ ...
-- [F020 - Giao Bài tập về nhà & Theo dõi Nộp bài](pages/screens/m3-sm2-bai-tap.md) — M3/SM2: Tạo bài tập về nhà theo môn học và lớp, đính kèm tài liệu hướng dẫn, đặt hạn nộp...
-- [F021 - Sổ điểm & Đánh giá Học tập Định kỳ](pages/screens/m3-sm3-diem-danh-gia.md) — M3/SM3: Sổ điểm điện tử chuẩn Bộ Giáo dục & Đào tạo ghi nhận điểm số (miệng, 15 phút, 1 ...
-- [F022 - Thư viện Media & Nhận diện Khuôn mặt AI](pages/screens/m2-sm3-thu-vien.md) — M2/SM3: Album hình ảnh và video lớp học tỷ lệ chuẩn 16:9, tích hợp AI tự động nhận diện ...
-- [F023 - Kênh Trao đổi Tin nhắn Phụ huynh](pages/screens/m2-sm4-trao-doi.md) — M2/SM4: Kênh trao đổi thời gian thực giữa giáo viên và phụ huynh (chat 1:1, nhóm học sin...
-- [F024 - Danh mục Môn học & Phân công Giảng dạy](pages/screens/m5-sm4-mon-hoc.md) — M5/SM4: Tra cứu danh mục môn học chuẩn theo 4 cấp học (Tiểu học, THCS, THPT, GDTX) và ph...
-- [F025 - Kế hoạch Thực đơn Tuần & Nguồn gốc Thực phẩm GTIN](pages/screens/m5-sm8-thuc-don.md) — M5/SM8: Lập thực đơn dinh dưỡng bán trú tuần trước tối đa 8 tuần (dạng lưới hoặc file tả...
-- [F026 - Điểm danh Nhân viên 1 chạm & Phê duyệt Nghỉ phép](pages/screens/m5-sm9-diem-danh-nv.md) — M5/SM9: Chấm công đến/về cho cán bộ nhân viên nhà trường tức thì bằng 1 click, duyệt đơn...
-- [F027 - Dashboard Tổng quan Toàn trường (Overview)](pages/screens/m1-sm1-tong-quan.md) — M1/SM1: Bảng điều khiển trung tâm hiển thị toàn diện các chỉ số KPI vận hành của trường:...
-- [F028 - Báo cáo Điểm danh Tháng Học sinh & Nhân viên](pages/screens/m2-sm5-bao-cao-diem-danh.md) — M2/SM5: Xuất lưới điểm danh tháng của lớp và nhân viên theo 2 buổi sáng/chiều, nhúng thô...
-- [F029 - Báo cáo Mở rộng theo Mẫu Động](pages/screens/m2-sm6-bao-cao-mo-rong.md) — M2/SM6: Hệ thống sinh báo cáo đánh giá định kỳ theo các mẫu động cấu hình trước, hỗ trợ ...
-- [F030 - Bảng thông tin & Lên lịch Gửi Thông báo](pages/screens/m5-sm6-bang-thong-tin.md) — M5/SM6: Soạn thảo, xem trước giao diện hiển thị trên ứng dụng di động của phụ huynh, hẹn...
-- [F031 - Bình chọn & Khảo sát Ý kiến Phụ huynh (Polls)](pages/screens/m5-sm7-binh-chon.md) — M5/SM7: Tạo các cuộc khảo sát ý kiến nhiều lựa chọn, phân tách giữa soạn nháp và phát hà...
-- [F032 - Sổ tay Phụ huynh Cây Tri thức 2 cấp (Handbook)](pages/screens/m5-sm10-so-tay-ph.md) — M5/SM10: Tổ chức các quy định, cẩm nang phụ huynh và câu hỏi thường gặp (FAQ) theo cấu tr...
-- [F033 - Hòm thư Góp ý Phụ huynh & Thảo luận 2 chiều](pages/screens/m5-sm11-gop-y.md) — M5/SM11: Tiếp nhận phiếu phản ánh góp ý từ phụ huynh theo 8 lĩnh vực, phân công cán bộ xử...
-- [F034 - Lịch Sự kiện & Ngày nghỉ Trường học (Calendar)](pages/screens/m5-sm12-lich-su-kien.md) — M5/SM12: Quản lý lịch sự kiện và ngày nghỉ toàn trường trên 3 chế độ xem (Năm, Tháng, Dan...
-- [F035 - Kho Lưu trữ Học sinh Thôi học / Rút hồ sơ (Archive)](pages/screens/m5-sm14-luu-tru.md) — M5/SM14: Kho lưu trữ độc lập danh sách học sinh đã thôi học hoặc chuyển trường, hỗ trợ ph...
-- [F036 - Quản lý Dữ liệu Khuôn mặt Học sinh (Face ID)](pages/screens/m6-sm4-nhan-dien.md) — M6/SM4: Đăng ký, cập nhật và quản lý kho ảnh mẫu khuôn mặt của học sinh phục vụ cho tính...
-- [F037 - Quản lý Bật/Tắt Tính năng Trường học (Feature Flags)](pages/screens/m6-sm5-tinh-nang.md) — M6/SM5: Bảng công tắc cấu hình bật hoặc tắt linh hoạt từng phân hệ chức năng cho trường ...
-- [F038 - Cấu hình Lịch & Quy tắc Thông báo Toàn trường](pages/screens/m6-sm6-thong-bao.md) — M6/SM6: Thiết lập lịch phát thông báo tự động (thông báo điểm danh, nhắc nộp học phí, th...
+- [PRD Cổng Vận Hành Trường Học](pages/sources/src-prd-school-operating-portal.md) — Đặc tả nghiệp vụ chuẩn tổng thể
+- [Khung Kiến Trúc Kỹ Thuật Nền Tảng](pages/sources/src-tech-architecture-blueprint.md) — Blueprint kỹ thuật hệ thống
+- [Bảng Câu Hỏi Mở & Quyết Định](pages/sources/src-open-questions-resolutions.md) — Quyết định dứt điểm OQ-01..23 (gồm 15 kịch bản đối kháng Red-Team và nghiệp vụ thực tế)
+- [Đặc Tả Đăng Nhập & Xác Thực](pages/sources/src-prd-dang-nhap-xac-thuc.md) — Đặc tả cơ chế xác thực đa trường, SSO và JWT
+- [Đặc Tả Cơ Chế Hoàn Tiền Khi Nghỉ Học](pages/sources/src-prd-co-che-hoan-tien.md) — Cơ chế khấu trừ tiền ăn tự động tháng M+1
+- [Đặc Tả Cơ Chế Miễn Giảm Học Phí](pages/sources/src-prd-mien-giam-hoc-phi.md) — Chính sách ưu đãi, xử lý xung đột Best-rate
+- [Đặc Tả Bộ Hồ Sơ Kỹ Thuật 35 Epics & Prototype](pages/sources/src-development-epics-manifest.md) — Bản vẽ 35 Epics E-001..E-035
+- [Đặc Tả Khảo Sát Hệ Thống Cũ (Legacy Portal QLTH)](pages/sources/src-legacy-operating-portal-guide.md) — Báo cáo khảo sát 30 modules và M7-SM1
+- [Đặc Tả 33 Quyết Định Kiến Trúc (ADR)](pages/sources/src-adr-architectural-decisions.md) — 33 quyết định ADR-001..ADR-033
+- [Đặc Tả Kho Tri Thức Kỹ Thuật & Danh Mục Anti-Pattern](pages/sources/src-knowledge-base-standards.md) — Tiêu chuẩn đa tầng và Never Do List
+- [Đặc Tả Bảng Đối Soát Mâu Thuẫn Nghiệp Vụ (K001–K057)](pages/sources/src-planning-contradictions-matrix.md) — 57 điểm mâu thuẫn K001..K057
+- [Đặc Tả Bộ Hồ Sơ Thiết Kế Kế Hoạch (Screens, Flows, Diagrams)](pages/sources/src-planning-blueprints-flows-screens.md) — Hồ sơ màn hình và sơ đồ tuần tự
+- [Đặc Tả Hệ Thống Thiết Kế Giao Diện (ECO Design System)](pages/sources/src-portal-design-system.md) — Nền tảng token semantic v2.6.0
+- [Đặc Tả Bộ Hồ Sơ Kế Hoạch SEPO (VOI, AP, ISP)](pages/sources/src-sepo-architecture-implementation-plan.md) — Kế hoạch kiến trúc và thi công kỹ thuật
 
-## Sources
+---
 
-## Entities
+## 3. Khái Niệm Kiến Trúc Then Chốt (Concepts)
 
-## Concepts
+- [Cơ chế cô lập đa trường học (Multi-Tenancy)](pages/concepts/multi-tenancy-isolation.md) — RLS & routing
+- [Cơ chế hoàn tiền ăn tự động](pages/concepts/meal-refund-engine.md) — Liên thông điểm danh sang hóa đơn M+1
+- [Thuật toán giải quyết xung đột miễn giảm](pages/concepts/discount-deduplication.md) — Cảnh báo trùng lặp & Best-rate
+- [Đường ống nhận diện khuôn mặt AI](pages/concepts/ai-face-recognition.md) — BullMQ Worker bất đồng bộ
+- [Chốt chặn an toàn khi xóa lớp](pages/concepts/class-deletion-guard.md) — Bảo vệ toàn vẹn tài chính & học sinh
+- [Cơ chế kiểm duyệt bài viết 2 cấp & Phân quyền RBAC](pages/concepts/rbac-two-tier-moderation.md) — Quy trình duyệt bài GV và BGH
+- [Kiến trúc thanh toán VietQR động & Đối soát tự động](pages/concepts/vietqr-dynamic-reconciliation.md) — Tích hợp NAPAS 247 và webhook
+- [Kiến trúc tích hợp Cơ sở dữ liệu Bộ/Sở GD&ĐT (CSDL Sở)](pages/concepts/csdl-so-integration.md) — Chuẩn hóa danh mục tài chính nhà nước
+- [Chuẩn đánh giá & Xếp loại học sinh Bộ GD&ĐT](pages/concepts/curriculum-assessment-standard.md) — Thông tư 22/27/51 và công thức TBHK có trọng số
+- [Vòng đời chuyển tiếp học sinh](pages/concepts/student-lifecycle-transitions.md) — Chuyển lớp, niên khóa, lưu trữ kho lạnh và phục hồi
+- [Điều phối lịch học, biểu phí & phân rã ngoại khóa](pages/concepts/extracurricular-billing-scheduling.md) — Conflict scheduler 4 chiều & Sub-invoice
+- [Kiến trúc giao diện & Hệ thống Token](pages/concepts/design-system-tokens-principles.md) — Hybrid Tailwind/Styled Components & tokens v2.6.0
 
-## Flows
+---
+
+## 4. Thực Thể Nghiệp Vụ Cốt Lõi (Entities)
+
+- [Hồ sơ học sinh 360](pages/entities/student-profile.md) — Dữ liệu gốc học sinh và 5 tab ngữ cảnh
+- [Giáo viên & Nhân viên](pages/entities/teacher-staff.md) — Nhân sự và phân quyền kiểm duyệt 2 cấp
+- [Lớp học](pages/entities/classroom.md) — Đơn vị tổ chức lớp chính khóa và ngoại khóa
+- [Điểm danh hằng ngày](pages/entities/attendance-daily.md) — Đón/trả, thân nhiệt, sức khỏe, người đón hộ
+- [Hóa đơn học phí](pages/entities/tuition-invoice.md) — Hóa đơn thu phí tích hợp VietQR động
+- [Danh mục khoản phí](pages/entities/fee-catalog-item.md) — 24 khoản thu chuẩn toàn trường
+- [Chính sách miễn giảm](pages/entities/discount-policy.md) — Quy tắc ưu đãi học phí và chuyển đổi đơn vị
+- [Khấu trừ hoàn tiền ăn](pages/entities/meal-refund-credit.md) — Dòng giảm trừ tiền ăn nghỉ học có phép
+- [Thời khóa biểu tuần](pages/entities/timetable-weekly.md) — Lịch học ma trận theo tiết và phòng học
+- [Bài tập về nhà](pages/entities/homework-assignment.md) — Nhiệm vụ tự học và theo dõi nộp bài
+- [Sổ điểm đánh giá](pages/entities/gradebook-record.md) — Điểm số và nhận xét chuẩn Bộ GD&ĐT
+- [Bảng tin hoạt động lớp](pages/entities/class-activity.md) — Nhật ký lớp học kèm hashtag và mention
+- [Thư viện media](pages/entities/media-album.md) — Album ảnh lớp và gắn thẻ AI học sinh
+- [Tin nhắn trao đổi](pages/entities/conversation-thread.md) — Kênh trò chuyện trực tiếp 1:1 với phụ huynh
+- [Phiếu chi nội bộ](pages/entities/expense-voucher.md) — Quản lý chi tiêu vận hành và phê duyệt chi
+- [Phiên đăng nhập & RBAC](pages/entities/auth-session.md) — Token JWT kép và kiểm soát truy cập 3 cấp
+- [Niên khóa & Học kỳ](pages/entities/academic-year.md) — Quản lý khung thời gian năm học và kích hoạt niên khóa
+- [Bảng thông tin nhà trường](pages/entities/school-announcement.md) — Bản tin truyền thông nội bộ và thông báo khẩn cấp
+- [Khảo sát & Bình chọn](pages/entities/school-poll.md) — Chiến dịch lấy ý kiến phụ huynh và giáo viên
+- [Thực đơn dinh dưỡng tuần](pages/entities/weekly-menu.md) — Khẩu phần ăn bán trú theo bữa và khối tuổi
+- [Lịch sự kiện & Ngày nghỉ lễ](pages/entities/calendar-event.md) — Lịch nghỉ lễ, sự kiện học thuật và ngoại khóa
+- [Môn học](pages/entities/school-subject.md) — Danh mục môn học giảng dạy và phân công chuyên môn
+- [Khối lớp học](pages/entities/grade-level.md) — Cấp bậc phân loại độ tuổi và chương trình đào tạo
+- [Sổ tay phụ huynh](pages/entities/parent-handbook.md) — Cẩm nang học đường, quy chế và hỏi đáp FAQ
+- [Góp ý & Khiếu nại phụ huynh](pages/entities/parent-feedback.md) — Hòm thư tiếp nhận và phân luồng khiếu nại
+- [Điểm danh nhân sự](pages/entities/staff-attendance.md) — Nhật ký chấm công ca làm việc của cán bộ giáo viên
+- [Phiên đối soát giao dịch](pages/entities/reconciliation-session.md) — Đợt đối soát khớp lệnh ngân hàng tự động
+- [Danh mục thu CSDL Sở](pages/entities/revenue-category.md) — Danh mục nguồn thu chuẩn hóa liên thông Sở GD&ĐT
+- [Hồ sơ trường học](pages/entities/school-profile.md) — Thông tin pháp lý, nhận diện thương hiệu và tham số trường
+- [Đơn xin nghỉ học / Báo vắng](pages/entities/student-absence-request.md) — Đơn nghỉ học của phụ huynh và căn cứ hoàn tiền ăn
+- [Hồ sơ nhận diện khuôn mặt sinh trắc](pages/entities/face-biometric-registration.md) — Ảnh chân dung mẫu và vector AI 512 chiều
+- [Hồ sơ lưu trữ học sinh](pages/entities/student-archive-record.md) — Bản ghi học sinh lưu trữ kho lạnh và phục hồi
+
+---
+
+## 5. Luồng Nghiệp Vụ (Flows)
+
+- [Luồng điểm danh đón trả](pages/flows/fl-diem-danh-don-tra.md) — Đón trẻ, đo nhiệt độ và xác thực người đón
+- [Luồng báo vắng và hoàn tiền](pages/flows/fl-bao-vang-hoan-tien.md) — Báo vắng hợp lệ và khấu trừ M+1
+- [Luồng lập và phát hành hóa đơn](pages/flows/fl-lap-phat-hanh-hoa-don.md) — Tạo đợt hóa đơn và sinh mã VietQR
+- [Luồng thiết lập miễn giảm](pages/flows/fl-thiet-lap-mien-giam.md) — Tạo chính sách ưu đãi kèm cảnh báo trùng lặp
+- [Luồng đăng bài kiểm duyệt](pages/flows/fl-dang-bai-kiem-duyet.md) — Đăng nhật ký lớp học và duyệt bài 2 cấp
+- [Luồng nhận diện album ảnh](pages/flows/fl-nhan-dien-album-anh.md) — Tải ảnh lớp và xử lý khuôn mặt AI ngầm
+- [Luồng đăng nhập đa trường](pages/flows/fl-dang-nhap-da-truong.md) — Xác thực `{schoolCode}` và cấp quyền RBAC
+- [Luồng chuyển lớp và chuyển năm học](pages/flows/fl-chuyen-lop-va-chuyen-nam-hoc.md) — Điều chuyển học sinh bảo toàn dữ liệu
+- [Luồng lập thời khóa biểu](pages/flows/fl-lap-thoi-khoa-bieu.md) — Xếp lịch học tuần và kiểm tra trùng tiết
+- [Luồng nhập sổ điểm](pages/flows/fl-nhap-so-diem.md) — Nhập điểm kiểm tra và khóa sổ điểm
+- [Luồng quản lý hồ sơ học sinh 360](pages/flows/fl-quan-ly-ho-so-hoc-sinh-360.md) — Quản lý danh bạ và tab ngữ cảnh
+- [Luồng phân công giáo viên](pages/flows/fl-phan-cong-giao-vien-kiem-duyet.md) — Phân công chủ nhiệm và quyền duyệt bài
+- [Luồng đối soát giao dịch](pages/flows/fl-doi-soat-giao-dich.md) — Khớp lệnh ngân hàng tự động và xử lý lệch số liệu
+- [Luồng lập duyệt phiếu chi](pages/flows/fl-lap-duyet-phieu-chi.md) — Lập, đính kèm chứng từ và phê duyệt xuất quỹ nội bộ
+- [Luồng giao bài tập về nhà](pages/flows/fl-giao-bai-tap-ve-nha.md) — Giao bài tập, theo dõi nộp bài và chấm nhận xét
+- [Luồng khảo sát bình chọn](pages/flows/fl-khao-sat-binh-chon.md) — Khởi tạo và tổng hợp biểu quyết trực tuyến
+- [Luồng lập thực đơn dinh dưỡng](pages/flows/fl-lap-thuc-don-dinh-duong.md) — Lên thực đơn tuần và công bố tới phụ huynh
+- [Luồng tiếp nhận và xử lý góp ý](pages/flows/fl-tiep-nhan-xu-ly-gop-y.md) — Phân luồng giải quyết khiếu nại của phụ huynh
+- [Luồng điểm danh chấm công nhân viên](pages/flows/fl-diem-danh-cham-cong-nv.md) — Chấm công ca làm việc và tổng hợp công tháng
+- [Luồng đồng bộ danh mục thu](pages/flows/fl-dong-bo-danh-muc-thu.md) — Kéo danh mục chuẩn từ CSDL Sở và kích hoạt sử dụng
+- [Luồng nộp đơn xin nghỉ học](pages/flows/fl-don-xin-nghi-hoc.md) — Phụ huynh nộp đơn và duyệt báo vắng tự động
+- [Luồng kho lưu trữ học sinh](pages/flows/fl-kho-luu-tru-hoc-sinh.md) — Đóng băng kho lạnh, phục hồi và xóa vĩnh viễn 2 bước
+- [Luồng đăng ký sinh trắc khuôn mặt](pages/flows/fl-dang-ky-sinh-trac-khuon-mat.md) — Quét webcam/tải ảnh và đồng bộ AI
+- [Luồng quản trị tài khoản đa vai trò](pages/flows/fl-quan-tri-tai-khoan-phan-quyen.md) — RBAC, bảo vệ Super-Admin và CSDL Sở
+
+---
+
+## 6. Màn Hình Giao Diện (Screens)
+
+### M1: Tổng Quan
+- [Màn hình tổng quan điều hành](pages/screens/m1-sm1-tong-quan.md) — Dashboard trung tâm
+
+### M2: Vận Hành
+- [Màn hình điểm danh](pages/screens/m2-sm1-diem-danh.md) — Điểm danh đón/trả và sức khỏe
+- [Màn hình hoạt động](pages/screens/m2-sm2-hoat-dong.md) — Bảng tin hoạt động lớp học
+- [Màn hình thư viện](pages/screens/m2-sm3-thu-vien.md) — Thư viện ảnh và AI nhận diện
+- [Màn hình trao đổi](pages/screens/m2-sm4-trao-doi.md) — Kênh trò chuyện với phụ huynh
+- [Màn hình báo cáo điểm danh](pages/screens/m2-sm5-bao-cao-diem-danh.md) — Lưới điểm danh tháng
+- [Màn hình báo cáo mở rộng](pages/screens/m2-sm6-bao-cao-mo-rong.md) — Báo cáo thống kê chuyên sâu
+
+### M3: Học Tập
+- [Màn hình thời khóa biểu](pages/screens/m3-sm1-thoi-khoa-bieu.md) — Ma trận lịch học tuần
+- [Màn hình bài tập về nhà](pages/screens/m3-sm2-bai-tap.md) — Giao bài và kiểm tra nộp bài
+- [Màn hình sổ điểm đánh giá](pages/screens/m3-sm3-diem-danh-gia.md) — Nhập điểm và tổng kết học lực
+
+### M4: Tài Chính
+- [Màn hình hóa đơn học phí](pages/screens/m4-sm1-hoc-phi.md) — Lập hóa đơn và VietQR động
+- [Màn hình đối soát](pages/screens/m4-sm2-doi-soat.md) — Khớp lệnh ngân hàng tự động
+- [Màn hình khoản phí](pages/screens/m4-sm3-khoan-phi.md) — Quản lý 24 khoản thu trường
+- [Màn hình quản lý học phí](pages/screens/m4-sm4-quan-ly-hoc-phi.md) — Cấu hình biểu phí từng lớp
+- [Màn hình khoản chi](pages/screens/m4-sm5-khoan-chi.md) — Phiếu chi và chứng từ nội bộ
+- [Màn hình báo cáo học phí](pages/screens/m4-sm6-bao-cao-hoc-phi.md) — Biểu đồ tỷ lệ hoàn thành thu phí
+- [Màn hình danh mục thu](pages/screens/m4-sm7-danh-muc-thu.md) — Danh mục nguồn thu chuẩn hóa CSDL Sở
+- [Màn hình chính sách miễn giảm](pages/screens/m4-sm8-mien-giam.md) — Thiết lập ưu đãi và giảm trừ
+
+### M5: Nhà Trường
+- [Màn hình học sinh](pages/screens/m5-sm1-hoc-sinh.md) — Danh bạ và hồ sơ học sinh 360
+- [Màn hình giáo viên](pages/screens/m5-sm2-giao-vien.md) — Danh bạ giáo viên và quyền duyệt
+- [Màn hình lớp học](pages/screens/m5-sm3-lop-hoc.md) — Quản lý lớp và chốt chặn xóa lớp
+- [Màn hình môn học](pages/screens/m5-sm4-mon-hoc.md) — Danh mục môn học giảng dạy
+- [Màn hình khối lớp](pages/screens/m5-sm5-khoi-lop.md) — Danh mục khối lớp liên cấp
+- [Màn hình bảng thông tin](pages/screens/m5-sm6-bang-thong-tin.md) — Tin tức và truyền thông nội bộ
+- [Màn hình bình chọn](pages/screens/m5-sm7-binh-chon.md) — Khảo sát trực tuyến phụ huynh
+- [Màn hình thực đơn](pages/screens/m5-sm8-thuc-don.md) — Thực đơn dinh dưỡng tuần
+- [Màn hình điểm danh nhân viên](pages/screens/m5-sm9-diem-danh-nv.md) — Chấm công ca làm việc
+- [Màn hình sổ tay phụ huynh](pages/screens/m5-sm10-so-tay-ph.md) — Quy định và hướng dẫn nhà trường
+- [Màn hình hòm thư góp ý](pages/screens/m5-sm11-gop-y.md) — Tiếp nhận phản ánh khiếu nại
+- [Màn hình lịch sự kiện](pages/screens/m5-sm12-lich-su-kien.md) — Lịch sự kiện và hoạt động
+- [Màn hình niên khóa](pages/screens/m5-sm13-nam-hoc.md) — Quản lý năm học và học kỳ
+- [Màn hình kho lưu trữ](pages/screens/m5-sm14-luu-tru.md) — Hồ sơ học sinh tốt nghiệp/chuyển trường
+
+### M6: Cấu Hình
+- [Màn hình cấu hình trường học](pages/screens/m6-sm1-truong.md) — Thông tin pháp lý & thương hiệu
+- [Màn hình quản trị tài khoản](pages/screens/m6-sm2-tai-khoan.md) — Người dùng và phân quyền admin
+- [Màn hình cấu hình tham số học phí](pages/screens/m6-sm3-hoc-phi.md) — Tỷ lệ hoàn tiền ăn & hạn báo vắng
+- [Màn hình cấu hình nhận diện AI](pages/screens/m6-sm4-nhan-dien.md) — Tham số mô hình thị giác AI
+- [Màn hình bật tắt tính năng](pages/screens/m6-sm5-tinh-nang.md) — Quản lý Feature Flags
+- [Màn hình cấu hình thông báo](pages/screens/m6-sm6-thong-bao.md) — Ma trận thông báo push/email
+- [Màn hình lịch sử thanh toán Sepay](pages/screens/m6-sm7-lich-su-thanh-toan.md) — Nhật ký giao dịch cổng thanh toán và webhook
+
+### M7: Tài Khoản & Đăng Nhập
+- [Màn hình quản trị tài khoản cá nhân & thông báo](pages/screens/m7-sm1-khac.md) — Profile, đổi mật khẩu, thông báo cá nhân, ngôn ngữ, đăng xuất
+- [Màn hình đăng nhập hệ thống](pages/screens/m7-sm2-dang-nhap.md) — Đăng nhập `{schoolCode}`, SSO & cấp JWT

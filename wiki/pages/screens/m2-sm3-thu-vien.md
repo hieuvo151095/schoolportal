@@ -1,45 +1,45 @@
 ---
-title: "Thư viện Media & Nhận diện Khuôn mặt AI"
+title: Màn Hình Thư Viện Media & AI
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+  - pages/sources/src-open-questions-resolutions.md
+spec_ids:
+  - VH-06
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/operations/media
+status: missing
+updated: 2026-11-05
 ---
 
-# Thư viện Media & Nhận diện Khuôn mặt AI (`M2/SM3`)
+# Màn Hình Thư Viện Media & AI
 
 ## Mục đích
-
-Album hình ảnh và video lớp học tỷ lệ chuẩn 16:9, tích hợp AI tự động nhận diện khuôn mặt để gom nhóm ảnh học sinh và phân bổ vào album cá nhân.
-
-Thuộc phân hệ **[Vận hành](../overview/module-m2-van-hanh.md)**. Mã định danh tính năng Harness Loop: **`F022`** (Mức ưu tiên: `P1`).
+Quản lý album hình ảnh và video sự kiện của lớp và toàn trường, ứng dụng AI nhận diện khuôn mặt tự động gắn thẻ học sinh, đồng thời hỗ trợ chế độ bảo vệ quyền riêng tư sinh trắc học `opt_out_face_ai` (tự động làm mờ mặt và gắn biểu tượng lá chắn bảo vệ theo Nghị định 13/2023/NĐ-CP - OQ-16).
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/class/[classId]/media`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/media.ts`
-  - `docs/src/utils/mediaValidation.ts`
-  - `docs/tests/unit/media.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/operations/media` | repo:app/src/pages/[schoolCode]/operations/media.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F022-01**: Duy trì 2 album hệ thống ('Hoạt động' và 'Điểm danh') cùng các album tùy tạo của giáo viên.
-- **SPEC-F022-02**: Tích hợp AI phân tích khuôn mặt ảnh tải lên, tự động gắn khung và tag vào hồ sơ học sinh tương ứng.
-- **SPEC-F022-03**: Thanh công cụ chọn nhiều ảnh hỗ trợ Tải xuống ZIP và Xóa ảnh hàng loạt kèm modal xác nhận.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| VH-06 | Thư viện media tự động gắn thẻ khuôn mặt học sinh bằng AI và tôn trọng cờ opt-out quyền riêng tư (OQ-16) | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F022-01` | Duy trì 2 album hệ thống ('Hoạt động' và 'Điểm danh') cùng c... | `OK` | repo:app/src/utils/mediaValidation.ts:1 | Đã hoàn thành và verify qua tests/unit/media.test.mjs |
-| `SPEC-F022-02` | Tích hợp AI phân tích khuôn mặt ảnh tải lên, tự động gắn khu... | `OK` | repo:app/src/utils/mediaValidation.ts:35 | Đã hoàn thành và verify qua tests/unit/media.test.mjs |
-| `SPEC-F022-03` | Thanh công cụ chọn nhiều ảnh hỗ trợ Tải xuống ZIP và Xóa ảnh... | `OK` | repo:app/src/utils/mediaValidation.ts:75 | Đã hoàn thành và verify qua tests/unit/media.test.mjs |
+| VH-06 | Thư viện media tự động gắn thẻ khuôn mặt học sinh trong ảnh lớp bằng AI | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/operations/media.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md) mục OQ-04, OQ-16).
 
 ## Liên quan
-
-- Phân hệ cha: [Vận hành](../overview/module-m2-van-hanh.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ Vận hành](../overview/module-operations.md)
+- [Thực thể Thư viện media](../entities/media-album.md)
+- [Thực thể Hồ sơ học sinh 360](../entities/student-profile.md)
+- [Đường ống nhận diện khuôn mặt AI](../concepts/ai-face-recognition.md)
+- [Luồng nhận diện album ảnh](../flows/fl-nhan-dien-album-anh.md)

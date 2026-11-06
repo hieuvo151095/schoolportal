@@ -1,43 +1,42 @@
 ---
-title: "Quản lý Biểu phí theo Lớp học (Tuition Management)"
+title: Màn Hình Cấu Hình Biểu Phí Theo Lớp
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - TC-04
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/finance/tuition-management
+status: missing
+updated: 2026-11-05
 ---
 
-# Quản lý Biểu phí theo Lớp học (Tuition Management) (`M4/SM4`)
+# Màn Hình Cấu Hình Biểu Phí Theo Lớp
 
 ## Mục đích
-
-Gán gói các khoản thu và đơn giá tùy chỉnh từ Master Catalog cho từng lớp học hoặc khối lớp cụ thể trong năm học.
-
-Thuộc phân hệ **[Tài chính](../overview/module-m4-tai-chinh.md)**. Mã định danh tính năng Harness Loop: **`F012`** (Mức ưu tiên: `P1`).
+Gán gói khoản thu và đơn giá tùy chỉnh phù hợp cho từng lớp học hoặc khối học cụ thể.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/school/tuition-management`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/tuitionManagement.ts`
-  - `docs/src/utils/tuitionManagementValidation.ts`
-  - `docs/tests/unit/tuitionManagement.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/finance/tuition-management` | repo:app/src/pages/[schoolCode]/finance/tuition-management.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F012-01**: Bảng quản lý tinh gọn 6 cột; cột 'Các khoản phí' hiển thị số lượng kèm modal chi tiết 3 cột: Tên khoản phí, Số tiền, Xuất HĐĐT.
-- **SPEC-F012-02**: Ghi đè đơn giá khoản thu riêng biệt theo lớp mà không làm biến động Master Catalog gốc.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| TC-04 | Cấu hình gói biểu phí và đơn giá áp dụng riêng biệt cho từng lớp học hoặc khối lớp | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F012-01` | Bảng quản lý tinh gọn 6 cột; cột 'Các khoản phí' hiển thị số... | `OK` | repo:app/tests/unit/tuitionManagement.test.mjs:1 | Đã kiểm chứng 15/15 unit tests |
-| `SPEC-F012-02` | Ghi đè đơn giá khoản thu riêng biệt theo lớp mà không làm bi... | `OK` | repo:app/tests/unit/tuitionManagement.test.mjs:1 | Đã kiểm chứng 15/15 unit tests |
+| TC-04 | Cấu hình gói biểu phí và đơn giá áp dụng riêng biệt cho từng lớp học hoặc khối lớp | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/finance/tuition-management.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Tài chính](../overview/module-m4-tai-chinh.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-finance.md)
+- [Thực thể liên quan](../entities/fee-catalog-item.md)
+- [Thực thể liên quan](../entities/classroom.md)

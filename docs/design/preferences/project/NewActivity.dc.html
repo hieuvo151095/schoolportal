@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Hoạt động lớp — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="activity" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Hoạt động lớp 1A1</h1>
+    <p class="ecomd-page-header__desc body-sm">Dòng thời gian hoạt động, bài học trong ngày và chia sẻ hình ảnh với phụ huynh</p>
+  </div>
+</div>
+<div class="ecomd-split is-aside" style="gap: var(--space-20); align-items: start;">
+<div style="display: flex; flex-direction: column; gap: var(--space-16); min-width: 0;">
+<section class="ecomd-card">
+  <div class="ecomd-card__body" style="display: flex; flex-direction: column; gap: var(--space-12);">
+    <div style="display: flex; align-items: flex-start; gap: var(--space-12);">
+      <x-import component-from-global-scope="ECOMD.Avatar" name="Nguyễn Thu Mai"></x-import>
+      <label style="flex: 1; min-width: 0;"><span class="ecomd-sr">Nội dung hoạt động</span><textarea class="ecomd-textarea body-sm" rows="3" placeholder="Chia sẻ hoạt động lớp hôm nay. Gõ @ để gắn tên học sinh, # để gắn môn học." value="{{draft}}" onChange="{{setDraft}}"></textarea></label>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-8);">
+      <x-import component-from-global-scope="ECOMD.Button" variant="ghost" icon="at">Học sinh</x-import><x-import component-from-global-scope="ECOMD.Button" variant="ghost" icon="hashtag">Môn học</x-import><x-import component-from-global-scope="ECOMD.Button" variant="ghost" icon="images">Ảnh, video</x-import>
+      <span style="flex: 1;"></span>
+      <x-import component-from-global-scope="ECOMD.SelectField" options="{{scopeOpts}}" value="{{scope}}" on-change="{{setScope}}" label="Phạm vi đăng"></x-import>
+      <x-import component-from-global-scope="ECOMD.Checkbox" label="Duyệt trước khi gửi phụ huynh" checked="{{review}}" on-change="{{setReview}}"></x-import>
+      <x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="paper-plane" disabled="{{noDraft}}">Đăng</x-import>
+    </div>
+  </div>
+</section>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-12);">
+  <x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Trạng thái duyệt" variant="segmented"></x-import>
+  <div style="display: flex; flex: 1 1 calc(var(--size-40) * 6); min-width: 0; justify-content: flex-end;"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo nội dung, giáo viên" value="{{query}}" on-change="{{setQuery}}"></x-import></div>
+</div>
+<sc-for list="{{posts}}" as="p" hint-placeholder-count="3"><article class="ecomd-card">
+  <sc-if value="{{p.pinned}}" hint-placeholder-val="{{false}}"><div class="body-xs-medium" style="display: flex; align-items: center; gap: var(--space-6); padding: var(--space-10) var(--space-16); border-bottom: 1px solid var(--border-subtle); color: var(--text-subtle);"><x-import component-from-global-scope="ECOMD.Icon" name="thumbtack" size="{{twelve}}"></x-import>Đã ghim đầu trang lớp</div></sc-if>
+  <div style="display: flex; align-items: flex-start; gap: var(--space-12); padding: var(--space-16) var(--space-16) 0;">
+    <x-import component-from-global-scope="ECOMD.Avatar" name="{{p.who}}"></x-import>
+    <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2);">
+      <span style="display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-4) var(--space-8);"><span class="body-sm-semibold" style="color: var(--text-heading);">{{p.who}}</span><span class="body-xs" style="color: var(--text-subtle);">{{p.role}}</span></span>
+      <span class="body-xs" style="color: var(--text-subtle);">{{p.time}} · {{p.scope}}</span>
+    </div>
+    <x-import component-from-global-scope="ECOMD.StatusTag" tone="{{p.tone}}">{{p.statusLabel}}</x-import>
+    <x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{p.actionLabel}}" items="{{p.menu}}"></x-import>
+  </div>
+  <p class="body-sm" style="margin: 0; padding: var(--space-12) var(--space-16) 0; color: var(--text-body);"><sc-for list="{{p.segs}}" as="s" hint-placeholder-count="1"><sc-if value="{{s.plain}}" hint-placeholder-val="{{true}}"><span>{{s.t}}</span></sc-if><sc-if value="{{s.link}}" hint-placeholder-val="{{false}}"><a href="#" class="body-sm-medium" style="color: var(--text-link); text-decoration: none;">{{s.t}}</a></sc-if></sc-for></p>
+  <div class="ecomd-grid" style="--ecomd-cols: {{p.cols}}; --ecomd-cols-mobile: {{p.colsM}}; gap: var(--space-4); padding: var(--space-12) var(--space-16) 0;">
+    <sc-for list="{{p.imgs}}" as="i" hint-placeholder-count="2"><div role="img" aria-label="{{i.label}}" style="display: flex; align-items: center; justify-content: center; aspect-ratio: {{p.ratio}}; border-radius: var(--radius-8); background: var(--bg-muted); color: var(--text-muted);"><x-import component-from-global-scope="ECOMD.Icon" name="image" size="{{twenty}}"></x-import></div></sc-for>
+  </div>
+  <sc-if value="{{p.isOk}}" hint-placeholder-val="{{true}}"><div class="body-xs" style="display: flex; align-items: center; gap: var(--space-16); padding: var(--space-12) var(--space-16) var(--space-16); color: var(--text-subtle);"><span style="display: inline-flex; align-items: center; gap: var(--space-6);"><x-import component-from-global-scope="ECOMD.Icon" name="heart" size="{{twelve}}"></x-import>{{p.likes}} lượt thích</span><span style="display: inline-flex; align-items: center; gap: var(--space-6);"><x-import component-from-global-scope="ECOMD.Icon" name="eye" size="{{twelve}}"></x-import>{{p.views}} lượt xem</span></div></sc-if>
+  <sc-if value="{{p.isWait}}" hint-placeholder-val="{{false}}"><div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-8); margin-top: var(--space-12); padding: var(--space-12) var(--space-16); border-top: 1px solid var(--border-subtle);"><span class="body-xs" style="flex: 1; color: var(--text-subtle);">Bài đăng chờ duyệt, phụ huynh chưa nhìn thấy</span><x-import component-from-global-scope="ECOMD.Button" variant="secondary" on-click="{{p.reject}}">Từ chối</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="check" on-click="{{p.approve}}">Duyệt và gửi phụ huynh</x-import></div></sc-if>
+</article></sc-for>
+<sc-if value="{{noPosts}}" hint-placeholder-val="{{false}}"><section class="ecomd-card"><x-import component-from-global-scope="ECOMD.EmptyState" icon="clipboard-list" label="Không có hoạt động nào khớp bộ lọc"></x-import></section></sc-if>
+</div>
+<aside style="display: flex; flex-direction: column; gap: var(--space-16);">
+  <x-import component-from-global-scope="ECOMD.Card" title="Bài học hôm nay" description="Thứ Sáu, 30/10/2026 · 2 tiết">
+    <div style="display: flex; flex-direction: column; gap: var(--space-16);">
+      <sc-for list="{{lessons}}" as="l" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; gap: var(--space-6);">
+        <span><x-import component-from-global-scope="ECOMD.Tag">{{l.subject}}</x-import></span>
+        <span class="body-sm-semibold" style="color: var(--text-heading);">{{l.title}}</span>
+        <span class="body-xs" style="color: var(--text-subtle);">{{l.topic}}</span>
+        <ul class="body-xs" style="display: flex; flex-direction: column; gap: var(--space-6); margin: var(--space-4) 0 0; padding: 0; list-style: none; color: var(--text-body);"><sc-for list="{{l.goals}}" as="g" hint-placeholder-count="2"><li style="display: flex; align-items: flex-start; gap: var(--space-8);"><span style="display: flex; padding-top: var(--space-2); color: var(--semantic-success);"><x-import component-from-global-scope="ECOMD.Icon" name="check" size="{{twelve}}"></x-import></span><span>{{g}}</span></li></sc-for></ul>
+      </div></sc-for>
+    </div>
+  </x-import>
+  <x-import component-from-global-scope="ECOMD.Card" title="Mẫu câu nhanh" description="Chèn vào bài đăng, hoặc gõ $ trong ô soạn">
+    <div style="display: flex; flex-direction: column; gap: var(--space-12);">
+      <sc-for list="{{tpls}}" as="m" hint-placeholder-count="3"><div style="display: flex; flex-direction: column; gap: var(--space-4); padding-bottom: var(--space-12); border-bottom: 1px solid var(--border-subtle);">
+        <span style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-8);"><span class="body-sm-medium" style="color: var(--text-heading);">{{m.name}}</span><x-import component-from-global-scope="ECOMD.Tag" variant="code">{{m.code}}</x-import></span>
+        <span class="body-xs" style="color: var(--text-subtle);">{{m.text}}</span>
+        <span><x-import component-from-global-scope="ECOMD.Button" variant="text" icon="plus" on-click="{{m.insert}}">Chèn vào bài</x-import></span>
+      </div></sc-for>
+    </div>
+  </x-import>
+</aside>
+</div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 2041}}'>
+var CRUMBS = ["Vận hành", "Hoạt động"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'all', query: '', draft: '', scope: 'Lớp 1A1', review: true, ov: {} }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var P = [{"id": 1, "who": "Cô Nguyễn Thu Mai", "role": "Giáo viên chủ nhiệm", "time": "11:30, 30/10", "scope": "Lớp 1A1", "status": "ok", "pinned": true, "likes": 24, "views": 58, "imgs": 4, "text": ["Hoạt động trải nghiệm: Bé làm quen với các hình khối và phối màu sắc. Hôm nay các con lớp 1A1 đã hoàn thành xuất sắc bài vẽ sáng tạo ngôi trường mơ ước. Khen ngợi bạn ", "@Nguyễn Gia Bảo", " và ", "@Trần Minh Anh", " đã có bài thuyết trình rất tự tin trước lớp! ", "#HinhHocCoBan", " ", "#TapVe"]}, {"id": 2, "who": "Cô Trần Thu Hà", "role": "Giáo viên Tiếng Anh", "time": "10:05, 30/10", "scope": "Lớp 1A1", "status": "wait", "pinned": false, "likes": 0, "views": 0, "imgs": 2, "text": ["Tiết Tiếng Anh: các con học bài hát về màu sắc và chơi trò tìm đồ vật theo màu. Cả lớp tham gia rất sôi nổi. ", "#TiengAnh1"]}, {"id": 3, "who": "Thầy Lê Văn Hùng", "role": "Giáo viên Thể dục", "time": "08:30, 30/10", "scope": "Lớp 1A1", "status": "ok", "pinned": false, "likes": 18, "views": 42, "imgs": 2, "text": ["Tiết Thể dục: rèn luyện khả năng phối hợp vận động và phản xạ nhanh qua trò chơi dân gian. 100% học sinh tham gia nhiệt tình, uống nước và nghỉ ngơi hợp lý. ", "#TheDuc1", " ", "#VanDongCoBan"]}, {"id": 4, "who": "Ban Giám hiệu", "role": "Quản trị viên trường", "time": "13:30, 29/10", "scope": "Toàn trường", "status": "ok", "pinned": false, "likes": 45, "views": 130, "imgs": 1, "text": ["Thông báo khám sức khỏe định kỳ học kỳ I năm học 2026 – 2027 cho toàn bộ học sinh khối 1. Đoàn bác sĩ Bệnh viện Nhi Trung ương sẽ kiểm tra thể lực, răng hàm mặt, thị lực và thính lực vào sáng thứ Năm tuần này."]}];
+    var L = [{"subject": "Mỹ thuật & Thủ công", "title": "Bài 12: Vẽ ngôi trường mơ ước và phối màu sắc", "topic": "Chủ đề 2: Ngôi trường thân yêu", "goals": ["Nhận biết và phối màu cơ bản (đỏ, vàng, lam)", "Phát triển trí tưởng tượng về không gian lớp học và bạn bè", "Rèn luyện kỹ năng cầm cọ và sự khéo léo của bàn tay"]}, {"subject": "Giáo dục Thể chất", "title": "Bài 4: Trò chơi vận động dân gian và rèn luyện phản xạ", "topic": "Chủ đề 1: Đội hình đội ngũ", "goals": ["Tập luyện phản xạ nhanh và sự phối hợp đồng đội", "Giáo dục ý thức giữ gìn trật tự và kỷ luật sân chơi"]}];
+    var M = [{"name": "Khen ngợi học tập tích cực", "code": "$khen_ngoi", "text": "Khen ngợi các con đã hoàn thành rất xuất sắc nhiệm vụ học tập hôm nay, tinh thần tự giác cao!"}, {"name": "Nhắc chuẩn bị đồ dùng", "code": "$nhac_nho", "text": "Kính nhờ quý phụ huynh nhắc con kiểm tra và chuẩn bị đầy đủ đồ dùng học tập cho buổi học ngày mai."}, {"name": "Nhật ký sức khỏe và dinh dưỡng", "code": "$suc_khoe", "text": "Hôm nay các con ăn hết suất bán trú, ngủ trưa ngoan và năng động trong các giờ chơi ngoài trời."}, {"name": "Nhắc trang phục ngoại khóa", "code": "$dong_phuc", "text": "Ngày mai có tiết ngoại khóa, kính nhờ phụ huynh cho con mặc đồng phục thể dục, mang giày thể thao và mũ mềm."}];
+    var ov = st.ov || {};
+    P.forEach(function (p) { if (ov[p.id]) p.status = ov[p.id]; });
+    var vis = P.filter(function (p) { return p.status !== 'rejected'; });
+    var q = (st.query || '').trim().toLowerCase();
+    var base = vis.filter(function (p) { return !q || (p.who + ' ' + p.text.join('')).toLowerCase().indexOf(q) >= 0; });
+    var tabs = [['all', 'Tất cả'], ['ok', 'Đã duyệt'], ['wait', 'Chờ duyệt']].map(function (d) { return { key: d[0], label: d[1], count: base.filter(function (p) { return d[0] === 'all' || p.status === d[0]; }).length }; });
+    var list = base.filter(function (p) { return st.tab === 'all' || p.status === st.tab; });
+    function setOv(id, v) { var n = Object.assign({}, st.ov || {}); n[id] = v; self.setState({ ov: n }); }
+    var posts = list.map(function (p) { var ok = p.status === 'ok', n = p.imgs, imgs = [];
+      for (var i = 0; i < n; i++) imgs.push({ label: 'Ảnh ' + (i + 1) + ' của bài đăng' });
+      return { who: p.who, role: p.role, time: p.time, scope: p.scope, pinned: p.pinned, likes: p.likes, views: p.views,
+        tone: ok ? 'success' : 'warning', statusLabel: ok ? 'Đã duyệt' : 'Chờ duyệt', isOk: ok, isWait: !ok,
+        segs: p.text.map(function (t) { var link = t.charAt(0) === '@' || t.charAt(0) === '#'; return { t: t, link: link, plain: !link }; }),
+        imgs: imgs, cols: n >= 3 ? 4 : n + 1, colsM: 2, ratio: '4 / 3',
+        approve: function () { setOv(p.id, 'ok'); }, reject: function () { setOv(p.id, 'rejected'); },
+        actionLabel: 'Thao tác với bài đăng của ' + p.who,
+        menu: [{ icon: 'thumbtack', label: p.pinned ? 'Bỏ ghim' : 'Ghim đầu trang' }, { icon: 'pen', label: 'Sửa bài đăng' }, { icon: 'eye-slash', label: 'Ẩn với phụ huynh' }, { divider: true }, { icon: 'trash-can', label: 'Xóa bài đăng…', tone: 'danger' }] }; });
+    var draft = st.draft || '';
+    return Object.assign(this.shell(), {
+      twelve: 12, twenty: 20,
+      draft: draft, noDraft: !draft.trim(), setDraft: function (e) { self.setState({ draft: e && e.target ? e.target.value : e }); },
+      scopeOpts: ['Lớp 1A1', 'Khối 1 (tất cả các lớp)', 'Toàn trường'], scope: st.scope, setScope: function (v) { self.setState({ scope: v }); },
+      review: st.review, setReview: function (v) { self.setState({ review: v }); },
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      posts: posts, noPosts: posts.length === 0,
+      lessons: L,
+      tpls: M.map(function (m) { return Object.assign({}, m, { insert: function () { var d = self.state.draft || ''; self.setState({ draft: (d ? d + (d.slice(-1) === ' ' ? '' : ' ') : '') + m.text }); } }); })
+    });
+  }
+}
+</script>
+</body>
+</html>

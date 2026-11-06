@@ -1,45 +1,43 @@
 ---
-title: "Sổ điểm & Đánh giá Học tập Định kỳ"
+title: Màn Hình Sổ Điểm Đánh Giá
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - HT-03
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/academics/gradebook
+status: missing
+updated: 2026-11-05
 ---
 
-# Sổ điểm & Đánh giá Học tập Định kỳ (`M3/SM3`)
+# Màn Hình Sổ Điểm Đánh Giá
 
 ## Mục đích
-
-Sổ điểm điện tử chuẩn Bộ Giáo dục & Đào tạo ghi nhận điểm số (miệng, 15 phút, 1 tiết, giữa kỳ, cuối kỳ) và rubric đánh giá định kỳ cho học sinh mầm non.
-
-Thuộc phân hệ **[Học tập](../overview/module-m3-hoc-tap.md)**. Mã định danh tính năng Harness Loop: **`F021`** (Mức ưu tiên: `P1`).
+Nhập và tính toán điểm kiểm tra thường xuyên, giữa kỳ, cuối kỳ và điểm trung bình theo chuẩn Bộ GD&ĐT; quản lý khóa sổ điểm (`locked`), cơ chế Scoped Temporary Unlock mở cục bộ 1 ô điểm trong tối đa 60 phút có phê duyệt BGH và lưu vết `GradeAuditTrail` bất biến; cùng tính năng ánh xạ bảo toàn điểm số khi tiếp nhận học sinh chuyển trường giữa kỳ.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/school/scoreboard`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/gradebook.ts`
-  - `docs/src/utils/gradebookValidation.ts`
-  - `docs/tests/unit/gradebook.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/academics/gradebook` | repo:app/src/pages/[schoolCode]/academics/gradebook.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F021-01**: Ma trận nhập điểm số linh hoạt theo môn học, lớp và học kỳ.
-- **SPEC-F021-02**: Rubric đánh giá định kỳ cho các cấp học mầm non và tiểu học.
-- **SPEC-F021-03**: Tính điểm trung bình môn tự động theo trọng số quy chuẩn.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| HT-03 | Nhập sổ điểm và đánh giá định kỳ theo quy chuẩn chuẩn hóa của Bộ GD&ĐT | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F021-01` | Ma trận nhập điểm số linh hoạt theo môn học, lớp và học kỳ.... | `MISSING` | repo:app/src/types/gradebook.ts:1 | Cần triển khai và verify |
-| `SPEC-F021-02` | Rubric đánh giá định kỳ cho các cấp học mầm non và tiểu học.... | `MISSING` | repo:app/src/types/gradebook.ts:1 | Cần triển khai và verify |
-| `SPEC-F021-03` | Tính điểm trung bình môn tự động theo trọng số quy chuẩn.... | `MISSING` | repo:app/src/types/gradebook.ts:1 | Cần triển khai và verify |
+| HT-03 | Nhập sổ điểm và đánh giá định kỳ theo quy chuẩn chuẩn hóa của Bộ GD&ĐT | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/academics/gradebook.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Học tập](../overview/module-m3-hoc-tap.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-academics.md)
+- [Chuẩn đánh giá học sinh MoET](../concepts/curriculum-assessment-standard.md)
+- [Thực thể liên quan](../entities/gradebook-record.md)
+- [Luồng liên quan](../flows/fl-nhap-so-diem.md)

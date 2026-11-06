@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Hồ sơ giáo viên — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="teacher" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Nguyễn Thị Mai</h1>
+    <span style="display: inline-flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-4);"><x-import component-from-global-scope="ECOMD.StatusTag" tone="success">Đang làm việc</x-import><x-import component-from-global-scope="ECOMD.Tag">Giáo viên chính</x-import></span>
+    <p class="ecomd-page-header__desc body-sm">GV-2024-001 · mai.nguyen@finviet.edu.vn · 0912 345 678</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="chalkboard">Phân công lớp</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="pen">Sửa hồ sơ</x-import><x-import component-from-global-scope="ECOMD.DataTable.RowAction" icon="ellipsis" label="Thao tác khác" items="{{moreMenu}}"></x-import></div>
+</div>
+<div class="ecomd-split is-aside" style="gap: var(--space-20); align-items: start;"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Phân công giảng dạy</h2></div><div class="ecomd-card__actions"><x-import component-from-global-scope="ECOMD.Button" variant="ghost" icon="pen">Phân công lại</x-import></div></div>
+  <div class="ecomd-card__body"><dl class="ecomd-dl body-sm" style="align-items: center;"><dt>Lớp chủ nhiệm</dt><dd><x-import component-from-global-scope="ECOMD.Tag">Lớp 1A1</x-import></dd><dt>Lớp giảng dạy</dt><dd><span style="display: flex; flex-wrap: wrap; gap: var(--space-6);"><sc-for list="{{classes}}" as="t" hint-placeholder-count="2"><x-import component-from-global-scope="ECOMD.Tag">{{t}}</x-import></sc-for></span></dd><dt>Môn phụ trách</dt><dd><span style="display: flex; flex-wrap: wrap; gap: var(--space-6);"><sc-for list="{{subjects}}" as="t" hint-placeholder-count="2"><x-import component-from-global-scope="ECOMD.Tag">{{t}}</x-import></sc-for></span></dd></dl></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Vai trò và kiểm duyệt bài đăng</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Giáo viên chính · bài đăng hiển thị ngay</span><span class="ecomd-setting__desc body-xs">Bài viết hoạt động, ảnh và nhật ký lớp do cô Mai đăng sẽ hiển thị với phụ huynh ngay, không qua hàng chờ duyệt.</span></div><div class="ecomd-setting__control"><x-import component-from-global-scope="ECOMD.Button" variant="secondary">Đổi thành giáo viên hỗ trợ</x-import></div></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Học vấn và chứng chỉ</h2></div></div>
+  <div class="ecomd-card__body"><dl class="ecomd-dl body-sm"><dt>Trình độ đào tạo</dt><dd>Cử nhân Sư phạm Tiểu học</dd><dt>Chuyên ngành</dt><dd>Giáo dục Tiểu học</dd><dt>Chứng chỉ</dt><dd><span style="display: flex; flex-wrap: wrap; gap: var(--space-6);"><sc-for list="{{certs}}" as="t" hint-placeholder-count="2"><x-import component-from-global-scope="ECOMD.Tag">{{t}}</x-import></sc-for></span></dd></dl></div>
+</section>
+</div><div style="display: flex; flex-direction: column; gap: var(--space-16);"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Thông tin cá nhân</h2></div></div>
+  <div class="ecomd-card__body"><dl class="ecomd-dl body-sm"><dt>Giới tính</dt><dd>Nữ</dd><dt>Ngày sinh</dt><dd>15/03/1988</dd><dt>Số CCCD</dt><dd>001188001234</dd><dt>Bắt đầu công tác</dt><dd>15/08/2020</dd><dt>Mã CSDL Sở</dt><dd>SO-HN-88001</dd><dt>Đăng nhập gần nhất</dt><dd>14:30, 15/09/2026</dd></dl></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Ghi chú nội bộ</h2><p class="ecomd-card__desc body-xs">Chỉ nhà trường thấy</p></div><div class="ecomd-card__actions"><x-import component-from-global-scope="ECOMD.IconButton" icon="pen" label="Sửa ghi chú"></x-import></div></div>
+  <div class="ecomd-card__body"><p class="body-sm" style="margin: 0; color: var(--text-body);">Tổ trưởng chuyên môn khối 1, nhiệt tình, có kinh nghiệm 10 năm.</p></div>
+</section>
+</div></div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Nhà trường", "Giáo viên", "Nguyễn Thị Mai"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = {}; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      classes: ['Lớp 1A1', 'Lớp 1A2'], subjects: ['Tiếng Việt', 'Toán', 'Đạo đức'], certs: ['Nghiệp vụ sư phạm', 'Tin học IC3', 'Tiếng Anh B1'],
+      moreMenu: [{ icon: 'envelope', label: 'Đổi email đăng nhập' }, { icon: 'key', label: 'Đặt lại mật khẩu' }, { divider: true }, { icon: 'user-clock', label: 'Chuyển tạm nghỉ…', tone: 'danger' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

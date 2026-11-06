@@ -1,43 +1,46 @@
 ---
-title: "Đối soát Giao dịch Ngân hàng & Cổng Thanh toán"
+title: Màn Hình Đối Soát Thanh Toán
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+  - pages/sources/src-open-questions-resolutions.md
+spec_ids:
+  - TC-06
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/finance/reconciliation
+status: missing
+updated: 2026-11-05
 ---
 
-# Đối soát Giao dịch Ngân hàng & Cổng Thanh toán (`M4/SM2`)
+# Màn Hình Đối Soát Thanh Toán
 
 ## Mục đích
-
-Đối chiếu phiên giao dịch thanh toán từ tài khoản ngân hàng / Sepay / VietQR với hóa đơn thực thu của trường học, làm nổi bật giao dịch khớp và giao dịch lệch số liệu.
-
-Thuộc phân hệ **[Tài chính](../overview/module-m4-tai-chinh.md)**. Mã định danh tính năng Harness Loop: **`F017`** (Mức ưu tiên: `P1`).
+Đối soát tự động và thủ công giữa các giao dịch nộp học phí qua cổng thanh toán với sổ phụ ngân hàng; cảnh báo và xử lý Quỹ treo đối soát (`UNMATCHED_SUSPENSE_POOL`) đối với giao dịch trên hóa đơn đã hủy; xử lý giao dịch chuyển thừa `OVERPAID` (kết chuyển Credit Balance hoặc nút "Tạo phiếu chi hoàn tiền thừa"), chuyển thiếu `PARTIAL_PAID` (sinh lại VietQR nợ), và đóng băng tra soát `FROZEN_UNDER_REVIEW` cấm xuất hóa đơn điện tử VAT (OQ-18).
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/school/reconciliation`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/reconciliation.ts`
-  - `docs/src/utils/reconciliationValidation.ts`
-  - `docs/tests/unit/reconciliation.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/finance/reconciliation` | repo:app/src/pages/[schoolCode]/finance/reconciliation.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F017-01**: Danh sách phiên đối soát theo ngày và cổng thanh toán.
-- **SPEC-F017-02**: Tự động làm nổi bật các giao dịch khớp lệnh và cảnh báo chênh lệch số tiền / thừa thiếu.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| TC-06 | Đối soát giao dịch thanh toán tự động/thủ công và xử lý bất thường thừa/thiếu/tra soát (OQ-18) | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F017-01` | Danh sách phiên đối soát theo ngày và cổng thanh toán.... | `OK` | repo:app/tests/unit/reconciliation.test.mjs:1 | Đã kiểm chứng 10/10 unit tests |
-| `SPEC-F017-02` | Tự động làm nổi bật các giao dịch khớp lệnh và cảnh báo chên... | `OK` | repo:app/tests/unit/reconciliation.test.mjs:1 | Đã kiểm chứng 10/10 unit tests |
+| TC-06 | Đối soát giao dịch thanh toán tự động và thủ công với sổ phụ ngân hàng | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/finance/reconciliation.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md) mục OQ-09, OQ-18).
 
 ## Liên quan
-
-- Phân hệ cha: [Tài chính](../overview/module-m4-tai-chinh.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ Tài chính](../overview/module-finance.md)
+- [Thực thể Hóa đơn học phí](../entities/tuition-invoice.md)
+- [Thực thể Phiên đối soát giao dịch](../entities/reconciliation-session.md)
+- [Thực thể Phiếu chi nội bộ](../entities/expense-voucher.md)
+- [Khái niệm Kiến trúc VietQR động và đối soát](../concepts/vietqr-dynamic-reconciliation.md)
+- [Luồng đối soát giao dịch](../flows/fl-doi-soat-giao-dich.md)

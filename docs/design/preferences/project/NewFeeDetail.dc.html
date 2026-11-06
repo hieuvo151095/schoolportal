@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Chi tiết hóa đơn — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="fee" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Hóa đơn tháng 09/2026</h1>
+    <span style="display: inline-flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-4);"><x-import component-from-global-scope="ECOMD.StatusTag" tone="warning" icon="{{clock}}">Thanh toán một phần</x-import></span>
+    <p class="ecomd-page-header__desc body-sm">HD2609-002 · Trần Thị Bích · HS-602 · Lớp 6A1</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="print">In phiếu</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="check">Ghi nhận thanh toán</x-import><x-import component-from-global-scope="ECOMD.DataTable.RowAction" icon="ellipsis" label="Thao tác khác" items="{{moreMenu}}"></x-import></div>
+</div>
+<div class="ecomd-split is-aside" style="gap: var(--space-20); align-items: start;"><section class="ecomd-card"><div class="ecomd-card__body" style="display: flex; flex-direction: column; gap: var(--space-20);"><div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--space-16); padding-bottom: var(--space-16); border-bottom: 1px solid var(--border-default);"><div style="display: flex; flex-direction: column; gap: var(--space-2);"><span class="overline-xs" style="color: var(--text-subtle); text-transform: uppercase;">Trường Liên cấp FinViet</span><h2 class="h5" style="margin: 0; color: var(--text-heading);">Phiếu báo học phí và dịch vụ</h2><span class="body-sm" style="color: var(--text-body); font-variant-numeric: tabular-nums;">Số HD2609-002 · Kỳ thu 09/2026</span></div><dl class="body-sm" style="display: grid; grid-template-columns: auto auto; gap: var(--space-4) var(--space-16); margin: 0; font-variant-numeric: tabular-nums;"><dt style="color: var(--text-subtle);">Ngày lập</dt><dd style="margin: 0; text-align: right; color: var(--text-heading);">01/09/2026</dd><dt style="color: var(--text-subtle);">Ngày gửi</dt><dd style="margin: 0; text-align: right; color: var(--text-heading);">02/09/2026</dd><dt style="color: var(--text-subtle);">Hạn thanh toán</dt><dd class="body-sm-semibold" style="margin: 0; text-align: right; color: var(--text-heading);">20/09/2026</dd></dl></div><div class="ecomd-grid" style="--ecomd-cols: 4; --ecomd-cols-tablet: 2; --ecomd-cols-mobile: 2; gap: var(--space-16);"><div style="display: flex; flex-direction: column; gap: var(--space-2); min-width: 0;"><span class="body-xs" style="color: var(--text-subtle);">Học sinh</span><span class="body-sm-medium" style="color: var(--text-heading);">Trần Thị Bích</span></div><div style="display: flex; flex-direction: column; gap: var(--space-2); min-width: 0;"><span class="body-xs" style="color: var(--text-subtle);">Mã học sinh</span><span class="body-sm-medium" style="color: var(--text-heading);">HS-602</span></div><div style="display: flex; flex-direction: column; gap: var(--space-2); min-width: 0;"><span class="body-xs" style="color: var(--text-subtle);">Lớp</span><span class="body-sm-medium" style="color: var(--text-heading);">6A1 (Khối 6)</span></div><div style="display: flex; flex-direction: column; gap: var(--space-2); min-width: 0;"><span class="body-xs" style="color: var(--text-subtle);">Người nhận thông báo</span><span class="body-sm-medium" style="color: var(--text-heading);">Trần Văn Hòa (Bố)</span><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">0912 345 678</span></div></div><div class="ecomd-table-scroll">
+<table class="ecomd-table is-fit">
+<thead><tr><th class="body-xs-bold is-primary">Khoản thu</th><th class="body-xs-bold is-right">Đơn giá</th><th class="body-xs-bold is-right">Số lượng</th><th class="body-xs-bold is-right">Giảm trừ</th><th class="body-xs-bold is-right">Thành tiền</th></tr></thead>
+<tbody>
+<sc-for list="{{inv}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><span class="body-sm" style="color: var(--text-heading);">{{r.name}}</span></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Đơn giá</span><div class="ecomd-cell__value"><span style="font-variant-numeric: tabular-nums; white-space: nowrap;">{{r.price}}</span></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Số lượng</span><div class="ecomd-cell__value"><span style="font-variant-numeric: tabular-nums;">{{r.qty}}</span></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Giảm trừ</span><div class="ecomd-cell__value"><span style="color: var(--text-subtle);">–</span></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Thành tiền</span><div class="ecomd-cell__value"><span class="body-sm-semibold" style="color: var(--text-heading); white-space: nowrap; font-variant-numeric: tabular-nums;">{{r.total}}</span></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="5"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có dữ liệu"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<dl class="body-sm" style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-8) 0; margin: 0 0 0 auto; width: 100%; max-width: calc(var(--size-sidebar-w) * 3 / 2);"><dt style="color: var(--text-subtle);">Tạm tính</dt><dd class="body-sm" style="margin: 0; padding-left: var(--space-24); text-align: right; font-variant-numeric: tabular-nums; color: var(--text-heading);">2,270,000đ</dd><dt style="color: var(--text-subtle);">Giảm trừ</dt><dd class="body-sm" style="margin: 0; padding-left: var(--space-24); text-align: right; font-variant-numeric: tabular-nums; color: var(--text-heading);">0đ</dd><dt style="color: var(--text-subtle);">Đã thanh toán</dt><dd class="body-sm" style="margin: 0; padding-left: var(--space-24); text-align: right; font-variant-numeric: tabular-nums; color: var(--text-heading);">1,000,000đ</dd><dt style="color: var(--text-heading); padding-top: var(--space-8); border-top: 1px solid var(--border-default);" class="body-sm-semibold">Còn phải nộp</dt><dd class="title-md" style="margin: 0; padding-left: var(--space-24); text-align: right; font-variant-numeric: tabular-nums; color: var(--text-heading); padding-top: var(--space-8); border-top: 1px solid var(--border-default);">1,270,000đ</dd></dl></div></section>
+<div style="display: flex; flex-direction: column; gap: var(--space-16);"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Tình trạng thanh toán</h2></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-12);"><span style="display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-8);"><span class="h5" style="color: var(--text-heading); font-variant-numeric: tabular-nums;">1,270,000đ</span><span class="body-xs" style="color: var(--text-subtle);">còn phải nộp</span></span><x-import component-from-global-scope="ECOMD.Meter" value="{{paid}}" max="{{total}}" text="44%" tone="warning" label="Tỉ lệ đã thanh toán"></x-import><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">Đã thu 1,000,000đ / 2,270,000đ · hạn 20/09/2026</span></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Chuyển khoản VietQR</h2><p class="ecomd-card__desc body-xs">Phụ huynh quét mã hoặc chuyển khoản đúng nội dung để tự gạch nợ</p></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-12);"><div aria-label="Mã VietQR của hóa đơn HD2609-002" role="img" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-6); aspect-ratio: 1; width: 50%; max-width: calc(var(--size-sidebar-w) * 3 / 4); margin: 0 auto; border: 1px solid var(--border-default); border-radius: var(--radius-12); background: var(--bg-subtle); color: var(--text-muted);"><x-import component-from-global-scope="ECOMD.Icon" name="mobile-screen" size="{{twenty}}"></x-import><span class="body-xs">Mã VietQR</span></div><dl class="ecomd-dl body-sm" style="grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); align-items: center;"><dt>Ngân hàng</dt><dd>MB Bank</dd><dt>Số tài khoản</dt><dd style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-8);"><span style="font-variant-numeric: tabular-nums;">0987654321</span><x-import component-from-global-scope="ECOMD.IconButton" icon="copy" label="Sao chép số tài khoản"></x-import></dd><dt>Nội dung</dt><dd style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-8);"><x-import component-from-global-scope="ECOMD.Tag" variant="code">HOCPHI HD2609-002</x-import><x-import component-from-global-scope="ECOMD.IconButton" icon="copy" label="Sao chép nội dung chuyển khoản"></x-import></dd></dl></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Lịch sử thanh toán</h2><p class="ecomd-card__desc body-xs">1 giao dịch</p></div></div>
+  <div class="ecomd-card__body"><ul style="display: flex; flex-direction: column; gap: var(--space-8); margin: 0; padding: 0; list-style: none;"><li style="display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-12); border: 1px solid var(--border-default); border-radius: var(--radius-8);"><span style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-8);"><span class="body-sm-semibold" style="color: var(--semantic-success-strong); font-variant-numeric: tabular-nums;">+1,000,000đ</span><x-import component-from-global-scope="ECOMD.Tag">Tiền mặt</x-import></span><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">21:30, 08/09/2026 · Xác nhận bởi Nguyễn Thị Kế Toán</span><span class="body-xs" style="color: var(--text-body);">Phụ huynh đóng đợt 1 tại văn phòng trường</span></li></ul></div>
+</section>
+</div></div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 979}}'>
+var CRUMBS = ["Tài chính", "Học phí", "HD2609-002"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = {}; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+    function vnd(n) { return (n < 0 ? '-' : '') + Math.abs(Math.round(n)).toLocaleString('en-US') + 'đ'; }
+    function num(v) { v = String(v == null ? '' : v).replace(/,/g, '').trim(); return v === '' || isNaN(+v) ? 0 : +v; }
+    function fmt(n) { return n ? Math.round(n).toLocaleString('en-US') : ''; }
+
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      clock: 'clock', paid: 1000000, total: 2270000, isEmpty: false,
+      inv: [{"name": "Học phí chính khóa tháng 09/2026", "price": "1,200,000đ", "qty": "1", "total": "1,200,000đ"}, {"name": "Tiền ăn bán trú (22 ngày)", "price": "35,000đ", "qty": "22", "total": "770,000đ"}, {"name": "Câu lạc bộ Robotics và STEM", "price": "300,000đ", "qty": "1", "total": "300,000đ"}],
+      moreMenu: [{ icon: 'paper-plane', label: 'Gửi lại thông báo' }, { icon: 'download', label: 'Tải PDF' }, { divider: true }, { icon: 'circle-xmark', label: 'Hủy hóa đơn…', tone: 'danger' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

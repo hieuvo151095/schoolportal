@@ -1,45 +1,43 @@
 ---
-title: "Bảng tin Hoạt động Lớp học"
+title: Màn Hình Nhật Ký Hoạt Động Lớp
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - VH-05
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/operations/activity
+status: missing
+updated: 2026-11-05
 ---
 
-# Bảng tin Hoạt động Lớp học (`M2/SM2`)
+# Màn Hình Nhật Ký Hoạt Động Lớp
 
 ## Mục đích
-
-Bảng tin nhật ký bài học và hoạt động trong ngày của lớp, hỗ trợ soạn thảo đa phương tiện, nhắc tên học sinh (@), gắn thẻ bài học (#) và phân luồng duyệt bài đăng.
-
-Thuộc phân hệ **[Vận hành](../overview/module-m2-van-hanh.md)**. Mã định danh tính năng Harness Loop: **`F010`** (Mức ưu tiên: `P0`).
+Ghi nhận và xuất bản nhật ký hoạt động hằng ngày của lớp học kèm hình ảnh, gắn hashtag chủ đề và nhắc tên học sinh với cơ chế duyệt 2 cấp.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/class/[classId]/activity`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/activity.ts`
-  - `docs/src/utils/activityValidation.ts`
-  - `docs/tests/unit/activity.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/operations/activity` | repo:app/src/pages/[schoolCode]/operations/activity.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F010-01**: Soạn bài viết hỗ trợ đính kèm ảnh/video, tag học sinh hiển thị dạng pill màu xanh nổi bật.
-- **SPEC-F010-02**: Phân tách tab 'Đã duyệt' và 'Chờ duyệt' cho bài viết của giáo viên hỗ trợ.
-- **SPEC-F010-03**: Cơ chế ghim tối đa 1 bài viết quan trọng lên đầu bảng tin kèm xác nhận gỡ bài cũ.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| VH-05 | Đăng bài hoạt động lớp hỗ trợ gắn hashtag `#` chủ đề và nhắc tên học sinh `@` | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F010-01` | Soạn bài viết hỗ trợ đính kèm ảnh/video, tag học sinh hiển t... | `OK` | repo:app/src/utils/activityValidation.ts:1 | Đã hoàn thành và verify qua tests/unit/activity.test.mjs |
-| `SPEC-F010-02` | Phân tách tab 'Đã duyệt' và 'Chờ duyệt' cho bài viết của giá... | `OK` | repo:app/src/utils/activityValidation.ts:35 | Đã hoàn thành và verify qua tests/unit/activity.test.mjs |
-| `SPEC-F010-03` | Cơ chế ghim tối đa 1 bài viết quan trọng lên đầu bảng tin kè... | `OK` | repo:app/src/utils/activityValidation.ts:75 | Đã hoàn thành và verify qua tests/unit/activity.test.mjs |
+| VH-05 | Đăng bài hoạt động lớp hỗ trợ gắn hashtag `#` chủ đề và nhắc tên học sinh `@` | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/operations/activity.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Vận hành](../overview/module-m2-van-hanh.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-operations.md)
+- [Thực thể liên quan](../entities/class-activity.md)
+- [Thực thể liên quan](../entities/teacher-staff.md)
+- [Luồng liên quan](../flows/fl-dang-bai-kiem-duyet.md)

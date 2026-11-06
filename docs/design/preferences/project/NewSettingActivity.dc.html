@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tính năng — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="setting-activity" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Cấu hình tính năng</h1>
+    <p class="ecomd-page-header__desc body-sm">Bật, tắt bình luận trên hoạt động lớp và mốc thời gian học kỳ theo năm học</p>
+  </div>
+</div>
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Nhóm tính năng"></x-import>
+<sc-if value="{{tAct}}" hint-placeholder-val="{{true}}"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Tương tác trên bài đăng hoạt động</h2><p class="ecomd-card__desc body-xs">Quyền bình luận và kiểm duyệt bình luận trên bài đăng hằng ngày của lớp</p></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Cho phép bình luận</span><span class="ecomd-setting__desc body-xs">Phụ huynh và giáo viên viết bình luận, trả lời dưới bài đăng hoạt động của lớp.</span></div><div class="ecomd-setting__control"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Cho phép bình luận" checked="{{comment}}" onChange="{{tg.comment}}"></div></div><div class="ecomd-setting"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Duyệt bình luận trước khi hiển thị</span><span class="ecomd-setting__desc body-xs">Bình luận mới cần giáo viên phụ trách hoặc quản trị viên duyệt mới hiện cho mọi người.</span><sc-if value="{{noComment}}" hint-placeholder-val="{{false}}"><span class="body-xs" style="color: var(--text-muted);">Bật "Cho phép bình luận" để dùng tùy chọn này.</span></sc-if></div><div class="ecomd-setting__control"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Duyệt bình luận" checked="{{review}}" onChange="{{tg.review}}" disabled="{{noComment}}"></div></div></div>
+</section>
+</sc-if>
+<sc-if value="{{tTerm}}" hint-placeholder-val="{{false}}"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Mốc học kỳ năm học 2026 – 2027</h2><p class="ecomd-card__desc body-xs">Dùng cho điểm, thời khóa biểu và báo cáo theo học kỳ</p></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Học kỳ</th><th class="body-xs-bold">Bắt đầu</th><th class="body-xs-bold">Kết thúc</th><th class="body-xs-bold">Trạng thái</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{terms}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><span class="body-sm-medium" style="color: var(--text-heading);">{{r.name}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Bắt đầu</span><div class="ecomd-cell__value"><span style="font-variant-numeric: tabular-nums;">{{r.from}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Kết thúc</span><div class="ecomd-cell__value"><span style="font-variant-numeric: tabular-nums;">{{r.to}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Trạng thái</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.tone}}">{{r.status}}</x-import></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.IconButton" icon="pen" label="{{r.edit}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="5"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có dữ liệu"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</sc-if>
+<div class="body-xs" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-12); color: var(--text-subtle);"><span style="display: inline-flex; align-items: center; gap: var(--space-6);"><x-import component-from-global-scope="ECOMD.Icon" name="circle-check" size="{{twelve}}" color="var(--semantic-success)"></x-import>Cấu hình đang đồng bộ với hệ thống</span><x-import component-from-global-scope="ECOMD.Button" variant="primary" disabled="{{clean}}">Lưu thay đổi</x-import></div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "scenario": {"editor": "enum", "options": ["Hoạt động", "Học kỳ"], "default": "Hoạt động", "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Cấu hình", "Tính năng"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: props.scenario === 'Học kỳ' ? 'term' : 'act', sw: { comment: true, review: true } }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var tg = {}; Object.keys(st.sw || {}).forEach(function (k) { tg[k] = function (e) { var n = Object.assign({}, self.state.sw); n[k] = e && e.target ? e.target.checked : !n[k]; self.setState({ sw: n }); }; });
+    return Object.assign(this.shell(), {
+      tg: tg, twelve: 12, fourteen: 14,
+      comment: st.sw.comment, review: st.sw.review && st.sw.comment, noComment: !st.sw.comment, clean: st.sw.comment === true && st.sw.review === true,
+      tabs: [{ key: 'act', label: 'Hoạt động' }, { key: 'term', label: 'Học kỳ' }], tab: st.tab, setTab: function (k) { self.setState({ tab: k }); }, tAct: st.tab === 'act', tTerm: st.tab === 'term',
+      terms: [{ name: 'Học kỳ I', from: '15/08/2026', to: '15/01/2027', status: 'Đang diễn ra', tone: 'success', edit: 'Sửa mốc học kỳ I' }, { name: 'Học kỳ II', from: '16/01/2027', to: '31/05/2027', status: 'Sắp tới', tone: 'info', edit: 'Sửa mốc học kỳ II' }], isEmpty: false
+    });
+  }
+}
+</script>
+</body>
+</html>

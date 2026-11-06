@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Điểm và đánh giá — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="scoreboard" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Điểm và đánh giá</h1>
+    <p class="ecomd-page-header__desc body-sm">Tiến độ nhập điểm, công bố kết quả và tổng kết theo kỳ đánh giá của từng lớp</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.SelectField" options="{{yearOpts}}" value="{{year}}" on-change="{{setYear}}" label="Năm học"></x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="file-excel">Xuất bảng tổng hợp</x-import></div>
+</div>
+<div class="ecomd-stat-group" style="--ecomd-cols: 4;">
+  <sc-for list="{{stats}}" as="s" hint-placeholder-count="4"><x-import component-from-global-scope="ECOMD.StatCard" label="{{s.label}}" value="{{s.value}}" icon="{{s.icon}}" tone="{{s.tone}}"></x-import></sc-for>
+</div>
+<section class="ecomd-table-card">
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Loại đánh giá"></x-import>
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo tên lớp, giáo viên chủ nhiệm" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{gradeOpts}}" value="{{grade}}" on-change="{{setGrade}}" label="Lọc theo khối"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{perOpts}}" value="{{per}}" on-change="{{setPer}}" label="Lọc theo trạng thái kỳ"></x-import></div>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead>
+<tr><th class="body-xs-bold is-primary" rowspan="2" style="vertical-align: bottom;">Lớp học</th><th class="body-xs-bold" style="padding: var(--space-8) var(--space-16); border-left: 1px solid var(--border-default); text-align: center; color: var(--text-heading);" colspan="2">Học kỳ I</th><th class="body-xs-bold" style="padding: var(--space-8) var(--space-16); border-left: 1px solid var(--border-default); text-align: center; color: var(--text-heading);" colspan="2">Học kỳ II</th><th class="body-xs-bold" style="padding: var(--space-8) var(--space-16); border-left: 1px solid var(--border-default); text-align: center; color: var(--text-heading);">Cả năm</th><th class="body-xs-bold is-actions" rowspan="2"><span class="ecomd-sr">Thao tác</span></th></tr>
+<tr><th class="body-xs-bold">Giữa kỳ</th><th class="body-xs-bold">Cuối kỳ</th><th class="body-xs-bold">Giữa kỳ</th><th class="body-xs-bold">Cuối kỳ</th><th class="body-xs-bold">Tổng kết năm</th></tr>
+</thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="4"><tr>
+<td class="body-sm is-primary"><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; gap: var(--space-2);"><a href="#" class="body-sm-semibold" style="color: var(--text-heading); text-decoration: none; white-space: nowrap;">{{r.name}}</a><span class="body-xs" style="color: var(--text-subtle);">{{r.grade}} · {{r.n}} học sinh</span><span class="body-xs" style="color: var(--text-subtle);">GVCN {{r.gv}}</span></span></div></td>
+<td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Giữa học kỳ I</span><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-6); min-width: calc(var(--size-40) * 4);"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.p0.tone}}">{{r.p0.status}}</x-import><x-import component-from-global-scope="ECOMD.Meter" value="{{r.p0.v}}" max="{{r.n}}" text="{{r.p0.text}}" tone="{{r.p0.mt}}" label="{{r.p0.label}}" style="width: 100%;"></x-import><x-import component-from-global-scope="ECOMD.Button" variant="text" on-click="{{r.p0.go}}">{{r.p0.act}}</x-import></span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Cuối học kỳ I</span><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-6); min-width: calc(var(--size-40) * 4);"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.p1.tone}}">{{r.p1.status}}</x-import><x-import component-from-global-scope="ECOMD.Meter" value="{{r.p1.v}}" max="{{r.n}}" text="{{r.p1.text}}" tone="{{r.p1.mt}}" label="{{r.p1.label}}" style="width: 100%;"></x-import><x-import component-from-global-scope="ECOMD.Button" variant="text" on-click="{{r.p1.go}}">{{r.p1.act}}</x-import></span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Giữa học kỳ II</span><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-6); min-width: calc(var(--size-40) * 4);"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.p2.tone}}">{{r.p2.status}}</x-import><x-import component-from-global-scope="ECOMD.Meter" value="{{r.p2.v}}" max="{{r.n}}" text="{{r.p2.text}}" tone="{{r.p2.mt}}" label="{{r.p2.label}}" style="width: 100%;"></x-import><x-import component-from-global-scope="ECOMD.Button" variant="text" on-click="{{r.p2.go}}">{{r.p2.act}}</x-import></span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Cuối học kỳ II</span><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-6); min-width: calc(var(--size-40) * 4);"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.p3.tone}}">{{r.p3.status}}</x-import><x-import component-from-global-scope="ECOMD.Meter" value="{{r.p3.v}}" max="{{r.n}}" text="{{r.p3.text}}" tone="{{r.p3.mt}}" label="{{r.p3.label}}" style="width: 100%;"></x-import><x-import component-from-global-scope="ECOMD.Button" variant="text" on-click="{{r.p3.go}}">{{r.p3.act}}</x-import></span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Tổng kết năm</span><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-6); min-width: calc(var(--size-40) * 4);"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.p4.tone}}">{{r.p4.status}}</x-import><x-import component-from-global-scope="ECOMD.Meter" value="{{r.p4.v}}" max="{{r.n}}" text="{{r.p4.text}}" tone="{{r.p4.mt}}" label="{{r.p4.label}}" style="width: 100%;"></x-import><x-import component-from-global-scope="ECOMD.Button" variant="text" on-click="{{r.p4.go}}">{{r.p4.act}}</x-import></span></div></td>
+<td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td>
+</tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="7"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có lớp nào khớp tìm kiếm"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+</section>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Học tập", "Điểm & Đánh giá"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'pt', query: '', year: 'Năm học 2025 – 2026', grade: 'Tất cả khối', per: 'Mọi trạng thái' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var C = [{"id": 1, "name": "Lớp 12A1", "grade": "Khối 12", "gv": "Thầy Trần Minh Đức", "n": 34, "kind": "pt", "p": [["doing", 22, ""], ["none", 0, ""], ["none", 0, ""], ["none", 0, ""], ["none", 0, ""]]}, {"id": 2, "name": "Lớp 6A1", "grade": "Khối 6", "gv": "Cô Hoàng Lan Anh", "n": 32, "kind": "pt", "p": [["done", 32, "16/04/2026"], ["done", 32, "18/06/2026"], ["doing", 21, ""], ["none", 0, ""], ["none", 0, ""]]}, {"id": 3, "name": "Lớp Lá", "grade": "Mầm non", "gv": "Cô Nguyễn Thu Hằng", "n": 28, "kind": "mn", "p": [["done", 28, "12/11/2025"], ["doing", 18, ""], ["none", 0, ""], ["none", 0, ""], ["none", 0, ""]]}, {"id": 4, "name": "Lớp 1A7", "grade": "Khối 1", "gv": "Cô Phạm Thanh Thảo", "n": 30, "kind": "mn", "p": [["doing", 15, ""], ["none", 0, ""], ["none", 0, ""], ["none", 0, ""], ["none", 0, ""]]}];
+    var PER = ["Giữa học kỳ I", "Cuối học kỳ I", "Giữa học kỳ II", "Cuối học kỳ II", "Tổng kết năm"];
+    var SS = { done: ['Đã công bố', 'success', 'success', 'Xem bảng điểm'], doing: ['Đang nhập điểm', 'warning', 'warning', 'Tiếp tục nhập'], none: ['Chưa bắt đầu', 'neutral', 'default', 'Nhập điểm'] };
+    var q = (st.query || '').trim().toLowerCase();
+    var base = C.filter(function (c) { return (!q || (c.name + ' ' + c.gv).toLowerCase().indexOf(q) >= 0) && (st.grade === 'Tất cả khối' || c.grade === st.grade)
+      && (st.per === 'Mọi trạng thái' || c.p.some(function (p) { return (st.per === 'Có kỳ đang nhập') ? p[0] === 'doing' : p[0] === 'done'; })); });
+    var tabs = [['pt', 'Bảng điểm (phổ thông)'], ['mn', 'Phiếu đánh giá (mầm non, tiểu học)']].map(function (d) { return { key: d[0], label: d[1], count: base.filter(function (c) { return c.kind === d[0]; }).length }; });
+    var list = base.filter(function (c) { return c.kind === st.tab; });
+    var rows = list.map(function (c) { var r = { name: c.name, grade: c.grade, gv: c.gv, n: c.n, actionLabel: 'Thao tác với ' + c.name,
+        menu: [{ icon: 'clipboard-check', label: 'Tổng kết học kỳ' }, { icon: 'paper-plane', label: 'Công bố tới phụ huynh' }, { icon: 'file-excel', label: 'Xuất bảng điểm' }, { icon: 'file-import', label: 'Nhập điểm từ Excel' }] };
+      c.p.forEach(function (p, i) { var s = SS[p[0]]; r['p' + i] = { status: s[0], tone: s[1], mt: s[2], act: s[3], v: p[1], text: p[2] ? 'Công bố ' + p[2] : p[1] + '/' + c.n + ' học sinh', label: PER[i] + ': ' + p[1] + ' trên ' + c.n + ' học sinh', go: function () {} }; });
+      return r; });
+    var all = []; C.forEach(function (c) { c.p.forEach(function (p) { all.push(p[0]); }); });
+    var cnt = function (k) { return all.filter(function (x) { return x === k; }).length; };
+    return Object.assign(this.shell(), {
+      twelve: 12,
+      yearOpts: ['Năm học 2025 – 2026', 'Năm học 2024 – 2025'], year: st.year, setYear: function (v) { self.setState({ year: v }); },
+      stats: [
+        { label: 'Lớp đang theo dõi', value: String(C.length), icon: 'chalkboard', tone: 'neutral' },
+        { label: 'Kỳ đang nhập điểm', value: String(cnt('doing')), icon: 'pen', tone: 'warning' },
+        { label: 'Kỳ đã công bố', value: String(cnt('done')), icon: 'circle-check', tone: 'success' },
+        { label: 'Kỳ chưa bắt đầu', value: String(cnt('none')), icon: 'hourglass-half', tone: 'neutral' }],
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      gradeOpts: ['Tất cả khối', 'Mầm non', 'Khối 1', 'Khối 2', 'Khối 6', 'Khối 12'], grade: st.grade, setGrade: function (v) { self.setState({ grade: v }); },
+      perOpts: ['Mọi trạng thái', 'Có kỳ đang nhập', 'Có kỳ đã công bố'], per: st.per, setPer: function (v) { self.setState({ per: v }); },
+      rows: rows, isEmpty: rows.length === 0
+    });
+  }
+}
+</script>
+</body>
+</html>

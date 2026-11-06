@@ -1,45 +1,41 @@
 ---
-title: "Hồ sơ Trường học & Thiết lập Vận hành"
+title: Màn Hình Cấu Hình Trường Học
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - CH-01
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/settings/school-profile
+status: missing
+updated: 2026-11-05
 ---
 
-# Hồ sơ Trường học & Thiết lập Vận hành (`M6/SM1`)
+# Màn Hình Cấu Hình Trường Học
 
 ## Mục đích
-
-Quản lý thông tin định danh gốc của cơ sở trường học: tên trường, mã trường, địa chỉ, số điện thoại liên hệ, logo thương hiệu, ngôn ngữ thông báo mặc định và cấu hình phương thức điểm danh.
-
-Thuộc phân hệ **[Cấu hình](../overview/module-m6-cau-hinh.md)**. Mã định danh tính năng Harness Loop: **`F002`** (Mức ưu tiên: `P0`).
+Cập nhật thông tin pháp lý nhà trường, địa chỉ, hotline, logo thương hiệu và niên khóa mặc định.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/school/info`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/schoolProfile.ts`
-  - `docs/src/utils/schoolProfileValidation.ts`
-  - `docs/tests/unit/schoolProfile.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/settings/school-profile` | repo:app/src/pages/[schoolCode]/settings/school-profile.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F002-01**: Hiển thị và cập nhật thông tin pháp lý, địa chỉ và hotline nhà trường.
-- **SPEC-F002-02**: Cấu hình phương thức điểm danh mặc định của trường (Thủ công / QR / Nhận diện AI).
-- **SPEC-F002-03**: Thiết lập ngôn ngữ hiển thị và kênh thông báo mặc định gửi phụ huynh.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| CH-01 | Cấu hình thông tin pháp lý nhà trường, biểu tượng thương hiệu và niên khóa mặc định | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F002-01` | Hiển thị và cập nhật thông tin pháp lý, địa chỉ và hotline n... | `OK` | repo:app/tests/unit/schoolProfile.test.mjs:1 | Đã kiểm chứng 11/11 unit tests |
-| `SPEC-F002-02` | Cấu hình phương thức điểm danh mặc định của trường (Thủ công... | `OK` | repo:app/tests/unit/schoolProfile.test.mjs:1 | Đã kiểm chứng 11/11 unit tests |
-| `SPEC-F002-03` | Thiết lập ngôn ngữ hiển thị và kênh thông báo mặc định gửi p... | `OK` | repo:app/tests/unit/schoolProfile.test.mjs:1 | Đã kiểm chứng 11/11 unit tests |
+| CH-01 | Cấu hình thông tin pháp lý nhà trường, biểu tượng thương hiệu và niên khóa mặc định | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/settings/school-profile.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Cấu hình](../overview/module-m6-cau-hinh.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-settings.md)
+- [Khái niệm liên quan](../concepts/multi-tenancy-isolation.md)

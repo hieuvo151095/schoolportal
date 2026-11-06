@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tạo báo cáo mở rộng — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="report-extended" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Tạo báo cáo mở rộng</h1>
+    <p class="ecomd-page-header__desc body-sm">Phiếu đánh giá phát triển theo mẫu, tạo ở trạng thái bản nháp để giáo viên chấm từng tiêu chí</p>
+  </div>
+</div>
+<div class="ecomd-split is-aside" style="gap: var(--space-20); align-items: start;"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Mẫu báo cáo</h2><p class="ecomd-card__desc body-xs">Mẫu quyết định các phần và tiêu chí giáo viên sẽ đánh giá</p></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-choices" style="--ecomd-cols: 2;"><sc-for list="{{tpls}}" as="t" hint-placeholder-count="4"><label class="ecomd-choice"><input type="radio" name="tpl" checked="{{t.on}}" onChange="{{t.pick}}"><span class="ecomd-choice__icon" aria-hidden="true"><x-import component-from-global-scope="ECOMD.Icon" name="{{t.icon}}" size="{{fourteen}}"></x-import></span><span class="ecomd-choice__text"><span class="ecomd-choice__title body-sm-semibold">{{t.name}}</span><span class="ecomd-choice__desc body-xs">{{t.cat}}</span></span></label></sc-for></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Học sinh và kỳ đánh giá</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Học sinh <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{kidOpts}}" value="{{kid}}" on-change="{{setKid}}" label="Học sinh được đánh giá"></x-import></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tên kỳ đánh giá</span><input type="text" class="ecomd-text body-sm" value="Tháng 09/2026"><span class="ecomd-field__hint body-xs">Hiển thị trên phiếu gửi phụ huynh</span></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Từ ngày <span class="ecomd-field__req" aria-hidden="true">*</span></span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" value="01/09/2026" placeholder="dd/mm/yyyy"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Đến ngày <span class="ecomd-field__req" aria-hidden="true">*</span></span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" value="30/09/2026" placeholder="dd/mm/yyyy"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span></label></div><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Nhận xét chung ban đầu</span><textarea class="ecomd-textarea body-sm" rows="3" placeholder="Ghi chú sơ bộ về tình hình học tập và phát triển của bé" value="{{note}}" onChange="{{setNote}}" maxlength="500"></textarea><span class="ecomd-field__meta"><span class="ecomd-field__hint body-xs">Không bắt buộc. Có thể bổ sung khi chấm từng tiêu chí.</span><span class="ecomd-field__count body-xs">{{noteCount}} / 500</span></span></label></div></div>
+</section>
+</div><div style="display: flex; flex-direction: column; gap: var(--space-16);"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Cấu trúc mẫu</h2><p class="ecomd-card__desc body-xs">{{tplName}}</p></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-12);"><sc-if value="{{hasDesc}}" hint-placeholder-val="{{true}}"><p class="body-sm" style="margin: 0; color: var(--text-body);">{{tplDesc}}</p></sc-if><sc-if value="{{hasSecs}}" hint-placeholder-val="{{true}}"><ol style="display: flex; flex-direction: column; gap: var(--space-8); margin: 0; padding: 0; list-style: none;"><sc-for list="{{secs}}" as="s" hint-placeholder-count="2"><li style="display: flex; align-items: flex-start; gap: var(--space-10); padding: var(--space-10) var(--space-12); border: 1px solid var(--border-default); border-radius: var(--radius-8);"><span class="body-xs-bold" style="display: flex; flex: none; align-items: center; justify-content: center; width: var(--size-20); height: var(--size-20); border-radius: var(--radius-full); background: var(--bg-muted); color: var(--text-nav);">{{s.n}}</span><span style="display: flex; flex-direction: column; min-width: 0;"><span class="body-sm-medium" style="color: var(--text-heading);">{{s.name}}</span><span class="body-xs" style="color: var(--text-subtle);">{{s.count}} tiêu chí</span></span></li></sc-for></ol><span class="body-xs" style="color: var(--text-subtle);">Mỗi tiêu chí chấm một trong hai mức: <b style="color: var(--text-body); font-weight: inherit;">Đạt yêu cầu</b> hoặc <b style="color: var(--text-body); font-weight: inherit;">Đang rèn luyện</b>.</span></sc-if><sc-if value="{{noSecs}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" italic="{{yes}}">Chưa có mô tả cấu trúc cho mẫu này</x-import></sc-if></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Sau khi tạo</h2></div></div>
+  <div class="ecomd-card__body"><ol class="body-sm" style="display: flex; flex-direction: column; gap: var(--space-10); margin: 0; padding: 0; list-style: none;"><li style="display: flex; gap: var(--space-10);"><span style="flex: none; color: var(--text-link);"><x-import component-from-global-scope="ECOMD.Icon" name="pen" size="{{fourteen}}"></x-import></span><span style="display: flex; flex-direction: column;"><span class="body-sm-medium" style="color: var(--text-heading);">Bản nháp</span><span class="body-xs" style="color: var(--text-subtle);">Chấm từng tiêu chí, chỉ giáo viên thấy</span></span></li><li style="display: flex; gap: var(--space-10);"><span style="flex: none; color: var(--text-muted);"><x-import component-from-global-scope="ECOMD.Icon" name="circle-check" size="{{fourteen}}"></x-import></span><span style="display: flex; flex-direction: column;"><span class="body-sm-medium" style="color: var(--text-heading);">Hoàn tất</span><span class="body-xs" style="color: var(--text-subtle);">Khóa nội dung, sẵn sàng in hoặc xuất PDF</span></span></li><li style="display: flex; gap: var(--space-10);"><span style="flex: none; color: var(--text-muted);"><x-import component-from-global-scope="ECOMD.Icon" name="paper-plane" size="{{fourteen}}"></x-import></span><span style="display: flex; flex-direction: column;"><span class="body-sm-medium" style="color: var(--text-heading);">Gửi phụ huynh</span><span class="body-xs" style="color: var(--text-subtle);">Phụ huynh xem và ký xác nhận trên ứng dụng</span></span></li></ol></div>
+</section>
+</div></div>
+<div class="ecomd-form-footer"><span class="ecomd-form-footer__note body-xs">Báo cáo được lưu ở trạng thái bản nháp.</span><div class="ecomd-form-footer__actions"><x-import component-from-global-scope="ECOMD.Button" variant="ghost">Hủy</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="plus">Tạo bản nháp</x-import></div></div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 914}}'>
+var CRUMBS = ["Vận hành", "BC Mở rộng", "Tạo báo cáo"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tpl: 'lang', kid: 'Lê Gia Huy · HS-1A1-001', note: '' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var T = [{"key": "lang", "name": "Lĩnh vực ngôn ngữ Tiếng Việt", "cat": "Ngôn ngữ", "icon": "book-open", "desc": "Phát âm, nhận diện chữ cái và kỹ năng giao tiếp tiếng Việt.", "secs": [{"n": 1, "name": "Âm và chữ cái (bảng chữ cái mẫu giáo)", "count": 5}, {"n": 2, "name": "Kỹ năng nghe nói và diễn đạt", "count": 3}]}, {"key": "math", "name": "Lĩnh vực Toán và tư duy logic", "cat": "Tư duy", "icon": "shapes", "desc": "", "secs": []}, {"key": "eng", "name": "English language report", "cat": "Ngoại ngữ", "icon": "comments", "desc": "Phonics and communication.", "secs": []}, {"key": "week", "name": "Thư tuần và đánh giá định kỳ", "cat": "Tổng hợp", "icon": "newspaper", "desc": "", "secs": []}];
+    var cur = T.filter(function (t) { return t.key === st.tpl; })[0];
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      tpls: T.map(function (t) { return Object.assign({}, t, { on: t.key === st.tpl, pick: function () { self.setState({ tpl: t.key }); } }); }),
+      tplName: cur.name, tplDesc: cur.desc, hasDesc: !!cur.desc, secs: cur.secs, hasSecs: cur.secs.length > 0, noSecs: cur.secs.length === 0,
+      kidOpts: ['Lê Gia Huy · HS-1A1-001', 'Trần Minh Khôi · HS-1A1-002', 'Nguyễn Minh Anh · HS-1A1-004'], kid: st.kid, setKid: function (v) { self.setState({ kid: v }); },
+      note: st.note, noteCount: (st.note || '').length, setNote: function (e) { self.setState({ note: e.target.value }); }
+    });
+  }
+}
+</script>
+</body>
+</html>

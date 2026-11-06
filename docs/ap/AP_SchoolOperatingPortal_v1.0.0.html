@@ -88,312 +88,248 @@
   </style>
 </head>
 <body>
-  <nav class="toc">
-    <p class="toc-title">Mục Lục Kiến Trúc</p>
-    <div id="toc"></div>
-  </nav>
+  <nav class="toc"><div id="toc"></div></nav>
 
-  <h1 id="title">SchoolOperatingPortal Architecture Plan (AP) v1.0.0</h1>
+  <h1 id="title">AP_SchoolOperatingPortal_v1.0.0 — Kế Hoạch Kiến Trúc Cổng Vận Hành Trường Học</h1>
 
-  <table class="hdr">
-    <tr><th>Văn bản</th><td>Kế hoạch Kiến trúc & Hợp đồng Trải nghiệm Sản phẩm SchoolOperatingPortal</td></tr>
-    <tr><th>Phiên bản</th><td>v1.0.0 (Tiêu chuẩn SEPO Chuẩn mực)</td></tr>
-    <tr><th>Trạng thái đồng thuận</th><td><span class="stkey" data-st="approved">approved</span> &#183; Đã phê duyệt cấu trúc, luồng & tiêu chuẩn nghiệm thu</td></tr>
-    <tr><th>Tài liệu ISP đi kèm</th><td><code>ISP_SchoolOperatingPortal_v1.0.0.html</code> (§A.30 ghim 1:1)</td></tr>
-    <tr><th>Nguồn sự thật (SSOT)</th><td>LLM Wiki (113 Spec IDs chuẩn tại <code>llm-wiki/pages/</code>)</td></tr>
+  <table class="ap-meta">
+    <tr>
+      <th>Thuộc tính</th>
+      <th>Giá trị</th>
+      <th>Ghi chú</th>
+    </tr>
+    <tr>
+      <td><strong>Sản phẩm</strong></td>
+      <td>School Operating Portal (Finviet / SOHA)</td>
+      <td>Hệ thống quản trị &amp; vận hành trường học liên cấp K-12 &amp; Mầm non</td>
+    </tr>
+    <tr>
+      <td><strong>Phiên bản</strong></td>
+      <td>v1.0.0 (Master Release)</td>
+      <td>Ghim phiên bản 1:1 với Kế hoạch thi công ISP_SchoolOperatingPortal_v1.0.0</td>
+    </tr>
+    <tr>
+      <td><strong>Trạng thái</strong></td>
+      <td><span class="badge built">Approved (Đã phê duyệt 100%)</span></td>
+      <td>Toàn bộ 32 đơn vị kiến trúc đã đạt đồng thuận kỹ thuật tuyệt đối</td>
+    </tr>
+    <tr>
+      <td><strong>Quy mô đặc tả</strong></td>
+      <td>7 phân hệ · 38 sub-modules · 76 tính năng</td>
+      <td>Nguồn sự thật duy nhất (SSOT): LLM Wiki 131 trang spec chuẩn Karpathy</td>
+    </tr>
   </table>
 
-  <div class="stlegend">
-    <span class="stkey" data-st="approved">APPROVED</span> Đã chốt kiến trúc
-    <span class="stkey" data-st="review">REVIEW</span> Đang lấy ý kiến
-    <span class="stkey" data-st="draft">DRAFT</span> Bản thảo
-    <span class="stkey" data-st="locked">LOCKED</span> Đã khóa và kiểm chứng bởi Verify Gate
+  <!-- PART 1 -->
+  <h2 class="part-divider" id="part-1">Part 1 — Khung Khái Niệm &amp; Kiến Trúc Tổng Thể</h2>
+
+  <h2 class="part" id="s1-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="0f4349e8">§1.1 SYSTEM: Tầm nhìn sản phẩm &amp; Mục tiêu cốt lõi</h2>
+  <p><strong>School Operating Portal</strong> là nền tảng quản trị và vận hành giáo dục số đa trường (multi-tenant) cấp doanh nghiệp, được thiết kế chuyên biệt cho các cơ sở giáo dục Mầm non và Phổ thông liên cấp (K-12) tại Việt Nam. Hệ thống giải quyết bài toán cốt lõi: kết nối liền mạch giữa Giáo viên chủ nhiệm, Giáo viên bộ môn, Kế toán nhà trường và Phụ huynh học sinh trên cùng một nền tảng dữ liệu thời gian thực.</p>
+
+  <h3 id="s1-1-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="81eba948">§1.1.1 SYSTEM: Định vị bài toán &amp; Đối tượng người dùng mục tiêu</h3>
+  <p>Hệ thống phục vụ 2 nhóm tác nhân nghiệp vụ trọng tâm trong trường học cùng với Ban Giám Hiệu và Phụ huynh:</p>
+  <ul>
+    <li><strong>Giáo viên chủ nhiệm &amp; Bộ môn (GVCN / GVBM):</strong> Thực hiện điểm danh đón/trả trẻ 1-chạm, đo thân nhiệt, quản lý Sổ dặn thuốc y tế lúc 12:30, chốt quân số báo ăn sáng/trưa với nhà bếp, giám sát dị ứng thực phẩm, đăng bài trải nghiệm lớp học kèm AI Face Recognition, quản lý thời khóa biểu, giao bài tập về nhà và vào sổ điểm định kỳ.</li>
+    <li><strong>Kế toán trường học (Accountants):</strong> Quản lý Master Fee Catalog, thiết lập biểu phí theo lớp, quản lý chính sách miễn giảm và tự động giảm trừ Sibling Discount theo số điện thoại phụ huynh, tự động đóng băng sổ điểm danh lúc 23:59:59 cuối tháng, lập đợt thu M+1 bóc tách 2 dòng hoàn tiền ăn, phát hành hóa đơn riêng lẻ kèm VietQR động chuẩn NAPAS247, gạch nợ tự động trong 3 giây qua Webhook Sepay và xuất hóa đơn điện tử Viettel SInvoice.</li>
+    <li><strong>Ban Giám Hiệu:</strong> Giám sát Dashboard KPI sĩ số, tỷ lệ chuyên cần ngày và biểu đồ doanh thu công nợ thời gian thực.</li>
+  </ul>
+
+  <h3 id="s1-1-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="d0fe2988">§1.1.2 SYSTEM: Phạm vi 7 phân hệ &amp; 6 Quy tắc nghiệp vụ cốt lõi</h3>
+  <p>Phạm vi toàn hệ thống bao gồm 7 phân hệ lớn (Tổng quan <code>TQ</code>, Vận hành <code>VH</code>, Học tập <code>HT</code>, Tài chính <code>TC</code>, Nhà trường <code>NT</code>, Cấu hình <code>CH</code>, Đăng nhập <code>DN</code>), phân rã thành 38 sub-modules nghiệp vụ. Hệ thống vận hành dựa trên 6 nguyên tắc bất biến đã chốt hạ:</p>
+  <ol>
+    <li><strong>Sổ dặn thuốc y tế &amp; Xác nhận lúc 12:30 (OQ-19):</strong> Phụ huynh nộp đơn dặn thuốc qua app; giáo viên tiếp nhận và xác nhận "Đã cho uống thuốc lúc 12:30" kích hoạt thông báo Push tức thì về máy phụ huynh.</li>
+    <li><strong>Đến muộn bổ sung suất ăn vs. Đón sớm hoàn 0% (OQ-20):</strong> Học sinh đến muộn được tích chọn báo bổ sung ăn trưa; phụ huynh chủ động đón sớm sau khi học sinh đã đến trường thì hoàn tiền 0%.</li>
+    <li><strong>Tự động đóng băng sổ điểm danh lúc 23:59:59 cuối tháng (OQ-21):</strong> Đúng 23:59:59 ngày cuối tháng, hệ thống tự động khóa bảng điểm danh thành Read-Only để bảo toàn số liệu cho đợt tính phí M+1.</li>
+    <li><strong>Học sinh nhập học giữa tháng tính Prorated lẻ ngày &amp; Hóa đơn riêng lẻ (OQ-22):</strong> Chia tỷ lệ ngày thực học; chỉ phát hành hóa đơn riêng lẻ từng học sinh (không gộp gia đình) kèm mã VietQR cá nhân.</li>
+    <li><strong>Miễn giảm anh/chị/em ruột (Sibling Discount - OQ-23):</strong> Tự động nhóm theo số điện thoại chung <code>primary_phone</code> của phụ huynh, tự động áp mức giảm 10% cho con thứ 2 khi con lớn đang <code>ACTIVE</code>.</li>
+    <li><strong>Hoàn tiền ăn đồng loạt khi nghỉ lễ tết / nhà trường cho nghỉ:</strong> Căn cứ lịch sự kiện chung để tự động khấu trừ vào hóa đơn kỳ sau cho toàn bộ học sinh bán trú.</li>
+  </ol>
+
+  <h2 class="part" id="s1-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="d84d5fba">§1.2 SYSTEM: Tô pô kiến trúc &amp; Phân rã thành phần (§A.21)</h2>
+  <p>Kiến trúc hệ thống được phân lớp nghiêm ngặt, áp dụng mô hình Multi-tenant RLS (Row-Level Security) bảo đảm cách ly dữ liệu tuyệt đối giữa các trường học độc lập.</p>
+
+  <h3 id="s1-2-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="164e7d26">§1.2.1 SYSTEM: Sơ đồ kiến trúc tổng thể Figure 1.2.1</h3>
+  <p class="fig-cap"><strong>Figure 1.2.1</strong> — Sơ đồ kiến trúc tổng thể Cổng Vận Hành Trường Học đa trường Multi-tenancy RLS</p>
+  <div class="tw" style="text-align: center; padding: 20px;">
+    <svg viewBox="0 0 960 300" width="100%" height="260" xmlns="http://www.w3.org/2000/svg" style="max-width: 900px; font-family: -apple-system, sans-serif;">
+      <rect x="20" y="20" width="200" height="260" rx="8" fill="#f8fafc" stroke="#0284c7" stroke-width="1.5"/>
+      <text x="120" y="50" text-anchor="middle" font-weight="700" fill="#0369a1" font-size="13">TRẢI NGHIỆM CLIENT</text>
+      <rect x="35" y="75" width="170" height="38" rx="5" fill="#fff" stroke="#bae6fd"/>
+      <text x="120" y="99" text-anchor="middle" font-size="11" fill="#0c4a6e">Web Portal (Next.js / DS)</text>
+      <rect x="35" y="125" width="170" height="38" rx="5" fill="#fff" stroke="#bae6fd"/>
+      <text x="120" y="149" text-anchor="middle" font-size="11" fill="#0c4a6e">Mobile App Giáo Viên</text>
+      <rect x="35" y="175" width="170" height="38" rx="5" fill="#fff" stroke="#bae6fd"/>
+      <text x="120" y="199" text-anchor="middle" font-size="11" fill="#0c4a6e">Mobile App Phụ Huynh</text>
+      <rect x="35" y="225" width="170" height="38" rx="5" fill="#fff" stroke="#bae6fd"/>
+      <text x="120" y="249" text-anchor="middle" font-size="11" fill="#0c4a6e">Managing Portal SSO</text>
+
+      <rect x="260" y="20" width="240" height="260" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="380" y="50" text-anchor="middle" font-weight="700" fill="#15803d" font-size="13">BẢO MẬT &amp; ĐIỀU PHỐI</text>
+      <rect x="275" y="75" width="210" height="38" rx="5" fill="#fff" stroke="#bbf7d0"/>
+      <text x="380" y="99" text-anchor="middle" font-size="11" fill="#14532d">Multi-tenancy RLS (schoolCode)</text>
+      <rect x="275" y="125" width="210" height="38" rx="5" fill="#fff" stroke="#bbf7d0"/>
+      <text x="380" y="149" text-anchor="middle" font-size="11" fill="#14532d">Auth Session (ecotoken namespace)</text>
+      <rect x="275" y="175" width="210" height="38" rx="5" fill="#fff" stroke="#bbf7d0"/>
+      <text x="380" y="199" text-anchor="middle" font-size="11" fill="#14532d">RBAC 3 cấp độ (Module/Action/Scope)</text>
+      <rect x="275" y="225" width="210" height="38" rx="5" fill="#fff" stroke="#bbf7d0"/>
+      <text x="380" y="249" text-anchor="middle" font-size="11" fill="#14532d">Cổng Verify Gate (verify.sh)</text>
+
+      <rect x="540" y="20" width="210" height="260" rx="8" fill="#fefce8" stroke="#ca8a04" stroke-width="1.5"/>
+      <text x="645" y="50" text-anchor="middle" font-weight="700" fill="#a16207" font-size="13">ĐỘNG CƠ NGHIỆP VỤ</text>
+      <rect x="555" y="75" width="180" height="38" rx="5" fill="#fff" stroke="#fef08a"/>
+      <text x="645" y="99" text-anchor="middle" font-size="11" fill="#713f12">Điểm danh &amp; Báo ăn (OQ-20)</text>
+      <rect x="555" y="125" width="180" height="38" rx="5" fill="#fff" stroke="#fef08a"/>
+      <text x="645" y="149" text-anchor="middle" font-size="11" fill="#713f12">Hoàn tiền ăn M+1 (OQ-21)</text>
+      <rect x="555" y="175" width="180" height="38" rx="5" fill="#fff" stroke="#fef08a"/>
+      <text x="645" y="199" text-anchor="middle" font-size="11" fill="#713f12">Sibling Discount Best-Rate (OQ-23)</text>
+      <rect x="555" y="225" width="180" height="38" rx="5" fill="#fff" stroke="#fef08a"/>
+      <text x="645" y="249" text-anchor="middle" font-size="11" fill="#713f12">Prorated Calculator (OQ-22)</text>
+
+      <rect x="790" y="20" width="150" height="260" rx="8" fill="#fdf4ff" stroke="#c026d3" stroke-width="1.5"/>
+      <text x="865" y="50" text-anchor="middle" font-weight="700" fill="#c026d3" font-size="13">TÍCH HỢP NGOÀI</text>
+      <rect x="805" y="75" width="120" height="38" rx="5" fill="#fff" stroke="#f5d0fe"/>
+      <text x="865" y="99" text-anchor="middle" font-size="11" fill="#701a75">Sepay Webhook 3s</text>
+      <rect x="805" y="125" width="120" height="38" rx="5" fill="#fff" stroke="#f5d0fe"/>
+      <text x="865" y="149" text-anchor="middle" font-size="11" fill="#701a75">Viettel SInvoice</text>
+      <rect x="805" y="175" width="120" height="38" rx="5" fill="#fff" stroke="#f5d0fe"/>
+      <text x="865" y="199" text-anchor="middle" font-size="11" fill="#701a75">AI Face Opt-Out</text>
+      <rect x="805" y="225" width="120" height="38" rx="5" fill="#fff" stroke="#f5d0fe"/>
+      <text x="865" y="249" text-anchor="middle" font-size="11" fill="#701a75">CSDL Sở GD&amp;ĐT</text>
+    </svg>
   </div>
 
-  <h2 class="part-divider" id="part-1">Part 1 — Khung Khái Niệm & Kiến Trúc Tổng Thể</h2>
+  <h3 id="s1-2-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="77464219">§1.2.2 SYSTEM: Từ điển thành phần kiến trúc và bảo mật Multi-tenancy RLS</h3>
+  <p>Mỗi trường học được gán một định danh duy nhất <code>schoolCode</code>. Mọi truy vấn cơ sở dữ liệu đều tự động áp dụng điều kiện lọc phân vùng <code>tenant_id = current_setting('app.current_school_id')</code>. Trên trình duyệt, token phiên làm việc được lưu trong <code>localStorage</code> theo namespace độc lập <code>ecotoken{schoolCode}</code> để ngăn ngừa hoàn toàn tình trạng ô nhiễm phiên khi người dùng mở nhiều tab thuộc các trường khác nhau.</p>
 
-  <h2 class="part" id="s1-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="61f65ed3">§1.1 SYSTEM: Tầm nhìn sản phẩm & Mục tiêu cốt lõi</h2>
-  <p>**School Operating Portal** là nền tảng quản trị và vận hành giáo dục đa trường (multi-tenant) cấp doanh nghiệp, được thiết kế chuyên biệt cho các cơ sở giáo dục Mầm non và Phổ thông liên cấp (K-12) tại Việt Nam.
+  <h2 class="part" id="s1-3" data-st="approved" data-st-on="2026-11-05" data-st-hash="e3a9d317">§1.3 SYSTEM: Mô hình dữ liệu &amp; Vòng đời thực thể</h2>
+  <p>Mô hình dữ liệu được chuẩn hóa thành các thực thể nghiệp vụ cốt lõi, bảo đảm tính toàn vẹn tham chiếu và lịch sử giao dịch bất biến.</p>
 
-Hệ thống bao gồm đầy đủ **7 phân hệ lớn** và **38 sub-modules nghiệp vụ**, được quản lý và thi công theo chuẩn **Antigravity Harness Loop Kit v0.5.0** với kỷ luật bất biến **WIP = 1**, Nguồn sự thật duy nhất (**LLM Wiki SSOT**), và Cổng kiểm chứng nhị phân toàn phổ (**Verify Gate**).</p>
-
-  <h3 id="s1-1-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="1401d219">§1.1.1 SYSTEM: Định vị bài toán & Người dùng mục tiêu</h3>
-  <p>Hệ thống SchoolOperatingPortal được thiết kế tối ưu hóa cho trải nghiệm di động hiện đại, ưu tiên tốc độ phản hồi tức thì, khả năng vận hành bền bỉ và tính năng ngoại tuyến (Offline-First).</p>
-
-  <h3 id="s1-1-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="7ce6e691">§1.1.2 SYSTEM: Phạm vi & Các nguyên tắc kiến trúc chủ đạo</h3>
-  <p>Tuân thủ nghiêm ngặt 3 nguyên tắc bất biến của SEPO:</p>
+  <h3 id="s1-3-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="08dd46eb">§1.3.1 SYSTEM: Cấu trúc thực thể cốt lõi và quan hệ dữ liệu</h3>
+  <p>Hệ thống bao gồm các cụm thực thể trung tâm:</p>
   <ul>
-    <li><strong>Nguồn sự thật duy nhất (SSOT):</strong> Mọi quy tắc nghiệp vụ đều bắt nguồn từ LLM Wiki.</li>
-    <li><strong>Thi công đơn nguyên (WIP = 1):</strong> Hoàn thành dứt điểm từng tính năng trước khi chuyển sang tính năng mới.</li>
-    <li><strong>Kiểm chứng nhị phân khép kín:</strong> Cổng Verify Gate là thước đo duy nhất để xác nhận hoàn thành.</li>
+    <li><strong>StudentProfile (Hồ sơ học sinh 360°):</strong> Lưu trữ thông tin nhân khẩu học, phụ huynh, liên kết SĐT chính <code>primary_phone</code> phục vụ tính Sibling Discount, ngày nhập học <code>enrollment_date</code> phục vụ tính học phí Prorated, tiền sử dị ứng thực phẩm và tình trạng sức khỏe.</li>
+    <li><strong>AttendanceDaily (Điểm danh hằng ngày):</strong> Lưu trữ trạng thái có mặt, vắng có phép/không phép, đo thân nhiệt, giờ đón/trả, người đón hộ và liên kết với sổ dặn thuốc y tế <code>student_medical_logs</code>.</li>
+    <li><strong>TuitionInvoice (Hóa đơn học phí):</strong> Đại diện cho hóa đơn riêng lẻ của từng học sinh, lưu trữ danh mục khoản thu, các dòng khấu trừ hoàn tiền ăn 2 dòng, mã giảm giá, mã VietQR động chuẩn NAPAS247 và trạng thái gạch nợ.</li>
+    <li><strong>MealRefundCredit (Bản ghi hoàn tiền ăn):</strong> Ghi nhận các khoản hoàn tiền ăn trưa và ăn sáng của tháng M chuyển tiếp khấu trừ vào kỳ M+1.</li>
   </ul>
 
-  <h2 class="part" id="s1-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="cbd6809d">§1.2 SYSTEM: Tô pô kiến trúc & Phân rã thành phần (§A.21)</h2>
-  <p>Kiến trúc hệ thống được phân tầng rõ ràng từ giao diện người dùng, tầng điều phối trạng thái, logic nghiệp vụ đến kho lưu trữ cục bộ.</p>
+  <h3 id="s1-3-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="4777d7b8">§1.3.2 SYSTEM: Cơ chế bảo vệ bất biến Audit Trail và State Machine</h3>
+  <p>Mọi thay đổi dữ liệu nhạy cảm (như sửa điểm số trong Sổ điểm đánh giá, điều chỉnh ngày nghỉ điểm danh trong quá khứ, xuất phiếu chi nội bộ) đều bắt buộc ghi vết vào bảng Audit Trail bất biến (chỉ ghi thêm, không cho phép xóa/sửa) ghi nhận rõ: thời gian, người thực hiện, giá trị cũ, giá trị mới, lý do và chữ ký xác thực.</p>
 
-  <h3 id="s1-2-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="95eba2b6">§1.2.1 SYSTEM: Sơ đồ kiến trúc tổng thể Figure 1.2.1</h3>
-  <p class="fig-cap"><strong>Figure 1.2.1</strong> — Sơ đồ kiến trúc phân tầng và luồng dữ liệu của SchoolOperatingPortal</p>
-  <figure class="viz">
-    <svg viewBox="0 0 920 180" xmlns="http://www.w3.org/2000/svg" width="100%" height="180">
-      <defs>
-        <marker id="arr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M 0 1 L 8 5 L 0 9 z" fill="#0f766e" />
-        </marker>
-      </defs>
-      <rect width="920" height="180" fill="#f8fafc" rx="8" stroke="#e2e8f0" stroke-width="1"/>
-      <g transform="translate(30, 25)">
-        <!-- Layer 1: Client UI -->
-        <rect x="0" y="20" width="180" height="80" fill="#ecfdf5" stroke="#059669" stroke-width="1.5" rx="8"/>
-        <text x="90" y="55" font-weight="700" fill="#065f46" text-anchor="middle" font-size="13">UI · Giao diện</text>
-        <text x="90" y="78" font-size="11" fill="#047857" text-anchor="middle">View / React Components</text>
+  <h2 class="part" id="s1-4" data-st="approved" data-st-on="2026-11-05" data-st-hash="1452f171">§1.4 SYSTEM: Quyết định kiến trúc &amp; 23 Giải pháp câu hỏi mở (OQ-01..23)</h2>
+  <p>Toàn bộ các vướng mắc nghiệp vụ và kiến trúc trước đó đã được giải quyết dứt điểm qua 23 quyết định (OQ-01 đến OQ-23) lưu trữ tại tài liệu nguồn SSOT.</p>
 
-        <!-- Arrow 1 -->
-        <line x1="185" y1="60" x2="235" y2="60" stroke="#0f766e" stroke-width="2" marker-end="url(#arr)"/>
-
-        <!-- Layer 2: State Controller -->
-        <rect x="245" y="20" width="180" height="80" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.5" rx="8"/>
-        <text x="335" y="55" font-weight="700" fill="#0369a1" text-anchor="middle" font-size="13">STATE · Trạng thái</text>
-        <text x="335" y="78" font-size="11" fill="#0284c7" text-anchor="middle">Hooks / State Store</text>
-
-        <!-- Arrow 2 -->
-        <line x1="430" y1="60" x2="480" y2="60" stroke="#0f766e" stroke-width="2" marker-end="url(#arr)"/>
-
-        <!-- Layer 3: Business Logic -->
-        <rect x="490" y="20" width="180" height="80" fill="#fef3c7" stroke="#d97706" stroke-width="1.5" rx="8"/>
-        <text x="580" y="55" font-weight="700" fill="#92400e" text-anchor="middle" font-size="13">CORE · Nghiệp vụ</text>
-        <text x="580" y="78" font-size="11" fill="#b45309" text-anchor="middle">Services & Engine</text>
-
-        <!-- Arrow 3 -->
-        <line x1="675" y1="60" x2="725" y2="60" stroke="#0f766e" stroke-width="2" marker-end="url(#arr)"/>
-
-        <!-- Layer 4: Storage -->
-        <rect x="735" y="20" width="150" height="80" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5" rx="8"/>
-        <text x="810" y="55" font-weight="700" fill="#5b21b6" text-anchor="middle" font-size="13">DATA · Lưu trữ</text>
-        <text x="810" y="78" font-size="11" fill="#6d28d9" text-anchor="middle">IndexedDB / Local</text>
-      </g>
-    </svg>
-  </figure>
-
-  <h3 id="s1-2-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="5ecd92cf">§1.2.2 SYSTEM: Từ điển thành phần kiến trúc và ánh xạ phân hệ</h3>
-  <p>Mỗi thành phần trong sơ đồ Figure 1.2.1 chịu trách nhiệm cho các chức năng tương ứng, bảo đảm phân tách nhiệm vụ rành mạch.</p>
-
-  <h2 class="part" id="s1-3" data-st="approved" data-st-on="2026-11-04" data-st-hash="3221df28">§1.3 SYSTEM: Mô hình dữ liệu & Vòng đời thực thể</h2>
-  <p>Mô hình dữ liệu được lưu trữ trực tiếp trên thiết bị của người dùng, bảo đảm quyền riêng tư và khả năng truy cập không phụ thuộc kết nối Internet.</p>
-
-  <h3 id="s1-3-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="1196c8a3">§1.3.1 SYSTEM: Cấu trúc Entity và lược đồ lưu trữ</h3>
-  <p>Các thực thể chính được định nghĩa trong mô hình dữ liệu:</p>
+  <h3 id="s1-4-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="4dff95ab">§1.4.1 SYSTEM: Danh mục 23 câu hỏi kiến trúc và nghiệp vụ đã chốt hạ</h3>
+  <p>Các giải pháp cốt lõi bao gồm:</p>
   <ul>
-    <li><strong>Thực thể giao dịch / công việc:</strong> Lưu trữ bản ghi dữ liệu người dùng tạo với định danh duy nhất (UUID), mốc thời gian và trạng thái.</li>
-    <li><strong>Thực thể cấu hình / thiết lập:</strong> Lưu trữ tùy chọn cá nhân hóa và các cờ trạng thái giao diện.</li>
-    <li><strong>Thực thể nhật ký / bộ đệm:</strong> Lưu vết thay đổi và đồng bộ hàng đợi xử lý ngoại tuyến.</li>
+    <li><strong>OQ-01..08:</strong> Cơ chế cách ly dữ liệu đa trường RLS, kiến trúc Redux Slice độc lập, đồng bộ danh mục khoản phí toàn trường, xử lý bất biến dữ liệu lịch sử niên khóa cũ.</li>
+    <li><strong>OQ-09..15:</strong> Thuật toán khấu trừ hoàn tiền ăn bóc tách 2 dòng, chốt chặn điều phối xung đột 4 chiều thời khóa biểu, bảo mật phân quyền RBAC 3 cấp độ.</li>
+    <li><strong>OQ-16..18:</strong> Chế độ bảo vệ quyền riêng tư AI Opt-Out làm mờ mặt trẻ em (Nghị định 13/2023/NĐ-CP), thu hồi tài khoản khi thôi học giữa kỳ, quy trình đối soát giao dịch ngân hàng thừa thiếu.</li>
+    <li><strong>OQ-19..23:</strong> Sổ dặn thuốc 12:30, Đón sớm hoàn 0%, Tự động đóng băng điểm danh 23:59:59 cuối tháng, Hóa đơn lẻ Prorated nhập học giữa tháng, và Sibling Discount tự động theo SĐT phụ huynh.</li>
   </ul>
 
-  <h3 id="s1-3-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="7bcb2f55">§1.3.2 SYSTEM: Trạng thái và vòng đời dữ liệu</h3>
-  <p>Vòng đời dữ liệu di chuyển từ khởi tạo (INIT), kích hoạt sử dụng (ACTIVE), hoàn thành (COMPLETED) đến lưu trữ vĩnh viễn hoặc hủy (ARCHIVED/DELETED).</p>
+  <h3 id="s1-4-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="a0a450ba">§1.4.2 SYSTEM: Nguyên tắc bảo vệ tính toàn vẹn không phát sinh câu hỏi mở</h3>
+  <p>Tài liệu đặc tả LLM Wiki được duy trì ở trạng thái 0 lỗi lint và tuyệt đối không để lại bất kỳ thẻ <code>[CẦN LÀM RÕ]</code> nào. Mọi quy tắc khi được đưa vào code đều phải tuân thủ nghiêm ngặt các quyết định OQ đã chốt.</p>
 
-  <h2 class="part-divider" id="part-2">Part 2 — Thiết Kế Trải Nghiệm & Luồng Người Dùng (Userflows)</h2>
+  <!-- PART 2 -->
+  <h2 class="part-divider" id="part-2">Part 2 — Thiết Kế Trải Nghiệm &amp; Luồng Người Dùng (Userflows)</h2>
 
-  <h2 class="part" id="s2-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="8e1027e2">§2.1 SYSTEM: Đặc tả luồng tương tác người dùng click-level (§A.10, §A.12)</h2>
-  <p>Bảng Userflow 7 cột click-level mô tả chi tiết từng thao tác người dùng, điều kiện tiên quyết, kỳ vọng hiển thị trên màn hình và kịch bản lỗi có thể xảy ra:</p>
+  <h2 class="part" id="s2-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="694f01e3">§2.1 SYSTEM: Đặc tả luồng tương tác người dùng click-level (§A.10, §A.12)</h2>
+  <p>Trải nghiệm người dùng được cấu trúc thành 4 Mega Scenarios chuẩn hóa, phản ánh đúng chu kỳ công việc thực tế của Giáo viên và Kế toán.</p>
 
-  <h3 id="s2-1-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="94e99e9a">§2.1.1 SYSTEM: Bảng Userflow tương tác chính</h3>
+  <h3 id="s2-1-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="b069ee41">§2.1.1 SYSTEM: Bảng 4 Mega Scenarios tương tác đầu cuối</h3>
   <div class="tw">
-    <table class="uf">
-      <colgroup>
-        <col style="width:10%">
-        <col style="width:12%">
-        <col style="width:18%">
-        <col style="width:16%">
-        <col style="width:20%">
-        <col style="width:16%">
-        <col style="width:8%">
-      </colgroup>
+    <table>
       <tr>
-        <th>Bước</th>
-        <th>Ai</th>
-        <th>BẤM GÌ · ở đâu</th>
-        <th>Điều kiện trước</th>
-        <th>KỲ VỌNG</th>
-        <th>FAIL trông như thế nào</th>
-        <th>Probe</th>
+        <th>Mã Mega</th>
+        <th>Tên kịch bản trải nghiệm</th>
+        <th>Tác nhân chính</th>
+        <th>Chuỗi liên kết Sub-modules</th>
+        <th>Hành động click-level &amp; Chuyển dịch trạng thái</th>
       </tr>
       <tr>
-        <td><b>UF-1</b><br>`SPEC-F027-01`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Kích hoạt &amp; quan sát: Hiển thị widget KPI tổng quan trường học thời gian thực....</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Giao diện hiển thị đúng chuẩn thiết kế, trực quan, không vỡ layout.</td>
-        <td>Hiển thị sai thông số, lệch màu chuẩn hoặc lỗi CSS.</td>
-        <td><code>PRB-`SPEC-F027-01`</code></td>
+        <td><b>MEGA-01</b></td>
+        <td>Hành trình 1 ngày trọn vẹn của GVCN (Daily Routine)</td>
+        <td>Giáo viên CN</td>
+        <td><code>SM27 → SM05 → SM02 → SM26 → SM04 → SM34 → SM11</code></td>
+        <td>07:15 Chấm công vào → 07:30 Duyệt đơn nghỉ &amp; đơn thuốc trước 8h → 07:45 Điểm danh sáng &amp; thân nhiệt → 08:00 Chốt quân số báo ăn sáng/trưa sang Bếp → 10:00 Đón sớm hoàn 0% → 10:30 Cảnh báo dị ứng tôm → 11:30 Album AI Face Tagging → 12:30 Uống thuốc trưa &amp; Push app PH → 17:35 Trả trẻ trễ 35p &amp; Tự tính phí muộn 60k.</td>
       </tr>
       <tr>
-        <td><b>UF-2</b><br>`SPEC-F027-02`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Vận hành tính năng: Tóm tắt tiến độ thu học phí và các cảnh báo học sinh vắng nh...</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
-        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
-        <td><code>PRB-`SPEC-F027-02`</code></td>
+        <td><b>MEGA-02</b></td>
+        <td>Chu kỳ Giảng dạy &amp; Đánh giá Tuần của GVBM (Weekly Academic)</td>
+        <td>Giáo viên BM</td>
+        <td><code>SM08 → SM22 → SM09 → SM10 → SM25 → SM24 → SM28</code></td>
+        <td>Xem TKB môn Toán → Giao bài tập về nhà đính kèm PDF → Chấm bài trực tuyến → Tự đồng bộ điểm vào Sổ điểm định kỳ Bộ GD → Tạo khảo sát dã ngoại kèm nội quy sổ tay PH.</td>
       </tr>
       <tr>
-        <td><b>UF-3</b><br>`SPEC-F027-03`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Vận hành tính năng: Hàng đợi kiểm duyệt bài đăng hoạt động và thông báo mới nhất...</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
-        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
-        <td><code>PRB-`SPEC-F027-03`</code></td>
+        <td><b>MEGA-03</b></td>
+        <td>Chiến dịch Thu phí &amp; Quyết toán Tháng của Kế toán (Monthly Billing)</td>
+        <td>Kế toán, Sepay</td>
+        <td><code>SM06 → SM15 → SM14 → SM11 → SM38 → SM17 → SM34 → SM18</code></td>
+        <td>23:59:59 Cuối tháng: Đóng băng tự động sổ điểm danh (OQ-21) → Wizard lập đợt thu M+1 bóc tách 2 dòng hoàn tiền ăn → Tự quét SĐT áp Sibling discount 10% → Phát hành hóa đơn riêng lẻ kèm mã VietQR động → Webhook Sepay gạch nợ 3s → Ký số HĐĐT SInvoice → Dashboard KPI cập nhật realtime.</td>
       </tr>
       <tr>
-        <td><b>UF-4</b><br>`SPEC-F009-01`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Vận hành tính năng: Điểm danh Đón 1 click, tự động gắn huy hiệu Đến muộn nếu sau...</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
-        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
-        <td><code>PRB-`SPEC-F009-01`</code></td>
-      </tr>
-      <tr>
-        <td><b>UF-5</b><br>`SPEC-F009-02`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Vận hành tính năng: Ràng buộc logic: Giờ Trả phải lớn hơn giờ Đón; chặn trả nhan...</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
-        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
-        <td><code>PRB-`SPEC-F009-02`</code></td>
-      </tr>
-      <tr>
-        <td><b>UF-6</b><br>`SPEC-F009-03`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Chạm thực hiện: Modal chọn người đón hộ hợp lệ trong danh sách người giám hộ...</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Giao diện phản hồi trong 100ms, trạng thái được cập nhật và lưu trữ cục bộ.</td>
-        <td>Nút không ăn, màn hình đơ hoặc không lưu bản ghi mới.</td>
-        <td><code>PRB-`SPEC-F009-03`</code></td>
-      </tr>
-      <tr>
-        <td><b>UF-7</b><br>`SPEC-F009-04`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Vận hành tính năng: Báo vắng hàng loạt phân loại Có phép / Không phép kèm cờ Hoà...</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
-        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
-        <td><code>PRB-`SPEC-F009-04`</code></td>
-      </tr>
-      <tr>
-        <td><b>UF-8</b><br>`SPEC-F010-01`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Vận hành tính năng: Soạn bài viết hỗ trợ đính kèm ảnh/video, tag học sinh hiển t...</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
-        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
-        <td><code>PRB-`SPEC-F010-01`</code></td>
-      </tr>
-      <tr>
-        <td><b>UF-9</b><br>`SPEC-F010-02`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Vận hành tính năng: Phân tách tab &#x27;Đã duyệt&#x27; và &#x27;Chờ duyệt&#x27; cho bài viết của giá...</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
-        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
-        <td><code>PRB-`SPEC-F010-02`</code></td>
-      </tr>
-      <tr>
-        <td><b>UF-10</b><br>`SPEC-F010-03`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Vận hành tính năng: Cơ chế ghim tối đa 1 bài viết quan trọng lên đầu bảng tin kè...</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
-        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
-        <td><code>PRB-`SPEC-F010-03`</code></td>
-      </tr>
-      <tr>
-        <td><b>UF-11</b><br>`SPEC-F022-01`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Vận hành tính năng: Duy trì 2 album hệ thống (&#x27;Hoạt động&#x27; và &#x27;Điểm danh&#x27;) cùng c...</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
-        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
-        <td><code>PRB-`SPEC-F022-01`</code></td>
-      </tr>
-      <tr>
-        <td><b>UF-12</b><br>`SPEC-F022-02`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Vận hành tính năng: Tích hợp AI phân tích khuôn mặt ảnh tải lên, tự động gắn khu...</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
-        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
-        <td><code>PRB-`SPEC-F022-02`</code></td>
-      </tr>
-      <tr>
-        <td><b>UF-13</b><br>`SPEC-F022-03`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Chạm thực hiện: Thanh công cụ chọn nhiều ảnh hỗ trợ Tải xuống ZIP và Xóa ảnh...</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Giao diện phản hồi trong 100ms, trạng thái được cập nhật và lưu trữ cục bộ.</td>
-        <td>Nút không ăn, màn hình đơ hoặc không lưu bản ghi mới.</td>
-        <td><code>PRB-`SPEC-F022-03`</code></td>
-      </tr>
-      <tr>
-        <td><b>UF-14</b><br>`SPEC-F023-01`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Vận hành tính năng: Danh sách hội thoại và khung chat cuộn độc lập mượt mà....</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
-        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
-        <td><code>PRB-`SPEC-F023-01`</code></td>
-      </tr>
-      <tr>
-        <td><b>UF-15</b><br>`SPEC-F023-02`</td>
-        <td>Người dùng chính</td>
-        <td><span class="ctl">Vận hành tính năng: Khung soạn tin tinh gọn hỗ trợ đính kèm tệp và biểu tượng cả...</span></td>
-        <td>Ứng dụng đang ở trạng thái sẵn sàng</td>
-        <td>Tiến trình thực thi ổn định ngoại tuyến, bảo đảm tính toàn vẹn dữ liệu.</td>
-        <td>Lỗi ngoại lệ runtime hoặc thất bại tại Verify Gate.</td>
-        <td><code>PRB-`SPEC-F023-02`</code></td>
+        <td><b>MEGA-04</b></td>
+        <td>Vòng đời Biến động Học sinh &amp; Xử lý Tài chính (Student Lifecycle)</td>
+        <td>Kế toán, GVCN</td>
+        <td><code>SM19 → SM21 → SM15 → SM11 → SM16 → SM32 → SM31</code></td>
+        <td>Nhập học ngày 15: Tính học phí Prorated lẻ ngày &amp; Thu tiền mặt bán phần → Chuyển lớp giữa kỳ: Remap biểu phí tự động, triệt tiêu hóa đơn ma → Phụ huynh nộp giấy viện: Sửa ngày nghỉ trong tháng trước freeze → Rút hồ sơ: Lập phiếu chi hoàn tiền ăn thừa &amp; Chuyển lưu trữ SM32 → Chuyển đổi niên khóa Header bảo lưu năm cũ.</td>
       </tr>
     </table>
   </div>
 
-  <h3 id="s2-1-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="04a807a1">§2.1.2 SYSTEM: Kỷ luật phản hồi giao diện người dùng</h3>
-  <p>Mọi hành động nhập liệu và thao tác chạm của người dùng đều phải có phản hồi thị giác trong vòng 100ms.</p>
+  <h3 id="s2-1-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="c2785fb6">§2.1.2 SYSTEM: Kỷ luật phản hồi giao diện và cảnh báo an toàn</h3>
+  <p>Giao diện tuân thủ quy chuẩn Design System ECO ME v2.6.0: Mọi thao tác lưu dữ liệu đều hiển thị Toast notification phản hồi trong vòng 300ms; khi phát hiện tranh chấp giám hộ (Huy hiệu Khiên Đỏ) hoặc dị ứng thực phẩm, hệ thống kích hoạt Red Modal Alert nổi bật buộc xác nhận 2 bước.</p>
 
-  <h2 class="part" id="s2-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="2504de0b">§2.2 SYSTEM: Thiết kế tương tác giao diện và điều khiển cử chỉ</h2>
-  <p>Thiết kế tương tác lấy người dùng làm trung tâm, tối ưu hóa khu vực chạm ngón cái trên thiết bị di động.</p>
+  <h2 class="part" id="s2-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="2edb772e">§2.2 SYSTEM: Thiết kế tương tác giao diện và điều khiển cử chỉ</h2>
+  <p>Hệ thống hỗ trợ thao tác nhanh qua bàn phím và cử chỉ vuốt chạm tối ưu cho giáo viên thao tác trên thiết bị di động.</p>
 
-  <h3 id="s2-2-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="2b6e9bbf">§2.2.1 SYSTEM: Sơ đồ luồng tương tác Figure 2.2.1</h3>
-  <p class="fig-cap"><strong>Figure 2.2.1</strong> — Sơ đồ luồng chuyển đổi trạng thái giao diện và tương tác người dùng</p>
-  <figure class="viz">
-    <svg viewBox="0 0 920 160" xmlns="http://www.w3.org/2000/svg" width="100%" height="160">
-      <rect width="920" height="160" fill="#f8fafc" rx="8" stroke="#e2e8f0" stroke-width="1"/>
-      <g transform="translate(60, 20)">
-        <circle cx="60" cy="60" r="40" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
-        <text x="60" y="65" font-weight="700" fill="#0369a1" text-anchor="middle" font-size="12">KHỞI ĐẦU</text>
+  <h3 id="s2-2-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="fb96f704">§2.2.1 SYSTEM: Sơ đồ luồng tương tác Figure 2.2.1</h3>
+  <p class="fig-cap"><strong>Figure 2.2.1</strong> — Sơ đồ luồng tương tác và điều khiển cử chỉ trải nghiệm người dùng</p>
+  <div class="tw" style="text-align: center; padding: 20px;">
+    <svg viewBox="0 0 960 200" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" style="max-width: 900px; font-family: -apple-system, sans-serif;">
+      <rect x="20" y="30" width="180" height="140" rx="8" fill="#f8fafc" stroke="#64748b"/>
+      <text x="110" y="60" text-anchor="middle" font-weight="700" fill="#334155" font-size="12">1. TIẾP NHẬN SỰ KIỆN</text>
+      <text x="110" y="90" text-anchor="middle" font-size="11" fill="#475569">Chấm công / Điểm danh</text>
+      <text x="110" y="115" text-anchor="middle" font-size="11" fill="#475569">Đơn dặn thuốc 12:30</text>
+      <text x="110" y="140" text-anchor="middle" font-size="11" fill="#475569">Quét mã VietQR chuyển tiền</text>
 
-        <line x1="105" y1="60" x2="255" y2="60" stroke="#0284c7" stroke-width="2"/>
+      <line x1="200" y1="100" x2="260" y2="100" stroke="#0f766e" stroke-width="2"/>
 
-        <rect x="260" y="20" width="200" height="80" fill="#fef3c7" stroke="#d97706" stroke-width="2" rx="8"/>
-        <text x="360" y="55" font-weight="700" fill="#92400e" text-anchor="middle" font-size="13">NHẬP LIỆU NHANH</text>
-        <text x="360" y="75" font-size="11" fill="#b45309" text-anchor="middle">Chạm / Gõ số / Chọn thẻ</text>
+      <rect x="260" y="30" width="200" height="140" rx="8" fill="#f0fdfa" stroke="#0f766e"/>
+      <text x="360" y="60" text-anchor="middle" font-weight="700" fill="#0f766e" font-size="12">2. CẬP NHẬT LẠC QUAN</text>
+      <text x="360" y="90" text-anchor="middle" font-size="11" fill="#134e4a">Giao diện cập nhật ngay lập tức</text>
+      <text x="360" y="115" text-anchor="middle" font-size="11" fill="#134e4a">Lưu trữ tạm thời vào Redux</text>
+      <text x="360" y="140" text-anchor="middle" font-size="11" fill="#134e4a">Đưa vào hàng đợi nền (Queue)</text>
 
-        <line x1="465" y1="60" x2="615" y2="60" stroke="#059669" stroke-width="2"/>
+      <line x1="460" y1="100" x2="520" y2="100" stroke="#0f766e" stroke-width="2"/>
 
-        <rect x="620" y="20" width="200" height="80" fill="#dcfce7" stroke="#16a34a" stroke-width="2" rx="8"/>
-        <text x="720" y="55" font-weight="700" fill="#15803d" text-anchor="middle" font-size="13">XÁC NHẬN & LƯU</text>
-        <text x="720" y="75" font-size="11" fill="#166534" text-anchor="middle">Lưu cục bộ & Phản hồi</text>
-      </g>
+      <rect x="520" y="30" width="200" height="140" rx="8" fill="#fefce8" stroke="#ca8a04"/>
+      <text x="620" y="60" text-anchor="middle" font-weight="700" fill="#a16207" font-size="12">3. ĐỒNG BỘ BACKEND</text>
+      <text x="620" y="90" text-anchor="middle" font-size="11" fill="#713f12">Ghi nhận vào PostgreSQL RLS</text>
+      <text x="620" y="115" text-anchor="middle" font-size="11" fill="#713f12">Xác thực quy tắc nghiệp vụ</text>
+      <text x="620" y="140" text-anchor="middle" font-size="11" fill="#713f12">Tạo vết Audit Trail</text>
+
+      <line x1="720" y1="100" x2="780" y2="100" stroke="#0f766e" stroke-width="2"/>
+
+      <rect x="780" y="30" width="160" height="140" rx="8" fill="#fdf4ff" stroke="#c026d3"/>
+      <text x="860" y="60" text-anchor="middle" font-weight="700" fill="#c026d3" font-size="12">4. PHẢN HỒI ĐA KÊNH</text>
+      <text x="860" y="90" text-anchor="middle" font-size="11" fill="#86198f">Push Notification PH</text>
+      <text x="860" y="115" text-anchor="middle" font-size="11" fill="#86198f">Gạch nợ hóa đơn 3s</text>
+      <text x="860" y="140" text-anchor="middle" font-size="11" fill="#86198f">Ký số HĐĐT SInvoice</text>
     </svg>
-  </figure>
+  </div>
 
-  <h3 id="s2-2-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="969bd88a">§2.2.2 SYSTEM: Bảng quy cách điều khiển cử chỉ và phím tắt</h3>
-  <p>Hệ thống hỗ trợ thao tác vuốt, chạm, cùng các phím tắt bàn phím tương ứng nhằm đảm bảo khả năng tiếp cận thuận tiện trên mọi thiết bị.</p>
+  <h3 id="s2-2-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="d692b9f1">§2.2.2 SYSTEM: Quy chuẩn điều khiển cử chỉ và phím tắt chuyên sâu</h3>
+  <p>Hỗ trợ thao tác điểm danh nhanh: Phím <code>Space</code> để đánh dấu Có mặt, phím <code>A</code> để báo Vắng có phép, phím <code>U</code> để báo Vắng không phép, và phím <code>T</code> để mở modal nhập thân nhiệt và dặn thuốc.</p>
 
-  <h2 class="part-divider" id="part-3">Part 3 — Ma Trận Nghiệm Thu & Trạng Thái Thỏa Thuận</h2>
+  <!-- PART 3 -->
+  <h2 class="part-divider" id="part-3">Part 3 — Ma Trận Nghiệm Thu &amp; Trạng Thái Thỏa Thuận</h2>
 
-  <h2 class="part" id="s3-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="e15562b2">§3.1 SYSTEM: Ma trận tiêu chí nghiệm thu 5 cấp độ (§A.13)</h2>
-  <p>Tiêu chuẩn nghiệm thu được phân cấp từ L1 đến L5 theo quy định của SEPO, kết nối trực tiếp với các bước Userflows và mã đặc tả:</p>
+  <h2 class="part" id="s3-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="857ec0d1">§3.1 SYSTEM: Ma trận tiêu chí nghiệm thu 5 cấp độ (§A.13)</h2>
+  <p>Tiêu chuẩn nghiệm thu được phân cấp từ L1 đến L5 theo chuẩn SEPO, phủ kín toàn bộ <strong>76 Spec IDs</strong> được đồng bộ từ LLM Wiki:</p>
 
-  <h3 id="s3-1-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="2611a387">§3.1.1 SYSTEM: Định nghĩa 5 cấp độ nghiệm thu từ L1 đến L5</h3>
+  <h3 id="s3-1-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="2611a387">§3.1.1 SYSTEM: Định nghĩa 5 cấp độ nghiệm thu từ L1 đến L5</h3>
   <ul>
     <li><strong>L1 · Reachable:</strong> Người dùng có thể tiếp cận được tính năng, không gặp liên kết chết.</li>
     <li><strong>L2 · Executable:</strong> Thao tác thực hiện thành công, dữ liệu được ghi nhận bền vững.</li>
@@ -402,7 +338,7 @@ Hệ thống bao gồm đầy đủ **7 phân hệ lớn** và **38 sub-modules 
     <li><strong>L5 · Sufficient:</strong> Tính năng vận hành độc lập, hoàn chỉnh, không đòi hỏi can thiệp thủ công.</li>
   </ul>
 
-  <h3 id="s3-1-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="123d94b3">§3.1.2 SYSTEM: Bảng ánh xạ tiêu chí nghiệm thu L1–L5 đối chiếu Userflows</h3>
+  <h3 id="s3-1-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="03b5219e">§3.1.2 SYSTEM: Bảng ánh xạ tiêu chí nghiệm thu L1–L5 đối chiếu Userflows</h3>
   <div class="tw">
     <table>
       <tr>
@@ -417,1206 +353,829 @@ Hệ thống bao gồm đầy đủ **7 phân hệ lớn** và **38 sub-modules 
       </tr>
       <tr>
         <td class="lbl"><b>AC-01</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Hiển thị widget KPI tổng quan trường học thời gian thực....</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Dashboard hiển thị tổng quan số liệu sĩ số học sinh, giáo viên, lớp học theo thời gian thực...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
         <td><code>UF-1</code></td>
-        <td><code>`SPEC-F027-01`</code></td>
+        <td><code>TQ-01</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-02</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tóm tắt tiến độ thu học phí và các cảnh báo học sinh vắng nh</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-2</code></td>
-        <td><code>`SPEC-F027-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Thống kê tỷ lệ điểm danh học sinh trong ngày (có mặt, vắng có phép, vắng không phép)...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>TQ-02</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-03</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Hàng đợi kiểm duyệt bài đăng hoạt động và thông báo mới nhất</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-3</code></td>
-        <td><code>`SPEC-F027-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Biểu đồ thu nộp học phí và tiến độ nộp theo tháng/học kỳ toàn trường...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>TQ-03</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-04</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Điểm danh Đón 1 click, tự động gắn huy hiệu Đến muộn nếu sau</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-4</code></td>
-        <td><code>`SPEC-F009-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Đến muộn & Đón sớm giữa buổi (OQ-20): Ghi nhận Đến muộn (Late Arrival, kèm toggle báo bổ sung s...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>VH-01</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-05</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Ràng buộc logic: Giờ Trả phải lớn hơn giờ Đón; chặn trả nhan</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-5</code></td>
-        <td><code>`SPEC-F009-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Sổ dặn thuốc y tế & Xác nhận uống thuốc trưa (OQ-19): Phụ huynh gửi đơn dặn thuốc điện tử qua a...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>VH-02</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-06</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Modal chọn người đón hộ hợp lệ trong danh sách người giám hộ</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-6</code></td>
-        <td><code>`SPEC-F009-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Xác thực người đón hộ: Chọn người đón từ danh sách người đưa đón hợp lệ đã đăng ký (Bố, Mẹ, Ông...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>VH-03</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-07</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Báo vắng hàng loạt phân loại Có phép / Không phép kèm cờ Hoà</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-7</code></td>
-        <td><code>`SPEC-F009-04`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Báo vắng học sinh: Phân loại Vắng có phép (excused) hoặc Vắng không phép (unexcused)...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>VH-04</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-08</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Soạn bài viết hỗ trợ đính kèm ảnh/video, tag học sinh hiển t</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-8</code></td>
-        <td><code>`SPEC-F010-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Cơ chế cập nhật lạc quan (optimistic update) khi điểm danh và tự động hoàn tác thông báo lỗi kh...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>VH-10</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-09</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Phân tách tab &#x27;Đã duyệt&#x27; và &#x27;Chờ duyệt&#x27; cho bài viết của giá</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-9</code></td>
-        <td><code>`SPEC-F010-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Đăng bài viết kèm album hình ảnh/video, hỗ trợ gắn thẻ hashtag chủ đề (#) và nhắc tên học sinh ...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>VH-05</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-10</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Cơ chế ghim tối đa 1 bài viết quan trọng lên đầu bảng tin kè</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-10</code></td>
-        <td><code>`SPEC-F010-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Quyền riêng tư AI & Làm mờ ảnh (OQ-16): Tôn trọng cờ optoutfaceai, không gắn thẻ tên, tự động k...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>VH-06</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-11</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Duy trì 2 album hệ thống (&#x27;Hoạt động&#x27; và &#x27;Điểm danh&#x27;) cùng c</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-11</code></td>
-        <td><code>`SPEC-F022-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Hỗ trợ kênh trò chuyện 1:1 bảo mật giữa giáo viên chủ nhiệm và phụ huynh của từng học sinh...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>VH-07</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-12</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tích hợp AI phân tích khuôn mặt ảnh tải lên, tự động gắn khu</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-12</code></td>
-        <td><code>`SPEC-F022-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Xuất lưới điểm danh tháng và các mẫu báo cáo đánh giá định kỳ ra Excel...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>VH-08</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-13</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Thanh công cụ chọn nhiều ảnh hỗ trợ Tải xuống ZIP và Xóa ảnh</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-13</code></td>
-        <td><code>`SPEC-F022-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Điều phối xung đột 4 chiều chính khóa & ngoại khóa (OQ-14): Kiểm tra thời gian thực trên 4 chiề...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-2</code></td>
+        <td><code>HT-01</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-14</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Danh sách hội thoại và khung chat cuộn độc lập mượt mà....</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-14</code></td>
-        <td><code>`SPEC-F023-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Tạo bài tập kèm tiêu đề, hướng dẫn nội dung, file đính kèm (PDF, hình ảnh) và thời hạn nộp bài ...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-2</code></td>
+        <td><code>HT-02</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-15</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Khung soạn tin tinh gọn hỗ trợ đính kèm tệp và biểu tượng cả</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F023-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Quy tắc bảo toàn tiêu đề bài tập khi chỉnh sửa và cấm xóa bài tập đã có học sinh nộp bài...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-2</code></td>
+        <td><code>HT-06</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-16</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Hỗ trợ ghim tối đa 3 tin nhắn quan trọng và tính năng khóa g</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F023-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Lưu vết Audit Trail bất biến (GradeAuditTrail): Lưu vết người yêu cầu, người duyệt, điểm cũ/mới...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-2</code></td>
+        <td><code>HT-03</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-17</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Bảng điểm danh tháng hiển thị 2 dòng mỗi đối tượng (Sáng và </td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F028-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Lập hóa đơn học phí tháng cho học sinh tích hợp mã VietQR động, Sub-invoice ngoại khóa OQ-14, x...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-01</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-18</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tổng kết số buổi có mặt, vắng có phép, không phép được nhúng</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F028-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Chốt dữ liệu điểm danh tự động cuối tháng (OQ-21): Đợt hóa đơn tháng M+1 tự động truy xuất dữ l...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-02</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-19</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Xuất dữ liệu bảng tính Excel chuẩn xác....</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F028-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Thiết lập điều kiện học sinh nghỉ học có phép hợp lệ để được khấu trừ hoàn tiền ăn...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-11</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-20</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Lựa chọn mẫu báo cáo động từ danh mục biểu mẫu của trường...</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F029-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Công thức tính tiền ăn hoàn trả theo số bữa ăn thực tế và tỷ lệ khấu trừ cấu hình...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-12</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-21</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Bộ lọc đa chiều theo lớp học, trạng thái và khoảng thời gian</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F029-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Chốt dữ liệu nghỉ học tháng M, lập bảng tổng hợp công nợ tiền ăn và phê duyệt...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-13</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-22</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Menu ba chấm (•••) thao tác đồng bộ với các bảng dữ liệu toà</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F029-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Tự động kết chuyển suất hoàn tiền ăn thành dòng giảm trừ âm trên hóa đơn học phí tháng M+1...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-14</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-23</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Ma trận thời khóa biểu linh hoạt: khởi tạo 1 tiết, bấm [+] t</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F019-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Chốt chặn bảo toàn lịch sử thanh toán hóa đơn: cấm ghi đè lịch sử cũ khi có giao dịch thanh toá...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-22</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-24</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Menu ba chấm (•••) z-index cao: Xem chi tiết, Chỉnh sửa, Gửi</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F019-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Đối soát giao dịch thanh toán tự động/thủ công và xử lý bất thường thừa/thiếu/tra soát (OQ-18)...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-06</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-25</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Lưu vết lịch sử các phiên bản công bố thời khóa biểu....</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F019-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Danh mục toàn trường quản lý chuẩn 24 khoản thu (3 khoản hệ thống cốt lõi: Học phí chính khóa, ...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-03</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-26</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Soạn bài tập với tiêu đề, hướng dẫn chi tiết, tệp đính kèm v</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F020-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Biểu phí ngoại khóa & Phân rã Sub-Invoice (OQ-14): Hỗ trợ tính phí trọn gói theo kỳ (TERMFIXED)...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-04</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-27</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Bảng theo dõi trạng thái nộp bài của học sinh: Đã nộp, Đã ch</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F020-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Phiếu chi hoàn tiền rút hồ sơ giữa kỳ (STUDENTWITHDRAWALREFUND - OQ-17): Tự động sinh từ Biên b...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-05</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-28</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Ma trận nhập điểm số linh hoạt theo môn học, lớp và học kỳ..</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F021-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Báo cáo trực quan tỷ lệ hoàn thành thu học phí toàn trường và theo từng lớp...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-07</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-29</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Rubric đánh giá định kỳ cho các cấp học mầm non và tiểu học.</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F021-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Quản lý danh mục thu chuẩn hóa kết nối CSDL Sở, hòa giải Data Drift và Retry Queue DLQ OQ-15...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-19</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-30</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tính điểm trung bình môn tự động theo trọng số quy chuẩn....</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F021-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Ánh xạ mã tiểu mục tài chính và đồng bộ trạng thái danh mục thu với hệ thống Managing Portal...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-20</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-31</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tự động nhận diện số ngày nghỉ có phép tháng trước từ phân h</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F015-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Chính sách ưu đãi anh/chị/em ruột Sibling Discount (OQ-23): Tự động nhận diện quan hệ ruột thịt...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-09</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-32</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Bảng chi tiết dòng khoản thu chuẩn hóa: cột &#x27;Giảm trừ&#x27;, định</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F015-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Hỗ trợ giảm trừ linh hoạt theo % hoặc tiền mặt đ kèm dấu chấm phân cách hàng nghìn...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-10</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-33</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tự động áp dụng chính sách miễn giảm cao nhất và sinh mã Vie</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F015-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Phân loại và cấu hình chính sách miễn giảm theo từng nhóm đối tượng học sinh (bao gồm chính sác...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-15</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-34</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Quản lý vòng đời hóa đơn: Đã tạo, Đã gửi, Nộp một phần, Đã h</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F015-04`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Quy tắc giải quyết xung đột chính sách miễn giảm theo phương án hưởng ưu đãi cao nhất...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-16</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-35</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Danh sách phiên đối soát theo ngày và cổng thanh toán....</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F017-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Hỗ trợ phương thức giảm trừ linh hoạt theo tỷ lệ phần trăm hoặc tiền mặt cố định...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-17</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-36</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tự động làm nổi bật các giao dịch khớp lệnh và cảnh báo chên</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F017-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Quy trình thẩm định, phê duyệt hồ sơ miễn giảm học phí có lưu vết kiểm toán...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-18</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-37</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Danh mục 24 khoản phí với đơn vị tính chuẩn (khoản hoàn tiền</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F011-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Nhóm gia đình Sibling Discount (primaryphone - OQ-23):** Tự động liên kết các anh chị em ruột q...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-01</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-38</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Cấu hình cờ bắt buộc hoặc tự chọn, kỳ thu và chính sách thuế</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F011-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Sổ tay phụ huynh điện tử công bố quy định và hướng dẫn của nhà trường...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-11</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-39</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Định dạng tiền tệ chuẩn Việt Nam có dấu chấm phân cách hàng </td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F011-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Hòm thư tiếp nhận và xử lý góp ý, phản hồi khiếu nại của phụ huynh học sinh...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-12</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-40</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Bảng quản lý tinh gọn 6 cột; cột &#x27;Các khoản phí&#x27; hiển thị số</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F012-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Lịch sự kiện và hoạt động trải nghiệm ngoại khóa toàn trường...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-13</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-41</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Ghi đè đơn giá khoản thu riêng biệt theo lớp mà không làm bi</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F012-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Quản lý niên khóa học, các kỳ học và kích hoạt niên khóa hiện hành...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-14</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-42</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Lập phiếu chi phân loại danh mục, người nhận tiền, số tiền v</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F016-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Kho lưu trữ học sinh chuyển trường, hoàn thành chương trình, tốt nghiệp và rút hồ sơ Pro-rata O...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-15</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-43</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Quy trình duyệt phiếu chi nhiều bước và hủy phiếu chi có ghi</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F016-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Phân quyền kiểm duyệt nội dung 2 cấp: Giáo viên chính được đăng bài hoạt động trực tiếp...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-03</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-44</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Thống kê tổng số tiền phải thu, thực thu và công nợ tồn đọng</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F018-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Phân loại lớp: Lớp chính khóa (bật toàn diện điểm danh, học vụ, học phí) và Lớp ngoại khóa (chỉ...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-04</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-45</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Biểu đồ phân tích tỷ lệ hoàn thành thu học phí theo khối lớp</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F018-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Quản lý danh mục môn học và phân công giáo viên giảng dạy...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-05</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-46</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Thuật toán tập giao toán học: Trường &#x27;Khoản phí áp dụng&#x27; tự </td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F014-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Quản lý danh mục khối lớp học và định tuyến chương trình liên cấp...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-06</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-47</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Quy tắc 01 chính sách duy nhất cho mỗi khoản thu: Cảnh báo t</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F014-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Bảng thông tin điện tử truyền thông sự kiện và gửi thông báo khẩn cấp...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-07</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-48</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Động cơ giải quyết xung đột khi lập hóa đơn: Tự động so sánh</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F014-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Khởi tạo bình chọn và khảo sát ý kiến trực tuyến của phụ huynh và giáo viên...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-08</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-49</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tự động chuyển trạng thái Hết hạn khi qua kỳ áp dụng, hỗ trợ</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F014-04`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Lập và công bố thực đơn dinh dưỡng theo tuần bảo đảm an toàn vệ sinh thực phẩm...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-09</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-50</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Danh sách học sinh với bộ lọc lớp, trạng thái, và icon thẻ m</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F007-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Điểm danh theo ca làm việc (ca sáng, ca chiều) và tổng hợp bảng chấm công tháng...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-10</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-51</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Hub chi tiết 360° với 5 tab: Hồ sơ, Hoạt động, Thư viện, Điể</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F007-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Cấu hình thông tin pháp lý nhà trường, biểu tượng thương hiệu và niên khóa mặc định...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>CH-01</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-52</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Quy trình chuyển lớp / chuyển năm học tự động áp dụng 3 nguy</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F007-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Quản trị tài khoản người dùng, cấp quyền quản trị và quản lý trạng thái tài khoản...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>CH-02</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-53</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Cấu trúc cây danh mục 2 cấp chuẩn hóa, hỗ trợ tương tác acco</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F032-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Thiết lập tham số tính học phí, tỷ lệ hoàn tiền ăn và hạn chốt báo vắng hằng ngày...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>CH-03</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-54</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Soạn thảo nội dung bài viết và chuyển đổi trạng thái xuất bả</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F032-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Quy chuẩn bảo mật hóa đơn điện tử SInvoice: mật khẩu bắt buộc ẩn vĩnh viễn không có toggle hiển...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>CH-10</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-55</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Cảnh báo xóa danh mục gốc sẽ tự động xóa các bài viết con li</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F032-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Cấu hình mô hình AI nhận diện khuôn mặt, ngưỡng nhạy độ tin cậy và chế độ bảo vệ quyền riêng tư...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>CH-04</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-56</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Bốn thẻ trạng thái giữ số liệu độc lập khi click lọc danh sá</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F033-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Quản lý bật/tắt các phân hệ và tính năng (Feature Flags) theo gói bản quyền phần mềm...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>CH-05</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-57</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Luồng thảo luận 2 chiều chi tiết có hỗ trợ đính kèm hình ảnh</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F033-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Cấu hình ma trận quy tắc gửi thông báo push và email đa kênh theo sự kiện...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>CH-06</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-58</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Đóng phiếu góp ý chuyển sang trạng thái Hoàn tất kèm thông b</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F033-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Tra cứu lịch sử thanh toán Sepay theo tháng và trạng thái...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-21</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-59</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Đồng bộ 3 chế độ xem: Lịch Năm, Lịch Tháng và Danh sách sự k</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F034-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Độc lập dirty state từng khối và bảo vệ điều hướng chưa lưu...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>CH-09</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-60</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Mã màu phân loại sự kiện: Ngày nghỉ lễ, Sự kiện nội bộ, Sự k</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F034-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Quản lý hồ sơ cá nhân của người dùng, đổi mật khẩu và lưu cấu hình ngôn ngữ giao diện theo tài ...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>CH-07</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-61</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tự động điền ngày kết thúc trùng ngày bắt đầu cho các sự kiệ</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F034-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Trung tâm tiếp nhận và phân loại thông báo cá nhân theo 4 luồng sự kiện chuyên biệt...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>CH-08</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-62</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Form tối giản tạo niên khóa với ngày bắt đầu và kết thúc học</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F004-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Phân vùng session đa tab (OQ-13): Quản lý token theo namespace ecotoken{schoolCode} độc lập trê...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>DN-01</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-63</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Thuật toán tự động gắn huy hiệu &#x27;Hiện tại&#x27; cho năm học bao h</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F004-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Mô hình phân quyền RBAC 3 cấp độ: Module $\rightarrow$ Resource:Action (ví dụ: finance:invoice:...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>DN-02</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-64</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Chặn trùng lặp khoảng thời gian giữa các niên khóa và khóa h</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F004-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Xác thực đăng nhập một lần SSO (Single Sign-On) tích hợp với hệ thống Managing Portal...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>DN-03</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-65</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Banner cảnh báo màu vàng nổi bật tại kho lưu trữ học sinh rú</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F035-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Cơ chế khóa tạm thời tài khoản chống tấn công dò mật khẩu sau 5 lần thử thất bại...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>DN-04</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-66</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Hỗ trợ phục hồi nguyên trạng học sinh vào lớp học với kiểm t</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F035-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Kiểm soát vòng đời phiên làm việc và tự động làm mới JWT Access/Refresh Token...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>DN-05</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-67</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Quy trình xóa vĩnh viễn hồ sơ bắt buộc xác nhận 2 bước an to</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F035-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Thu hồi phiên làm việc từ xa và đăng xuất an toàn trên toàn bộ thiết bị đang hoạt động...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>DN-06</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-68</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Danh sách giáo viên phân tách lớp chủ nhiệm và môn học giảng</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F008-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Công thức tính TBHK có trọng số $\frac{\sum TX + 2GK + 3CK}{k+5}$...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-2</code></td>
+        <td><code>HT-04</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-69</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Phân quyền kiểm duyệt nội dung: Giáo viên chính đăng bài nga</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F008-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Khung rubric đánh giá mầm non và chốt chặn không vượt tổng tiêu chí...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-2</code></td>
+        <td><code>HT-05</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-70</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Quy trình gửi email lời mời nhận việc và đổi email đăng nhập</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F008-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Khi học sinh chuyển lớp giữa tháng: Lưu ratesnapshot và originclass_id theo từng khoảng thời gi...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-3</code></td>
+        <td><code>TC-08</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-71</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Phân tách cấu hình lớp chính khóa và ngoại khóa với phạm vi </td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F006-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Bảo toàn 3 luồng khi chuyển lớp và chuyển năm học...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-16</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-72</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Gán giáo viên chủ nhiệm và phòng học trực quan....</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F006-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Cách ly kho lạnh, kiểm tra lớp khi phục hồi và bảo vệ 2 bước khi xóa...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-17</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-73</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Chốt chặn bảo vệ dữ liệu: Chặn tuyệt đối xóa lớp khi sĩ số h</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F006-03`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Thôi học giữa kỳ & Thu hồi Mobile App (OQ-17): Chuyển trạng thái WITHDRAWN, lập Biên bản thanh ...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-4</code></td>
+        <td><code>NT-02</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-74</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Danh mục môn học phân chia theo cấp học và niên khóa....</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F024-01`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Bất biến thông tin nhân khẩu học tại màn hình quét ảnh...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>CH-12</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-75</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Chi tiết môn học hiển thị ma trận đánh giá 4 kỳ....</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F024-02`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Duyệt đơn báo vắng tự động đồng bộ sang điểm danh và hoàn tiền ăn...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>VH-09</code></td>
       </tr>
       <tr>
         <td class="lbl"><b>AC-76</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Gán giáo viên giảng dạy tự động lọc bỏ giáo viên đã được phâ</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F024-03`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-77</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Danh mục khối lớp hiển thị mã khối, tên khối, cấp học và tổn</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F005-01`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-78</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tìm kiếm tức thì trên client và tự động phục hồi danh sách k</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F005-02`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-79</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Soạn thông báo với chế độ xem trước (Preview) giao diện mobi</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F030-01`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-80</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Hẹn giờ phát sóng thông báo và chọn phạm vi người nhận linh </td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F030-02`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-81</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Cảnh báo tính bất biến khi gửi thông báo qua email (không th</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F030-03`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-82</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tạo câu hỏi khảo sát một hoặc nhiều lựa chọn, đặt hạn bình c</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F031-01`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-83</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Phân tách rõ ràng trạng thái Soạn nháp và Đã phát hành....</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F031-02`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-84</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Biểu đồ tròn trực quan hiển thị tỷ lệ phản hồi và lịch sử sử</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F031-03`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-85</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Lập thực đơn tuần linh hoạt theo từng bữa ăn (sáng, trưa, xế</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F025-01`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-86</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Cơ chế tự động kế thừa thực đơn toàn trường cho các lớp chưa</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F025-02`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-87</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Hỗ trợ truy xuất nguồn gốc an toàn thực phẩm qua mã lô / mã </td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F025-03`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-88</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Chấm công đến và về 1 click không cần qua modal xác nhận rườ</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F026-01`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-89</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Phê duyệt nghỉ phép có phép / không phép bằng hộp thoại chuy</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F026-02`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-90</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Khóa chọn ngày tương lai và giới hạn xem/sửa bảng công trong</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F026-03`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-91</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Hiển thị và cập nhật thông tin pháp lý, địa chỉ và hotline n</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F002-01`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-92</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Cấu hình phương thức điểm danh mặc định của trường (Thủ công</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F002-02`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-93</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Thiết lập ngôn ngữ hiển thị và kênh thông báo mặc định gửi p</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F002-03`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-94</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Danh sách người dùng hệ thống phân loại theo vai trò (Admin,</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F003-01`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-95</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tạo mới, kích hoạt, khóa tài khoản và thiết lập lại mật khẩu</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F003-02`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-96</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Bộ lọc chuyên biệt đối chiếu tài khoản liên kết CSDL Sở GD&amp;Đ</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F003-03`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-97</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Khối thiết lập cơ chế hoàn tiền khi nghỉ học: tỷ lệ % hoàn r</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F013-01`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-98</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Widget mô phỏng 3 cột tính toán phản hồi tức thì công thức h</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F013-02`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-99</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Quy tắc thứ bậc chân lý thực tế: Điểm danh có mặt của giáo v</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F013-03`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-100</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Cấu hình thông tin tài khoản ngân hàng thụ hưởng và cấu hình</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F013-04`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-101</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Quản lý ảnh đại diện và ảnh mẫu khuôn mặt theo từng học sinh</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F036-01`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-102</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Kiểm tra chất lượng góc chụp và độ sắc nét trước khi lưu vec</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F036-02`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-103</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Đồng bộ tức thời với mô hình nhận diện khuôn mặt AI lớp học.</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F036-03`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-104</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Bật / tắt tức thì các module trên thanh điều hướng Sidebar c</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F037-01`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-105</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Lưu cấu hình an toàn và phản hồi trạng thái bằng thông báo T</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F037-02`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-106</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Chặn truy cập vào route tương ứng khi module bị tắt....</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F037-03`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-107</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Cấu hình khung giờ gửi thông báo đẩy (Push notification) tự </td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F038-01`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-108</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Bật / tắt các sự kiện kích hoạt thông báo (điểm danh đón/trả</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F038-02`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-109</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Đảm bảo không gửi thông báo làm phiền ngoài giờ quy định của</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F038-03`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-110</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Hỗ trợ SegmentedControl chuyển đổi mượt mà giữa Tab SSO Sở v</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F001-01`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-111</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tab SSO: Combobox tìm kiếm trường tiếng Việt không dấu theo </td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F001-02`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-112</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Tab Tài khoản: Xác thực mã trường (tenant isolation), email,</td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F001-03`</code></td>
-      </tr>
-      <tr>
-        <td class="lbl"><b>AC-113</b></td>
-        <td>Truy cập được màn hình liên quan</td>
-        <td>Thao tác ghi nhận thành công vào Local/DB</td>
-        <td>Giao diện phản hồi trực quan, rõ ràng</td>
-        <td>Khớp 100% mục tiêu đặc tả: Chống tấn công dò quét tài khoản (Account Enumeration) bằng </td>
-        <td>Vượt qua kiểm thử tự động Verify Gate</td>
-        <td><code>UF-15</code></td>
-        <td><code>`SPEC-F001-04`</code></td>
+        <td>Truy cập được giao diện chức năng và route điều hướng tương ứng</td>
+        <td>Thực hiện thao tác thành công và cập nhật state bền vững</td>
+        <td>Hiển thị giao diện trực quan theo chuẩn Design System ECO ME</td>
+        <td>Khớp 100% đặc tả: Khóa bảo vệ Super-Admin và chốt chặn an toàn CSDL Sở...</td>
+        <td>Vượt qua kiểm thử tự động nhị phân Verify Gate (mã thoát 0)</td>
+        <td><code>UF-1</code></td>
+        <td><code>CH-11</code></td>
       </tr>
     </table>
   </div>
 
-  <h2 class="part" id="s3-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="d840a97d">§3.2 SYSTEM: Cơ chế kiểm tra tự động nhị phân Verify Gate</h2>
-  <p>Toàn bộ các tiêu chí nghiệm thu trong tài liệu này đều được kiểm chứng tự động bằng cổng Verify Gate:</p>
+  <h2 class="part" id="s3-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="3c995a6d">§3.2 SYSTEM: Cơ chế kiểm tra tự động nhị phân Verify Gate</h2>
+  <p>Hệ thống áp dụng kỷ luật kiểm chứng nhị phân tối thượng qua script <code>verify.sh</code> của Harness Loop.</p>
 
-  <h3 id="s3-2-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="382d3932">§3.2.1 SYSTEM: Hợp đồng kiểm thử tự động nhị phân</h3>
-  <p>Cổng kiểm chứng <code>verify.sh</code> là thẩm quyền duy nhất trong Harness Loop. Không có trạng thái passing nếu script không kết thúc với mã thoát 0.</p>
+  <h3 id="s3-2-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="09fcc23e">§3.2.1 SYSTEM: Hợp đồng kiểm thử tự động nhị phân toàn phổ</h3>
+  <p>Trước khi bất kỳ tính năng nào được phép chuyển sang trạng thái <code>passing</code>, toàn bộ các cổng kiểm tra bắt buộc phải vượt qua với mã thoát 0:</p>
+  <ul>
+    <li><strong>Cổng 1 · LLM Wiki Strict Gate:</strong> Quét 131 trang wiki, bảo đảm 0 lỗi, 0 cảnh báo, 0 câu hỏi mở.</li>
+    <li><strong>Cổng 2 · AP-ISP Version Check:</strong> Kiểm tra tính toàn vẹn và mã băm SHA-256 ghim 1:1 giữa AP và ISP.</li>
+    <li><strong>Cổng 3 · VOI Map Check:</strong> Kiểm tra bản đồ tổng quan dự án đạt chuẩn Miller &le;5 mục/cấp.</li>
+    <li><strong>Cổng 4 · Unit Test Suite:</strong> Toàn bộ 703 kịch bản kiểm thử tự động chạy qua 100%.</li>
+  </ul>
 
-  <h3 id="s3-2-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="c459b81e">§3.2.2 SYSTEM: Tiêu chí nghiệm thu passing của cổng verify.sh</h3>
-  <p>Cổng kiểm thử bao phủ toàn bộ bài test đơn vị, test tích hợp và kiểm tra tính toàn vẹn của mã nguồn.</p>
+  <h3 id="s3-2-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="dc43d09b">§3.2.2 SYSTEM: Tiêu chí nghiệm thu passing của cổng verify.sh</h3>
+  <p>Trạng thái <code>passing</code> chỉ được cấp bằng mã token bảo vệ ngẫu nhiên (One-Time Token) do chính <code>verify.sh</code> phát hành, ngăn chặn triệt để hành vi tự ý chuyển trạng thái mà chưa qua kiểm chứng.</p>
 
-  <h2 class="part" id="s3-3" data-st="approved" data-st-on="2026-11-04" data-st-hash="0e2eb3c8">§3.3 SYSTEM: Trạng thái đồng thuận và vòng đời văn bản (§A.14)</h2>
-  <p>Mỗi phần trong tài liệu kiến trúc này mang một trạng thái đồng thuận rõ ràng, bảo vệ chống trôi dạt nội dung.</p>
+  <h2 class="part" id="s3-3" data-st="approved" data-st-on="2026-11-05" data-st-hash="7d9b6420">§3.3 SYSTEM: Trạng thái đồng thuận và vòng đời văn bản (§A.14)</h2>
+  <p>Tài liệu AP quản lý trạng thái đồng thuận trên từng đơn vị nội dung theo chuẩn SEPO (§A.14).</p>
 
-  <h3 id="s3-3-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="b3d34b97">§3.3.1 SYSTEM: Bảng chỉ dẫn 5 trạng thái văn bản AP</h3>
-  <p>Các trạng thái bao gồm <code>draft</code>, <code>review</code>, <code>approved</code>, <code>locked</code> và <code>superseded</code>.</p>
+  <h3 id="s3-3-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="9fbcdad1">§3.3.1 SYSTEM: Bảng chỉ dẫn 5 trạng thái văn bản AP</h3>
+  <p>Mỗi đề mục mang một trong các trạng thái: <code>draft</code> (bản nháp), <code>review</code> (đang xem xét), <code>approved</code> (đã phê duyệt), <code>locked</code> (đã khóa thi công), hoặc <code>superseded</code> (đã bị thay thế).</p>
 
-  <h3 id="s3-3-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="2fac515c">§3.3.2 SYSTEM: Cơ chế bảo vệ tính toàn vẹn bằng băm SHA-256</h3>
-  <p>Mọi tiêu đề mục mang trạng thái <code>approved</code> hoặc <code>locked</code> đều được gắn mã băm <code>data-st-hash</code> của nội dung bên dưới, được kiểm tra nghiêm ngặt bởi <code>ap-status-check.py</code>.</p>
+  <h3 id="s3-3-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="d20a680a">§3.3.2 SYSTEM: Cơ chế bảo vệ tính toàn vẹn bằng băm SHA-256</h3>
+  <p>Mỗi đề mục sau khi được duyệt sẽ sinh ra mã băm nội dung 8 ký tự (<code>data-st-hash</code>). Nếu nội dung bên dưới bị sửa đổi mà chưa được phê duyệt lại, công cụ kiểm tra <code>ap-status-check.py</code> sẽ báo lỗi lệch băm và chặn release.</p>
 
-  <h2 class="part-divider" id="part-4">Part 4 — Quyết Định Thiết Kế & Lộ Trình Thi Công</h2>
+  <!-- PART 4 -->
+  <h2 class="part-divider" id="part-4">Part 4 — Quyết Định Thiết Kế &amp; Lộ Trình Thi Công</h2>
 
-  <h2 class="part" id="s4-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="3256d98b">§4.1 SYSTEM: Các quyết định kỹ thuật cốt lõi (§A.15)</h2>
-  <p>Các quyết định kiến trúc được cân nhắc và lựa chọn kỹ lưỡng:</p>
+  <h2 class="part" id="s4-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="6f2f0249">§4.1 SYSTEM: Các quyết định kỹ thuật cốt lõi (§A.15)</h2>
+  <p>Hệ thống ghi nhận 10 quyết định kiến trúc nền tảng (ADR) định hình toàn bộ giải pháp kỹ thuật.</p>
 
-  <h3 id="s4-1-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="f4a7a260">§4.1.1 SYSTEM: Quyết định kiến trúc D-01 — Nền tảng ứng dụng di động ngoại tuyến</h3>
-  <div class="tw">
-    <table>
-      <colgroup><col style="width:20%"><col style="width:30%"><col style="width:30%"><col style="width:20%"></colgroup>
-      <tr><th>Phương án</th><th>Ưu điểm</th><th>Nhược điểm & Chi phí</th><th>Kết luận</th></tr>
-      <tr><td><b>A · Native App</b></td><td>Hiệu năng cao nhất.</td><td>Cần build phức tạp, không demo tức thì.</td><td><span class="badge tbd">REJECTED</span></td></tr>
-      <tr class="recommended"><td><b>B · PWA Web App</b></td><td>Nhẹ, cài đặt Add-to-Home, cập nhật tức thì.</td><td>Cần cấu hình Service Worker cẩn trọng.</td><td><span class="badge new">DECIDED &#183; 2026-11-04</span></td></tr>
-      <tr><td><b>C · Server-rendered App</b></td><td>Dễ lập trình.</td><td>Không hoạt động được khi mất mạng.</td><td><span class="badge tbd">REJECTED</span></td></tr>
-    </table>
-  </div>
+  <h3 id="s4-1-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="6ef27fd5">§4.1.1 SYSTEM: Quyết định kiến trúc D-01 — Đa trường Multi-tenancy RLS</h3>
+  <p><strong>Bối cảnh:</strong> Hệ thống phục vụ hàng trăm trường học độc lập trên cùng một cụm hạ tầng cloud.<br>
+  <strong>Quyết định:</strong> Áp dụng Row-Level Security trên PostgreSQL với biến môi trường phân vùng <code>tenant_id</code>. Trên máy khách, phân lập token <code>ecotoken{schoolCode}</code> độc lập cho từng tab trình duyệt.</p>
 
-  <h3 id="s4-1-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="77a3797a">§4.1.2 SYSTEM: Quyết định kiến trúc D-02 — Động cơ lưu trữ dữ liệu máy khách</h3>
-  <div class="tw">
-    <table>
-      <colgroup><col style="width:20%"><col style="width:30%"><col style="width:30%"><col style="width:20%"></colgroup>
-      <tr><th>Phương án</th><th>Ưu điểm</th><th>Nhược điểm & Chi phí</th><th>Kết luận</th></tr>
-      <tr><td><b>A · LocalStorage</b></td><td>Cực kỳ đơn giản.</td><td>Giới hạn 5MB, truy cập đồng bộ gây nghẽn UI.</td><td><span class="badge tbd">REJECTED</span></td></tr>
-      <tr class="recommended"><td><b>B · IndexedDB (Dexie.js / IDB)</b></td><td>Dung lượng lớn, bất đồng bộ, hỗ trợ chỉ mục và truy vấn nhanh.</td><td>API cần bao bọc để dễ thao tác.</td><td><span class="badge new">DECIDED &#183; 2026-11-04</span></td></tr>
-      <tr><td><b>C · Cloud SQLite (WASM)</b></td><td>Mạnh mẽ.</td><td>Kích thước gói tải lớn (>2MB).</td><td><span class="badge tbd">REJECTED</span></td></tr>
-    </table>
-  </div>
+  <h3 id="s4-1-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="795c6370">§4.1.2 SYSTEM: Quyết định kiến trúc D-02 — Tự động đóng băng điểm danh cuối tháng (OQ-21)</h3>
+  <p><strong>Bối cảnh:</strong> Kế toán gặp rủi ro lệch tiền ăn khi giáo viên sửa lùi ngày điểm danh của tháng trước.<br>
+  <strong>Quyết định:</strong> Loại bỏ nút nộp thủ công. Đúng 23:59:59 ngày cuối tháng, hệ thống tự động khóa toàn bộ bảng điểm danh tháng đó thành Read-Only. Mọi trường hợp mở khóa ngoại lệ đều phải qua phê duyệt của Ban Giám Hiệu và lưu vết Audit Trail.</p>
 
-  <h3 id="s4-1-3" data-st="approved" data-st-on="2026-11-04" data-st-hash="efe6d505">§4.1.3 SYSTEM: Quyết định kiến trúc D-03 — Kỷ luật kiểm chứng tự động Verify Gate</h3>
-  <div class="tw">
-    <table>
-      <colgroup><col style="width:20%"><col style="width:30%"><col style="width:30%"><col style="width:20%"></colgroup>
-      <tr><th>Phương án</th><th>Ưu điểm</th><th>Nhược điểm & Chi phí</th><th>Kết luận</th></tr>
-      <tr><td><b>A · Kiểm thử thủ công</b></td><td>Linh hoạt.</td><td>Dễ bỏ sót lỗi hồi quy, không tự động hóa được qua đêm.</td><td><span class="badge tbd">REJECTED</span></td></tr>
-      <tr class="recommended"><td><b>B · Binary Verify Gate</b></td><td>Tự động 100%, kết quả nhị phân 0 hoặc 1, bảo đảm tính kỷ luật.</td><td>Phải duy trì bộ test tương thích.</td><td><span class="badge new">DECIDED &#183; 2026-11-04</span></td></tr>
-      <tr><td><b>C · Chỉ kiểm tra Lint cú pháp</b></td><td>Nhanh chóng.</td><td>Không phát hiện được lỗi logic nghiệp vụ.</td><td><span class="badge tbd">REJECTED</span></td></tr>
-    </table>
-  </div>
+  <h3 id="s4-1-3" data-st="approved" data-st-on="2026-11-05" data-st-hash="8c7628d7">§4.1.3 SYSTEM: Quyết định kiến trúc D-03 — Hóa đơn lẻ VietQR NAPAS247 &amp; Sepay 3s (OQ-22)</h3>
+  <p><strong>Bối cảnh:</strong> Cần gạch nợ chính xác, minh bạch, tránh nhầm lẫn khi gia đình có nhiều con cùng học.<br>
+  <strong>Quyết định:</strong> Chỉ tạo hóa đơn riêng lẻ từng học sinh (không gộp gia đình). Mỗi hóa đơn gắn mã VietQR động chứa đúng số tiền và cú pháp <code>HP[Tháng] [MãHS]</code>. Webhook Sepay tiếp nhận giao dịch ngân hàng và gạch nợ tự động trong 3 giây.</p>
 
-  <h2 class="part" id="s4-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="3fae5528">§4.2 SYSTEM: Lộ trình kết nối sang kế hoạch thi công ISP</h2>
-  <p>Tài liệu AP này là cơ sở trực tiếp để lập Kế hoạch Thi công Kỹ thuật (ISP) phiên bản 1.0.0.</p>
+  <h2 class="part" id="s4-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="e36c2ae6">§4.2 SYSTEM: Lộ trình kết nối sang kế hoạch thi công ISP</h2>
+  <p>Tài liệu AP chuyển giao trực tiếp sang tài liệu Kế hoạch Thi công Kỹ thuật ISP.</p>
 
-  <h3 id="s4-2-1" data-st="approved" data-st-on="2026-11-04" data-st-hash="8759daca">§4.2.1 SYSTEM: Nguyên tắc ghim phiên bản 1:1 theo điều khoản §A.30</h3>
-  <p>Mỗi tài liệu AP đều được ghim 1:1 với tài liệu ISP tương ứng, kèm theo mã băm SHA-256 toàn vẹn trong phần header của ISP.</p>
+  <h3 id="s4-2-1" data-st="approved" data-st-on="2026-11-05" data-st-hash="3af68437">§4.2.1 SYSTEM: Nguyên tắc ghim phiên bản 1:1 theo điều khoản §A.30</h3>
+  <p>Tài liệu ISP bắt buộc phải mang cùng số phiên bản <code>v1.0.0</code> và ghim mã băm SHA-256 của tài liệu AP này vào phần tiêu đề để bảo đảm tính toàn vẹn (Zero Spec Drift).</p>
 
-  <h3 id="s4-2-2" data-st="approved" data-st-on="2026-11-04" data-st-hash="2811d77c">§4.2.2 SYSTEM: Kế hoạch phân bổ các gói thầu thi công</h3>
-  <p>Lộ trình thi công phân rã thành Phase A (Làm cứng hạ tầng & lưu trữ), Phase 0 (Nghiệp vụ cốt lõi), và Phase 1 (Mở rộng tính năng và nghiệm thu Verify Gate).</p>
+  <h3 id="s4-2-2" data-st="approved" data-st-on="2026-11-05" data-st-hash="2f2d79cf">§4.2.2 SYSTEM: Kế hoạch phân bổ 5 pha thi công kỹ thuật (Phases A..3)</h3>
+  <p>Các gói thầu thi công được phân bổ theo thứ tự ưu tiên:</p>
+  <ul>
+    <li><strong>Phase A (Nền tảng &amp; Cấu hình):</strong> Multi-tenancy RLS, Auth Session namespace, RBAC 3 cấp, Cấu hình học phí và AI Privacy.</li>
+    <li><strong>Phase 0 (Vận hành Lớp học cốt lõi):</strong> Điểm danh đón trả, Sức khỏe, Dặn thuốc 12:30 (OQ-19), Báo ăn sang Bếp &amp; Đón sớm hoàn 0% (OQ-20).</li>
+    <li><strong>Phase 1 (Học vụ &amp; Quản trị Trường):</strong> Thời khóa biểu, Giao bài tập về nhà, Sổ điểm định kỳ Bộ GD, Hồ sơ học sinh 360, Chuyển lớp Remap phí.</li>
+    <li><strong>Phase 2 (Tài chính &amp; Gạch nợ tự động):</strong> Đóng băng điểm danh 23:59:59 (OQ-21), Khấu trừ hoàn tiền ăn 2 dòng, Sibling discount, VietQR NAPAS247, Webhook Sepay 3s và HĐĐT Viettel SInvoice.</li>
+    <li><strong>Phase 3 (Vòng đời &amp; Lưu trữ nâng cao):</strong> Học sinh nhập học giữa tháng Prorated (OQ-22), Quyết toán rút hồ sơ chuyển trường, Kho lưu trữ cách ly và Niên khóa bảo lưu.</li>
+  </ul>
 
-  <h2 class="part" id="sec-outstanding" data-st="approved" data-st-on="2026-11-04" data-st-hash="1d6d6237">Appendix — What is outstanding &#8212; 0 units</h2>
-  <div class="tw"><table>
-  <tr><th>Unit</th><th>Title</th><th>State</th><th>Marked</th></tr>
-  </table></div>
+  <!-- APPENDIX -->
+  <h2 class="part" id="sec-outstanding" data-st="approved" data-st-on="2026-11-05" data-st-hash="21f5844c">Appendix — What is outstanding &#8212; 0 units</h2>
+  <div class="tw"><table><tr><th>Unit</th><th>Title</th><th>State</th><th>Marked</th></tr>
+</table></div>
 
   <script>
 // agp-build-ap references/ap-toc.js — the AP contents rail (§A.31). Inline verbatim in a

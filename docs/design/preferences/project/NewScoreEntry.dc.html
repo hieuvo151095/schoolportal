@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Nhập điểm — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="scoreboard" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Nhập điểm Toán học</h1>
+    <p class="ecomd-page-header__desc body-sm">Lớp 12A1 · Giữa học kỳ I · GVCN Thầy Trần Minh Đức · Sĩ số 34</p>
+  </div>
+</div>
+<section class="ecomd-table-card"><div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SelectField" options="{{subOpts}}" value="{{sub}}" on-change="{{setSub}}" label="Môn học"></x-import><x-import component-from-global-scope="ECOMD.StatusTag" tone="success" icon="{{check}}">Môn của khối 12</x-import><span style="flex: 1;"></span><x-import component-from-global-scope="ECOMD.Checkbox" label="Ẩn cột nhận xét" checked="{{hideCmt}}" on-change="{{toggleCmt}}"></x-import></div><div class="ecomd-table-scroll"><table class="ecomd-table is-dense"><thead><tr><th class="body-xs-bold is-primary">Học sinh</th><th class="body-xs-bold is-right">TX1</th><th class="body-xs-bold is-right">TX2</th><th class="body-xs-bold is-right">TX3</th><th class="body-xs-bold is-right">TX4</th><th class="body-xs-bold is-right">Giữa kỳ</th><th class="body-xs-bold is-right">Cuối kỳ</th><th class="body-xs-bold is-right">TBHK</th><sc-if value="{{showCmt}}" hint-placeholder-val="{{true}}"><th class="body-xs-bold">Nhận xét</th></sc-if></tr></thead><tbody><sc-for list="{{rows}}" as="r" hint-placeholder-count="5"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><span style="display: flex; align-items: center; gap: var(--space-10);"><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums; min-width: var(--size-16);">{{r.n}}</span><span style="display: flex; flex-direction: column; min-width: 0;"><span class="body-sm-medium" style="color: var(--text-heading); white-space: nowrap;">{{r.name}}</span><span class="body-xs" style="color: var(--text-subtle);">{{r.code}}</span></span></span></div></td><sc-for list="{{r.cells}}" as="c" hint-placeholder-count="6"><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">{{c.lbl}}</span><div class="ecomd-cell__value"><input type="text" inputmode="decimal" class="{{c.cls}}" value="{{c.v}}" placeholder="–" aria-label="{{c.aria}}" onChange="{{c.set}}" style="width: calc(var(--size-40) * 3 / 2);"></div></td></sc-for><td class="body-sm is-right is-wide"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">TBHK</span><div class="ecomd-cell__value"><span class="body-sm-bold" style="color: var(--text-heading); font-variant-numeric: tabular-nums;">{{r.avg}}</span></div></td><sc-if value="{{showCmt}}" hint-placeholder-val="{{true}}"><td class="body-sm is-wide"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Nhận xét</span><div class="ecomd-cell__value" style="flex: 1;"><input type="text" class="ecomd-text body-sm" value="{{r.cmt}}" aria-label="{{r.cmtLabel}}" style="min-width: calc(var(--size-sidebar-w) * 3 / 4);"></div></td></sc-if></tr></sc-for></tbody></table></div></section>
+<x-import component-from-global-scope="ECOMD.InlineNotice" tone="info">TBHK tự tính: (tổng điểm thường xuyên + 2 × giữa kỳ + 3 × cuối kỳ) ÷ (số bài thường xuyên + 5), làm tròn 1 chữ số thập phân. Ô để trống không tính vào điểm thường xuyên.</x-import>
+<div class="ecomd-form-footer"><span class="ecomd-form-footer__note body-xs">{{footNote}}</span><div class="ecomd-form-footer__actions"><x-import component-from-global-scope="ECOMD.Button" variant="ghost">Hủy</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary">Lưu bảng điểm</x-import></div></div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Học tập", "Điểm & Đánh giá", "12A1 · Giữa học kỳ I"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { sub: 'Toán học', hideCmt: false, scores: [["8.5", "9", "8", "9.5", "8.5", "9"], ["7", "7.5", "8", "7", "7.5", "8"], ["9", "9.5", "10", "9", "9.5", "10"], ["6.5", "7", "6", "", "6.5", "7"], ["8", "8.5", "9", "8.5", "8", "8.5"]] }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var K = [["Nguyễn Văn An", "HS-1201", ["8.5", "9", "8", "9.5"], "8.5", "9", "Làm bài nhanh, tư duy toán tốt"], ["Trần Thị Bích", "HS-1202", ["7", "7.5", "8", "7"], "7.5", "8", "Cần chú ý trình bày các bước giải"], ["Lê Hoàng Cường", "HS-1203", ["9", "9.5", "10", "9"], "9.5", "10", "Xuất sắc, giải quyết bài toán nhanh"], ["Phạm Minh Đức", "HS-1204", ["6.5", "7", "6", ""], "6.5", "7", "Cần ôn tập kỹ các phép tính"], ["Vũ Hải Yến", "HS-1205", ["8", "8.5", "9", "8.5"], "8", "8.5", "Chăm chỉ, tích cực phát biểu"]], L = ["TX1", "TX2", "TX3", "TX4", "Giữa kỳ", "Cuối kỳ"];
+    var S = st.scores; var invalid = 0, empty = 0;
+    function num(v) { v = String(v || '').trim().replace(',', '.'); if (!v) return null; var n = +v; return isNaN(n) ? NaN : n; }
+    var rows = K.map(function (k, i) {
+      var vals = S[i];
+      var cells = vals.map(function (v, j) { var n = num(v), bad = n !== null && (isNaN(n) || n < 0 || n > 10); if (bad) invalid++; if (n === null) empty++;
+        return { lbl: L[j], v: v, cls: 'ecomd-text is-num body-sm' + (bad ? ' is-invalid' : ''), aria: L[j] + ' của ' + k[0],
+          set: function (e) { var nx = self.state.scores.map(function (r) { return r.slice(); }); nx[i][j] = e.target.value; self.setState({ scores: nx }); } }; });
+      var tx = vals.slice(0, 4).map(num).filter(function (n) { return n !== null && !isNaN(n); });
+      var gk = num(vals[4]), ck = num(vals[5]), avg = '–';
+      if (gk !== null && ck !== null && !isNaN(gk) && !isNaN(ck) && tx.length) { var s = tx.reduce(function (a, b) { return a + b; }, 0); avg = (Math.round((s + 2 * gk + 3 * ck) / (tx.length + 5) * 10) / 10).toFixed(1); }
+      return { n: i + 1, name: k[0], code: k[1], cells: cells, avg: avg, cmt: k[5], cmtLabel: 'Nhận xét cho ' + k[0] };
+    });
+    var total = K.length * 6;
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      check: 'circle-check', rows: rows,
+      subOpts: ['Toán học', 'Ngữ văn', 'Tiếng Anh', 'Vật lý', 'Hóa học'], sub: st.sub, setSub: function (v) { self.setState({ sub: v }); },
+      hideCmt: !!st.hideCmt, showCmt: !st.hideCmt, toggleCmt: function (v) { self.setState({ hideCmt: !!v }); },
+      footNote: invalid ? invalid + ' ô điểm không hợp lệ (phải từ 0 đến 10) · sửa trước khi lưu.' : 'Đã nhập ' + (total - empty) + ' / ' + total + ' ô điểm' + (empty ? ' · ' + empty + ' ô trống' : '') + '.'
+    });
+  }
+}
+</script>
+</body>
+</html>

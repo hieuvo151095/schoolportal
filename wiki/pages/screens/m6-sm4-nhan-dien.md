@@ -1,45 +1,45 @@
 ---
-title: "Quản lý Dữ liệu Khuôn mặt Học sinh (Face ID)"
+title: Màn Hình Cấu Hình Nhận Diện AI
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+  - pages/sources/src-open-questions-resolutions.md
+spec_ids:
+  - CH-04
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/settings/face-recognition
+status: missing
+updated: 2026-11-05
 ---
 
-# Quản lý Dữ liệu Khuôn mặt Học sinh (Face ID) (`M6/SM4`)
+# Màn Hình Cấu Hình Nhận Diện AI
 
 ## Mục đích
-
-Đăng ký, cập nhật và quản lý kho ảnh mẫu khuôn mặt của học sinh phục vụ cho tính năng nhận diện AI trong thư viện ảnh lớp và điểm danh sinh trắc học.
-
-Thuộc phân hệ **[Cấu hình](../overview/module-m6-cau-hinh.md)**. Mã định danh tính năng Harness Loop: **`F036`** (Mức ưu tiên: `P2`).
+Cấu hình tham số mô hình AI nhận diện khuôn mặt, độ nhạy ngưỡng tin cậy (mặc định $\ge 0.85$), huấn luyện vector mẫu, và thiết lập chế độ bảo vệ quyền riêng tư sinh trắc học Opt-Out (`AUTO_BLUR_FACE` / `EXCLUDE_FROM_PUBLIC_ALBUM` theo Nghị định 13/2023/NĐ-CP - OQ-16).
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/setting/face-recognition`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/faceRecognition.ts`
-  - `docs/src/utils/faceRecognitionValidation.ts`
-  - `docs/tests/unit/faceRecognition.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/settings/face-recognition` | repo:app/src/pages/[schoolCode]/settings/face-recognition.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F036-01**: Quản lý ảnh đại diện và ảnh mẫu khuôn mặt theo từng học sinh.
-- **SPEC-F036-02**: Kiểm tra chất lượng góc chụp và độ sắc nét trước khi lưu vector khuôn mặt.
-- **SPEC-F036-03**: Đồng bộ tức thời với mô hình nhận diện khuôn mặt AI lớp học.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| CH-04 | Cấu hình mô hình AI nhận diện khuôn mặt, ngưỡng nhạy độ tin cậy và chế độ bảo vệ quyền riêng tư Opt-Out OQ-16 | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F036-01` | Quản lý ảnh đại diện và ảnh mẫu khuôn mặt theo từng học sinh... | `OK` | repo:app/src/utils/faceRecognitionValidation.ts:1 | Đã hoàn thành và verify qua tests/unit/faceRecognition.test.mjs |
-| `SPEC-F036-02` | Kiểm tra chất lượng góc chụp và độ sắc nét trước khi lưu vec... | `OK` | repo:app/src/utils/faceRecognitionValidation.ts:35 | Đã hoàn thành và verify qua tests/unit/faceRecognition.test.mjs |
-| `SPEC-F036-03` | Đồng bộ tức thời với mô hình nhận diện khuôn mặt AI lớp học.... | `OK` | repo:app/src/utils/faceRecognitionValidation.ts:70 | Đã hoàn thành và verify qua tests/unit/faceRecognition.test.mjs |
+| CH-04 | Cấu hình mô hình AI nhận diện khuôn mặt và ngưỡng nhạy độ tin cậy nhận diện | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/settings/face-recognition.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md) mục OQ-04, OQ-16).
 
 ## Liên quan
-
-- Phân hệ cha: [Cấu hình](../overview/module-m6-cau-hinh.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ Cấu hình](../overview/module-settings.md)
+- [Đường ống nhận diện khuôn mặt AI](../concepts/ai-face-recognition.md)
+- [Hồ sơ sinh trắc khuôn mặt](../entities/face-biometric-registration.md)
+- [Thư viện media](../entities/media-album.md)
+- [Luồng đăng ký sinh trắc khuôn mặt](../flows/fl-dang-ky-sinh-trac-khuon-mat.md)

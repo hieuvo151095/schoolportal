@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tải lên thời khóa biểu — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<div style="height: 100vh; overflow: hidden;" aria-hidden="true"><dc-import name="NewSchedule" hint-size="100%,900px"></dc-import></div>
+<x-import component-from-global-scope="ECOMD.PopupModal" open="{{open}}" on-close="{{close}}" title="Tải lên thời khóa biểu" description="Dùng tệp có sẵn thay cho lưới tiết học" icon="upload" width="calc(var(--size-sidebar-w) * 2 + var(--space-48) * 2)" primary-action="{{pri}}" secondary-action="{{sec}}">
+<div class="ecomd-form"><div class="ecomd-grid" style="--ecomd-cols: 2; --ecomd-cols-mobile: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Lớp <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{clsOpts}}" value="{{cls}}" on-change="{{setCls}}" label="Lớp"></x-import></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Học kỳ <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{termOpts}}" value="{{term2}}" on-change="{{setTerm}}" label="Học kỳ"></x-import></label></div><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tệp thời khóa biểu <span class="ecomd-field__req" aria-hidden="true">*</span></span><div style="display: flex; flex-direction: column; gap: var(--space-8);"><button type="button" class="ecomd-dropzone"><x-import class-name="ecomd-dropzone__icon" component-from-global-scope="ECOMD.Icon" name="upload" size="{{twenty}}"></x-import><span class="ecomd-dropzone__title body-sm-medium">Kéo thả tệp vào đây hoặc <b>chọn tệp</b></span><span class="body-xs">PDF, JPG, PNG · tối đa 10 MB</span></button><div class="ecomd-file"><span class="ecomd-file__icon"><x-import component-from-global-scope="ECOMD.Icon" name="file-pdf" size="{{fourteen}}"></x-import></span><span class="ecomd-file__text"><span class="ecomd-file__name body-sm-medium">TKB_HK1_Khoi1_2026.pdf</span><span class="ecomd-file__meta body-xs">1.2 MB · đã tải lên</span></span><x-import component-from-global-scope="ECOMD.IconButton" icon="xmark" label="Bỏ tệp"></x-import></div></div></div><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tên hiển thị</span><input type="text" class="ecomd-text body-sm" value="Thời khóa biểu học kỳ I (PDF)"></label><x-import component-from-global-scope="ECOMD.Checkbox" label="Phát hành ngay tới phụ huynh" description="Bỏ chọn để lưu ở trạng thái bản nháp" checked="{{pub}}" on-change="{{tgPub}}"></x-import></div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"open": {"editor": "boolean", "default": true, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ open: props.open !== false }, { cls: 'Lớp 1A1', term2: 'Học kỳ I · 2026 – 2027', pub: true }); }
+  componentDidUpdate(prev) { if (prev.open !== this.props.open) this.setState({ open: this.props.open !== false }); }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    return {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      open: st.open, close: function () { self.setState({ open: false }); },
+      clsOpts: ['Lớp 1A1', 'Lớp 2A2', 'Lớp 3A1', 'Lớp 5A1'], cls: st.cls, setCls: function (v) { self.setState({ cls: v }); },
+      termOpts: ['Học kỳ I · 2026 – 2027', 'Học kỳ II · 2026 – 2027'], term2: st.term2, setTerm: function (v) { self.setState({ term2: v }); },
+      pub: st.pub, tgPub: function (v) { self.setState({ pub: v }); },
+      pri: { label: st.pub ? 'Tải lên và phát hành' : 'Lưu bản nháp', icon: 'upload' }, sec: { label: 'Hủy', onClick: function () { self.setState({ open: false }); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

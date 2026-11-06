@@ -2,7 +2,7 @@
 
 > Đây là bản thể hiện của mẫu "LLM Wiki" (Karpathy, gist `karpathy/442a6bf555914893e9891c11519de94f`) cho repo này. Wiki được dựng bằng skill `llm-wiki`, chế độ **new**.
 > File này là **cấu hình**: nó cho mọi agent LLM biết wiki có cấu trúc ra sao, quy ước viết trang và quy trình Ingest / Query / Lint. Bản máy đọc nằm ở `wiki.json`; `tools/lint_wiki.py` đọc file đó.
-> Người và LLM cùng chỉnh file này theo thời gian. Ngày khởi tạo: 2026-11-04.
+> Người và LLM cùng chỉnh file này theo thời gian. Ngày khởi tạo: 2026-11-05.
 
 ## 1. Mục đích
 
@@ -60,7 +60,7 @@ title: Đơn hàng                 # tên hiển thị
 type: entity                    # overview | source | entity | concept | flow | screen
 sources:                        # nguồn căn cứ: đường dẫn tương đối từ llm-wiki/ hoặc repo:<path>
   - raw/specs/01-yeu-cau.md
-updated: 2026-11-04               # ngày LLM sửa gần nhất (YYYY-MM-DD)
+updated: 2026-11-05               # ngày LLM sửa gần nhất (YYYY-MM-DD)
 ---
 ```
 
@@ -116,7 +116,7 @@ Cột `Bằng chứng` ghi `repo:path:line` theo snapshot của ngày trong `upd
 
 ### 4.7 Đánh dấu chưa rõ
 
-- Chỗ spec mơ hồ hoặc tự mâu thuẫn: ghi `**[CẦN LÀM RÕ]**` kèm mô tả, và liệt kê trong mục `## Câu hỏi mở`.
+- Chỗ spec mơ hồ hoặc tự mâu thuẫn: ghi `**[CẦN_LÀM_RÕ]**` kèm mô tả, và liệt kê trong mục `## Câu hỏi mở`.
 - Không tự bịa quy tắc nghiệp vụ.
 
 ## 5. Mã yêu cầu (spec IDs) và thứ tự ưu tiên nguồn
@@ -129,7 +129,13 @@ Danh sách tiền tố cũng nằm trong `wiki.json → prefixes`; khi thêm ti�
 
 | Tiền tố | Phân hệ | Hub |
 |---|---|---|
-| `XX` | (chưa có — thêm bằng init_wiki.py --force --prefix hoặc sửa tay) | — |
+| `TQ` | Tổng quan | [Tổng quan](pages/overview/module-overview.md) |
+| `VH` | Vận hành | [Vận hành](pages/overview/module-operations.md) |
+| `HT` | Học tập | [Học tập](pages/overview/module-academics.md) |
+| `TC` | Tài chính | [Tài chính](pages/overview/module-finance.md) |
+| `NT` | Nhà trường | [Nhà trường](pages/overview/module-school-admin.md) |
+| `CH` | Cấu hình | [Cấu hình](pages/overview/module-settings.md) |
+| `DN` | Đăng nhập & Xác thực | [Đăng nhập & Xác thực](pages/overview/module-auth.md) |
 
 **Quyết định của chủ sở hữu:**
 - Ghi vào trang source riêng `sources/<module>-decisions-YYYY-MM-DD.md`, rồi cập nhật các mã liên quan.
@@ -139,7 +145,7 @@ Danh sách tiền tố cũng nằm trong `wiki.json → prefixes`; khi thêm ti�
 **Thứ tự ưu tiên khi nguồn mâu thuẫn:**
 
 1. Quyết định của chủ sở hữu (trang `*-decisions-*` mới nhất).
-2. tài liệu yêu cầu trong raw/specs/ (bản mới hơn thắng)
+2. docs/prd/PRD_School_Operating_Portal_VI.md > docs/tech-specs/system-architecture-blueprint.md
 3. Tài liệu phái sinh, ví dụ PRD do AI viết.
 
 Code (khi đã có) chỉ là bằng chứng triển khai, không phải spec. Code khác spec thì ghi vào `Khác biệt spec ↔ code`.
@@ -152,7 +158,7 @@ Mâu thuẫn phải được ghi ở cả hai trang liên quan và trong kết q
 
 1. Người dùng thả nguồn vào `raw/`, hoặc chỉ định file trong repo. Với spreadsheet: lưu bản gốc, cùng export từng tab ra `.csv` và `.md` nguyên văn, không sửa nội dung.
 
-2. LLM đọc toàn bộ nguồn, tách thành các quy tắc kiểm được và đặt mã spec. Chỗ nào chưa rõ thì ghi `[CẦN LÀM RÕ]`, không tự quyết.
+2. LLM đọc toàn bộ nguồn, tách thành các quy tắc kiểm được và đặt mã spec. Chỗ nào chưa rõ thì ghi `[CẦN_LÀM_RÕ]`, không tự quyết.
 
 3. Tạo hoặc cập nhật **một trang source cho mỗi nguồn** trong `pages/sources/` (không gộp nhiều tài liệu vào một trang), định nghĩa mã spec mới nếu có.
 4. Cập nhật mọi trang entity, concept, flow, screen bị ảnh hưởng. Khi thông tin mới mâu thuẫn với trang cũ: không xoá, mà ghi rõ mâu thuẫn và nguồn nào thắng theo §5.
@@ -208,7 +214,7 @@ Ghi kết quả vào `log.md` theo dạng `## [YYYY-MM-DD] lint | <Phạm vi>`, 
 
 1. Chủ sở hữu trả lời câu hỏi mở.
 2. LLM ghi câu trả lời vào `sources/<module>-decisions-YYYY-MM-DD.md`: câu hỏi, phương án được chọn, các phương án bị loại, người quyết định, các trang và feature bị ảnh hưởng.
-3. Cập nhật các trang liên quan; bỏ `[CẦN LÀM RÕ]` ở chỗ đã chốt.
+3. Cập nhật các trang liên quan; bỏ `[CẦN_LÀM_RÕ]` ở chỗ đã chốt.
 4. Ghi `## [YYYY-MM-DD] decide | <Phạm vi>` vào `log.md`.
 
 ## 7. Quy tắc `index.md` và `log.md`

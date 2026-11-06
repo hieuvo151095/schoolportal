@@ -1,45 +1,41 @@
 ---
-title: "Điểm danh Nhân viên 1 chạm & Phê duyệt Nghỉ phép"
+title: Màn Hình Điểm Danh Nhân Viên
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - NT-10
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/school/staff-attendance
+status: missing
+updated: 2026-11-05
 ---
 
-# Điểm danh Nhân viên 1 chạm & Phê duyệt Nghỉ phép (`M5/SM9`)
+# Màn Hình Điểm Danh Nhân Viên
 
 ## Mục đích
-
-Chấm công đến/về cho cán bộ nhân viên nhà trường tức thì bằng 1 click, duyệt đơn xin nghỉ phép và hỗ trợ điều chỉnh công trong vòng 45 ngày quá khứ.
-
-Thuộc phân hệ **[Nhà trường](../overview/module-m5-nha-truong.md)**. Mã định danh tính năng Harness Loop: **`F026`** (Mức ưu tiên: `P1`).
+Chấm công ca làm việc và tổng hợp ngày công nhân sự nhà trường.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/school/staff-attendance`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/staffAttendance.ts`
-  - `docs/src/utils/staffAttendanceValidation.ts`
-  - `docs/tests/unit/staffAttendance.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/school/staff-attendance` | repo:app/src/pages/[schoolCode]/school/staff-attendance.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F026-01**: Chấm công đến và về 1 click không cần qua modal xác nhận rườm rà.
-- **SPEC-F026-02**: Phê duyệt nghỉ phép có phép / không phép bằng hộp thoại chuyên dụng.
-- **SPEC-F026-03**: Khóa chọn ngày tương lai và giới hạn xem/sửa bảng công trong 45 ngày quá khứ.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| NT-10 | Điểm danh ca làm việc và tổng hợp bảng chấm công nhân viên nhà trường | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F026-01` | Chấm công đến và về 1 click không cần qua modal xác nhận rườ... | `OK` | repo:app/src/utils/staffAttendanceValidation.ts:1 | Đã hoàn thành và verify qua tests/unit/staffAttendance.test.mjs |
-| `SPEC-F026-02` | Phê duyệt nghỉ phép có phép / không phép bằng hộp thoại chuy... | `OK` | repo:app/src/utils/staffAttendanceValidation.ts:40 | Đã hoàn thành và verify qua tests/unit/staffAttendance.test.mjs |
-| `SPEC-F026-03` | Khóa chọn ngày tương lai và giới hạn xem/sửa bảng công trong... | `OK` | repo:app/src/utils/staffAttendanceValidation.ts:80 | Đã hoàn thành và verify qua tests/unit/staffAttendance.test.mjs |
+| NT-10 | Điểm danh ca làm việc và tổng hợp bảng chấm công nhân viên nhà trường | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/school/staff-attendance.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Nhà trường](../overview/module-m5-nha-truong.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-school-admin.md)
+- [Thực thể liên quan](../entities/teacher-staff.md)

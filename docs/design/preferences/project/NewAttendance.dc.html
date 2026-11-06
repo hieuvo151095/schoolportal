@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Điểm danh lớp — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="attendance" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Điểm danh lớp 1A1</h1>
+    <p class="ecomd-page-header__desc body-sm">GVCN Cô Nguyễn Thu Mai · Giờ đón, giờ trả, người đón và sức khỏe học sinh trong ngày</p>
+  </div>
+  <div class="ecomd-page-header__actions"><span style="display: inline-flex; align-items: center; gap: var(--space-4);"><x-import component-from-global-scope="ECOMD.IconButton" icon="chevron-left" label="Ngày trước" size="md"></x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="calendar-days">Thứ Sáu, 30/10/2026</x-import><x-import component-from-global-scope="ECOMD.IconButton" icon="chevron-right" label="Ngày sau" size="md"></x-import></span><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="file-excel">Xuất Excel</x-import></div>
+</div>
+<div class="ecomd-stat-group" style="--ecomd-cols: 4;">
+  <sc-for list="{{stats}}" as="s" hint-placeholder-count="4"><x-import component-from-global-scope="ECOMD.StatCard" label="{{s.label}}" value="{{s.value}}" icon="{{s.icon}}" tone="{{s.tone}}"></x-import></sc-for>
+</div>
+<section class="ecomd-table-card">
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Tình trạng điểm danh"></x-import>
+<sc-if value="{{noSel}}" hint-placeholder-val="{{true}}"><div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo tên bé, mã học sinh" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{healthOpts}}" value="{{health}}" on-change="{{setHealth}}" label="Lọc theo sức khỏe"></x-import></div></sc-if>
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{false}}"><div class="ecomd-table-card__bulk"><span class="body-sm-semibold">Đã chọn {{selCount}} học sinh</span><span style="flex: 1;"></span><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="arrow-right-to-bracket" on-click="{{bulkIn}}">Đón</x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="arrow-right-from-bracket" on-click="{{bulkOut}}">Trả</x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="user-xmark">Báo vắng</x-import><x-import component-from-global-scope="ECOMD.Button" variant="ghost" on-click="{{clearSel}}">Bỏ chọn</x-import></div></sc-if>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="is-check"><x-import component-from-global-scope="ECOMD.Checkbox" aria-label="Chọn tất cả" checked="{{allChecked}}" indeterminate="{{someChecked}}" on-change="{{toggleAll}}"></x-import></th><th class="body-xs-bold is-primary">Học sinh</th><th class="body-xs-bold">Giờ đón</th><th class="body-xs-bold">Giờ trả · người đón</th><th class="body-xs-bold">Sức khỏe</th><th class="body-xs-bold">Ghi chú</th><th class="body-xs-bold">Trạng thái</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr class="{{r.cls}}"><td class="is-check"><x-import component-from-global-scope="ECOMD.Checkbox" aria-label="{{r.checkLabel}}" checked="{{r.checked}}" on-change="{{r.toggle}}"></x-import></td><td class="body-sm is-primary"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.Person" name="{{r.name}}" meta="{{r.code}}" href="#"></x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Giờ đón</span><div class="ecomd-cell__value"><div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-6);"><sc-if value="{{r.inHas}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; gap: var(--space-6); font-variant-numeric: tabular-nums; color: var(--text-heading);"><x-import component-from-global-scope="ECOMD.Icon" name="clock" size="{{twelve}}" color="var(--text-subtle)"></x-import>{{r.in}}</span></sc-if><sc-if value="{{r.inBtn}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="arrow-right-to-bracket" on-click="{{r.checkIn}}" disabled="{{r.inOff}}">Đón</x-import></sc-if><sc-if value="{{r.inNone}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Nghỉ học"></x-import></sc-if><sc-if value="{{r.late}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.StatusTag" tone="warning">Đến muộn</x-import></sc-if></div></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Giờ trả · người đón</span><div class="ecomd-cell__value"><div style="display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4);"><sc-if value="{{r.outHas}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; gap: var(--space-6); font-variant-numeric: tabular-nums; color: var(--text-heading);"><x-import component-from-global-scope="ECOMD.Icon" name="clock" size="{{twelve}}" color="var(--text-subtle)"></x-import>{{r.out}}</span></sc-if><sc-if value="{{r.outBtn}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="arrow-right-from-bracket" on-click="{{r.checkOut}}" disabled="{{r.outOff}}">Trả</x-import></sc-if><sc-if value="{{r.outNone}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Nghỉ học"></x-import></sc-if><sc-if value="{{r.picker}}" hint-placeholder-val="{{false}}"><span class="body-xs" style="display: inline-flex; align-items: center; gap: var(--space-4); white-space: nowrap; color: var(--text-subtle);"><x-import component-from-global-scope="ECOMD.Icon" name="shield-halved" size="{{twelve}}" color="var(--semantic-success)"></x-import>{{r.picker}}</span></sc-if></div></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Sức khỏe</span><div class="ecomd-cell__value"><div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-8);"><sc-if value="{{r.temp}}" hint-placeholder-val="{{true}}"><span style="font-variant-numeric: tabular-nums; color: var(--text-heading);">{{r.temp}} °C</span></sc-if><sc-if value="{{r.sick}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.StatusTag" tone="warning" icon="triangle-exclamation">{{r.healthLabel}}</x-import></sc-if><sc-if value="{{r.well}}" hint-placeholder-val="{{true}}"><span class="body-xs" style="color: var(--text-subtle);">Bình thường</span></sc-if><sc-if value="{{r.noTemp}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Chưa đo"></x-import></sc-if></div></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Ghi chú</span><div class="ecomd-cell__value"><sc-if value="{{r.hasNote}}" hint-placeholder-val="{{true}}"><span class="body-xs" style="color: var(--text-body);">{{r.note}}</span></sc-if><sc-if value="{{r.noNote}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Chưa có"></x-import></sc-if></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Trạng thái</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.Tags"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.tone}}">{{r.status}}</x-import><sc-if value="{{r.refund}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.Tag">Hoàn tiền ăn</x-import></sc-if></x-import></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="8"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có học sinh nào khớp bộ lọc"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="học sinh"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1130}}'>
+var CRUMBS = ["Vận hành", "Điểm danh"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'all', health: 'Tất cả sức khỏe', query: '', sel: [], times: {} }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var T = [{"id": 1, "name": "Nguyễn Minh Khang", "code": "HS2026-001", "inT": "07:35", "outT": "", "picker": "", "temp": "36.8", "health": "ok", "note": "Bé vui vẻ, ăn sáng đầy đủ", "abs": "", "late": false}, {"id": 2, "name": "Trần Bảo Ngọc", "code": "HS2026-002", "inT": "08:15", "outT": "", "picker": "", "temp": "37.1", "health": "ok", "note": "Gia đình kẹt xe nên đến muộn 15 phút", "abs": "", "late": true}, {"id": 3, "name": "Lê Tuấn Kiệt", "code": "HS2026-003", "inT": "", "outT": "", "picker": "", "temp": "37.0", "health": "Cảm sốt", "note": "Phụ huynh xin nghỉ qua app: bé bị sốt nhẹ từ tối qua", "abs": "leave", "late": false}, {"id": 4, "name": "Phạm Gia Hưng", "code": "HS2026-004", "inT": "07:40", "outT": "16:45", "picker": "Phạm Quốc Bảo (Bố)", "temp": "36.7", "health": "ok", "note": "Đã hoàn thành bài tập nhóm", "abs": "", "late": false}, {"id": 5, "name": "Hoàng Thảo My", "code": "HS2026-005", "inT": "", "outT": "", "picker": "", "temp": "", "health": "ok", "note": "", "abs": "", "late": false}, {"id": 6, "name": "Đỗ Nhật Minh", "code": "HS2026-006", "inT": "07:50", "outT": "", "picker": "", "temp": "37.2", "health": "Đỏ mắt", "note": "Mắt phải hơi đỏ, giáo viên theo dõi thêm trong ngày", "abs": "", "late": false}, {"id": 7, "name": "Vũ Phương Linh", "code": "HS2026-007", "inT": "", "outT": "", "picker": "", "temp": "", "health": "ok", "note": "", "abs": "", "late": false}, {"id": 8, "name": "Bùi Chí Thiện", "code": "HS2026-008", "inT": "07:25", "outT": "", "picker": "", "temp": "36.6", "health": "ok", "note": "Đi xe buýt tuyến 02 đến trường", "abs": "", "late": false}];
+    var tm = st.times || {};
+    T.forEach(function (t) { var o = tm[t.id]; if (o) { if (o.inT) t.inT = o.inT; if (o.outT) { t.outT = o.outT; t.picker = t.picker || 'Bố mẹ (đã ủy quyền)'; } if (o.abs) t.abs = o.abs; } });
+    function stat(t) { return t.abs === 'leave' ? 'leave' : t.abs === 'absent' ? 'absent' : t.inT ? 'in' : 'none'; }
+    var STS = { in: ['Có mặt', 'success'], none: ['Chưa điểm danh', 'neutral'], leave: ['Nghỉ có phép', 'warning'], absent: ['Nghỉ không phép', 'danger'] };
+    var q = (st.query || '').trim().toLowerCase();
+    var base = T.filter(function (t) { return (!q || (t.name + ' ' + t.code).toLowerCase().indexOf(q) >= 0) && (st.health === 'Tất cả sức khỏe' || (st.health === 'Cần theo dõi' ? t.health !== 'ok' : t.health === 'ok')); });
+    var tabs = [['all', 'Tất cả'], ['in', 'Có mặt'], ['leave', 'Nghỉ có phép'], ['absent', 'Nghỉ không phép'], ['none', 'Chưa điểm danh']].map(function (d) { return { key: d[0], label: d[1], count: base.filter(function (t) { return d[0] === 'all' || stat(t) === d[0]; }).length }; });
+    var list = base.filter(function (t) { return st.tab === 'all' || stat(t) === st.tab; });
+    var ids = list.map(function (t) { return t.id; }), sel = st.sel || [];
+    var nOn = ids.filter(function (i) { return sel.indexOf(i) >= 0; }).length;
+    function setT(id, k, v) { var n = Object.assign({}, st.times || {}); n[id] = Object.assign({}, n[id] || {}); n[id][k] = v; self.setState({ times: n }); }
+    var rows = list.map(function (t) { var s = stat(t), off = s === 'leave' || s === 'absent', on = sel.indexOf(t.id) >= 0;
+      return { name: t.name, code: t.code,
+        in: t.inT, inHas: !!t.inT, inBtn: !t.inT && !off, inNone: off, inOff: false, checkIn: function () { setT(t.id, 'inT', '07:55'); }, late: t.late,
+        out: t.outT, outHas: !!t.outT, outBtn: !t.outT && !off, outNone: off, outOff: !t.inT, checkOut: function () { setT(t.id, 'outT', '16:30'); },
+        picker: t.picker, noPicker: !t.picker,
+        temp: t.temp, noTemp: !t.temp, sick: !!t.temp && t.health !== 'ok', well: !!t.temp && t.health === 'ok', healthLabel: t.health,
+        note: t.note, hasNote: !!t.note, noNote: !t.note,
+        status: STS[s][0], tone: STS[s][1], refund: s === 'leave',
+        checked: on, cls: on ? 'is-selected' : '', checkLabel: 'Chọn học sinh ' + t.name,
+        toggle: function (v) { var n = sel.filter(function (x) { return x !== t.id; }); if (v) n.push(t.id); self.setState({ sel: n }); },
+        actionLabel: 'Thao tác với học sinh ' + t.name,
+        menu: [{ icon: 'user-clock', label: 'Báo nghỉ có phép…' }, { icon: 'user-xmark', label: 'Báo nghỉ không phép…' }, { icon: 'pen', label: 'Sửa giờ đón / trả' }, { icon: 'user-shield', label: 'Người được ủy quyền đón' }, { icon: 'heart-pulse', label: 'Cập nhật sức khỏe' }, { icon: 'comment-dots', label: 'Thêm ghi chú' }] }; });
+    var all = T.map(stat), cnt = function (k) { return all.filter(function (x) { return x === k; }).length; };
+    var outN = T.filter(function (t) { return !!t.outT; }).length;
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20, twelve: 12,
+      stats: [
+        { label: 'Có mặt hôm nay', value: cnt('in') + ' / ' + T.length, icon: 'user-check', tone: 'success' },
+        { label: 'Nghỉ (có phép · không phép)', value: cnt('leave') + ' · ' + cnt('absent'), icon: 'user-xmark', tone: 'warning' },
+        { label: 'Chưa điểm danh', value: String(cnt('none')), icon: 'hourglass-half', tone: 'neutral' },
+        { label: 'Đã trả về', value: outN + ' / ' + cnt('in'), icon: 'arrow-right-from-bracket', tone: 'info' }],
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      healthOpts: ['Tất cả sức khỏe', 'Cần theo dõi', 'Bình thường'], health: st.health, setHealth: function (v) { self.setState({ health: v }); },
+      rows: rows, isEmpty: rows.length === 0, total: rows.length,
+      noSel: sel.length === 0, hasSel: sel.length > 0, selCount: sel.length, clearSel: function () { self.setState({ sel: [] }); },
+      bulkIn: function () { var n = Object.assign({}, st.times || {}); sel.forEach(function (id) { n[id] = Object.assign({ inT: '07:55' }, n[id] || {}); }); self.setState({ times: n, sel: [] }); },
+      bulkOut: function () { var n = Object.assign({}, st.times || {}); T.forEach(function (t) { if (sel.indexOf(t.id) >= 0 && t.inT) n[t.id] = Object.assign({}, n[t.id] || {}, { outT: '16:30' }); }); self.setState({ times: n, sel: [] }); },
+      allChecked: ids.length > 0 && nOn === ids.length, someChecked: nOn > 0 && nOn < ids.length, toggleAll: function (v) { self.setState({ sel: v ? ids : [] }); }
+    });
+  }
+}
+</script>
+</body>
+</html>

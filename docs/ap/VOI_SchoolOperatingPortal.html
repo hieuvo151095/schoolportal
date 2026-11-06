@@ -98,6 +98,7 @@
     /* Badges */
     .st { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 700; }
     .st-done { background: var(--done-bg); color: var(--done-text); }
+    .st-pending { background: #fef3c7; color: #92400e; }
     .ts-ok { color: #15803d; font-weight: 700; }
     .ui-ok { color: #0369a1; font-weight: 600; }
     .mk-store { color: #7c3aed; font-weight: 600; }
@@ -106,318 +107,373 @@
 <body>
 <div class="container">
   <header class="header">
-    <h1>Bản Đồ Dự Án VOI (Visual Overview) — School Operating Portal</h1>
-    <p class="lead">**School Operating Portal** là nền tảng quản trị và vận hành giáo dục đa trường (multi-tenant) cấp doanh nghiệp, được thiết kế chuyên biệt cho các cơ sở giáo dục Mầm non và Phổ thông liên cấp (K-12) tại Việt Nam.
-
-Hệ thống bao gồm đầy đủ **7 phân hệ lớn** và **38 sub-modules nghiệp vụ**, được quản lý và thi công theo chuẩn **Antigravity Harness Loop Kit v0.5.0** với kỷ luật bất biến **WIP = 1**, Nguồn sự thật duy nhất (**LLM Wiki SSOT**), và Cổng kiểm chứng nhị phân toàn phổ (**Verify Gate**). (Cập nhật: 2026-11-04 11:22 &#183; Kỷ luật VeVoi &le;5 mục anh em mỗi cấp).</p>
+    <h1>Bản Đồ Dự Án VOI (Visual Overview of Implementation) — School Operating Portal</h1>
+    <p class="lead"><strong>School Operating Portal</strong> là nền tảng quản trị và vận hành trường học số đa cơ sở (multi-tenant) cấp doanh nghiệp, bám sát nghiệp vụ thực tế của Giáo viên và Kế toán trường học. Hệ thống bao phủ <strong>7 phân hệ lớn</strong>, <strong>38 sub-modules</strong> và <strong>76 tính năng kỹ thuật</strong> được phân rã theo cấu trúc chuẩn <strong>agp-vevoi (Miller &le;5 mục/cấp)</strong>, kết nối với Harness Loop và Cổng kiểm chứng Verify Gate.</p>
   </header>
 
   <div class="elephant">
     <div class="stage">
       <div class="sh">Giai đoạn I</div>
-      <div class="sn">Khởi Tạo & Nền Tảng Cốt Lõi</div>
+      <div class="sn">Nền Tảng, Bảo Mật &amp; Cấu Hình</div>
       <ul>
-        <li><b>M1</b> Giao diện chính &amp; Điều hướng</li><li><b>M2</b> Xử lý tương tác &amp; Nghiệp vụ</li>
+        <li><b>DN</b> Xác thực SSO, RBAC 3 cấp &amp; Session đa tab</li>
+        <li><b>CH</b> Cấu hình học phí, SInvoice &amp; AI Privacy</li>
+        <li><b>TQ</b> Dashboard KPI toàn trường thời gian thực</li>
       </ul>
     </div>
     <div class="stage">
       <div class="sh">Giai đoạn II</div>
-      <div class="sn">Mở Rộng & Kiểm Chứng Verify Gate</div>
+      <div class="sn">Vận Hành Lớp Học &amp; Học Vụ</div>
       <ul>
-        <li><b>M3</b> Lưu trữ cục bộ &amp; Đồng bộ</li><li><b>M4</b> Bảo vệ &amp; Verify Gate</li>
+        <li><b>VH</b> Điểm danh, Thân nhiệt, Dặn thuốc &amp; Đón sớm 0%</li>
+        <li><b>HT</b> Thời khóa biểu, Giao bài tập &amp; Sổ điểm Bộ GD</li>
+        <li><b>NT</b> Hồ sơ học sinh 360, Thực đơn &amp; Chuyển lớp</li>
+      </ul>
+    </div>
+    <div class="stage">
+      <div class="sh">Giai đoạn III</div>
+      <div class="sn">Tài Chính, Thu Phí &amp; Đối Soát</div>
+      <ul>
+        <li><b>TC</b> Hóa đơn lẻ VietQR, Hoàn tiền M+1 &amp; Sibling discount</li>
+        <li><b>DS</b> Webhook Sepay gạch nợ 3s &amp; HĐĐT Viettel</li>
       </ul>
     </div>
   </div>
 
   <section id="s1">
-    <h2>1 · Tổng quan — Con voi chia 2 giai đoạn → 4 phân hệ chính</h2>
+    <h2>1 · Tổng quan — Phân rã 3 giai đoạn kiến trúc → 7 phân hệ chính</h2>
     <div class="tw">
       <table class="vv" data-vevoi="hier" data-name="tong-quan">
         <thead>
           <tr class="supr">
             <th colspan="1" class="sup">Phân hệ</th>
-            <th colspan="1" class="sup">Màn hình</th>
-            <th colspan="1" class="sup">Quyền & Vai trò</th>
-            <th colspan="1" class="sup">Đặc tả Spec</th>
+            <th colspan="1" class="sup">Màn hình &amp; Route</th>
+            <th colspan="1" class="sup">Quyền &amp; Tác nhân</th>
+            <th colspan="1" class="sup">Đặc tả Spec &amp; Phạm vi</th>
           </tr>
           <tr>
-            <th>Phân hệ · trạng thái</th>
-            <th>Màn hình · luồng chức năng</th>
-            <th>Tác nhân (vai trò)</th>
-            <th>Mục spec gốc</th>
+            <th>Phân hệ · Trạng thái</th>
+            <th>Màn hình · Luồng chức năng</th>
+            <th>Tác nhân (Role)</th>
+            <th>Mã Spec &amp; Phạm vi</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="band l1"><th colspan="4">Giai đoạn I · Nền Tảng & Nghiệp Vụ Cốt Lõi (M1–M2)</th></tr><tr class="leaf">
-  <th><b>M1</b> Giao diện chính &amp; Điều hướng<br><span class="st st-done">Done</span></th>
-  <td><ul class="vv-list"><li>Màn hình chính</li><li>Thanh Topbar/Bottombar</li><li>Menu cấu hình</li></ul></td>
-  <td>Mọi người dùng</td>
-  <td>F001..02</td>
-</tr><tr class="leaf">
-  <th><b>M2</b> Xử lý tương tác &amp; Nghiệp vụ<br><span class="st st-done">Done</span></th>
-  <td><ul class="vv-list"><li>Bộ điều phối trạng thái</li><li>Trình xử lý sự kiện</li><li>Kiểm tra điều kiện</li></ul></td>
-  <td>Người dùng chính</td>
-  <td>F003..04</td>
-</tr><tr class="band l1"><th colspan="4">Giai đoạn II · Mở Rộng & Kiểm Chứng Verify Gate (M3–M4)</th></tr><tr class="leaf">
-  <th><b>M3</b> Lưu trữ cục bộ &amp; Đồng bộ<br><span class="st st-done">Done</span></th>
-  <td><ul class="vv-list"><li>Cơ sở dữ liệu IndexedDB</li><li>Bộ đệm ngoại tuyến</li><li>Trình sao lưu</li></ul></td>
-  <td>Hệ thống</td>
-  <td>F005..06</td>
-</tr><tr class="leaf">
-  <th><b>M4</b> Bảo vệ &amp; Verify Gate<br><span class="st st-done">Done</span></th>
-  <td><ul class="vv-list"><li>Cổng kiểm chứng Verify Gate</li><li>Bộ bài kiểm thử nhị phân</li><li>Báo cáo tiến độ</li></ul></td>
-  <td>Kỹ sư / CI</td>
-  <td>F007..08</td>
-</tr>
+          <tr class="band l1"><th colspan="4">Giai đoạn I · Nền Tảng, Bảo Mật &amp; Cấu Hình (DN, CH, TQ — 21 Specs)</th></tr>
+          <tr class="leaf">
+            <th><b>DN &amp; CH</b> Đăng nhập, Phân quyền &amp; Cấu hình<br><span class="st st-pending">Pending</span></th>
+            <td><ul class="vv-list"><li>Cổng đăng nhập SSO Sở GD&amp;ĐT</li><li>Phân vùng session đa tab độc lập</li><li>Cấu hình tham số học phí &amp; AI</li></ul></td>
+            <td>Admin, Cán bộ IT</td>
+            <td>DN-01..06, CH-01..12</td>
+          </tr>
+          <tr class="leaf">
+            <th><b>TQ</b> Dashboard KPI &amp; Báo cáo Trung tâm<br><span class="st st-pending">Pending</span></th>
+            <td><ul class="vv-list"><li>Widget tổng quan sĩ số &amp; giáo viên</li><li>Tỷ lệ chuyên cần ngày thời gian thực</li><li>Tiến độ thu nộp học phí toàn trường</li></ul></td>
+            <td>Ban Giám Hiệu</td>
+            <td>TQ-01..03</td>
+          </tr>
+          <tr class="band l1"><th colspan="4">Giai đoạn II · Vận Hành Lớp Học &amp; Học Vụ (VH, HT, NT — 33 Specs)</th></tr>
+          <tr class="leaf">
+            <th><b>VH &amp; NT</b> Điểm danh, Y tế &amp; Hồ sơ 360<br><span class="st st-pending">Pending</span></th>
+            <td><ul class="vv-list"><li>Điểm danh đón trả, đo thân nhiệt</li><li>Sổ dặn thuốc y tế lúc 12:30 (OQ-19)</li><li>Báo ăn sáng/trưa sang Bếp &amp; Dị ứng</li></ul></td>
+            <td>Giáo viên CN, Y tế</td>
+            <td>VH-01..10, NT-01..17</td>
+          </tr>
+          <tr class="leaf">
+            <th><b>HT</b> Thời khóa biểu, Bài tập &amp; Sổ điểm<br><span class="st st-pending">Pending</span></th>
+            <td><ul class="vv-list"><li>Lập thời khóa biểu tuần &amp; chống đụng</li><li>Giao bài tập về nhà đính kèm PDF</li><li>Nhập sổ điểm đánh giá Bộ GD&amp;ĐT</li></ul></td>
+            <td>Giáo viên bộ môn</td>
+            <td>HT-01..06</td>
+          </tr>
+          <tr class="band l1"><th colspan="4">Giai đoạn III · Tài Chính, Thu Phí &amp; Đối Soát (TC — 22 Specs)</th></tr>
+          <tr class="leaf">
+            <th><b>TC-A</b> Lập Đợt Thu &amp; Khấu Trừ Hoàn Tiền<br><span class="st st-pending">Pending</span></th>
+            <td><ul class="vv-list"><li>Đóng băng tự động 23:59:59 (OQ-21)</li><li>Khấu trừ hoàn tiền ăn 2 dòng M+1</li><li>Giảm trừ Sibling discount theo SĐT</li></ul></td>
+            <td>Kế toán viên</td>
+            <td>TC-01..14</td>
+          </tr>
+          <tr class="leaf">
+            <th><b>TC-B</b> Thanh Toán VietQR, Sepay &amp; HĐĐT<br><span class="st st-pending">Pending</span></th>
+            <td><ul class="vv-list"><li>Hóa đơn lẻ kèm VietQR chuẩn NAPAS</li><li>Webhook Sepay gạch nợ tự động 3s</li><li>Ký số HĐĐT Viettel SInvoice</li></ul></td>
+            <td>Kế toán, Hệ thống</td>
+            <td>TC-15..22</td>
+          </tr>
         </tbody>
       </table>
     </div>
   </section>
 
   <section id="s2">
-    <h2>2 · Ma trận đa chiều — 8 bước nghiệp vụ đầu-cuối (9 cột)</h2>
+    <h2>2 · Ma trận đa chiều — 8 bước quy trình liên thông qua 4 Mega Scenarios (9 cột)</h2>
     <div class="tw">
       <table class="vv wide" data-vevoi="hier" data-name="ma-tran-da-chieu">
         <thead>
           <tr class="supr">
-            <th colspan="4" class="sup">Bước</th>
-            <th colspan="1" class="sup">Input</th>
-            <th colspan="2" class="sup">Chế biến (xử lý)</th>
-            <th colspan="1" class="sup">Báo cáo</th>
-            <th colspan="1" class="sup">Output</th>
+            <th colspan="2" class="sup">Nhận diện &amp; Bước</th>
+            <th colspan="2" class="sup">Tác nhân &amp; Điểm chạm</th>
+            <th colspan="2" class="sup">Đầu vào &amp; Điều kiện</th>
+            <th colspan="2" class="sup">Xử lý &amp; Chuyển dịch</th>
+            <th colspan="1" class="sup">Kiểm chứng</th>
           </tr>
           <tr>
-            <th>Mã · bước</th>
-            <th>Tác nhân (vai trò)</th>
-            <th>Màn · route → file</th>
-            <th>Spec</th>
-            <th>Dữ liệu vào</th>
-            <th>Hàm · file:dòng</th>
-            <th>Quy tắc / kiểm soát</th>
-            <th>Màn báo cáo</th>
-            <th>Dữ liệu ra</th>
+            <th>Mã bước</th>
+            <th>Tên bước quy trình</th>
+            <th>Tác nhân</th>
+            <th>Sub-module &amp; Tuyến Route</th>
+            <th>Dữ liệu đầu vào</th>
+            <th>Điều kiện tiên quyết</th>
+            <th>Hành động xử lý</th>
+            <th>Trạng thái mới</th>
+            <th>Cổng Verify Gate</th>
           </tr>
         </thead>
         <tbody>
-<tr class="band l1"><th colspan="9">Pha A · Khởi Tạo & Điều Hướng</th></tr><tr class="band l2"><th colspan="9">A1 · Nạp giao diện & Cấu trúc cơ sở</th></tr><tr class="leaf">
-  <th><b>B01</b> Khởi động ứng dụng &amp; tải cấu hình</th>
-  <td>Người dùng</td>
-  <td><span class="path">AppShell.tsx</span></td>
-  <td><code>F001</code></td>
-  <td>Trạng thái ban đầu</td>
-  <td><span class="path">bootstrapApp (:25)</span></td>
-  <td>Khởi tạo môi trường ngoại tuyến</td>
-  <td>MainView</td>
-  <td>Giao diện sẵn sàng</td>
-</tr><tr class="leaf">
-  <th><b>B02</b> Điều hướng giữa các màn hình chính</th>
-  <td>Người dùng</td>
-  <td><span class="path">Navigator.tsx</span></td>
-  <td><code>F002</code></td>
-  <td>Chạm menu điều hướng</td>
-  <td><span class="path">navigate (:40)</span></td>
-  <td>Phản hồi trong 100ms</td>
-  <td>SubView</td>
-  <td>Hiển thị màn hình chọn</td>
-</tr><tr class="band l2"><th colspan="9">A2 · Tiếp nhận dữ liệu & Nhập liệu nhanh</th></tr><tr class="leaf">
-  <th><b>B03</b> Tiếp nhận dữ liệu đầu vào</th>
-  <td>Người dùng</td>
-  <td><span class="path">InputForm.tsx</span></td>
-  <td><code>F003</code></td>
-  <td>Nhập liệu bàn phím / chạm</td>
-  <td><span class="path">handleInput (:55)</span></td>
-  <td>Kiểm tra hợp lệ trước khi lưu</td>
-  <td>FormView</td>
-  <td>Dữ liệu hợp lệ</td>
-</tr><tr class="leaf">
-  <th><b>B04</b> Ghi nhận bản ghi vào bộ nhớ máy</th>
-  <td>Người dùng</td>
-  <td><span class="path">DataEngine.ts</span></td>
-  <td><code>F004</code></td>
-  <td>Dữ liệu đã qua kiểm tra</td>
-  <td><span class="path">saveRecord (:80)</span></td>
-  <td>Lưu trữ an toàn IndexedDB</td>
-  <td>ListView</td>
-  <td>Bản ghi được lưu bền vững</td>
-</tr><tr class="band l1"><th colspan="9">Pha B · Thao Tác Nghiệp Vụ & Dữ Liệu</th></tr><tr class="band l2"><th colspan="9">B1 · Xử lý nghiệp vụ chuyên biệt</th></tr><tr class="leaf">
-  <th><b>B05</b> Xử lý tương tác nghiệp vụ chuyên biệt</th>
-  <td>Người dùng</td>
-  <td><span class="path">BusinessService.ts</span></td>
-  <td><code>F005</code></td>
-  <td>Lệnh thực thi nghiệp vụ</td>
-  <td><span class="path">executeProcess (:65)</span></td>
-  <td>Đảm bảo tính nhất quán dữ liệu</td>
-  <td>DetailView</td>
-  <td>Trạng thái nghiệp vụ cập nhật</td>
-</tr><tr class="leaf">
-  <th><b>B06</b> Phản hồi thị giác &amp; âm thanh/rung</th>
-  <td>Hệ thống</td>
-  <td><span class="path">FeedbackEngine.ts</span></td>
-  <td><code>F006</code></td>
-  <td>Sự kiện hoàn tất thao tác</td>
-  <td><span class="path">triggerFeedback (:30)</span></td>
-  <td>Hiệu ứng mượt mà không giật</td>
-  <td>ScreenView</td>
-  <td>Người dùng nhận biết kết quả</td>
-</tr><tr class="band l2"><th colspan="9">B2 · Bảo vệ dữ liệu & Cổng kiểm chứng</th></tr><tr class="leaf">
-  <th><b>B07</b> Đồng bộ bộ đệm ngoại tuyến</th>
-  <td>Hệ thống</td>
-  <td><span class="path">SyncService.ts</span></td>
-  <td><code>F007</code></td>
-  <td>Hàng đợi dữ liệu chờ</td>
-  <td><span class="path">processSyncQueue (:90)</span></td>
-  <td>Không xung đột dữ liệu</td>
-  <td>SyncStatus</td>
-  <td>Đồng bộ hoàn tất</td>
-</tr><tr class="leaf">
-  <th><b>B08</b> Kiểm chứng tự động Verify Gate</th>
-  <td>Kỹ sư / CI</td>
-  <td><span class="path">scripts/verify.sh</span></td>
-  <td><code>F008</code></td>
-  <td>Kịch bản kiểm thử nhị phân</td>
-  <td><span class="path">verifySuite (:10)</span></td>
-  <td>Chỉ passing khi thoát mã 0</td>
-  <td>Terminal</td>
-  <td>Cấp token passing</td>
-</tr>
+          <tr class="band l1"><th colspan="9">MEGA-01 · Hành Trình 1 Ngày Trọn Vẹn Của GVCN (Daily Routine E2E)</th></tr>
+          <tr class="leaf">
+            <td><b>S1.1</b></td>
+            <td>Chấm công, Điểm danh sáng &amp; Chốt báo ăn 08:00</td>
+            <td>Giáo viên CN</td>
+            <td><span class="path">SM27, SM05, SM02, SM26</span></td>
+            <td>Thân nhiệt, Đơn xin nghỉ có phép</td>
+            <td>Trước giờ cắt 08:00 (OQ-20)</td>
+            <td>Điểm danh 1-chạm, bóc tách suất ăn sáng/trưa</td>
+            <td>Suất ăn chuyển sang Bếp</td>
+            <td><span class="ts-ok">verify.sh</span></td>
+          </tr>
+          <tr class="leaf">
+            <td><b>S1.2</b></td>
+            <td>Dặn thuốc trưa 12:30, AI Album &amp; Phí đón muộn</td>
+            <td>GVCN, AI</td>
+            <td><span class="path">SM05, SM04, SM36, SM34, SM11</span></td>
+            <td>Đơn thuốc, Ảnh sinh hoạt, Giờ trả trẻ</td>
+            <td>Đúng 12:30 trưa; Trả sau 17:00</td>
+            <td>Xác nhận uống thuốc, AI tag mặt, tính phí muộn 60k</td>
+            <td>Push app PH, Nợ phát sinh</td>
+            <td><span class="ts-ok">verify.sh</span></td>
+          </tr>
+          <tr class="band l1"><th colspan="9">MEGA-02 · Chu Kỳ Giảng Dạy &amp; Đánh Giá Tuần Của GVBM (Weekly Academic E2E)</th></tr>
+          <tr class="leaf">
+            <td><b>S2.1</b></td>
+            <td>Tra cứu TKB &amp; Giao bài tập về nhà đính kèm PDF</td>
+            <td>Giáo viên BM</td>
+            <td><span class="path">SM08, SM22, SM09, SM38</span></td>
+            <td>Tiêu đề bài tập, File PDF, Hạn nộp</td>
+            <td>Khớp tiết học theo Thời khóa biểu</td>
+            <td>Phát hành bài tập, gửi thông báo Push app</td>
+            <td>Bài tập ở trạng thái Mở</td>
+            <td><span class="ts-ok">verify.sh</span></td>
+          </tr>
+          <tr class="leaf">
+            <td><b>S2.2</b></td>
+            <td>Chấm bài, Nhập Sổ điểm định kỳ &amp; Khảo sát dã ngoại</td>
+            <td>GVBM, GVCN</td>
+            <td><span class="path">SM09, SM10, SM25, SM24, SM28</span></td>
+            <td>Điểm số bài làm, Phiếu bình chọn</td>
+            <td>Học sinh đã nộp bài; Lịch sự kiện SM30</td>
+            <td>Chấm điểm, đồng bộ Sổ điểm Bộ GD, ghim bản tin</td>
+            <td>Điểm số lưu Audit Trail</td>
+            <td><span class="ts-ok">verify.sh</span></td>
+          </tr>
+          <tr class="band l1"><th colspan="9">MEGA-03 · Chiến Dịch Thu Phí &amp; Quyết Toán Tháng Của Kế Toán (Monthly Billing E2E)</th></tr>
+          <tr class="leaf">
+            <td><b>S3.1</b></td>
+            <td>Đóng băng 23:59:59 &amp; Tính hoàn tiền ăn 2 dòng</td>
+            <td>Hệ thống, Kế toán</td>
+            <td><span class="path">SM06, SM15, SM14, SM11</span></td>
+            <td>Dữ liệu vắng có phép, SĐT phụ huynh</td>
+            <td>Đúng 23:59:59 cuối tháng (OQ-21)</td>
+            <td>Khóa sổ điểm danh, trừ 2 dòng ăn, giảm Sibling 10%</td>
+            <td>Hóa đơn nháp M+1</td>
+            <td><span class="ts-ok">verify.sh</span></td>
+          </tr>
+          <tr class="leaf">
+            <td><b>S3.2</b></td>
+            <td>Phát hành VietQR động, Sepay 3s &amp; HĐĐT SInvoice</td>
+            <td>Kế toán, Sepay</td>
+            <td><span class="path">SM11, SM38, SM17, SM34, SM18</span></td>
+            <td>Gói tin Webhook chuyển khoản ngân hàng</td>
+            <td>Khớp số tiền và cú pháp HP11 MãHS</td>
+            <td>Gạch nợ tự động trong 3s, ký số HĐĐT Viettel</td>
+            <td>Hóa đơn Đã hoàn thành</td>
+            <td><span class="ts-ok">verify.sh</span></td>
+          </tr>
+          <tr class="band l1"><th colspan="9">MEGA-04 · Vòng Đời Biến Động Học Sinh &amp; Quyết Toán Tài Chính (Student Lifecycle E2E)</th></tr>
+          <tr class="leaf">
+            <td><b>S4.1</b></td>
+            <td>Nhập học ngày 15 (Prorated) &amp; Chuyển lớp Remap phí</td>
+            <td>Kế toán, GVCN</td>
+            <td><span class="path">SM19, SM21, SM15, SM11</span></td>
+            <td>Ngày nhập học, Lớp đích chất lượng cao</td>
+            <td>Học sinh vào giữa tháng (OQ-22)</td>
+            <td>Chia tỷ lệ ngày lẻ, remap biểu phí tự động</td>
+            <td>Biểu phí mới có hiệu lực</td>
+            <td><span class="ts-ok">verify.sh</span></td>
+          </tr>
+          <tr class="leaf">
+            <td><b>S4.2</b></td>
+            <td>Rút hồ sơ chuyển trường, Chi hoàn tiền &amp; Lưu trữ</td>
+            <td>Kế toán, Admin</td>
+            <td><span class="path">SM11, SM16, SM32, SM31</span></td>
+            <td>Số ngày ăn đã đóng trước chưa dùng</td>
+            <td>Phụ huynh nộp đơn xin chuyển trường</td>
+            <td>Lập phiếu chi hoàn tiền thừa, chuyển kho lưu trữ SM32</td>
+            <td>Hồ sơ Lưu trữ cách ly</td>
+            <td><span class="ts-ok">verify.sh</span></td>
+          </tr>
         </tbody>
       </table>
     </div>
   </section>
 
   <section id="s3">
-    <h2>3 · Ma trận trạng thái tiến độ — Đánh giá toàn diện 10 cột</h2>
+    <h2>3 · Ma trận trạng thái tiến độ — Đánh giá toàn diện 76 tính năng (10 cột)</h2>
     <div class="tw">
       <table class="vv wide" data-vevoi="hier" data-name="tien-do">
         <thead>
           <tr class="supr">
-            <th colspan="1" class="sup">Định danh</th>
-            <th colspan="5" class="sup">Cấu phần thi công</th>
-            <th colspan="2" class="sup">Trạng thái</th>
-            <th colspan="2" class="sup">Đánh giá</th>
+            <th colspan="3" class="sup">Tính năng &amp; Đặc tả</th>
+            <th colspan="2" class="sup">Hiện trạng &amp; Cấp độ</th>
+            <th colspan="3" class="sup">Kiểm thử &amp; Bằng chứng</th>
+            <th colspan="2" class="sup">Sẵn sàng &amp; Kế hoạch</th>
           </tr>
           <tr>
-            <th>Phân hệ</th>
-            <th>Đặc tả (Spec)</th>
-            <th>Giao diện (UI)</th>
-            <th>Lưu trữ (DB)</th>
-            <th>Unit Test</th>
-            <th>E2E/Integration</th>
-            <th>Trạng thái</th>
-            <th>Lỗi tồn</th>
-            <th>Tỷ lệ hoàn thành</th>
-            <th>Verify Gate</th>
+            <th>Mã phân hệ</th>
+            <th>Tên nhóm tính năng</th>
+            <th>Số lượng Spec</th>
+            <th>Trạng thái FSM</th>
+            <th>Mức ưu tiên</th>
+            <th>Bộ bài kiểm thử</th>
+            <th>Tỷ lệ Pass</th>
+            <th>Cổng Verify Gate</th>
+            <th>Độ sẵn sàng</th>
+            <th>Pha thi công ISP</th>
           </tr>
         </thead>
         <tbody>
-<tr class="band l1"><th colspan="10">Giai đoạn I · Nền Tảng Cốt Lõi (M1–M2)</th></tr><tr class="leaf">
-  <th><b>M1</b> Giao diện chính &amp; Điều hướng<br><span class="st st-done">Done</span></th>
-  <td>Có · F001..02</td>
-  <td><span class="ui-ok">Có · Hoàn chỉnh</span></td>
-  <td><span class="mk-store">IndexedDB Thật</span></td>
-  <td><span class="ts-ok">Test Xanh 100%</span></td>
-  <td>Đạt</td>
-  <td><span class="st st-done">Done</span></td>
-  <td>0 lỗi</td>
-  <td><b>10/10</b></td>
-  <td><span class="ts-ok">PASS</span></td>
-</tr><tr class="leaf">
-  <th><b>M2</b> Xử lý tương tác &amp; Nghiệp vụ<br><span class="st st-done">Done</span></th>
-  <td>Có · F003..04</td>
-  <td><span class="ui-ok">Có · Hoàn chỉnh</span></td>
-  <td><span class="mk-store">IndexedDB Thật</span></td>
-  <td><span class="ts-ok">Test Xanh 100%</span></td>
-  <td>Đạt</td>
-  <td><span class="st st-done">Done</span></td>
-  <td>0 lỗi</td>
-  <td><b>10/10</b></td>
-  <td><span class="ts-ok">PASS</span></td>
-</tr><tr class="band l1"><th colspan="10">Giai đoạn II · Mở Rộng & Nghiệm Thu (M3–M4)</th></tr><tr class="leaf">
-  <th><b>M3</b> Lưu trữ cục bộ &amp; Đồng bộ<br><span class="st st-done">Done</span></th>
-  <td>Có · F005..06</td>
-  <td><span class="ui-ok">Có · Hoàn chỉnh</span></td>
-  <td><span class="mk-store">IndexedDB Thật</span></td>
-  <td><span class="ts-ok">Test Xanh 100%</span></td>
-  <td>Đạt</td>
-  <td><span class="st st-done">Done</span></td>
-  <td>0 lỗi</td>
-  <td><b>10/10</b></td>
-  <td><span class="ts-ok">PASS</span></td>
-</tr><tr class="leaf">
-  <th><b>M4</b> Bảo vệ &amp; Verify Gate<br><span class="st st-done">Done</span></th>
-  <td>Có · F007..08</td>
-  <td><span class="ui-ok">Có · Hoàn chỉnh</span></td>
-  <td><span class="mk-store">IndexedDB Thật</span></td>
-  <td><span class="ts-ok">Test Xanh 100%</span></td>
-  <td>Đạt</td>
-  <td><span class="st st-done">Done</span></td>
-  <td>0 lỗi</td>
-  <td><b>10/10</b></td>
-  <td><span class="ts-ok">PASS</span></td>
-</tr>
+          <tr class="band l1"><th colspan="10">Nhóm Tính Năng Trọng Tâm Vận Hành &amp; Học Vụ (VH, HT, NT — 33 Specs)</th></tr>
+          <tr class="leaf">
+            <td><b>VH &amp; NT</b></td>
+            <td>Điểm danh, Sức khỏe, Dặn thuốc, Báo ăn, Hồ sơ 360, Chuyển lớp</td>
+            <td>27 tính năng</td>
+            <td><span class="st st-pending">pending</span></td>
+            <td>P0 / P1</td>
+            <td>attendance.test.mjs, students.test.mjs</td>
+            <td>Chờ thi công</td>
+            <td><span class="ts-ok">verify.sh</span></td>
+            <td>Sẵn sàng 100%</td>
+            <td>Phase 0 &amp; Phase 1</td>
+          </tr>
+          <tr class="leaf">
+            <td><b>HT</b></td>
+            <td>Thời khóa biểu, Bài tập về nhà, Sổ điểm đánh giá Bộ GD</td>
+            <td>6 tính năng</td>
+            <td><span class="st st-pending">pending</span></td>
+            <td>P1 / P2</td>
+            <td>calendar.test.mjs, activity.test.mjs</td>
+            <td>Chờ thi công</td>
+            <td><span class="ts-ok">verify.sh</span></td>
+            <td>Sẵn sàng 100%</td>
+            <td>Phase 1</td>
+          </tr>
+          <tr class="band l1"><th colspan="10">Nhóm Tính Năng Trọng Tâm Tài Chính &amp; Nền Tảng (TC, CH, DN, TQ — 43 Specs)</th></tr>
+          <tr class="leaf">
+            <td><b>TC</b></td>
+            <td>Hóa đơn lẻ VietQR, Hoàn tiền ăn M+1, Sibling discount, Sepay 3s, SInvoice</td>
+            <td>22 tính năng</td>
+            <td><span class="st st-pending">pending</span></td>
+            <td>P0 / P1</td>
+            <td>invoices.test.mjs, mealRefund.test.mjs, discount.test.mjs</td>
+            <td>Chờ thi công</td>
+            <td><span class="ts-ok">verify.sh</span></td>
+            <td>Sẵn sàng 100%</td>
+            <td>Phase 2</td>
+          </tr>
+          <tr class="leaf">
+            <td><b>CH, DN, TQ</b></td>
+            <td>RBAC 3 cấp, SSO, Session đa tab, Cấu hình học phí &amp; AI, Dashboard KPI</td>
+            <td>21 tính năng</td>
+            <td><span class="st st-pending">pending</span></td>
+            <td>P0 / P1</td>
+            <td>auth.test.mjs, account.test.mjs, settingFee.test.mjs</td>
+            <td>Chờ thi công</td>
+            <td><span class="ts-ok">verify.sh</span></td>
+            <td>Sẵn sàng 100%</td>
+            <td>Phase A</td>
+          </tr>
         </tbody>
       </table>
     </div>
   </section>
 
   <section id="s4">
-    <h2>4 · Sơ đồ luồng dữ liệu & kiến trúc phân tầng</h2>
+    <h2>4 · Sơ đồ luồng dữ liệu &amp; kiến trúc phân tầng</h2>
     <div class="tw" style="padding: 24px; text-align: center;">
-      <svg viewBox="0 0 1000 240" xmlns="http://www.w3.org/2000/svg" width="100%" height="240">
+      <svg viewBox="0 0 1000 360" width="100%" height="320" xmlns="http://www.w3.org/2000/svg" style="max-width: 960px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
         <defs>
           <marker id="v-arr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M 0 1 L 8 5 L 0 9 z" fill="#0f766e" />
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0f766e"/>
           </marker>
         </defs>
-        <rect width="1000" height="240" fill="#f8fafc" rx="12" stroke="#e2e8f0" stroke-width="1.5"/>
-        
-        <!-- Box 1: UI / Clients -->
-        <g transform="translate(40, 40)">
-          <rect width="200" height="150" fill="#ecfdf5" stroke="#059669" stroke-width="2" rx="10"/>
-          <text x="100" y="35" font-weight="700" fill="#065f46" text-anchor="middle" font-size="15">GIAO DIỆN & TƯƠNG TÁC</text>
-          <text x="100" y="65" font-size="12" fill="#047857" text-anchor="middle">View / Cử chỉ / Phím tắt</text>
-          <text x="100" y="90" font-size="12" fill="#047857" text-anchor="middle">Form nhập nhanh & Bảng điều khiển</text>
-          <text x="100" y="115" font-size="11" fill="#059669" text-anchor="middle">Độ trễ phản hồi &lt; 100ms</text>
-        </g>
+        <!-- Layer 1: Client -->
+        <rect x="20" y="30" width="200" height="290" rx="10" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.5"/>
+        <text x="120" y="60" text-anchor="middle" font-weight="700" fill="#0f766e" font-size="14">LỚP NGƯỜI DÙNG</text>
+        <rect x="40" y="90" width="160" height="45" rx="6" fill="#fff" stroke="#99f6e4"/>
+        <text x="120" y="118" text-anchor="middle" font-size="12" fill="#134e4a">Giáo Viên (Web/App)</text>
+        <rect x="40" y="150" width="160" height="45" rx="6" fill="#fff" stroke="#99f6e4"/>
+        <text x="120" y="178" text-anchor="middle" font-size="12" fill="#134e4a">Kế Toán (Web Portal)</text>
+        <rect x="40" y="210" width="160" height="45" rx="6" fill="#fff" stroke="#99f6e4"/>
+        <text x="120" y="238" text-anchor="middle" font-size="12" fill="#134e4a">Phụ Huynh (Mobile App)</text>
+        <rect x="40" y="270" width="160" height="35" rx="6" fill="#fff" stroke="#99f6e4"/>
+        <text x="120" y="293" text-anchor="middle" font-size="11" fill="#134e4a">Ban Giám Hiệu</text>
 
-        <!-- Arrow 1 -->
-        <line x1="245" y1="115" x2="295" y2="115" stroke="#0f766e" stroke-width="2.5" marker-end="url(#v-arr)"/>
+        <!-- Arrows L1 -> L2 -->
+        <line x1="220" y1="175" x2="280" y2="175" stroke="#0f766e" stroke-width="2" marker-end="url(#v-arr)"/>
 
-        <!-- Box 2: State / Storage -->
-        <g transform="translate(300, 40)">
-          <rect width="200" height="150" fill="#f0f9ff" stroke="#0284c7" stroke-width="2" rx="10"/>
-          <text x="100" y="35" font-weight="700" fill="#0369a1" text-anchor="middle" font-size="15">LƯU TRỮ & TRẠNG THÁI</text>
-          <text x="100" y="65" font-size="12" fill="#0284c7" text-anchor="middle">IndexedDB / LocalStorage</text>
-          <text x="100" y="90" font-size="12" fill="#0284c7" text-anchor="middle">Quản lý giao dịch bất đồng bộ</text>
-          <text x="100" y="115" font-size="11" fill="#0284c7" text-anchor="middle">Bảo toàn dữ liệu 100% Offline</text>
-        </g>
+        <!-- Layer 2: Next.js Frontend & API Gateway -->
+        <rect x="290" y="30" width="220" height="290" rx="10" fill="#f8fafc" stroke="#0284c7" stroke-width="1.5"/>
+        <text x="400" y="60" text-anchor="middle" font-weight="700" fill="#0284c7" font-size="14">PORTAL VẬN HÀNH (SPA)</text>
+        <rect x="310" y="90" width="180" height="45" rx="6" fill="#fff" stroke="#bae6fd"/>
+        <text x="400" y="118" text-anchor="middle" font-size="12" fill="#0369a1">ECO ME UI (Design System)</text>
+        <rect x="310" y="150" width="180" height="45" rx="6" fill="#fff" stroke="#bae6fd"/>
+        <text x="400" y="178" text-anchor="middle" font-size="12" fill="#0369a1">Redux Store &amp; Slice State</text>
+        <rect x="310" y="210" width="180" height="45" rx="6" fill="#fff" stroke="#bae6fd"/>
+        <text x="400" y="238" text-anchor="middle" font-size="12" fill="#0369a1">Auth Session (Namespace)</text>
+        <rect x="310" y="270" width="180" height="35" rx="6" fill="#fff" stroke="#bae6fd"/>
+        <text x="400" y="293" text-anchor="middle" font-size="11" fill="#0369a1">Harness Verify Gate</text>
 
-        <!-- Arrow 2 -->
-        <line x1="505" y1="115" x2="555" y2="115" stroke="#0f766e" stroke-width="2.5" marker-end="url(#v-arr)"/>
+        <!-- Arrows L2 -> L3 -->
+        <line x1="510" y1="175" x2="570" y2="175" stroke="#0f766e" stroke-width="2" marker-end="url(#v-arr)"/>
 
-        <!-- Box 3: Logic Engine -->
-        <g transform="translate(560, 40)">
-          <rect width="200" height="150" fill="#fef3c7" stroke="#d97706" stroke-width="2" rx="10"/>
-          <text x="100" y="35" font-weight="700" fill="#92400e" text-anchor="middle" font-size="15">ĐỘNG CƠ NGHIỆP VỤ</text>
-          <text x="100" y="65" font-size="12" fill="#b45309" text-anchor="middle">Xử lý quy tắc nghiệp vụ</text>
-          <text x="100" y="90" font-size="12" fill="#b45309" text-anchor="middle">Tính toán logic & điều phối luồng</text>
-          <text x="100" y="115" font-size="11" fill="#b45309" text-anchor="middle">Khớp 100% đặc tả Spec</text>
-        </g>
+        <!-- Layer 3: Core Domain Engines -->
+        <rect x="580" y="30" width="200" height="290" rx="10" fill="#fefce8" stroke="#ca8a04" stroke-width="1.5"/>
+        <text x="680" y="60" text-anchor="middle" font-weight="700" fill="#a16207" font-size="14">CORE DOMAIN ENGINES</text>
+        <rect x="600" y="90" width="160" height="45" rx="6" fill="#fff" stroke="#fef08a"/>
+        <text x="680" y="118" text-anchor="middle" font-size="12" fill="#854d0e">Điểm danh &amp; Báo ăn (OQ-20)</text>
+        <rect x="600" y="150" width="160" height="45" rx="6" fill="#fff" stroke="#fef08a"/>
+        <text x="680" y="178" text-anchor="middle" font-size="12" fill="#854d0e">Hoàn tiền ăn M+1 (OQ-21)</text>
+        <rect x="600" y="210" width="160" height="45" rx="6" fill="#fff" stroke="#fef08a"/>
+        <text x="680" y="238" text-anchor="middle" font-size="12" fill="#854d0e">Sibling Discount (OQ-23)</text>
+        <rect x="600" y="270" width="160" height="35" rx="6" fill="#fff" stroke="#fef08a"/>
+        <text x="680" y="293" text-anchor="middle" font-size="11" fill="#854d0e">Prorated Calculator (OQ-22)</text>
 
-        <!-- Arrow 3 -->
-        <line x1="765" y1="115" x2="815" y2="115" stroke="#0f766e" stroke-width="2.5" marker-end="url(#v-arr)"/>
+        <!-- Arrows L3 -> L4 -->
+        <line x1="780" y1="175" x2="830" y2="175" stroke="#0f766e" stroke-width="2" marker-end="url(#v-arr)"/>
 
-        <!-- Box 4: Verify Gate -->
-        <g transform="translate(820, 40)">
-          <rect width="140" height="150" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2" rx="10"/>
-          <text x="70" y="35" font-weight="700" fill="#5b21b6" text-anchor="middle" font-size="14">VERIFY GATE</text>
-          <text x="70" y="65" font-size="12" fill="#6d28d9" text-anchor="middle">scripts/verify.sh</text>
-          <text x="70" y="90" font-size="12" fill="#6d28d9" text-anchor="middle">Kiểm chứng nhị phân</text>
-          <text x="70" y="115" font-weight="700" fill="#15803d" text-anchor="middle">0 LỖI (PASS)</text>
-        </g>
+        <!-- Layer 4: External Integrations -->
+        <rect x="840" y="30" width="140" height="290" rx="10" fill="#fdf4ff" stroke="#c026d3" stroke-width="1.5"/>
+        <text x="910" y="60" text-anchor="middle" font-weight="700" fill="#c026d3" font-size="14">TÍCH HỢP NGOÀI</text>
+        <rect x="850" y="90" width="120" height="45" rx="6" fill="#fff" stroke="#f5d0fe"/>
+        <text x="910" y="118" text-anchor="middle" font-size="11" fill="#86198f">Sepay (NAPAS247)</text>
+        <rect x="850" y="150" width="120" height="45" rx="6" fill="#fff" stroke="#f5d0fe"/>
+        <text x="910" y="178" text-anchor="middle" font-size="11" fill="#86198f">Viettel SInvoice</text>
+        <rect x="850" y="210" width="120" height="45" rx="6" fill="#fff" stroke="#f5d0fe"/>
+        <text x="910" y="238" text-anchor="middle" font-size="11" fill="#86198f">AI Face Recognition</text>
+        <rect x="850" y="270" width="120" height="35" rx="6" fill="#fff" stroke="#f5d0fe"/>
+        <text x="910" y="293" text-anchor="middle" font-size="11" fill="#86198f">CSDL Sở GD&amp;ĐT</text>
       </svg>
     </div>
   </section>
+
 </div>
 </body>
 </html>

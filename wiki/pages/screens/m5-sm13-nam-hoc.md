@@ -1,45 +1,41 @@
 ---
-title: "Cấu hình Niên khóa & Học kỳ"
+title: Màn Hình Quản Lý Niên Khóa
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - NT-14
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/school/academic-year
+status: missing
+updated: 2026-11-05
 ---
 
-# Cấu hình Niên khóa & Học kỳ (`M5/SM13`)
+# Màn Hình Quản Lý Niên Khóa
 
 ## Mục đích
-
-Thiết lập các niên khóa và khoảng thời gian học kỳ trong năm học; tự động nhận diện năm học hiện tại theo thời gian thực và ngăn chặn chồng lấn thời gian.
-
-Thuộc phân hệ **[Nhà trường](../overview/module-m5-nha-truong.md)**. Mã định danh tính năng Harness Loop: **`F004`** (Mức ưu tiên: `P0`).
+Quản lý niên khóa, phân kỳ các học kỳ (Học kỳ 1, 2, Hè) và kích hoạt năm học hiện hành.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/setting/season`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/academicYear.ts`
-  - `docs/src/utils/academicYearValidation.ts`
-  - `docs/tests/unit/academicYear.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/school/academic-year` | repo:app/src/pages/[schoolCode]/school/academic-year.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F004-01**: Form tối giản tạo niên khóa với ngày bắt đầu và kết thúc học kỳ 1, học kỳ 2.
-- **SPEC-F004-02**: Thuật toán tự động gắn huy hiệu 'Hiện tại' cho năm học bao hàm ngày hệ thống.
-- **SPEC-F004-03**: Chặn trùng lặp khoảng thời gian giữa các niên khóa và khóa hành động xóa niên khóa đang có dữ liệu.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| NT-14 | Quản lý niên khóa học, các kỳ học và kích hoạt niên khóa hiện hành | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F004-01` | Form tối giản tạo niên khóa với ngày bắt đầu và kết thúc học... | `OK` | repo:app/tests/unit/academicYear.test.mjs:1 | Đã kiểm chứng 24/24 unit tests |
-| `SPEC-F004-02` | Thuật toán tự động gắn huy hiệu 'Hiện tại' cho năm học bao h... | `OK` | repo:app/tests/unit/academicYear.test.mjs:1 | Đã kiểm chứng 24/24 unit tests |
-| `SPEC-F004-03` | Chặn trùng lặp khoảng thời gian giữa các niên khóa và khóa h... | `OK` | repo:app/tests/unit/academicYear.test.mjs:1 | Đã kiểm chứng 24/24 unit tests |
+| NT-14 | Quản lý niên khóa học, các kỳ học và kích hoạt niên khóa hiện hành | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/school/academic-year.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Nhà trường](../overview/module-m5-nha-truong.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-school-admin.md)
+- [Luồng liên quan](../flows/fl-chuyen-lop-va-chuyen-nam-hoc.md)

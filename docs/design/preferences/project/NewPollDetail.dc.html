@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Chi tiết bình chọn — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="poll" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Trung thu đoàn viên 2026</h1>
+    <span style="display: inline-flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-4);"><x-import component-from-global-scope="ECOMD.StatusTag" tone="neutral">Đã đóng</x-import></span>
+    <p class="ecomd-page-header__desc body-sm">Kết thúc 18:00, 25/10/2026 · 75 phiếu</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="file-excel">Xuất Excel</x-import><x-import component-from-global-scope="ECOMD.DataTable.RowAction" icon="ellipsis" label="Thao tác khác" items="{{moreMenu}}"></x-import></div>
+</div>
+<div class="ecomd-split is-aside" style="gap: var(--space-20); align-items: start;"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Kết quả</h2><p class="ecomd-card__desc body-xs">75 phiếu · 75 người tham gia</p></div></div>
+  <div class="ecomd-card__body"><ol style="display: flex; flex-direction: column; gap: var(--space-16); margin: 0; padding: 0; list-style: none;"><sc-for list="{{res}}" as="r" hint-placeholder-count="3"><li style="display: flex; flex-direction: column; gap: var(--space-6);"><span style="display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-12);"><span class="body-sm-medium" style="color: var(--text-heading);">{{r.name}}</span><span class="body-sm" style="white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--text-body);"><b class="body-sm-semibold" style="color: var(--text-heading);">{{r.pct}}</b> · {{r.votes}} phiếu</span></span><x-import component-from-global-scope="ECOMD.Meter" value="{{r.v}}" max="{{hundred}}" show-label="{{no}}" tone="{{r.tone}}" label="{{r.name}}"></x-import></li></sc-for></ol></div>
+</section>
+<section class="ecomd-table-card"><div class="ecomd-table-card__toolbar"><span class="title-md" style="color: var(--text-heading);">Tình trạng tham gia</span><span style="flex: 1;"></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{clsOpts}}" value="{{cls}}" on-change="{{setCls}}" label="Lọc theo lớp"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{stOpts}}" value="{{stt}}" on-change="{{setStt}}" label="Lọc theo trạng thái"></x-import></div><div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Học sinh</th><th class="body-xs-bold">Lớp</th><th class="body-xs-bold">Trạng thái</th><th class="body-xs-bold">Đã chọn</th><th class="body-xs-bold">Thời gian</th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><span style="display: flex; align-items: center; gap: var(--space-10);"><x-import component-from-global-scope="ECOMD.Avatar" name="{{r.name}}" size="sm"></x-import><span class="body-sm-medium" style="color: var(--text-heading); white-space: nowrap;">{{r.name}}</span></span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Lớp</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.Tag">{{r.cls}}</x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Trạng thái</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.tone}}">{{r.status}}</x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Đã chọn</span><div class="ecomd-cell__value"><span style="display: block; min-width: calc(var(--size-sidebar-w) * 5 / 4); color: {{r.choiceColor}};">{{r.choice}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Thời gian</span><div class="ecomd-cell__value"><span style="font-variant-numeric: tabular-nums; white-space: nowrap;">{{r.time}}</span></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="5"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có học sinh nào khớp bộ lọc"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<div class="ecomd-pagination body-sm"><span>Đã bình chọn <b>{{voted}}</b> / <b>{{total}}</b> học sinh</span></div></section></div><div style="display: flex; flex-direction: column; gap: var(--space-16);"><section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Thông tin</h2></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><p class="body-sm" style="margin: 0; color: var(--text-body);">Khảo sát ý kiến phụ huynh về việc tổ chức đêm hội Trung thu tại trường cho các bé khối Mầm non và Tiểu học.</p><dl class="ecomd-dl body-sm"><dt>Kết thúc</dt><dd>18:00, 25/10/2026</dd><dt>Người tạo</dt><dd>Nguyễn Thị Thu Hà · Phó hiệu trưởng</dd><dt>Gửi tới</dt><dd>Lớp INFANT, Lá, 1A</dd><dt>Cách chọn</dt><dd>Chọn 1 phương án</dd><dt>Kết quả</dt><dd>Phụ huynh xem được</dd></dl></div></div>
+</section>
+</div></div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 988}}'>
+var CRUMBS = ["Nhà trường", "Bình chọn", "Trung thu đoàn viên 2026"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { cls: 'Tất cả lớp', stt: 'Mọi trạng thái' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var P = [['Nguyễn Hoàng Huyền My', 'INFANT', 0, '14:32, 18/09/2026'], ['Trần Bảo An', 'INFANT', 0, '09:20, 17/09/2026'], ['Lê Minh Khang', 'INFANT', -1, ''], ['Phạm Quỳnh Chi', 'Lá', 1, '11:45, 19/09/2026'], ['Hoàng Gia Huy', 'Lá', 2, '16:10, 20/09/2026'], ['Đặng Tuệ Lâm', '1A', -1, '']];
+    var R = [["Tổ chức tiệc buffet và rước đèn tại trường", 45, 60.0], ["Chương trình ca múa nhạc và kịch rối", 20, 26.7], ["Hoạt động làm bánh dẻo cùng phụ huynh", 10, 13.3]];
+    var list = P.filter(function (p) { return (st.cls === 'Tất cả lớp' || 'Lớp ' + p[1] === st.cls) && (st.stt === 'Mọi trạng thái' || (st.stt === 'Đã bình chọn') === (p[2] >= 0)); });
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      hundred: 100,
+      res: R.map(function (r, i) { return { name: r[0], votes: r[1], pct: r[2].toFixed(1) + '%', v: r[2], tone: i === 0 ? 'default' : 'default' }; }),
+      clsOpts: ['Tất cả lớp', 'Lớp INFANT', 'Lớp Lá', 'Lớp 1A'], cls: st.cls, setCls: function (v) { self.setState({ cls: v }); },
+      stOpts: ['Mọi trạng thái', 'Đã bình chọn', 'Chưa bình chọn'], stt: st.stt, setStt: function (v) { self.setState({ stt: v }); },
+      rows: list.map(function (p) { var on = p[2] >= 0; return { name: p[0], cls: p[1], status: on ? 'Đã bình chọn' : 'Chưa bình chọn', tone: on ? 'success' : 'neutral', choice: on ? R[p[2]][0] : '–', choiceColor: on ? 'var(--text-heading)' : 'var(--text-muted)', time: p[3] || '–' }; }),
+      isEmpty: !list.length, voted: P.filter(function (p) { return p[2] >= 0; }).length, total: P.length,
+      moreMenu: [{ icon: 'copy', label: 'Nhân bản bình chọn' }, { icon: 'arrows-rotate', label: 'Mở lại bình chọn' }, { divider: true }, { icon: 'trash-can', label: 'Xóa…', tone: 'danger' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

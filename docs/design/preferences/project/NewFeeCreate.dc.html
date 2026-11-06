@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tạo hóa đơn — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="fee" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Tạo hóa đơn học phí</h1>
+    <p class="ecomd-page-header__desc body-sm">Lập hóa đơn thu phí cho một kỳ thu; phụ huynh nhận thông báo và thanh toán qua ứng dụng</p>
+  </div>
+</div>
+<x-import component-from-global-scope="ECOMD.InlineNotice" tone="info">Học sinh đã có hóa đơn hoặc đã đóng đủ học phí và tiền ăn của kỳ này sẽ được bỏ qua để tránh lập trùng. Tiền ăn bán trú tự trừ các ngày nghỉ có phép theo báo cáo điểm danh.</x-import>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Phạm vi lập hóa đơn</h2><p class="ecomd-card__desc body-xs">Lập hàng loạt cho toàn trường, khối, lớp hoặc từng học sinh</p></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><x-import component-from-global-scope="ECOMD.Tabs" items="{{scopes}}" value="{{scope}}" on-change="{{setScope}}" label="Phạm vi" variant="segmented" class-name="is-block"></x-import><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-16);"><sc-if value="{{scopeGrade}}" hint-placeholder-val="{{false}}"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Khối lớp <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{gradeOpts}}" value="{{grade}}" on-change="{{setGrade}}" label="Khối lớp"></x-import></label></sc-if><sc-if value="{{needClass}}" hint-placeholder-val="{{true}}"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">{{classLabel}}</span><x-import component-from-global-scope="ECOMD.SelectField" options="{{clsOpts}}" value="{{cls}}" on-change="{{setCls}}" label="Lớp học"></x-import></label></sc-if><sc-if value="{{scopeKid}}" hint-placeholder-val="{{true}}"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Học sinh <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{kidOpts}}" value="{{kid}}" on-change="{{setKid}}" label="Học sinh"></x-import></label></sc-if></div><div class="ecomd-setting" style="padding-top: var(--space-16); border-top: 1px solid var(--border-subtle);"><div class="ecomd-setting__text"><span class="ecomd-setting__title body-sm-semibold">Tự áp dụng chính sách miễn giảm</span><span class="ecomd-setting__desc body-xs">Rà soát và áp dụng các chính sách đang hiệu lực cho học sinh trong phạm vi lập hóa đơn.</span></div><div class="ecomd-setting__control"><input type="checkbox" role="switch" class="ecomd-switch" aria-label="Tự áp dụng chính sách miễn giảm" checked="{{autoDisc}}" onChange="{{toggleDisc}}"></div></div></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Thông tin hóa đơn</h2></div></div>
+  <div class="ecomd-card__body"><div class="ecomd-form"><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Kỳ thu <span class="ecomd-field__req" aria-hidden="true">*</span></span><x-import component-from-global-scope="ECOMD.SelectField" options="{{periodOpts}}" value="{{period}}" on-change="{{setPeriod}}" label="Kỳ thu"></x-import></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tên hiển thị trên hóa đơn <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" value="Hóa đơn tháng 09/2026"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Ngày hóa đơn <span class="ecomd-field__req" aria-hidden="true">*</span></span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" value="01/09/2026" placeholder="dd/mm/yyyy"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Hạn thanh toán <span class="ecomd-field__req" aria-hidden="true">*</span></span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" value="20/09/2026" placeholder="dd/mm/yyyy"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Ngày gửi thông báo phụ huynh</span><span class="ecomd-affix"><input type="text" class="ecomd-text body-sm" placeholder="Để trống để gửi ngay khi tạo"><x-import component-from-global-scope="ECOMD.Icon" name="calendar" size="{{fourteen}}"></x-import></span><span class="ecomd-field__hint body-xs">Hóa đơn ở trạng thái Đã gửi ngay khi tạo nếu để trống.</span></label><div class="ecomd-field" style="justify-content: center;"><x-import component-from-global-scope="ECOMD.Checkbox" label="Xuất hóa đơn điện tử" description="Phát hành qua Viettel SInvoice khi hóa đơn được thanh toán đủ" checked="{{einv}}" on-change="{{toggleEinv}}"></x-import></div></div></div></div>
+</section>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Khoản thu</h2><p class="ecomd-card__desc body-xs">Đang dùng danh mục khoản thu theo lớp của học sinh</p></div><div class="ecomd-card__actions"><x-import component-from-global-scope="ECOMD.Button" variant="ghost" icon="arrows-rotate">Tải lại theo lớp</x-import></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-16);"><div class="ecomd-table-scroll"><table class="ecomd-table is-dense"><thead><tr><th class="body-xs-bold is-primary">Khoản thu</th><th class="body-xs-bold">Mô tả trên hóa đơn</th><th class="body-xs-bold is-right">Đơn giá</th><th class="body-xs-bold is-right">Số lượng</th><th class="body-xs-bold">Giảm trừ</th><th class="body-xs-bold is-right">Thành tiền</th><th class="body-xs-bold is-actions"><span class="ecomd-sr">Xóa dòng</span></th></tr></thead><tbody><sc-for list="{{lines}}" as="l" hint-placeholder-count="4"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value" style="width: 100%;"><x-import component-from-global-scope="ECOMD.SelectField" options="{{feeOpts}}" value="{{l.fee}}" label="{{l.feeLabel}}" wrap-style="{{fill}}" style="{{fill}}"></x-import></div></td><td class="body-sm is-wide"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Mô tả</span><div class="ecomd-cell__value"><input type="text" class="ecomd-text body-sm" value="{{l.desc}}" aria-label="{{l.descLabel}}" style="min-width: calc(var(--size-sidebar-w) * 3 / 4);"></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Đơn giá</span><div class="ecomd-cell__value"><input type="text" inputmode="numeric" class="ecomd-text is-num body-sm" value="{{l.priceTxt}}" aria-label="{{l.priceLabel}}" onChange="{{l.setPrice}}" style="width: calc(var(--size-40) * 5 / 2); text-align: right;"></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Số lượng</span><div class="ecomd-cell__value"><input type="text" inputmode="numeric" class="ecomd-text is-num body-sm" value="{{l.qty}}" aria-label="{{l.qtyLabel}}" onChange="{{l.setQty}}" style="width: calc(var(--size-40) * 3 / 2);"></div></td><td class="body-sm is-wide"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Giảm trừ</span><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-2);"><span style="display: flex; gap: var(--space-4);"><input type="text" inputmode="numeric" class="ecomd-text is-num body-sm" value="{{l.discTxt}}" aria-label="{{l.discLabel}}" onChange="{{l.setDisc}}" style="width: calc(var(--size-40) * 5 / 2); text-align: right;"><x-import component-from-global-scope="ECOMD.SelectField" options="{{units}}" value="{{l.unit}}" on-change="{{l.setUnit}}" label="Đơn vị giảm trừ"></x-import></span><span class="body-xs" style="color: var(--semantic-success-strong); font-variant-numeric: tabular-nums;">{{l.discAmt}}</span></span></div></td><td class="body-sm is-right is-wide"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Thành tiền</span><div class="ecomd-cell__value"><span class="body-sm-semibold" style="color: var(--text-heading); white-space: nowrap; font-variant-numeric: tabular-nums;">{{l.total}}</span></div></td><td class="body-sm is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.IconButton" icon="trash-can" label="{{l.rmLabel}}" on-click="{{l.remove}}"></x-import></div></td></tr></sc-for></tbody></table></div><div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--space-16);"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="plus">Thêm dòng thu</x-import><dl class="body-sm" style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-8) 0; margin: 0 0 0 auto; width: 100%; max-width: calc(var(--size-sidebar-w) * 3 / 2);"><dt style="color: var(--text-subtle);">Tạm tính</dt><dd class="body-sm" style="margin: 0; padding-left: var(--space-24); text-align: right; font-variant-numeric: tabular-nums; color: var(--text-heading);">{{sub}}</dd><dt style="color: var(--text-subtle);">Giảm trừ miễn giảm</dt><dd class="body-sm" style="margin: 0; padding-left: var(--space-24); text-align: right; font-variant-numeric: tabular-nums; color: var(--text-heading);">{{disc}}</dd><dt style="color: var(--text-heading); padding-top: var(--space-8); border-top: 1px solid var(--border-default);" class="body-sm-semibold">Phải thu mỗi học sinh</dt><dd class="title-md" style="margin: 0; padding-left: var(--space-24); text-align: right; font-variant-numeric: tabular-nums; color: var(--text-heading); padding-top: var(--space-8); border-top: 1px solid var(--border-default);">{{grand}}</dd></dl></div></div></div>
+</section>
+<div class="ecomd-form-footer"><span class="ecomd-form-footer__note body-xs">{{footNote}}</span><div class="ecomd-form-footer__actions"><x-import component-from-global-scope="ECOMD.Button" variant="ghost">Hủy</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="check">Tạo hóa đơn</x-import></div></div>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1594}}'>
+var CRUMBS = ["Tài chính", "Học phí", "Tạo hóa đơn"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { scope: 'kid', grade: 'Khối 10', cls: 'Lớp 10A1 · 2 học sinh', kid: 'Nguyễn Gia Huy · HS-2026-001', period: 'Tháng 09/2026', autoDisc: true, einv: true, lines: [{"fee": "Học phí chính khóa", "desc": "Học phí chính khóa tháng 09/2026", "price": 2500000, "qty": 1, "disc": 50, "unit": "%"}, {"fee": "Tiền ăn bán trú", "desc": "Tiền ăn bán trú (đã trừ ngày nghỉ có phép)", "price": 35000, "qty": 22, "disc": 50, "unit": "%"}, {"fee": "Xe đưa đón", "desc": "Xe đưa đón", "price": 1200000, "qty": 1, "disc": 200000, "unit": "đ"}, {"fee": "Đồng phục hè", "desc": "Đồng phục hè", "price": 450000, "qty": 1, "disc": 0, "unit": "%"}] }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+    function vnd(n) { return (n < 0 ? '-' : '') + Math.abs(Math.round(n)).toLocaleString('en-US') + 'đ'; }
+    function num(v) { v = String(v == null ? '' : v).replace(/,/g, '').trim(); return v === '' || isNaN(+v) ? 0 : +v; }
+    function fmt(n) { return n ? Math.round(n).toLocaleString('en-US') : ''; }
+
+    var L = st.lines;
+    function upd(i, k) { return function (e) { var v = e && e.target ? e.target.value : e; var n = self.state.lines.map(function (x) { return Object.assign({}, x); }); n[i][k] = k === 'unit' ? v : num(v); self.setState({ lines: n }); }; }
+    var sub = 0, disc = 0;
+    var lines = L.map(function (l, i) {
+      var gross = l.price * l.qty, d = l.unit === '%' ? Math.round(gross * Math.min(l.disc, 100) / 100) : Math.min(l.disc, gross);
+      sub += gross; disc += d;
+      return { fee: l.fee, desc: l.desc, priceTxt: fmt(l.price), qty: String(l.qty), discTxt: l.unit === '%' ? String(l.disc) : fmt(l.disc), unit: l.unit, discAmt: d ? vnd(-d) : 'Không giảm', total: vnd(gross - d),
+        feeLabel: 'Khoản thu dòng ' + (i + 1), descLabel: 'Mô tả dòng ' + (i + 1), priceLabel: 'Đơn giá dòng ' + (i + 1), qtyLabel: 'Số lượng dòng ' + (i + 1), discLabel: 'Giảm trừ dòng ' + (i + 1), rmLabel: 'Xóa dòng ' + l.fee,
+        setPrice: upd(i, 'price'), setQty: upd(i, 'qty'), setDisc: upd(i, 'disc'), setUnit: upd(i, 'unit'),
+        remove: function () { self.setState({ lines: self.state.lines.filter(function (x, j) { return j !== i; }) }); } };
+    });
+    var who = { all: 'toàn trường', grade: st.grade, cls: st.cls, kid: '1 học sinh' }[st.scope];
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      fill: { width: '100%' }, feeOpts: ["Học phí chính khóa", "Tiền ăn bán trú", "Tiếng Anh tăng cường", "Xe đưa đón", "Đồng phục hè", "Học STEAM", "Kỹ năng sống", "Khoản thu khác"], units: ['%', 'đ'], lines: lines, isEmpty: !lines.length,
+      sub: vnd(sub), disc: vnd(-disc), grand: vnd(sub - disc),
+      scopes: [{ key: 'all', label: 'Toàn trường' }, { key: 'grade', label: 'Khối lớp' }, { key: 'cls', label: 'Lớp học' }, { key: 'kid', label: 'Học sinh' }], scope: st.scope, setScope: function (k) { self.setState({ scope: k }); },
+      scopeGrade: st.scope === 'grade', needClass: st.scope === 'cls' || st.scope === 'kid', scopeKid: st.scope === 'kid', classLabel: st.scope === 'kid' ? 'Lọc theo lớp' : 'Lớp học',
+      gradeOpts: ['Khối 1', 'Khối 6', 'Khối 10', 'Khối 11', 'Khối 12'], grade: st.grade, setGrade: function (v) { self.setState({ grade: v }); },
+      clsOpts: ['Lớp 10A1 · 2 học sinh', 'Lớp 10A2 · 1 học sinh', 'Lớp 6A1 · 7 học sinh', 'Lớp 12A1 · 1 học sinh'], cls: st.cls, setCls: function (v) { self.setState({ cls: v }); },
+      kidOpts: ['Nguyễn Gia Huy · HS-2026-001', 'Lê Bảo Anh · HS-2026-002'], kid: st.kid, setKid: function (v) { self.setState({ kid: v }); },
+      periodOpts: ['Tháng 09/2026', 'Tháng 10/2026', 'Tháng 11/2026', 'Tháng 12/2026'], period: st.period, setPeriod: function (v) { self.setState({ period: v }); },
+      autoDisc: st.autoDisc, toggleDisc: function (e) { self.setState({ autoDisc: e.target.checked }); }, einv: st.einv, toggleEinv: function (v) { self.setState({ einv: v }); },
+      footNote: 'Lập cho ' + who + ' · ' + lines.length + ' khoản thu · phải thu ' + vnd(sub - disc) + ' mỗi học sinh.'
+    });
+  }
+}
+</script>
+</body>
+</html>

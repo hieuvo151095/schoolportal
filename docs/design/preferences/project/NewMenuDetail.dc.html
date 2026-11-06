@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Chi tiết thực đơn — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="menu" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Thực đơn tuần 38</h1>
+    <span style="display: inline-flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-4);"><x-import component-from-global-scope="ECOMD.StatusTag" tone="success" icon="{{check}}">Đã xuất bản</x-import></span>
+    <p class="ecomd-page-header__desc body-sm">Toàn trường · 15/09 – 20/09/2026 · Lưới món ăn</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="ghost" icon="clock">Lịch sử gửi (2)</x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="paper-plane">Gửi lại</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="pen">Chỉnh sửa</x-import><x-import component-from-global-scope="ECOMD.DataTable.RowAction" icon="ellipsis" label="Thao tác khác" items="{{moreMenu}}"></x-import></div>
+</div>
+<div class="ecomd-stat-group" style="--ecomd-cols: 4;">
+  <sc-for list="{{stats}}" as="s" hint-placeholder-count="4"><x-import component-from-global-scope="ECOMD.StatCard" label="{{s.label}}" value="{{s.value}}" icon="{{s.icon}}" tone="{{s.tone}}"></x-import></sc-for>
+</div>
+<section class="ecomd-card">
+  <div class="ecomd-card__head"><div><h2 class="ecomd-card__title title-md">Món ăn trong tuần</h2><p class="ecomd-card__desc body-xs">Năng lượng tính theo khẩu phần một học sinh</p></div></div>
+  <div class="ecomd-card__body"><div style="display: flex; flex-direction: column; gap: var(--space-12);"><div class="ecomd-table-scroll ecomd-hide-compact"><table class="ecomd-timetable"><thead><tr><th class="is-time body-xs-bold">Bữa</th><sc-for list="{{days}}" as="d" hint-placeholder-count="6"><th class="body-xs-bold"><span style="display: flex; flex-direction: column; gap: var(--space-2);"><span>{{d.label}}</span><span class="body-xs" style="color: var(--text-subtle); font-weight: 400; font-variant-numeric: tabular-nums;">{{d.sub}}</span></span></th></sc-for></tr></thead><tbody><sc-for list="{{meals}}" as="m" hint-placeholder-count="3"><tr><td class="is-time"><span class="body-sm-semibold" style="color: var(--text-heading);">{{m.name}}</span></td><sc-for list="{{m.cells}}" as="c" hint-placeholder-count="6"><td><sc-if value="{{c.full}}" hint-placeholder-val="{{true}}"><div class="{{c.slotCls}}" style="gap: var(--space-6);"><sc-for list="{{c.dishes}}" as="d" hint-placeholder-count="2"><span style="display: flex; flex-direction: column; gap: 0;"><span class="body-sm" style="color: var(--text-heading);">{{d.name}}</span><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">{{d.kcal}}</span></span></sc-for><span class="body-xs" style="display: flex; align-items: center; gap: var(--space-4); margin-top: auto; color: {{c.tickColor}};"><x-import component-from-global-scope="ECOMD.Icon" name="{{c.tickIcon}}" size="{{twelve}}"></x-import>{{c.tickLabel}}</span></div></sc-if></td></sc-for></tr></sc-for></tbody></table></div><div class="ecomd-only-compact"><div style="display: flex; flex-direction: column; gap: var(--space-12);"><x-import component-from-global-scope="ECOMD.Tabs" items="{{dayTabs}}" value="{{day}}" on-change="{{setDay}}" label="Chọn ngày" variant="segmented" class-name="is-block"></x-import><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">{{daySub}}</span><ul style="display: flex; flex-direction: column; gap: var(--space-8); margin: 0; padding: 0; list-style: none;"><sc-for list="{{dayList}}" as="c" hint-placeholder-count="3"><li style="display: flex; flex-direction: column; gap: var(--space-6);"><span class="body-sm-semibold" style="color: var(--text-heading);">{{c.meal}}</span><sc-if value="{{c.full}}" hint-placeholder-val="{{true}}"><div class="{{c.slotCls}}" style="gap: var(--space-6);"><sc-for list="{{c.dishes}}" as="d" hint-placeholder-count="2"><span style="display: flex; flex-direction: column; gap: 0;"><span class="body-sm" style="color: var(--text-heading);">{{d.name}}</span><span class="body-xs" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">{{d.kcal}}</span></span></sc-for><span class="body-xs" style="display: flex; align-items: center; gap: var(--space-4); margin-top: auto; color: {{c.tickColor}};"><x-import component-from-global-scope="ECOMD.Icon" name="{{c.tickIcon}}" size="{{twelve}}"></x-import>{{c.tickLabel}}</span></div></sc-if></li></sc-for></ul></div></div></div></div>
+</section>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 996}}'>
+var CRUMBS = ["Nhà trường", "Thực đơn", "Tuần 38"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { day: 'Thứ Hai' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var EDIT = false, DATES = [];
+    function FILLED() { return true; }
+    var D = ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"], M = ["Ăn sáng", "Ăn trưa", "Ăn xế"], W = [[[["Phở bò Hà Nội", 380], ["Sữa hạt sen mè đen", 120]], [["Bánh cuốn chả quế Vissan", 360]], [["Cháo sườn bắp non", 310]], [["Xôi gà xé hạt sen", 390]], [["Mì Quảng tôm thịt", 370]], [["Bún mọc sườn chua", 340], ["Cơm tấm", 420]]], [[["Cơm tám thơm Điện Biên", 220], ["Thịt kho trứng cút", 320], ["Canh bí xanh nấu tôm thịt", 95], ["Chuối tiêu tráng miệng", 85]], [["Cơm trắng, gà om nấm đông cô", 450], ["Canh rau ngót nấu thịt nạc", 90]], [["Cơm trắng, cá basa sốt cà chua", 420], ["Canh cải cúc nấu ngao", 80]], [["Cơm tấm sườn nướng mật ong", 510], ["Canh củ quả hầm xương", 110]], [["Cơm trắng, bò xào cần tỏi", 460], ["Canh chua cá lóc rau muống", 105]], [["Bún", 280], ["Sữa", 120], ["Trái cây", 60]]], [[["Bánh flan sữa chua Ba Vì", 140]], [["Sữa tươi Vinamilk 100% ít đường", 110]], [["Chè đậu đỏ hạt sen", 160]], [["Sữa chua dầm hoa quả tươi", 130]], [["Bánh bao nhân thịt trứng cút", 190]], [["Nui xào thịt bằm", 210]]]], T = [[1, 1, 1, 1, 1, 1], [1, 1, 0, 1, 1, 1], [1, 1, 1, 1, 1, 1]];
+    function cellOf(mi, di) { var full = FILLED(mi, di); var ds = full ? W[mi][di] : []; var t = full && T[mi][di];
+      return { full: full, empty: !full, meal: M[mi], slotCls: 'ecomd-slot' + (EDIT ? ' is-edit' : ''), addLabel: 'Thêm món ' + M[mi].toLowerCase() + ', ' + D[di],
+        dishes: ds.map(function (d) { return { name: d[0], kcal: d[1] + ' kcal' }; }),
+        tickIcon: t ? 'circle-check' : 'circle-exclamation', tickColor: t ? 'var(--semantic-success-strong)' : 'var(--semantic-warning-strong)', tickLabel: t ? 'Đã truy xuất' : 'Chưa truy xuất' }; }
+    var meals = M.map(function (m, mi) { return { name: m, cells: D.map(function (d, di) { return cellOf(mi, di); }) }; });
+    var days = D.map(function (d, di) { var k = 0, n = 0, f = 0; M.forEach(function (m, mi) { if (FILLED(mi, di)) { f++; if (T[mi][di]) n++; W[mi][di].forEach(function (x) { k += x[1]; }); } });
+      return { label: d, sub: EDIT ? (DATES[di] + ' · ' + f + '/3 bữa') : (k.toLocaleString('en-US') + ' kcal · truy xuất ' + n + '/3') }; });
+    var dIdx = D.indexOf(st.day);
+    var dayList = M.map(function (m, mi) { return cellOf(mi, dIdx); });
+    var filled = 0; meals.forEach(function (m) { m.cells.forEach(function (c) { if (c.full) filled++; }); });
+    var tot = 0, ok = 0; W.forEach(function (m, mi) { m.forEach(function (d, di) { if (T[mi][di]) ok++; d.forEach(function (x) { tot += x[1]; }); }); });
+    return Object.assign(this.shell(), {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      days: days, meals: meals, dayTabs: D.map(function (d, i) { return { key: d, label: 'T' + (i + 2) }; }), day: st.day, setDay: function (k) { self.setState({ day: k }); }, dayList: dayList, daySub: days[dIdx].label + ' · ' + days[dIdx].sub,
+      check: 'circle-check',
+      stats: [{ label: 'Bữa đã có món', value: filled + ' / 18', icon: 'utensils', tone: 'neutral' }, { label: 'Năng lượng trung bình mỗi ngày', value: Math.round(tot / 6).toLocaleString('en-US') + ' kcal', icon: 'bolt', tone: 'neutral' },
+              { label: 'Bữa đã truy xuất nguồn gốc', value: ok + ' / 18', icon: 'circle-check', tone: 'success' }, { label: 'Lần gửi phụ huynh', value: '2', icon: 'paper-plane', tone: 'neutral' }],
+      moreMenu: [{ icon: 'download', label: 'Tải xuống' }, { icon: 'copy', label: 'Sao chép sang tuần khác' }, { divider: true }, { icon: 'trash-can', label: 'Gỡ xuất bản…', tone: 'danger' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

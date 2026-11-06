@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Thư viện ảnh — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="media" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Thư viện ảnh lớp 1A1</h1>
+    <p class="ecomd-page-header__desc body-sm">Ảnh, video hoạt động và ảnh nhận diện khuôn mặt học sinh · 4 album, 21 ảnh</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="user-check">Nhận diện khuôn mặt</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="plus">Tạo album</x-import></div>
+</div>
+<x-import component-from-global-scope="ECOMD.InlineNotice" tone="info"><b>Nhận diện khuôn mặt đã gắn tên cho 78% ảnh.</b> Còn 5 ảnh chưa nhận ra học sinh, cần giáo viên xác nhận.</x-import>
+<section class="ecomd-table-card">
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Loại album"></x-import>
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm album theo tên, chủ đề" value="{{query}}" on-change="{{setQuery}}"></x-import><span style="flex: 1;"></span><x-import component-from-global-scope="ECOMD.Tabs" items="{{views}}" value="{{view}}" on-change="{{setView}}" label="Kiểu hiển thị" variant="segmented"></x-import></div>
+<sc-if value="{{isGrid}}" hint-placeholder-val="{{true}}"><div class="ecomd-grid" style="--ecomd-cols: 4; --ecomd-cols-tablet: 2; gap: var(--space-16); padding: var(--space-16);">
+  <sc-for list="{{albums}}" as="a" hint-placeholder-count="4"><article style="display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-default); border-radius: var(--radius-12); background: var(--bg-surface);">
+    <div role="img" aria-label="{{a.coverLabel}}" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 16 / 9; background: var(--bg-muted); color: var(--text-muted);"><x-import component-from-global-scope="ECOMD.Icon" name="images" size="{{twenty}}"></x-import>
+      <span class="body-xs-semibold" style="position: absolute; right: var(--space-8); bottom: var(--space-8); display: inline-flex; align-items: center; gap: var(--space-4); padding: var(--space-2) var(--space-8); border-radius: var(--radius-full); background: var(--bg-surface); color: var(--text-heading);"><x-import component-from-global-scope="ECOMD.Icon" name="image" size="{{twelve}}"></x-import>{{a.n}} ảnh</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--space-6); padding: var(--space-12) var(--space-14) var(--space-14); flex: 1;">
+      <div style="display: flex; align-items: flex-start; gap: var(--space-8);"><a href="#" class="body-sm-semibold" style="flex: 1; min-width: 0; color: var(--text-heading); text-decoration: none;">{{a.name}}</a><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{a.actionLabel}}" items="{{a.menu}}"></x-import></div>
+      <span class="body-xs" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: var(--text-subtle);">{{a.desc}}</span>
+      <div class="body-xs" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-8); margin-top: auto; padding-top: var(--space-8); color: var(--text-subtle);"><x-import component-from-global-scope="ECOMD.Tag">{{a.kindLabel}}</x-import><span style="white-space: nowrap;">{{a.scope}} · {{a.date}}</span></div>
+    </div>
+  </article></sc-for>
+</div></sc-if>
+<sc-if value="{{isList}}" hint-placeholder-val="{{false}}"><div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Album</th><th class="body-xs-bold">Loại</th><th class="body-xs-bold">Phạm vi</th><th class="body-xs-bold is-right">Số ảnh</th><th class="body-xs-bold">Cập nhật</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{albums}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><div style="display: flex; align-items: center; gap: var(--space-12);"><span role="img" aria-label="{{r.coverLabel}}" style="display: flex; align-items: center; justify-content: center; flex: none; width: var(--size-44); height: var(--size-44); border-radius: var(--radius-8); background: var(--bg-muted); color: var(--text-muted);"><x-import component-from-global-scope="ECOMD.Icon" name="images" size="{{twelve}}"></x-import></span><span style="display: flex; flex-direction: column; min-width: 0;"><a href="#" class="body-sm-medium" style="color: var(--text-heading); text-decoration: none;">{{r.name}}</a><span class="body-xs" style="color: var(--text-subtle);">{{r.desc}}</span></span></div></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Loại</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.Tag">{{r.kindLabel}}</x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Phạm vi</span><div class="ecomd-cell__value"><span>{{r.scope}}</span></div></td><td class="body-sm is-right"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Số ảnh</span><div class="ecomd-cell__value"><span style="font-variant-numeric: tabular-nums;">{{r.n}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Cập nhật</span><div class="ecomd-cell__value"><span style="font-variant-numeric: tabular-nums;">{{r.date}}</span></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="6"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có album nào khớp tìm kiếm"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+</sc-if>
+</section>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "scenario": {"editor": "enum", "options": ["Lưới", "Danh sách"], "default": "Lưới", "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Vận hành", "Thư viện ảnh"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'all', query: '', view: props.scenario === 'Danh sách' ? 'list' : 'grid' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var A = [{"id": 1, "name": "Hoạt động", "kind": "system", "scope": "Lớp 1A1", "n": 6, "date": "30/10/2026", "desc": "Tự động tổng hợp ảnh và video từ các bài đăng Hoạt động của lớp 1A1."}, {"id": 2, "name": "Điểm danh", "kind": "system", "scope": "Lớp 1A1", "n": 4, "date": "30/10/2026", "desc": "Ảnh xác nhận đưa đón và nhận diện khuôn mặt khi điểm danh học sinh lớp 1A1."}, {"id": 3, "name": "Dã ngoại Làng gốm Bát Tràng", "kind": "own", "scope": "Lớp 1A1", "n": 6, "date": "08/10/2026", "desc": "Chuyến trải nghiệm thực tế học kỳ I: các bạn nhỏ lớp 1A1 tập nặn gốm và vẽ men màu."}, {"id": 4, "name": "Lễ khai giảng năm học 2026 – 2027", "kind": "own", "scope": "Toàn trường", "n": 5, "date": "05/09/2026", "desc": "Không khí ngày tựu trường và lễ đón học sinh lớp 1 bước vào năm học mới."}];
+    var KL = { system: 'Album hệ thống', own: 'Tự tạo' };
+    var q = (st.query || '').trim().toLowerCase();
+    var base = A.filter(function (a) { return !q || (a.name + ' ' + a.desc).toLowerCase().indexOf(q) >= 0; });
+    var tabs = [['all', 'Tất cả'], ['system', 'Album hệ thống'], ['own', 'Tự tạo']].map(function (d) { return { key: d[0], label: d[1], count: base.filter(function (a) { return d[0] === 'all' || a.kind === d[0]; }).length }; });
+    var list = base.filter(function (a) { return st.tab === 'all' || a.kind === st.tab; });
+    var albums = list.map(function (a) { var sys = a.kind === 'system';
+      return Object.assign({}, a, { kindLabel: KL[a.kind], coverLabel: 'Ảnh bìa album ' + a.name, actionLabel: 'Thao tác với album ' + a.name,
+        menu: sys ? [{ icon: 'eye', label: 'Mở album' }, { icon: 'download', label: 'Tải tất cả ảnh' }, { icon: 'share-from-square', label: 'Chia sẻ với phụ huynh' }]
+                  : [{ icon: 'eye', label: 'Mở album' }, { icon: 'upload', label: 'Thêm ảnh, video' }, { icon: 'pen', label: 'Đổi tên, mô tả' }, { icon: 'download', label: 'Tải tất cả ảnh' }, { icon: 'share-from-square', label: 'Chia sẻ với phụ huynh' }, { divider: true }, { icon: 'trash-can', label: 'Xóa album…', tone: 'danger' }] }); });
+    return Object.assign(this.shell(), {
+      twelve: 12, twenty: 20,
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      views: [{ key: 'grid', label: 'Lưới', icon: 'table-cells' }, { key: 'list', label: 'Danh sách', icon: 'list' }], view: st.view, setView: function (k) { self.setState({ view: k }); },
+      isGrid: st.view === 'grid', isList: st.view === 'list',
+      albums: albums, isEmpty: albums.length === 0
+    });
+  }
+}
+</script>
+</body>
+</html>

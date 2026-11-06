@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Lịch sự kiện — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="calendar" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Lịch sự kiện</h1>
+    <p class="ecomd-page-header__desc body-sm">Ngày nghỉ, sự kiện và lịch kiểm tra của nhà trường theo năm</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Tabs" items="{{views}}" value="{{view}}" on-change="{{setView}}" label="Chế độ xem" variant="segmented"></x-import>
+<x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="plus">Thêm sự kiện</x-import></div>
+</div>
+<section class="ecomd-card">
+  <div style="display: flex; align-items: center; gap: var(--space-12); flex-wrap: wrap; padding: var(--space-16); border-bottom: 1px solid var(--border-default);">
+    <div style="display: flex; align-items: center; gap: var(--space-4);"><x-import component-from-global-scope="ECOMD.IconButton" icon="chevron-left" label="Năm trước" size="md"></x-import><span class="title-md" style="min-width: var(--size-44); text-align: center; color: var(--text-heading);">2026</span><x-import component-from-global-scope="ECOMD.IconButton" icon="chevron-right" label="Năm sau" size="md"></x-import></div>
+    <x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm sự kiện" value="{{query}}" on-change="{{setQuery}}"></x-import>
+    <span style="flex: 1;"></span>
+    <ul class="body-xs" aria-label="Chú thích màu" style="display: flex; flex-wrap: wrap; gap: var(--space-8) var(--space-16); margin: 0; padding: 0; list-style: none; color: var(--text-subtle);">
+      <sc-for list="{{legend}}" as="l" hint-placeholder-count="4"><li style="display: flex; align-items: center; gap: var(--space-6); white-space: nowrap;"><span aria-hidden="true" style="flex: none; width: var(--size-12); height: var(--size-12); border-radius: var(--radius-4); background: {{l.bg}}; box-shadow: inset 0 0 0 1px {{l.bd}};"></span>{{l.label}}</li></sc-for>
+    </ul>
+  </div>
+  <div class="ecomd-grid" style="--ecomd-cols: 4; --ecomd-cols-tablet: 2; gap: var(--space-16); padding: var(--space-16);">
+    <sc-for list="{{months}}" as="m" hint-placeholder-count="12">
+      <div style="display: flex; flex-direction: column; gap: var(--space-8); padding: var(--space-12); border: 1px solid var(--border-default); border-radius: var(--radius-12); background: {{m.bg}};">
+        <div style="display: flex; align-items: baseline; justify-content: space-between;"><span class="body-sm-semibold" style="color: var(--text-heading);">{{m.name}}</span><span class="body-xs" style="color: var(--text-subtle);">{{m.evText}}</span></div>
+        <div role="grid" aria-label="{{m.name}}" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); row-gap: var(--space-2); text-align: center;">
+          <sc-for list="{{dows}}" as="d" hint-placeholder-count="7"><span class="body-2xs" style="padding-bottom: var(--space-4); color: {{d.color}};">{{d.label}}</span></sc-for>
+          <sc-for list="{{m.days}}" as="x" hint-placeholder-count="30"><span title="{{x.title}}" class="{{x.cls}}" style="height: var(--size-24); display: flex; align-items: center; justify-content: center; border-radius: var(--radius-6); background: {{x.bg}}; color: {{x.color}}; box-shadow: {{x.ring}};">{{x.n}}</span></sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1017}}'>
+var CRUMBS = ["Nhà trường", "Lịch sự kiện"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { query: '', view: 'year' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var EV = [{"a": "2026-01-01", "b": "2026-01-01", "t": "holiday", "name": "Tết Dương lịch"}, {"a": "2026-02-14", "b": "2026-02-23", "t": "holiday", "name": "Nghỉ Tết Nguyên đán"}, {"a": "2026-03-08", "b": "2026-03-08", "t": "event", "name": "Quốc tế Phụ nữ 8/3"}, {"a": "2026-04-29", "b": "2026-05-03", "t": "holiday", "name": "Nghỉ lễ 30/4 và 1/5"}, {"a": "2026-05-28", "b": "2026-05-28", "t": "school", "name": "Tổng kết năm học"}, {"a": "2026-08-15", "b": "2026-08-18", "t": "event", "name": "Tựu trường và sinh hoạt đầu năm"}, {"a": "2026-09-01", "b": "2026-09-03", "t": "holiday", "name": "Nghỉ Quốc khánh 2/9"}, {"a": "2026-09-05", "b": "2026-09-05", "t": "school", "name": "Khai giảng năm học 2026 – 2027"}, {"a": "2026-10-20", "b": "2026-10-20", "t": "event", "name": "Ngày Phụ nữ Việt Nam"}, {"a": "2026-11-20", "b": "2026-11-20", "t": "school", "name": "Ngày Nhà giáo Việt Nam"}, {"a": "2026-12-14", "b": "2026-12-18", "t": "exam", "name": "Kiểm tra cuối học kỳ I"}];
+    var TY = { holiday: ['var(--semantic-danger-soft)', 'var(--semantic-danger-strong)', 'var(--border-danger-soft)', 'Ngày nghỉ'], event: ['var(--semantic-info-soft)', 'var(--semantic-info-strong)', 'var(--border-info-soft)', 'Sự kiện'],
+      school: ['var(--semantic-success-soft)', 'var(--semantic-success-strong)', 'var(--border-success-soft)', 'Hoạt động trường'], exam: ['var(--semantic-warning-soft)', 'var(--semantic-warning-strong)', 'var(--border-warning-soft)', 'Kiểm tra'] };
+    var q = (st.query || '').trim().toLowerCase();
+    var evs = EV.filter(function (e) { return !q || e.name.toLowerCase().indexOf(q) >= 0; });
+    function key(y, m, d) { return y + '-' + (m < 10 ? '0' : '') + m + '-' + (d < 10 ? '0' : '') + d; }
+    var today = '2026-10-30';
+    var months = [];
+    for (var m = 1; m <= 12; m++) {
+      var first = new Date(2026, m - 1, 1).getDay(), lead = (first + 6) % 7, nd = new Date(2026, m, 0).getDate(), days = [], cnt = 0, seen = {};
+      for (var i = 0; i < lead; i++) days.push({ n: '', bg: 'transparent', color: 'inherit', ring: 'none', title: '', cls: 'body-xs' });
+      for (var d = 1; d <= nd; d++) {
+        var k = key(2026, m, d), ev = null;
+        evs.forEach(function (e) { if (k >= e.a && k <= e.b) ev = e; });
+        if (ev && !seen[ev.name]) { seen[ev.name] = 1; cnt++; }
+        var dow = (lead + d - 1) % 7;
+        days.push({ n: d, title: ev ? ev.name : '', cls: ev || k === today ? 'body-xs-semibold' : 'body-xs',
+          bg: ev ? TY[ev.t][0] : 'transparent', color: ev ? TY[ev.t][1] : (dow >= 5 ? 'var(--text-subtle)' : 'var(--text-body)'),
+          ring: k === today ? 'inset 0 0 0 2px var(--eco-blue-strong)' : 'none' });
+      }
+      months.push({ name: 'Tháng ' + m, evText: cnt ? cnt + ' sự kiện' : '', days: days, bg: m === 10 ? 'var(--bg-surface)' : 'var(--bg-surface)' });
+    }
+    return Object.assign(this.shell(), {
+      months: months, query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      dows: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map(function (x, i) { return { label: x, color: i >= 5 ? 'var(--text-muted)' : 'var(--text-subtle)' }; }),
+      legend: Object.keys(TY).map(function (k) { return { label: TY[k][3], bg: TY[k][0], bd: TY[k][2] }; }),
+      views: [{ key: 'year', label: 'Năm', icon: 'calendar-days' }, { key: 'month', label: 'Tháng', icon: 'calendar-week' }, { key: 'list', label: 'Danh sách', icon: 'list' }],
+      view: st.view, setView: function (k) { self.setState({ view: k }); }
+    });
+  }
+}
+</script>
+</body>
+</html>

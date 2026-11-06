@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Danh mục thu — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="fee-categories" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Danh mục thu</h1>
+    <p class="ecomd-page-header__desc body-sm">Danh mục thu chuẩn từ CSDL của Sở GD&ĐT, dùng để gắn khoản phí và xuất hóa đơn điện tử</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="arrows-rotate">Đồng bộ CSDL ngành</x-import></div>
+</div>
+<x-import component-from-global-scope="ECOMD.InlineNotice" tone="info">Danh mục thu do Sở GD&amp;ĐT quản lý: trường không sửa trực tiếp, chỉ đồng bộ lại khi Sở cập nhật. Có <b>3 danh mục chưa có ngày hiệu lực</b>, cần kiểm tra với Sở.</x-import>
+<section class="ecomd-table-card">
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Trạng thái áp dụng"></x-import>
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo tên, mã, ghi chú" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{unitOpts}}" value="{{unit}}" on-change="{{setUnit}}" label="Đơn vị tính"></x-import></div>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Danh mục thu</th><th class="body-xs-bold">Ghi chú</th><th class="body-xs-bold">Hiệu lực</th><th class="body-xs-bold">Đơn vị tính</th><th class="body-xs-bold">Trạng thái</th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><span style="display: flex; flex-direction: column; gap: var(--space-4); min-width: 0;"><span style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-8);"><span class="body-sm-medium" style="color: var(--text-heading);">{{r.name}}</span><x-import component-from-global-scope="ECOMD.Tag" variant="code">{{r.code}}</x-import></span><sc-if value="{{r.basis}}" hint-placeholder-val="{{false}}"><span class="body-xs" style="display: inline-flex; align-items: center; gap: var(--space-6); color: var(--text-subtle);"><x-import component-from-global-scope="ECOMD.Icon" name="file-lines" size="{{twelve}}"></x-import>{{r.basis}}</span></sc-if></span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Ghi chú</span><div class="ecomd-cell__value"><sc-if value="{{r.note}}" hint-placeholder-val="{{true}}"><span class="body-xs" style="color: var(--text-body);">{{r.note}}</span></sc-if><sc-if value="{{r.noNote}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Không có"></x-import></sc-if></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Hiệu lực</span><div class="ecomd-cell__value"><sc-if value="{{r.span}}" hint-placeholder-val="{{true}}"><span style="white-space: nowrap; font-variant-numeric: tabular-nums;">{{r.span}}</span></sc-if><sc-if value="{{r.noSpan}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.StatusTag" tone="warning" icon="triangle-exclamation">Chưa có ngày hiệu lực</x-import></sc-if></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Đơn vị tính</span><div class="ecomd-cell__value"><span>{{r.unit}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Trạng thái</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.tone}}">{{r.status}}</x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="5"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có danh mục nào khớp bộ lọc"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="danh mục"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1754}}'>
+var CRUMBS = ["Tài chính", "Danh mục thu"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'all', query: '', unit: 'Mọi đơn vị' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var R = [{"id": 1, "name": "Xe đưa đón học sinh", "code": "XD001", "basis": "", "note": "Theo tuyến và nhu cầu đăng ký", "on": true, "span": "Từ 01/09/2025", "unit": "Tháng"}, {"id": 2, "name": "Xe đưa đón", "code": "TX001", "basis": "", "note": "", "on": true, "span": "", "unit": "Khác"}, {"id": 3, "name": "Thư viện số và học liệu trực tuyến", "code": "TV001", "basis": "", "note": "Chưa gửi đến trường", "on": true, "span": "Từ 01/09/2025", "unit": "Năm"}, {"id": 4, "name": "Hoạt động trải nghiệm ngoại khóa", "code": "TN001", "basis": "Kế hoạch hoạt động trải nghiệm năm học 2025 – 2026", "note": "Thực hiện theo kế hoạch từng khối", "on": true, "span": "Từ 01/09/2025", "unit": "Học kỳ"}, {"id": 5, "name": "Tin học và kỹ năng số", "code": "TH001", "basis": "Kế hoạch chuyển đổi số ngành giáo dục", "note": "Gồm học liệu và thực hành phòng máy", "on": true, "span": "Từ 01/09/2025", "unit": "Học kỳ"}, {"id": 6, "name": "Tiếng Anh tăng cường", "code": "TA001", "basis": "Đề án tăng cường ngoại ngữ trong trường học", "note": "Áp dụng theo lớp đăng ký", "on": true, "span": "Từ 01/09/2025", "unit": "Tháng"}, {"id": 7, "name": "Sổ liên lạc điện tử", "code": "ST001", "basis": "", "note": "Dự kiến triển khai trong học kỳ II", "on": true, "span": "Từ 01/09/2025", "unit": "Năm"}, {"id": 8, "name": "Nước uống học sinh", "code": "NU001", "basis": "", "note": "Nước uống tinh khiết phục vụ tại trường", "on": true, "span": "Từ 01/09/2025", "unit": "Tháng"}, {"id": 9, "name": "Luyện thi tăng cường", "code": "LT001", "basis": "", "note": "Ngừng theo kế hoạch chuyên môn mới", "on": false, "span": "01/09/2025 – 31/01/2026", "unit": "Tháng"}, {"id": 10, "name": "Phí học tiếng Anh tăng cường", "code": "KT0014", "basis": "Đề án số 12/2026/ĐA-NT", "note": "", "on": true, "span": "Từ 01/09/2026", "unit": "Tháng"}, {"id": 11, "name": "Tiền sách giáo khoa", "code": "KT0012", "basis": "Kế hoạch trang bị SGK năm học 2026 – 2027", "note": "Thu một lần trong năm học", "on": true, "span": "01/09/2025 – 30/06/2027", "unit": "Năm"}, {"id": 12, "name": "Tiền ăn bán trú", "code": "KT0003", "basis": "Quyết định số 45/QĐ-BGDĐT", "note": "Tính theo số ngày ăn thực tế", "on": true, "span": "01/09/2026 – 31/05/2027", "unit": "Khác"}, {"id": 13, "name": "Tiền bán trú", "code": "KT0002", "basis": "", "note": "Áp dụng cho học sinh đăng ký bán trú", "on": false, "span": "01/01/2026 – 31/07/2026", "unit": "Tháng"}, {"id": 14, "name": "Tiền học phí chính khóa", "code": "KT0001", "basis": "Nghị định 81/2021/NĐ-CP", "note": "Thu theo từng tháng trong năm học", "on": true, "span": "03/09/2020 – 31/05/2027", "unit": "Tháng"}, {"id": 15, "name": "Giáo dục kỹ năng sống", "code": "KN001", "basis": "Chương trình phối hợp giáo dục kỹ năng sống", "note": "Tổ chức theo từng học kỳ", "on": true, "span": "Từ 01/09/2025", "unit": "Học kỳ"}, {"id": 16, "name": "Học phí chính khóa", "code": "HP001", "basis": "Nghị quyết HĐND TP.HCM", "note": "Thu theo tháng học thực tế", "on": true, "span": "Từ 01/09/2025", "unit": "Tháng"}, {"id": 17, "name": "Kỹ năng sống", "code": "DV003", "basis": "", "note": "Áp dụng theo nhu cầu đăng ký", "on": true, "span": "", "unit": "Khác"}, {"id": 18, "name": "Nước uống học sinh", "code": "DV002", "basis": "", "note": "Áp dụng theo nhu cầu đăng ký", "on": true, "span": "", "unit": "Khác"}, {"id": 19, "name": "Chăm sóc bán trú", "code": "CS001", "basis": "Đề án tổ chức chăm sóc bán trú", "note": "Dành cho khối mầm non và tiểu học", "on": true, "span": "Từ 01/09/2025", "unit": "Tháng"}, {"id": 20, "name": "Tiền ăn bán trú", "code": "BT001", "basis": "Quyết định tổ chức bán trú của trường", "note": "", "on": true, "span": "Từ 01/09/2025", "unit": "Tháng"}];
+    var q = (st.query || '').trim().toLowerCase();
+    var base = R.filter(function (r) { return (!q || (r.name + ' ' + r.code + ' ' + r.note + ' ' + r.basis).toLowerCase().indexOf(q) >= 0) && (st.unit === 'Mọi đơn vị' || r.unit === st.unit); });
+    var tabs = [['all', 'Tất cả'], ['on', 'Đang áp dụng'], ['off', 'Ngừng áp dụng']].map(function (d) { return { key: d[0], label: d[1], count: base.filter(function (r) { return d[0] === 'all' || (d[0] === 'on') === r.on; }).length }; });
+    var list = base.filter(function (r) { return st.tab === 'all' || (st.tab === 'on') === r.on; });
+    var rows = list.map(function (r) { return Object.assign({}, r, { noNote: !r.note, noSpan: !r.span, status: r.on ? 'Đang áp dụng' : 'Ngừng áp dụng', tone: r.on ? 'success' : 'neutral' }); });
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20, twelve: 12, fourteen: 14,
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      rows: rows, isEmpty: rows.length === 0,
+      total: rows.length,
+      unitOpts: ["Mọi đơn vị", "Tháng", "Học kỳ", "Năm", "Khác"], unit: st.unit, setUnit: function (v) { self.setState({ unit: v }); },
+    });
+  }
+}
+</script>
+</body>
+</html>

@@ -121,7 +121,7 @@ def collect(root, bodies=True):
                     gap.setdefault(kind, {}).setdefault(lvl, 0)
                     gap[kind][lvl] += 1
         node = {'path': p.replace(os.sep, '/'), 'title': title, 'type': fm.get('type', ''), 'group': group,
-                'fm': fm, 'gap': gap, 'open': text.count(cfg['open_marker'])}
+                'fm': fm, 'gap': gap, 'open': (CODE.sub('', text).count(cfg['open_marker']) if group != 'root' else 0)}
         if bodies:
             node['body'] = body
         nodes.append(node)
@@ -142,7 +142,7 @@ def page(data, live):
     return TEMPLATE.replace('__LIVE__', 'true' if live else 'false').replace('__DATA__', payload)
 
 
-def serve(root, host, port):
+def serve(root, host='127.0.0.1', port=8770):
     known = set()
 
     class H(http.server.BaseHTTPRequestHandler):
@@ -175,7 +175,7 @@ def serve(root, host, port):
 
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.ThreadingTCPServer((host, port), H) as srv:
-        print(f'wiki viewer: http://{host}:{port}/ (đọc trực tiếp {root}; sửa wiki rồi F5) — Ctrl+C để dừng')
+        print(f'wiki viewer: http://{host}:{port}/  (đọc trực tiếp {root}; sửa wiki rồi F5) — Ctrl+C để dừng')
         try:
             srv.serve_forever()
         except KeyboardInterrupt:
@@ -343,7 +343,7 @@ def main(argv=None):
     mode = ap.add_mutually_exclusive_group(required=True)
     mode.add_argument('--serve', action='store_true', help='xem trực tiếp qua HTTP server')
     mode.add_argument('--build', action='store_true', help='ghi một file HTML tĩnh')
-    ap.add_argument('--host', default='127.0.0.1', help='địa chỉ IP để lắng nghe (mặc định 127.0.0.1, dùng 0.0.0.0 cho local IP)')
+    ap.add_argument('--host', default='127.0.0.1', help='địa chỉ IP để lắng nghe (mặc định 127.0.0.1, dùng 0.0.0.0 cho mạng nội bộ)')
     ap.add_argument('--port', type=int, default=8770)
     ap.add_argument('--out', default=None, help='đường dẫn file khi --build (mặc định <wiki>/viewer.html)')
     ap.add_argument('--lite', action='store_true', help='--build không kèm nội dung trang (cho wiki rất lớn)')

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Lớp học — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="classes" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Lớp học</h1>
+    <p class="ecomd-page-header__desc body-sm">Lớp chính khóa, lớp ngoại khóa và câu lạc bộ của năm học 2026 – 2027</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="plus">Tạo lớp học</x-import></div>
+</div>
+<section class="ecomd-table-card">
+<x-import component-from-global-scope="ECOMD.Tabs" items="{{tabs}}" value="{{tab}}" on-change="{{setTab}}" label="Loại lớp"></x-import>
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo tên lớp, mã lớp, GVCN, phòng" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{gradeOpts}}" value="{{grade}}" on-change="{{setGrade}}" label="Lọc theo khối"></x-import></div>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Lớp học</th><th class="body-xs-bold">Khối</th><th class="body-xs-bold">Giáo viên chủ nhiệm</th><th class="body-xs-bold">Sĩ số</th><th class="body-xs-bold">Trạng thái</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><div><a href="#" class="body-sm-semibold" style="color: var(--text-heading); text-decoration: none;">{{r.name}}</a><div class="body-xs" style="color: var(--text-subtle);">{{r.meta}}</div></div></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Khối</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.Tag">{{r.grade}}</x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Giáo viên chủ nhiệm</span><div class="ecomd-cell__value"><sc-if value="{{r.gv}}" hint-placeholder-val="{{true}}"><div><div class="body-sm-medium" style="color: var(--text-heading);">{{r.gv}}</div><div class="body-xs" style="color: var(--text-subtle);">{{r.phone}}</div></div></sc-if><sc-if value="{{r.noGv}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.StatusTag" tone="warning">Chưa phân công</x-import></sc-if></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Sĩ số</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.Meter" value="{{r.n}}" max="{{r.cap}}" text="{{r.ratio}}" tone="{{r.meterTone}}" label="{{r.meterLabel}}"></x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Trạng thái</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="success">Đang học</x-import></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="6"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có lớp nào khớp tìm kiếm"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="lớp"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Nhà trường", "Lớp học"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { tab: 'main', grade: 'Tất cả khối', query: '' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var T = [{"id": 1, "code": "MAM-01", "name": "Lớp Mầm 1", "room": "P.101", "grade": "Khối Mầm", "gv": "Cô Nguyễn Thị Mai", "phone": "0912 345 678", "n": 24, "cap": 30, "type": "main"}, {"id": 2, "code": "CHOI-01", "name": "Lớp Chồi 1", "room": "P.102", "grade": "Khối Chồi", "gv": "Cô Trần Thị Thu", "phone": "0918 765 432", "n": 26, "cap": 30, "type": "main"}, {"id": 3, "code": "LA-01", "name": "Lớp Lá 1", "room": "P.103", "grade": "Khối Lá", "gv": "Cô Lê Thị Hoa", "phone": "0987 654 321", "n": 28, "cap": 32, "type": "main"}, {"id": 4, "code": "LOP-1A", "name": "Lớp 1A", "room": "P.201", "grade": "Khối 1", "gv": "Thầy Phạm Văn Hùng", "phone": "0978 123 456", "n": 30, "cap": 35, "type": "main"}, {"id": 5, "code": "MAM-02", "name": "Lớp Mầm 2 (Dự phòng)", "room": "P.104", "grade": "Khối Mầm", "gv": "", "phone": "", "n": 0, "cap": 30, "type": "main"}, {"id": 6, "code": "CLB-VE", "name": "CLB Vẽ Sáng Tạo", "room": "P.301", "grade": "Liên khối", "gv": "Thầy Hoàng Minh Đức", "phone": "0903 222 111", "n": 18, "cap": 20, "type": "extra"}, {"id": 7, "code": "CLB-STEM", "name": "CLB STEM cuối tuần", "room": "Lab 1", "grade": "Liên khối", "gv": "Thầy Trần Văn Dũng", "phone": "0918 333 222", "n": 15, "cap": 20, "type": "extra"}, {"id": 8, "code": "CLB-ANH", "name": "CLB Tiếng Anh giao tiếp", "room": "P.305", "grade": "Liên khối", "gv": "Cô Lê Hoàng Yến", "phone": "0987 444 333", "n": 12, "cap": 25, "type": "extra"}, {"id": 9, "code": "CLB-BB", "name": "CLB Bóng rổ", "room": "Sân thể chất", "grade": "Liên khối", "gv": "", "phone": "", "n": 0, "cap": 20, "type": "extra"}];
+    var q = (st.query || '').trim().toLowerCase();
+    var base = T.filter(function (t) { return (!q || (t.name + ' ' + t.code + ' ' + t.gv + ' ' + t.room).toLowerCase().indexOf(q) >= 0) && (st.grade === 'Tất cả khối' || t.grade === st.grade); });
+    var tabs = [['main', 'Lớp chính khóa'], ['extra', 'Ngoại khóa và CLB']].map(function (d) { return { key: d[0], label: d[1], count: base.filter(function (t) { return t.type === d[0]; }).length }; });
+    var list = base.filter(function (t) { return t.type === st.tab; });
+    var rows = list.map(function (t) { var full = t.n >= t.cap;
+      return { name: t.name, meta: 'Mã ' + t.code + ' · Phòng ' + t.room, grade: t.grade, gv: t.gv, phone: t.phone, noGv: !t.gv,
+        n: t.n, cap: t.cap, ratio: t.n + '/' + t.cap, meterTone: full ? 'warning' : 'default', meterLabel: 'Sĩ số ' + t.n + ' trên ' + t.cap,
+        actionLabel: 'Thao tác với ' + t.name,
+        menu: [{ icon: 'eye', label: 'Xem chi tiết lớp' }, { icon: 'users', label: 'Danh sách học sinh' }, { icon: 'chalkboard-user', label: 'Phân công GVCN…' }, { icon: 'pen', label: 'Sửa thông tin' }, { divider: true }, { icon: 'trash-can', label: 'Xóa lớp…', tone: 'danger' }] }; });
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20,
+      tabs: tabs, tab: st.tab, setTab: function (k) { self.setState({ tab: k }); },
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      rows: rows, isEmpty: rows.length === 0, total: rows.length,
+      gradeOpts: ['Tất cả khối', 'Khối Mầm', 'Khối Chồi', 'Khối Lá', 'Khối 1', 'Liên khối'], grade: st.grade, setGrade: function (v) { self.setState({ grade: v }); }
+    });
+  }
+}
+</script>
+</body>
+</html>

@@ -1,45 +1,41 @@
 ---
-title: "Lịch Sự kiện & Ngày nghỉ Trường học (Calendar)"
+title: Màn Hình Lịch Sự Kiện
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - NT-13
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/school/calendar
+status: missing
+updated: 2026-11-05
 ---
 
-# Lịch Sự kiện & Ngày nghỉ Trường học (Calendar) (`M5/SM12`)
+# Màn Hình Lịch Sự Kiện
 
 ## Mục đích
-
-Quản lý lịch sự kiện và ngày nghỉ toàn trường trên 3 chế độ xem (Năm, Tháng, Danh sách sự kiện) có mã màu phân loại rõ ràng.
-
-Thuộc phân hệ **[Nhà trường](../overview/module-m5-nha-truong.md)**. Mã định danh tính năng Harness Loop: **`F034`** (Mức ưu tiên: `P2`).
+Quản lý và hiển thị lịch các ngày lễ, kỳ thi, hoạt động dã ngoại và sự kiện toàn trường.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/setting/holidays`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/calendar.ts`
-  - `docs/src/utils/calendarValidation.ts`
-  - `docs/tests/unit/calendar.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/school/calendar` | repo:app/src/pages/[schoolCode]/school/calendar.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F034-01**: Đồng bộ 3 chế độ xem: Lịch Năm, Lịch Tháng và Danh sách sự kiện.
-- **SPEC-F034-02**: Mã màu phân loại sự kiện: Ngày nghỉ lễ, Sự kiện nội bộ, Sự kiện mời phụ huynh.
-- **SPEC-F034-03**: Tự động điền ngày kết thúc trùng ngày bắt đầu cho các sự kiện diễn ra trong 1 ngày.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| NT-13 | Lịch sự kiện và hoạt động trải nghiệm ngoại khóa toàn trường | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F034-01` | Đồng bộ 3 chế độ xem: Lịch Năm, Lịch Tháng và Danh sách sự k... | `OK` | repo:app/tests/unit/calendar.test.mjs:1 | Đã kiểm chứng 17/17 unit tests |
-| `SPEC-F034-02` | Mã màu phân loại sự kiện: Ngày nghỉ lễ, Sự kiện nội bộ, Sự k... | `OK` | repo:app/tests/unit/calendar.test.mjs:1 | Đã kiểm chứng 17/17 unit tests |
-| `SPEC-F034-03` | Tự động điền ngày kết thúc trùng ngày bắt đầu cho các sự kiệ... | `OK` | repo:app/tests/unit/calendar.test.mjs:1 | Đã kiểm chứng 17/17 unit tests |
+| NT-13 | Lịch sự kiện và hoạt động trải nghiệm ngoại khóa toàn trường | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/school/calendar.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Nhà trường](../overview/module-m5-nha-truong.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-school-admin.md)
+- [Thực thể liên quan](../entities/classroom.md)

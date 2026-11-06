@@ -1,45 +1,41 @@
 ---
-title: "Bảng thông tin & Lên lịch Gửi Thông báo"
+title: Màn Hình Bảng Thông Tin
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - NT-07
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/school/announcements
+status: missing
+updated: 2026-11-05
 ---
 
-# Bảng thông tin & Lên lịch Gửi Thông báo (`M5/SM6`)
+# Màn Hình Bảng Thông Tin
 
 ## Mục đích
-
-Soạn thảo, xem trước giao diện hiển thị trên ứng dụng di động của phụ huynh, hẹn giờ phát thông báo tới toàn trường, giáo viên hoặc lớp cụ thể qua App Push và Email.
-
-Thuộc phân hệ **[Nhà trường](../overview/module-m5-nha-truong.md)**. Mã định danh tính năng Harness Loop: **`F030`** (Mức ưu tiên: `P2`).
+Đăng tải các thông báo chính thức, tin tức nhà trường và thông điệp khẩn cấp tới toàn thể phụ huynh và giáo viên.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/announcement`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/announcement.ts`
-  - `docs/src/utils/announcementValidation.ts`
-  - `docs/tests/unit/announcements.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/school/announcements` | repo:app/src/pages/[schoolCode]/school/announcements.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F030-01**: Soạn thông báo với chế độ xem trước (Preview) giao diện mobile trực quan.
-- **SPEC-F030-02**: Hẹn giờ phát sóng thông báo và chọn phạm vi người nhận linh hoạt.
-- **SPEC-F030-03**: Cảnh báo tính bất biến khi gửi thông báo qua email (không thể thu hồi).
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| NT-07 | Bảng thông tin điện tử truyền thông sự kiện và gửi thông báo khẩn cấp | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F030-01` | Soạn thông báo với chế độ xem trước (Preview) giao diện mobi... | `MISSING` | repo:app/src/types/announcement.ts:1 | Cần triển khai và verify |
-| `SPEC-F030-02` | Hẹn giờ phát sóng thông báo và chọn phạm vi người nhận linh ... | `MISSING` | repo:app/src/types/announcement.ts:1 | Cần triển khai và verify |
-| `SPEC-F030-03` | Cảnh báo tính bất biến khi gửi thông báo qua email (không th... | `MISSING` | repo:app/src/types/announcement.ts:1 | Cần triển khai và verify |
+| NT-07 | Bảng thông tin điện tử truyền thông sự kiện và gửi thông báo khẩn cấp | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/school/announcements.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Nhà trường](../overview/module-m5-nha-truong.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-school-admin.md)
+- [Thực thể liên quan](../entities/classroom.md)

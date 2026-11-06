@@ -1,45 +1,41 @@
 ---
-title: "Danh mục Môn học & Phân công Giảng dạy"
+title: Màn Hình Quản Lý Môn Học
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - NT-05
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/school/subjects
+status: missing
+updated: 2026-11-05
 ---
 
-# Danh mục Môn học & Phân công Giảng dạy (`M5/SM4`)
+# Màn Hình Quản Lý Môn Học
 
 ## Mục đích
-
-Tra cứu danh mục môn học chuẩn theo 4 cấp học (Tiểu học, THCS, THPT, GDTX) và phân công giáo viên phụ trách giảng dạy.
-
-Thuộc phân hệ **[Nhà trường](../overview/module-m5-nha-truong.md)**. Mã định danh tính năng Harness Loop: **`F024`** (Mức ưu tiên: `P1`).
+Quản lý danh mục môn học giảng dạy trong toàn trường và phân công tổ chuyên môn.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/school/subject`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/subject.ts`
-  - `docs/src/utils/subjectValidation.ts`
-  - `docs/tests/unit/subject.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/school/subjects` | repo:app/src/pages/[schoolCode]/school/subjects.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F024-01**: Danh mục môn học phân chia theo cấp học và niên khóa.
-- **SPEC-F024-02**: Chi tiết môn học hiển thị ma trận đánh giá 4 kỳ.
-- **SPEC-F024-03**: Gán giáo viên giảng dạy tự động lọc bỏ giáo viên đã được phân công.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| NT-05 | Quản lý danh mục môn học và phân công giáo viên giảng dạy | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F024-01` | Danh mục môn học phân chia theo cấp học và niên khóa.... | `MISSING` | repo:app/src/types/subject.ts:1 | Cần triển khai và verify |
-| `SPEC-F024-02` | Chi tiết môn học hiển thị ma trận đánh giá 4 kỳ.... | `MISSING` | repo:app/src/types/subject.ts:1 | Cần triển khai và verify |
-| `SPEC-F024-03` | Gán giáo viên giảng dạy tự động lọc bỏ giáo viên đã được phâ... | `MISSING` | repo:app/src/types/subject.ts:1 | Cần triển khai và verify |
+| NT-05 | Quản lý danh mục môn học và phân công giáo viên giảng dạy | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/school/subjects.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Nhà trường](../overview/module-m5-nha-truong.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-school-admin.md)
+- [Thực thể liên quan](../entities/teacher-staff.md)

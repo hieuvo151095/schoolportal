@@ -1,45 +1,42 @@
 ---
-title: "Báo cáo Mở rộng theo Mẫu Động"
+title: Màn Hình Báo Cáo Mở Rộng
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - VH-08
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/operations/reports/extended
+status: missing
+updated: 2026-11-05
 ---
 
-# Báo cáo Mở rộng theo Mẫu Động (`M2/SM6`)
+# Màn Hình Báo Cáo Mở Rộng
 
 ## Mục đích
-
-Hệ thống sinh báo cáo đánh giá định kỳ theo các mẫu động cấu hình trước, hỗ trợ lọc theo khối, lớp, khoảng ngày và xuất file Excel.
-
-Thuộc phân hệ **[Vận hành](../overview/module-m2-van-hanh.md)**. Mã định danh tính năng Harness Loop: **`F029`** (Mức ưu tiên: `P2`).
+Cung cấp các mẫu báo cáo tổng hợp chuyên sâu về sức khỏe, thể lực BMI và thống kê vận hành toàn trường.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/reports/extended`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/reports.ts`
-  - `docs/src/utils/reportsValidation.ts`
-  - `docs/tests/unit/reports.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/operations/reports/extended` | repo:app/src/pages/[schoolCode]/operations/reports/extended.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F029-01**: Lựa chọn mẫu báo cáo động từ danh mục biểu mẫu của trường.
-- **SPEC-F029-02**: Bộ lọc đa chiều theo lớp học, trạng thái và khoảng thời gian.
-- **SPEC-F029-03**: Menu ba chấm (•••) thao tác đồng bộ với các bảng dữ liệu toàn hệ thống.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| VH-08 | Xuất lưới điểm danh tháng và các mẫu báo cáo đánh giá định kỳ ra Excel | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F029-01` | Lựa chọn mẫu báo cáo động từ danh mục biểu mẫu của trường.... | `OK` | repo:app/src/utils/reportsValidation.ts:1 | Đã hoàn thành và verify qua tests/unit/reports.test.mjs |
-| `SPEC-F029-02` | Bộ lọc đa chiều theo lớp học, trạng thái và khoảng thời gian... | `OK` | repo:app/src/utils/reportsValidation.ts:40 | Đã hoàn thành và verify qua tests/unit/reports.test.mjs |
-| `SPEC-F029-03` | Menu ba chấm (•••) thao tác đồng bộ với các bảng dữ liệu toà... | `OK` | repo:app/src/utils/reportsValidation.ts:80 | Đã hoàn thành và verify qua tests/unit/reports.test.mjs |
+| VH-08 | Xuất lưới điểm danh tháng và các mẫu báo cáo đánh giá định kỳ ra Excel | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/operations/reports/extended.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Vận hành](../overview/module-m2-van-hanh.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-operations.md)
+- [Thực thể liên quan](../entities/attendance-daily.md)
+- [Thực thể liên quan](../entities/student-profile.md)

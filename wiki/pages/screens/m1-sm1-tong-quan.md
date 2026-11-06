@@ -1,44 +1,49 @@
 ---
-title: "Dashboard Tổng quan Toàn trường (Overview)"
+title: Màn Hình Tổng Quan Điều Hành
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - TQ-01
+  - TQ-02
+  - TQ-03
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/
+status: missing
+updated: 2026-11-05
 ---
 
-# Dashboard Tổng quan Toàn trường (Overview) (`M1/SM1`)
+# Màn Hình Tổng Quan Điều Hành
 
 ## Mục đích
-
-Bảng điều khiển trung tâm hiển thị toàn diện các chỉ số KPI vận hành của trường: tổng số học sinh/lớp/giáo viên, tiến độ thu học phí, điểm danh hôm nay, hàng đợi duyệt bài và sinh nhật trong tháng.
-
-Thuộc phân hệ **[Tổng quan](../overview/module-m1-tong-quan.md)**. Mã định danh tính năng Harness Loop: **`F027`** (Mức ưu tiên: `P2`).
+Cung cấp bảng điều khiển trung tâm (Dashboard) cho Ban Giám Hiệu và Quản trị viên, hiển thị tổng hợp chỉ số học sinh, giáo viên, tỷ lệ điểm danh hôm nay và biểu đồ thu nộp học phí toàn trường.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/overview`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/pages/index.tsx`
-  - `docs/src/types/reports.ts`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/` | repo:app/src/pages/[schoolCode]/index.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F027-01**: Hiển thị widget KPI tổng quan trường học thời gian thực.
-- **SPEC-F027-02**: Tóm tắt tiến độ thu học phí và các cảnh báo học sinh vắng nhiều lần.
-- **SPEC-F027-03**: Hàng đợi kiểm duyệt bài đăng hoạt động và thông báo mới nhất.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| TQ-01 | Dashboard hiển thị tổng quan số liệu sĩ số học sinh, giáo viên, lớp học theo thời gian thực | MISSING |
+| TQ-02 | Thống kê tỷ lệ điểm danh học sinh trong ngày (có mặt, vắng có phép, vắng không phép) | MISSING |
+| TQ-03 | Biểu đồ thu nộp học phí và tiến độ nộp theo tháng/học kỳ toàn trường | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F027-01` | Hiển thị widget KPI tổng quan trường học thời gian thực.... | `MISSING` | repo:app/src/pages/index.tsx:1 | Cần triển khai và verify |
-| `SPEC-F027-02` | Tóm tắt tiến độ thu học phí và các cảnh báo học sinh vắng nh... | `MISSING` | repo:app/src/pages/index.tsx:1 | Cần triển khai và verify |
-| `SPEC-F027-03` | Hàng đợi kiểm duyệt bài đăng hoạt động và thông báo mới nhất... | `MISSING` | repo:app/src/pages/index.tsx:1 | Cần triển khai và verify |
+| TQ-01 | Dashboard hiển thị tổng quan số liệu sĩ số học sinh, giáo viên, lớp học theo thời gian thực | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/index.tsx |
+| TQ-02 | Thống kê tỷ lệ điểm danh học sinh trong ngày (có mặt, vắng có phép, vắng không phép) | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/index.tsx |
+| TQ-03 | Biểu đồ thu nộp học phí và tiến độ nộp theo tháng/học kỳ toàn trường | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/index.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Tổng quan](../overview/module-m1-tong-quan.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-overview.md)
+- [Thực thể liên quan](../entities/student-profile.md)
+- [Thực thể liên quan](../entities/attendance-daily.md)
+- [Thực thể liên quan](../entities/tuition-invoice.md)

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Thêm người dùng — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<div style="height: 100vh; overflow: hidden;" aria-hidden="true"><dc-import name="NewSettingUsers" hint-size="100%,900px"></dc-import></div>
+<x-import component-from-global-scope="ECOMD.PopupModal" open="{{open}}" on-close="{{close}}" title="Thêm người dùng" description="Tạo tài khoản quản trị cho cán bộ, nhân viên nhà trường" icon="user-plus" width="calc(var(--size-sidebar-w) * 2 + var(--space-48) * 2)" primary-action="{{pri}}" secondary-action="{{sec}}">
+<div class="ecomd-form"><div class="ecomd-grid" style="--ecomd-cols: 2; gap: var(--space-16);"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Họ và tên <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" value="Đặng Thu Trang"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Số điện thoại</span><input type="tel" class="ecomd-text body-sm" value="0945 678 123"></label></div><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Email đăng nhập <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="email" class="ecomd-text body-sm" value="trang.dang@ecoschool.edu.vn"><span class="ecomd-field__hint body-xs">Người dùng nhận email kích hoạt và tự đặt mật khẩu.</span></label><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Vai trò <span class="ecomd-field__req" aria-hidden="true">*</span></span><div class="ecomd-grid" style="--ecomd-cols: 2; --ecomd-cols-mobile: 1; gap: var(--space-12);"><x-import component-from-global-scope="ECOMD.Checkbox" label="Quản trị viên" description="Toàn quyền cấu hình và tài khoản" checked="{{r0}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Quản lý" description="Ban giám hiệu, xem và duyệt" checked="{{r1}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Kế toán" description="Học phí, khoản chi, đối soát" checked="{{r2}}"></x-import><x-import component-from-global-scope="ECOMD.Checkbox" label="Giáo viên" description="Lớp, hoạt động, điểm danh" checked="{{r3}}"></x-import></div><span class="ecomd-field__hint body-xs">Chọn được nhiều vai trò.</span></div><div class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Đăng nhập</span><div class="ecomd-radios"><label class="ecomd-radio body-sm"><input type="radio" name="auth" checked="{{own}}" onChange="{{pickOwn}}"><span>Tài khoản trường</span></label><label class="ecomd-radio body-sm"><input type="radio" name="auth" checked="{{so}}" onChange="{{pickSo}}"><span>Tài khoản Sở GD&amp;ĐT (SSO)</span></label></div></div></div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"open": {"editor": "boolean", "default": true, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ open: props.open !== false }, { auth: 'own' }); }
+  componentDidUpdate(prev) { if (prev.open !== this.props.open) this.setState({ open: this.props.open !== false }); }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    return {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      open: st.open, close: function () { self.setState({ open: false }); },
+      r0: false, r1: false, r2: true, r3: false, own: st.auth === 'own', so: st.auth === 'so', pickOwn: function () { self.setState({ auth: 'own' }); }, pickSo: function () { self.setState({ auth: 'so' }); },
+      pri: { label: 'Gửi lời mời', icon: 'paper-plane' }, sec: { label: 'Hủy', onClick: function () { self.setState({ open: false }); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

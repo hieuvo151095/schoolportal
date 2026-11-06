@@ -1,45 +1,41 @@
 ---
-title: "Cấu hình Lịch & Quy tắc Thông báo Toàn trường"
+title: Màn Hình Cấu Hình Thông Báo
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - CH-06
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/settings/notifications
+status: missing
+updated: 2026-11-05
 ---
 
-# Cấu hình Lịch & Quy tắc Thông báo Toàn trường (`M6/SM6`)
+# Màn Hình Cấu Hình Thông Báo
 
 ## Mục đích
-
-Thiết lập lịch phát thông báo tự động (thông báo điểm danh, nhắc nộp học phí, thực đơn ngày mai) áp dụng cho mọi tài khoản trên toàn bộ nền tảng.
-
-Thuộc phân hệ **[Cấu hình](../overview/module-m6-cau-hinh.md)**. Mã định danh tính năng Harness Loop: **`F038`** (Mức ưu tiên: `P2`).
+Thiết lập ma trận quy tắc gửi thông báo push và email cho phụ huynh, giáo viên và quản trị viên.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/setting/notification`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/notificationSettings.ts`
-  - `docs/src/utils/notificationSettingsValidation.ts`
-  - `docs/tests/unit/notificationSettings.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/settings/notifications` | repo:app/src/pages/[schoolCode]/settings/notifications.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F038-01**: Cấu hình khung giờ gửi thông báo đẩy (Push notification) tự động.
-- **SPEC-F038-02**: Bật / tắt các sự kiện kích hoạt thông báo (điểm danh đón/trả, phát hành hóa đơn).
-- **SPEC-F038-03**: Đảm bảo không gửi thông báo làm phiền ngoài giờ quy định của trường.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| CH-06 | Cấu hình ma trận quy tắc gửi thông báo push và email đa kênh theo sự kiện | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F038-01` | Cấu hình khung giờ gửi thông báo đẩy (Push notification) tự ... | `OK` | repo:app/src/utils/notificationSettingsValidation.ts:1 | Đã hoàn thành và verify qua tests/unit/notificationSettings.test.mjs |
-| `SPEC-F038-02` | Bật / tắt các sự kiện kích hoạt thông báo (điểm danh đón/trả... | `OK` | repo:app/src/utils/notificationSettingsValidation.ts:35 | Đã hoàn thành và verify qua tests/unit/notificationSettings.test.mjs |
-| `SPEC-F038-03` | Đảm bảo không gửi thông báo làm phiền ngoài giờ quy định của... | `OK` | repo:app/src/utils/notificationSettingsValidation.ts:70 | Đã hoàn thành và verify qua tests/unit/notificationSettings.test.mjs |
+| CH-06 | Cấu hình ma trận quy tắc gửi thông báo push và email đa kênh theo sự kiện | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/settings/notifications.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Cấu hình](../overview/module-m6-cau-hinh.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-settings.md)
+- [Thực thể liên quan](../entities/teacher-staff.md)

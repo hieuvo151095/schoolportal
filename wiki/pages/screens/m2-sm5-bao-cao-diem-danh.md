@@ -1,45 +1,42 @@
 ---
-title: "Báo cáo Điểm danh Tháng Học sinh & Nhân viên"
+title: Màn Hình Báo Cáo Điểm Danh
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - VH-08
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/operations/reports/attendance
+status: missing
+updated: 2026-11-05
 ---
 
-# Báo cáo Điểm danh Tháng Học sinh & Nhân viên (`M2/SM5`)
+# Màn Hình Báo Cáo Điểm Danh
 
 ## Mục đích
-
-Xuất lưới điểm danh tháng của lớp và nhân viên theo 2 buổi sáng/chiều, nhúng thông tin tổng kết trực tiếp vào cột cố định và xuất file Excel phục vụ thanh tra lưu trữ.
-
-Thuộc phân hệ **[Vận hành](../overview/module-m2-van-hanh.md)**. Mã định danh tính năng Harness Loop: **`F028`** (Mức ưu tiên: `P2`).
+Tổng hợp lưới điểm danh tháng, thống kê chuyên cần, hiển thị trạng thái khóa đóng băng dữ liệu tháng cũ (Monthly Attendance Auto-Freeze - OQ-21) và xuất file Excel đối soát phục vụ thanh tra lưu trữ.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/reports/attendance`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/reports.ts`
-  - `docs/src/utils/reportsValidation.ts`
-  - `docs/tests/unit/reports.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/operations/reports/attendance` | repo:app/src/pages/[schoolCode]/operations/reports/attendance.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F028-01**: Bảng điểm danh tháng hiển thị 2 dòng mỗi đối tượng (Sáng và Chiều).
-- **SPEC-F028-02**: Tổng kết số buổi có mặt, vắng có phép, không phép được nhúng trực tiếp trong khung cố định tên.
-- **SPEC-F028-03**: Xuất dữ liệu bảng tính Excel chuẩn xác.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| VH-08 | Xuất lưới điểm danh tháng và các mẫu báo cáo đánh giá định kỳ ra Excel | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F028-01` | Bảng điểm danh tháng hiển thị 2 dòng mỗi đối tượng (Sáng và ... | `OK` | repo:app/src/utils/reportsValidation.ts:1 | Đã hoàn thành và verify qua tests/unit/reports.test.mjs |
-| `SPEC-F028-02` | Tổng kết số buổi có mặt, vắng có phép, không phép được nhúng... | `OK` | repo:app/src/utils/reportsValidation.ts:40 | Đã hoàn thành và verify qua tests/unit/reports.test.mjs |
-| `SPEC-F028-03` | Xuất dữ liệu bảng tính Excel chuẩn xác.... | `OK` | repo:app/src/utils/reportsValidation.ts:80 | Đã hoàn thành và verify qua tests/unit/reports.test.mjs |
+| VH-08 | Xuất lưới điểm danh tháng và các mẫu báo cáo đánh giá định kỳ ra Excel | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/operations/reports/attendance.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md) mục OQ-21).
 
 ## Liên quan
-
-- Phân hệ cha: [Vận hành](../overview/module-m2-van-hanh.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-operations.md)
+- [Thực thể liên quan](../entities/attendance-daily.md)
+- [Thực thể liên quan](../entities/meal-refund-credit.md)

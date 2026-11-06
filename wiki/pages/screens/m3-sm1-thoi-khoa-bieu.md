@@ -1,45 +1,44 @@
 ---
-title: "Thời khóa biểu Tuần & Lịch sử Phiên bản"
+title: Màn Hình Thời Khóa Biểu
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+  - pages/sources/src-open-questions-resolutions.md
+spec_ids:
+  - HT-01
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/academics/schedule
+status: missing
+updated: 2026-11-05
 ---
 
-# Thời khóa biểu Tuần & Lịch sử Phiên bản (`M3/SM1`)
+# Màn Hình Thời Khóa Biểu
 
 ## Mục đích
-
-Lập lịch thời khóa biểu tuần theo tiết học, môn học, phòng học và giáo viên phụ trách; lưu vết lịch sử phiên bản gửi thông báo đến phụ huynh.
-
-Thuộc phân hệ **[Học tập](../overview/module-m3-hoc-tap.md)**. Mã định danh tính năng Harness Loop: **`F019`** (Mức ưu tiên: `P1`).
+Lập ma trận lịch học tuần theo tiết, môn học, giáo viên và phòng học; tích hợp Bộ điều phối xung đột 4 chiều kiểm tra trùng lịch giữa chính khóa và ngoại khóa (học sinh, giáo viên, phòng học, sĩ số - OQ-14); công bố lịch học chính thức tới phụ huynh.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/school/schedule`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/schedule.ts`
-  - `docs/src/utils/scheduleValidation.ts`
-  - `docs/tests/unit/schedule.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/academics/schedule` | repo:app/src/pages/[schoolCode]/academics/schedule.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F019-01**: Ma trận thời khóa biểu linh hoạt: khởi tạo 1 tiết, bấm [+] thêm tiết, các cột Thứ 2 - Thứ 7 để trống chờ nhập.
-- **SPEC-F019-02**: Menu ba chấm (•••) z-index cao: Xem chi tiết, Chỉnh sửa, Gửi phụ huynh (kèm modal xác nhận), Tải xuống, Xóa.
-- **SPEC-F019-03**: Lưu vết lịch sử các phiên bản công bố thời khóa biểu.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| HT-01 | Thiết lập và công bố thời khóa biểu tuần theo tiết học, môn học, phòng học, giáo viên và điều phối xung đột 4 chiều OQ-14 | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F019-01` | Ma trận thời khóa biểu linh hoạt: khởi tạo 1 tiết, bấm [+] t... | `MISSING` | repo:app/src/types/schedule.ts:1 | Cần triển khai và verify |
-| `SPEC-F019-02` | Menu ba chấm (•••) z-index cao: Xem chi tiết, Chỉnh sửa, Gửi... | `MISSING` | repo:app/src/types/schedule.ts:1 | Cần triển khai và verify |
-| `SPEC-F019-03` | Lưu vết lịch sử các phiên bản công bố thời khóa biểu.... | `MISSING` | repo:app/src/types/schedule.ts:1 | Cần triển khai và verify |
+| HT-01 | Thiết lập và công bố thời khóa biểu tuần theo tiết học, môn học, phòng học và giáo viên | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/academics/schedule.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md) mục OQ-14).
 
 ## Liên quan
-
-- Phân hệ cha: [Học tập](../overview/module-m3-hoc-tap.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ Học tập](../overview/module-academics.md)
+- [Thời khóa biểu tuần](../entities/timetable-weekly.md)
+- [Điều phối lịch học, biểu phí & phân rã ngoại khóa](../concepts/extracurricular-billing-scheduling.md)
+- [Luồng lập thời khóa biểu](../flows/fl-lap-thoi-khoa-bieu.md)

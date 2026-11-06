@@ -3,7 +3,7 @@ title: Mở wiki bằng Obsidian để xem graph
 type: overview
 sources:
   - SCHEMA.md
-updated: 2026-11-04
+updated: 2026-11-05
 ---
 
 # Mở wiki bằng Obsidian để xem graph
@@ -13,7 +13,7 @@ Thư mục `llm-wiki/` là một **Obsidian vault** đã cấu hình sẵn trong
 ## Tóm tắt
 
 1. Cài Obsidian: `brew install --cask obsidian` (macOS), hoặc tải từ obsidian.md.
-2. Mở vault: Obsidian → **Open folder as vault** → chọn `harness-loop-kit/llm-wiki`.
+2. Mở vault: Obsidian → **Open folder as vault** → chọn `eco-school-portal/wiki`.
 3. Xem graph: `Cmd+G`. Mở một trang rồi chạy **Open local graph** để xem các trang quanh nó.
 
 ## Bản đồ

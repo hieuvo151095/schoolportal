@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Năm học — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="academic-year" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Năm học</h1>
+    <p class="ecomd-page-header__desc body-sm">Năm học, học kỳ và năm học đang áp dụng cho toàn trường</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="plus">Thêm năm học</x-import></div>
+</div>
+<x-import component-from-global-scope="ECOMD.InlineNotice" tone="info">Đang áp dụng <b>Năm học 2026 – 2027</b>, <b>Học kỳ I</b> (15/08/2026 – 15/01/2027). Mọi màn quản lý lấy dữ liệu theo năm học này.</x-import>
+<section class="ecomd-table-card">
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo tên năm học, ví dụ: 2026 – 2027" value="{{query}}" on-change="{{setQuery}}"></x-import></div>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Năm học / học kỳ</th><th class="body-xs-bold">Bắt đầu</th><th class="body-xs-bold">Kết thúc</th><th class="body-xs-bold">Trạng thái</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><div style="display: flex; align-items: center; gap: var(--space-8); padding-left: {{r.indent}};"><sc-if value="{{r.isTerm}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.Icon" name="arrow-right" size="{{twelve}}" color="var(--text-muted)"></x-import></sc-if><span class="{{r.nameCls}}" style="color: var(--text-heading);">{{r.name}}</span><sc-if value="{{r.current}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.Tag" variant="success">Hiện tại</x-import></sc-if></div></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Bắt đầu</span><div class="ecomd-cell__value"><span style="font-variant-numeric: tabular-nums;">{{r.start}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Kết thúc</span><div class="ecomd-cell__value"><span style="font-variant-numeric: tabular-nums;">{{r.end}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Trạng thái</span><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.StatusTag" tone="{{r.tone}}">{{r.status}}</x-import></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="5"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có năm học nào"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="năm học"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+var CRUMBS = ["Nhà trường", "Năm học"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { query: '' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var T = [{"name": "Năm học 2027 – 2028", "start": "15/08/2027", "end": "31/05/2028", "st": "upcoming", "terms": []}, {"name": "Năm học 2026 – 2027", "start": "15/08/2026", "end": "31/05/2027", "st": "current", "terms": [{"name": "Học kỳ I", "start": "15/08/2026", "end": "15/01/2027", "st": "current"}, {"name": "Học kỳ II", "start": "16/01/2027", "end": "31/05/2027", "st": "upcoming"}]}, {"name": "Năm học 2025 – 2026", "start": "15/08/2025", "end": "31/05/2026", "st": "done", "terms": []}, {"name": "Năm học 2024 – 2025", "start": "15/08/2024", "end": "31/05/2025", "st": "done", "terms": []}];
+    var ST = { current: ['Đang áp dụng', 'success'], upcoming: ['Sắp tới', 'info'], done: ['Đã kết thúc', 'neutral'] };
+    var q = (st.query || '').trim().toLowerCase();
+    var rows = [];
+    T.filter(function (t) { return !q || t.name.toLowerCase().indexOf(q) >= 0; }).forEach(function (t) {
+      rows.push({ name: t.name, nameCls: 'body-sm-semibold', indent: '0', isTerm: false, current: t.st === 'current', start: t.start, end: t.end, status: ST[t.st][0], tone: ST[t.st][1], actionLabel: 'Thao tác với ' + t.name,
+        menu: [{ icon: 'pen', label: 'Sửa năm học' }, { icon: 'calendar-plus', label: 'Thêm học kỳ' }].concat(t.st === 'upcoming' ? [{ icon: 'circle-check', label: 'Đặt làm năm học hiện tại…' }] : []) });
+      t.terms.forEach(function (k) { rows.push({ name: k.name, nameCls: 'body-sm', indent: 'var(--space-16)', isTerm: true, current: k.st === 'current', start: k.start, end: k.end, status: ST[k.st][0], tone: ST[k.st][1], actionLabel: 'Thao tác với ' + k.name,
+        menu: [{ icon: 'pen', label: 'Sửa học kỳ' }] }); });
+    });
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20, twelve: 12, query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      rows: rows, isEmpty: rows.length === 0, total: T.length
+    });
+  }
+}
+</script>
+</body>
+</html>

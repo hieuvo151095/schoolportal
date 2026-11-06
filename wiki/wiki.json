@@ -2,17 +2,26 @@
   "name": "School Operating Portal",
   "mode": "new",
   "lang": "vi",
-  "created": "2026-11-04",
+  "created": "2026-11-05",
   "repo_root": "..",
   "max_lines": 600,
-  "prefixes": {},
-  "code_roots": [],
+  "prefixes": {
+    "TQ": "Tổng quan",
+    "VH": "Vận hành",
+    "HT": "Học tập",
+    "TC": "Tài chính",
+    "NT": "Nhà trường",
+    "CH": "Cấu hình",
+    "DN": "Đăng nhập & Xác thực"
+  },
+  "code_roots": [
+    "app"
+  ],
   "doc_roots": [
-    "docs",
-    "README.md"
+    "docs"
   ],
   "source_priority": {
-    "desired": "tài liệu yêu cầu trong raw/specs/ (bản mới hơn thắng)",
+    "desired": "docs/prd/PRD_School_Operating_Portal_VI.md > docs/tech-specs/system-architecture-blueprint.md",
     "current": "chưa có code"
   },
   "_doc": "Đọc bởi tools/lint_wiki.py. Ghi đè mặc định bằng các khoá: page_types, orphan_exempt, gap_levels, doc_levels, log_ops, spec_id_suffix, generated_dirs. Xem SCHEMA.md."

@@ -1,45 +1,41 @@
 ---
-title: "Hòm thư Góp ý Phụ huynh & Thảo luận 2 chiều"
+title: Màn Hình Hòm Thư Góp Ý
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - NT-12
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/school/parent-feedback
+status: missing
+updated: 2026-11-05
 ---
 
-# Hòm thư Góp ý Phụ huynh & Thảo luận 2 chiều (`M5/SM11`)
+# Màn Hình Hòm Thư Góp Ý
 
 ## Mục đích
-
-Tiếp nhận phiếu phản ánh góp ý từ phụ huynh theo 8 lĩnh vực, phân công cán bộ xử lý, đặt mức ưu tiên và trao đổi thảo luận 2 chiều minh bạch.
-
-Thuộc phân hệ **[Nhà trường](../overview/module-m5-nha-truong.md)**. Mã định danh tính năng Harness Loop: **`F033`** (Mức ưu tiên: `P2`).
+Tiếp nhận, xử lý và phản hồi ý kiến đóng góp, khiếu nại của phụ huynh học sinh.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/school/feedback`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/feedback.ts`
-  - `docs/src/utils/feedbackValidation.ts`
-  - `docs/tests/unit/feedback.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/school/parent-feedback` | repo:app/src/pages/[schoolCode]/school/parent-feedback.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F033-01**: Bốn thẻ trạng thái giữ số liệu độc lập khi click lọc danh sách phiếu góp ý.
-- **SPEC-F033-02**: Luồng thảo luận 2 chiều chi tiết có hỗ trợ đính kèm hình ảnh.
-- **SPEC-F033-03**: Đóng phiếu góp ý chuyển sang trạng thái Hoàn tất kèm thông báo Toast.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| NT-12 | Hòm thư tiếp nhận và xử lý góp ý, phản hồi khiếu nại của phụ huynh học sinh | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F033-01` | Bốn thẻ trạng thái giữ số liệu độc lập khi click lọc danh sá... | `MISSING` | repo:app/src/types/feedback.ts:1 | Cần triển khai và verify |
-| `SPEC-F033-02` | Luồng thảo luận 2 chiều chi tiết có hỗ trợ đính kèm hình ảnh... | `MISSING` | repo:app/src/types/feedback.ts:1 | Cần triển khai và verify |
-| `SPEC-F033-03` | Đóng phiếu góp ý chuyển sang trạng thái Hoàn tất kèm thông b... | `MISSING` | repo:app/src/types/feedback.ts:1 | Cần triển khai và verify |
+| NT-12 | Hòm thư tiếp nhận và xử lý góp ý, phản hồi khiếu nại của phụ huynh học sinh | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/school/parent-feedback.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Nhà trường](../overview/module-m5-nha-truong.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-school-admin.md)
+- [Thực thể liên quan](../entities/conversation-thread.md)

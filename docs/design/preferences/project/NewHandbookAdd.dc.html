@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Thêm danh mục sổ tay — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<div style="height: 100vh; overflow: hidden;" aria-hidden="true"><dc-import name="NewHandbook" hint-size="100%,900px"></dc-import></div>
+<x-import component-from-global-scope="ECOMD.PopupModal" open="{{open}}" on-close="{{close}}" title="Thêm danh mục" description="Nhóm các bài viết trong Sổ tay phụ huynh" icon="book-bookmark" primary-action="{{pri}}" secondary-action="{{sec}}">
+<div class="ecomd-form"><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Tên danh mục <span class="ecomd-field__req" aria-hidden="true">*</span></span><input type="text" class="ecomd-text body-sm" placeholder="VD: Quy định đưa đón" value="{{name}}" onChange="{{setName}}"></label><label class="ecomd-field"><span class="ecomd-field__label body-sm-medium">Mô tả ngắn</span><textarea class="ecomd-textarea body-sm" rows="3" placeholder="Phụ huynh thấy mô tả này dưới tên danh mục"></textarea><span class="ecomd-field__hint body-xs">Không bắt buộc</span></label></div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"open": {"editor": "boolean", "default": true, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ open: props.open !== false }, { name: 'Quy định đưa đón' }); }
+  componentDidUpdate(prev) { if (prev.open !== this.props.open) this.setState({ open: this.props.open !== false }); }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    return {
+      yes: true, no: false, twelve: 12, fourteen: 14, sixteen: 16, twenty: 20,
+      open: st.open, close: function () { self.setState({ open: false }); },
+      name: st.name, setName: function (e) { self.setState({ name: e.target.value }); },
+      pri: { label: 'Tạo danh mục', icon: 'plus', disabled: !(st.name || '').trim() }, sec: { label: 'Hủy', onClick: function () { self.setState({ open: false }); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

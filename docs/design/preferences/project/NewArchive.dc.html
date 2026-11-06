@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Lưu trữ — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="archive" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Lưu trữ học sinh</h1>
+    <p class="ecomd-page-header__desc body-sm">Hồ sơ học sinh đã chuyển trường, thôi học hoặc tốt nghiệp</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="file-excel">Xuất Excel</x-import></div>
+</div>
+<section class="ecomd-table-card">
+<div class="ecomd-table-card__toolbar"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo tên, mã HS, lớp cũ, lý do" value="{{query}}" on-change="{{setQuery}}"></x-import><x-import component-from-global-scope="ECOMD.SelectField" options="{{yearOpts}}" value="{{year}}" on-change="{{setYear}}" label="Năm lưu trữ"></x-import></div>
+<div class="ecomd-table-scroll">
+<table class="ecomd-table">
+<thead><tr><th class="body-xs-bold is-primary">Học sinh</th><th class="body-xs-bold">Lớp cũ</th><th class="body-xs-bold">Lý do</th><th class="body-xs-bold">Ngày lưu trữ</th><th class="body-xs-bold">Người lưu trữ</th><th class="body-xs-bold is-right is-actions"><span class="ecomd-sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6"><tr><td class="body-sm is-primary"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.Person" name="{{r.name}}" meta="{{r.meta}}" href="#"></x-import></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Lớp cũ</span><div class="ecomd-cell__value"><span>{{r.cls}}</span></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Lý do</span><div class="ecomd-cell__value"><sc-if value="{{r.hasReason}}" hint-placeholder-val="{{true}}"><span>{{r.reason}}</span></sc-if><sc-if value="{{r.noReason}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Chưa ghi"></x-import></sc-if></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Ngày lưu trữ</span><div class="ecomd-cell__value"><sc-if value="{{r.hasDate}}" hint-placeholder-val="{{true}}"><span style="font-variant-numeric: tabular-nums;">{{r.date}}</span></sc-if><sc-if value="{{r.noDate}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Chưa ghi"></x-import></sc-if></div></td><td class="body-sm"><span class="ecomd-cell__label body-xs-medium" aria-hidden="true">Người lưu trữ</span><div class="ecomd-cell__value"><sc-if value="{{r.hasBy}}" hint-placeholder-val="{{true}}"><span>{{r.by}}</span></sc-if><sc-if value="{{r.noBy}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.EmptyValue" label="Chưa ghi"></x-import></sc-if></div></td><td class="body-sm is-right is-actions"><div class="ecomd-cell__value"><x-import component-from-global-scope="ECOMD.DataTable.RowAction" label="{{r.actionLabel}}" items="{{r.menu}}"></x-import></div></td></tr></sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><tr><td class="ecomd-table__none" colspan="6"><x-import component-from-global-scope="ECOMD.EmptyState" label="Không có hồ sơ nào khớp tìm kiếm"></x-import></td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<x-import component-from-global-scope="ECOMD.Pagination" total="{{total}}" page="{{one}}" page-size="{{twenty}}" unit="hồ sơ"></x-import>
+</section>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 916}}'>
+var CRUMBS = ["Nhà trường", "Lưu trữ"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { query: '', year: 'Tất cả năm' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var T = [{"code": "HS-2023-0621", "name": "Đặng Quốc Thái", "dob": "30/09/2018", "sex": "Nam", "cls": "Mẫu Giáo Lớn 2", "date": "10/04/2024", "by": "Thầy Phạm Minh Tuấn", "reason": "Thôi học do lý do sức khoẻ"}, {"code": "HS-2022-0198", "name": "Đỗ Minh Thương", "dob": "25/01/2018", "sex": "Nữ", "cls": "Mẫu Giáo Nhỡ 1", "date": "10/12/2023", "by": "", "reason": "Tạm ngừng học"}, {"code": "HS-2023-0550", "name": "Hoàng Khánh An", "dob": "18/04/2019", "sex": "Nữ", "cls": "Mẫu Giáo Bé 2", "date": "02/04/2024", "by": "Cô Hoàng Lan Anh", "reason": "Theo bố mẹ định cư nước ngoài"}, {"code": "HS-2022-0045", "name": "Lê Hoàng Bách", "dob": "09/08/2017", "sex": "Nam", "cls": "Lớp Mầm Xanh (2022 – 2023)", "date": "30/08/2023", "by": "Cô Lê Thị Mai", "reason": "Tốt nghiệp mầm non lên Tiểu học"}, {"code": "HS-2023-0102", "name": "Nguyễn Hoàng Long", "dob": "12/05/2018", "sex": "Nam", "cls": "Mẫu Giáo Lớn 1", "date": "15/03/2024", "by": "Cô Lê Thị Mai", "reason": "Chuyển nơi cư trú sang Quận 7"}, {"code": "HS-2023-0309", "name": "Phạm Gia Huy", "dob": "14/02/2019", "sex": "Nam", "cls": "Mẫu Giáo Bé 1", "date": "", "by": "", "reason": ""}, {"code": "HS-2023-0215", "name": "Trần Thị Thanh Trúc", "dob": "20/11/2019", "sex": "Nữ", "cls": "Mẫu Giáo Nhỡ 2", "date": "20/03/2024", "by": "Thầy Phạm Minh Tuấn", "reason": "Chuyển trường quốc tế"}, {"code": "HS-2023-0412", "name": "Vũ Bảo Ngọc", "dob": "05/10/2018", "sex": "Nữ", "cls": "Mẫu Giáo Lớn 1", "date": "", "by": "", "reason": "Gia đình có việc riêng"}];
+    var q = (st.query || '').trim().toLowerCase();
+    var rows = T.filter(function (t) { return !q || (t.name + ' ' + t.code + ' ' + t.cls + ' ' + t.reason).toLowerCase().indexOf(q) >= 0; }).map(function (t) { return {
+      name: t.name, meta: t.code + ' · ' + t.sex + ' · ' + t.dob, cls: t.cls, reason: t.reason, hasReason: !!t.reason, noReason: !t.reason,
+      date: t.date, hasDate: !!t.date, noDate: !t.date, by: t.by, hasBy: !!t.by, noBy: !t.by, actionLabel: 'Thao tác với hồ sơ ' + t.name,
+      menu: [{ icon: 'eye', label: 'Xem hồ sơ' }, { icon: 'download', label: 'Tải hồ sơ' }, { icon: 'rotate-left', label: 'Khôi phục về danh sách học sinh…' }] }; });
+    return Object.assign(this.shell(), {
+      one: 1, twenty: 20, query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      yearOpts: ['Tất cả năm', '2024', '2023'], year: st.year, setYear: function (v) { self.setState({ year: v }); },
+      rows: rows, isEmpty: rows.length === 0, total: rows.length
+    });
+  }
+}
+</script>
+</body>
+</html>

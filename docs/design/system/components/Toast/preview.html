@@ -1,0 +1,30 @@
+<!-- @dsCard group="Phản hồi" height=280 subtitle="Thông báo nổi góc màn hình · 5 mức độ ngữ nghĩa" -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Toast</title>
+<link rel="stylesheet" href="../tokens.css" />
+<link rel="stylesheet" href="../bundle.css" />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body { background: var(--bg-canvas); font-family: var(--font-sans); color: var(--text-body); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-12); padding: var(--space-24); }
+  .ecomd-toast-demo { position: static; max-width: 360px; width: 100%; }
+</style>
+</head>
+<body>
+  <div class="ecomd-toast ecomd-toast-demo ecomd-toast--success">
+    <span>✓ Đã lưu thành công biểu phí năm học 2026 - 2027.</span>
+  </div>
+  <div class="ecomd-toast ecomd-toast-demo ecomd-toast--danger">
+    <span>✕ Mã trường hoặc thông tin đăng nhập không chính xác.</span>
+  </div>
+  <div class="ecomd-toast ecomd-toast-demo ecomd-toast--warning">
+    <span>⚠ Có 3 học sinh chưa hoàn tất học phí tháng này.</span>
+  </div>
+  <div class="ecomd-toast ecomd-toast-demo ecomd-toast--info">
+    <span>ℹ Đang đồng bộ dữ liệu với Sở GD&ĐT TP.HCM...</span>
+  </div>
+</body>
+</html>

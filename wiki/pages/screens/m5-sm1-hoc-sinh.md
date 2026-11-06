@@ -1,45 +1,46 @@
 ---
-title: "Hồ sơ Học sinh 360° & Chuyển lớp"
+title: Màn Hình Quản Lý Học Sinh
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+  - pages/sources/src-open-questions-resolutions.md
+spec_ids:
+  - NT-01
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/school/students
+status: missing
+updated: 2026-11-05
 ---
 
-# Hồ sơ Học sinh 360° & Chuyển lớp (`M5/SM1`)
+# Màn Hình Quản Lý Học Sinh
 
 ## Mục đích
-
-Quản lý hồ sơ gốc học sinh toàn diện qua các năm học (mã học sinh, CCCD, ngày sinh, BMI), hub chi tiết 360° gồm 5 tab ngữ cảnh và điều phối chuyển lớp/chuyển năm học an toàn.
-
-Thuộc phân hệ **[Nhà trường](../overview/module-m5-nha-truong.md)**. Mã định danh tính năng Harness Loop: **`F007`** (Mức ưu tiên: `P0`).
+Quản lý danh bạ và hồ sơ học sinh 360 độ qua 5 tab ngữ cảnh chuyên sâu; hiển thị biểu tượng Khóa đồng bộ kỳ thi Sở GD&ĐT (`is_sync_locked` - OQ-15); cấu hình cờ quyền riêng tư sinh trắc học `opt_out_face_ai` và danh sách hạn chế tiếp cận tranh chấp giám hộ `restricted_guardians` (OQ-16); kích hoạt luồng rút hồ sơ / thôi học giữa kỳ kèm quyết toán Pro-rata (OQ-17); ghi nhận ngày bắt đầu học `enrollment_date` cho học sinh nhập học giữa tháng tính Prorated (OQ-22); quản lý số điện thoại chính `primary_phone` tự động liên kết nhóm anh chị em ruột hưởng Sibling Discount (OQ-23); và theo dõi đơn dặn thuốc y tế, lịch sử uống thuốc trong tab Y tế/Điểm danh (OQ-19).
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/school/kid`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/student.ts`
-  - `docs/src/utils/studentValidation.ts`
-  - `docs/tests/unit/students.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/school/students` | repo:app/src/pages/[schoolCode]/school/students.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F007-01**: Danh sách học sinh với bộ lọc lớp, trạng thái, và icon thẻ miễn giảm (faTag) màu xanh ngọc.
-- **SPEC-F007-02**: Hub chi tiết 360° với 5 tab: Hồ sơ, Hoạt động, Thư viện, Điểm danh, Học phí.
-- **SPEC-F007-03**: Quy trình chuyển lớp / chuyển năm học tự động áp dụng 3 nguyên tắc cascade: gán biểu phí mới, thu hồi chat cũ, bảo toàn điểm số.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| NT-01 | Quản lý danh bạ và hồ sơ học sinh 360° với 5 tab ngữ cảnh chuyên sâu, tích hợp sync lock OQ-15, opt-out AI/giám hộ OQ-16 và rút hồ sơ OQ-17 | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F007-01` | Danh sách học sinh với bộ lọc lớp, trạng thái, và icon thẻ m... | `OK` | repo:app/tests/unit/students.test.mjs:1 | Đã kiểm chứng 21/21 unit tests |
-| `SPEC-F007-02` | Hub chi tiết 360° với 5 tab: Hồ sơ, Hoạt động, Thư viện, Điể... | `OK` | repo:app/tests/unit/students.test.mjs:1 | Đã kiểm chứng 21/21 unit tests |
-| `SPEC-F007-03` | Quy trình chuyển lớp / chuyển năm học tự động áp dụng 3 nguy... | `OK` | repo:app/tests/unit/students.test.mjs:1 | Đã kiểm chứng 21/21 unit tests |
+| NT-01 | Quản lý danh bạ và hồ sơ học sinh 360° với 5 tab ngữ cảnh chuyên sâu | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/school/students.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md) mục OQ-15, OQ-16, OQ-17, OQ-19, OQ-22, OQ-23).
 
 ## Liên quan
-
-- Phân hệ cha: [Nhà trường](../overview/module-m5-nha-truong.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ Nhà trường](../overview/module-school-admin.md)
+- [Thực thể Hồ sơ học sinh 360](../entities/student-profile.md)
+- [Khái niệm Tích hợp CSDL Sở](../concepts/csdl-so-integration.md)
+- [Đường ống nhận diện khuôn mặt AI](../concepts/ai-face-recognition.md)
+- [Khái niệm vòng đời học sinh](../concepts/student-lifecycle-transitions.md)
+- [Luồng quản lý hồ sơ học sinh 360](../flows/fl-quan-ly-ho-so-hoc-sinh-360.md)

@@ -1,45 +1,41 @@
 ---
-title: "Kế hoạch Thực đơn Tuần & Nguồn gốc Thực phẩm GTIN"
+title: Màn Hình Thực Đơn Tuần
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+spec_ids:
+  - NT-09
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/school/menu
+status: missing
+updated: 2026-11-05
 ---
 
-# Kế hoạch Thực đơn Tuần & Nguồn gốc Thực phẩm GTIN (`M5/SM8`)
+# Màn Hình Thực Đơn Tuần
 
 ## Mục đích
-
-Lập thực đơn dinh dưỡng bán trú tuần trước tối đa 8 tuần (dạng lưới hoặc file tải lên), tự động kế thừa thực đơn trường cho các lớp và truy xuất nguồn gốc thực phẩm theo mã GTIN/lô.
-
-Thuộc phân hệ **[Nhà trường](../overview/module-m5-nha-truong.md)**. Mã định danh tính năng Harness Loop: **`F025`** (Mức ưu tiên: `P1`).
+Lập thực đơn dinh dưỡng chi tiết theo bữa (sáng, trưa, xế) và công bố tới phụ huynh.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/school/menu`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/menu.ts`
-  - `docs/src/utils/menuValidation.ts`
-  - `docs/tests/unit/menu.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/school/menu` | repo:app/src/pages/[schoolCode]/school/menu.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F025-01**: Lập thực đơn tuần linh hoạt theo từng bữa ăn (sáng, trưa, xế).
-- **SPEC-F025-02**: Cơ chế tự động kế thừa thực đơn toàn trường cho các lớp chưa có thực đơn riêng.
-- **SPEC-F025-03**: Hỗ trợ truy xuất nguồn gốc an toàn thực phẩm qua mã lô / mã vạch GTIN.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| NT-09 | Lập và công bố thực đơn dinh dưỡng theo tuần bảo đảm an toàn vệ sinh thực phẩm | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F025-01` | Lập thực đơn tuần linh hoạt theo từng bữa ăn (sáng, trưa, xế... | `MISSING` | repo:app/src/types/menu.ts:1 | Cần triển khai và verify |
-| `SPEC-F025-02` | Cơ chế tự động kế thừa thực đơn toàn trường cho các lớp chưa... | `MISSING` | repo:app/src/types/menu.ts:1 | Cần triển khai và verify |
-| `SPEC-F025-03` | Hỗ trợ truy xuất nguồn gốc an toàn thực phẩm qua mã lô / mã ... | `MISSING` | repo:app/src/types/menu.ts:1 | Cần triển khai và verify |
+| NT-09 | Lập và công bố thực đơn dinh dưỡng theo tuần bảo đảm an toàn vệ sinh thực phẩm | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/school/menu.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Nhà trường](../overview/module-m5-nha-truong.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ tương ứng](../overview/module-school-admin.md)
+- [Thực thể liên quan](../entities/meal-refund-credit.md)

@@ -1,45 +1,46 @@
 ---
-title: "Kho Lưu trữ Học sinh Thôi học / Rút hồ sơ (Archive)"
+title: Màn Hình Kho Lưu Trữ
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+  - pages/sources/src-open-questions-resolutions.md
+spec_ids:
+  - NT-15
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/school/archive
+status: missing
+updated: 2026-11-05
 ---
 
-# Kho Lưu trữ Học sinh Thôi học / Rút hồ sơ (Archive) (`M5/SM14`)
+# Màn Hình Kho Lưu Trữ
 
 ## Mục đích
-
-Kho lưu trữ độc lập danh sách học sinh đã thôi học hoặc chuyển trường, hỗ trợ phục hồi nguyên trạng vào lớp học cũ hoặc xóa vĩnh viễn an toàn 2 bước.
-
-Thuộc phân hệ **[Nhà trường](../overview/module-m5-nha-truong.md)**. Mã định danh tính năng Harness Loop: **`F035`** (Mức ưu tiên: `P2`).
+Lưu trữ hồ sơ học sinh đã thôi học, chuyển trường hoặc tốt nghiệp trong kho lạnh; quản lý hồ sơ thanh lý rút học phí giữa kỳ Pro-rata và phiếu chi hoàn tiền (OQ-17); thực thi chốt chặn khôi phục học sinh (bắt buộc chỉ định một lớp học đích đang hoạt động thuộc niên khóa hiện hành nếu lớp cũ đã bị xóa/giải tán, kiểm tra sĩ số an toàn); và thực thi chốt chặn bảo toàn công nợ khi xóa vĩnh viễn (cấm xóa nếu `balance_due > 0`, yêu cầu xác nhận 2 bước cảnh báo đỏ).
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/setting/kid/archived`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/types/archive.ts`
-  - `docs/src/utils/archiveValidation.ts`
-  - `docs/tests/unit/archive.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/school/archive` | repo:app/src/pages/[schoolCode]/school/archive.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F035-01**: Banner cảnh báo màu vàng nổi bật tại kho lưu trữ học sinh rút hồ sơ.
-- **SPEC-F035-02**: Hỗ trợ phục hồi nguyên trạng học sinh vào lớp học với kiểm tra lớp cũ.
-- **SPEC-F035-03**: Quy trình xóa vĩnh viễn hồ sơ bắt buộc xác nhận 2 bước an toàn.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| NT-15 | Kho lưu trữ học sinh chuyển trường, hoàn thành chương trình, tốt nghiệp và rút hồ sơ Pro-rata OQ-17 | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F035-01` | Banner cảnh báo màu vàng nổi bật tại kho lưu trữ học sinh rú... | `MISSING` | repo:app/src/types/archive.ts:1 | Cần triển khai và verify |
-| `SPEC-F035-02` | Hỗ trợ phục hồi nguyên trạng học sinh vào lớp học với kiểm t... | `MISSING` | repo:app/src/types/archive.ts:1 | Cần triển khai và verify |
-| `SPEC-F035-03` | Quy trình xóa vĩnh viễn hồ sơ bắt buộc xác nhận 2 bước an to... | `MISSING` | repo:app/src/types/archive.ts:1 | Cần triển khai và verify |
+| NT-15 | Kho lưu trữ học sinh chuyển trường, hoàn thành chương trình hoặc tốt nghiệp | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/[schoolCode]/school/archive.tsx |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md) mục OQ-12, OQ-17).
 
 ## Liên quan
-
-- Phân hệ cha: [Nhà trường](../overview/module-m5-nha-truong.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ Nhà trường](../overview/module-school-admin.md)
+- [Thực thể Hồ sơ học sinh 360](../entities/student-profile.md)
+- [Thực thể hồ sơ lưu trữ học sinh](../entities/student-archive-record.md)
+- [Thực thể Phiếu chi nội bộ](../entities/expense-voucher.md)
+- [Khái niệm vòng đời học sinh](../concepts/student-lifecycle-transitions.md)
+- [Luồng kho lưu trữ học sinh](../flows/fl-kho-luu-tru-hoc-sinh.md)

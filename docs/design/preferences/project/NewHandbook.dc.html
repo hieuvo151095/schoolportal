@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Sổ tay phụ huynh — thiết kế mới</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/ecomd/tokens.css">
+<link rel="stylesheet" href="ds/ecomd/components/bundle.css">
+<script src="ds/ecomd/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html{scrollbar-width:none}
+body{margin:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="ECOMD.AppShell" active-key="handbook" breadcrumb="{{crumbs}}" user="{{user}}" notification="{{yes}}" context="{{ctx}}" term="{{term}}" collapsed="{{navCollapsed}}" on-toggle-collapse="{{toggleNav}}" nav-open="{{navOpen}}" on-nav-open-change="{{setNavOpen}}">
+<div class="ecomd-page-header">
+  <div>
+    <h1 class="ecomd-page-header__title h4">Sổ tay phụ huynh</h1>
+    <p class="ecomd-page-header__desc body-sm">3 danh mục, 12 bài viết hướng dẫn, quy chế và cẩm nang học đường</p>
+  </div>
+  <div class="ecomd-page-header__actions"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="folder">Thêm danh mục</x-import><x-import component-from-global-scope="ECOMD.Button" variant="primary" icon="pen-to-square">Viết bài</x-import></div>
+</div>
+<div class="ecomd-split" style="gap: var(--space-16); align-items: start;">
+<section class="ecomd-card">
+  <div style="display: flex; flex-direction: column; gap: var(--space-8); padding: var(--space-16); border-bottom: 1px solid var(--border-default);"><x-import component-from-global-scope="ECOMD.SearchField" class-name="ecomd-filterbar__search" placeholder="Tìm theo tiêu đề bài viết" value="{{query}}" on-change="{{setQuery}}"></x-import>
+    <x-import component-from-global-scope="ECOMD.Tabs" items="{{stTabs}}" value="{{stTab}}" on-change="{{setStTab}}" label="Trạng thái bài viết" variant="segmented"></x-import>
+
+  </div>
+  <div style="display: flex; flex-direction: column; padding: var(--space-8);">
+    <sc-for list="{{cats}}" as="c" hint-placeholder-count="3">
+      <div style="display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-8) 0;">
+        <button type="button" onClick="{{c.toggle}}" aria-expanded="{{c.open}}" style="display: flex; align-items: flex-start; gap: var(--space-10); padding: var(--space-8); border: 0; border-radius: var(--radius-8); background: transparent; text-align: left; font-family: var(--font-sans); cursor: pointer;">
+          <span style="display: flex; padding-top: var(--space-2); color: var(--text-subtle);"><x-import component-from-global-scope="ECOMD.Icon" name="{{c.chev}}" size="{{twelve}}"></x-import></span>
+          <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2);"><span class="body-sm-semibold" style="color: var(--text-heading);">{{c.name}}</span><span class="body-xs" style="color: var(--text-subtle);">{{c.desc}}</span></span>
+          <span class="body-xs-semibold" style="color: var(--text-subtle); font-variant-numeric: tabular-nums;">{{c.count}}</span>
+        </button>
+        <sc-if value="{{c.open}}" hint-placeholder-val="{{true}}">
+          <div style="display: flex; flex-direction: column; gap: var(--space-2); padding-left: var(--space-24);">
+            <sc-for list="{{c.sections}}" as="s" hint-placeholder-count="2">
+              <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                <span class="body-xs-semibold" style="display: flex; align-items: center; gap: var(--space-8); padding: var(--space-8) var(--space-8) var(--space-4); color: var(--text-nav);"><x-import component-from-global-scope="ECOMD.Icon" name="folder" size="{{twelve}}" color="var(--text-muted)"></x-import>{{s.name}}</span>
+                <sc-for list="{{s.posts}}" as="p" hint-placeholder-count="2">
+                  <button type="button" onClick="{{p.pick}}" aria-current="{{p.current}}" class="{{p.cls}}" style="display: flex; align-items: center; gap: var(--space-8); padding: var(--space-8); border: 0; border-radius: var(--radius-8); background: {{p.bg}}; text-align: left; font-family: var(--font-sans); cursor: pointer;">
+                    <x-import component-from-global-scope="ECOMD.Icon" name="file-lines" size="{{twelve}}" color="{{p.iconColor}}"></x-import>
+                    <span class="body-sm" style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: {{p.color}};">{{p.title}}</span>
+                    <sc-if value="{{p.draft}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="ECOMD.StatusTag" tone="neutral">Nháp</x-import></sc-if>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</section>
+<section class="ecomd-card">
+  <div style="display: flex; flex-direction: column; gap: var(--space-12); padding: var(--space-20) var(--space-24); border-bottom: 1px solid var(--border-default);">
+    <ol class="ecomd-crumbs body-xs"><li><span>Quy định chung và nội quy</span></li><li><x-import component-from-global-scope="ECOMD.Icon" name="chevron-right" size="{{twelve}}"></x-import><span>Thời gian biểu và đưa đón</span></li></ol>
+    <div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--space-12) var(--space-16);">
+      <h2 class="body-lg-bold" style="flex: 1 1 var(--size-sidebar-w); min-width: 0; margin: 0; color: var(--text-heading);">{{article}}</h2>
+      <div style="display: flex; gap: var(--space-8); flex: none;"><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="eye-slash">Ẩn bài viết</x-import><x-import component-from-global-scope="ECOMD.Button" variant="secondary" icon="pen">Chỉnh sửa</x-import><x-import component-from-global-scope="ECOMD.IconButton" icon="trash-can" label="Xóa bài viết" size="md"></x-import></div>
+    </div>
+    <div class="body-xs" style="display: flex; align-items: center; gap: var(--space-16); flex-wrap: wrap; color: var(--text-subtle);">
+      <x-import component-from-global-scope="ECOMD.StatusTag" tone="success">Đã phát hành 20/08/2026</x-import>
+      <span>Tác giả: <b class="body-xs-semibold" style="color: var(--text-body);">Ban Giám hiệu</b></span>
+      <span>Cập nhật 20/08/2026</span>
+    </div>
+  </div>
+  <article class="body-md" style="display: flex; flex-direction: column; gap: var(--space-12); padding: var(--space-20) var(--space-24); color: var(--text-body);">
+    <h3 class="title-md" style="margin: 0; color: var(--text-heading);">1. Thời gian mở cổng và đón trả học sinh</h3>
+    <p style="margin: 0;">Cổng trường bắt đầu đón học sinh từ <b>07h00</b> các ngày từ Thứ Hai đến Thứ Sáu. Tiết học đầu tiên bắt đầu lúc <b>08h00</b>. Đề nghị Quý phụ huynh đưa con đến trường trước 07h50 để các con kịp ổn định nề nếp đầu giờ.</p>
+    <ul style="margin: 0; padding-left: var(--space-20); display: flex; flex-direction: column; gap: var(--space-6);">
+      <li><b>Giờ tan học buổi chiều:</b> 16h30 hằng ngày.</li>
+      <li><b>Thời gian trả học sinh tự đón:</b> từ 16h30 đến 17h30.</li>
+      <li><b>Sau 17h30:</b> học sinh được bàn giao về phòng quản lý học sinh muộn tại Tầng 1, Nhà A.</li>
+    </ul>
+    <h3 class="title-md" style="margin: 0; color: var(--text-heading);">2. Quy định dành cho xe đưa đón tuyến</h3>
+    <p style="margin: 0;">Học sinh đăng ký xe đưa đón cần có mặt tại điểm đón trước <b>05 phút</b> so với lịch hẹn trong hợp đồng. Giám thị xe buýt sẽ gọi điện thông báo trước khi xe đến 03 phút.</p>
+    <div style="display: flex; flex-direction: column; gap: var(--space-8); padding-top: var(--space-12); border-top: 1px solid var(--border-default);">
+      <span class="overline" style="color: var(--text-subtle);">Tài liệu đính kèm</span>
+      <a href="#" style="display: flex; align-items: center; gap: var(--space-12); padding: var(--space-12); border: 1px solid var(--border-default); border-radius: var(--radius-8); color: var(--text-body); text-decoration: none;">
+        <span style="display: flex; color: var(--semantic-danger);"><x-import component-from-global-scope="ECOMD.Icon" name="file-pdf" size="{{sixteen}}"></x-import></span>
+        <span style="flex: 1; min-width: 0; display: flex; flex-direction: column;"><span class="body-sm-medium" style="color: var(--text-heading); overflow-wrap: anywhere;">So_do_luong_giao_thong_cong_truong.pdf</span><span class="body-xs" style="color: var(--text-subtle);">1,8 MB</span></span>
+        <x-import component-from-global-scope="ECOMD.Icon" name="download" size="{{fourteen}}" color="var(--text-subtle)"></x-import>
+      </a>
+    </div>
+  </article>
+</section>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"collapsed": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "navOpen": {"editor": "boolean", "default": false, "section": "Kịch bản"}, "$preview": {"width": 1440, "height": 1235}}'>
+var CRUMBS = ["Nhà trường", "Sổ tay PH"];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({ nav: !props.collapsed, drawer: !!props.navOpen }, this.seed(props)); }
+  seed(props) { var s = { query: '', stTab: 'all', open: {}, article: 'Quy định đưa đón học sinh và thời gian biểu năm học 2026 – 2027' }; return s; }
+  componentDidUpdate(prev) {
+    if (prev.collapsed !== this.props.collapsed) this.setState({ nav: !this.props.collapsed });
+    if (prev.navOpen !== this.props.navOpen) this.setState({ drawer: !!this.props.navOpen });
+    var ch = false; for (var k in this.props) if (k !== "collapsed" && k !== "navOpen" && prev[k] !== this.props[k]) ch = true;
+    if (ch) this.setState(this.seed(this.props));
+  }
+
+  shell() {
+    var self = this;
+    return {
+      yes: true, no: false,
+      crumbs: CRUMBS,
+      user: { name: 'Nguyễn Thị Mai', role: 'GVCN Lớp 1A1' },
+      ctx: { label: 'Lớp đang xem', value: 'Lớp 1A1', short: '1A1', icon: 'chalkboard', options: ['Lớp 1A1', 'Lớp 1A2', 'Lớp 2A1', 'Toàn trường'] },
+      term: { year: '2026 – 2027', term: 'Học kỳ I' },
+      navCollapsed: this.state.nav === false, navOpen: !!this.state.drawer,
+      setNavOpen: function (v) { self.setState({ drawer: !!v }); },
+      toggleNav: function () { self.setState({ nav: self.state.nav === false }); }
+    };
+  }
+  renderVals() {
+    var self = this, st = this.state, props = this.props;
+
+    var C = [{"name": "Quy định chung và nội quy nhà trường", "desc": "Quy định hành chính, nội quy cơ sở vật chất và văn hóa ứng xử", "sections": [{"name": "Thời gian biểu và đưa đón học sinh", "posts": [["Quy định đưa đón học sinh và thời gian biểu năm học 2026 – 2027", "pub"], ["Thủ tục ủy quyền người thân đón trẻ và cấp thẻ đón bổ sung", "pub"], ["Quy trình xử lý trường hợp đón muộn sau 17h30", "draft"]]}, {"name": "Đồng phục và dụng cụ học tập", "posts": [["Hướng dẫn đăng ký và đổi kích cỡ đồng phục năm học mới", "pub"], ["Danh mục đồ dùng cá nhân và thiết bị học tập được phép mang vào trường", "pub"]]}, {"name": "Bài viết trực tiếp", "posts": [["Nội quy văn hóa ứng xử và giao tiếp trong khuôn viên nhà trường", "pub"]]}]}, {"name": "Y tế, an toàn và dinh dưỡng", "desc": "Chăm sóc sức khỏe ban đầu, vệ sinh an toàn thực phẩm và phòng dịch", "sections": [{"name": "Khám sức khỏe định kỳ và BHYT", "posts": [["Kế hoạch kiểm tra sức khỏe tổng quát và nha học đường học kỳ I", "pub"], ["Thủ tục kê khai thông tin BHYT và đổi nơi đăng ký khám chữa bệnh", "draft"]]}, {"name": "Quy trình gửi thuốc và chăm sóc y tế", "posts": [["Quy trình phụ huynh gửi thuốc uống trong ngày cho học sinh", "pub"]]}]}, {"name": "Học phí và chính sách tài chính", "desc": "Biểu phí, thời hạn đóng học phí và chính sách hoàn phí khi nghỉ", "sections": [{"name": "Cơ chế hoàn phí khi nghỉ học", "posts": [["Chính sách hoàn tiền ăn và dịch vụ đưa đón khi học sinh nghỉ học", "pub"], ["Thời gian đối soát và hoàn tiền học phí cuối học kỳ", "draft"]]}, {"name": "Học bổng và miễn giảm học phí", "posts": [["Tiêu chuẩn xét duyệt học bổng tài năng và miễn giảm học phí năm học 2026 – 2027", "pub"]]}]}];
+    var open = st.open || {}; var q = (st.query || '').trim().toLowerCase(); var stf = st.stTab;
+    var total = 0, pubN = 0, draftN = 0;
+    C.forEach(function (c) { c.sections.forEach(function (s) { s.posts.forEach(function (p) { total++; if (p[1] === 'pub') pubN++; else draftN++; }); }); });
+    var cats = C.map(function (c, ci) {
+      var isOpen = open[ci] !== false, n = 0;
+      var sections = c.sections.map(function (s) { var posts = s.posts.filter(function (p) { return (!q || p[0].toLowerCase().indexOf(q) >= 0) && (stf === 'all' || p[1] === stf); }).map(function (p) {
+          n++; var cur = p[0] === st.article;
+          return { title: p[0], draft: p[1] === 'draft', current: cur ? 'true' : 'false', bg: cur ? 'var(--bg-selected)' : 'transparent', color: cur ? 'var(--eco-blue-strong)' : 'var(--text-body)', iconColor: cur ? 'var(--eco-blue-strong)' : 'var(--text-muted)', cls: cur ? 'body-sm-semibold' : '',
+            pick: function () { self.setState({ article: p[0] }); } }; });
+        return { name: s.name, posts: posts }; }).filter(function (s) { return s.posts.length; });
+      return { name: c.name, desc: c.desc, count: n, open: isOpen, chev: isOpen ? 'chevron-down' : 'chevron-right', sections: sections,
+        toggle: function () { var o = Object.assign({}, open); o[ci] = !isOpen; self.setState({ open: o }); } };
+    });
+    return Object.assign(this.shell(), {
+      twelve: 12, fourteen: 14, sixteen: 16, cats: cats, article: st.article,
+      query: st.query, setQuery: function (v) { self.setState({ query: v }); },
+      stTabs: [{ key: 'all', label: 'Tất cả', count: total }, { key: 'pub', label: 'Đã phát hành', count: pubN }, { key: 'draft', label: 'Bản nháp', count: draftN }],
+      stTab: st.stTab, setStTab: function (k) { self.setState({ stTab: k }); }
+    });
+  }
+}
+</script>
+</body>
+</html>
