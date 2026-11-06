@@ -40,18 +40,8 @@ export const ActivityToolbar: React.FC<ActivityToolbarProps> = ({
       />
 
       {/* 2. Search Toolbar */}
-      <div
-        style={{
-          padding: 'var(--space-12) var(--space-20)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: 'var(--space-12)',
-          background: 'var(--bg-surface)',
-        }}
-      >
-        <div style={{ width: '360px', maxWidth: '100%' }}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 sm:px-5 sm:py-3 bg-[var(--bg-surface)] w-full min-w-0">
+        <div className="w-full sm:w-80 flex-1 min-w-0">
           <SearchField
             value={searchQuery}
             onChange={onSearchQueryChange}
@@ -59,7 +49,7 @@ export const ActivityToolbar: React.FC<ActivityToolbarProps> = ({
           />
         </div>
 
-        <div className="body-xs" style={{ color: 'var(--text-subtle)' }}>
+        <div className="body-xs hidden sm:block text-[var(--text-subtle)]">
           Hiển thị nhật ký học tập và sinh hoạt hàng ngày của học sinh
         </div>
       </div>

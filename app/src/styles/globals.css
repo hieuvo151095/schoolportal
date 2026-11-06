@@ -39,3 +39,41 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
 }
+
+/* Mobile responsive hardening and anti-overflow SSOT rules */
+html, body, #__next {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 767.98px) {
+  /* Hide thead completely on mobile so its wide columns never expand the table or container */
+  .ecomd-table thead,
+  .ds-table thead {
+    display: none !important;
+  }
+
+  /* Table and containers must never exceed mobile screen */
+  .ecomd-table,
+  .ecomd-table-card,
+  .ecomd-table-scroll {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* StatCard grid 2 columns standard */
+  .ecomd-stat-group {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: var(--space-8) !important;
+  }
+
+  /* Header stays neatly contained without overflow */
+  .ecomd-header {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: var(--space-12) !important;
+    padding-right: var(--space-12) !important;
+  }
+}

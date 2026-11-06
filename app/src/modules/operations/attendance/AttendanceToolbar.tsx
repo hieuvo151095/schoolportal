@@ -97,11 +97,11 @@ export const AttendanceToolbar: React.FC<AttendanceToolbarProps> = ({
       />
 
       {/* 2. Integrated Filter Controls */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-3 sm:p-4 border-b border-[var(--border-default)] bg-[var(--bg-surface)]">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-3 sm:p-4 border-b border-[var(--border-default)] bg-[var(--bg-surface)] w-full max-w-full min-w-0">
         {/* Left: Class picker, Date Navigator, Search */}
-        <div className="flex flex-col sm:flex-row sm:items-center flex-wrap gap-2.5 sm:gap-3 w-full lg:w-auto">
+        <div className="flex flex-col sm:flex-row sm:items-center flex-wrap gap-2.5 sm:gap-3 w-full lg:w-auto min-w-0">
           {/* Class Select */}
-          <div className="w-full sm:w-44 flex-shrink-0">
+          <div className="w-full sm:w-44 flex-shrink-0 min-w-0">
             <SelectField
               value={selectedClassId}
               onChange={onSelectClassId}
@@ -110,7 +110,7 @@ export const AttendanceToolbar: React.FC<AttendanceToolbarProps> = ({
           </div>
 
           {/* Date Navigator */}
-          <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start gap-1 bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded-[var(--radius-8)] px-2 py-1 flex-shrink-0">
+          <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start gap-1 bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded-[var(--radius-8)] px-2 py-1 flex-shrink-0 min-w-0">
             <IconButton
               icon="chevron-left"
               label="Hôm trước"
@@ -154,7 +154,7 @@ export const AttendanceToolbar: React.FC<AttendanceToolbarProps> = ({
           </div>
 
           {/* Search Box */}
-          <div className="w-full sm:w-60 md:w-72 flex-1">
+          <div className="w-full sm:w-60 md:w-72 flex-1 min-w-0">
             <SearchField
               value={searchQuery}
               onChange={onSearchChange}
@@ -164,7 +164,7 @@ export const AttendanceToolbar: React.FC<AttendanceToolbarProps> = ({
         </div>
 
         {/* Right: Quick action buttons */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full lg:w-auto pt-1 lg:pt-0">
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full lg:w-auto pt-1 lg:pt-0 min-w-0 flex-nowrap">
           <Button
             variant="secondary"
             icon="check"

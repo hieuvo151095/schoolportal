@@ -54,9 +54,9 @@ export const AlbumGrid: React.FC<AlbumGridProps> = ({
     <>
       {viewMode === 'list' ? (
         /* List view mode */
-        <div className="ecomd-table-card">
-          <div className="ecomd-table-scroll">
-            <table className="ecomd-table">
+        <div className="ecomd-table-card w-full max-w-full min-w-0">
+          <div className="ecomd-table-scroll w-full max-w-full min-w-0">
+            <table className="ecomd-table w-full max-w-full min-w-0">
               <thead>
                 <tr>
                   <th className="body-xs-semibold" style={{ paddingLeft: 'var(--space-20)' }}>Album</th>
@@ -154,14 +154,8 @@ export const AlbumGrid: React.FC<AlbumGridProps> = ({
           </div>
         </div>
       ) : (
-        /* Grid view mode - Clean, balanced 4-column layout */
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-            gap: 'var(--space-16)',
-          }}
-        >
+        /* Grid view mode - Clean, responsive layout */
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full min-w-0">
           {albums.map((album) => (
             <div
               key={album.id}

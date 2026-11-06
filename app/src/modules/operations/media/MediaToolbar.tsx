@@ -24,29 +24,24 @@ export const MediaToolbar: React.FC<MediaToolbarProps> = ({
 }) => {
   return (
     <div
-      className="ecomd-filterbar"
-      style={{
-        padding: 'var(--space-12) var(--space-16)',
-        background: 'var(--bg-surface)',
-        border: '1px solid var(--border-default)',
-        borderRadius: 'var(--radius-12)',
-      }}
+      className="ecomd-filterbar flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 w-full max-w-full min-w-0 p-3 sm:px-4 sm:py-3 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-12)]"
     >
-      <div className="ecomd-filterbar__filters">
-        <Tag variant="default" style={{ height: '36px', padding: '0 var(--space-12)', fontWeight: 600 }}>
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 flex-1 min-w-0">
+        <Tag variant="default" className="h-9 px-3 font-semibold justify-center sm:justify-start flex-none">
           {totalAlbums} Album • {totalPhotos} Ảnh & Video
         </Tag>
 
-        <div style={{ width: '320px' }}>
+        <div className="w-full sm:w-72 flex-1 min-w-0">
           <SearchField
             value={searchQuery}
             onChange={onSearchChange}
             placeholder="Tìm album theo tên, chủ đề..."
+            className="ecomd-filterbar__search w-full"
           />
         </div>
       </div>
 
-      <div className="ecomd-filterbar__actions">
+      <div className="flex items-center justify-center sm:justify-end flex-none">
         <SegmentedControl
           value={viewMode}
           onChange={onViewModeChange}

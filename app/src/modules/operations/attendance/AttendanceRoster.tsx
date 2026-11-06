@@ -137,8 +137,8 @@ export const AttendanceRoster: React.FC<AttendanceRosterProps> = ({
         </div>
       )}
 
-      <div className="ecomd-table-scroll">
-        <table className="ecomd-table ecomd-table--dense">
+      <div className="ecomd-table-scroll w-full max-w-full min-w-0">
+        <table className="ecomd-table ecomd-table--dense w-full max-w-full min-w-0">
           <thead>
             <tr>
               <th className="is-check" style={{ width: '36px', textAlign: 'center' }}>
@@ -623,20 +623,9 @@ export const AttendanceRoster: React.FC<AttendanceRosterProps> = ({
 
       {/* Card Footer: Student count */}
       {students.length > 0 && (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: 'var(--space-12) var(--space-20)',
-            borderTop: '1px solid var(--border-default)',
-            fontSize: '13px',
-            color: 'var(--text-subtle)',
-            background: 'var(--bg-surface)',
-          }}
-        >
+        <div className="flex items-center justify-between p-3 sm:px-5 sm:py-3 border-t border-[var(--border-default)] text-xs sm:text-sm text-[var(--text-subtle)] bg-[var(--bg-surface)] w-full min-w-0">
           <span>Hiển thị <strong>{students.length}</strong> học sinh</span>
-          <span style={{ fontSize: '12px' }}>Đồng bộ thời gian thực với ứng dụng Phụ huynh</span>
+          <span className="hidden sm:inline text-xs">Đồng bộ thời gian thực với ứng dụng Phụ huynh</span>
         </div>
       )}
     </div>

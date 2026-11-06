@@ -117,7 +117,7 @@ export default function MediaPage() {
               title="Thư Viện Ảnh Lớp 1A1"
               description="Kho lưu trữ ảnh, video hoạt động và nhận diện khuôn mặt học sinh"
               actions={
-                <div className="flex items-center gap-3">
+                <>
                   <Button
                     variant="secondary"
                     icon="camera"
@@ -132,7 +132,7 @@ export default function MediaPage() {
                   >
                     Tạo album mới
                   </Button>
-                </div>
+                </>
               }
             />
 

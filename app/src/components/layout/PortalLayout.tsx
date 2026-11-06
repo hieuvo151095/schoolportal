@@ -94,10 +94,12 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
 }) => {
   const router = useRouter();
   const schoolCode = (router.query.schoolCode as string) || propSchoolCode || 'demo';
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const handleResize = () => {
       const mob = window.innerWidth < 1024;
       setIsMobile(mob);
@@ -394,14 +396,14 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
   ];
 
   return (
-    <div className={`ecomd-shell h-screen overflow-hidden flex flex-col bg-[var(--bg-canvas)] ${isMobile ? 'ecomd-shell--mobile' : 'ecomd-shell--desktop'}`}>
+    <div className={`ecomd-shell h-screen overflow-hidden flex flex-col bg-[var(--bg-canvas)] w-full max-w-full min-w-0 ${mounted && isMobile ? 'ecomd-shell--mobile' : 'ecomd-shell--desktop'}`}>
       {/* Global Top-Right Toast Notifications for all modules */}
       <GlobalToastContainer />
 
       {/* [DS] ECO ME DASHBOARD Standard AppHeader */}
       <AppHeader
         productName="ECO School Portal"
-        tagline={isMobile ? undefined : 'Hệ thống Quản Trị Vận Hành Giáo Dục Toàn Diện'}
+        tagline="Hệ thống Quản Trị Vận Hành Giáo Dục Toàn Diện"
         notification={true}
         menuActive={!sidebarOpen}
         onMenu={() => setSidebarOpen(!sidebarOpen)}
@@ -452,7 +454,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
       />
 
       {/* Body Area - Independent Scrolling Panes */}
-      <div className="flex-1 flex overflow-hidden min-h-0 relative">
+      <div className="flex-1 flex overflow-hidden min-h-0 min-w-0 w-full max-w-full relative">
         {/* Mobile Scrim Backdrop */}
         {isMobile && sidebarOpen && (
           <button
@@ -478,13 +480,13 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
 
         {/* Main Content Pane - Independent vertical scroll or full height if noPadding */}
         <main
-          className={`flex-1 min-h-0 w-full ${
+          className={`flex-1 min-h-0 min-w-0 w-full max-w-full ${
             noPadding
               ? 'overflow-hidden p-0'
-              : 'overflow-y-auto p-3 sm:p-4 md:p-6 lg:p-8'
+              : 'overflow-y-auto overflow-x-hidden p-3 sm:p-4 md:p-6 lg:p-8'
           }`}
         >
-          <div className={`w-full ${noPadding ? 'h-full' : ''}`}>{children}</div>
+          <div className={`w-full max-w-full min-w-0 ${noPadding ? 'h-full' : ''}`}>{children}</div>
         </main>
       </div>
     </div>

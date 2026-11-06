@@ -464,20 +464,9 @@ export const ActivityComposer: React.FC<ActivityComposerProps> = ({
         )}
 
         {/* Trigger Bar (BR03) & Action Row */}
-        <div
-          style={{
-            marginTop: 'var(--space-16)',
-            paddingTop: 'var(--space-12)',
-            borderTop: '1px solid var(--border-default)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 'var(--space-12)',
-          }}
-        >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-4 pt-3 border-t border-[var(--border-default)] w-full min-w-0">
           {/* BR03 Trigger Shortcut Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-8)', position: 'relative' }}>
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto min-w-0">
             {/* Student Mention Button */}
             <div style={{ position: 'relative' }}>
               <button
@@ -715,8 +704,8 @@ export const ActivityComposer: React.FC<ActivityComposerProps> = ({
           </div>
 
           {/* Submit Action & Queue Indicator */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-12)' }}>
-            <div className="body-xs" style={{ color: 'var(--text-subtle)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+          <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto pt-2 sm:pt-0">
+            <div className="body-xs flex items-center gap-1 text-[var(--text-subtle)]">
               <Icon name="info" size={12} color="var(--text-subtle)" />
               <span>Duyệt trước khi gửi PH</span>
             </div>
@@ -725,6 +714,7 @@ export const ActivityComposer: React.FC<ActivityComposerProps> = ({
               variant="primary"
               icon="paper-plane"
               type="submit"
+              className="flex-1 sm:flex-none justify-center"
             >
               Đăng hoạt động
             </Button>

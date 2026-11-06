@@ -181,7 +181,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
               </div>
             )}
 
-            <div style={{ padding: 'var(--space-20)' }}>
+            <div className="p-3.5 sm:p-5">
               {/* Header Row */}
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--space-12)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-12)' }}>
@@ -360,6 +360,8 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
                   color: 'var(--text-body)',
                   lineHeight: 1.6,
                   whiteSpace: 'pre-line',
+                  wordBreak: 'break-word',
+                  overflowWrap: 'anywhere',
                 }}
               >
                 {renderFormattedContent(post.content)}
