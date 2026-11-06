@@ -191,6 +191,12 @@ Bằng việc tái phát triển toàn diện cổng vận hành trên nền t�
 - `NFR-004 (Chuẩn thiết kế ECO Design System 1.0)`: Giao diện phải tuân thủ nghiêm ngặt token thiết kế: Vàng `#FEC020`, Xanh dương `#0070CE`, thang đo khoảng cách 4-64px, và font chữ chuẩn Google Fonts (`Inter`, `Be Vietnam Pro`).
 - `NFR-005 (Giám sát & Đo lường)`: Tích hợp Sentry giám sát lỗi với tỷ lệ lấy mẫu trace ~10%. Theo dõi hành vi người dùng qua Google Analytics 4 và Microsoft Clarity.
 - `NFR-006 (Toàn vẹn dữ liệu)`: Điểm danh và thanh toán hóa đơn phải đảm bảo tính lũy thừa (idempotency) và chống xung đột ghi đồng thời (race condition).
+- `NFR-007 (Chuẩn Responsive & Mobile First UX)`: Bắt buộc hỗ trợ trơn tru 3 cấp độ thiết bị theo Design Preference & System v2.6.0: Desktop (≥ 1280px), Tablet (768px – 1279px), và Mobile (< 768px, tối ưu chuẩn 360px – 390px):
+  - **AppHeader & Navigation**: Chiều cao thanh header trên Mobile cố định đúng 56px (`var(--size-header-h)`), `flex-nowrap`, `overflow-hidden`. Tuyệt đối cấm quấn dòng làm phình header hoặc che lấp `PageHeader` bên dưới. Ẩn tagline, ẩn ô tìm kiếm chức năng trên header, ẩn tên/vai trò text người dùng (chỉ giữ avatar sm), bộ chọn năm học chuyển vào ngăn kéo drawer nếu không đủ diện tích.
+  - **Tabs & Cuộn ngang**: Các dải tab (`CountedTabs`) phải có thuộc tính `overflow-x: auto`, `flex: none` (`flex-shrink: 0`) cho từng tab item, viền active indicator ăn khớp, cấm co ép làm biến dạng nhãn đếm.
+  - **Thanh công cụ tác vụ (Toolbar)**: Các nút thao tác (Đón hàng loạt, Trả hàng loạt, Báo vắng, Tạo mới...) dàn layout dạng flex-col hoặc thanh cuộn ngang mượt mà, cấm để chữ bị cắt xén (như "Báo...").
+  - **Lưới thẻ (StatCard Grid)**: Hiển thị 2 cột cân đối hoặc auto-fit, nội dung chữ co giãn kèm thanh tiến trình gọn gàng, không để card tràn ngang mép màn hình.
+  - **Vùng chạm công thái học (Touch Target)**: Đạt tối thiểu 40px – 44px chuẩn Accessibility. Đệm mép trang `var(--space-16)` (16px), khoảng cách giữa các khối `var(--space-16)` (16px).
 
 ---
 

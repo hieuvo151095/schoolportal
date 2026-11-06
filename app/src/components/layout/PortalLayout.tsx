@@ -394,20 +394,20 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
   ];
 
   return (
-    <div className="h-screen overflow-hidden flex flex-col bg-[var(--bg-canvas)]">
+    <div className={`ecomd-shell h-screen overflow-hidden flex flex-col bg-[var(--bg-canvas)] ${isMobile ? 'ecomd-shell--mobile' : 'ecomd-shell--desktop'}`}>
       {/* Global Top-Right Toast Notifications for all modules */}
       <GlobalToastContainer />
 
       {/* [DS] ECO ME DASHBOARD Standard AppHeader */}
       <AppHeader
         productName="ECO School Portal"
-        tagline="Hệ thống Quản Trị Vận Hành Giáo Dục Toàn Diện"
+        tagline={isMobile ? undefined : 'Hệ thống Quản Trị Vận Hành Giáo Dục Toàn Diện'}
         notification={true}
         menuActive={!sidebarOpen}
         onMenu={() => setSidebarOpen(!sidebarOpen)}
         search={false}
         center={
-          <div className="w-44 sm:w-52 md:w-60">
+          <div className="hidden sm:block w-44 sm:w-52 md:w-60">
             <Dropdown
               options={academicYears.map((ay) => ({
                 value: ay.id,

@@ -30,6 +30,13 @@ Kiến trúc giao diện của School Operating Portal được xây dựng theo
 4. **Độc lập dirty state và bảo vệ thay đổi chưa lưu (CH-09):**
    - Các màn hình cấu hình nhiều khối độc lập (như Cấu hình học phí, Hồ sơ trường) quản lý cờ `dirtyFlags` riêng cho từng khối.
    - Khi người dùng rời trang mà còn thay đổi chưa lưu, hệ thống kích hoạt modal cảnh báo điều hướng.
+5. **Quy tắc Responsive Đa Thiết Bị & Mobile First UX (ADR-010):**
+   - **Tương thích 3 cấp độ:** Desktop (≥ 1280px), Tablet (768px – 1279px) và Mobile (< 768px, tối thiểu chuẩn 360px – 390px).
+   - **Khung AppHeader:** Cố định đúng 56px (`var(--size-header-h)`), `flex-nowrap`, `overflow-hidden`. Tuyệt đối cấm quấn dòng làm phình thanh trên đè lên `PageHeader` nội dung. Trên mobile (< 768px), ẩn tagline sản phẩm (`hidden md:block`), ẩn ô tìm kiếm chức năng trên header, ẩn text tên/vai trò tài khoản (chỉ giữ avatar sm), dời bộ chọn năm học vào Sidebar Drawer nếu hẹp.
+   - **Thanh Tab (CountedTabs):** Cuộn ngang trơn tru (`overflow-x: auto`), từng tab giữ `flex: none` (`flex-shrink: 0`), chỉ báo active khớp đúng tab.
+   - **Thanh công cụ tác vụ (Toolbar):** Bộ lọc xếp cột hoặc co giãn linh hoạt; nút tác vụ nhanh cuộn ngang mượt mà (`overflow-x: auto no-scrollbar`), cấm cắt cụt chữ nhãn nút (như 'Báo...').
+   - **Lưới thẻ (StatCard Grid):** Lưới 2 cột cân đối hoặc auto-fit, nội dung chữ co giãn kèm thanh tiến trình nhỏ gọn, không để card tràn ra ngoài màn hình.
+   - **Vùng chạm công thái học (Touch Target):** Đạt tối thiểu 40px – 44px chuẩn Accessibility. Đệm mép trang `var(--space-16)` (16px), khoảng cách giữa các khối `var(--space-16)` (16px).
 
 ## Áp dụng ở đâu
 - [Tổng quan dự án](../overview/project-overview.md)

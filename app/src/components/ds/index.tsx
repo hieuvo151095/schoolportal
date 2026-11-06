@@ -538,8 +538,8 @@ export function PageHeader(p: PageHeaderProps) {
   return (
     <div className={cx('ecomd-page-header', p.className)} style={p.style}>
       <div>
-        <h1 className="ecomd-page-header__title h4">{p.title}</h1>
-        {p.description ? <p className="ecomd-page-header__desc body-sm">{p.description}</p> : null}
+        <h1 className="ecomd-page-header__title h4 text-lg sm:text-xl md:text-2xl font-black">{p.title}</h1>
+        {p.description ? <p className="ecomd-page-header__desc body-sm text-xs sm:text-sm text-[var(--text-subtle)] mt-1">{p.description}</p> : null}
       </div>
       {p.actions ? <div className="ecomd-page-header__actions">{p.actions}</div> : null}
     </div>
@@ -618,14 +618,16 @@ export function CountedTabs(p: CountedTabsProps) {
   return (
     <div
       role="tablist"
-      className={cx('ecomd-counted-tabs', p.className)}
+      className={cx('ecomd-counted-tabs no-scrollbar', p.className)}
       style={Object.assign(
         {
           display: 'flex',
-          gap: 'var(--space-20)',
-          padding: '0 var(--space-20)',
+          gap: 'var(--space-16)',
+          padding: '0 var(--space-16)',
           borderBottom: '1px solid var(--border-default)',
           overflowX: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'none',
           background: 'var(--bg-surface)',
         },
         p.style
@@ -642,11 +644,13 @@ export function CountedTabs(p: CountedTabsProps) {
             onClick={() => p.onChange(tab.id)}
             style={{
               height: '48px',
+              flex: 'none',
+              flexShrink: 0,
               display: 'flex',
               alignItems: 'center',
               gap: 'var(--space-8)',
               marginBottom: '-1px',
-              padding: '0',
+              padding: '0 var(--space-4)',
               border: '0',
               borderBottom: isActive ? '2px solid var(--eco-blue-strong)' : '2px solid transparent',
               background: 'transparent',
@@ -1273,17 +1277,17 @@ export function AppHeader(p: AppHeaderProps) {
       title="Tài khoản người dùng"
     >
       <Avatar src={u.avatar} name={u.name} size="sm" ring={true} />
-      <div className="ecomd-user__text">
+      <div className="ecomd-user__text hidden sm:flex">
         <div className="ecomd-user__name body-xs-bold">{u.name}</div>
         {u.role ? <div className="ecomd-user__role body-2xs">{u.role}</div> : null}
       </div>
-      <Icon name="chevron-down" size={12} className="ecomd-user__caret" />
+      <Icon name="chevron-down" size={12} className="ecomd-user__caret hidden sm:inline-block" />
     </button>
   ) : null;
 
   return (
-    <header className={cx('ecomd-header', p.className)} style={p.style}>
-      <div className="ecomd-header__left">
+    <header className={cx('ecomd-header flex-nowrap overflow-hidden flex-shrink-0', p.className)} style={p.style}>
+      <div className="ecomd-header__left flex-shrink-0 min-w-0">
         {p.onMenu !== false && (
           <IconButton
             icon="bars"
@@ -1293,18 +1297,18 @@ export function AppHeader(p: AppHeaderProps) {
             onClick={p.onMenu}
           />
         )}
-        <div className="ecomd-header__logo">
+        <div className="ecomd-header__logo flex-shrink-0">
           <Icon name={p.logoIcon || 'school'} size={20} />
         </div>
-        <div className="ecomd-header__brand">
+        <div className="ecomd-header__brand min-w-0">
           <div className="ecomd-header__title">
-            <span className="ecomd-header__name body-lg-bold">{p.productName || 'ECO School Portal'}</span>
+            <span className="ecomd-header__name body-lg-bold truncate max-w-[130px] sm:max-w-none">{p.productName || 'ECO School Portal'}</span>
             {p.context ? <Tag variant="warning" pill={true}>{p.context}</Tag> : null}
           </div>
-          {p.tagline ? <p className="ecomd-header__tagline body-xs">{p.tagline}</p> : null}
+          {p.tagline ? <p className="ecomd-header__tagline body-xs hidden md:block">{p.tagline}</p> : null}
         </div>
       </div>
-      <div className="ecomd-header__right">
+      <div className="ecomd-header__right flex-shrink-0 min-w-0">
         {p.center ? (
           <div className="ecomd-header__center">{p.center}</div>
         ) : p.search !== false ? (

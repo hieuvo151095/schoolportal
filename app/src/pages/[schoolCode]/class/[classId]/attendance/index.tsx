@@ -178,7 +178,7 @@ export default function AttendancePage() {
         <AttendanceSummaryCards summary={summary} />
 
         {/* Unified Table Card: CountedTabs + Filter Controls + Bulk Actions + Data Table */}
-        <div className="ecomd-table-card">
+        <div className="ecomd-table-card overflow-hidden w-full max-w-full">
           <AttendanceToolbar
             selectedClassId={selectedClassId}
             onSelectClassId={handleSelectClassId}

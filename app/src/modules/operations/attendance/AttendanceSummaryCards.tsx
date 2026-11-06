@@ -18,17 +18,24 @@ export const AttendanceSummaryCards: React.FC<AttendanceSummaryCardsProps> = ({ 
   const attendanceRate = totalStudents > 0 ? Math.round((presentCount / totalStudents) * 100) : 0;
 
   return (
-    <div className="ecomd-stat-group grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+    <div
+      className="w-full"
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+        gap: 'var(--space-10)',
+      }}
+    >
       <StatCard
         label="Có mặt hôm nay"
         value={`${presentCount} / ${totalStudents}`}
         icon="user-check"
         tone="success"
         sub={
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--space-8)' }}>
-            <span>Tỷ lệ có mặt: <strong>{attendanceRate}%</strong></span>
-            <div style={{ width: '60px', height: '4px', background: 'var(--bg-muted)', borderRadius: 'var(--radius-full)', overflow: 'hidden' }}>
-              <div style={{ width: `${attendanceRate}%`, height: '100%', background: 'var(--semantic-success)' }} />
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2">
+            <span className="text-xs truncate">Tỷ lệ: <strong>{attendanceRate}%</strong></span>
+            <div className="w-10 sm:w-14 h-1 bg-[var(--bg-muted)] rounded-full overflow-hidden flex-shrink-0">
+              <div style={{ width: `${attendanceRate}%` }} className="h-full bg-[var(--semantic-success)]" />
             </div>
           </div>
         }
@@ -38,21 +45,21 @@ export const AttendanceSummaryCards: React.FC<AttendanceSummaryCardsProps> = ({ 
         value={`${absentExcusedCount} học sinh`}
         icon="clock"
         tone="warning"
-        sub="Đủ điều kiện hoàn tiền ăn"
+        sub={<span className="text-xs truncate block" title="Đủ điều kiện hoàn tiền ăn">Đủ điều kiện hoàn tiền</span>}
       />
       <StatCard
         label="Nghỉ không phép (KP)"
         value={`${absentUnexcusedCount} học sinh`}
         icon="circle-xmark"
         tone="danger"
-        sub="Cần giáo viên liên hệ PH"
+        sub={<span className="text-xs truncate block" title="Cần giáo viên liên hệ PH">Cần liên hệ PH</span>}
       />
       <StatCard
         label="Chưa điểm danh"
         value={`${unmarkedCount} học sinh`}
         icon="user-clock"
         tone="neutral"
-        sub="Đang mở tiếp nhận điểm danh"
+        sub={<span className="text-xs truncate block" title="Đang mở tiếp nhận điểm danh">Đang tiếp nhận</span>}
       />
     </div>
   );

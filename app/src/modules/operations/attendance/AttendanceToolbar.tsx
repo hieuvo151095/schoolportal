@@ -97,22 +97,11 @@ export const AttendanceToolbar: React.FC<AttendanceToolbarProps> = ({
       />
 
       {/* 2. Integrated Filter Controls */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: 'var(--space-12)',
-          padding: 'var(--space-16) var(--space-20)',
-          borderBottom: '1px solid var(--border-default)',
-          background: 'var(--bg-surface)',
-        }}
-      >
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-3 sm:p-4 border-b border-[var(--border-default)] bg-[var(--bg-surface)]">
         {/* Left: Class picker, Date Navigator, Search */}
-        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-12)' }}>
+        <div className="flex flex-col sm:flex-row sm:items-center flex-wrap gap-2.5 sm:gap-3 w-full lg:w-auto">
           {/* Class Select */}
-          <div style={{ width: '180px' }}>
+          <div className="w-full sm:w-44 flex-shrink-0">
             <SelectField
               value={selectedClassId}
               onChange={onSelectClassId}
@@ -121,17 +110,7 @@ export const AttendanceToolbar: React.FC<AttendanceToolbarProps> = ({
           </div>
 
           {/* Date Navigator */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 'var(--space-4)',
-              background: 'var(--bg-subtle)',
-              border: '1px solid var(--border-default)',
-              borderRadius: 'var(--radius-8)',
-              padding: '2px 4px',
-            }}
-          >
+          <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start gap-1 bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded-[var(--radius-8)] px-2 py-1 flex-shrink-0">
             <IconButton
               icon="chevron-left"
               label="Hôm trước"
@@ -175,7 +154,7 @@ export const AttendanceToolbar: React.FC<AttendanceToolbarProps> = ({
           </div>
 
           {/* Search Box */}
-          <div style={{ width: '280px' }}>
+          <div className="w-full sm:w-60 md:w-72 flex-1">
             <SearchField
               value={searchQuery}
               onChange={onSearchChange}
@@ -185,13 +164,14 @@ export const AttendanceToolbar: React.FC<AttendanceToolbarProps> = ({
         </div>
 
         {/* Right: Quick action buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}>
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full lg:w-auto pt-1 lg:pt-0">
           <Button
             variant="secondary"
             icon="check"
             onClick={onBulkCheckIn}
             disabled={selectedCount === 0}
             title={selectedCount === 0 ? 'Chọn học sinh để đón hàng loạt' : 'Đón các học sinh đã chọn'}
+            className="flex-none whitespace-nowrap text-xs sm:text-sm"
           >
             Đón hàng loạt
           </Button>
@@ -202,6 +182,7 @@ export const AttendanceToolbar: React.FC<AttendanceToolbarProps> = ({
             onClick={onBulkCheckOut}
             disabled={selectedCheckedInCount === 0}
             title={selectedCheckedInCount === 0 ? 'Chưa có học sinh đã đón nào được chọn' : 'Trả các học sinh đã đón'}
+            className="flex-none whitespace-nowrap text-xs sm:text-sm"
           >
             Trả hàng loạt
           </Button>
@@ -212,6 +193,7 @@ export const AttendanceToolbar: React.FC<AttendanceToolbarProps> = ({
             onClick={onOpenBulkAbsentModal}
             disabled={selectedCount === 0}
             title={selectedCount === 0 ? 'Chọn học sinh để báo vắng' : 'Báo vắng cho học sinh đã chọn'}
+            className="flex-none whitespace-nowrap text-xs sm:text-sm"
           >
             Báo vắng
           </Button>
