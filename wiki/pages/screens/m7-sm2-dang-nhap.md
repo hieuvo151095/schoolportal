@@ -37,7 +37,7 @@ Cổng xác thực danh tính người dùng theo trường học cụ thể (`{
 | Mã | Yêu cầu | Trạng thái |
 |---|---|---|
 | DN-01 | Đăng nhập hệ thống theo tiền tố mã trường `{schoolCode}` và cấp cặp JWT Access/Refresh Token | OK |
-| DN-02 | Phân quyền kiểm soát truy cập theo mô hình Role-Based Access Control (RBAC) 3 cấp | MISSING |
+| DN-02 | Phân quyền kiểm soát truy cập theo mô hình Role-Based Access Control (RBAC) 3 cấp | OK |
 | DN-03 | Xác thực đăng nhập một lần SSO (Single Sign-On) tích hợp với hệ thống Managing Portal | MISSING |
 | DN-04 | Cơ chế khóa tạm thời tài khoản chống tấn công dò mật khẩu sau 5 lần thử thất bại | MISSING |
 | DN-05 | Kiểm soát vòng đời phiên làm việc và tự động làm mới JWT Access/Refresh Token | MISSING |
@@ -46,7 +46,7 @@ Cổng xác thực danh tính người dùng theo trường học cụ thể (`{
 | Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
 | DN-01 | Đăng nhập hệ thống theo tiền tố mã trường `{schoolCode}` và cấp cặp JWT Access/Refresh Token | Phân vùng session đa tab theo namespace `eco_session_{schoolCode}` và `eco_token_{schoolCode}` | OK | repo:app/src/utils/authSession.ts:16 |
-| DN-02 | Phân quyền kiểm soát truy cập theo mô hình Role-Based Access Control (RBAC) 3 cấp | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/signin.tsx:1 |
+| DN-02 | Phân quyền kiểm soát truy cập theo mô hình Role-Based Access Control (RBAC) 3 cấp | Mô hình RBAC 3 cấp (Module -> Resource:Action -> Data Scope) và bộ lọc checkAccessScope | OK | repo:app/src/utils/rbac.ts:1 |
 | DN-03 | Xác thực đăng nhập một lần SSO (Single Sign-On) tích hợp với hệ thống Managing Portal | Trang mock SSO tiếp nhận token qua URL query nhưng chưa liên thông auth backend | MISSING | repo:app/src/pages/sso/login.tsx:1 |
 | DN-04 | Cơ chế khóa tạm thời tài khoản chống tấn công dò mật khẩu sau 5 lần thử thất bại | Xử lý client validation cơ bản, chưa có rate-limiting backend | MISSING | repo:app/src/utils/authValidation.ts:1 |
 | DN-05 | Kiểm soát vòng đời phiên làm việc và tự động làm mới JWT Access/Refresh Token | Mock session helper, chưa có middleware silent refresh | MISSING | repo:app/src/utils/authSession.ts:1 |

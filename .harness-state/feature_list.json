@@ -21,12 +21,12 @@
       "name": "Mô hình phân quyền RBAC 3 cấp độ: Module $\\rightarrow$ Resource:Action (ví dụ: finance:invoice:approve) $\\rightarrow$ Data Scope (Toàn trường, Khối, Lớp hoặc Cá nhân)",
       "description": "Đặc tả: Mô hình phân quyền RBAC 3 cấp độ: Module $\\rightarrow$ Resource:Action (ví dụ: finance:invoice:approve) $\\rightarrow$ Data Scope (Toàn trường, Khối, Lớp hoặc Cá nhân) ; Chặn truy cập trái phép ở cả Gateway và Backend Controller",
       "priority": "P0",
-      "state": "pending",
+      "state": "passing",
       "spec_file": "wiki/pages/entities/auth-session.md",
       "spec_path": "wiki/pages/entities/auth-session.md",
       "spec_line": 36,
       "created_at": "2026-11-05T10:48:27Z",
-      "updated_at": "2026-11-05T10:48:27Z"
+      "updated_at": "2026-11-06T04:58:42Z"
     },
     {
       "id": "DN-03",

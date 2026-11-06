@@ -33,7 +33,7 @@ Thực thể Phiên đăng nhập & Phân quyền quản lý danh tính xác th�
 | Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
 | DN-01 | Đăng nhập hệ thống theo tiền tố mã trường `{schoolCode}` và cấp cặp JWT Access/Refresh Token | Cơ chế phân vùng session đa tab theo namespace `eco_session_{schoolCode}` và `eco_token_{schoolCode}` | OK | repo:app/src/utils/authSession.ts:16 |
-| DN-02 | Phân quyền kiểm soát truy cập theo mô hình Role-Based Access Control (RBAC) 3 cấp | Chưa có middleware kiểm tra scope RBAC ở backend | MISSING | repo:app/src/utils/authSession.ts |
+| DN-02 | Phân quyền kiểm soát truy cập theo mô hình Role-Based Access Control (RBAC) 3 cấp | Mô hình RBAC 3 cấp (Module -> Resource:Action -> Data Scope) và bộ lọc checkAccessScope | OK | repo:app/src/utils/rbac.ts:1 |
 
 ## Câu hỏi mở
 Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md) mục OQ-01).
