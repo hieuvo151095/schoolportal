@@ -1,48 +1,63 @@
 ---
-title: "Cổng Đăng nhập (SSO Sở GD&ĐT & Tài khoản Finviet)"
+title: Màn Hình Đăng Nhập Hệ Thống
 type: screen
 sources:
-  - docs/PRD_School_Operating_Portal_VI.md
-  - docs/PRD_Dang_Nhap_VI.md
-updated: 2026-11-04
+  - pages/sources/src-prd-school-operating-portal.md
+  - pages/sources/src-prd-dang-nhap-xac-thuc.md
+spec_ids:
+  - DN-01
+  - DN-02
+  - DN-03
+  - DN-04
+  - DN-05
+  - DN-06
+apps:
+  - web
+route_ids:
+  - /{schoolCode}/login
+  - /signin
+  - /sso/login
+status: missing
+updated: 2026-11-05
 ---
 
-# Cổng Đăng nhập (SSO Sở GD&ĐT & Tài khoản Finviet) (`M7/SM2`)
+# Màn Hình Đăng Nhập Hệ Thống
 
 ## Mục đích
-
-Cổng xác thực đăng nhập duy nhất cho mọi nhân sự trường học, hỗ trợ 2 luồng độc lập: Đăng nhập SSO bằng dữ liệu Sở GD&ĐT (chọn Sở, tìm trường, redirect SSO, ánh xạ CCCD) và Đăng nhập bằng tài khoản Finviet cấp (Mã trường, Email, Mật khẩu, Nhớ mật khẩu 24h).
-
-Thuộc phân hệ **[Cổng & Xác thực](../overview/module-m7-dang-nhap.md)**. Mã định danh tính năng Harness Loop: **`F001`** (Mức ưu tiên: `P0`).
+Cổng xác thực danh tính người dùng theo trường học cụ thể (`{schoolCode}`), hỗ trợ đăng nhập mật khẩu truyền thống và đăng nhập một lần (SSO - Single Sign-On), cấp phiên làm việc JWT và phân quyền giao diện; thực thi cô lập phiên đa tab (`eco_token_{schoolCode}`), phân kênh WebSocket theo tenant và dọn dẹp Redux Store qua `RESET_TENANT_STATE` khi chuyển trường.
 
 ## App / route / file code
-
-- **Route ứng dụng**: `/signin, /sso/login`
-- **Tài liệu đặc tả nguồn**: `docs/PRD_School_Operating_Portal_VI.md` (hoặc `docs/PRD_Dang_Nhap_VI.md`)
-- **Tệp mã nguồn liên quan**:
-  - `docs/src/pages/signin.tsx`
-  - `docs/src/pages/sso/login.tsx`
-  - `docs/src/types/auth.ts`
-  - `docs/tests/unit/auth.test.mjs`
+| App | Route | File |
+|---|---|---|
+| web | `/{schoolCode}/login` | repo:app/src/pages/signin.tsx |
+| web | `/signin` | repo:app/src/pages/signin.tsx |
+| web | `/sso/login` | repo:app/src/pages/sso/login.tsx |
 
 ## Yêu cầu spec
-
-- **SPEC-F001-01**: Hỗ trợ SegmentedControl chuyển đổi mượt mà giữa Tab SSO Sở và Tab Tài khoản Finviet.
-- **SPEC-F001-02**: Tab SSO: Combobox tìm kiếm trường tiếng Việt không dấu theo Sở đã chọn, redirect cổng SSO Sở và xử lý JWT callback.
-- **SPEC-F001-03**: Tab Tài khoản: Xác thực mã trường (tenant isolation), email, mật khẩu với icon ẩn/hiện mắt và checkbox ghi nhớ phiên 24h.
-- **SPEC-F001-04**: Chống tấn công dò quét tài khoản (Account Enumeration) bằng thông báo lỗi chung, điều hướng an toàn theo tham số `?next=`.
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| DN-01 | Đăng nhập hệ thống theo tiền tố mã trường `{schoolCode}` và cấp cặp JWT Access/Refresh Token | OK |
+| DN-02 | Phân quyền kiểm soát truy cập theo mô hình Role-Based Access Control (RBAC) 3 cấp | MISSING |
+| DN-03 | Xác thực đăng nhập một lần SSO (Single Sign-On) tích hợp với hệ thống Managing Portal | MISSING |
+| DN-04 | Cơ chế khóa tạm thời tài khoản chống tấn công dò mật khẩu sau 5 lần thử thất bại | MISSING |
+| DN-05 | Kiểm soát vòng đời phiên làm việc và tự động làm mới JWT Access/Refresh Token | MISSING |
 
 ## Khác biệt spec ↔ code
-
-| Mã yêu cầu | Mô tả tóm tắt | Hiện trạng | Bằng chứng mã nguồn | Ghi chú theo dõi |
+| Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| `SPEC-F001-01` | Hỗ trợ SegmentedControl chuyển đổi giữa SSO và Tài khoản | `OK` | repo:app/tests/unit/auth.test.mjs:90 | Verify Gate 14/14 tests PASS |
-| `SPEC-F001-02` | Tab SSO: Tìm trường tiếng Việt không dấu, redirect cổng SSO | `OK` | repo:app/tests/unit/auth.test.mjs:32 | Verify Gate 14/14 tests PASS |
-| `SPEC-F001-03` | Tab Tài khoản: Xác thực mã trường, email, mật khẩu ẩn/hiện | `OK` | repo:app/tests/unit/auth.test.mjs:8 | Verify Gate 14/14 tests PASS |
-| `SPEC-F001-04` | Chống dò quét tài khoản, điều hướng an toàn ?next= | `OK` | repo:app/tests/unit/auth.test.mjs:74 | Verify Gate 14/14 tests PASS |
+| DN-01 | Đăng nhập hệ thống theo tiền tố mã trường `{schoolCode}` và cấp cặp JWT Access/Refresh Token | Phân vùng session đa tab theo namespace `eco_session_{schoolCode}` và `eco_token_{schoolCode}` | OK | repo:app/src/utils/authSession.ts:16 |
+| DN-02 | Phân quyền kiểm soát truy cập theo mô hình Role-Based Access Control (RBAC) 3 cấp | Prototype frontend mockup, chưa có API backend | MISSING | repo:app/src/pages/signin.tsx:1 |
+| DN-03 | Xác thực đăng nhập một lần SSO (Single Sign-On) tích hợp với hệ thống Managing Portal | Trang mock SSO tiếp nhận token qua URL query nhưng chưa liên thông auth backend | MISSING | repo:app/src/pages/sso/login.tsx:1 |
+| DN-04 | Cơ chế khóa tạm thời tài khoản chống tấn công dò mật khẩu sau 5 lần thử thất bại | Xử lý client validation cơ bản, chưa có rate-limiting backend | MISSING | repo:app/src/utils/authValidation.ts:1 |
+| DN-05 | Kiểm soát vòng đời phiên làm việc và tự động làm mới JWT Access/Refresh Token | Mock session helper, chưa có middleware silent refresh | MISSING | repo:app/src/utils/authSession.ts:1 |
+| DN-06 | Thu hồi phiên làm việc từ xa và đăng xuất an toàn trên toàn bộ thiết bị đang hoạt động | Mock session helper, chưa có API thu hồi token từ xa | MISSING | repo:app/src/utils/authSession.ts:1 |
+
+## Câu hỏi mở
+Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md)).
 
 ## Liên quan
-
-- Phân hệ cha: [Cổng & Xác thực](../overview/module-m7-dang-nhap.md)
-- Tổng quan hệ thống: [Tổng quan School Operating Portal](../overview/project-overview.md)
-- [Mục lục LLM Wiki](../../index.md)
+- [Phân hệ Đăng nhập & Xác thực](../overview/module-auth.md)
+- [Thực thể Phiên đăng nhập](../entities/auth-session.md)
+- [Khái niệm Cô lập đa trường học](../concepts/multi-tenancy-isolation.md)
+- [Luồng đăng nhập đa trường](../flows/fl-dang-nhap-da-truong.md)
+- [Màn hình quản trị tài khoản cá nhân](../screens/m7-sm1-khac.md)

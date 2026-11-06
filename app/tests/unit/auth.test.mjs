@@ -153,3 +153,76 @@ describe('Đăng nhập — ràng buộc kiến trúc', () => {
     assert.ok(fs.existsSync(path.resolve('Portal DS/components/ComboboxField/README.md')));
   });
 });
+
+describe('Đăng nhập — Phân vùng session đa tab (OQ-13 & DN-01)', () => {
+  it('sinh key phân vùng chính xác theo mã trường (case-insensitive)', async () => {
+    const { getSessionKey, getTokenKey, RESET_TENANT_STATE } = await import('../../src/utils/authSession.ts');
+    assert.equal(getSessionKey('TH-ECO01'), 'eco_session_th-eco01');
+    assert.equal(getSessionKey('demo'), 'eco_session_demo');
+    assert.equal(getSessionKey(''), 'eco_auth_session');
+    assert.equal(getTokenKey('TH-ECO01'), 'eco_token_th-eco01');
+    assert.equal(getTokenKey('demo'), 'eco_token_demo');
+    assert.equal(getTokenKey(''), 'eco_token');
+    assert.equal(RESET_TENANT_STATE, 'RESET_TENANT_STATE');
+  });
+
+  it('cô lập dữ liệu phiên đa tab cho 2 trường đồng thời, không bị ghi đè', async () => {
+    const { saveSession, loadSession, clearSession, getAuthToken } = await import('../../src/utils/authSession.ts');
+
+    const storageMap = new Map();
+    const fakeStore = {
+      getItem: (k) => storageMap.get(k) || null,
+      setItem: (k, v) => storageMap.set(k, String(v)),
+      removeItem: (k) => storageMap.delete(k),
+      clear: () => storageMap.clear(),
+    };
+
+    global.window = {
+      sessionStorage: fakeStore,
+      localStorage: fakeStore,
+    };
+
+    try {
+      const sessionA = {
+        method: 'account',
+        schoolCode: 'TH-ECO01',
+        schoolName: 'Trường Tiểu học ECO 01',
+        displayName: 'Cô Nguyễn Thị Hoa',
+        role: 'teacher',
+        issuedAt: new Date().toISOString(),
+      };
+
+      const sessionB = {
+        method: 'account',
+        schoolCode: 'TH-ECO02',
+        schoolName: 'Trường THCS ECO 02',
+        displayName: 'Cô Trần Thị Mai',
+        role: 'teacher',
+        issuedAt: new Date().toISOString(),
+      };
+
+      // Lưu đồng thời 2 trường ở 2 tab
+      saveSession(sessionA, false);
+      saveSession(sessionB, false);
+
+      // Từng trường đọc đúng session và token độc lập của mình
+      const loadedA = loadSession('TH-ECO01');
+      const loadedB = loadSession('TH-ECO02');
+      assert.equal(loadedA?.displayName, 'Cô Nguyễn Thị Hoa');
+      assert.equal(loadedB?.displayName, 'Cô Trần Thị Mai');
+
+      const tokenA = getAuthToken('TH-ECO01');
+      const tokenB = getAuthToken('TH-ECO02');
+      assert.ok(tokenA && tokenA.includes('th-eco01'));
+      assert.ok(tokenB && tokenB.includes('th-eco02'));
+      assert.notEqual(tokenA, tokenB);
+
+      // Xóa session trường A, trường B vẫn tồn tại nguyên vẹn
+      clearSession('TH-ECO01');
+      assert.equal(loadSession('TH-ECO01'), null);
+      assert.equal(loadSession('TH-ECO02')?.displayName, 'Cô Trần Thị Mai');
+    } finally {
+      delete global.window;
+    }
+  });
+});

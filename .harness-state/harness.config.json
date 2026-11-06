@@ -15,7 +15,7 @@
     }
   },
   "verify": {
-    "command": "export PATH=\"$PWD/.tools/bin:$PATH\" && cd docs && node --experimental-strip-types --test tests/unit/auth.test.mjs tests/unit/account.test.mjs tests/unit/academicYear.test.mjs tests/unit/grade.test.mjs tests/unit/students.test.mjs tests/unit/class.test.mjs tests/unit/teachers.test.mjs tests/unit/settingFee.test.mjs tests/unit/mealRefund.test.mjs tests/unit/schoolProfile.test.mjs tests/unit/calendar.test.mjs tests/unit/schoolFees.test.mjs tests/unit/tuitionManagement.test.mjs tests/unit/discount.test.mjs tests/unit/invoices.test.mjs tests/unit/expenses.test.mjs tests/unit/reconciliation.test.mjs tests/unit/feeReports.test.mjs tests/unit/staffAttendance.test.mjs tests/unit/faceRecognition.test.mjs tests/unit/featureFlags.test.mjs tests/unit/attendance.test.mjs tests/unit/activity.test.mjs tests/unit/conversations.test.mjs tests/unit/notificationSettings.test.mjs tests/unit/media.test.mjs tests/unit/reports.test.mjs"
+    "command": "export PATH=\"$PWD/.tools/bin:$PATH\" && cd app && npm test"
   },
   "created_at": "2026-11-04T02:47:29Z"
 }
