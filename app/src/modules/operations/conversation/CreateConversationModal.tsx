@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SlideOver, Icon } from '@/components/ds';
+import { SlideOver, Icon, Dropdown } from '@/components/ds';
 import { useAppDispatch } from '../../../store';
 import { createConversation } from '../../../store/slices/conversationSlice';
 import { MessageCategory } from '../../../types/conversation';
@@ -13,11 +13,11 @@ export const CreateConversationModal: React.FC<Props> = ({ isOpen, onClose }) =>
   const dispatch = useAppDispatch();
   const [mode, setMode] = useState<'individual' | 'group'>('individual');
 
-  // Form states
-  const [selectedClass, setSelectedClass] = useState('lop-1a1');
-  const [selectedStudentId, setSelectedStudentId] = useState('hs-001');
+  // Form states - Initialized to empty to avoid auto-filling
+  const [selectedClass, setSelectedClass] = useState('');
+  const [selectedStudentId, setSelectedStudentId] = useState('');
   const [groupTitle, setGroupTitle] = useState('');
-  const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>(['hs-001', 'hs-002']);
+  const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
   const [category, setCategory] = useState<MessageCategory>('tin_nhan');
   const [content, setContent] = useState('');
 
@@ -48,7 +48,10 @@ export const CreateConversationModal: React.FC<Props> = ({ isOpen, onClose }) =>
 
   const isFormValid =
     content.trim().length > 0 &&
-    (mode === 'individual' ? Boolean(selectedStudentId) : groupTitle.trim().length > 0 && selectedStudentIds.length > 0);
+    selectedClass !== '' &&
+    (mode === 'individual'
+      ? Boolean(selectedStudentId)
+      : groupTitle.trim().length > 0 && selectedStudentIds.length > 0);
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -87,6 +90,9 @@ export const CreateConversationModal: React.FC<Props> = ({ isOpen, onClose }) =>
     // Reset and close
     setContent('');
     setGroupTitle('');
+    setSelectedClass('');
+    setSelectedStudentId('');
+    setSelectedStudentIds([]);
     onClose();
   };
 
@@ -110,8 +116,8 @@ export const CreateConversationModal: React.FC<Props> = ({ isOpen, onClose }) =>
       }}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Mode Toggle: Cá nhân vs Nhóm lớp */}
-        <div className="flex bg-[var(--bg-muted)] p-1 rounded-[var(--radius-8)] border border-[var(--border-default)]">
+        {/* Mode Selector */}
+        <div className="flex bg-[var(--bg-subtle)] p-1 rounded-[var(--radius-8)] border border-[var(--border-default)]">
           <button
             type="button"
             className={`flex-1 py-2 text-xs font-bold rounded-[var(--radius-6)] transition-all ${
@@ -141,19 +147,16 @@ export const CreateConversationModal: React.FC<Props> = ({ isOpen, onClose }) =>
           <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
             Lớp học <span className="text-[var(--text-danger)]">*</span>
           </label>
-          <div className="relative">
-            <select
-              value={selectedClass}
-              onChange={(e) => setSelectedClass(e.target.value)}
-              className="w-full appearance-none px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all font-medium pr-9"
-            >
-              <option value="lop-1a1">Lớp 1A1 (Cô Mai & Cô Thủy)</option>
-              <option value="lop-1a2">Lớp 1A2 (Cô Thảo & Thầy Tuấn)</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[var(--text-subtle)]">
-              <Icon name="chevron-down" size={14} />
-            </div>
-          </div>
+          <Dropdown
+            options={[
+              { value: 'lop-1a1', label: 'Lớp 1A1 (Cô Mai & Cô Thủy)' },
+              { value: 'lop-1a2', label: 'Lớp 1A2 (Cô Thảo & Thầy Tuấn)' },
+            ]}
+            value={selectedClass}
+            onChange={(val) => setSelectedClass(val)}
+            placeholder="-- Chọn lớp học --"
+            fullWidth
+          />
         </div>
 
         {/* Category */}
@@ -161,22 +164,19 @@ export const CreateConversationModal: React.FC<Props> = ({ isOpen, onClose }) =>
           <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
             Chuyên mục trao đổi
           </label>
-          <div className="relative">
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value as MessageCategory)}
-              className="w-full appearance-none px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all font-medium pr-9"
-            >
-              <option value="tin_nhan">Tin nhắn chung</option>
-              <option value="bao_vang">Báo vắng / Nghỉ học</option>
-              <option value="dan_thuoc">Dặn thuốc / Y tế</option>
-              <option value="yeu_cau_don_ve">Ủy quyền đón về</option>
-              <option value="gop_y">Góp ý / Kiến nghị</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[var(--text-subtle)]">
-              <Icon name="chevron-down" size={14} />
-            </div>
-          </div>
+          <Dropdown
+            options={[
+              { value: 'tin_nhan', label: 'Tin nhắn chung' },
+              { value: 'bao_vang', label: 'Báo vắng / Nghỉ học' },
+              { value: 'dan_thuoc', label: 'Dặn thuốc / Y tế' },
+              { value: 'yeu_cau_don_ve', label: 'Ủy quyền đón về' },
+              { value: 'gop_y', label: 'Góp ý / Kiến nghị' },
+            ]}
+            value={category}
+            onChange={(val) => setCategory(val as MessageCategory)}
+            placeholder="-- Chọn chuyên mục trao đổi --"
+            fullWidth
+          />
           <p className="text-[11px] text-[var(--text-subtle)] mt-1">
             Gắn nhãn để phụ huynh và giáo viên lọc tin nhắn quan trọng dễ dàng hơn.
           </p>
@@ -187,22 +187,18 @@ export const CreateConversationModal: React.FC<Props> = ({ isOpen, onClose }) =>
             <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
               Chọn học sinh & Phụ huynh <span className="text-[var(--text-danger)]">*</span>
             </label>
-            <div className="relative">
-              <select
-                value={selectedStudentId}
-                onChange={(e) => setSelectedStudentId(e.target.value)}
-                className="w-full appearance-none px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all font-medium pr-9"
-              >
-                {mockStudents.map((st) => (
-                  <option key={st.id} value={st.id}>
-                    {st.name} ({st.code}) - {st.parentName}
-                  </option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[var(--text-subtle)]">
-                <Icon name="chevron-down" size={14} />
-              </div>
-            </div>
+            <Dropdown
+              options={mockStudents.map((st) => ({
+                value: st.id,
+                label: `${st.name} (${st.code})`,
+                sublabel: `Phụ huynh: ${st.parentName}`,
+              }))}
+              value={selectedStudentId}
+              onChange={(val) => setSelectedStudentId(val)}
+              placeholder="-- Chọn học sinh & Phụ huynh --"
+              searchable
+              fullWidth
+            />
           </div>
         ) : (
           <>
@@ -260,11 +256,11 @@ export const CreateConversationModal: React.FC<Props> = ({ isOpen, onClose }) =>
             Nội dung tin nhắn ban đầu <span className="text-[var(--text-danger)]">*</span>
           </label>
           <textarea
-            rows={3}
-            placeholder="Nhập nội dung trao đổi ban đầu..."
+            rows={4}
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all placeholder:text-[var(--text-disabled)] resize-none"
+            placeholder="Nhập nội dung trao đổi ban đầu..."
+            className="w-full px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all resize-none placeholder:text-[var(--text-disabled)]"
           />
           <p className="text-[11px] text-[var(--text-subtle)] mt-1">
             Tin nhắn sẽ được gửi ngay sau khi tạo hội thoại thành công.

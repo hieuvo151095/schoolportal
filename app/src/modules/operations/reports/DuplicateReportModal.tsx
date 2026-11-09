@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SlideOver, Icon } from '@/components/ds';
+import { SlideOver, Dropdown } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { closeDuplicateModal, duplicateExtendedReport } from '../../../store/slices/reportsSlice';
 
@@ -14,6 +14,7 @@ export const DuplicateReportModal: React.FC = () => {
 
   const handleClose = () => {
     dispatch(closeDuplicateModal());
+    setTargetStudentId('');
   };
 
   const handleDuplicate = () => {
@@ -40,6 +41,13 @@ export const DuplicateReportModal: React.FC = () => {
 
     handleClose();
   };
+
+  const availableStudents = students
+    .filter((s) => s.studentId !== selectedDuplicateReport.studentId)
+    .map((s) => ({
+      value: s.studentId,
+      label: `${s.studentName} (${s.studentCode})`,
+    }));
 
   return (
     <SlideOver
@@ -107,25 +115,14 @@ export const DuplicateReportModal: React.FC = () => {
           <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
             Học sinh tiếp nhận mới <span className="text-[var(--text-danger)]">*</span>
           </label>
-          <div className="relative">
-            <select
-              value={targetStudentId}
-              onChange={(e) => setTargetStudentId(e.target.value)}
-              className="w-full appearance-none px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all font-medium pr-9"
-            >
-              <option value="">-- Chọn học sinh tiếp nhận --</option>
-              {students
-                .filter((s) => s.studentId !== selectedDuplicateReport.studentId)
-                .map((s) => (
-                  <option key={s.studentId} value={s.studentId}>
-                    {s.studentName} ({s.studentCode})
-                  </option>
-                ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[var(--text-subtle)]">
-              <Icon name="chevron-down" size={14} />
-            </div>
-          </div>
+          <Dropdown
+            options={availableStudents}
+            value={targetStudentId}
+            onChange={(val) => setTargetStudentId(val)}
+            placeholder="-- Chọn học sinh tiếp nhận --"
+            searchable
+            fullWidth
+          />
           <p className="text-[11px] text-[var(--text-subtle)] mt-1">
             Bản sao sẽ kế thừa toàn bộ tiêu chí đánh giá và lưu ở trạng thái Bản nháp.
           </p>

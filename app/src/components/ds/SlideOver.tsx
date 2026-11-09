@@ -72,6 +72,13 @@ export function SlideOver({
   const ext = extraAction;
   const hasFooter = footer || pri || sec || ext;
 
+  const cleanLabel = (label: ReactNode, icon?: IconName) => {
+    if (typeof label === 'string' && icon && label.trim().startsWith('+')) {
+      return label.trim().replace(/^\+\s*/, '');
+    }
+    return label;
+  };
+
   const renderedFooter =
     footer ||
     (hasFooter ? (
@@ -84,7 +91,7 @@ export function SlideOver({
               onClick={ext.onClick}
               disabled={ext.disabled}
             >
-              {ext.label}
+              {cleanLabel(ext.label, ext.icon)}
             </Button>
           ) : null}
         </div>
@@ -95,7 +102,7 @@ export function SlideOver({
               onClick={sec.onClick}
               disabled={sec.disabled}
             >
-              {sec.label}
+              {cleanLabel(sec.label, sec.icon)}
             </Button>
           ) : null}
           {pri ? (
@@ -105,7 +112,7 @@ export function SlideOver({
               onClick={pri.onClick}
               disabled={pri.disabled}
             >
-              {pri.label}
+              {cleanLabel(pri.label, pri.icon)}
             </Button>
           ) : null}
         </div>

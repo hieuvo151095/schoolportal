@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SlideOver, Icon } from '@/components/ds';
+import { SlideOver, Icon, Dropdown } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   removeStudentFromGroup,
@@ -232,22 +232,24 @@ export const GroupDetailsModal: React.FC<Props> = ({
                   Thêm thành viên nhận tin mới
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <select
+                  <Dropdown
+                    options={[
+                      { value: 'giao_vien', label: 'Giáo viên / Quản lý' },
+                      { value: 'phu_huynh', label: 'Phụ huynh khác' },
+                    ]}
                     value={newRecipientType}
-                    onChange={(e) =>
-                      setNewRecipientType(e.target.value as 'phu_huynh' | 'giao_vien')
+                    onChange={(val) =>
+                      setNewRecipientType(val as 'phu_huynh' | 'giao_vien')
                     }
-                    className="w-full text-xs px-2.5 py-1.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-6)] text-[var(--text-heading)]"
-                  >
-                    <option value="giao_vien">Giáo viên / Quản lý</option>
-                    <option value="phu_huynh">Phụ huynh khác</option>
-                  </select>
+                    size="sm"
+                    fullWidth
+                  />
                   <input
                     type="text"
                     placeholder="Họ và tên (ví dụ: Thầy Tuấn Anh)"
                     value={newRecipientName}
                     onChange={(e) => setNewRecipientName(e.target.value)}
-                    className="w-full text-xs px-2.5 py-1.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-6)] text-[var(--text-heading)]"
+                    className="w-full text-xs px-2.5 py-1.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-6)] text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)]"
                   />
                 </div>
                 <div className="flex justify-end gap-2 pt-1">
@@ -261,7 +263,8 @@ export const GroupDetailsModal: React.FC<Props> = ({
                   <button
                     type="button"
                     onClick={handleAddRecipient}
-                    className="px-3 py-1 text-xs font-bold text-white bg-[var(--eco-blue-strong)] hover:bg-[var(--eco-blue-hover)] rounded-[var(--radius-6)]"
+                    disabled={!newRecipientName.trim()}
+                    className="px-3 py-1 text-xs font-bold text-white bg-[var(--eco-blue-strong)] hover:bg-[var(--eco-blue-hover)] disabled:opacity-50 disabled:cursor-not-allowed rounded-[var(--radius-6)]"
                   >
                     Thêm ngay
                   </button>

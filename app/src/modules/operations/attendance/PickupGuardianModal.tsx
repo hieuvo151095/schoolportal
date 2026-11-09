@@ -28,12 +28,7 @@ export const PickupGuardianModal: React.FC<PickupGuardianModalProps> = ({
   useEffect(() => {
     if (student) {
       setDepartureTime(student.departureTime || getCurrentTimeHHmm());
-      const authorized = student.guardians.find((g) => g.isAuthorizedPickup);
-      if (authorized) {
-        setSelectedGuardianId(authorized.id);
-      } else if (student.guardians.length > 0) {
-        setSelectedGuardianId(student.guardians[0].id);
-      }
+      setSelectedGuardianId('');
       setValidationError(null);
     }
   }, [student]);
@@ -90,7 +85,7 @@ export const PickupGuardianModal: React.FC<PickupGuardianModalProps> = ({
       primaryAction={{
         label: 'Xác nhận trả học sinh',
         icon: 'check',
-        disabled: Boolean(validationError),
+        disabled: Boolean(validationError) || !selectedGuardianId || !departureTime,
         onClick: () => handleSubmit(),
       }}
       secondaryAction={{

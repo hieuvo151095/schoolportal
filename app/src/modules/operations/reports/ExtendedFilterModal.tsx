@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SlideOver, Icon } from '@/components/ds';
+import { SlideOver, Icon, Dropdown } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { setReportFilterCriteria, toggleExtendedFilter } from '../../../store/slices/reportsSlice';
 import { DEVELOPMENTAL_TEMPLATES } from '../../../services/mockReportsData';
@@ -48,6 +48,9 @@ export const ExtendedFilterModal: React.FC = () => {
         status: 'all',
       })
     );
+    setSearchQuery('');
+    setTemplateId('all');
+    setStatus('all');
     handleClose();
   };
 
@@ -96,23 +99,20 @@ export const ExtendedFilterModal: React.FC = () => {
           <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
             Mẫu báo cáo (Template)
           </label>
-          <div className="relative">
-            <select
-              value={templateId}
-              onChange={(e) => setTemplateId(e.target.value as 'all' | ReportTemplateId)}
-              className="w-full appearance-none px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all font-medium pr-9"
-            >
-              <option value="all">-- Tất cả mẫu báo cáo --</option>
-              {DEVELOPMENTAL_TEMPLATES.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name} ({t.category})
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[var(--text-subtle)]">
-              <Icon name="chevron-down" size={14} />
-            </div>
-          </div>
+          <Dropdown
+            options={[
+              { value: 'all', label: '-- Tất cả mẫu báo cáo --' },
+              ...DEVELOPMENTAL_TEMPLATES.map((t) => ({
+                value: t.id,
+                label: t.name,
+                sublabel: t.category,
+              })),
+            ]}
+            value={templateId}
+            onChange={(val) => setTemplateId(val as 'all' | ReportTemplateId)}
+            searchable
+            fullWidth
+          />
           <p className="text-[11px] text-[var(--text-subtle)] mt-1">
             Lọc theo tiêu chuẩn hoặc lĩnh vực giáo dục cụ thể.
           </p>
@@ -123,21 +123,17 @@ export const ExtendedFilterModal: React.FC = () => {
           <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
             Trạng thái xử lý báo cáo
           </label>
-          <div className="relative">
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value as 'all' | ReportLifecycleStatus)}
-              className="w-full appearance-none px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all font-medium pr-9"
-            >
-              <option value="all">-- Tất cả trạng thái --</option>
-              <option value="draft">Bản nháp (Draft)</option>
-              <option value="sent">Đã gửi cho phụ huynh (Sent)</option>
-              <option value="completed">Đã hoàn tất (Completed)</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[var(--text-subtle)]">
-              <Icon name="chevron-down" size={14} />
-            </div>
-          </div>
+          <Dropdown
+            options={[
+              { value: 'all', label: '-- Tất cả trạng thái --' },
+              { value: 'draft', label: 'Bản nháp (Draft)' },
+              { value: 'sent', label: 'Đã gửi cho phụ huynh (Sent)' },
+              { value: 'completed', label: 'Đã hoàn tất (Completed)' },
+            ]}
+            value={status}
+            onChange={(val) => setStatus(val as 'all' | ReportLifecycleStatus)}
+            fullWidth
+          />
           <p className="text-[11px] text-[var(--text-subtle)] mt-1">
             Lọc theo quy trình phê duyệt và phản hồi từ phụ huynh.
           </p>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SlideOver, Icon } from '@/components/ds';
+import { SlideOver, Icon, Dropdown } from '@/components/ds';
 import { useAppDispatch } from '../../../store';
 import { createExtendedReport } from '../../../store/slices/reportsSlice';
 import { DEVELOPMENTAL_TEMPLATES } from '../../../services/mockReportsData';
@@ -70,28 +70,47 @@ export const CreateExtendedReportSlideOver: React.FC<CreateExtendedReportSlideOv
 }) => {
   const dispatch = useAppDispatch();
 
-  const [studentId, setStudentId] = useState(MOCK_STUDENTS[0].id);
-  const [templateId, setTemplateId] = useState<ReportTemplateId>('tieng_viet');
+  const [studentId, setStudentId] = useState('');
+  const [templateId, setTemplateId] = useState<ReportTemplateId | ''>('');
   const [dateType, setDateType] = useState<'date_range' | 'stage'>('date_range');
-  const [startDate, setStartDate] = useState('2026-09-01');
-  const [endDate, setEndDate] = useState('2026-09-30');
-  const [stageName, setStageName] = useState('Kỳ 1 - Khởi động 2026');
-  const [createdBy, setCreatedBy] = useState('Cô Nguyễn Mai');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [stageName, setStageName] = useState('');
+  const [createdBy, setCreatedBy] = useState('');
   const [notes, setNotes] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  const selectedStudent = MOCK_STUDENTS.find((s) => s.id === studentId) || MOCK_STUDENTS[0];
-  const selectedTemplate = DEVELOPMENTAL_TEMPLATES.find((t) => t.id === templateId) || DEVELOPMENTAL_TEMPLATES[0];
+  const selectedStudent = MOCK_STUDENTS.find((s) => s.id === studentId);
+  const selectedTemplate = DEVELOPMENTAL_TEMPLATES.find((t) => t.id === templateId);
+
+  const isFormValid = Boolean(
+    studentId &&
+    templateId &&
+    createdBy.trim() &&
+    (dateType === 'date_range' ? startDate && endDate : stageName.trim())
+  );
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
-    if (!studentId) {
+    if (!selectedStudent) {
       setError('Vui lòng chọn học sinh cần tạo báo cáo.');
       return;
     }
-    if (!startDate || !endDate) {
+    if (!selectedTemplate) {
+      setError('Vui lòng chọn mẫu báo cáo đánh giá.');
+      return;
+    }
+    if (dateType === 'date_range' && (!startDate || !endDate)) {
       setError('Vui lòng nhập đầy đủ thời gian đánh giá.');
+      return;
+    }
+    if (dateType === 'stage' && !stageName.trim()) {
+      setError('Vui lòng nhập tên giai đoạn đánh giá.');
+      return;
+    }
+    if (!createdBy.trim()) {
+      setError('Vui lòng nhập giáo viên phụ trách đánh giá.');
       return;
     }
 
@@ -109,11 +128,11 @@ export const CreateExtendedReportSlideOver: React.FC<CreateExtendedReportSlideOv
       templateId: selectedTemplate.id as ReportTemplateId,
       templateName: selectedTemplate.name,
       dateType,
-      startDate,
-      endDate,
+      startDate: dateType === 'date_range' ? startDate : '2026-09-01',
+      endDate: dateType === 'date_range' ? endDate : '2026-09-30',
       stageName: dateType === 'stage' ? stageName : undefined,
       status: 'draft',
-      createdBy: createdBy.trim() || 'Cô Nguyễn Mai',
+      createdBy: createdBy.trim(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       checklistData: {},
@@ -133,8 +152,9 @@ export const CreateExtendedReportSlideOver: React.FC<CreateExtendedReportSlideOv
       description="Thiết lập biểu mẫu đánh giá năng lực hoặc thư tuần định kỳ gửi tới phụ huynh"
       width={520}
       primaryAction={{
-        label: '+ Tạo báo cáo mới',
+        label: 'Tạo báo cáo mới',
         icon: 'plus',
+        disabled: !isFormValid,
         onClick: () => handleSubmit(),
       }}
       secondaryAction={{
@@ -148,22 +168,21 @@ export const CreateExtendedReportSlideOver: React.FC<CreateExtendedReportSlideOv
           <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
             Chọn học sinh <span className="text-[var(--text-danger)]">*</span>
           </label>
-          <div className="relative">
-            <select
-              value={studentId}
-              onChange={(e) => setStudentId(e.target.value)}
-              className="w-full appearance-none px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all font-medium pr-9"
-            >
-              {MOCK_STUDENTS.map((st) => (
-                <option key={st.id} value={st.id}>
-                  {st.name} ({st.code}) - {st.className}
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[var(--text-subtle)]">
-              <Icon name="chevron-down" size={14} />
-            </div>
-          </div>
+          <Dropdown
+            options={MOCK_STUDENTS.map((st) => ({
+              value: st.id,
+              label: `${st.name} (${st.code}) - ${st.className}`,
+              sublabel: `Phụ huynh: ${st.parentName}`,
+            }))}
+            value={studentId}
+            onChange={(val) => {
+              setStudentId(val);
+              if (error) setError(null);
+            }}
+            placeholder="-- Chọn học sinh --"
+            searchable
+            fullWidth
+          />
           <p className="text-[11px] text-[var(--text-subtle)] mt-1">
             Học sinh được chọn sẽ liên kết tự động với sổ theo dõi và hồ sơ phụ huynh.
           </p>
@@ -174,25 +193,26 @@ export const CreateExtendedReportSlideOver: React.FC<CreateExtendedReportSlideOv
           <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
             Mẫu báo cáo đánh giá <span className="text-[var(--text-danger)]">*</span>
           </label>
-          <div className="relative">
-            <select
-              value={templateId}
-              onChange={(e) => setTemplateId(e.target.value as ReportTemplateId)}
-              className="w-full appearance-none px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all font-medium pr-9"
-            >
-              {DEVELOPMENTAL_TEMPLATES.map((tmpl) => (
-                <option key={tmpl.id} value={tmpl.id}>
-                  {tmpl.name} ({tmpl.category})
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[var(--text-subtle)]">
-              <Icon name="chevron-down" size={14} />
-            </div>
-          </div>
-          <p className="text-[11px] text-[var(--text-subtle)] mt-1">
-            {selectedTemplate.description}
-          </p>
+          <Dropdown
+            options={DEVELOPMENTAL_TEMPLATES.map((tmpl) => ({
+              value: tmpl.id,
+              label: tmpl.name,
+              sublabel: tmpl.description,
+            }))}
+            value={templateId}
+            onChange={(val) => {
+              setTemplateId(val as ReportTemplateId);
+              if (error) setError(null);
+            }}
+            placeholder="-- Chọn mẫu báo cáo đánh giá --"
+            searchable
+            fullWidth
+          />
+          {selectedTemplate && (
+            <p className="text-[11px] text-[var(--text-subtle)] mt-1">
+              {selectedTemplate.description}
+            </p>
+          )}
         </div>
 
         {/* Hình thức xác định thời gian */}
@@ -236,7 +256,10 @@ export const CreateExtendedReportSlideOver: React.FC<CreateExtendedReportSlideOv
               <input
                 type="date"
                 value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                onChange={(e) => {
+                  setStartDate(e.target.value);
+                  if (error) setError(null);
+                }}
                 className="w-full px-3 py-2 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)]"
               />
             </div>
@@ -247,7 +270,10 @@ export const CreateExtendedReportSlideOver: React.FC<CreateExtendedReportSlideOv
               <input
                 type="date"
                 value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
+                onChange={(e) => {
+                  setEndDate(e.target.value);
+                  if (error) setError(null);
+                }}
                 className="w-full px-3 py-2 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)]"
               />
             </div>
@@ -260,7 +286,10 @@ export const CreateExtendedReportSlideOver: React.FC<CreateExtendedReportSlideOv
             <input
               type="text"
               value={stageName}
-              onChange={(e) => setStageName(e.target.value)}
+              onChange={(e) => {
+                setStageName(e.target.value);
+                if (error) setError(null);
+              }}
               placeholder="VD: Kỳ 1 - Đánh giá giữa kỳ..."
               className="w-full px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)]"
             />
@@ -275,8 +304,12 @@ export const CreateExtendedReportSlideOver: React.FC<CreateExtendedReportSlideOv
           <input
             type="text"
             value={createdBy}
-            onChange={(e) => setCreatedBy(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)]"
+            placeholder="Nhập họ và tên giáo viên phụ trách..."
+            onChange={(e) => {
+              setCreatedBy(e.target.value);
+              if (error) setError(null);
+            }}
+            className="w-full px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] placeholder:text-[var(--text-disabled)]"
           />
           <p className="text-[11px] text-[var(--text-subtle)] mt-1">
             Hiển thị trên phần chữ ký và báo cáo gửi cho phụ huynh.

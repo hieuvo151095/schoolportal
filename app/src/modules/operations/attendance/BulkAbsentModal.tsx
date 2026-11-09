@@ -55,6 +55,7 @@ export const BulkAbsentModal: React.FC<BulkAbsentModalProps> = ({
       primaryAction={{
         label: 'Xác nhận báo vắng',
         icon: 'check',
+        disabled: selectedCount === 0,
         onClick: () => handleSubmit(),
       }}
       secondaryAction={{

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SlideOver, Icon } from '@/components/ds';
+import { SlideOver, Icon, Dropdown } from '@/components/ds';
 import { AudienceScope } from '../../../types/media';
 import { validateAlbumCreation } from '../../../utils/mediaValidation';
 
@@ -28,12 +28,19 @@ export const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [audienceScope, setAudienceScope] = useState<AudienceScope>('current_class');
+  const [audienceScope, setAudienceScope] = useState<AudienceScope | ''>('');
   const [selectedCover, setSelectedCover] = useState(SAMPLE_COVERS[0]);
   const [error, setError] = useState<string | null>(null);
 
+  const isFormValid = title.trim().length > 0 && audienceScope !== '';
+
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    if (!isFormValid || !audienceScope) {
+      setError('Vui lòng điền đầy đủ các thông tin bắt buộc.');
+      return;
+    }
+
     const validation = validateAlbumCreation(title);
     if (!validation.valid) {
       setError(validation.error || 'Vui lòng nhập tên album.');
@@ -50,6 +57,7 @@ export const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
     // Reset and close
     setTitle('');
     setDescription('');
+    setAudienceScope('');
     setError(null);
     onClose();
   };
@@ -63,8 +71,9 @@ export const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
       description="Khai báo thông tin album hoạt động, chọn phạm vi hiển thị và ảnh bìa đại diện"
       width={520}
       primaryAction={{
-        label: '+ Tạo album mới',
+        label: 'Tạo album mới',
         icon: 'plus',
+        disabled: !isFormValid,
         onClick: () => handleSubmit(),
       }}
       secondaryAction={{
@@ -105,20 +114,20 @@ export const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
           <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
             Đối tượng hiển thị <span className="text-[var(--text-danger)]">*</span>
           </label>
-          <div className="relative">
-            <select
-              value={audienceScope}
-              onChange={(e) => setAudienceScope(e.target.value as AudienceScope)}
-              className="w-full appearance-none px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all font-medium pr-9"
-            >
-              <option value="current_class">Lớp hiện tại (Lớp 1A1)</option>
-              <option value="whole_school">Toàn trường (Tất cả các lớp)</option>
-              <option value="custom_classes">Nhiều lớp khác nhau</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[var(--text-subtle)]">
-              <Icon name="chevron-down" size={14} />
-            </div>
-          </div>
+          <Dropdown
+            options={[
+              { value: 'current_class', label: 'Lớp hiện tại (Lớp 1A1)' },
+              { value: 'whole_school', label: 'Toàn trường (Tất cả các lớp)' },
+              { value: 'custom_classes', label: 'Nhiều lớp khác nhau' },
+            ]}
+            value={audienceScope}
+            onChange={(val) => {
+              setAudienceScope(val as AudienceScope);
+              if (error) setError(null);
+            }}
+            placeholder="-- Chọn đối tượng hiển thị --"
+            fullWidth
+          />
           <p className="text-[11px] text-[var(--text-subtle)] mt-1">
             Xác định nhóm học sinh và phụ huynh có quyền xem album ảnh này.
           </p>
@@ -161,19 +170,19 @@ export const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
                 >
                   <img
                     src={url}
-                    alt={`Ảnh bìa mẫu ${index + 1}`}
+                    alt={`Cover ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
                   {isSelected && (
                     <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-[var(--eco-blue-strong)] text-white flex items-center justify-center shadow-xs">
-                      <Icon name="check" size={11} />
+                      <Icon name="check" size={10} />
                     </div>
                   )}
                 </div>
               );
             })}
           </div>
-          <p className="text-[11px] text-[var(--text-subtle)] mt-1.5">
+          <p className="text-[11px] text-[var(--text-subtle)] mt-1">
             Ảnh bìa sẽ được hiển thị trên danh mục thư viện ảnh của lớp và cổng phụ huynh.
           </p>
         </div>
@@ -181,5 +190,3 @@ export const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
     </SlideOver>
   );
 };
-
-export default CreateAlbumModal;
