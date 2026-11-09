@@ -18,7 +18,13 @@ export const AttendanceSummaryCards: React.FC<AttendanceSummaryCardsProps> = ({ 
   const attendanceRate = totalStudents > 0 ? Math.round((presentCount / totalStudents) * 100) : 0;
 
   return (
-    <div className="ecomd-stat-group grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 w-full max-w-full min-w-0">
+    <div
+      className="ecomd-stat-group w-full max-w-full min-w-0"
+      style={{
+        '--ecomd-cols': 4,
+        marginBottom: 'var(--space-16)',
+      } as React.CSSProperties}
+    >
       <div className="min-w-0 overflow-hidden">
         <StatCard
           label="Có mặt hôm nay"

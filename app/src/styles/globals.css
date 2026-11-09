@@ -59,6 +59,15 @@ html, body, #__next {
   box-sizing: border-box !important;
 }
 
+/* StatCard grid base rule: defaults to 4 columns on desktop unless --ecomd-cols is provided */
+.ecomd-stat-group {
+  display: grid;
+  grid-template-columns: repeat(var(--ecomd-cols, 4), minmax(0, 1fr));
+  gap: var(--space-12);
+  width: 100%;
+  max-width: 100%;
+}
+
 @media (max-width: 767.98px) {
   /* Hide thead completely on mobile so its wide columns never expand the table or container */
   .ecomd-table thead,
