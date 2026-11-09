@@ -1286,7 +1286,7 @@ export function AppHeader(p: AppHeaderProps) {
   ) : null;
 
   return (
-    <header className={cx('ecomd-header flex-nowrap overflow-hidden flex-shrink-0', p.className)} style={p.style}>
+    <header className={cx('ecomd-header w-full flex-nowrap overflow-hidden flex-shrink-0', p.className)} style={p.style}>
       <div className="ecomd-header__left flex-shrink-0 min-w-0">
         {p.onMenu !== false && (
           <IconButton

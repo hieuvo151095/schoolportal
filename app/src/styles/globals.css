@@ -40,11 +40,23 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   background: var(--text-secondary);
 }
 
-/* Mobile responsive hardening and anti-overflow SSOT rules */
+/* Responsive Layout & Anti-overflow SSOT rules across Desktop, Tablet, and Mobile */
 html, body, #__next {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+}
+
+.ecomd-shell {
+  align-items: stretch !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.ecomd-header {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 @media (max-width: 767.98px) {
@@ -69,10 +81,8 @@ html, body, #__next {
     gap: var(--space-8) !important;
   }
 
-  /* Header stays neatly contained without overflow */
+  /* Header compact padding on mobile */
   .ecomd-header {
-    width: 100% !important;
-    max-width: 100% !important;
     padding-left: var(--space-12) !important;
     padding-right: var(--space-12) !important;
   }

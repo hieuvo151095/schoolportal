@@ -94,7 +94,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
 }) => {
   const router = useRouter();
   const schoolCode = (router.query.schoolCode as string) || propSchoolCode || 'demo';
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -396,7 +396,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
   ];
 
   return (
-    <div className={`ecomd-shell h-screen overflow-hidden flex flex-col bg-[var(--bg-canvas)] w-full max-w-full min-w-0 ${mounted && isMobile ? 'ecomd-shell--mobile' : 'ecomd-shell--desktop'}`}>
+    <div className={`ecomd-shell h-screen overflow-hidden flex flex-col items-stretch bg-[var(--bg-canvas)] w-full max-w-full min-w-0 ${mounted && isMobile ? 'ecomd-shell--mobile' : 'ecomd-shell--desktop'}`}>
       {/* Global Top-Right Toast Notifications for all modules */}
       <GlobalToastContainer />
 
