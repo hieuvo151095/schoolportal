@@ -896,6 +896,7 @@ export const ChatThread: React.FC<Props> = ({
   // Close settings dropdown on click outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
+      if ((e.target as HTMLElement)?.closest('[data-settings-toggle]')) return;
       if (
         settingsDropdownRef.current &&
         !settingsDropdownRef.current.contains(e.target as Node)
@@ -1036,21 +1037,112 @@ export const ChatThread: React.FC<Props> = ({
   const pinnedIds = activeConv.pinnedMessageIds || [];
   const pinnedMessages = rawMessages.filter((m) => pinnedIds.includes(m.id));
 
+  const renderSettingsMenu = () => {
+    if (!isSettingsOpen) return null;
+    return (
+      <SettingsDropdown ref={settingsDropdownRef} style={{ maxWidth: 'calc(100vw - 32px)', right: 0 }}>
+        <DropdownHeader>
+          <span>Cài đặt cuộc trò chuyện</span>
+          <span
+            style={{ cursor: 'pointer', color: '#94a3b8' }}
+            onClick={() => setIsSettingsOpen(false)}
+          >
+            ✕
+          </span>
+        </DropdownHeader>
+
+        {/* Lock parents from sending messages */}
+        <SettingItem>
+          <SettingItemInfo>
+            <div className="title">Khóa phụ huynh gửi tin</div>
+            <div className="desc">
+              Chỉ giáo viên được gửi tin nhắn. Phụ huynh chỉ có quyền xem tin nhắn.
+            </div>
+          </SettingItemInfo>
+          <ToggleBtn
+            $isActive={!!activeConv.isParentLocked}
+            onClick={() =>
+              dispatch(toggleLockParents({ conversationId: activeConv.id }))
+            }
+          >
+            {activeConv.isParentLocked ? 'Mở khóa' : 'Khóa'}
+          </ToggleBtn>
+        </SettingItem>
+
+        {/* Archive the chat to lock messages from everyone */}
+        <SettingItem>
+          <SettingItemInfo>
+            <div className="title">Lưu trữ cuộc trò chuyện</div>
+            <div className="desc">
+              Khóa gửi tin nhắn đối với tất cả thành viên (cả giáo viên và phụ huynh).
+            </div>
+          </SettingItemInfo>
+          <ToggleBtn
+            $isActive={!!activeConv.isArchived}
+            onClick={() =>
+              dispatch(toggleArchiveChat({ conversationId: activeConv.id }))
+            }
+          >
+            {activeConv.isArchived ? 'Bỏ lưu trữ' : 'Lưu trữ'}
+          </ToggleBtn>
+        </SettingItem>
+      </SettingsDropdown>
+    );
+  };
+
   return (
     <ThreadContainer>
       <ThreadHeader>
-        <HeaderTopRow>
-          <ConvInfo>
+        {/* 1. Mobile Header (< 768px): 2 separate lines as requested */}
+        <div className="flex md:hidden flex-col gap-2 w-full">
+          {/* Line 1: [← Danh sách] (left) & [⚙️] (right) */}
+          <div className="flex items-center justify-between w-full">
             {onBack && (
               <button
                 type="button"
                 onClick={onBack}
-                className="md:hidden inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 py-1 px-2.5 rounded-lg bg-blue-50 border border-blue-200 cursor-pointer flex-shrink-0"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 py-1.5 px-3 rounded-lg bg-blue-50 border border-blue-200 cursor-pointer min-h-[36px]"
                 aria-label="Quay lại danh sách hội thoại"
               >
                 <span>← Danh sách</span>
               </button>
             )}
+
+            <div className="relative ml-auto flex items-center gap-2">
+              {isGroup && (
+                <GroupAvatarCluster onClick={onOpenGroupDetails} style={{ padding: '4px 8px', fontSize: '12px' }}>
+                  👥 {activeConv.recipients.length}
+                </GroupAvatarCluster>
+              )}
+
+              <SettingsBtn
+                data-settings-toggle="true"
+                $active={isSettingsOpen}
+                onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                title="Cài đặt cuộc trò chuyện"
+                style={{ minHeight: '36px', minWidth: '36px', padding: '6px 10px' }}
+              >
+                <span>⚙️</span>
+              </SettingsBtn>
+
+              {renderSettingsMenu()}
+            </div>
+          </div>
+
+          {/* Line 2: Tên phụ huynh và Lớp */}
+          <div className="flex items-center gap-2 flex-wrap min-w-0 w-full">
+            <ConvName style={{ fontSize: '15px' }}>
+              {activeConv.title}
+              {activeConv.isArchived && <span title="Đã lưu trữ" style={{ fontSize: '14px' }}>📦</span>}
+              {activeConv.isParentLocked && <span title="Khóa phụ huynh" style={{ fontSize: '14px' }}>🔒</span>}
+            </ConvName>
+            <ClassPill>{activeConv.className}</ClassPill>
+          </div>
+        </div>
+
+        {/* 2. Desktop Header (>= 768px): Single line */}
+        <div className="hidden md:flex items-center justify-between gap-3 w-full">
+          <ConvInfo>
             <ConvName>
               {activeConv.title}
               {activeConv.isArchived && <span title="Đã lưu trữ" style={{ fontSize: '15px' }}>📦</span>}
@@ -1059,16 +1151,15 @@ export const ChatThread: React.FC<Props> = ({
             <ClassPill>{activeConv.className}</ClassPill>
           </ConvInfo>
 
-          <HeaderActions ref={settingsDropdownRef}>
+          <HeaderActions>
             {isGroup && (
               <GroupAvatarCluster onClick={onOpenGroupDetails}>
                 👥 {activeConv.recipients.length} Thành viên • Chi tiết
               </GroupAvatarCluster>
             )}
 
-
-            {/* Setting Icon for Chat Controls */}
             <SettingsBtn
+              data-settings-toggle="true"
               $active={isSettingsOpen}
               onClick={() => setIsSettingsOpen(!isSettingsOpen)}
               title="Cài đặt cuộc trò chuyện"
@@ -1077,57 +1168,9 @@ export const ChatThread: React.FC<Props> = ({
               <span className="hidden sm:inline"> Cài đặt</span>
             </SettingsBtn>
 
-            {isSettingsOpen && (
-              <SettingsDropdown>
-                <DropdownHeader>
-                  <span>Cài đặt cuộc trò chuyện</span>
-                  <span
-                    style={{ cursor: 'pointer', color: '#94a3b8' }}
-                    onClick={() => setIsSettingsOpen(false)}
-                  >
-                    ✕
-                  </span>
-                </DropdownHeader>
-
-                {/* Lock parents from sending messages */}
-                <SettingItem>
-                  <SettingItemInfo>
-                    <div className="title">Khóa phụ huynh gửi tin</div>
-                    <div className="desc">
-                      Chỉ giáo viên được gửi tin nhắn. Phụ huynh chỉ có quyền xem tin nhắn.
-                    </div>
-                  </SettingItemInfo>
-                  <ToggleBtn
-                    $isActive={!!activeConv.isParentLocked}
-                    onClick={() =>
-                      dispatch(toggleLockParents({ conversationId: activeConv.id }))
-                    }
-                  >
-                    {activeConv.isParentLocked ? 'Mở khóa' : 'Khóa'}
-                  </ToggleBtn>
-                </SettingItem>
-
-                {/* Archive the chat to lock messages from everyone */}
-                <SettingItem>
-                  <SettingItemInfo>
-                    <div className="title">Lưu trữ cuộc trò chuyện</div>
-                    <div className="desc">
-                      Khóa gửi tin nhắn đối với tất cả thành viên (cả giáo viên và phụ huynh).
-                    </div>
-                  </SettingItemInfo>
-                  <ToggleBtn
-                    $isActive={!!activeConv.isArchived}
-                    onClick={() =>
-                      dispatch(toggleArchiveChat({ conversationId: activeConv.id }))
-                    }
-                  >
-                    {activeConv.isArchived ? 'Bỏ lưu trữ' : 'Lưu trữ'}
-                  </ToggleBtn>
-                </SettingItem>
-              </SettingsDropdown>
-            )}
+            {renderSettingsMenu()}
           </HeaderActions>
-        </HeaderTopRow>
+        </div>
 
         {!isGroup && (
           <FilterRow>

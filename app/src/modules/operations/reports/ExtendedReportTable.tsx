@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '../../../store';
@@ -8,7 +8,7 @@ import {
 } from '../../../store/slices/reportsSlice';
 import { canDeleteReport, filterExtendedReports } from '../../../utils/reportsValidation';
 import { ExtendedReport } from '../../../types/reports';
-import { Avatar, StatusTag, Icon, IconButton } from '@/components/ds';
+import { Avatar, StatusTag, Icon, IconButton, DropdownMenu } from '@/components/ds';
 
 export const ExtendedReportTable: React.FC = () => {
   const router = useRouter();
@@ -17,19 +17,6 @@ export const ExtendedReportTable: React.FC = () => {
 
   const reports = useAppSelector((state) => state.reports.extendedReports);
   const filters = useAppSelector((state) => state.reports.reportFilters);
-
-  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
-
-  // Close dropdown menu on document click
-  useEffect(() => {
-    const handleDocumentClick = () => {
-      setOpenDropdownId(null);
-    };
-    document.addEventListener('click', handleDocumentClick);
-    return () => {
-      document.removeEventListener('click', handleDocumentClick);
-    };
-  }, []);
 
   const filteredReports = filterExtendedReports(reports, filters);
 
@@ -80,44 +67,45 @@ export const ExtendedReportTable: React.FC = () => {
         <table className="ecomd-table">
           <thead>
             <tr>
-              <th className="body-xs-semibold">Học sinh</th>
+              <th className="body-xs-semibold is-primary">Học sinh</th>
               <th className="body-xs-semibold">Mẫu báo cáo</th>
               <th className="body-xs-semibold">Kỳ / Giai đoạn đánh giá</th>
-              <th className="body-xs-semibold" style={{ textAlign: 'center' }}>Trạng thái</th>
+              <th className="body-xs-semibold hidden md:table-cell" style={{ textAlign: 'center' }}>
+                Trạng thái
+              </th>
               <th className="body-xs-semibold">Người tạo / Cập nhật</th>
-              <th className="body-xs-semibold" style={{ textAlign: 'right' }}>Thao tác</th>
+              <th className="body-xs-semibold is-actions" style={{ textAlign: 'right' }}>
+                Thao tác
+              </th>
             </tr>
           </thead>
           <tbody>
-            {filteredReports.map((report, index) => {
+            {filteredReports.map((report) => {
               const isDraft = report.status === 'draft';
-              const isNearBottom = index >= filteredReports.length - 2 && filteredReports.length > 2;
-              const isMenuOpen = openDropdownId === report.id;
 
               return (
                 <tr key={report.id}>
-                  {/* Student Cell */}
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-10)' }}>
+                  {/* Student Cell (is-primary): Tên HS nằm cạnh Avatar */}
+                  <td className="is-primary">
+                    <div className="ecomd-cell__value flex items-center gap-3">
                       <Avatar
                         src={report.studentAvatar}
                         name={report.studentName}
                         size="md"
+                        className="shrink-0"
                       />
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <div className="flex flex-col min-w-0">
                         <Link
                           href={`/${schoolCode}/reports/extended/${report.id}`}
-                          className="body-sm-bold"
+                          className="body-sm-bold hover:underline"
                           style={{
                             color: 'var(--text-heading)',
                             textDecoration: 'none',
                           }}
-                          onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--eco-blue-strong)')}
-                          onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-heading)')}
                         >
                           {report.studentName}
                         </Link>
-                        <span className="body-xs" style={{ color: 'var(--text-subtle)' }}>
+                        <span className="body-xs text-[var(--text-subtle)]">
                           {report.studentAge} • {report.className}
                         </span>
                       </div>
@@ -126,151 +114,87 @@ export const ExtendedReportTable: React.FC = () => {
 
                   {/* Template Name */}
                   <td>
-                    <span
-                      style={{
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        color: 'var(--text-body)',
-                        background: 'var(--bg-muted)',
-                        padding: '3px 8px',
-                        borderRadius: 'var(--radius-4)',
-                        border: '1px solid var(--border-default)',
-                      }}
-                    >
-                      {report.templateName}
-                    </span>
-                  </td>
-
-                  {/* Stage / Date */}
-                  <td>
-                    <span className="body-xs-semibold" style={{ color: 'var(--text-heading)' }}>
-                      {report.stageName || `${report.startDate} ~ ${report.endDate}`}
-                    </span>
-                  </td>
-
-                  {/* Status */}
-                  <td style={{ textAlign: 'center' }}>
-                    {renderStatusBadge(report.status)}
-                  </td>
-
-                  {/* Created By / Updated At */}
-                  <td>
-                    <div className="body-xs-semibold" style={{ color: 'var(--text-heading)' }}>
-                      {report.createdBy}
-                    </div>
-                    <div className="body-xs" style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                      {report.updatedAt?.split('T')[0]}
-                    </div>
-                  </td>
-
-                  {/* Action Menu */}
-                  <td style={{ textAlign: 'right' }}>
-                    <div style={{ position: 'relative', display: 'inline-block' }}>
-                      <IconButton
-                        icon="ellipsis"
-                        label="Tùy chọn thao tác"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setOpenDropdownId(openDropdownId === report.id ? null : report.id);
+                    <div className="flex items-center">
+                      <span
+                        style={{
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          color: 'var(--text-body)',
+                          background: 'var(--bg-muted)',
+                          padding: '3px 8px',
+                          borderRadius: 'var(--radius-4)',
+                          border: '1px solid var(--border-default)',
                         }}
+                      >
+                        {report.templateName}
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* Stage / Date & Status: Trạng thái nằm cùng hàng với thời gian trên mobile */}
+                  <td>
+                    <div className="flex items-center justify-between gap-2 w-full">
+                      <span className="body-xs-semibold" style={{ color: 'var(--text-heading)' }}>
+                        {report.stageName || `${report.startDate} ~ ${report.endDate}`}
+                      </span>
+                      <span className="inline-flex md:hidden shrink-0">
+                        {renderStatusBadge(report.status)}
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* Status on Desktop */}
+                  <td className="desktop-only hidden md:table-cell" style={{ textAlign: 'center' }}>
+                    <div className="flex justify-center">
+                      {renderStatusBadge(report.status)}
+                    </div>
+                  </td>
+
+                  {/* Created By / Updated At: Thời gian nằm ngay dưới tên cô */}
+                  <td>
+                    <div className="flex flex-col items-start text-left leading-tight w-full">
+                      <span className="body-xs-semibold" style={{ color: 'var(--text-heading)' }}>
+                        {report.createdBy}
+                      </span>
+                      <span
+                        className="body-xs font-mono mt-0.5"
+                        style={{ color: 'var(--text-subtle)' }}
+                      >
+                        {report.updatedAt?.split('T')[0]}
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* Action Menu (is-actions): Neo góc phải, Dropdown không bị che */}
+                  <td className="is-actions" style={{ textAlign: 'right' }}>
+                    <div className="ecomd-cell__value flex justify-end">
+                      <DropdownMenu
+                        trigger={
+                          <IconButton
+                            icon="ellipsis"
+                            label="Tùy chọn thao tác"
+                            size="sm"
+                          />
+                        }
+                        align="right"
+                        items={[
+                          {
+                            label: 'Xem / Đánh giá',
+                            href: `/${schoolCode}/reports/extended/${report.id}`,
+                          },
+                          {
+                            label: 'Nhân bản',
+                            onClick: () => handleDuplicate(report),
+                          },
+                          { divider: true },
+                          {
+                            label: 'Xóa bản nháp',
+                            tone: 'danger',
+                            disabled: !isDraft,
+                            onClick: () => handleDelete(report),
+                          },
+                        ]}
                       />
-
-                      {isMenuOpen && (
-                        <div
-                          style={{
-                            position: 'absolute',
-                            right: 0,
-                            top: isNearBottom ? undefined : '100%',
-                            bottom: isNearBottom ? '100%' : undefined,
-                            marginTop: isNearBottom ? undefined : '4px',
-                            marginBottom: isNearBottom ? '4px' : undefined,
-                            width: '180px',
-                            background: 'var(--bg-surface)',
-                            border: '1px solid var(--border-default)',
-                            borderRadius: 'var(--radius-8)',
-                            boxShadow: 'var(--shadow-lg)',
-                            padding: '4px',
-                            zIndex: 60,
-                            textAlign: 'left',
-                          }}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <Link
-                            href={`/${schoolCode}/reports/extended/${report.id}`}
-                            style={{
-                              display: 'block',
-                              padding: '8px 12px',
-                              fontSize: '12px',
-                              fontWeight: 500,
-                              color: 'var(--text-heading)',
-                              textDecoration: 'none',
-                              borderRadius: 'var(--radius-4)',
-                            }}
-                            onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-subtle)')}
-                            onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                          >
-                            Xem / Đánh giá
-                          </Link>
-
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setOpenDropdownId(null);
-                              handleDuplicate(report);
-                            }}
-                            style={{
-                              width: '100%',
-                              display: 'block',
-                              padding: '8px 12px',
-                              fontSize: '12px',
-                              fontWeight: 500,
-                              color: 'var(--text-heading)',
-                              background: 'transparent',
-                              border: 0,
-                              borderRadius: 'var(--radius-4)',
-                              cursor: 'pointer',
-                              textAlign: 'left',
-                            }}
-                            onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-subtle)')}
-                            onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                          >
-                            Nhân bản
-                          </button>
-
-                          <div style={{ height: '1px', background: 'var(--border-subtle)', margin: '4px 0' }} />
-
-                          <button
-                            type="button"
-                            disabled={!isDraft}
-                            onClick={() => {
-                              if (isDraft) {
-                                setOpenDropdownId(null);
-                                handleDelete(report);
-                              }
-                            }}
-                            style={{
-                              width: '100%',
-                              display: 'block',
-                              padding: '8px 12px',
-                              fontSize: '12px',
-                              fontWeight: 500,
-                              color: isDraft ? 'var(--semantic-danger-strong)' : 'var(--text-disabled)',
-                              background: 'transparent',
-                              border: 0,
-                              borderRadius: 'var(--radius-4)',
-                              cursor: isDraft ? 'pointer' : 'not-allowed',
-                              textAlign: 'left',
-                            }}
-                            onMouseEnter={(e) => {
-                              if (isDraft) e.currentTarget.style.background = 'var(--semantic-danger-soft)';
-                            }}
-                            onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                          >
-                            Xóa bản nháp
-                          </button>
-                        </div>
-                      )}
                     </div>
                   </td>
                 </tr>

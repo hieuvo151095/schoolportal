@@ -182,47 +182,17 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
             )}
 
             <div className="p-3.5 sm:p-5">
-              {/* Header Row */}
-              <div className="flex items-start justify-between gap-2.5 sm:gap-3">
-                <div className="flex items-start gap-2.5 sm:gap-3 min-w-0 flex-1">
+              {/* Header: Row 1 has Avatar + Author Name on left, Badges & Actions on right */}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5 min-w-0 flex-1 pr-2">
                   <Avatar
                     src={post.authorAvatarUrl}
                     name={post.authorName}
                     size="md"
-                    className="shrink-0 mt-0.5"
+                    className="shrink-0"
                   />
-                  <div className="min-w-0 flex-1">
-                    {/* Row 1: Tên người đăng nằm trên 1 hàng riêng biệt */}
-                    <div className="body-sm-bold text-[var(--text-heading)] leading-snug">
-                      {post.authorName}
-                    </div>
-
-                    {/* Row 2: Thông tin lớp, bộ môn/vai trò và thời gian cùng hàng dưới tên người đăng */}
-                    <div className="flex flex-wrap items-center gap-1.5 mt-1 text-xs text-[var(--text-subtle)] leading-normal">
-                      <span
-                        className="whitespace-nowrap font-semibold text-[11px] px-1.5 py-0.5 rounded shrink-0"
-                        style={{
-                          color: 'var(--eco-blue-strong)',
-                          background: 'var(--semantic-info-soft)',
-                        }}
-                      >
-                        {post.scopeLabel || (post.audienceScope === 'whole_school' ? 'Toàn trường' : 'Lớp 1A1')}
-                      </span>
-                      <span className="text-slate-300">•</span>
-                      <span
-                        className="whitespace-nowrap font-medium text-[11px] px-1.5 py-0.5 rounded shrink-0"
-                        style={{
-                          background: 'var(--bg-muted)',
-                          color: 'var(--text-body)',
-                        }}
-                      >
-                        {post.authorRole}
-                      </span>
-                      <span className="text-slate-300">•</span>
-                      <span className="whitespace-nowrap text-[11px] text-[var(--text-subtle)]" suppressHydrationWarning>
-                        {formatTimestamp(post.createdAt)}
-                      </span>
-                    </div>
+                  <div className="body-sm-bold text-[var(--text-heading)] leading-snug truncate">
+                    {post.authorName}
                   </div>
                 </div>
 
@@ -349,6 +319,35 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
                     )}
                   </div>
                 </div>
+              </div>
+
+              {/* Header: Row 2 has Lớp + Vai trò + Thời gian, indented under name with full width */}
+              <div className="flex flex-wrap items-center gap-1.5 mt-1.5 pl-[42px] text-xs text-[var(--text-subtle)] leading-normal">
+                <span
+                  className="whitespace-nowrap font-semibold text-[11px] px-1.5 py-0.5 rounded shrink-0"
+                  style={{
+                    color: 'var(--eco-blue-strong)',
+                    background: 'var(--semantic-info-soft)',
+                  }}
+                >
+                  {post.scopeLabel || (post.audienceScope === 'whole_school' ? 'Toàn trường' : 'Lớp 1A1')}
+                </span>
+                <span className="text-slate-300">•</span>
+                <span className="inline-flex items-center gap-1.5 whitespace-nowrap shrink-0">
+                  <span
+                    className="font-medium text-[11px] px-1.5 py-0.5 rounded shrink-0"
+                    style={{
+                      background: 'var(--bg-muted)',
+                      color: 'var(--text-body)',
+                    }}
+                  >
+                    {post.authorRole}
+                  </span>
+                  <span className="text-slate-300">•</span>
+                  <span className="text-[11px] text-[var(--text-subtle)] font-numeric shrink-0" suppressHydrationWarning>
+                    {formatTimestamp(post.createdAt)}
+                  </span>
+                </span>
               </div>
 
               {/* Post Content */}

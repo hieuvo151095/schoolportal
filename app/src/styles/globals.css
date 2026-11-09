@@ -66,6 +66,12 @@ html, body, #__next {
     display: none !important;
   }
 
+  /* Hide mobile-suppressed cells completely */
+  .ecomd-table tbody td.desktop-only,
+  .ds-table tbody td.desktop-only {
+    display: none !important;
+  }
+
   /* Table and containers must never exceed mobile screen */
   .ecomd-table,
   .ecomd-table-card,
