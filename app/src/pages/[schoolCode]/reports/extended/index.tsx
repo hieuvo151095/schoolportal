@@ -68,32 +68,24 @@ export default function ExtendedReportsPage() {
           />
 
           {/* 2. Filter Toolbar */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: 'var(--space-12)',
-              padding: 'var(--space-16) var(--space-20)',
-              borderBottom: '1px solid var(--border-default)',
-              background: 'var(--bg-surface)',
-            }}
-          >
-            <div style={{ width: '360px', maxWidth: '100%' }}>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3.5 sm:px-5 sm:py-4 border-b border-[var(--border-default)] bg-[var(--bg-surface)]">
+            <div className="w-full sm:w-[360px]">
               <SearchField
                 value={filter.searchQuery || ''}
                 onChange={(q) => dispatch(setReportFilterCriteria({ searchQuery: q }))}
                 placeholder="Tìm kiếm học sinh theo tên hoặc mã..."
+                block
+                className="w-full"
               />
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}>
+            <div className="w-full sm:w-auto flex items-center justify-end">
               <Button
                 variant="secondary"
                 icon="filter"
                 active={Boolean(hasActiveFilters)}
                 onClick={() => dispatch(toggleExtendedFilter(true))}
+                className="w-full sm:w-auto justify-center"
               >
                 Bộ lọc nâng cao {hasActiveFilters && '(Đang áp dụng)'}
               </Button>

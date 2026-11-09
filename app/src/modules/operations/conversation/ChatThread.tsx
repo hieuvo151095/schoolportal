@@ -409,11 +409,14 @@ const SenderLabel = styled.div<{ $isMe: boolean }>`
   margin-bottom: 3px;
   display: flex;
   align-items: center;
+  justify-content: ${({ $isMe }) => ($isMe ? 'flex-end' : 'flex-start')};
   gap: 6px;
+  width: 100%;
 `;
 
-const BubbleWrapper = styled.div`
+const BubbleWrapper = styled.div<{ $isMe?: boolean }>`
   display: flex;
+  flex-direction: ${({ $isMe }) => ($isMe ? 'row-reverse' : 'row')};
   align-items: flex-end;
   gap: 8px;
   max-width: 70%;
@@ -421,6 +424,10 @@ const BubbleWrapper = styled.div`
 
   @media (max-width: 767.98px) {
     max-width: 88%;
+
+    .msg-menu {
+      display: none;
+    }
   }
 
   &:hover .msg-menu {
@@ -1273,7 +1280,7 @@ export const ChatThread: React.FC<Props> = ({
                   <span style={{ fontWeight: 400, fontSize: '10px' }}>• {msg.timestamp}</span>
                 </SenderLabel>
 
-                <BubbleWrapper>
+                <BubbleWrapper $isMe={isMe}>
                   <Bubble $isMe={isMe} $isRecalled={msg.isRecalled} $isPinned={isPinned}>
                     {isPinned && <PinnedBadge>📌 Đã ghim</PinnedBadge>}
                     <div>{msg.content}</div>

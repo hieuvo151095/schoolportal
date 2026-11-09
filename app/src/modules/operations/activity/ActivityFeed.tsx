@@ -183,52 +183,51 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
 
             <div className="p-3.5 sm:p-5">
               {/* Header Row */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--space-12)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-12)' }}>
+              <div className="flex items-start justify-between gap-2.5 sm:gap-3">
+                <div className="flex items-start gap-2.5 sm:gap-3 min-w-0 flex-1">
                   <Avatar
                     src={post.authorAvatarUrl}
                     name={post.authorName}
                     size="md"
+                    className="shrink-0 mt-0.5"
                   />
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}>
-                      <span className="body-sm-bold" style={{ color: 'var(--text-heading)' }}>
-                        {post.authorName}
-                      </span>
+                  <div className="min-w-0 flex-1">
+                    {/* Row 1: Tên người đăng nằm trên 1 hàng riêng biệt */}
+                    <div className="body-sm-bold text-[var(--text-heading)] leading-snug">
+                      {post.authorName}
+                    </div>
+
+                    {/* Row 2: Thông tin lớp, bộ môn/vai trò và thời gian cùng hàng dưới tên người đăng */}
+                    <div className="flex flex-wrap items-center gap-1.5 mt-1 text-xs text-[var(--text-subtle)] leading-normal">
                       <span
+                        className="whitespace-nowrap font-semibold text-[11px] px-1.5 py-0.5 rounded shrink-0"
                         style={{
-                          fontSize: '11px',
-                          fontWeight: 500,
+                          color: 'var(--eco-blue-strong)',
+                          background: 'var(--semantic-info-soft)',
+                        }}
+                      >
+                        {post.scopeLabel || (post.audienceScope === 'whole_school' ? 'Toàn trường' : 'Lớp 1A1')}
+                      </span>
+                      <span className="text-slate-300">•</span>
+                      <span
+                        className="whitespace-nowrap font-medium text-[11px] px-1.5 py-0.5 rounded shrink-0"
+                        style={{
                           background: 'var(--bg-muted)',
                           color: 'var(--text-body)',
-                          padding: '1px 6px',
-                          borderRadius: 'var(--radius-4)',
                         }}
                       >
                         {post.authorRole}
                       </span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-6)', marginTop: '2px', fontSize: '12px', color: 'var(--text-subtle)' }}>
-                      <span>{formatTimestamp(post.createdAt)}</span>
-                      <span>•</span>
-                      <span
-                        style={{
-                          color: 'var(--eco-blue-strong)',
-                          fontWeight: 600,
-                          background: 'var(--semantic-info-soft)',
-                          padding: '1px 6px',
-                          borderRadius: 'var(--radius-4)',
-                          fontSize: '11px',
-                        }}
-                      >
-                        {post.scopeLabel || (post.audienceScope === 'whole_school' ? 'Toàn trường' : 'Lớp 1A1')}
+                      <span className="text-slate-300">•</span>
+                      <span className="whitespace-nowrap text-[11px] text-[var(--text-subtle)]" suppressHydrationWarning>
+                        {formatTimestamp(post.createdAt)}
                       </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Right badges & menu */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}>
+                <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                   {/* Status Badge (BR06) */}
                   {isApproved ? (
                     <StatusTag tone="success" label="Đã duyệt" icon />

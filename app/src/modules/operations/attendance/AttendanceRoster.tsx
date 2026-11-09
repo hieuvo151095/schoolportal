@@ -374,6 +374,13 @@ export const AttendanceRoster: React.FC<AttendanceRosterProps> = ({
                             </div>
                           ) : (
                             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+                              <IconButton
+                                icon="gear"
+                                label="Ủy quyền người đón"
+                                disabled={!isCheckedIn}
+                                onClick={() => onOpenPickupModal(student)}
+                                size="sm"
+                              />
                               <div
                                 onClick={() => startEditTime(student.studentId, 'departureTime', student.departureTime)}
                                 style={{
@@ -395,17 +402,17 @@ export const AttendanceRoster: React.FC<AttendanceRosterProps> = ({
                                 <span>{student.departureTime}</span>
                                 <Icon name="pen" size={10} color="var(--eco-blue-strong)" />
                               </div>
-                              <IconButton
-                                icon="gear"
-                                label="Ủy quyền người đón"
-                                disabled={!isCheckedIn}
-                                onClick={() => onOpenPickupModal(student)}
-                                size="sm"
-                              />
                             </div>
                           )
                         ) : (
                           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+                            <IconButton
+                              icon="gear"
+                              label="Ủy quyền người đón"
+                              disabled={!isCheckedIn}
+                              onClick={() => onOpenPickupModal(student)}
+                              size="sm"
+                            />
                             <button
                               type="button"
                               disabled={!isCheckedIn}
@@ -428,14 +435,6 @@ export const AttendanceRoster: React.FC<AttendanceRosterProps> = ({
                               <Icon name="right-from-bracket" size={12} />
                               <span>Trả</span>
                             </button>
-
-                            <IconButton
-                              icon="gear"
-                              label="Ủy quyền người đón"
-                              disabled={!isCheckedIn}
-                              onClick={() => onOpenPickupModal(student)}
-                              size="sm"
-                            />
                           </div>
                         )}
                       </div>

@@ -129,8 +129,8 @@ export const INITIAL_ACTIVITY_POSTS: ActivityPost[] = [
     scopeLabel: 'Lớp 1A1',
     status: 'approved',
     isPinned: true,
-    createdAt: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
+    createdAt: '2026-09-12T08:58:00.000Z',
+    updatedAt: '2026-09-12T08:58:00.000Z',
     media: [
       {
         id: 'm-1',
@@ -177,8 +177,8 @@ export const INITIAL_ACTIVITY_POSTS: ActivityPost[] = [
     scopeLabel: 'Lớp 1A1',
     status: 'approved',
     isPinned: false,
-    createdAt: new Date(Date.now() - 5 * 3600 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 5 * 3600 * 1000).toISOString(),
+    createdAt: '2026-09-12T05:58:00.000Z',
+    updatedAt: '2026-09-12T05:58:00.000Z',
     media: [
       {
         id: 'm-5',
@@ -213,8 +213,8 @@ export const INITIAL_ACTIVITY_POSTS: ActivityPost[] = [
     scopeLabel: 'Lớp 1A1',
     status: 'cho_duyet', // Moderation queue BR06
     isPinned: false,
-    createdAt: new Date(Date.now() - 40 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 40 * 60 * 1000).toISOString(),
+    createdAt: '2026-09-12T10:15:00.000Z',
+    updatedAt: '2026-09-12T10:15:00.000Z',
     media: [],
     files: [],
     taggedStudents: [],
@@ -236,8 +236,8 @@ export const INITIAL_ACTIVITY_POSTS: ActivityPost[] = [
     scopeLabel: 'Toàn trường',
     status: 'approved',
     isPinned: false,
-    createdAt: new Date(Date.now() - 24 * 3600 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 24 * 3600 * 1000).toISOString(),
+    createdAt: '2026-09-11T09:00:00.000Z',
+    updatedAt: '2026-09-11T09:00:00.000Z',
     media: [
       {
         id: 'm-7',
@@ -266,8 +266,8 @@ export const INITIAL_ACTIVITY_POSTS: ActivityPost[] = [
     scopeLabel: 'Lớp 1A2',
     status: 'approved',
     isPinned: true,
-    createdAt: new Date(Date.now() - 5 * 3600 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 5 * 3600 * 1000).toISOString(),
+    createdAt: '2026-09-12T07:15:00.000Z',
+    updatedAt: '2026-09-12T07:15:00.000Z',
     media: [
       {
         id: 'm-8',
@@ -296,8 +296,8 @@ export const INITIAL_ACTIVITY_POSTS: ActivityPost[] = [
     scopeLabel: 'Lớp 2A1',
     status: 'approved',
     isPinned: false,
-    createdAt: new Date(Date.now() - 8 * 3600 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 8 * 3600 * 1000).toISOString(),
+    createdAt: '2026-09-11T14:30:00.000Z',
+    updatedAt: '2026-09-11T14:30:00.000Z',
     media: [
       {
         id: 'm-9',
@@ -326,8 +326,8 @@ export const INITIAL_ACTIVITY_POSTS: ActivityPost[] = [
     scopeLabel: 'Lớp 6A1',
     status: 'approved',
     isPinned: true,
-    createdAt: new Date(Date.now() - 10 * 3600 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 10 * 3600 * 1000).toISOString(),
+    createdAt: '2026-09-11T11:00:00.000Z',
+    updatedAt: '2026-09-11T11:00:00.000Z',
     media: [
       {
         id: 'm-10',
@@ -356,8 +356,8 @@ export const INITIAL_ACTIVITY_POSTS: ActivityPost[] = [
     scopeLabel: 'Lớp 12A1',
     status: 'approved',
     isPinned: true,
-    createdAt: new Date(Date.now() - 12 * 3600 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 12 * 3600 * 1000).toISOString(),
+    createdAt: '2026-09-11T08:00:00.000Z',
+    updatedAt: '2026-09-11T08:00:00.000Z',
     media: [
       {
         id: 'm-11',
@@ -386,8 +386,8 @@ export const INITIAL_ACTIVITY_POSTS: ActivityPost[] = [
     scopeLabel: 'Lớp Lá 1',
     status: 'approved',
     isPinned: true,
-    createdAt: new Date(Date.now() - 3 * 3600 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 3 * 3600 * 1000).toISOString(),
+    createdAt: '2026-09-12T09:30:00.000Z',
+    updatedAt: '2026-09-12T09:30:00.000Z',
     media: [
       {
         id: 'm-12',
