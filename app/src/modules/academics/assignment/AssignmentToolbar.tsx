@@ -9,9 +9,10 @@ import { Button, SearchField, SelectField, CountedTabs } from '@/components/ds';
 
 interface AssignmentToolbarProps {
   schoolCode: string;
+  onOpenCreate?: () => void;
 }
 
-export const AssignmentToolbar: React.FC<AssignmentToolbarProps> = ({ schoolCode }) => {
+export const AssignmentToolbar: React.FC<AssignmentToolbarProps> = ({ schoolCode, onOpenCreate }) => {
   const dispatch = useAppDispatch();
   const assignments = useAppSelector((state) => state.assignment.assignments);
   const filterCriteria = useAppSelector(
@@ -140,7 +141,7 @@ export const AssignmentToolbar: React.FC<AssignmentToolbarProps> = ({ schoolCode
           <Button
             variant="primary"
             icon="plus"
-            href={`/${schoolCode}/school/assignment/create/`}
+            onClick={onOpenCreate}
             className="flex-none whitespace-nowrap min-h-[40px]"
           >
             Tạo bài tập

@@ -15,9 +15,10 @@ import {
 
 interface ScheduleToolbarProps {
   schoolCode: string;
+  onOpenCreate?: () => void;
 }
 
-export const ScheduleToolbar: React.FC<ScheduleToolbarProps> = ({ schoolCode }) => {
+export const ScheduleToolbar: React.FC<ScheduleToolbarProps> = ({ schoolCode, onOpenCreate }) => {
   const dispatch = useAppDispatch();
   const { timetables, classes, filterCriteria } = useAppSelector((state) => state.schedule);
 
@@ -127,7 +128,7 @@ export const ScheduleToolbar: React.FC<ScheduleToolbarProps> = ({ schoolCode }) 
             variant="primary"
             icon="plus"
             className="flex-none whitespace-nowrap"
-            href={`/${schoolCode}/school/schedule/create`}
+            onClick={onOpenCreate}
           >
             Thêm thời khóa biểu
           </Button>

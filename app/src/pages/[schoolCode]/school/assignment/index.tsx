@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { PortalLayout } from '../../../../components/layout/PortalLayout';
@@ -6,11 +6,13 @@ import { AssignmentSummaryCards } from '../../../../modules/academics/assignment
 import { AssignmentToolbar } from '../../../../modules/academics/assignment/AssignmentToolbar';
 import { AssignmentTable } from '../../../../modules/academics/assignment/AssignmentTable';
 import { ExtendedAssignmentFilterModal } from '../../../../modules/academics/assignment/ExtendedAssignmentFilterModal';
+import { CreateAssignmentSlideOver } from '../../../../modules/academics/assignment/CreateAssignmentSlideOver';
 import { PageHeader } from '@/components/ds';
 
 export default function AssignmentCatalogPage() {
   const router = useRouter();
   const schoolCode = (router.query.schoolCode as string) || 'demo';
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   return (
     <PortalLayout>
@@ -33,9 +35,19 @@ export default function AssignmentCatalogPage() {
 
         {/* Unified Table Card Architecture */}
         <div className="ecomd-table-card">
-          <AssignmentToolbar schoolCode={schoolCode} />
+          <AssignmentToolbar
+            schoolCode={schoolCode}
+            onOpenCreate={() => setIsCreateOpen(true)}
+          />
           <AssignmentTable schoolCode={schoolCode} />
         </div>
+
+        {/* Create Assignment SlideOver */}
+        <CreateAssignmentSlideOver
+          isOpen={isCreateOpen}
+          onClose={() => setIsCreateOpen(false)}
+          schoolCode={schoolCode}
+        />
 
         {/* Extended Filter Drawer (BR12) */}
         <ExtendedAssignmentFilterModal />

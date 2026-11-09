@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { PortalLayout } from '../../../../components/layout/PortalLayout';
@@ -8,11 +8,13 @@ import { SendHistoryModal } from '../../../../modules/academics/schedule/SendHis
 import { CloneScheduleModal } from '../../../../modules/academics/schedule/CloneScheduleModal';
 import { ExtendedScheduleFilterModal } from '../../../../modules/academics/schedule/ExtendedScheduleFilterModal';
 import { UploadScheduleModal } from '../../../../modules/academics/schedule/UploadScheduleModal';
+import { CreateScheduleSlideOver } from '../../../../modules/academics/schedule/CreateScheduleSlideOver';
 import { PageHeader } from '@/components/ds';
 
 export default function ScheduleCatalogPage() {
   const router = useRouter();
   const schoolCode = (router.query.schoolCode as string) || 'demo';
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   return (
     <PortalLayout>
@@ -32,9 +34,16 @@ export default function ScheduleCatalogPage() {
 
         {/* Unified Table Card Architecture */}
         <div className="ecomd-table-card">
-          <ScheduleToolbar schoolCode={schoolCode} />
+          <ScheduleToolbar schoolCode={schoolCode} onOpenCreate={() => setIsCreateOpen(true)} />
           <ScheduleTable schoolCode={schoolCode} />
         </div>
+
+        {/* Create Schedule SlideOver */}
+        <CreateScheduleSlideOver
+          isOpen={isCreateOpen}
+          onClose={() => setIsCreateOpen(false)}
+          schoolCode={schoolCode}
+        />
 
         {/* Global Modals for Epic 6 */}
         <SendHistoryModal />
