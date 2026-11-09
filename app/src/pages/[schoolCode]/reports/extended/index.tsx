@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -6,6 +6,7 @@ import { PortalLayout } from '../../../../components/layout/PortalLayout';
 import { ExtendedReportTable } from '../../../../modules/operations/reports/ExtendedReportTable';
 import { ExtendedFilterModal } from '../../../../modules/operations/reports/ExtendedFilterModal';
 import { DuplicateReportModal } from '../../../../modules/operations/reports/DuplicateReportModal';
+import { CreateExtendedReportSlideOver } from '../../../../modules/operations/reports/CreateExtendedReportSlideOver';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { setReportFilterCriteria, toggleExtendedFilter } from '../../../../store/slices/reportsSlice';
 import { ReportLifecycleStatus } from '../../../../types/reports';
@@ -18,6 +19,8 @@ export default function ExtendedReportsPage() {
 
   const reports = useAppSelector((state) => state.reports.extendedReports);
   const filter = useAppSelector((state) => state.reports.reportFilters);
+
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const hasActiveFilters =
     (filter.templateId && filter.templateId !== 'all') ||
@@ -50,11 +53,9 @@ export default function ExtendedReportsPage() {
           title="Báo Cáo Mở Rộng"
           description="Quản lý các biểu mẫu đánh giá năng lực ngôn ngữ, tư duy toán học, nhận xét định kỳ và thư tuần của học sinh"
           actions={
-            <Link href={`/${schoolCode}/reports/create/create-extended/`} style={{ textDecoration: 'none' }}>
-              <Button variant="primary" icon="plus">
-                Tạo Báo Cáo Mới
-              </Button>
-            </Link>
+            <Button variant="primary" icon="plus" onClick={() => setIsCreateOpen(true)}>
+              Tạo Báo Cáo Mới
+            </Button>
           }
         />
 
@@ -96,10 +97,16 @@ export default function ExtendedReportsPage() {
           <ExtendedReportTable />
         </div>
 
-        {/* Filter Drawer / Modal */}
+        {/* Create Extended Report SlideOver */}
+        <CreateExtendedReportSlideOver
+          isOpen={isCreateOpen}
+          onClose={() => setIsCreateOpen(false)}
+        />
+
+        {/* Filter SlideOver */}
         <ExtendedFilterModal />
 
-        {/* Duplication Dialog */}
+        {/* Duplication SlideOver */}
         <DuplicateReportModal />
       </div>
     </PortalLayout>

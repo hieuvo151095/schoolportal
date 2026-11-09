@@ -95,6 +95,22 @@ Tài liệu này tổng hợp toàn bộ các nguyên tắc thiết kế và thi
   - Phần tử kích hoạt bắt buộc bọc trong container có class `relative`.
   - Khung menu popup định vị `absolute top-full left-0 mt-1 z-50 w-full` (hoặc `right-0` tùy vị trí mép màn hình).
 
+### 2.9. Tiêu Chuẩn Slide-Over Drawer Cho Tạo Mới / Chỉnh Sửa / Xem Chi Tiết (SlideOver Pattern)
+- **Mục tiêu:** Thay thế hoàn toàn các popup nổi ở giữa màn hình (center modal) hay việc chuyển hướng trang không cần thiết khi người dùng Tạo mới, Chỉnh sửa hoặc Xem chi tiết một bản ghi trong các sub-module.
+- **Quy chuẩn component bắt buộc:** Sử dụng component chuẩn `<SlideOver>` từ `@/components/ds`.
+- **Hành vi Responsive:**
+  - **Trên Desktop ($\ge 768\text{px}$ / $\ge 640\text{px}$):**
+    - Neo cố định sát mép phải màn hình (`fixed right-0 top-0 bottom-0`), chiều rộng tiêu chuẩn `width={480}` đến `width={560}`.
+    - Lớp mờ hậu cảnh (backdrop blur nhẹ), click ngoài hoặc nhấn phím `Escape` để đóng panel.
+  - **Trên Mobile ($< 640\text{px}$):**
+    - Chiếm trọn bề ngang màn hình (`100vw`, `inset-0`).
+    - Thanh tiêu đề dính trên cùng (sticky header) gồm icon bo tròn mang sắc thái phân hệ, tiêu đề in đậm, mô tả phụ và nút đóng `✕` tối thiểu 44px touch target.
+    - Thanh tác vụ dính dưới đáy (sticky bottom footer) chứa nút phụ ("Hủy") và nút tác vụ chính ("Tạo mới", "Lưu thay đổi", "Áp dụng bộ lọc") với khoảng đệm ngón tay chạm chuẩn xác.
+- **Quy chuẩn bố cục trường dữ liệu (Form Fields):**
+  - Các ô nhập xếp theo chiều dọc với nhãn rõ ràng, đánh dấu `*` màu đỏ cho trường bắt buộc.
+  - Chú thích phụ (helper text) nằm ngay dưới mỗi trường, màu `var(--text-subtle)`.
+  - Hỗ trợ nút hành động bổ sung ở góc trái footer (`extraAction`, ví dụ: "Đặt lại", "Xóa").
+
 ---
 
 ## 3. Checklist Kiểm Tra Trước Khi Hoàn Tất Tính Năng (Definition of Done)

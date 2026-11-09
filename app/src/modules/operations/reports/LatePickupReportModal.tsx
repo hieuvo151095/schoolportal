@@ -1,171 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
+import { SlideOver, Icon } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { closeLateFeeModal } from '../../../store/slices/reportsSlice';
 import { computeLatePickupFee } from '../../../utils/reportsValidation';
 
-const ModalOverlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 50;
-  backdrop-filter: blur(2px);
-`;
-
-const ModalCard = styled.div`
-  background: white;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 580px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  overflow: hidden;
-  border: 1px solid #E2E8F0;
-`;
-
-const ModalHeader = styled.div`
-  padding: 16px 20px;
-  border-bottom: 1px solid #E2E8F0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #F8FAFC;
-
-  h3 {
-    font-size: 16px;
-    font-weight: 700;
-    color: #1E293B;
-    margin: 0;
-  }
-
-  button {
-    background: none;
-    border: none;
-    color: #64748B;
-    font-size: 18px;
-    cursor: pointer;
-    line-height: 1;
-    padding: 4px;
-    &:hover {
-      color: #0F172A;
-    }
-  }
-`;
-
-const ModalBody = styled.div`
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-height: 70vh;
-  overflow-y: auto;
-`;
-
-const SurchargeNotice = styled.div`
-  background-color: #FFFBEB;
-  border: 1px solid #FDE68A;
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 13px;
-  color: #92400E;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  .icon {
-    font-size: 18px;
-  }
-`;
-
-const SummaryStatBox = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  background: #F8FAFC;
-  padding: 14px;
-  border-radius: 8px;
-  border: 1px solid #E2E8F0;
-
-  .stat-item {
-    text-align: center;
-    .label {
-      font-size: 11px;
-      color: #64748B;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-    .value {
-      font-size: 18px;
-      font-weight: 800;
-      color: #0F172A;
-      margin-top: 4px;
-    }
-    .highlight {
-      color: #EF4444;
-    }
-  }
-`;
-
-const OvertimeTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-
-  th {
-    background: #F1F5F9;
-    color: #475569;
-    font-weight: 600;
-    text-align: left;
-    padding: 8px 12px;
-    border-bottom: 1px solid #CBD5E1;
-  }
-
-  td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #F1F5F9;
-    color: #334155;
-  }
-
-  tr:hover td {
-    background-color: #F8FAFC;
-  }
-
-  .fee {
-    font-weight: 700;
-    color: #EF4444;
-  }
-`;
-
-const ModalFooter = styled.div`
-  padding: 14px 20px;
-  border-top: 1px solid #E2E8F0;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  background-color: #F8FAFC;
-`;
-
-const Button = styled.button<{ $variant?: 'primary' | 'secondary' }>`
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease-in-out;
-  border: 1px solid ${props => (props.$variant === 'primary' ? '#0070CE' : '#CBD5E1')};
-  background-color: ${props => (props.$variant === 'primary' ? '#0070CE' : '#FFFFFF')};
-  color: ${props => (props.$variant === 'primary' ? '#FFFFFF' : '#334155')};
-
-  &:hover {
-    background-color: ${props => (props.$variant === 'primary' ? '#005bb5' : '#F1F5F9')};
-  }
-`;
-
 export const LatePickupReportModal: React.FC = () => {
   const dispatch = useAppDispatch();
-  const student = useAppSelector(state => state.reports.selectedLateFeeReport);
+  const student = useAppSelector((state) => state.reports.selectedLateFeeReport);
 
   if (!student) return null;
 
@@ -179,74 +20,113 @@ export const LatePickupReportModal: React.FC = () => {
     .sort(([dateA], [dateB]) => dateA.localeCompare(dateB));
 
   return (
-    <ModalOverlay onClick={handleClose}>
-      <ModalCard onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="late-fee-title">
-        <ModalHeader>
-          <h3 id="late-fee-title">Báo Cáo Đón Muộn — {student.studentName}</h3>
-          <button onClick={handleClose} aria-label="Đóng">&times;</button>
-        </ModalHeader>
+    <SlideOver
+      open={Boolean(student)}
+      onClose={handleClose}
+      icon="clock"
+      title={`Báo Cáo Đón Muộn — ${student.studentName}`}
+      description={`Chi tiết số lượt đón muộn và phụ phí bán trú của học sinh ${student.studentName}`}
+      width={520}
+      secondaryAction={{
+        label: 'Đóng',
+        onClick: handleClose,
+      }}
+      primaryAction={{
+        label: 'Xuất Phiếu Thu Phụ Phí',
+        icon: 'file-invoice-dollar',
+        onClick: () => {
+          alert(
+            `Đã xuất bảng tính phụ phí đón muộn cho học sinh ${student.studentName}: ${student.estimatedLateFee.toLocaleString(
+              'vi-VN'
+            )} đ.`
+          );
+          handleClose();
+        },
+      }}
+    >
+      <div className="space-y-4">
+        {/* Notice banner */}
+        <div
+          className="p-3.5 rounded-[var(--radius-8)] border text-xs leading-relaxed flex items-start gap-2.5"
+          style={{
+            background: 'var(--semantic-warning-soft)',
+            borderColor: 'var(--border-warning-soft, #fed7aa)',
+            color: 'var(--semantic-warning-strong)',
+          }}
+        >
+          <Icon name="circle-exclamation" size={16} className="mt-0.5 shrink-0" />
+          <div>
+            <strong>Quy định đón muộn (BR05, BR06):</strong> Giờ tan học chuẩn là <strong>17:30</strong>. Phụ phí áp dụng <strong>50.000 đ / block 30 phút</strong> hoặc phần lẻ 30 phút quá giờ.
+          </div>
+        </div>
 
-        <ModalBody>
-          <SurchargeNotice>
-            <span className="icon">⏱️</span>
-            <div>
-              <strong>Quy định đón muộn (BR05, BR06):</strong> Giờ tan học chuẩn là <strong>17:30</strong>. Phụ phí áp dụng <strong>50.000 đ / block 30 phút</strong> hoặc phần lẻ 30 phút quá giờ.
+        {/* Summary Stat Box */}
+        <div className="grid grid-cols-3 gap-2.5 p-3.5 bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-center">
+          <div>
+            <div className="text-[11px] text-[var(--text-subtle)] uppercase font-semibold">Số lần đón muộn</div>
+            <div className="text-lg font-bold text-[var(--text-heading)] mt-0.5">{student.totalLateDepartures} lần</div>
+          </div>
+          <div>
+            <div className="text-[11px] text-[var(--text-subtle)] uppercase font-semibold">Tổng phút muộn</div>
+            <div className="text-lg font-bold text-amber-600 mt-0.5">{student.totalLateDepartureMinutes} phút</div>
+          </div>
+          <div>
+            <div className="text-[11px] text-[var(--text-subtle)] uppercase font-semibold">Tổng phụ phí</div>
+            <div className="text-lg font-bold text-[var(--semantic-danger-strong)] mt-0.5 font-numeric">
+              {student.estimatedLateFee.toLocaleString('vi-VN')} đ
             </div>
-          </SurchargeNotice>
+          </div>
+        </div>
 
-          <SummaryStatBox>
-            <div className="stat-item">
-              <div className="label">Số lần đón muộn</div>
-              <div className="value">{student.totalLateDepartures} lần</div>
-            </div>
-            <div className="stat-item">
-              <div className="label">Tổng phút muộn</div>
-              <div className="value">{student.totalLateDepartureMinutes} phút</div>
-            </div>
-            <div className="stat-item">
-              <div className="label">Tổng tiền phụ phí</div>
-              <div className="value highlight">{student.estimatedLateFee.toLocaleString('vi-VN')} đ</div>
-            </div>
-          </SummaryStatBox>
-
-          <OvertimeTable>
-            <thead>
-              <tr>
-                <th>Ngày</th>
-                <th>Giờ về</th>
-                <th>Số phút muộn</th>
-                <th>Phụ phí tính</th>
-              </tr>
-            </thead>
-            <tbody>
-              {lateRecords.map(([date, rec]) => {
-                const mins = rec.lateDepartureMinutes || 0;
-                const fee = computeLatePickupFee(mins);
-                return (
-                  <tr key={date}>
-                    <td><strong>{date} ({rec.weekday})</strong></td>
-                    <td>{rec.checkOutTime || '--:--'}</td>
-                    <td>+{mins} phút</td>
-                    <td className="fee">{fee.toLocaleString('vi-VN')} đ</td>
+        {/* Detailed List */}
+        <div>
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-2">
+            Nhật ký các ngày đón muộn trong tháng
+          </label>
+          <div className="border border-[var(--border-default)] rounded-[var(--radius-8)] overflow-hidden">
+            <table className="w-full text-xs">
+              <thead className="bg-[var(--bg-muted)] text-[var(--text-subtle)] border-b border-[var(--border-default)]">
+                <tr>
+                  <th className="px-3 py-2 text-left font-semibold">Ngày</th>
+                  <th className="px-3 py-2 text-left font-semibold">Giờ về</th>
+                  <th className="px-3 py-2 text-left font-semibold">Số phút</th>
+                  <th className="px-3 py-2 text-right font-semibold">Phụ phí</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--border-subtle)]">
+                {lateRecords.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="px-3 py-4 text-center text-[var(--text-subtle)]">
+                      Học sinh không có lượt đón muộn nào trong tháng.
+                    </td>
                   </tr>
-                );
-              })}
-            </tbody>
-          </OvertimeTable>
-        </ModalBody>
-
-        <ModalFooter>
-          <Button $variant="secondary" onClick={handleClose}>
-            Đóng
-          </Button>
-          <Button $variant="primary" onClick={() => {
-            alert(`Đã xuất bảng tính phụ phí đón muộn cho học sinh ${student.studentName}: ${student.estimatedLateFee.toLocaleString('vi-VN')} đ.`);
-            handleClose();
-          }}>
-            Xuất Phiếu Thu Phụ Phí
-          </Button>
-        </ModalFooter>
-      </ModalCard>
-    </ModalOverlay>
+                ) : (
+                  lateRecords.map(([date, rec]) => {
+                    const mins = rec.lateDepartureMinutes || 0;
+                    const fee = computeLatePickupFee(mins);
+                    return (
+                      <tr key={date} className="hover:bg-[var(--bg-subtle)]">
+                        <td className="px-3 py-2 font-medium">
+                          {date} ({rec.weekday})
+                        </td>
+                        <td className="px-3 py-2 font-mono text-[var(--text-subtle)]">
+                          {rec.checkOutTime || '--:--'}
+                        </td>
+                        <td className="px-3 py-2 text-amber-600 font-semibold font-mono">
+                          +{mins}p
+                        </td>
+                        <td className="px-3 py-2 text-right font-semibold text-[var(--semantic-danger-strong)] font-numeric">
+                          {fee.toLocaleString('vi-VN')} đ
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </SlideOver>
   );
 };

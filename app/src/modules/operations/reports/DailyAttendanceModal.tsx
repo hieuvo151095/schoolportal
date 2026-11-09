@@ -1,245 +1,142 @@
 import React from 'react';
-import styled from 'styled-components';
+import { SlideOver, Icon } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
-import { closeDayDetailModal, openAbsenceEditModal } from '../../../store/slices/reportsSlice';
-
-const ModalOverlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 50;
-  backdrop-filter: blur(2px);
-`;
-
-const ModalCard = styled.div`
-  background: white;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 480px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  overflow: hidden;
-  border: 1px solid #E2E8F0;
-`;
-
-const ModalHeader = styled.div`
-  padding: 16px 20px;
-  border-bottom: 1px solid #E2E8F0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #F8FAFC;
-
-  h3 {
-    font-size: 16px;
-    font-weight: 700;
-    color: #1E293B;
-    margin: 0;
-  }
-
-  button {
-    background: none;
-    border: none;
-    color: #64748B;
-    font-size: 18px;
-    cursor: pointer;
-    line-height: 1;
-    padding: 4px;
-    &:hover {
-      color: #0F172A;
-    }
-  }
-`;
-
-const ModalBody = styled.div`
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const InfoRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  padding: 6px 0;
-  border-bottom: 1px dashed #F1F5F9;
-
-  .label {
-    color: #64748B;
-    font-weight: 500;
-  }
-  .value {
-    color: #0F172A;
-    font-weight: 600;
-  }
-`;
-
-const StatusTag = styled.span<{ $type: 'present' | 'absent_excused' | 'absent_unexcused' | 'unmarked' }>`
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  background-color: ${props => 
-    props.$type === 'present' ? '#DCFCE7' : 
-    props.$type === 'absent_excused' ? '#FEF3C7' : 
-    props.$type === 'absent_unexcused' ? '#FEE2E2' : '#F1F5F9'};
-  color: ${props => 
-    props.$type === 'present' ? '#166534' : 
-    props.$type === 'absent_excused' ? '#92400E' : 
-    props.$type === 'absent_unexcused' ? '#991B1B' : '#64748B'};
-`;
-
-const NoteBox = styled.div`
-  background: #F8FAFC;
-  border-radius: 8px;
-  padding: 12px;
-  border: 1px solid #E2E8F0;
-  font-size: 13px;
-  color: #334155;
-  .title {
-    font-weight: 600;
-    color: #475569;
-    margin-bottom: 4px;
-  }
-`;
-
-const ModalFooter = styled.div`
-  padding: 14px 20px;
-  border-top: 1px solid #E2E8F0;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  background-color: #F8FAFC;
-`;
-
-const Button = styled.button<{ $variant?: 'primary' | 'secondary' }>`
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease-in-out;
-  border: 1px solid ${props => (props.$variant === 'primary' ? '#0070CE' : '#CBD5E1')};
-  background-color: ${props => (props.$variant === 'primary' ? '#0070CE' : '#FFFFFF')};
-  color: ${props => (props.$variant === 'primary' ? '#FFFFFF' : '#334155')};
-
-  &:hover {
-    background-color: ${props => (props.$variant === 'primary' ? '#005bb5' : '#F1F5F9')};
-  }
-`;
+import { closeDayDetailModal } from '../../../store/slices/reportsSlice';
 
 export const DailyAttendanceModal: React.FC = () => {
   const dispatch = useAppDispatch();
-  const selectedDayDetail = useAppSelector(state => state.reports.selectedDayDetail);
+  const selectedDayDetail = useAppSelector((state) => state.reports.selectedDayDetail);
 
   if (!selectedDayDetail) return null;
 
   const { studentName, record } = selectedDayDetail;
-  const isAbsent = record.status === 'absent_excused' || record.status === 'absent_unexcused';
 
   const handleClose = () => {
     dispatch(closeDayDetailModal());
   };
 
   return (
-    <ModalOverlay onClick={handleClose}>
-      <ModalCard onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="day-detail-title">
-        <ModalHeader>
-          <h3 id="day-detail-title">Chi Tiết Điểm Danh — {record.date}</h3>
-          <button onClick={handleClose} aria-label="Đóng">&times;</button>
-        </ModalHeader>
+    <SlideOver
+      open={Boolean(selectedDayDetail)}
+      onClose={handleClose}
+      icon="calendar"
+      title={`Chi Tiết Điểm Danh — ${record.date}`}
+      description={`Thông tin đưa đón, sức khỏe và nhật ký điểm danh của học sinh ${studentName}`}
+      width={480}
+      primaryAction={{
+        label: 'Đóng',
+        onClick: handleClose,
+      }}
+      secondaryAction={null}
+    >
+      <div className="space-y-3.5">
+        {/* Student Name */}
+        <div className="flex justify-between items-center py-2 border-b border-[var(--border-default)]">
+          <span className="text-xs text-[var(--text-subtle)] font-medium">Học sinh</span>
+          <span className="text-sm font-bold text-[var(--text-heading)]">{studentName}</span>
+        </div>
 
-        <ModalBody>
-          <InfoRow>
-            <span className="label">Học sinh</span>
-            <span className="value">{studentName}</span>
-          </InfoRow>
+        {/* Status */}
+        <div className="flex justify-between items-center py-2 border-b border-[var(--border-default)]">
+          <span className="text-xs text-[var(--text-subtle)] font-medium">Trạng thái</span>
+          <div>
+            {record.status === 'present' && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <Icon name="check" size={10} /> Có mặt
+              </span>
+            )}
+            {record.status === 'absent_excused' && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                <Icon name="clock" size={10} /> Nghỉ có phép (CP)
+              </span>
+            )}
+            {record.status === 'absent_unexcused' && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                <Icon name="circle-xmark" size={10} /> Nghỉ không phép (KP)
+              </span>
+            )}
+            {record.status === 'unmarked' && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+                Chưa ghi nhận
+              </span>
+            )}
+          </div>
+        </div>
 
-          <InfoRow>
-            <span className="label">Trạng thái</span>
-            <StatusTag $type={record.status}>
-              {record.status === 'present' && 'Có mặt'}
-              {record.status === 'absent_excused' && 'Nghỉ có phép (P)'}
-              {record.status === 'absent_unexcused' && 'Nghỉ không phép (KP)'}
-              {record.status === 'unmarked' && 'Chưa ghi nhận'}
-            </StatusTag>
-          </InfoRow>
+        {record.status === 'present' ? (
+          <>
+            <div className="flex justify-between items-center py-2 border-b border-[var(--border-default)]">
+              <span className="text-xs text-[var(--text-subtle)] font-medium">Giờ đến (Check-in)</span>
+              <span className="text-sm font-bold text-[var(--text-heading)] font-mono">
+                {record.checkInTime || '--:--'}
+                {record.isLateArrival && (
+                  <span className="text-amber-600 font-semibold ml-2 text-xs">
+                    (+{record.lateArrivalMinutes}p đến muộn)
+                  </span>
+                )}
+              </span>
+            </div>
 
-          {record.status === 'present' ? (
-            <>
-              <InfoRow>
-                <span className="label">Giờ đến (Check-in)</span>
-                <span className="value">
-                  {record.checkInTime || '--:--'}
-                  {record.isLateArrival && (
-                    <span style={{ color: '#F59E0B', marginLeft: 6, fontWeight: 700 }}>
-                      (+{record.lateArrivalMinutes}p đến muộn)
-                    </span>
-                  )}
-                </span>
-              </InfoRow>
+            <div className="flex justify-between items-center py-2 border-b border-[var(--border-default)]">
+              <span className="text-xs text-[var(--text-subtle)] font-medium">Giáo viên đón</span>
+              <span className="text-sm font-semibold text-[var(--text-heading)]">
+                {record.checkInStaff || 'Cô Nguyễn Mai'}
+              </span>
+            </div>
 
-              <InfoRow>
-                <span className="label">Giáo viên đón</span>
-                <span className="value">{record.checkInStaff || 'Cô Nguyễn Mai'}</span>
-              </InfoRow>
+            <div className="flex justify-between items-center py-2 border-b border-[var(--border-default)]">
+              <span className="text-xs text-[var(--text-subtle)] font-medium">Giờ về (Check-out)</span>
+              <span className="text-sm font-bold text-[var(--text-heading)] font-mono">
+                {record.checkOutTime || '--:--'}
+                {record.isLateDeparture && (
+                  <span className="text-rose-600 font-semibold ml-2 text-xs">
+                    (+{record.lateDepartureMinutes}p về muộn)
+                  </span>
+                )}
+              </span>
+            </div>
 
-              <InfoRow>
-                <span className="label">Giờ về (Check-out)</span>
-                <span className="value">
-                  {record.checkOutTime || '--:--'}
-                  {record.isLateDeparture && (
-                    <span style={{ color: '#EF4444', marginLeft: 6, fontWeight: 700 }}>
-                      (+{record.lateDepartureMinutes}p về muộn)
-                    </span>
-                  )}
-                </span>
-              </InfoRow>
+            <div className="flex justify-between items-center py-2 border-b border-[var(--border-default)]">
+              <span className="text-xs text-[var(--text-subtle)] font-medium">Giáo viên trả trẻ</span>
+              <span className="text-sm font-semibold text-[var(--text-heading)]">
+                {record.checkOutStaff || 'Cô Thu Thủy'}
+              </span>
+            </div>
 
-              <InfoRow>
-                <span className="label">Giáo viên trả trẻ</span>
-                <span className="value">{record.checkOutStaff || 'Cô Thu Thủy'}</span>
-              </InfoRow>
+            <div className="flex justify-between items-center py-2 border-b border-[var(--border-default)]">
+              <span className="text-xs text-[var(--text-subtle)] font-medium">Thân nhiệt</span>
+              <span className="text-sm font-semibold text-[var(--text-heading)]">
+                {record.temperature ? `${record.temperature}°C` : '36.5°C (Bình thường)'}
+              </span>
+            </div>
 
-              <InfoRow>
-                <span className="label">Thân nhiệt</span>
-                <span className="value">
-                  {record.temperature ? `${record.temperature}°C` : '36.5°C (Bình thường)'}
-                </span>
-              </InfoRow>
+            <div className="flex justify-between items-center py-2 border-b border-[var(--border-default)]">
+              <span className="text-xs text-[var(--text-subtle)] font-medium">Tình trạng sức khỏe</span>
+              <span className="text-sm font-semibold text-[var(--text-heading)]">
+                {record.healthStatus || 'Tốt, vui vẻ'}
+              </span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="p-3 bg-[var(--bg-subtle)] rounded-[var(--radius-8)] border border-[var(--border-default)]">
+              <div className="text-xs font-semibold text-[var(--text-heading)] mb-1">Lý do vắng mặt:</div>
+              <div className="text-xs text-[var(--text-body)]">
+                {record.notes || 'Gia đình có việc riêng, phụ huynh đã gửi đơn xin nghỉ qua cổng Trao đổi.'}
+              </div>
+            </div>
 
-              <InfoRow>
-                <span className="label">Tình trạng sức khỏe</span>
-                <span className="value">{record.healthStatus || 'Tốt, vui vẻ'}</span>
-              </InfoRow>
-            </>
-          ) : (
-            <>
-              <NoteBox>
-                <div className="title">Lý do vắng mặt:</div>
-                <div>{record.notes || 'Gia đình có việc riêng, phụ huynh đã gửi đơn xin nghỉ qua cổng Trao đổi.'}</div>
-              </NoteBox>
-
-              <InfoRow>
-                <span className="label">Người duyệt / ghi nhận</span>
-                <span className="value">{record.checkInStaff || 'Cô Nguyễn Mai'}</span>
-              </InfoRow>
-            </>
-          )}
-        </ModalBody>
-
-        <ModalFooter>
-          <Button $variant="primary" onClick={handleClose}>
-            Đóng
-          </Button>
-        </ModalFooter>
-      </ModalCard>
-    </ModalOverlay>
+            <div className="flex justify-between items-center py-2 border-b border-[var(--border-default)]">
+              <span className="text-xs text-[var(--text-subtle)] font-medium">Người duyệt / ghi nhận</span>
+              <span className="text-sm font-semibold text-[var(--text-heading)]">
+                {record.checkInStaff || 'Cô Nguyễn Mai'}
+              </span>
+            </div>
+          </>
+        )}
+      </div>
+    </SlideOver>
   );
 };
+
+export default DailyAttendanceModal;

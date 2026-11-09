@@ -1917,3 +1917,10 @@ export function ComboboxField(p: ComboboxFieldProps) {
     </div>
   );
 }
+
+/* ==========================================================================
+   26. SlideOver Component (Right Drawer for Create / Edit / View)
+   ========================================================================== */
+export { SlideOver } from './SlideOver';
+export type { SlideOverProps, SlideOverAction } from './SlideOver';
+

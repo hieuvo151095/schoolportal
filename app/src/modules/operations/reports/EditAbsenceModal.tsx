@@ -1,166 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import { SlideOver, Icon } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { closeAbsenceEditModal, updateAbsenceRecord } from '../../../store/slices/reportsSlice';
 import { AttendanceDayStatus } from '../../../types/reports';
 
-const ModalOverlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 50;
-  backdrop-filter: blur(2px);
-`;
-
-const ModalCard = styled.div`
-  background: white;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 460px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  overflow: hidden;
-  border: 1px solid #E2E8F0;
-`;
-
-const ModalHeader = styled.div`
-  padding: 16px 20px;
-  border-bottom: 1px solid #E2E8F0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #F8FAFC;
-
-  h3 {
-    font-size: 16px;
-    font-weight: 700;
-    color: #1E293B;
-    margin: 0;
-  }
-
-  button {
-    background: none;
-    border: none;
-    color: #64748B;
-    font-size: 18px;
-    cursor: pointer;
-    line-height: 1;
-    padding: 4px;
-    &:hover {
-      color: #0F172A;
-    }
-  }
-`;
-
-const ModalBody = styled.div`
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const StudentInfoBanner = styled.div`
-  background: #EFF6FF;
-  border: 1px solid #BFDBFE;
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 13px;
-  color: #1E40AF;
-
-  .name {
-    font-weight: 700;
-  }
-  .date {
-    margin-top: 2px;
-    color: #3B82F6;
-  }
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #334155;
-  }
-`;
-
-const RadioOptions = styled.div`
-  display: flex;
-  gap: 16px;
-`;
-
-const RadioOption = styled.label<{ $checked: boolean }>`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1.5px solid ${props => (props.$checked ? '#0070CE' : '#CBD5E1')};
-  background-color: ${props => (props.$checked ? '#F0F7FF' : '#FFFFFF')};
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  color: ${props => (props.$checked ? '#0070CE' : '#475569')};
-  transition: all 0.15s ease;
-
-  input {
-    accent-color: #0070CE;
-  }
-`;
-
-const Textarea = styled.textarea`
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 12px;
-  border: 1.5px solid #CBD5E1;
-  border-radius: 8px;
-  font-size: 13px;
-  color: #1E293B;
-  outline: none;
-  resize: vertical;
-  min-height: 80px;
-
-  &:focus {
-    border-color: #0070CE;
-    box-shadow: 0 0 0 3px rgba(0, 112, 206, 0.15);
-  }
-`;
-
-const ModalFooter = styled.div`
-  padding: 14px 20px;
-  border-top: 1px solid #E2E8F0;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  background-color: #F8FAFC;
-`;
-
-const Button = styled.button<{ $variant?: 'primary' | 'secondary' }>`
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease-in-out;
-  border: 1px solid ${props => (props.$variant === 'primary' ? '#0070CE' : '#CBD5E1')};
-  background-color: ${props => (props.$variant === 'primary' ? '#0070CE' : '#FFFFFF')};
-  color: ${props => (props.$variant === 'primary' ? '#FFFFFF' : '#334155')};
-
-  &:hover {
-    background-color: ${props => (props.$variant === 'primary' ? '#005bb5' : '#F1F5F9')};
-  }
-`;
-
 export const EditAbsenceModal: React.FC = () => {
   const dispatch = useAppDispatch();
-  const selectedAbsenceEdit = useAppSelector(state => state.reports.selectedAbsenceEdit);
+  const selectedAbsenceEdit = useAppSelector((state) => state.reports.selectedAbsenceEdit);
 
   const [status, setStatus] = useState<AttendanceDayStatus>('absent_excused');
   const [reason, setReason] = useState('');
@@ -178,80 +24,119 @@ export const EditAbsenceModal: React.FC = () => {
 
   if (!selectedAbsenceEdit) return null;
 
+  const { studentName, record } = selectedAbsenceEdit;
+
   const handleClose = () => {
     dispatch(closeAbsenceEditModal());
   };
 
   const handleSave = () => {
-    dispatch(updateAbsenceRecord({
-      studentId: selectedAbsenceEdit.studentId,
-      date: selectedAbsenceEdit.record.date,
-      status,
-      notes: reason.trim() || undefined
-    }));
+    dispatch(
+      updateAbsenceRecord({
+        studentId: selectedAbsenceEdit.studentId,
+        date: record.date,
+        status,
+        notes: reason.trim(),
+      })
+    );
+    handleClose();
   };
 
   return (
-    <ModalOverlay onClick={handleClose}>
-      <ModalCard onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="edit-absence-title">
-        <ModalHeader>
-          <h3 id="edit-absence-title">Thay Đổi Trạng Thái Vắng</h3>
-          <button onClick={handleClose} aria-label="Đóng">&times;</button>
-        </ModalHeader>
+    <SlideOver
+      open={Boolean(selectedAbsenceEdit)}
+      onClose={handleClose}
+      icon="pen"
+      title="Chỉnh Sửa Trạng Thái Vắng"
+      description={`Cập nhật phân loại nghỉ và lý do vắng cho học sinh ${studentName}`}
+      width={480}
+      secondaryAction={{
+        label: 'Hủy',
+        onClick: handleClose,
+      }}
+      primaryAction={{
+        label: 'Lưu thay đổi',
+        icon: 'check',
+        onClick: handleSave,
+      }}
+    >
+      <div className="space-y-4">
+        {/* Info card */}
+        <div
+          className="p-3.5 rounded-[var(--radius-8)] border text-xs leading-relaxed"
+          style={{
+            background: 'var(--semantic-info-soft)',
+            borderColor: 'var(--border-info-soft, #bfdbfe)',
+            color: 'var(--semantic-info-strong)',
+          }}
+        >
+          <div className="font-bold text-sm">{studentName}</div>
+          <div className="text-[11px] opacity-90 mt-0.5">Ngày vắng: {record.date}</div>
+        </div>
 
-        <ModalBody>
-          <StudentInfoBanner>
-            <div className="name">{selectedAbsenceEdit.studentName}</div>
-            <div className="date">Ngày: {selectedAbsenceEdit.record.date} ({selectedAbsenceEdit.record.weekday})</div>
-          </StudentInfoBanner>
+        {/* Absence Type */}
+        <div>
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1.5">
+            Loại vắng mặt <span className="text-[var(--text-danger)]">*</span>
+          </label>
+          <div className="grid grid-cols-2 gap-3">
+            <label
+              className={`flex items-center gap-2.5 p-3 rounded-[var(--radius-8)] border cursor-pointer transition-all ${
+                status === 'absent_excused'
+                  ? 'border-[var(--eco-blue-strong)] bg-[var(--semantic-info-soft)] text-[var(--eco-blue-strong)] font-semibold'
+                  : 'border-[var(--border-default)] hover:border-[var(--text-subtle)] text-[var(--text-body)] bg-[var(--bg-surface)]'
+              }`}
+            >
+              <input
+                type="radio"
+                name="absence-type"
+                checked={status === 'absent_excused'}
+                onChange={() => setStatus('absent_excused')}
+                className="w-4 h-4 text-[var(--eco-blue-strong)]"
+              />
+              <span className="text-xs">Nghỉ có phép (P)</span>
+            </label>
 
-          <FormGroup>
-            <label>Phân loại vắng:</label>
-            <RadioOptions>
-              <RadioOption $checked={status === 'absent_excused'}>
-                <input
-                  type="radio"
-                  name="absence-status"
-                  value="absent_excused"
-                  checked={status === 'absent_excused'}
-                  onChange={() => setStatus('absent_excused')}
-                />
-                Có phép (P)
-              </RadioOption>
-              <RadioOption $checked={status === 'absent_unexcused'}>
-                <input
-                  type="radio"
-                  name="absence-status"
-                  value="absent_unexcused"
-                  checked={status === 'absent_unexcused'}
-                  onChange={() => setStatus('absent_unexcused')}
-                />
-                Không phép (KP)
-              </RadioOption>
-            </RadioOptions>
-          </FormGroup>
+            <label
+              className={`flex items-center gap-2.5 p-3 rounded-[var(--radius-8)] border cursor-pointer transition-all ${
+                status === 'absent_unexcused'
+                  ? 'border-[var(--eco-blue-strong)] bg-[var(--semantic-info-soft)] text-[var(--eco-blue-strong)] font-semibold'
+                  : 'border-[var(--border-default)] hover:border-[var(--text-subtle)] text-[var(--text-body)] bg-[var(--bg-surface)]'
+              }`}
+            >
+              <input
+                type="radio"
+                name="absence-type"
+                checked={status === 'absent_unexcused'}
+                onChange={() => setStatus('absent_unexcused')}
+                className="w-4 h-4 text-[var(--eco-blue-strong)]"
+              />
+              <span className="text-xs">Nghỉ không phép (KP)</span>
+            </label>
+          </div>
+          <p className="text-[11px] text-[var(--text-subtle)] mt-1.5">
+            {status === 'absent_excused'
+              ? 'Học sinh đủ điều kiện hoàn lại tiền ăn bán trú theo quy định nhà trường.'
+              : 'Nghỉ không phép sẽ không được khấu trừ tiền ăn trong tháng.'}
+          </p>
+        </div>
 
-          <FormGroup>
-            <label htmlFor="absence-notes">Lý do nghỉ / Ghi chú:</label>
-            <Textarea
-              id="absence-notes"
-              rows={3}
-              value={reason}
-              onChange={e => setReason(e.target.value)}
-              placeholder="Nhập lý do xin nghỉ hoặc ghi chú của giáo viên..."
-            />
-          </FormGroup>
-        </ModalBody>
-
-        <ModalFooter>
-          <Button $variant="secondary" onClick={handleClose}>
-            Hủy
-          </Button>
-          <Button $variant="primary" onClick={handleSave}>
-            Lưu thay đổi
-          </Button>
-        </ModalFooter>
-      </ModalCard>
-    </ModalOverlay>
+        {/* Reason */}
+        <div>
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
+            Lý do xin nghỉ / Ghi chú của giáo viên
+          </label>
+          <textarea
+            rows={3}
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder="Nhập lý do vắng mặt..."
+            className="w-full px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all resize-none placeholder:text-[var(--text-disabled)]"
+          />
+        </div>
+      </div>
+    </SlideOver>
   );
 };
+
+export default EditAbsenceModal;

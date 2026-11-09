@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { SlideOver, Icon } from '@/components/ds';
 import { useAppDispatch } from '../../../store';
 import { createConversation } from '../../../store/slices/conversationSlice';
 import { MessageCategory } from '../../../types/conversation';
@@ -9,231 +9,33 @@ interface Props {
   onClose: () => void;
 }
 
-const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(4px);
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-`;
-
-const ModalBox = styled.div`
-  background: #ffffff;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 560px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-`;
-
-const ModalHeader = styled.div`
-  padding: 18px 24px;
-  border-bottom: 1px solid #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const Title = styled.h3`
-  font-family: var(--font-heading);
-  font-size: 18px;
-  font-weight: 800;
-  color: #0f172a;
-`;
-
-const CloseBtn = styled.button`
-  background: transparent;
-  border: none;
-  font-size: 18px;
-  color: #94a3b8;
-  cursor: pointer;
-
-  &:hover {
-    color: #0f172a;
-  }
-`;
-
-const ModalBody = styled.div`
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-height: 70vh;
-  overflow-y: auto;
-`;
-
-const ModeToggle = styled.div`
-  display: flex;
-  background: #f1f5f9;
-  padding: 4px;
-  border-radius: 10px;
-  gap: 4px;
-`;
-
-const ModeBtn = styled.button<{ $active: boolean }>`
-  flex: 1;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
-  font-size: 13px;
-  font-weight: 700;
-  background: ${({ $active }) => ($active ? '#ffffff' : 'transparent')};
-  color: ${({ $active }) => ($active ? '#0070CE' : '#64748b')};
-  box-shadow: ${({ $active }) =>
-    $active ? '0 1px 3px rgba(0, 0, 0, 0.08)' : 'none'};
-  cursor: pointer;
-  transition: all 0.15s;
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-`;
-
-const Label = styled.label`
-  font-size: 13px;
-  font-weight: 700;
-  color: #334155;
-
-  span {
-    color: #ef4444;
-  }
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 13px;
-  outline: none;
-  font-family: inherit;
-
-  &:focus {
-    border-color: #0070CE;
-  }
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 13px;
-  outline: none;
-  font-family: inherit;
-  box-sizing: border-box;
-
-  &:focus {
-    border-color: #0070CE;
-  }
-`;
-
-const Textarea = styled.textarea`
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 13px;
-  outline: none;
-  font-family: inherit;
-  min-height: 90px;
-  resize: vertical;
-  box-sizing: border-box;
-
-  &:focus {
-    border-color: #0070CE;
-  }
-`;
-
-const StudentCheckboxGroup = styled.div`
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 10px 14px;
-  max-height: 130px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  background: #f8fafc;
-`;
-
-const CheckboxLabel = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  cursor: pointer;
-`;
-
-const ModalFooter = styled.div`
-  padding: 16px 24px;
-  border-top: 1px solid #e2e8f0;
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  background: #f8fafc;
-`;
-
-const CancelBtn = styled.button`
-  padding: 8px 16px;
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  color: #475569;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-
-  &:hover {
-    background: #f1f5f9;
-  }
-`;
-
-const SubmitBtn = styled.button<{ disabled?: boolean }>`
-  padding: 8px 20px;
-  border: none;
-  background: ${({ disabled }) => (disabled ? '#94a3b8' : '#0070CE')};
-  color: #ffffff;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-
-  &:hover {
-    background: ${({ disabled }) => (disabled ? '#94a3b8' : '#005096')};
-  }
-`;
-
 export const CreateConversationModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const dispatch = useAppDispatch();
-  const [mode, setMode] = useState<'ca_nhan' | 'nhom'>('ca_nhan');
-  const [classId, setClassId] = useState('lop-1a1');
-  const [studentId, setStudentId] = useState('hs-1');
-  const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>(['hs-1', 'hs-2']);
+  const [mode, setMode] = useState<'individual' | 'group'>('individual');
+
+  // Form states
+  const [selectedClass, setSelectedClass] = useState('lop-1a1');
+  const [selectedStudentId, setSelectedStudentId] = useState('hs-001');
   const [groupTitle, setGroupTitle] = useState('');
+  const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>(['hs-001', 'hs-002']);
   const [category, setCategory] = useState<MessageCategory>('tin_nhan');
   const [content, setContent] = useState('');
 
-  if (!isOpen) return null;
-
+  // Mock available students in the class
   const mockStudents = [
-    { id: 'hs-1', name: 'Đỗ Nam', parentName: 'Nguyễn Thị Hương' },
-    { id: 'hs-2', name: 'Lê Bảo An', parentName: 'Lê Văn Hoàng' },
-    { id: 'hs-3', name: 'Trần Minh Thảo', parentName: 'Trần Tuấn Anh' },
-    { id: 'hs-4', name: 'Trần Quang Khải', parentName: 'Trần Tuấn Anh' },
-    { id: 'hs-5', name: 'Vũ Phong', parentName: 'Vũ Hoàng Yến' },
+    { id: 'hs-001', name: 'Đỗ Nam', parentName: 'Mẹ Đỗ Nam', code: 'HS2026-001' },
+    { id: 'hs-002', name: 'Lê Bảo An', parentName: 'Bố Lê Bảo An', code: 'HS2026-002' },
+    { id: 'hs-003', name: 'Trần Minh Thảo', parentName: 'Mẹ Trần Minh Thảo', code: 'HS2026-003' },
+    { id: 'hs-004', name: 'Nguyễn Gia Bảo', parentName: 'Bố Nguyễn Gia Bảo', code: 'HS2026-004' },
+    { id: 'hs-005', name: 'Vũ Hoàng Yến', parentName: 'Mẹ Vũ Hoàng Yến', code: 'HS2026-005' },
   ];
 
   const handleToggleStudent = (id: string) => {
-    setSelectedStudentIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+    if (selectedStudentIds.includes(id)) {
+      setSelectedStudentIds(selectedStudentIds.filter((item) => item !== id));
+    } else {
+      setSelectedStudentIds([...selectedStudentIds, id]);
+    }
   };
 
   const handleSelectAllStudents = () => {
@@ -245,194 +47,232 @@ export const CreateConversationModal: React.FC<Props> = ({ isOpen, onClose }) =>
   };
 
   const isFormValid =
-    mode === 'ca_nhan'
-      ? studentId && content.trim()
-      : groupTitle.trim() && selectedStudentIds.length > 0 && content.trim();
+    content.trim().length > 0 &&
+    (mode === 'individual' ? Boolean(selectedStudentId) : groupTitle.trim().length > 0 && selectedStudentIds.length > 0);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!isFormValid) return;
 
-    if (mode === 'ca_nhan') {
-      const student = mockStudents.find((s) => s.id === studentId);
+    if (mode === 'individual') {
+      const student = mockStudents.find((s) => s.id === selectedStudentId);
+      if (!student) return;
+
       dispatch(
         createConversation({
+          title: `Phụ huynh ${student.name}`,
           type: 'ca_nhan',
-          title: `Phụ huynh ${student?.name || ''}`,
-          classId,
-          className: 'Lớp 1A1',
-          studentId,
-          studentName: student?.name,
-          initialMessage: content.trim(),
+          classId: selectedClass,
+          className: selectedClass === 'lop-1a1' ? 'Lớp 1A1' : 'Lớp 1A2',
+          studentId: student.id,
+          studentName: student.name,
           category,
-          recipients: [
-            {
-              id: `ph-${studentId}`,
-              name: student?.parentName || 'Phụ huynh',
-              role: 'phu_huynh',
-              childrenNames: [student?.name || ''],
-              isManualAddition: false,
-            },
-          ],
+          initialMessage: content.trim(),
         })
       );
     } else {
       dispatch(
         createConversation({
-          type: 'nhom',
           title: groupTitle.trim(),
-          classId,
-          className: 'Lớp 1A1',
+          type: 'nhom',
+          classId: selectedClass,
+          className: selectedClass === 'lop-1a1' ? 'Lớp 1A1' : 'Lớp 1A2',
           studentIds: selectedStudentIds,
+          category,
           initialMessage: content.trim(),
-          recipients: [
-            {
-              id: 'gv-current',
-              name: 'Cô Nguyễn Mai Anh (GVCN)',
-              role: 'giao_vien',
-              isManualAddition: true,
-            },
-          ],
         })
       );
     }
 
+    // Reset and close
+    setContent('');
+    setGroupTitle('');
     onClose();
   };
 
   return (
-    <Overlay onClick={onClose}>
-      <ModalBox onClick={(e) => e.stopPropagation()}>
-        <ModalHeader>
-          <Title>Tạo Cuộc Trao Đổi Mới</Title>
-          <CloseBtn onClick={onClose}>✕</CloseBtn>
-        </ModalHeader>
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      icon="comments"
+      title="Tạo Cuộc Trò Chuyện Mới"
+      description="Bắt đầu trao đổi trực tiếp với phụ huynh học sinh hoặc lập nhóm trao đổi theo lớp"
+      width={540}
+      primaryAction={{
+        label: 'Tạo & Gửi Tin Nhắn',
+        icon: 'paper-plane',
+        disabled: !isFormValid,
+        onClick: () => handleSubmit(),
+      }}
+      secondaryAction={{
+        label: 'Hủy',
+        onClick: onClose,
+      }}
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Mode Toggle: Cá nhân vs Nhóm lớp */}
+        <div className="flex bg-[var(--bg-muted)] p-1 rounded-[var(--radius-8)] border border-[var(--border-default)]">
+          <button
+            type="button"
+            className={`flex-1 py-2 text-xs font-bold rounded-[var(--radius-6)] transition-all ${
+              mode === 'individual'
+                ? 'bg-[var(--bg-surface)] text-[var(--eco-blue-strong)] shadow-xs'
+                : 'text-[var(--text-subtle)] hover:text-[var(--text-heading)]'
+            }`}
+            onClick={() => setMode('individual')}
+          >
+            Cá nhân (1-1 với Phụ huynh)
+          </button>
+          <button
+            type="button"
+            className={`flex-1 py-2 text-xs font-bold rounded-[var(--radius-6)] transition-all ${
+              mode === 'group'
+                ? 'bg-[var(--bg-surface)] text-[var(--eco-blue-strong)] shadow-xs'
+                : 'text-[var(--text-subtle)] hover:text-[var(--text-heading)]'
+            }`}
+            onClick={() => setMode('group')}
+          >
+            Nhóm lớp / Ban đại diện
+          </button>
+        </div>
 
-        <ModalBody>
-          <FormGroup>
-            <Label>Hình thức trao đổi</Label>
-            <ModeToggle>
-              <ModeBtn
-                $active={mode === 'ca_nhan'}
-                onClick={() => setMode('ca_nhan')}
+        {/* Lớp học */}
+        <div>
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
+            Lớp học <span className="text-[var(--text-danger)]">*</span>
+          </label>
+          <div className="relative">
+            <select
+              value={selectedClass}
+              onChange={(e) => setSelectedClass(e.target.value)}
+              className="w-full appearance-none px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all font-medium pr-9"
+            >
+              <option value="lop-1a1">Lớp 1A1 (Cô Mai & Cô Thủy)</option>
+              <option value="lop-1a2">Lớp 1A2 (Cô Thảo & Thầy Tuấn)</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[var(--text-subtle)]">
+              <Icon name="chevron-down" size={14} />
+            </div>
+          </div>
+        </div>
+
+        {/* Category */}
+        <div>
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
+            Chuyên mục trao đổi
+          </label>
+          <div className="relative">
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value as MessageCategory)}
+              className="w-full appearance-none px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all font-medium pr-9"
+            >
+              <option value="tin_nhan">Tin nhắn chung</option>
+              <option value="bao_vang">Báo vắng / Nghỉ học</option>
+              <option value="dan_thuoc">Dặn thuốc / Y tế</option>
+              <option value="yeu_cau_don_ve">Ủy quyền đón về</option>
+              <option value="gop_y">Góp ý / Kiến nghị</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[var(--text-subtle)]">
+              <Icon name="chevron-down" size={14} />
+            </div>
+          </div>
+          <p className="text-[11px] text-[var(--text-subtle)] mt-1">
+            Gắn nhãn để phụ huynh và giáo viên lọc tin nhắn quan trọng dễ dàng hơn.
+          </p>
+        </div>
+
+        {mode === 'individual' ? (
+          <div>
+            <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
+              Chọn học sinh & Phụ huynh <span className="text-[var(--text-danger)]">*</span>
+            </label>
+            <div className="relative">
+              <select
+                value={selectedStudentId}
+                onChange={(e) => setSelectedStudentId(e.target.value)}
+                className="w-full appearance-none px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all font-medium pr-9"
               >
-                👤 Trao đổi cá nhân (1:1)
-              </ModeBtn>
-              <ModeBtn
-                $active={mode === 'nhom'}
-                onClick={() => setMode('nhom')}
-              >
-                👥 Trao đổi nhóm
-              </ModeBtn>
-            </ModeToggle>
-          </FormGroup>
+                {mockStudents.map((st) => (
+                  <option key={st.id} value={st.id}>
+                    {st.name} ({st.code}) - {st.parentName}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[var(--text-subtle)]">
+                <Icon name="chevron-down" size={14} />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div>
+              <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
+                Tiêu đề nhóm <span className="text-[var(--text-danger)]">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Ví dụ: Ban Đại Diện Cha Mẹ Học Sinh, Nhóm Ngoại Khóa..."
+                value={groupTitle}
+                onChange={(e) => setGroupTitle(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all placeholder:text-[var(--text-disabled)]"
+              />
+            </div>
 
-          <FormGroup>
-            <Label>
-              Lớp học <span>*</span>
-            </Label>
-            <Select value={classId} onChange={(e) => setClassId(e.target.value)}>
-              <option value="lop-1a1">Lớp 1A1</option>
-              <option value="lop-1a2">Lớp 1A2</option>
-            </Select>
-          </FormGroup>
-
-          {mode === 'ca_nhan' ? (
-            <>
-              <FormGroup>
-                <Label>
-                  Học sinh <span>*</span>
-                </Label>
-                <Select
-                  value={studentId}
-                  onChange={(e) => setStudentId(e.target.value)}
+            <div>
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="text-xs font-semibold text-[var(--text-heading)]">
+                  Chọn học sinh tham gia <span className="text-[var(--text-danger)]">*</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={handleSelectAllStudents}
+                  className="text-xs font-bold text-[var(--eco-blue-strong)] hover:underline cursor-pointer"
                 >
-                  {mockStudents.map((st) => (
-                    <option key={st.id} value={st.id}>
-                      {st.name} — PH: {st.parentName}
-                    </option>
-                  ))}
-                </Select>
-              </FormGroup>
-
-              <FormGroup>
-                <Label>Thể loại tin nhắn</Label>
-                <Select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value as MessageCategory)}
-                >
-                  <option value="tin_nhan">Tin nhắn</option>
-                  <option value="bao_vang">Báo vắng</option>
-                  <option value="dan_thuoc">Dặn thuốc</option>
-                  <option value="gop_y">Góp ý</option>
-                  <option value="khac">Khác</option>
-                </Select>
-              </FormGroup>
-            </>
-          ) : (
-            <>
-              <FormGroup>
-                <Label>
-                  Tiêu đề nhóm <span>*</span>
-                </Label>
-                <Input
-                  placeholder="Ví dụ: Ban Đại Diện Cha Mẹ Học Sinh, Nhóm Ngoại Khóa..."
-                  value={groupTitle}
-                  onChange={(e) => setGroupTitle(e.target.value)}
-                />
-              </FormGroup>
-
-              <FormGroup>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                  <Label style={{ marginBottom: 0 }}>
-                    Chọn học sinh tham gia <span>*</span>
-                  </Label>
-                  <button
-                    type="button"
-                    style={{ background: 'none', border: 'none', fontSize: '12px', color: '#0070CE', fontWeight: 700, cursor: 'pointer' }}
-                    onClick={handleSelectAllStudents}
+                  {selectedStudentIds.length === mockStudents.length ? 'Bỏ chọn cả lớp' : 'Chọn cả lớp'}
+                </button>
+              </div>
+              <div className="border border-[var(--border-default)] rounded-[var(--radius-8)] p-2 max-h-40 overflow-y-auto space-y-1.5 bg-[var(--bg-surface)]">
+                {mockStudents.map((st) => (
+                  <label
+                    key={st.id}
+                    className="flex items-center gap-2 p-1.5 rounded-[var(--radius-4)] hover:bg-[var(--bg-subtle)] cursor-pointer text-xs text-[var(--text-heading)]"
                   >
-                    {selectedStudentIds.length === mockStudents.length
-                      ? 'Bỏ chọn cả lớp'
-                      : 'Chọn cả lớp'}
-                  </button>
-                </div>
-                <StudentCheckboxGroup>
-                  {mockStudents.map((st) => (
-                    <CheckboxLabel key={st.id}>
-                      <input
-                        type="checkbox"
-                        checked={selectedStudentIds.includes(st.id)}
-                        onChange={() => handleToggleStudent(st.id)}
-                      />
-                      <span>
-                        <strong>{st.name}</strong> ({st.parentName})
-                      </span>
-                    </CheckboxLabel>
-                  ))}
-                </StudentCheckboxGroup>
-              </FormGroup>
-            </>
-          )}
+                    <input
+                      type="checkbox"
+                      checked={selectedStudentIds.includes(st.id)}
+                      onChange={() => handleToggleStudent(st.id)}
+                      className="rounded border-[var(--border-default)] text-[var(--eco-blue-strong)]"
+                    />
+                    <span>
+                      <strong>{st.name}</strong> ({st.parentName})
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
 
-          <FormGroup>
-            <Label>
-              Nội dung tin nhắn <span>*</span>
-            </Label>
-            <Textarea
-              placeholder="Nhập nội dung trao đổi ban đầu..."
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          </FormGroup>
-        </ModalBody>
-
-        <ModalFooter>
-          <CancelBtn onClick={onClose}>Hủy</CancelBtn>
-          <SubmitBtn disabled={!isFormValid} onClick={handleSubmit}>
-            Tạo & Gửi Tin Nhắn
-          </SubmitBtn>
-        </ModalFooter>
-      </ModalBox>
-    </Overlay>
+        {/* Nội dung tin nhắn */}
+        <div>
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
+            Nội dung tin nhắn ban đầu <span className="text-[var(--text-danger)]">*</span>
+          </label>
+          <textarea
+            rows={3}
+            placeholder="Nhập nội dung trao đổi ban đầu..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="w-full px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-2 focus:ring-[var(--eco-blue-100,#dbeafe)] transition-all placeholder:text-[var(--text-disabled)] resize-none"
+          />
+          <p className="text-[11px] text-[var(--text-subtle)] mt-1">
+            Tin nhắn sẽ được gửi ngay sau khi tạo hội thoại thành công.
+          </p>
+        </div>
+      </form>
+    </SlideOver>
   );
 };
+
+export default CreateConversationModal;

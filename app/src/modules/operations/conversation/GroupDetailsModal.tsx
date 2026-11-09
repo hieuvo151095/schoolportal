@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { SlideOver, Icon } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   removeStudentFromGroup,
@@ -11,172 +11,6 @@ interface Props {
   onClose: () => void;
   conversationId: string;
 }
-
-const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(4px);
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-`;
-
-const ModalBox = styled.div`
-  background: #ffffff;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 620px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  max-height: 85vh;
-`;
-
-const ModalHeader = styled.div`
-  padding: 18px 24px;
-  border-bottom: 1px solid #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const Title = styled.h3`
-  font-family: var(--font-heading);
-  font-size: 18px;
-  font-weight: 800;
-  color: #0f172a;
-`;
-
-const CloseBtn = styled.button`
-  background: transparent;
-  border: none;
-  font-size: 18px;
-  color: #94a3b8;
-  cursor: pointer;
-
-  &:hover {
-    color: #0f172a;
-  }
-`;
-
-const TabBar = styled.div`
-  display: flex;
-  border-bottom: 1px solid #e2e8f0;
-  background: #f8fafc;
-`;
-
-const TabButton = styled.button<{ $active: boolean }>`
-  flex: 1;
-  padding: 12px;
-  font-size: 13px;
-  font-weight: 700;
-  border: none;
-  background: ${({ $active }) => ($active ? '#ffffff' : 'transparent')};
-  color: ${({ $active }) => ($active ? '#0070CE' : '#64748b')};
-  border-bottom: 2px solid
-    ${({ $active }) => ($active ? '#0070CE' : 'transparent')};
-  cursor: pointer;
-`;
-
-const TabContent = styled.div`
-  padding: 20px 24px;
-  overflow-y: auto;
-  flex: 1;
-`;
-
-const ActionRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-`;
-
-const PrimaryBtn = styled.button`
-  background: #0070CE;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-
-  &:hover {
-    background: #005096;
-  }
-`;
-
-const DeleteBtn = styled.button`
-  background: #fee2e2;
-  color: #b91c1c;
-  border: 1px solid #fca5a5;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-
-  &:hover {
-    background: #fecdd3;
-  }
-`;
-
-const ItemTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-
-  th,
-  td {
-    padding: 10px 12px;
-    text-align: left;
-    border-bottom: 1px solid #f1f5f9;
-  }
-
-  th {
-    background: #f8fafc;
-    color: #64748b;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-`;
-
-const AddBox = styled.div`
-  background: #f8fafc;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  padding: 14px;
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const FormRow = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-const Select = styled.select`
-  flex: 1;
-  padding: 6px 10px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  font-size: 12px;
-`;
-
-const Input = styled.input`
-  flex: 2;
-  padding: 6px 10px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  font-size: 12px;
-`;
 
 export const GroupDetailsModal: React.FC<Props> = ({
   isOpen,
@@ -190,25 +24,42 @@ export const GroupDetailsModal: React.FC<Props> = ({
 
   const [activeTab, setActiveTab] = useState<'students' | 'recipients'>('students');
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
+
+  // Add recipient form state
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newRecipientType, setNewRecipientType] = useState<'phu_huynh' | 'giao_vien'>('giao_vien');
   const [newRecipientName, setNewRecipientName] = useState('');
+  const [newRecipientType, setNewRecipientType] = useState<'phu_huynh' | 'giao_vien'>('giao_vien');
 
-  if (!isOpen || !conv) return null;
+  if (!conv || !isOpen) return null;
 
-  // Mock list of class students for display in Tab 1
-  const studentRoster = [
-    { id: 'hs-1', name: 'Đỗ Nam', code: 'HS001', parentName: 'Nguyễn Thị Hương' },
-    { id: 'hs-2', name: 'Lê Bảo An', code: 'HS002', parentName: 'Lê Văn Hoàng' },
-    { id: 'hs-3', name: 'Trần Minh Thảo', code: 'HS003', parentName: 'Trần Tuấn Anh' },
-    { id: 'hs-4', name: 'Trần Quang Khải', code: 'HS004', parentName: 'Trần Tuấn Anh' },
-    { id: 'hs-5', name: 'Vũ Phong', code: 'HS005', parentName: 'Vũ Hoàng Yến' },
-  ].filter((s) => conv.studentIds.includes(s.id));
+  // Mock student roster
+  const studentRoster = conv.studentIds.map((id, index) => ({
+    id,
+    name:
+      id === 'hs-001'
+        ? 'Đỗ Nam'
+        : id === 'hs-002'
+        ? 'Lê Bảo An'
+        : id === 'hs-003'
+        ? 'Trần Minh Thảo'
+        : `Học sinh ${index + 1}`,
+    parentName:
+      id === 'hs-001'
+        ? 'Mẹ Đỗ Nam'
+        : id === 'hs-002'
+        ? 'Bố Lê Bảo An'
+        : id === 'hs-003'
+        ? 'Mẹ Trần Minh Thảo'
+        : `PH Học sinh ${index + 1}`,
+    code: `HS2026-${(index + 1).toString().padStart(3, '0')}`,
+  }));
 
   const handleToggleStudent = (id: string) => {
-    setSelectedStudents((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+    if (selectedStudents.includes(id)) {
+      setSelectedStudents(selectedStudents.filter((s) => s !== id));
+    } else {
+      setSelectedStudents([...selectedStudents, id]);
+    }
   };
 
   const handleBulkRemoveStudents = () => {
@@ -225,7 +76,7 @@ export const GroupDetailsModal: React.FC<Props> = ({
       addRecipientToGroup({
         conversationId,
         recipient: {
-          id: `rec-${Date.now()}`,
+          id: `rec-manual-${Date.now()}`,
           name: newRecipientName.trim(),
           role: newRecipientType,
           isManualAddition: true,
@@ -238,70 +89,108 @@ export const GroupDetailsModal: React.FC<Props> = ({
   };
 
   return (
-    <Overlay onClick={onClose}>
-      <ModalBox onClick={(e) => e.stopPropagation()}>
-        <ModalHeader>
-          <Title>Chi Tiết Nhóm: {conv.title}</Title>
-          <CloseBtn onClick={onClose}>✕</CloseBtn>
-        </ModalHeader>
-
-        <TabBar>
-          <TabButton
-            $active={activeTab === 'students'}
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      icon="users"
+      title={`Chi Tiết Nhóm: ${conv.title}`}
+      description="Quản lý danh sách học sinh tham gia và thành viên nhận tin của nhóm trao đổi"
+      width={560}
+      primaryAction={{
+        label: 'Đóng',
+        onClick: onClose,
+      }}
+      secondaryAction={null}
+    >
+      <div className="space-y-4">
+        {/* Tabs */}
+        <div className="flex border-b border-[var(--border-default)]">
+          <button
+            type="button"
+            className={`flex-1 py-2.5 text-xs font-bold transition-all border-b-2 ${
+              activeTab === 'students'
+                ? 'border-[var(--eco-blue-strong)] text-[var(--eco-blue-strong)]'
+                : 'border-transparent text-[var(--text-subtle)] hover:text-[var(--text-heading)]'
+            }`}
             onClick={() => setActiveTab('students')}
           >
-            Danh Sách Học Sinh ({conv.studentIds.length})
-          </TabButton>
-          <TabButton
-            $active={activeTab === 'recipients'}
+            Học Sinh ({conv.studentIds.length})
+          </button>
+          <button
+            type="button"
+            className={`flex-1 py-2.5 text-xs font-bold transition-all border-b-2 ${
+              activeTab === 'recipients'
+                ? 'border-[var(--eco-blue-strong)] text-[var(--eco-blue-strong)]'
+                : 'border-transparent text-[var(--text-subtle)] hover:text-[var(--text-heading)]'
+            }`}
             onClick={() => setActiveTab('recipients')}
           >
-            Danh Sách Người Nhận ({conv.recipients.length})
-          </TabButton>
-        </TabBar>
+            Người Nhận ({conv.recipients.length})
+          </button>
+        </div>
 
-        <TabContent>
-          {activeTab === 'students' ? (
-            <div>
-              <ActionRow>
-                <div style={{ fontSize: '12px', color: '#64748b' }}>
-                  Học sinh nguồn kéo theo phụ huynh vào danh sách nhận tin
-                </div>
-                {selectedStudents.length > 0 && (
-                  <DeleteBtn onClick={handleBulkRemoveStudents}>
-                    Xóa trẻ ({selectedStudents.length})
-                  </DeleteBtn>
-                )}
-              </ActionRow>
+        {/* Tab Content */}
+        {activeTab === 'students' ? (
+          <div className="space-y-3">
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-[var(--text-subtle)]">
+                Học sinh nguồn kéo theo phụ huynh vào nhóm
+              </span>
+              {selectedStudents.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleBulkRemoveStudents}
+                  className="px-2.5 py-1 text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-[var(--radius-6)] transition-all cursor-pointer"
+                >
+                  Xóa khỏi nhóm ({selectedStudents.length})
+                </button>
+              )}
+            </div>
 
-              <ItemTable>
-                <thead>
+            <div className="border border-[var(--border-default)] rounded-[var(--radius-8)] overflow-hidden">
+              <table className="w-full text-xs">
+                <thead className="bg-[var(--bg-muted)] text-[var(--text-subtle)] border-b border-[var(--border-default)]">
                   <tr>
-                    <th style={{ width: '36px' }}>Chọn</th>
-                    <th>Mã HS</th>
-                    <th>Họ và tên học sinh</th>
-                    <th>Phụ huynh liên kết</th>
-                    <th style={{ textAlign: 'right' }}>Thao tác</th>
+                    <th className="w-8 px-3 py-2 text-center">
+                      <input
+                        type="checkbox"
+                        checked={
+                          studentRoster.length > 0 &&
+                          selectedStudents.length === studentRoster.length
+                        }
+                        onChange={() => {
+                          if (selectedStudents.length === studentRoster.length) {
+                            setSelectedStudents([]);
+                          } else {
+                            setSelectedStudents(studentRoster.map((s) => s.id));
+                          }
+                        }}
+                        className="rounded border-[var(--border-default)]"
+                      />
+                    </th>
+                    <th className="px-3 py-2 text-left font-semibold">Mã HS</th>
+                    <th className="px-3 py-2 text-left font-semibold">Học sinh</th>
+                    <th className="px-3 py-2 text-left font-semibold">Phụ huynh</th>
+                    <th className="w-12 px-3 py-2 text-right"></th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-[var(--border-subtle)]">
                   {studentRoster.map((st) => (
-                    <tr key={st.id}>
-                      <td>
+                    <tr key={st.id} className="hover:bg-[var(--bg-subtle)]">
+                      <td className="px-3 py-2 text-center">
                         <input
                           type="checkbox"
                           checked={selectedStudents.includes(st.id)}
                           onChange={() => handleToggleStudent(st.id)}
+                          className="rounded border-[var(--border-default)]"
                         />
                       </td>
-                      <td>{st.code}</td>
-                      <td>
-                        <strong>{st.name}</strong>
-                      </td>
-                      <td>{st.parentName}</td>
-                      <td style={{ textAlign: 'right' }}>
+                      <td className="px-3 py-2 font-mono text-[var(--text-subtle)]">{st.code}</td>
+                      <td className="px-3 py-2 font-semibold text-[var(--text-heading)]">{st.name}</td>
+                      <td className="px-3 py-2 text-[var(--text-subtle)]">{st.parentName}</td>
+                      <td className="px-3 py-2 text-right">
                         <button
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}
+                          type="button"
                           onClick={() =>
                             dispatch(
                               removeStudentFromGroup({
@@ -310,129 +199,123 @@ export const GroupDetailsModal: React.FC<Props> = ({
                               })
                             )
                           }
-                          title="Xóa học sinh này khỏi nhóm"
+                          title="Xóa học sinh này"
+                          className="text-[var(--text-subtle)] hover:text-rose-600 transition-colors p-1"
                         >
-                          🗑️
+                          <Icon name="trash" size={12} />
                         </button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
-              </ItemTable>
+              </table>
             </div>
-          ) : (
-            <div>
-              <ActionRow>
-                <div style={{ fontSize: '12px', color: '#64748b' }}>
-                  Phụ huynh suy ra tự động & thành viên bổ sung
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-[var(--text-subtle)]">
+                Phụ huynh tự động & giáo viên phụ trách
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowAddForm(!showAddForm)}
+                className="px-2.5 py-1 text-xs font-bold text-[var(--eco-blue-strong)] bg-[var(--eco-blue-50,#eff6ff)] hover:bg-[var(--eco-blue-100,#dbeafe)] rounded-[var(--radius-6)] transition-all cursor-pointer"
+              >
+                + Thêm người nhận
+              </button>
+            </div>
+
+            {showAddForm && (
+              <div className="p-3 bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded-[var(--radius-8)] space-y-2.5">
+                <div className="text-xs font-bold text-[var(--text-heading)]">
+                  Thêm thành viên nhận tin mới
                 </div>
-                <PrimaryBtn onClick={() => setShowAddForm(!showAddForm)}>
-                  + Thêm người nhận
-                </PrimaryBtn>
-              </ActionRow>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <select
+                    value={newRecipientType}
+                    onChange={(e) =>
+                      setNewRecipientType(e.target.value as 'phu_huynh' | 'giao_vien')
+                    }
+                    className="w-full text-xs px-2.5 py-1.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-6)] text-[var(--text-heading)]"
+                  >
+                    <option value="giao_vien">Giáo viên / Quản lý</option>
+                    <option value="phu_huynh">Phụ huynh khác</option>
+                  </select>
+                  <input
+                    type="text"
+                    placeholder="Họ và tên (ví dụ: Thầy Tuấn Anh)"
+                    value={newRecipientName}
+                    onChange={(e) => setNewRecipientName(e.target.value)}
+                    className="w-full text-xs px-2.5 py-1.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-6)] text-[var(--text-heading)]"
+                  />
+                </div>
+                <div className="flex justify-end gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddForm(false)}
+                    className="px-2.5 py-1 text-xs font-semibold text-[var(--text-subtle)] hover:text-[var(--text-heading)]"
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleAddRecipient}
+                    className="px-3 py-1 text-xs font-bold text-white bg-[var(--eco-blue-strong)] hover:bg-[var(--eco-blue-hover)] rounded-[var(--radius-6)]"
+                  >
+                    Thêm ngay
+                  </button>
+                </div>
+              </div>
+            )}
 
-              {showAddForm && (
-                <AddBox>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#0f172a' }}>
-                    Thêm thành viên nhận tin
-                  </div>
-                  <FormRow>
-                    <Select
-                      value={newRecipientType}
-                      onChange={(e) =>
-                        setNewRecipientType(e.target.value as 'phu_huynh' | 'giao_vien')
-                      }
-                    >
-                      <option value="giao_vien">Giáo viên / Quản lý</option>
-                      <option value="phu_huynh">Phụ huynh khác</option>
-                    </Select>
-                    <Input
-                      placeholder="Họ và tên (ví dụ: Cô Thu Thủy)"
-                      value={newRecipientName}
-                      onChange={(e) => setNewRecipientName(e.target.value)}
-                    />
-                  </FormRow>
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-                    <button
-                      style={{
-                        padding: '4px 10px',
-                        fontSize: '12px',
-                        background: 'none',
-                        border: '1px solid #cbd5e1',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => setShowAddForm(false)}
-                    >
-                      Hủy
-                    </button>
-                    <PrimaryBtn onClick={handleAddRecipient}>Thêm ngay</PrimaryBtn>
-                  </div>
-                </AddBox>
-              )}
-
-              <ItemTable>
-                <thead>
+            <div className="border border-[var(--border-default)] rounded-[var(--radius-8)] overflow-hidden">
+              <table className="w-full text-xs">
+                <thead className="bg-[var(--bg-muted)] text-[var(--text-subtle)] border-b border-[var(--border-default)]">
                   <tr>
-                    <th>Họ và tên</th>
-                    <th>Vai trò / Gắn thẻ con</th>
-                    <th>Nguồn tham gia</th>
+                    <th className="px-3 py-2 text-left font-semibold">Họ và tên</th>
+                    <th className="px-3 py-2 text-left font-semibold">Vai trò / Liên kết</th>
+                    <th className="px-3 py-2 text-left font-semibold">Nguồn tham gia</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-[var(--border-subtle)]">
                   {conv.recipients.map((rec) => (
-                    <tr key={rec.id}>
-                      <td>
-                        <strong>{rec.name}</strong>
+                    <tr key={rec.id} className="hover:bg-[var(--bg-subtle)]">
+                      <td className="px-3 py-2 font-semibold text-[var(--text-heading)]">
+                        {rec.name}
                       </td>
-                      <td>
+                      <td className="px-3 py-2">
                         {rec.role === 'phu_huynh' ? (
-                          <span style={{ color: '#2563eb', fontWeight: 600 }}>
+                          <span className="text-blue-600 font-medium">
                             {rec.childrenNames && rec.childrenNames.length > 0
                               ? `PH của ${rec.childrenNames.join(', ')}`
                               : 'Phụ huynh'}
                           </span>
                         ) : (
-                          <span style={{ color: '#059669', fontWeight: 600 }}>
+                          <span className="text-emerald-700 font-medium">
                             Giáo viên / Quản lý
                           </span>
                         )}
                       </td>
-                      <td>
+                      <td className="px-3 py-2">
                         {rec.isManualAddition ? (
-                          <span
-                            style={{
-                              background: '#f1f5f9',
-                              color: '#475569',
-                              padding: '2px 8px',
-                              borderRadius: '9999px',
-                              fontSize: '11px',
-                            }}
-                          >
-                            Thêm thủ công
+                          <span className="inline-block px-2 py-0.5 rounded-full text-[11px] bg-slate-100 text-slate-700">
+                            Thủ công
                           </span>
                         ) : (
-                          <span
-                            style={{
-                              background: '#eff6ff',
-                              color: '#1d4ed8',
-                              padding: '2px 8px',
-                              borderRadius: '9999px',
-                              fontSize: '11px',
-                            }}
-                          >
-                            Tự động theo học sinh
+                          <span className="inline-block px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700">
+                            Tự động
                           </span>
                         )}
                       </td>
                     </tr>
                   ))}
                 </tbody>
-              </ItemTable>
+              </table>
             </div>
-          )}
-        </TabContent>
-      </ModalBox>
-    </Overlay>
+          </div>
+        )}
+      </div>
+    </SlideOver>
   );
 };
