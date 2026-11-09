@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,8 +15,11 @@ import {
   faLanguage,
   faQuoteLeft,
   faExternalLinkAlt,
+  faCamera,
+  faBell,
 } from '@fortawesome/free-solid-svg-icons';
-import { useAppSelector } from '../../../store';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { loadSchoolByCode } from '../../../store/slices/schoolProfileSlice';
 import { EcoButton, EcoBadge } from '../../../components/eco';
 import { PageHeader, Button } from '@/components/ds';
 
@@ -24,10 +27,17 @@ export const SchoolOverviewView: React.FC = () => {
   const router = useRouter();
   const { schoolCode } = router.query;
   const sCode = (schoolCode as string) || 'demo';
+  const dispatch = useAppDispatch();
 
-  const { profile, operatingHours, attendanceRules } = useAppSelector(
+  const { profile, operatingHours, attendanceRules, cameraAttendanceRules } = useAppSelector(
     (state) => state.schoolProfile
   );
+
+  useEffect(() => {
+    if (sCode) {
+      dispatch(loadSchoolByCode(sCode));
+    }
+  }, [sCode, dispatch]);
 
   return (
     <div className="space-y-6 pb-12">
@@ -294,6 +304,111 @@ export const SchoolOverviewView: React.FC = () => {
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+
+          {/* Card 4: Cấu hình giờ đón/trả bằng Camera */}
+          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faCamera} className="text-eco-blue text-sm" />
+                <h2 className="text-base font-bold text-gray-900">Giờ đón/trả bằng Camera</h2>
+              </div>
+              <EcoBadge
+                variant={cameraAttendanceRules.educationalType === 'mam_non' ? 'info' : 'neutral'}
+                size="sm"
+              >
+                {cameraAttendanceRules.educationalType === 'mam_non'
+                  ? 'Mầm non (1 buổi)'
+                  : 'K12 (2 buổi)'}
+              </EcoBadge>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              {cameraAttendanceRules.educationalType === 'mam_non' ? (
+                <>
+                  <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-gray-800">Giờ đón học sinh:</span>
+                      <span className="font-bold text-eco-blue">
+                        {cameraAttendanceRules.pickup.enabled
+                          ? `${cameraAttendanceRules.pickup.startTime} – ${cameraAttendanceRules.pickup.endTime}`
+                          : 'Cả ngày (Tắt giới hạn)'}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-emerald-700 flex items-center gap-1 pt-0.5">
+                      <FontAwesomeIcon icon={faBell} className="text-[9px]" />
+                      Lấy sự kiện đầu tiên · Bắn thông báo ngay
+                    </p>
+                  </div>
+
+                  <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-gray-800">Giờ trả học sinh:</span>
+                      <span className="font-bold text-eco-blue">
+                        {cameraAttendanceRules.dropoff.enabled
+                          ? `${cameraAttendanceRules.dropoff.startTime} – ${cameraAttendanceRules.dropoff.endTime}`
+                          : 'Cả ngày (Tắt giới hạn)'}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-amber-700 flex items-center gap-1 pt-0.5">
+                      <FontAwesomeIcon icon={faBell} className="text-[9px]" />
+                      Lấy sự kiện cuối cùng · Bắn thông báo mốc cuối ({cameraAttendanceRules.dropoff.endTime})
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 space-y-2">
+                    <span className="font-bold text-gray-700 text-[11px] uppercase tracking-wide">
+                      Buổi sáng
+                    </span>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-600">Đón sáng:</span>
+                      <span className="font-semibold text-gray-900">
+                        {cameraAttendanceRules.morningPickup.enabled
+                          ? `${cameraAttendanceRules.morningPickup.startTime} – ${cameraAttendanceRules.morningPickup.endTime}`
+                          : 'Cả ngày'}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-600">Trả sáng:</span>
+                      <span className="font-semibold text-gray-900">
+                        {cameraAttendanceRules.morningDropoff.enabled
+                          ? `${cameraAttendanceRules.morningDropoff.startTime} – ${cameraAttendanceRules.morningDropoff.endTime}`
+                          : 'Cả ngày'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 space-y-2">
+                    <span className="font-bold text-gray-700 text-[11px] uppercase tracking-wide">
+                      Buổi chiều
+                    </span>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-600">Đón chiều:</span>
+                      <span className="font-semibold text-gray-900">
+                        {cameraAttendanceRules.afternoonPickup.enabled
+                          ? `${cameraAttendanceRules.afternoonPickup.startTime} – ${cameraAttendanceRules.afternoonPickup.endTime}`
+                          : 'Cả ngày'}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-600">Trả chiều:</span>
+                      <span className="font-semibold text-gray-900">
+                        {cameraAttendanceRules.afternoonDropoff.enabled
+                          ? `${cameraAttendanceRules.afternoonDropoff.startTime} – ${cameraAttendanceRules.afternoonDropoff.endTime}`
+                          : 'Cả ngày'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className="text-[11px] text-emerald-700 flex items-center gap-1 pt-1 font-medium">
+                    <FontAwesomeIcon icon={faBell} className="text-[9px]" />
+                    Cả 2 buổi: Lấy sự kiện đầu tiên · Bắn thông báo ngay
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>

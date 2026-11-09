@@ -13,10 +13,12 @@ import {
   openUnsavedLeaveModal,
   closeUnsavedLeaveModal,
   discardChanges,
+  loadSchoolByCode,
 } from '../../../store/slices/schoolProfileSlice';
 import { SchoolInfoForm } from './SchoolInfoForm';
 import { OperatingHoursForm } from './OperatingHoursForm';
 import { AttendanceRulesForm } from './AttendanceRulesForm';
+import { CameraAttendanceForm } from './CameraAttendanceForm';
 import { UnsavedChangesModal } from './UnsavedChangesModal';
 import { EcoButton } from '../../../components/eco';
 
@@ -31,13 +33,21 @@ export const SchoolEditContainer: React.FC = () => {
     isDirtyInfo,
     isDirtyHours,
     isDirtyRules,
+    isDirtyCamera,
     showUnsavedLeaveModal: isModalOpen,
     pendingNavigationUrl,
     toastMessage,
     toastType,
   } = useAppSelector((state) => state.schoolProfile);
 
-  const isDirty = isDirtyInfo || isDirtyHours || isDirtyRules;
+  const isDirty = isDirtyInfo || isDirtyHours || isDirtyRules || isDirtyCamera;
+
+  // Load school profile based on sCode
+  useEffect(() => {
+    if (sCode) {
+      dispatch(loadSchoolByCode(sCode));
+    }
+  }, [sCode, dispatch]);
 
   // Sync route query ?tab= with Redux activeTab
   useEffect(() => {
@@ -186,7 +196,7 @@ export const SchoolEditContainer: React.FC = () => {
         >
           <FontAwesomeIcon icon={faClock} />
           Giờ hoạt động
-          {(isDirtyHours || isDirtyRules) && (
+          {(isDirtyHours || isDirtyRules || isDirtyCamera) && (
             <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
           )}
         </button>
@@ -199,6 +209,7 @@ export const SchoolEditContainer: React.FC = () => {
         <div className="space-y-6">
           <OperatingHoursForm onCancelRequest={handleBackToOverview} />
           <AttendanceRulesForm onCancelRequest={handleBackToOverview} />
+          <CameraAttendanceForm onCancelRequest={handleBackToOverview} />
         </div>
       )}
 

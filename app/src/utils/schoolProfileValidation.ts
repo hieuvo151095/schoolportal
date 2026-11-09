@@ -9,6 +9,9 @@ import type {
   AttendanceRules,
   SchoolInfoFormData,
   SchoolInfoValidationErrors,
+  CameraAttendanceRules,
+  CameraTimeWindow,
+  SchoolEducationalType,
 } from '../types/schoolProfile.ts';
 
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -179,5 +182,187 @@ export function getDefaultAttendanceRules(): AttendanceRules {
     morningSessionTime: '07:00 - 11:30',
     afternoonSessionTime: '13:30 - 17:00',
     sessionTimeNotice: 'Hiện Eco School chưa hỗ trợ thay đổi thông tin này',
+  };
+}
+
+/**
+ * Returns default Camera Attendance Rules baseline.
+ * - Preschool (Mầm non): 1 buổi (pickup 06:30-11:45, dropoff 14:15-17:30).
+ * - K12: 2 buổi (morning pickup 06:30-08:30, morning dropoff 11:15-12:30,
+ *   afternoon pickup 12:45-14:00, afternoon dropoff 16:00-17:45).
+ */
+export function getDefaultCameraAttendanceRules(
+  educationalType: SchoolEducationalType = 'mam_non'
+): CameraAttendanceRules {
+  return {
+    educationalType,
+    pickup: {
+      enabled: true,
+      startTime: '06:30',
+      endTime: '11:45',
+    },
+    dropoff: {
+      enabled: true,
+      startTime: '14:15',
+      endTime: '17:30',
+    },
+    morningPickup: {
+      enabled: true,
+      startTime: '06:30',
+      endTime: '08:30',
+    },
+    morningDropoff: {
+      enabled: true,
+      startTime: '11:15',
+      endTime: '12:30',
+    },
+    afternoonPickup: {
+      enabled: true,
+      startTime: '12:45',
+      endTime: '14:00',
+    },
+    afternoonDropoff: {
+      enabled: true,
+      startTime: '16:00',
+      endTime: '17:45',
+    },
+  };
+}
+
+/**
+ * Helper to validate a single time window (startTime < endTime).
+ */
+export function validateCameraWindow(
+  window: CameraTimeWindow,
+  windowLabel: string
+): { isValid: boolean; error?: string } {
+  if (!window.enabled) return { isValid: true };
+  if (!window.startTime || !window.endTime) {
+    return {
+      isValid: false,
+      error: `Vui lòng chọn đầy đủ giờ bắt đầu và kết thúc cho ${windowLabel}.`,
+    };
+  }
+  if (window.startTime >= window.endTime) {
+    return {
+      isValid: false,
+      error: `Giờ bắt đầu phải trước giờ kết thúc (${windowLabel}: ${window.startTime} ≥ ${window.endTime}).`,
+    };
+  }
+  return { isValid: true };
+}
+
+/**
+ * Validates Camera Attendance Rules ensuring non-overlapping windows and chronological integrity.
+ * - For Preschool (1 buổi): pickup.endTime <= dropoff.startTime (when both enabled).
+ * - For K12 (2 buổi): morningPickup <= morningDropoff <= afternoonPickup <= afternoonDropoff.
+ */
+export function validateCameraAttendanceRules(
+  rules: CameraAttendanceRules
+): { isValid: boolean; error?: string } {
+  if (rules.educationalType === 'mam_non') {
+    const pickupVal = validateCameraWindow(rules.pickup, 'Giờ đón học sinh');
+    if (!pickupVal.isValid) return pickupVal;
+
+    const dropoffVal = validateCameraWindow(rules.dropoff, 'Giờ trả học sinh');
+    if (!dropoffVal.isValid) return dropoffVal;
+
+    if (rules.pickup.enabled && rules.dropoff.enabled) {
+      if (rules.pickup.endTime > rules.dropoff.startTime) {
+        return {
+          isValid: false,
+          error: `Khung giờ đón và khung giờ trả không được trùng nhau (Giờ đón kết thúc lúc ${rules.pickup.endTime}, sau giờ bắt đầu trả ${rules.dropoff.startTime}).`,
+        };
+      }
+    }
+  } else {
+    // K12 (2 buổi)
+    const mPick = validateCameraWindow(rules.morningPickup, 'Giờ đón sáng');
+    if (!mPick.isValid) return mPick;
+
+    const mDrop = validateCameraWindow(rules.morningDropoff, 'Giờ trả sáng');
+    if (!mDrop.isValid) return mDrop;
+
+    const aPick = validateCameraWindow(rules.afternoonPickup, 'Giờ đón chiều');
+    if (!aPick.isValid) return aPick;
+
+    const aDrop = validateCameraWindow(rules.afternoonDropoff, 'Giờ trả chiều');
+    if (!aDrop.isValid) return aDrop;
+
+    if (rules.morningPickup.enabled && rules.morningDropoff.enabled) {
+      if (rules.morningPickup.endTime > rules.morningDropoff.startTime) {
+        return {
+          isValid: false,
+          error: `Khung giờ đón sáng và trả sáng không được trùng nhau (${rules.morningPickup.endTime} > ${rules.morningDropoff.startTime}).`,
+        };
+      }
+    }
+
+    if (rules.morningDropoff.enabled && rules.afternoonPickup.enabled) {
+      if (rules.morningDropoff.endTime > rules.afternoonPickup.startTime) {
+        return {
+          isValid: false,
+          error: `Khung giờ trả sáng và đón chiều không được trùng nhau (${rules.morningDropoff.endTime} > ${rules.afternoonPickup.startTime}).`,
+        };
+      }
+    }
+
+    if (rules.afternoonPickup.enabled && rules.afternoonDropoff.enabled) {
+      if (rules.afternoonPickup.endTime > rules.afternoonDropoff.startTime) {
+        return {
+          isValid: false,
+          error: `Khung giờ đón chiều và trả chiều không được trùng nhau (${rules.afternoonPickup.endTime} > ${rules.afternoonDropoff.startTime}).`,
+        };
+      }
+    }
+  }
+
+  return { isValid: true };
+}
+
+export interface CameraNotificationRuleInfo {
+  eventCapture: 'first' | 'last';
+  dispatchTiming: 'immediate' | 'cutoff';
+  label: string;
+  badgeText: string;
+}
+
+/**
+ * Returns exact event capture and notification timing rule for a given window:
+ * - Preschool:
+ *   - Check-in: captures first event -> immediate notification.
+ *   - Check-out: captures last event -> notification at cutoff (endTime).
+ * - K12:
+ *   - All sessions (Morning pickup/dropoff, Afternoon pickup/dropoff):
+ *     captures first event -> immediate notification.
+ */
+export function getCameraNotificationRule(
+  educationalType: SchoolEducationalType,
+  windowKey: 'pickup' | 'dropoff' | 'morningPickup' | 'morningDropoff' | 'afternoonPickup' | 'afternoonDropoff',
+  endTime = ''
+): CameraNotificationRuleInfo {
+  if (educationalType === 'mam_non') {
+    if (windowKey === 'dropoff') {
+      return {
+        eventCapture: 'last',
+        dispatchTiming: 'cutoff',
+        label: `Lấy sự kiện nhận diện cuối cùng; hệ thống tự động bắn thông báo đến phụ huynh tại mốc kết thúc (${endTime || 'hết giờ'}).`,
+        badgeText: 'Sự kiện cuối · Bắn thông báo mốc cuối',
+      };
+    }
+    return {
+      eventCapture: 'first',
+      dispatchTiming: 'immediate',
+      label: 'Lấy sự kiện nhận diện đầu tiên; hệ thống tự động bắn thông báo đến phụ huynh ngay lập tức.',
+      badgeText: 'Sự kiện đầu · Bắn thông báo ngay',
+    };
+  }
+
+  // K12
+  return {
+    eventCapture: 'first',
+    dispatchTiming: 'immediate',
+    label: 'Lấy sự kiện nhận diện đầu tiên; hệ thống tự động bắn thông báo đến phụ huynh ngay lập tức.',
+    badgeText: 'Sự kiện đầu · Bắn thông báo ngay',
   };
 }

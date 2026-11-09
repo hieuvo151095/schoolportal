@@ -8,18 +8,19 @@ spec_ids:
   - VH-01
   - VH-02
   - VH-03
-updated: 2026-11-05
+updated: 2026-11-09
 ---
 
 # Luồng Điểm Danh Đón Trả & Theo Dõi Sức Khỏe
 
 ## Mục tiêu
-Thực hiện quy trình đón học sinh buổi sáng, kiểm tra thân nhiệt dấu hiệu y tế, và trả học sinh buổi chiều xác thực người đón hộ chỉ với 1-chạm, bảo đảm an toàn giám hộ và kích hoạt cảnh báo đỏ khẩn cấp khi có tranh chấp.
+Thực hiện quy trình đón học sinh buổi sáng, kiểm tra thân nhiệt dấu hiệu y tế, và trả học sinh buổi chiều xác thực người đón hộ chỉ với 1-chạm hoặc tự động qua Camera AI tại cổng trường, bảo đảm an toàn giám hộ và kích hoạt cảnh báo đỏ khẩn cấp khi có tranh chấp.
 
 ## Các bước
 | # | Vai trò | App / màn | Hành động | Kết quả | Mã |
 |---|---|---|---|---|---|
-| 1 | Giáo viên | [Màn hình điểm danh](../screens/m2-sm1-diem-danh.md) | Chọn lớp học và bấm nút Đón buổi sáng 1-chạm; nếu đến sau 08:30 ghi nhận Đến muộn (Late Arrival, kèm toggle báo bổ sung suất ăn với bếp nếu đến trước 09:00 - OQ-20) | Trạng thái học sinh chuyển sang Đã đến lớp kèm giờ đến thực tế | VH-01 |
+| 0 | Hệ thống / Camera AI | Cổng trường | Học sinh bước qua trạm nhận diện khuôn mặt AI tại cổng trường trong khung giờ cấu hình | Ghi nhận sự kiện điểm danh tự động vào sổ điểm danh hằng ngày. Với Mầm non: đón sáng lấy sự kiện đầu tiên gửi thông báo ngay, trả chiều lấy sự kiện cuối cùng gửi thông báo tại mốc kết thúc khung giờ. Với K12 (2 buổi): cả 2 buổi đón và trả đều lấy sự kiện đầu tiên gửi thông báo ngay lập tức | VH-01 |
+| 1 | Giáo viên | [Màn hình điểm danh](../screens/m2-sm1-diem-danh.md) | Chọn lớp học và bấm nút Đón buổi sáng 1-chạm (hoặc đối soát kết quả từ Camera AI); nếu đến sau 08:30 ghi nhận Đến muộn (Late Arrival, kèm toggle báo bổ sung suất ăn với bếp nếu đến trước 09:00 - OQ-20) | Trạng thái học sinh chuyển sang Đã đến lớp kèm giờ đến thực tế | VH-01 |
 | 2 | Giáo viên | [Màn hình điểm danh](../screens/m2-sm1-diem-danh.md) | Nhập số đo nhiệt độ và chọn dấu hiệu sức khỏe nếu có bất thường | Lưu chỉ số thân nhiệt; nếu sốt $\ge 38.0^\circ\text{C}$ phát cảnh báo y tế | VH-02 |
 | 2c | Giáo viên | [Màn hình điểm danh](../screens/m2-sm1-diem-danh.md) | Sổ dặn thuốc y tế & Xác nhận uống thuốc trưa (OQ-19): Tiếp nhận đơn dặn thuốc từ phụ huynh, đối chiếu Huy hiệu Viên thuốc, cho học sinh uống thuốc đúng liều lượng và bấm xác nhận "Đã cho uống thuốc lúc HH:mm" | Hệ thống tự động gửi Push Notification an tâm tức thời tới phụ huynh; lưu vết bất biến trong `student_medical_logs` | VH-02 |
 | 2b | Giáo viên / Y tế | [Màn hình điểm danh](../screens/m2-sm1-diem-danh.md) | Học sinh sốt cao ($\ge 38.5^\circ\text{C}$), phụ huynh đón về trước 10:30 sáng: chọn "Đón về nửa ngày do y tế" | Ghi nhận `half_day_leave`, hoàn 50% tiền ăn bán trú ngày đó | VH-02 |
@@ -29,6 +30,10 @@ Thực hiện quy trình đón học sinh buổi sáng, kiểm tra thân nhiệt
 
 ## Quy tắc chặn / validation
 - Không cho phép xác nhận Trả trẻ nếu chưa thực hiện thao tác Đón trẻ trong cùng ngày (VH-01).
+- **Quy tắc khung giờ Camera AI:** Camera chỉ ghi nhận trong khung giờ đón/trả được thiết lập tại [Cấu hình trường học](../screens/m6-sm1-truong.md); ngoài khung giờ (hoặc khi tắt hạn chế) camera ghi nhận cả ngày. Khung giờ đón và trả không được trùng nhau.
+- **Quy tắc bắn thông báo qua Camera AI:**
+  - Mầm non: Đón sáng bắn ngay trên sự kiện đầu tiên; Trả chiều chỉ bắn tại mốc cuối của khung giờ trả trên sự kiện cuối cùng.
+  - K12: Cả 2 buổi (sáng/chiều), đón và trả đều bắn ngay lập tức trên sự kiện đầu tiên.
 - **Chốt chặn an toàn tranh chấp quyền giám hộ (OQ-16):** Tuyệt đối cấm giao trẻ cho người nằm trong danh sách bị Tòa án hạn chế tiếp cận (`restricted_guardians`). Hệ thống khóa cứng nút trả trẻ trên giao diện, chỉ Ban Giám Hiệu và lực lượng chức năng mới có thẩm quyền giải quyết theo biên bản pháp lý.
 - **Chốt chặn người lạ ngoài giờ (OQ-10):** Cấm giao trẻ cho người không có tên/ảnh trong danh bạ nếu chưa có xác thực trực tiếp từ phụ huynh qua OTP hoặc video call.
 - **Quy trình bảo vệ pháp lý giữ trẻ ngoài giờ (OQ-10):** Sau 17:30, phòng trực có 2 nhân sự + camera an ninh; sau 19:30 báo Công an Phường và Tổng đài Bảo vệ Trẻ em 111.
@@ -39,7 +44,7 @@ Thực hiện quy trình đón học sinh buổi sáng, kiểm tra thân nhiệt
 ## Khác biệt spec ↔ code
 | Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
-| VH-01 | Điểm danh đón và trả học sinh 1-chạm theo lớp học hằng ngày | Giao diện prototype điểm danh chưa kết nối cơ sở dữ liệu thật | MISSING | repo:app/src/features/attendance/ |
+| VH-01 | Điểm danh đón và trả học sinh 1-chạm theo lớp học hằng ngày | Giao diện prototype điểm danh đã tích hợp quy định khung giờ đón/trả bằng Camera AI theo loại hình trường Mầm non và K12 | MISSING | repo:app/src/modules/setting/school/CameraAttendanceForm.tsx:1 |
 | VH-02 | Ghi nhận thân nhiệt và cảnh báo các dấu hiệu sức khỏe y tế bất thường của học sinh | Modal y tế và thân nhiệt chưa lưu trữ lịch sử sức khỏe | MISSING | repo:app/src/features/attendance/ |
 | VH-03 | Xác thực người đón hộ học sinh từ danh sách người đưa đón hợp lệ đã đăng ký | Chưa có API đối chiếu danh bạ người đón hợp lệ | MISSING | repo:app/src/features/attendance/ |
 
@@ -48,3 +53,4 @@ Thực hiện quy trình đón học sinh buổi sáng, kiểm tra thân nhiệt
 - [Điểm danh hằng ngày](../entities/attendance-daily.md)
 - [Đường ống nhận diện khuôn mặt AI](../concepts/ai-face-recognition.md)
 - [Màn hình điểm danh](../screens/m2-sm1-diem-danh.md)
+- [Màn hình cấu hình trường học](../screens/m6-sm1-truong.md)

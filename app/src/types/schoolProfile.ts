@@ -6,6 +6,26 @@
 
 export type NotificationLanguage = 'vi' | 'en';
 
+export type SchoolEducationalType = 'mam_non' | 'k12';
+
+export interface CameraTimeWindow {
+  enabled: boolean;
+  startTime: string; // 'HH:mm', step 5 or 15 mins
+  endTime: string;   // 'HH:mm', step 5 or 15 mins
+}
+
+export interface CameraAttendanceRules {
+  educationalType: SchoolEducationalType;
+  // Preschool (Mầm non - 1 buổi: Sáng đón, Chiều trả)
+  pickup: CameraTimeWindow; // Giờ đón
+  dropoff: CameraTimeWindow; // Giờ trả
+  // K12 (2 buổi: Sáng đón/trả, Chiều đón/trả)
+  morningPickup: CameraTimeWindow;
+  morningDropoff: CameraTimeWindow;
+  afternoonPickup: CameraTimeWindow;
+  afternoonDropoff: CameraTimeWindow;
+}
+
 export interface SchoolProfile {
   schoolCode: string;
   name: string; // Mandatory (*)
@@ -19,6 +39,7 @@ export interface SchoolProfile {
   defaultLanguage: NotificationLanguage;
   logoUrl?: string;
   educationStages: string[]; // Read-only (e.g. ['02-TH', '03-THCS'])
+  educationalType?: SchoolEducationalType; // 'mam_non' | 'k12'
 }
 
 export interface DayOperatingHour {
@@ -75,10 +96,12 @@ export interface SchoolProfileState {
   profile: SchoolProfile;
   operatingHours: DayOperatingHour[];
   attendanceRules: AttendanceRules;
+  cameraAttendanceRules: CameraAttendanceRules;
   activeTab: 'info' | 'weekdays';
   isDirtyInfo: boolean;
   isDirtyHours: boolean;
   isDirtyRules: boolean;
+  isDirtyCamera: boolean;
   showUnsavedLeaveModal: boolean;
   pendingNavigationUrl?: string;
   toastMessage?: string;

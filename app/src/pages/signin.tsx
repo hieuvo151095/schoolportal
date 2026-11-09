@@ -301,17 +301,82 @@ export default function SignInPage() {
 
             {process.env.NODE_ENV !== 'production' ? (
               <div className={styles.demo}>
-                <strong>Tài khoản demo:</strong>{' '}
+                <div style={{ fontWeight: 700, marginBottom: 8, color: '#1e293b' }}>
+                  Tài khoản đăng nhập demo:
+                </div>
                 {method === 'account' ? (
-                  <>
-                    Mã trường <code>demo</code> · <code>admin@demo.edu.vn</code> ·{' '}
-                    <code>Demo@2026</code>
-                  </>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 4 }}>
+                      <div>
+                        <span style={{ fontWeight: 700, color: '#0369a1' }}>🏫 Trường K12 (2 buổi):</span>{' '}
+                        Mã <code>demo</code> · <code>admin@demo.edu.vn</code>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSchoolCode('demo');
+                          setEmail('admin@demo.edu.vn');
+                          setPassword('Demo@2026');
+                          setAccountErrors({});
+                          setFormError('');
+                        }}
+                        style={{
+                          fontSize: 11,
+                          padding: '3px 8px',
+                          borderRadius: 6,
+                          border: '1px solid #bae6fd',
+                          background: '#f0f9ff',
+                          color: '#0284c7',
+                          cursor: 'pointer',
+                          fontWeight: 600,
+                        }}
+                      >
+                        Điền K12
+                      </button>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 4 }}>
+                      <div>
+                        <span style={{ fontWeight: 700, color: '#b45309' }}>👶 Trường Mầm Non (1 buổi):</span>{' '}
+                        Mã <code>mamnon</code> · <code>admin@mamnon.edu.vn</code>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSchoolCode('mamnon');
+                          setEmail('admin@mamnon.edu.vn');
+                          setPassword('Demo@2026');
+                          setAccountErrors({});
+                          setFormError('');
+                        }}
+                        style={{
+                          fontSize: 11,
+                          padding: '3px 8px',
+                          borderRadius: 6,
+                          border: '1px solid #fde68a',
+                          background: '#fffbeb',
+                          color: '#b45309',
+                          cursor: 'pointer',
+                          fontWeight: 600,
+                        }}
+                      >
+                        Điền Mầm Non
+                      </button>
+                    </div>
+
+                    <div style={{ fontSize: 11, color: '#64748b', paddingTop: 2, borderTop: '1px dashed #e2e8f0' }}>
+                      Mật khẩu chung: <code>Demo@2026</code>
+                    </div>
+                  </div>
                 ) : (
-                  <>
-                    Chọn <code>Liên cấp PT Sao Mai</code>, CCCD <code>079201001234</code> ·{' '}
-                    <code>Sso@2026</code>
-                  </>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <div>
+                      <strong>K12:</strong> Chọn <code>Liên cấp PT Sao Mai</code>, CCCD <code>079201001234</code> · <code>Sso@2026</code>
+                    </div>
+                    <div>
+                      <strong>Mầm non:</strong> Chọn <code>Trường MN Hoa Hồng</code>, CCCD <code>079201005678</code> · <code>Sso@2026</code>
+                    </div>
+                  </div>
                 )}
               </div>
             ) : null}

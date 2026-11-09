@@ -8,13 +8,13 @@ sources:
 spec_ids:
   - VH-06
   - CH-04
-updated: 2026-11-05
+updated: 2026-11-09
 ---
 
 # Đường Ống Nhận Diện Khuôn Mặt AI (AI Face Recognition Pipeline)
 
 ## Định nghĩa
-Đường ống nhận diện khuôn mặt AI là hệ thống xử lý thị giác máy tính bất đồng bộ, tự động phát hiện và nhận diện khuôn mặt học sinh trong các album ảnh hoạt động lớp học, tự động gắn thẻ (tag) học sinh và phân bổ ảnh vào portfolio cá nhân, đồng thời tuân thủ quyền riêng tư sinh trắc học và hỗ trợ chốt chặn an toàn giám hộ trẻ em.
+Đường ống nhận diện khuôn mặt AI là hệ thống xử lý thị giác máy tính bất đồng bộ, tự động phát hiện và nhận diện khuôn mặt học sinh trong các album ảnh hoạt động lớp học, tự động gắn thẻ (tag) học sinh và phân bổ ảnh vào portfolio cá nhân, đồng thời ghi nhận sự kiện điểm danh đón/trả tự động tại cổng trường qua camera AI, tuân thủ quyền riêng tư sinh trắc học và hỗ trợ chốt chặn an toàn giám hộ trẻ em.
 
 ## Quy tắc
 1. **Xử lý bất đồng bộ (Asynchronous Queue - OQ-04):**
@@ -34,14 +34,24 @@ updated: 2026-11-05
 5. **Chốt chặn an toàn tranh chấp quyền giám hộ (Restricted Custody Protection - OQ-16):**
    - Với các trường hợp tranh chấp quyền nuôi con hoặc có phán quyết của Tòa án cấm tiếp cận (`restricted_guardians`), hệ thống đồng bộ danh sách cảnh báo này sang phân hệ Vận hành.
    - Tại màn hình Điểm danh đón/trả (`m2-sm1-diem-danh`), học sinh được gắn Huy hiệu Khiên Đỏ (Custody Alert). Khi quét thẻ hoặc chọn người đón nằm trong danh sách hạn chế, hệ thống lập tức kích hoạt Cảnh báo đỏ toàn màn hình (Red Modal Alert) kèm chuông báo động, khóa nút giao trẻ và kích hoạt quy trình an ninh bảo vệ học sinh.
+6. **Điểm danh đón/trả bằng Camera AI tại cổng trường (Camera Gate Attendance Rules):**
+   - Camera nhận diện chỉ ghi nhận điểm danh trong khung giờ được cấu hình (hoặc cả ngày khi tắt giới hạn). Khung giờ đón và khung giờ trả không được trùng nhau.
+   - **Trường Mầm non (1 buổi):**
+     - Đón học sinh buổi sáng: Ghi nhận sự kiện nhận diện đầu tiên (first event), tự động gửi thông báo đẩy (push notification) tới phụ huynh ngay lập tức.
+     - Trả học sinh buổi chiều: Theo dõi và lấy sự kiện nhận diện cuối cùng (last event) trong khung giờ trả; chỉ gửi thông báo đẩy tới phụ huynh tại mốc kết thúc khung giờ (cutoff time) để tránh thông báo sai khi trẻ chạy qua lại cổng trường.
+   - **Trường K12 (2 buổi):**
+     - Cấu hình 2 buổi độc lập (Sáng đón/trả, Chiều đón/trả).
+     - Ở cả 2 buổi, cả sự kiện đón và trả đều lấy sự kiện nhận diện đầu tiên (first event) và gửi thông báo đẩy tới phụ huynh ngay lập tức.
 
 ## Áp dụng ở đâu
 - [Thư viện media](../entities/media-album.md)
 - [Hồ sơ học sinh 360](../entities/student-profile.md)
 - [Điểm danh hằng ngày](../entities/attendance-daily.md)
 - [Hồ sơ sinh trắc khuôn mặt](../entities/face-biometric-registration.md)
+- [Thực thể Hồ sơ trường học](../entities/school-profile.md)
 - [Màn hình thư viện](../screens/m2-sm3-thu-vien.md)
 - [Màn hình điểm danh](../screens/m2-sm1-diem-danh.md)
+- [Màn hình cấu hình trường học](../screens/m6-sm1-truong.md)
 - [Màn hình nhận diện](../screens/m6-sm4-nhan-dien.md)
 - [Luồng nhận diện album ảnh](../flows/fl-nhan-dien-album-anh.md)
 - [Luồng điểm danh đón trả](../flows/fl-diem-danh-don-tra.md)
@@ -50,7 +60,7 @@ updated: 2026-11-05
 | Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
 |---|---|---|---|---|
 | VH-06 | Thư viện media tự động gắn thẻ khuôn mặt học sinh trong ảnh lớp bằng AI | Prototype frontend hiển thị ảnh tĩnh, chưa kết nối BullMQ worker | MISSING | repo:app/src/features/media/ |
-| CH-04 | Cấu hình mô hình AI nhận diện khuôn mặt và ngưỡng nhạy độ tin cậy nhận diện | Màn hình cài đặt AI mới có mockup giao diện | MISSING | repo:app/src/features/settings/ |
+| CH-04 | Cấu hình mô hình AI nhận diện khuôn mặt và ngưỡng nhạy độ tin cậy nhận diện | Màn hình cài đặt AI mới có mockup giao diện; cấu hình khung giờ đón/trả camera đã hoàn thiện tại cấu hình trường | MISSING | repo:app/src/modules/setting/school/CameraAttendanceForm.tsx:1 |
 
 ## Liên quan
 - [Phân hệ Vận hành](../overview/module-operations.md)
@@ -62,4 +72,5 @@ updated: 2026-11-05
 - [Luồng điểm danh đón trả](../flows/fl-diem-danh-don-tra.md)
 - [Màn hình thư viện](../screens/m2-sm3-thu-vien.md)
 - [Màn hình điểm danh](../screens/m2-sm1-diem-danh.md)
+- [Màn hình cấu hình trường học](../screens/m6-sm1-truong.md)
 - [Màn hình nhận diện](../screens/m6-sm4-nhan-dien.md)

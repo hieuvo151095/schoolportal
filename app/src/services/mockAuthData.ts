@@ -58,17 +58,18 @@ export const MOCK_SSO_ACCOUNTS: SsoAccount[] = [
 
 /** Tài khoản demo do Finviet cấp (mã trường + email + mật khẩu). */
 export const MOCK_SCHOOL_ACCOUNTS: SchoolAccount[] = [
+  // --- Trường K12 (Điểm danh 2 buổi) ---
   {
     schoolCode: 'demo',
-    schoolName: 'Trường Demo ECO',
+    schoolName: 'Trường Phổ Thông Liên Cấp ECO (K12)',
     email: 'admin@demo.edu.vn',
     password: 'Demo@2026',
-    displayName: 'Quản trị viên Demo',
+    displayName: 'Quản trị viên K12',
     role: 'admin',
   },
   {
     schoolCode: 'demo',
-    schoolName: 'Trường Demo ECO',
+    schoolName: 'Trường Phổ Thông Liên Cấp ECO (K12)',
     email: 'ketoan@demo.edu.vn',
     password: 'Demo@2026',
     displayName: 'Nguyễn Thị Kế Toán',
@@ -76,10 +77,28 @@ export const MOCK_SCHOOL_ACCOUNTS: SchoolAccount[] = [
   },
   {
     schoolCode: 'demo',
-    schoolName: 'Trường Demo ECO',
+    schoolName: 'Trường Phổ Thông Liên Cấp ECO (K12)',
     email: 'mai.nguyen@demo.edu.vn',
     password: 'Demo@2026',
     displayName: 'Cô Nguyễn Thị Mai',
+    role: 'teacher',
+  },
+
+  // --- Trường Mầm Non (Điểm danh 1 buổi) ---
+  {
+    schoolCode: 'mamnon',
+    schoolName: 'Trường Mầm Non Ban Mai',
+    email: 'admin@mamnon.edu.vn',
+    password: 'Demo@2026',
+    displayName: 'Quản trị viên Mầm Non',
+    role: 'admin',
+  },
+  {
+    schoolCode: 'mamnon',
+    schoolName: 'Trường Mầm Non Ban Mai',
+    email: 'mai.nguyen@mamnon.edu.vn',
+    password: 'Demo@2026',
+    displayName: 'Cô Nguyễn Mai Anh',
     role: 'teacher',
   },
 ];

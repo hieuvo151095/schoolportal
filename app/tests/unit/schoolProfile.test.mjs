@@ -9,20 +9,33 @@ import {
   validateAttendanceRules,
   getDefaultOperatingHours,
   getDefaultAttendanceRules,
+  getDefaultCameraAttendanceRules,
+  validateCameraWindow,
+  validateCameraAttendanceRules,
+  getCameraNotificationRule,
 } from '../../src/utils/schoolProfileValidation.ts';
 import schoolProfileReducer, {
   setActiveTab,
   updateSchoolProfile,
   updateOperatingHours,
   updateAttendanceRules,
+  updateCameraAttendanceRules,
+  setEducationalType,
+  loadSchoolByCode,
   setDirtyInfo,
   setDirtyHours,
   setDirtyRules,
+  setDirtyCamera,
   openUnsavedLeaveModal,
   closeUnsavedLeaveModal,
   discardChanges,
 } from '../../src/store/slices/schoolProfileSlice.ts';
-import { mockSchoolProfile } from '../../src/services/mockSchoolProfileData.ts';
+import {
+  mockSchoolProfile,
+  mockPreschoolProfile,
+  mockK12SchoolProfile,
+  getSchoolProfileByCode,
+} from '../../src/services/mockSchoolProfileData.ts';
 
 test('School Profile & Operational Configuration Suite', async (t) => {
   await t.test('TR-01 & BR02: Inline Field Validation on Blur', () => {
@@ -201,5 +214,127 @@ test('School Profile & Operational Configuration Suite', async (t) => {
     state = schoolProfileReducer(state, discardChanges());
     assert.equal(state.isDirtyInfo, false);
     assert.equal(state.showUnsavedLeaveModal, false);
+  });
+
+  await t.test('Camera Attendance Rules: Defaults for Mầm Non & K12', () => {
+    const mnRules = getDefaultCameraAttendanceRules('mam_non');
+    assert.equal(mnRules.educationalType, 'mam_non');
+    assert.equal(mnRules.pickup.startTime, '06:30');
+    assert.equal(mnRules.pickup.endTime, '11:45');
+    assert.equal(mnRules.dropoff.startTime, '14:15');
+    assert.equal(mnRules.dropoff.endTime, '17:30');
+
+    const k12Rules = getDefaultCameraAttendanceRules('k12');
+    assert.equal(k12Rules.educationalType, 'k12');
+    assert.equal(k12Rules.morningPickup.startTime, '06:30');
+    assert.equal(k12Rules.morningPickup.endTime, '08:30');
+    assert.equal(k12Rules.morningDropoff.startTime, '11:15');
+    assert.equal(k12Rules.morningDropoff.endTime, '12:30');
+    assert.equal(k12Rules.afternoonPickup.startTime, '12:45');
+    assert.equal(k12Rules.afternoonPickup.endTime, '14:00');
+    assert.equal(k12Rules.afternoonDropoff.startTime, '16:00');
+    assert.equal(k12Rules.afternoonDropoff.endTime, '17:45');
+  });
+
+  await t.test('Camera Attendance Rules: Validation & Overlap Constraints', () => {
+    // 1. Single window validation (startTime >= endTime)
+    const invalidWindow = validateCameraWindow(
+      { enabled: true, startTime: '11:45', endTime: '06:30' },
+      'Giờ đón'
+    );
+    assert.equal(invalidWindow.isValid, false);
+    assert.ok(invalidWindow.error?.includes('Giờ bắt đầu phải trước giờ kết thúc'));
+
+    // Disabled window skips validation
+    const disabledWindow = validateCameraWindow(
+      { enabled: false, startTime: '18:00', endTime: '07:00' },
+      'Giờ đón'
+    );
+    assert.equal(disabledWindow.isValid, true);
+
+    // 2. Preschool overlap validation
+    const validPreschool = getDefaultCameraAttendanceRules('mam_non');
+    assert.equal(validateCameraAttendanceRules(validPreschool).isValid, true);
+
+    const overlappingPreschool = {
+      ...validPreschool,
+      pickup: { enabled: true, startTime: '06:30', endTime: '15:00' },
+      dropoff: { enabled: true, startTime: '14:00', endTime: '17:30' },
+    };
+    const preschoolResult = validateCameraAttendanceRules(overlappingPreschool);
+    assert.equal(preschoolResult.isValid, false);
+    assert.ok(preschoolResult.error?.includes('Khung giờ đón và khung giờ trả không được trùng nhau'));
+
+    // 3. K12 overlap validation
+    const validK12 = getDefaultCameraAttendanceRules('k12');
+    assert.equal(validateCameraAttendanceRules(validK12).isValid, true);
+
+    const overlappingK12 = {
+      ...validK12,
+      morningPickup: { enabled: true, startTime: '06:30', endTime: '11:30' },
+      morningDropoff: { enabled: true, startTime: '11:00', endTime: '12:30' },
+    };
+    const k12Result = validateCameraAttendanceRules(overlappingK12);
+    assert.equal(k12Result.isValid, false);
+    assert.ok(k12Result.error?.includes('không được trùng nhau'));
+  });
+
+  await t.test('Camera Attendance Rules: Event Capture & Notification Timing Rules', () => {
+    // Preschool Pickup: first event -> immediate notification
+    const mnPickup = getCameraNotificationRule('mam_non', 'pickup', '11:45');
+    assert.equal(mnPickup.eventCapture, 'first');
+    assert.equal(mnPickup.dispatchTiming, 'immediate');
+    assert.ok(mnPickup.label.includes('ngay lập tức'));
+
+    // Preschool Dropoff: last event -> cutoff notification at endTime
+    const mnDropoff = getCameraNotificationRule('mam_non', 'dropoff', '17:30');
+    assert.equal(mnDropoff.eventCapture, 'last');
+    assert.equal(mnDropoff.dispatchTiming, 'cutoff');
+    assert.ok(mnDropoff.label.includes('cuối cùng'));
+    assert.ok(mnDropoff.label.includes('17:30'));
+
+    // K12 all sessions: first event -> immediate notification
+    const k12Morning = getCameraNotificationRule('k12', 'morningPickup', '08:30');
+    assert.equal(k12Morning.eventCapture, 'first');
+    assert.equal(k12Morning.dispatchTiming, 'immediate');
+
+    const k12Drop = getCameraNotificationRule('k12', 'afternoonDropoff', '17:45');
+    assert.equal(k12Drop.eventCapture, 'first');
+    assert.equal(k12Drop.dispatchTiming, 'immediate');
+  });
+
+  await t.test('Camera Attendance Rules: Redux State Mutations & Multi-School Profile Loading', () => {
+    let state = schoolProfileReducer(undefined, { type: '@@INIT' });
+
+    // Update camera rules
+    state = schoolProfileReducer(
+      state,
+      updateCameraAttendanceRules({
+        pickup: { enabled: true, startTime: '07:00', endTime: '11:30' },
+      })
+    );
+    assert.equal(state.cameraAttendanceRules.pickup.startTime, '07:00');
+    assert.equal(state.isDirtyCamera, false);
+    assert.equal(state.toastType, 'success');
+
+    // Toggle dirty camera
+    state = schoolProfileReducer(state, setDirtyCamera(true));
+    assert.equal(state.isDirtyCamera, true);
+
+    // Switch educational type
+    state = schoolProfileReducer(state, setEducationalType('mam_non'));
+    assert.equal(state.cameraAttendanceRules.educationalType, 'mam_non');
+    assert.equal(state.isDirtyCamera, true);
+
+    // Load school by code: 'mamnon' loads Preschool profile
+    state = schoolProfileReducer(state, loadSchoolByCode('mamnon'));
+    assert.equal(state.profile.schoolCode, 'mamnon');
+    assert.equal(state.cameraAttendanceRules.educationalType, 'mam_non');
+    assert.equal(state.isDirtyCamera, false);
+
+    // Load school by code: 'demo' loads K12 profile
+    state = schoolProfileReducer(state, loadSchoolByCode('demo'));
+    assert.equal(state.profile.schoolCode, 'demo');
+    assert.equal(state.cameraAttendanceRules.educationalType, 'k12');
   });
 });

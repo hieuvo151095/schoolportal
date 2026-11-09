@@ -10,22 +10,30 @@ import type {
   SchoolProfile,
   DayOperatingHour,
   AttendanceRules,
+  CameraAttendanceRules,
+  SchoolEducationalType,
   SchoolProfileState,
 } from '../../types/schoolProfile.ts';
 import {
   mockSchoolProfile,
   mockDayOperatingHours,
   mockAttendanceRules,
+  mockCameraAttendanceRules,
+  getSchoolProfileByCode,
+  getAttendanceRulesByCode,
+  getCameraAttendanceRulesByCode,
 } from '../../services/mockSchoolProfileData.ts';
 
 const initialState: SchoolProfileState = {
   profile: mockSchoolProfile,
   operatingHours: mockDayOperatingHours,
   attendanceRules: mockAttendanceRules,
+  cameraAttendanceRules: mockCameraAttendanceRules,
   activeTab: 'info',
   isDirtyInfo: false,
   isDirtyHours: false,
   isDirtyRules: false,
+  isDirtyCamera: false,
   showUnsavedLeaveModal: false,
   pendingNavigationUrl: undefined,
   toastMessage: undefined,
@@ -63,6 +71,32 @@ export const schoolProfileSlice = createSlice({
       state.toastMessage = 'Cập nhật quy định điểm danh thành công!';
       state.toastType = 'success';
     },
+    updateCameraAttendanceRules: (
+      state,
+      action: PayloadAction<Partial<CameraAttendanceRules>>
+    ) => {
+      state.cameraAttendanceRules = {
+        ...state.cameraAttendanceRules,
+        ...action.payload,
+      };
+      state.isDirtyCamera = false;
+      state.toastMessage = 'Cập nhật cấu hình giờ đón/trả bằng camera thành công!';
+      state.toastType = 'success';
+    },
+    setEducationalType: (state, action: PayloadAction<SchoolEducationalType>) => {
+      state.cameraAttendanceRules.educationalType = action.payload;
+      state.isDirtyCamera = true;
+    },
+    loadSchoolByCode: (state, action: PayloadAction<string>) => {
+      const code = action.payload;
+      state.profile = getSchoolProfileByCode(code);
+      state.attendanceRules = getAttendanceRulesByCode(code);
+      state.cameraAttendanceRules = getCameraAttendanceRulesByCode(code);
+      state.isDirtyInfo = false;
+      state.isDirtyHours = false;
+      state.isDirtyRules = false;
+      state.isDirtyCamera = false;
+    },
     setDirtyInfo: (state, action: PayloadAction<boolean>) => {
       state.isDirtyInfo = action.payload;
     },
@@ -71,6 +105,9 @@ export const schoolProfileSlice = createSlice({
     },
     setDirtyRules: (state, action: PayloadAction<boolean>) => {
       state.isDirtyRules = action.payload;
+    },
+    setDirtyCamera: (state, action: PayloadAction<boolean>) => {
+      state.isDirtyCamera = action.payload;
     },
     openUnsavedLeaveModal: (state, action: PayloadAction<string | undefined>) => {
       state.showUnsavedLeaveModal = true;
@@ -84,6 +121,7 @@ export const schoolProfileSlice = createSlice({
       state.isDirtyInfo = false;
       state.isDirtyHours = false;
       state.isDirtyRules = false;
+      state.isDirtyCamera = false;
       state.showUnsavedLeaveModal = false;
       state.pendingNavigationUrl = undefined;
     },
@@ -106,9 +144,13 @@ export const {
   updateSchoolProfile,
   updateOperatingHours,
   updateAttendanceRules,
+  updateCameraAttendanceRules,
+  setEducationalType,
+  loadSchoolByCode,
   setDirtyInfo,
   setDirtyHours,
   setDirtyRules,
+  setDirtyCamera,
   openUnsavedLeaveModal,
   closeUnsavedLeaveModal,
   discardChanges,
