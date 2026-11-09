@@ -1297,7 +1297,7 @@ export function AppHeader(p: AppHeaderProps) {
   ) : null;
 
   return (
-    <header className={cx('ecomd-header w-full flex-nowrap overflow-hidden flex-shrink-0', p.className)} style={p.style}>
+    <header className={cx('ecomd-header w-full flex-nowrap overflow-visible relative z-40 flex-shrink-0', p.className)} style={p.style}>
       <div className="ecomd-header__left flex-shrink-0 min-w-0">
         {p.onMenu !== false && (
           <IconButton
@@ -1471,7 +1471,13 @@ export function DropdownMenu(p: DropdownMenuProps) {
 
   const panel = (
     <div
-      className={cx('ecomd-menu', p.trigger && 'is-floating', p.align === 'left' ? 'is-left' : 'is-right', !p.trigger && p.className)}
+      className={cx(
+        'ecomd-menu',
+        p.trigger && 'is-floating',
+        p.align === 'left' ? 'is-left' : 'is-right',
+        '!z-[999] shadow-2xl',
+        !p.trigger && p.className
+      )}
       role="menu"
       style={p.trigger ? undefined : p.style}
     >
@@ -1491,7 +1497,7 @@ export function DropdownMenu(p: DropdownMenuProps) {
   });
 
   return (
-    <div ref={ref} className={cx('ecomd-menu-wrap', p.className)} style={p.style}>
+    <div ref={ref} className={cx('ecomd-menu-wrap relative z-50', p.className)} style={p.style}>
       {trig}
       {open ? panel : null}
     </div>
