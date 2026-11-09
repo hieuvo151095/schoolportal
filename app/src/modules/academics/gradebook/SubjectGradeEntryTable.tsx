@@ -281,12 +281,16 @@ const HeaderCard = styled.div`
   background: #ffffff;
   border-radius: 14px;
   border: 1px solid #e2e8f0;
-  padding: 20px 24px;
+  padding: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
+
+  @media (min-width: 768px) {
+    padding: 20px 24px;
+  }
 `;
 
 const Breadcrumb = styled.div`
@@ -296,6 +300,13 @@ const Breadcrumb = styled.div`
   font-size: 12px;
   color: #64748b;
   margin-bottom: 6px;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const BackLink = styled.a`
@@ -344,6 +355,7 @@ const SaveButton = styled.button`
   color: #ffffff;
   font-size: 13px;
   font-weight: 600;
+  min-height: 40px;
   padding: 8px 20px;
   border-radius: var(--radius-8);
   border: none;
@@ -362,8 +374,13 @@ const ToolbarBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
+  flex-direction: column;
+  gap: 12px;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    gap: 16px;
+  }
 `;
 
 const SubjectSelectorGroup = styled.div`
@@ -371,6 +388,11 @@ const SubjectSelectorGroup = styled.div`
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  width: 100%;
+
+  @media (min-width: 640px) {
+    width: auto;
+  }
 `;
 
 const SelectorLabel = styled.span`
@@ -381,6 +403,7 @@ const SelectorLabel = styled.span`
 
 const SubjectSelect = styled.select`
   padding: 7px 14px;
+  min-height: 38px;
   border: 1px solid var(--border-default);
   border-radius: var(--radius-8);
   font-size: 13px;
@@ -403,6 +426,11 @@ const NoticePill = styled.span`
 const ToggleWrapper = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
+
+  @media (min-width: 640px) {
+    width: auto;
+  }
 `;
 
 const TableWrapper = styled.div`
@@ -410,10 +438,12 @@ const TableWrapper = styled.div`
   border-radius: var(--radius-12);
   border: 1px solid var(--border-default);
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 `;
 
 const Table = styled.table`
   width: 100%;
+  min-width: 860px;
   border-collapse: collapse;
   th {
     padding: 10px 14px;

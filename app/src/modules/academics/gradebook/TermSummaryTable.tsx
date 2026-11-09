@@ -237,12 +237,16 @@ const HeaderCard = styled.div`
   background: #ffffff;
   border-radius: 14px;
   border: 1px solid #e2e8f0;
-  padding: 20px 24px;
+  padding: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
+
+  @media (min-width: 768px) {
+    padding: 20px 24px;
+  }
 `;
 
 const Breadcrumb = styled.div`
@@ -252,6 +256,13 @@ const Breadcrumb = styled.div`
   font-size: 12px;
   color: var(--text-subtle);
   margin-bottom: 6px;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const BackLink = styled.a`
@@ -282,7 +293,19 @@ const PageSubtitle = styled.p`
 const TopActions = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    width: auto;
+    gap: 12px;
+  }
 `;
 
 const ToastMessage = styled.span`
@@ -293,6 +316,8 @@ const ToastMessage = styled.span`
   padding: 8px 14px;
   border-radius: var(--radius-8);
   border: 1px solid var(--border-success-soft);
+  flex: none;
+  white-space: nowrap;
 `;
 
 const PublishButton = styled.button`
@@ -300,10 +325,13 @@ const PublishButton = styled.button`
   color: #ffffff;
   font-size: 13px;
   font-weight: 600;
+  min-height: 40px;
   padding: 8px 20px;
   border-radius: var(--radius-8);
   border: none;
   cursor: pointer;
+  flex: none;
+  white-space: nowrap;
   transition: all 0.15s ease;
   &:hover {
     opacity: 0.92;
@@ -312,8 +340,12 @@ const PublishButton = styled.button`
 
 const MetricRow = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+
+  @media (min-width: 640px) {
+    gap: 16px;
+  }
 `;
 
 const MetricCard = styled.div`
@@ -356,11 +388,14 @@ const TableControls = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
   border-bottom: 1px solid var(--border-default);
 `;
 
 const BulkEditBtn = styled.button<{ active: boolean }>`
   padding: 7px 14px;
+  min-height: 38px;
   background: ${props => (props.active ? 'var(--semantic-warning-soft)' : 'var(--bg-subtle)')};
   color: ${props => (props.active ? 'var(--semantic-warning-strong)' : 'var(--text-heading)')};
   border: 1px solid ${props => (props.active ? 'var(--semantic-warning-strong)' : 'var(--border-default)')};
@@ -372,10 +407,12 @@ const BulkEditBtn = styled.button<{ active: boolean }>`
 
 const TableWrapper = styled.div`
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 `;
 
 const Table = styled.table`
   width: 100%;
+  min-width: 780px;
   border-collapse: collapse;
   th {
     padding: 10px 14px;

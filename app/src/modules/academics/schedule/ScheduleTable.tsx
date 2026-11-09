@@ -270,7 +270,7 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({ schoolCode }) => {
       {/* Pagination Controls - Maximum 10 schedules per page */}
       {totalCount > 0 && (
         <div
-          className="flex items-center justify-between flex-wrap gap-3 px-5 py-3 border-t border-[var(--border-subtle)] text-xs text-[var(--text-subtle)]"
+          className="flex items-center justify-between flex-wrap gap-3 px-4 sm:px-5 py-3 border-t border-[var(--border-subtle)] text-xs text-[var(--text-subtle)]"
           style={{ background: 'var(--bg-subtle)' }}
         >
           <div>
@@ -279,7 +279,7 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({ schoolCode }) => {
             <b>{totalCount}</b> thời khóa biểu
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full py-1">
             <Button
               variant="secondary"
               size="sm"

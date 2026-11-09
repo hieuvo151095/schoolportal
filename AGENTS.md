@@ -44,3 +44,12 @@ Mọi màn hình trên School Operating Portal phải đáp ứng trơn tru cả
 - **Bảng dữ liệu dạng thẻ (Card List View)**: Khi thu nhỏ về mobile, các hàng dữ liệu chuyển đổi sang bố cục thẻ di động, tách rõ nhãn (`.ecomd-cell__label`) và giá trị (`.ecomd-cell__value`), nút thao tác nằm ở góc phải trên.
 - **Vùng chạm công thái học (Touch Target)**: Các nút bấm, icon thao tác và checkbox đạt tối thiểu 40px – 44px để người dùng chạm bằng ngón tay chính xác.
 - **Khoảng cách**: Đệm lề mép trang mobile là `var(--space-16)` (16px), khoảng cách giữa các khối là `var(--space-16)` (16px).
+
+### 3.5. Đồng Bộ Chiều Rộng Bộ Lọc & Định Vị Dropdown
+- **Độ rộng đồng nhất**: Trên mobile, mọi dropdown chọn lớp/môn và ô tìm kiếm phải chiếm 100% bề rộng (`w-full`), tránh so le ô trên ngắn ô dưới dài.
+- **Định vị Dropdown Popover**: Phần tử kích hoạt bắt buộc bọc trong container có class `relative`; menu dropdown đặt `absolute top-full left-0 z-50 w-full` (hoặc `right-0`), tuyệt đối không để menu bay lên góc trái trên màn hình.
+
+### 3.6. Bảng Ma Trận Nhiều Cột & Thời Khóa Biểu Tuần Trên Mobile
+- Với bảng ma trận nhiều cột (như thời khóa biểu 7 ngày hoặc bảng điểm 4 kỳ), trên mobile bắt buộc áp dụng một trong hai giải pháp:
+  1. **Thanh chọn ngày/kỳ dạng tab cuộn ngang**: Xem chi tiết từng ngày/kỳ trên thẻ mobile, kèm nút xem toàn tuần.
+  2. **Bảng cuộn ngang có ghim cột cố định (Sticky Column)**: Cột "Tiết học / Giờ" hoặc "Lớp học" được `position: sticky; left: 0`, các cột còn lại cuộn ngang mượt mà với `min-width` tối thiểu 120px/cột, tránh bóp nghẹt chữ.

@@ -67,19 +67,10 @@ export const ScheduleToolbar: React.FC<ScheduleToolbarProps> = ({ schoolCode }) 
 
       {/* 2. Unified Filterbar Toolbar */}
       <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: 'var(--space-12)',
-          padding: 'var(--space-16) var(--space-20)',
-          borderBottom: '1px solid var(--border-default)',
-          background: 'var(--bg-surface)',
-        }}
+        className="ecomd-table-card__toolbar flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 sm:p-5 border-b border-[var(--border-default)] bg-[var(--bg-surface)]"
       >
-        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-12)' }}>
-          <div style={{ width: '170px' }}>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center flex-wrap gap-3 flex-1 w-full">
+          <div className="w-full sm:w-[180px]">
             <SelectField
               value={filterCriteria.classId}
               onChange={handleClassChange}
@@ -90,7 +81,7 @@ export const ScheduleToolbar: React.FC<ScheduleToolbarProps> = ({ schoolCode }) 
             />
           </div>
 
-          <div style={{ width: '250px' }}>
+          <div className="w-full sm:w-[260px] sm:flex-1">
             <SearchField
               value={filterCriteria.searchQuery}
               onChange={handleSearchChange}
@@ -98,23 +89,26 @@ export const ScheduleToolbar: React.FC<ScheduleToolbarProps> = ({ schoolCode }) 
             />
           </div>
 
-          <SegmentedControl
-            value={filterCriteria.type}
-            onChange={(type) => dispatch(setFilterCriteria({ type: type as 'all' | 'grid' | 'file' }))}
-            items={[
-              { key: 'all', label: 'Tất cả' },
-              { key: 'grid', label: 'Dạng lưới', icon: 'layer-group' },
-              { key: 'file', label: 'Dạng file', icon: 'file-lines' },
-            ]}
-          />
+          <div className="w-full sm:w-auto">
+            <SegmentedControl
+              value={filterCriteria.type}
+              onChange={(type) => dispatch(setFilterCriteria({ type: type as 'all' | 'grid' | 'file' }))}
+              items={[
+                { key: 'all', label: 'Tất cả' },
+                { key: 'grid', label: 'Dạng lưới', icon: 'layer-group' },
+                { key: 'file', label: 'Dạng file', icon: 'file-lines' },
+              ]}
+            />
+          </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)', flexWrap: 'wrap' }}>
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full md:w-auto py-1">
           <Button
             variant="secondary"
             icon="filter"
             active={isFiltered}
             indicator={isFiltered}
+            className="flex-none whitespace-nowrap"
             onClick={() => dispatch(setFilterDrawerOpen(true))}
           >
             Bộ lọc
@@ -123,6 +117,7 @@ export const ScheduleToolbar: React.FC<ScheduleToolbarProps> = ({ schoolCode }) 
           <Button
             variant="secondary"
             icon="upload"
+            className="flex-none whitespace-nowrap"
             onClick={() => dispatch(setUploadModalOpen(true))}
           >
             Tải lên file
@@ -131,6 +126,7 @@ export const ScheduleToolbar: React.FC<ScheduleToolbarProps> = ({ schoolCode }) 
           <Button
             variant="primary"
             icon="plus"
+            className="flex-none whitespace-nowrap"
             href={`/${schoolCode}/school/schedule/create`}
           >
             Thêm thời khóa biểu

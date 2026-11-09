@@ -17,7 +17,11 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 24px;
+  padding: 16px;
+
+  @media (min-width: 768px) {
+    padding: 24px;
+  }
 `;
 
 const BreadcrumbBar = styled.div`
@@ -26,6 +30,13 @@ const BreadcrumbBar = styled.div`
   gap: 8px;
   font-size: 13px;
   color: #64748b;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   a {
     color: #0070ce;
@@ -42,13 +53,14 @@ const HeaderCard = styled.div`
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: 20px 24px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 16px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
   @media (min-width: 768px) {
+    padding: 20px 24px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -104,19 +116,34 @@ const StatusBadge = styled.span<{ $status: 'draft' | 'published' | 'updated' }>`
 const ButtonGroup = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 8px;
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    width: auto;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 `;
 
 const ActionButton = styled.button<{ $primary?: boolean }>`
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  min-height: 40px;
   padding: 8px 16px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  flex: none;
+  white-space: nowrap;
   border: 1px solid ${(props) => (props.$primary ? '#0070ce' : '#cbd5e1')};
   background: ${(props) => (props.$primary ? '#0070ce' : '#ffffff')};
   color: ${(props) => (props.$primary ? '#ffffff' : '#334155')};

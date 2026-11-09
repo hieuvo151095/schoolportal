@@ -190,7 +190,7 @@ export const AssignmentTable: React.FC<AssignmentTableProps> = ({ schoolCode }) 
                     Tiến độ nộp
                   </span>
                   <div className="ecomd-cell__value">
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', minWidth: '120px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', minWidth: '140px', width: '100%', maxWidth: '240px' }}>
                       <div className="flex items-center justify-between body-xs-semibold font-numeric text-[var(--text-body)]">
                         <span>{tally.submittedCount}/{tally.total} đã nộp</span>
                         <span className="text-[var(--text-subtle)] font-normal">{tally.submissionRate}%</span>

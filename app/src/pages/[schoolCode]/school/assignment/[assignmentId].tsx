@@ -16,7 +16,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 24px;
+  padding: 16px;
+
+  @media (min-width: 768px) {
+    padding: 24px;
+  }
 `;
 
 const Breadcrumbs = styled.div`
@@ -25,6 +29,13 @@ const Breadcrumbs = styled.div`
   gap: 8px;
   font-size: 13px;
   color: #64748b;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   a {
     color: #0070ce;
@@ -42,10 +53,14 @@ const HeaderCard = styled.div`
   border-radius: 12px;
   border: 1px solid #e2e8f0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  padding: 24px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  @media (min-width: 768px) {
+    padding: 24px;
+  }
 `;
 
 const TopMetaRow = styled.div`
@@ -185,12 +200,25 @@ const AttachmentItem = styled.a`
 const ActionButtonsRow = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
-  justify-content: flex-end;
+  gap: 8px;
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   margin-top: 4px;
+
+  @media (min-width: 768px) {
+    width: auto;
+    justify-content: flex-end;
+    gap: 10px;
+  }
 `;
 
 const SecondaryBtn = styled.a`
+  min-height: 40px;
   padding: 8px 16px;
   border: 1px solid #cbd5e1;
   background-color: #ffffff;
@@ -203,6 +231,8 @@ const SecondaryBtn = styled.a`
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  flex: none;
+  white-space: nowrap;
 
   &:hover {
     background-color: #f8fafc;
@@ -210,6 +240,7 @@ const SecondaryBtn = styled.a`
 `;
 
 const PrimaryBtn = styled.button`
+  min-height: 40px;
   padding: 8px 18px;
   border: none;
   background-color: #0070ce;
@@ -221,6 +252,9 @@ const PrimaryBtn = styled.button`
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  flex: none;
+  white-space: nowrap;
+  transition: all 0.2s;
 
   &:hover {
     background-color: #005bb0;
@@ -231,6 +265,12 @@ const TabContainer = styled.div`
   display: flex;
   border-bottom: 2px solid #e2e8f0;
   margin-top: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const TabButton = styled.button<{ $active: boolean }>`
@@ -243,6 +283,9 @@ const TabButton = styled.button<{ $active: boolean }>`
   cursor: pointer;
   position: relative;
   transition: color 0.2s;
+  flex: none;
+  white-space: nowrap;
+  min-height: 40px;
 
   &:hover {
     color: #0070ce;

@@ -39,8 +39,14 @@ const SearchInput = styled.input`
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   font-size: 14px;
-  min-width: 240px;
+  min-width: 0;
+  width: 100%;
   outline: none;
+
+  @media (min-width: 640px) {
+    width: 280px;
+    min-width: 240px;
+  }
 
   &:focus {
     border-color: #0070ce;
@@ -51,11 +57,24 @@ const SearchInput = styled.input`
 const ActionsGroup = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 640px) {
+    width: auto;
+    gap: 10px;
+  }
 `;
 
 const SecondaryButton = styled.button`
   padding: 8px 14px;
+  min-height: 40px;
   border: 1px solid #cbd5e1;
   background-color: #ffffff;
   color: #334155;
@@ -66,6 +85,8 @@ const SecondaryButton = styled.button`
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  flex: none;
+  white-space: nowrap;
   transition: all 0.2s;
 
   &:hover {
@@ -76,6 +97,7 @@ const SecondaryButton = styled.button`
 
 const PrimaryButton = styled.button`
   padding: 8px 14px;
+  min-height: 40px;
   border: none;
   background-color: #0070ce;
   color: #ffffff;
@@ -86,6 +108,8 @@ const PrimaryButton = styled.button`
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  flex: none;
+  white-space: nowrap;
   transition: all 0.2s;
 
   &:hover {
@@ -93,8 +117,15 @@ const PrimaryButton = styled.button`
   }
 `;
 
+const TableScrollWrapper = styled.div`
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+`;
+
 const StyledTable = styled.table`
   width: 100%;
+  min-width: 680px;
   border-collapse: collapse;
   text-align: left;
   font-size: 14px;
@@ -334,7 +365,8 @@ export const SubmissionRosterTable: React.FC<SubmissionRosterTableProps> = ({
         </ActionsGroup>
       </Toolbar>
 
-      <StyledTable>
+      <TableScrollWrapper>
+        <StyledTable>
         <TableHead>
           <tr>
             <TableHeaderCell style={{ width: '6%' }}>STT</TableHeaderCell>
@@ -496,7 +528,8 @@ export const SubmissionRosterTable: React.FC<SubmissionRosterTableProps> = ({
             })
           )}
         </tbody>
-      </StyledTable>
+        </StyledTable>
+      </TableScrollWrapper>
     </Container>
   );
 };

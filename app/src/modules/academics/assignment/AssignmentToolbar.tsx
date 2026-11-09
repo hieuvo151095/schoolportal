@@ -81,21 +81,11 @@ export const AssignmentToolbar: React.FC<AssignmentToolbarProps> = ({ schoolCode
 
       {/* 2. Integrated Filterbar Toolbar */}
       <div
-        className="ecomd-table-card__toolbar"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: 'var(--space-12)',
-          padding: 'var(--space-16) var(--space-20)',
-          borderBottom: '1px solid var(--border-default)',
-          background: 'var(--bg-surface)',
-        }}
+        className="ecomd-table-card__toolbar flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 sm:p-5 border-b border-[var(--border-default)] bg-[var(--bg-surface)]"
       >
-        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-12)' }}>
+        <div className="flex flex-col sm:flex-row sm:items-center flex-wrap gap-3 w-full md:w-auto">
           {/* Class Filter */}
-          <div style={{ width: '170px' }}>
+          <div className="w-full sm:w-[180px]">
             <SelectField
               value={filterCriteria.classId}
               onChange={(val) => dispatch(setFilterCriteria({ classId: val }))}
@@ -108,7 +98,7 @@ export const AssignmentToolbar: React.FC<AssignmentToolbarProps> = ({ schoolCode
           </div>
 
           {/* Subject Filter */}
-          <div style={{ width: '170px' }}>
+          <div className="w-full sm:w-[180px]">
             <SelectField
               value={filterCriteria.subjectId}
               onChange={(val) => dispatch(setFilterCriteria({ subjectId: val }))}
@@ -120,7 +110,7 @@ export const AssignmentToolbar: React.FC<AssignmentToolbarProps> = ({ schoolCode
           </div>
 
           {/* Search Box */}
-          <div style={{ width: '250px' }}>
+          <div className="w-full sm:w-[260px] sm:flex-1">
             <SearchField
               value={filterCriteria.searchQuery}
               onChange={(q) => dispatch(setFilterCriteria({ searchQuery: q }))}
@@ -135,13 +125,14 @@ export const AssignmentToolbar: React.FC<AssignmentToolbarProps> = ({ schoolCode
           )}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)', flexWrap: 'wrap' }}>
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full md:w-auto py-1">
           <Button
             variant="secondary"
             icon="filter"
             active={isFiltered}
             indicator={isFiltered}
             onClick={() => dispatch(setFilterDrawerOpen(true))}
+            className="flex-none whitespace-nowrap min-h-[40px]"
           >
             Bộ lọc nâng cao
           </Button>
@@ -150,6 +141,7 @@ export const AssignmentToolbar: React.FC<AssignmentToolbarProps> = ({ schoolCode
             variant="primary"
             icon="plus"
             href={`/${schoolCode}/school/assignment/create/`}
+            className="flex-none whitespace-nowrap min-h-[40px]"
           >
             Tạo bài tập
           </Button>
