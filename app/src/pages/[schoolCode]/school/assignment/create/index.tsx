@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { createAssignment } from '../../../../../store/slices/assignmentSlice';
 import { validateAssignmentForm } from '../../../../../utils/assignmentValidation';
 import { AudienceType } from '../../../../../types/assignment';
+import { Dropdown } from '@/components/ds';
 
 const Container = styled.div`
   max-width: 860px;
@@ -220,7 +221,15 @@ const DraftBtn = styled.button`
   font-weight: 600;
   cursor: pointer;
 
-  &:hover {
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #94a3b8;
+  }
+
+  &:hover:not(:disabled) {
     background-color: #dbeafe;
   }
 `;
@@ -235,7 +244,13 @@ const SubmitBtn = styled.button`
   font-weight: 600;
   cursor: pointer;
 
-  &:hover {
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #cbd5e1;
+  }
+
+  &:hover:not(:disabled) {
     background-color: #005bb0;
   }
 `;
@@ -248,8 +263,8 @@ export default function CreateAssignmentPage() {
   const subjects = useAppSelector((state) => state.assignment.subjects);
   const students = useAppSelector((state) => state.assignment.students);
 
-  const [classId, setClassId] = useState('1a1');
-  const [subjectId, setSubjectId] = useState(subjects[0]?.id || 'sub-01');
+  const [classId, setClassId] = useState('');
+  const [subjectId, setSubjectId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -258,6 +273,25 @@ export default function CreateAssignmentPage() {
   const [targetStudentIds, setTargetStudentIds] = useState<string[]>([]);
   const [fileName, setFileName] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const isFormValid =
+    classId !== '' &&
+    subjectId !== '' &&
+    title.trim().length > 0 &&
+    dueDate !== '' &&
+    (audienceType !== 'specific_students' || targetStudentIds.length > 0);
+  const isDraftValid = title.trim().length > 0;
+
+  const classOptions = [
+    { value: '', label: '-- Chọn lớp học --' },
+    { value: '1a1', label: 'Lớp 1A1' },
+    { value: '2a2', label: 'Lớp 2A2' },
+  ];
+
+  const subjectOptions = [
+    { value: '', label: '-- Chọn môn học --' },
+    ...subjects.map((s) => ({ value: s.id, label: s.name })),
+  ];
 
   // Filter students by selected class
   const classStudents = students.filter(
@@ -352,16 +386,17 @@ export default function CreateAssignmentPage() {
               <Label>
                 Lớp học<RequiredStar>*</RequiredStar>
               </Label>
-              <SelectBox
+              <Dropdown
+                searchable
+                fullWidth
                 value={classId}
-                onChange={(e) => {
-                  setClassId(e.target.value);
+                onChange={(val) => {
+                  setClassId(val);
                   setTargetStudentIds([]);
                 }}
-              >
-                <option value="1a1">Lớp 1A1</option>
-                <option value="2a2">Lớp 2A2</option>
-              </SelectBox>
+                options={classOptions}
+                placeholder="-- Chọn lớp học --"
+              />
               {errors.classId && <ErrorText>{errors.classId}</ErrorText>}
             </FormGroup>
 
@@ -369,16 +404,14 @@ export default function CreateAssignmentPage() {
               <Label>
                 Môn học<RequiredStar>*</RequiredStar>
               </Label>
-              <SelectBox
+              <Dropdown
+                searchable
+                fullWidth
                 value={subjectId}
-                onChange={(e) => setSubjectId(e.target.value)}
-              >
-                {subjects.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name}
-                  </option>
-                ))}
-              </SelectBox>
+                onChange={(val) => setSubjectId(val)}
+                options={subjectOptions}
+                placeholder="-- Chọn môn học --"
+              />
               {errors.subjectId && <ErrorText>{errors.subjectId}</ErrorText>}
             </FormGroup>
           </RowGroup>
@@ -540,9 +573,11 @@ export default function CreateAssignmentPage() {
               <CancelBtn as="a">Hủy bỏ</CancelBtn>
             </Link>
 
-            <DraftBtn onClick={() => handleSave(true)}>Lưu nháp</DraftBtn>
+            <DraftBtn disabled={!isDraftValid} onClick={() => handleSave(true)}>
+              Lưu nháp
+            </DraftBtn>
 
-            <SubmitBtn onClick={() => handleSave(false)}>
+            <SubmitBtn disabled={!isFormValid} onClick={() => handleSave(false)}>
               Lưu và gửi
             </SubmitBtn>
           </ActionFooter>

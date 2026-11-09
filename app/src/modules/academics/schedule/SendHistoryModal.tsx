@@ -1,161 +1,10 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   setSendHistoryModalOpen,
   sendScheduleNotification,
 } from '../../../store/slices/scheduleSlice';
-
-const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 50;
-  padding: 16px;
-`;
-
-const ModalCard = styled.div`
-  background: #ffffff;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 680px;
-  max-height: 90vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-`;
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 24px;
-  border-bottom: 1px solid #e2e8f0;
-  background: #f8fafc;
-`;
-
-const Title = styled.h3`
-  margin: 0;
-  font-size: 17px;
-  font-weight: 700;
-  color: #0f172a;
-`;
-
-const CloseButton = styled.button`
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  color: #64748b;
-  cursor: pointer;
-
-  &:hover {
-    color: #0f172a;
-  }
-`;
-
-const Body = styled.div`
-  padding: 24px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-`;
-
-const ScheduleBanner = styled.div`
-  background: #f1f5f9;
-  border-left: 4px solid #0070ce;
-  border-radius: 8px;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const HistoryTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-
-  th,
-  td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #f1f5f9;
-    text-align: left;
-  }
-
-  th {
-    background: #f8fafc;
-    color: #475569;
-    font-weight: 600;
-  }
-`;
-
-const ChannelBadge = styled.span<{ $channel: string }>`
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 4px;
-  background: #eff6ff;
-  color: #1d4ed8;
-`;
-
-const DispatchCard = styled.div`
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-const Textarea = styled.textarea`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 13px;
-  color: #1e293b;
-  outline: none;
-  resize: vertical;
-  min-height: 60px;
-
-  &:focus {
-    border-color: #0070ce;
-  }
-`;
-
-const Footer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 16px 24px;
-  border-top: 1px solid #e2e8f0;
-  background: #ffffff;
-`;
-
-const Button = styled.button<{ $primary?: boolean }>`
-  padding: 8px 18px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  border: 1px solid ${(props) => (props.$primary ? '#0070ce' : '#cbd5e1')};
-  background: ${(props) => (props.$primary ? '#0070ce' : '#ffffff')};
-  color: ${(props) => (props.$primary ? '#ffffff' : '#334155')};
-  transition: all 0.15s ease;
-
-  &:hover {
-    background: ${(props) => (props.$primary ? '#005bb5' : '#f8fafc')};
-  }
-`;
+import { SlideOver, Dropdown, Button, Tag, StatusTag, Icon } from '@/components/ds';
 
 export const SendHistoryModal: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -186,118 +35,154 @@ export const SendHistoryModal: React.FC = () => {
 
   const handleClose = () => {
     dispatch(setSendHistoryModalOpen({ isOpen: false }));
+    setNewNote('');
+  };
+
+  const channelOptions = [
+    { value: 'all', label: 'Tất cả kênh (App + Zalo OA)' },
+    { value: 'app_notification', label: 'Ứng dụng ECO School Phụ huynh' },
+    { value: 'zalo', label: 'Zalo Thông báo (ZNS)' },
+    { value: 'sms', label: 'Tin nhắn SMS Brandname' },
+  ];
+
+  const getChannelBadge = (ch: string) => {
+    switch (ch) {
+      case 'all':
+        return <Tag variant="default">Đa kênh</Tag>;
+      case 'app_notification':
+        return <Tag variant="default">App PH</Tag>;
+      case 'zalo':
+        return <Tag variant="success">Zalo OA</Tag>;
+      case 'sms':
+        return <Tag variant="warning">SMS</Tag>;
+      default:
+        return <Tag variant="default">{ch}</Tag>;
+    }
   };
 
   return (
-    <Overlay onClick={handleClose}>
-      <ModalCard onClick={(e) => e.stopPropagation()}>
-        <Header>
-          <Title>📋 Lịch Sử Gửi Thông Báo Thời Khóa Biểu</Title>
-          <CloseButton onClick={handleClose}>✕</CloseButton>
-        </Header>
-
-        <Body>
-          <ScheduleBanner>
-            <div>
-              <div style={{ fontWeight: 700, color: '#0f172a' }}>
-                {targetSchedule.title}
-              </div>
-              <div style={{ fontSize: '13px', color: '#475569', marginTop: '2px' }}>
-                Lớp: <strong>{targetSchedule.className}</strong> • Học kỳ: <strong>{targetSchedule.semesterName}</strong>
-              </div>
-            </div>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>
-              Tổng số lần gửi: <strong>{targetSchedule.sendHistory.length}</strong>
-            </div>
-          </ScheduleBanner>
-
+    <SlideOver
+      open={isSendHistoryModalOpen}
+      onClose={handleClose}
+      title="Nhật ký & Phát hành thông báo"
+      description="Xem lịch sử và gửi thông báo thời khóa biểu đến phụ huynh học sinh"
+      icon="paper-plane"
+      width={560}
+      secondaryAction={{
+        label: 'Đóng',
+        onClick: handleClose,
+      }}
+    >
+      <div className="space-y-5">
+        {/* Schedule Summary Banner */}
+        <div className="bg-slate-50 border border-[var(--border-default)] rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <div style={{ fontWeight: 700, fontSize: '14px', marginBottom: '8px', color: '#334155' }}>
-              Nhật ký phát hành thông báo (BR07)
-            </div>
+            <h4 className="text-sm font-bold text-[var(--text-heading)]">{targetSchedule.title}</h4>
+            <p className="text-xs text-[var(--text-subtle)] mt-0.5">
+              Lớp <strong>{targetSchedule.className}</strong> • Học kỳ <strong>{targetSchedule.semesterName}</strong>
+            </p>
+          </div>
+          <div className="text-xs text-[var(--text-subtle)] flex items-center gap-1.5 sm:self-center">
+            <span>Tổng số lần gửi:</span>
+            <span className="font-bold text-[var(--text-heading)] px-2 py-0.5 bg-white border border-[var(--border-default)] rounded-full">
+              {targetSchedule.sendHistory.length}
+            </span>
+          </div>
+        </div>
 
-            {targetSchedule.sendHistory.length === 0 ? (
-              <div style={{ padding: '20px', textAlign: 'center', color: '#64748b', fontStyle: 'italic' }}>
-                Thời khóa biểu này chưa từng gửi thông báo cho phụ huynh.
-              </div>
-            ) : (
-              <HistoryTable>
-                <thead>
-                  <tr>
-                    <th>Thời gian gửi</th>
-                    <th>Người gửi</th>
-                    <th>Kênh</th>
-                    <th>Người nhận</th>
-                    <th>Ghi chú</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {targetSchedule.sendHistory.map((entry) => (
-                    <tr key={entry.id}>
-                      <td style={{ whiteSpace: 'nowrap', color: '#475569' }}>
-                        {new Date(entry.sentAt).toLocaleString('vi-VN')}
-                      </td>
-                      <td>
-                        <div style={{ fontWeight: 600 }}>{entry.senderName}</div>
-                        <div style={{ fontSize: '11px', color: '#64748b' }}>
-                          {entry.senderRole}
-                        </div>
-                      </td>
-                      <td>
-                        <ChannelBadge $channel={entry.channel}>
-                          {entry.channel === 'all' && 'Đa kênh (App + Zalo)'}
-                          {entry.channel === 'app_notification' && 'App phụ huynh'}
-                          {entry.channel === 'zalo' && 'Zalo OA'}
-                          {entry.channel === 'sms' && 'SMS'}
-                        </ChannelBadge>
-                      </td>
-                      <td style={{ fontWeight: 600, color: '#15803d' }}>
-                        {entry.recipientsCount} PH
-                      </td>
-                      <td style={{ color: '#334155' }}>{entry.note || '—'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </HistoryTable>
-            )}
+        {/* Dispatch New Notification Card */}
+        <div className="bg-white border border-blue-200 rounded-xl p-4 shadow-xs space-y-3">
+          <div className="flex items-center gap-2 text-xs font-bold text-blue-900">
+            <Icon name="bell" size={14} className="text-[var(--eco-blue-strong)]" />
+            <span>Phát hành thông báo mới ngay</span>
           </div>
 
-          <DispatchCard>
-            <div style={{ fontWeight: 700, fontSize: '13px', color: '#0f172a' }}>
-              📢 Gửi thông báo cập nhật mới ngay bây giờ
-            </div>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <label style={{ fontSize: '12px', fontWeight: 600, color: '#475569' }}>
-                Kênh phát hành:
-              </label>
-              <select
-                value={channel}
-                onChange={(e) => setChannel(e.target.value as any)}
-                style={{ padding: '4px 8px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '12px' }}
-              >
-                <option value="all">Tất cả kênh (App + Zalo OA)</option>
-                <option value="app_notification">Chỉ App Phụ Huynh</option>
-                <option value="zalo">Zalo OA</option>
-                <option value="sms">Tin nhắn SMS</option>
-              </select>
-            </div>
-            <Textarea
-              placeholder="Nhập nội dung lưu ý cho phụ huynh (ví dụ: Thay đổi phòng học môn Tin học từ tuần sau)..."
+          <div>
+            <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
+              Kênh thông báo
+            </label>
+            <Dropdown
+              fullWidth
+              value={channel}
+              onChange={(val) => setChannel(val as any)}
+              options={channelOptions}
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
+              Ghi chú gửi kèm phụ huynh
+            </label>
+            <input
+              type="text"
+              className="w-full h-9 px-3 border border-[var(--border-default)] rounded-lg text-xs bg-[var(--bg-surface)] text-[var(--text-body)] focus:border-[var(--primary)] outline-none"
               value={newNote}
               onChange={(e) => setNewNote(e.target.value)}
+              placeholder="VD: Điều chỉnh lịch học tiết chiều từ ngày 15/09..."
             />
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button $primary type="button" onClick={handleSendNew}>
-                Gửi thông báo & Cập nhật
-              </Button>
-            </div>
-          </DispatchCard>
-        </Body>
+          </div>
 
-        <Footer>
-          <Button onClick={handleClose}>Đóng</Button>
-        </Footer>
-      </ModalCard>
-    </Overlay>
+          <div className="flex justify-end pt-1">
+            <Button
+              variant="primary"
+              size="sm"
+              icon="paper-plane"
+              onClick={handleSendNew}
+            >
+              Gửi thông báo (32 PH)
+            </Button>
+          </div>
+        </div>
+
+        {/* History Log List */}
+        <div>
+          <h5 className="text-xs font-bold text-[var(--text-heading)] mb-2.5">
+            Lịch sử các lần phát hành trước (BR07)
+          </h5>
+
+          {targetSchedule.sendHistory.length === 0 ? (
+            <div className="p-6 text-center text-xs text-[var(--text-subtle)] bg-[var(--bg-muted)] rounded-xl border border-dashed border-[var(--border-default)]">
+              Thời khóa biểu này chưa từng gửi thông báo cho phụ huynh.
+            </div>
+          ) : (
+            <div className="space-y-2.5">
+              {targetSchedule.sendHistory.map((entry) => (
+                <div
+                  key={entry.id}
+                  className="bg-white border border-[var(--border-default)] rounded-xl p-3.5 space-y-2 text-xs"
+                >
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <span className="font-semibold text-[var(--text-heading)]">
+                      {entry.senderName}
+                      <span className="text-[var(--text-subtle)] font-normal ml-1">({entry.senderRole})</span>
+                    </span>
+                    <span className="text-[11px] text-[var(--text-subtle)] font-mono">
+                      {new Date(entry.sentAt).toLocaleString('vi-VN')}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-[var(--border-subtle)]">
+                    <div className="flex items-center gap-2">
+                      {getChannelBadge(entry.channel)}
+                      <span className="text-emerald-700 font-semibold font-numeric">
+                        ✓ {entry.recipientsCount} phụ huynh
+                      </span>
+                    </div>
+                  </div>
+
+                  {entry.note && (
+                    <div className="text-[11px] text-[var(--text-subtle)] bg-[var(--bg-muted)] p-2 rounded-lg">
+                      {entry.note}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </SlideOver>
   );
 };
+
+export default SendHistoryModal;

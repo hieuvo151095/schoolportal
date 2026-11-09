@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   setFilterCriteria,
@@ -11,156 +10,7 @@ import {
   DueDateFilter,
   AssignmentLifecycleStatus,
 } from '../../../types/assignment';
-
-const Overlay = styled.div<{ $isOpen: boolean }>`
-  position: fixed;
-  inset: 0;
-  background-color: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(2px);
-  z-index: 100;
-  display: ${(props) => (props.$isOpen ? 'flex' : 'none')};
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-`;
-
-const DrawerContainer = styled.div`
-  background: #ffffff;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 480px;
-  max-height: 90vh;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  border: 1px solid #e2e8f0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  animation: modalFadeIn 0.2s ease-out;
-
-  @keyframes modalFadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.96);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-`;
-
-const DrawerHeader = styled.div`
-  padding: 18px 24px;
-  border-bottom: 1px solid #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const DrawerTitle = styled.h2`
-  font-size: 17px;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0;
-`;
-
-const CloseButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #94a3b8;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 6px;
-
-  &:hover {
-    color: #0f172a;
-    background-color: #f1f5f9;
-  }
-`;
-
-const DrawerBody = styled.div`
-  padding: 24px;
-  overflow-y: auto;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-`;
-
-const SectionTitle = styled.div`
-  font-size: 14px;
-  font-weight: 600;
-  color: #334155;
-  margin-bottom: 12px;
-`;
-
-const RadioGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const RadioLabel = styled.label<{ $checked?: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border: 1px solid ${(props) => (props.$checked ? '#0070ce' : '#e2e8f0')};
-  background-color: ${(props) => (props.$checked ? '#eff6ff' : '#ffffff')};
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: ${(props) => (props.$checked ? '600' : '400')};
-  color: ${(props) => (props.$checked ? '#0070ce' : '#334155')};
-  transition: all 0.2s;
-
-  &:hover {
-    border-color: #0070ce;
-  }
-`;
-
-const DrawerFooter = styled.div`
-  padding: 16px 24px;
-  border-top: 1px solid #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  background-color: #f8fafc;
-`;
-
-const ResetButton = styled.button`
-  padding: 10px 16px;
-  border: 1px solid #cbd5e1;
-  background-color: #ffffff;
-  color: #475569;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #f1f5f9;
-    color: #0f172a;
-  }
-`;
-
-const ApplyButton = styled.button`
-  padding: 10px 20px;
-  border: none;
-  background-color: #0070ce;
-  color: #ffffff;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  flex: 1;
-
-  &:hover {
-    background-color: #005bb0;
-  }
-`;
+import { SlideOver, Dropdown } from '@/components/ds';
 
 export const ExtendedAssignmentFilterModal: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -181,7 +31,19 @@ export const ExtendedAssignmentFilterModal: React.FC = () => {
     filterCriteria.status
   );
 
+  useEffect(() => {
+    if (isOpen) {
+      setAudience(filterCriteria.audienceType || 'all');
+      setDueDate(filterCriteria.dueDateFilter);
+      setStatus(filterCriteria.status);
+    }
+  }, [isOpen, filterCriteria]);
+
   if (!isOpen) return null;
+
+  const handleClose = () => {
+    dispatch(setFilterDrawerOpen(false));
+  };
 
   const handleApply = () => {
     dispatch(
@@ -191,7 +53,7 @@ export const ExtendedAssignmentFilterModal: React.FC = () => {
         status,
       })
     );
-    dispatch(setFilterDrawerOpen(false));
+    handleClose();
   };
 
   const handleReset = () => {
@@ -199,137 +61,95 @@ export const ExtendedAssignmentFilterModal: React.FC = () => {
     setAudience('all');
     setDueDate('tat_ca');
     setStatus('all');
-    dispatch(setFilterDrawerOpen(false));
+    handleClose();
   };
 
+  const audienceOptions = [
+    { value: 'all', label: 'Tất cả đối tượng' },
+    { value: 'whole_class', label: 'Giao cho cả lớp' },
+    { value: 'specific_students', label: 'Giao học sinh cụ thể' },
+  ];
+
+  const dueDateOptions = [
+    { value: 'tat_ca', label: 'Tất cả thời hạn' },
+    { value: 'dang_tien_hanh', label: 'Đang tiến hành (Chưa hết hạn)' },
+    { value: 'sap_het_han', label: 'Sắp hết hạn (trong 24 giờ)' },
+    { value: 'het_han', label: 'Đã hết hạn nộp bài' },
+  ];
+
+  const statusOptions = [
+    { value: 'all', label: 'Tất cả trạng thái' },
+    { value: 'da_tao', label: 'Bản nháp' },
+    { value: 'chua_gui', label: 'Chờ phát hành' },
+    { value: 'da_gui', label: 'Đã gửi học sinh' },
+  ];
+
   return (
-    <Overlay $isOpen={isOpen} onClick={() => dispatch(setFilterDrawerOpen(false))}>
-      <DrawerContainer onClick={(e) => e.stopPropagation()}>
-        <DrawerHeader>
-          <DrawerTitle>Lọc Mở Rộng Bài Tập</DrawerTitle>
-          <CloseButton onClick={() => dispatch(setFilterDrawerOpen(false))}>
-            ✕
-          </CloseButton>
-        </DrawerHeader>
+    <SlideOver
+      open={isOpen}
+      onClose={handleClose}
+      title="Bộ lọc nâng cao bài tập"
+      description="Lọc danh sách bài tập theo đối tượng giao, thời hạn và trạng thái phát hành"
+      icon="filter"
+      width={460}
+      primaryAction={{
+        label: 'Áp dụng bộ lọc',
+        icon: 'check',
+        onClick: handleApply,
+      }}
+      secondaryAction={{
+        label: 'Đặt lại',
+        onClick: handleReset,
+      }}
+    >
+      <div className="space-y-4">
+        <div>
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1.5">
+            Đối tượng nhận bài
+          </label>
+          <Dropdown
+            fullWidth
+            value={audience}
+            onChange={(val) => setAudience(val as any)}
+            options={audienceOptions}
+            placeholder="-- Chọn đối tượng --"
+          />
+        </div>
 
-        <DrawerBody>
-          {/* Audience Scope (BR12) */}
-          <div>
-            <SectionTitle>Giao cho</SectionTitle>
-            <RadioGroup>
-              <RadioLabel $checked={audience === 'all'}>
-                <input
-                  type="radio"
-                  name="audience"
-                  checked={audience === 'all'}
-                  onChange={() => setAudience('all')}
-                />
-                <span>Tất cả</span>
-              </RadioLabel>
-              <RadioLabel $checked={audience === 'whole_class'}>
-                <input
-                  type="radio"
-                  name="audience"
-                  checked={audience === 'whole_class'}
-                  onChange={() => setAudience('whole_class')}
-                />
-                <span>Cả lớp</span>
-              </RadioLabel>
-              <RadioLabel $checked={audience === 'specific_students'}>
-                <input
-                  type="radio"
-                  name="audience"
-                  checked={audience === 'specific_students'}
-                  onChange={() => setAudience('specific_students')}
-                />
-                <span>Học sinh cụ thể</span>
-              </RadioLabel>
-            </RadioGroup>
-          </div>
+        <div>
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1.5">
+            Thời hạn nộp bài
+          </label>
+          <Dropdown
+            fullWidth
+            value={dueDate}
+            onChange={(val) => setDueDate(val as any)}
+            options={dueDateOptions}
+            placeholder="-- Chọn thời hạn --"
+          />
+        </div>
 
-          {/* Due Date Status (BR12, BR13) */}
-          <div>
-            <SectionTitle>Hạn nộp bài</SectionTitle>
-            <RadioGroup>
-              <RadioLabel $checked={dueDate === 'tat_ca'}>
-                <input
-                  type="radio"
-                  name="dueDate"
-                  checked={dueDate === 'tat_ca'}
-                  onChange={() => setDueDate('tat_ca')}
-                />
-                <span>Tất cả bài tập</span>
-              </RadioLabel>
-              <RadioLabel $checked={dueDate === 'dang_tien_hanh'}>
-                <input
-                  type="radio"
-                  name="dueDate"
-                  checked={dueDate === 'dang_tien_hanh'}
-                  onChange={() => setDueDate('dang_tien_hanh')}
-                />
-                <span>Đang tiến hành (chưa hết hạn)</span>
-              </RadioLabel>
-              <RadioLabel $checked={dueDate === 'het_han'}>
-                <input
-                  type="radio"
-                  name="dueDate"
-                  checked={dueDate === 'het_han'}
-                  onChange={() => setDueDate('het_han')}
-                />
-                <span>Hết hạn nộp</span>
-              </RadioLabel>
-            </RadioGroup>
-          </div>
+        <div>
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1.5">
+            Trạng thái bài tập
+          </label>
+          <Dropdown
+            fullWidth
+            value={status}
+            onChange={(val) => setStatus(val as any)}
+            options={statusOptions}
+            placeholder="-- Chọn trạng thái --"
+          />
+        </div>
 
-          {/* Lifecycle Status (BR05, BR12) */}
-          <div>
-            <SectionTitle>Trạng thái bài tập</SectionTitle>
-            <RadioGroup>
-              <RadioLabel $checked={status === 'all'}>
-                <input
-                  type="radio"
-                  name="status"
-                  checked={status === 'all'}
-                  onChange={() => setStatus('all')}
-                />
-                <span>Tất cả trạng thái</span>
-              </RadioLabel>
-              <RadioLabel $checked={status === 'da_gui'}>
-                <input
-                  type="radio"
-                  name="status"
-                  checked={status === 'da_gui'}
-                  onChange={() => setStatus('da_gui')}
-                />
-                <span>Đã gửi</span>
-              </RadioLabel>
-              <RadioLabel $checked={status === 'chua_gui'}>
-                <input
-                  type="radio"
-                  name="status"
-                  checked={status === 'chua_gui'}
-                  onChange={() => setStatus('chua_gui')}
-                />
-                <span>Chưa gửi (đã lên lịch)</span>
-              </RadioLabel>
-              <RadioLabel $checked={status === 'da_tao'}>
-                <input
-                  type="radio"
-                  name="status"
-                  checked={status === 'da_tao'}
-                  onChange={() => setStatus('da_tao')}
-                />
-                <span>Đã tạo (bản nháp)</span>
-              </RadioLabel>
-            </RadioGroup>
-          </div>
-        </DrawerBody>
-
-        <DrawerFooter>
-          <ResetButton onClick={handleReset}>Xóa bộ lọc</ResetButton>
-          <ApplyButton onClick={handleApply}>Áp dụng bộ lọc</ApplyButton>
-        </DrawerFooter>
-      </DrawerContainer>
-    </Overlay>
+        <div className="bg-[var(--bg-muted)] border border-[var(--border-default)] rounded-lg p-3 text-xs text-[var(--text-subtle)] space-y-1">
+          <p className="font-semibold text-[var(--text-heading)]">Mẹo lọc nhanh:</p>
+          <p>• Bạn có thể kết hợp nhanh với thanh CountedTabs ở đầu trang để lọc theo tiến độ.</p>
+          <p>• Dùng ô tìm kiếm trên thanh công cụ để tra cứu theo từ khóa tiêu đề hoặc ghi chú.</p>
+        </div>
+      </div>
+    </SlideOver>
   );
 };
+
+export default ExtendedAssignmentFilterModal;

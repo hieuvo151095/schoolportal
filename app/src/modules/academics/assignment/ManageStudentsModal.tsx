@@ -1,154 +1,10 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   addStudentToAssignment,
   closeManageStudentsModal,
 } from '../../../store/slices/assignmentSlice';
-
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(2px);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-`;
-
-const ModalCard = styled.div`
-  background: #ffffff;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 480px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  animation: fadeIn 0.2s ease-out;
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.96);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-`;
-
-const ModalHeader = styled.div`
-  padding: 16px 20px;
-  border-bottom: 1px solid #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const ModalTitle = styled.h3`
-  font-size: 16px;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0;
-`;
-
-const CloseButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 18px;
-  color: #94a3b8;
-  cursor: pointer;
-
-  &:hover {
-    color: #0f172a;
-  }
-`;
-
-const ModalBody = styled.div`
-  padding: 20px;
-  max-height: 60vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-const StudentRow = styled.label<{ $selected?: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  border: 1px solid ${(props) => (props.$selected ? '#0070ce' : '#e2e8f0')};
-  background-color: ${(props) => (props.$selected ? '#eff6ff' : '#ffffff')};
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-
-  &:hover {
-    border-color: #0070ce;
-  }
-`;
-
-const StudentName = styled.div`
-  font-weight: 600;
-  font-size: 14px;
-  color: #0f172a;
-`;
-
-const StudentCode = styled.div`
-  font-size: 12px;
-  color: #64748b;
-`;
-
-const ModalFooter = styled.div`
-  padding: 14px 20px;
-  border-top: 1px solid #e2e8f0;
-  background-color: #f8fafc;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-`;
-
-const CancelButton = styled.button`
-  padding: 8px 16px;
-  border: 1px solid #cbd5e1;
-  background-color: #ffffff;
-  color: #475569;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #f1f5f9;
-  }
-`;
-
-const AddButton = styled.button`
-  padding: 8px 18px;
-  border: none;
-  background-color: #0070ce;
-  color: #ffffff;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  &:hover:not(:disabled) {
-    background-color: #005bb0;
-  }
-`;
+import { SlideOver, SearchField, Icon } from '@/components/ds';
 
 export const ManageStudentsModal: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -164,6 +20,7 @@ export const ManageStudentsModal: React.FC = () => {
   const allStudents = useAppSelector((state) => state.assignment.students);
 
   const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const currentAssignment = assignments.find((a) => a.id === assignmentId);
 
@@ -179,10 +36,30 @@ export const ManageStudentsModal: React.FC = () => {
       !existingStudentIds.includes(s.id)
   );
 
+  const filteredStudents = availableStudents.filter(
+    (s) =>
+      s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      s.studentCode.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const handleToggle = (id: string) => {
     setSelectedStudentIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedStudentIds.length === filteredStudents.length) {
+      setSelectedStudentIds([]);
+    } else {
+      setSelectedStudentIds(filteredStudents.map((s) => s.id));
+    }
+  };
+
+  const handleClose = () => {
+    setSelectedStudentIds([]);
+    setSearchQuery('');
+    dispatch(closeManageStudentsModal());
   };
 
   const handleAddStudents = () => {
@@ -195,77 +72,99 @@ export const ManageStudentsModal: React.FC = () => {
       );
     });
 
-    setSelectedStudentIds([]);
-    dispatch(closeManageStudentsModal());
+    handleClose();
   };
 
   return (
-    <Overlay onClick={() => dispatch(closeManageStudentsModal())}>
-      <ModalCard onClick={(e) => e.stopPropagation()}>
-        <ModalHeader>
-          <ModalTitle>Thêm Học Sinh Vào Bài Tập</ModalTitle>
-          <CloseButton onClick={() => dispatch(closeManageStudentsModal())}>
-            ✕
-          </CloseButton>
-        </ModalHeader>
+    <SlideOver
+      open={isOpen}
+      onClose={handleClose}
+      title="Thêm học sinh vào bài tập"
+      description={`Chỉ định bổ sung học sinh lớp ${currentAssignment.className} cần hoàn thành bài tập`}
+      icon="users"
+      width={480}
+      primaryAction={{
+        label: `Thêm (${selectedStudentIds.length}) học sinh`,
+        icon: 'check',
+        disabled: selectedStudentIds.length === 0,
+        onClick: handleAddStudents,
+      }}
+      secondaryAction={{
+        label: 'Hủy',
+        onClick: handleClose,
+      }}
+    >
+      <div className="space-y-3.5">
+        <div>
+          <SearchField
+            value={searchQuery}
+            onChange={(q) => setSearchQuery(q)}
+            placeholder="Tìm theo tên học sinh, mã HS..."
+          />
+        </div>
 
-        <ModalBody>
-          <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 8px' }}>
-            Chọn học sinh trong {currentAssignment.className} cần giao bài:
-          </p>
-
-          {availableStudents.length === 0 ? (
-            <div
-              style={{
-                padding: '24px',
-                textAlign: 'center',
-                color: '#64748b',
-                fontSize: '14px',
-              }}
+        {filteredStudents.length > 0 && (
+          <div className="flex items-center justify-between text-xs text-[var(--text-subtle)] px-1">
+            <span>Tìm thấy {filteredStudents.length} học sinh</span>
+            <button
+              type="button"
+              onClick={handleSelectAll}
+              className="text-[var(--eco-blue-strong)] hover:underline font-semibold"
             >
-              Tất cả học sinh trong lớp đã có trong danh sách bài tập này.
+              {selectedStudentIds.length === filteredStudents.length
+                ? 'Bỏ chọn tất cả'
+                : 'Chọn tất cả'}
+            </button>
+          </div>
+        )}
+
+        <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-1">
+          {filteredStudents.length === 0 ? (
+            <div className="py-8 text-center text-xs text-[var(--text-subtle)] bg-[var(--bg-muted)] rounded-xl border border-dashed border-[var(--border-default)]">
+              {availableStudents.length === 0
+                ? 'Tất cả học sinh trong lớp đã có trong danh sách bài tập này.'
+                : 'Không tìm thấy học sinh phù hợp với từ khóa.'}
             </div>
           ) : (
-            availableStudents.map((student) => {
+            filteredStudents.map((student) => {
               const isSelected = selectedStudentIds.includes(student.id);
 
               return (
-                <StudentRow
+                <div
                   key={student.id}
-                  $selected={isSelected}
                   onClick={() => handleToggle(student.id)}
+                  className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                    isSelected
+                      ? 'border-[var(--eco-blue-strong)] bg-blue-50/60 shadow-xs'
+                      : 'border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-muted)]'
+                  }`}
                 >
                   <input
                     type="checkbox"
                     checked={isSelected}
                     onChange={() => {}}
-                    style={{ accentColor: '#0070ce' }}
+                    className="w-4 h-4 rounded text-[var(--eco-blue-strong)] focus:ring-0 cursor-pointer"
                   />
-                  <div>
-                    <StudentName>{student.name}</StudentName>
-                    <StudentCode>
-                      Mã: {student.studentCode}
-                      {student.nickname && ` • Tên gọi: ${student.nickname}`}
-                    </StudentCode>
+                  <div className="w-8 h-8 rounded-full bg-[var(--bg-muted)] flex items-center justify-center text-xs font-bold text-[var(--text-heading)] flex-shrink-0">
+                    {student.name.charAt(0)}
                   </div>
-                </StudentRow>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-bold text-[var(--text-heading)] truncate">
+                      {student.name}
+                    </p>
+                    <p className="text-[11px] text-[var(--text-subtle)] font-mono truncate">
+                      Mã: {student.studentCode}
+                      {student.nickname ? ` • ${student.nickname}` : ''}
+                    </p>
+                  </div>
+                </div>
               );
             })
           )}
-        </ModalBody>
-
-        <ModalFooter>
-          <CancelButton onClick={() => dispatch(closeManageStudentsModal())}>
-            Hủy bỏ
-          </CancelButton>
-          <AddButton
-            disabled={selectedStudentIds.length === 0}
-            onClick={handleAddStudents}
-          >
-            Thêm ({selectedStudentIds.length}) học sinh
-          </AddButton>
-        </ModalFooter>
-      </ModalCard>
-    </Overlay>
+        </div>
+      </div>
+    </SlideOver>
   );
 };
+
+export default ManageStudentsModal;

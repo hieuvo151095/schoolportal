@@ -12,6 +12,7 @@ import {
 } from '../../../../../utils/scheduleValidation';
 import { DayOfWeek, ScheduleType, TimeSlotRow, TimetableCell } from '../../../../../types/schedule';
 import { TimetableGridView } from '../../../../../modules/academics/schedule/TimetableGridView';
+import { Dropdown } from '@/components/ds';
 
 const PageContainer = styled.div`
   display: flex;
@@ -237,8 +238,8 @@ export default function CreateSchedulePage() {
 
   const { classes, semesters } = useAppSelector((state) => state.schedule);
 
-  const [classId, setClassId] = useState(classes[0]?.id || 'cls-1a1');
-  const [semesterId, setSemesterId] = useState(semesters[0]?.id || 'sem-2026-hk1');
+  const [classId, setClassId] = useState('');
+  const [semesterId, setSemesterId] = useState('');
   const [title, setTitle] = useState('');
   const [startDate, setStartDate] = useState('2026-09-01');
   const [endDate, setEndDate] = useState('2027-01-15');
@@ -375,6 +376,21 @@ export default function CreateSchedulePage() {
   };
 
   const isFileBlocked = scheduleType === 'file' && !fileName;
+  const isFormValid =
+    classId !== '' &&
+    semesterId !== '' &&
+    title.trim().length > 0 &&
+    !isFileBlocked;
+
+  const classOptions = [
+    { value: '', label: '-- Chọn lớp học --' },
+    ...classes.map((c) => ({ value: c.id, label: c.name })),
+  ];
+
+  const semesterOptions = [
+    { value: '', label: '-- Chọn học kỳ --' },
+    ...semesters.map((s) => ({ value: s.id, label: `${s.name} (${s.academicYear})` })),
+  ];
 
   return (
     <PortalLayout>
@@ -395,27 +411,26 @@ export default function CreateSchedulePage() {
           <FormGrid>
             <FormGroup>
               <Label>Lớp học áp dụng *</Label>
-              <Select value={classId} onChange={(e) => setClassId(e.target.value)}>
-                {classes.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </Select>
+              <Dropdown
+                searchable
+                fullWidth
+                value={classId}
+                onChange={(val) => setClassId(val)}
+                options={classOptions}
+                placeholder="-- Chọn lớp học --"
+              />
             </FormGroup>
 
             <FormGroup>
               <Label>Học kỳ áp dụng *</Label>
-              <Select
+              <Dropdown
+                searchable
+                fullWidth
                 value={semesterId}
-                onChange={(e) => setSemesterId(e.target.value)}
-              >
-                {semesters.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name} ({s.academicYear})
-                  </option>
-                ))}
-              </Select>
+                onChange={(val) => setSemesterId(val)}
+                options={semesterOptions}
+                placeholder="-- Chọn học kỳ --"
+              />
             </FormGroup>
 
             <FormGroup>
@@ -424,6 +439,7 @@ export default function CreateSchedulePage() {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                placeholder="VD: Thời khóa biểu Học kỳ 1 2026-2027"
               />
             </FormGroup>
           </FormGrid>
@@ -538,8 +554,8 @@ export default function CreateSchedulePage() {
             </Link>
 
             <Button
-              $disabled={isFileBlocked}
-              disabled={isFileBlocked}
+              $disabled={!isFormValid}
+              disabled={!isFormValid}
               onClick={() => handleSave(false)}
             >
               Lưu bản nháp
@@ -547,8 +563,8 @@ export default function CreateSchedulePage() {
 
             <Button
               $primary
-              $disabled={isFileBlocked}
-              disabled={isFileBlocked}
+              $disabled={!isFormValid}
+              disabled={!isFormValid}
               onClick={() => handleSave(true)}
             >
               Lưu và phát hành (Gửi PH)

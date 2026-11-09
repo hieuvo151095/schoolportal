@@ -1,155 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { createSchedule, setUploadModalOpen } from '../../../store/slices/scheduleSlice';
 import { generateAutoTitle } from '../../../utils/scheduleValidation';
-
-const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 50;
-  padding: 16px;
-`;
-
-const ModalCard = styled.div`
-  background: #ffffff;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 540px;
-  overflow: hidden;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-`;
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 24px;
-  border-bottom: 1px solid #e2e8f0;
-  background: #f8fafc;
-`;
-
-const Title = styled.h3`
-  margin: 0;
-  font-size: 17px;
-  font-weight: 700;
-  color: #0f172a;
-`;
-
-const CloseButton = styled.button`
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  color: #64748b;
-  cursor: pointer;
-
-  &:hover {
-    color: #0f172a;
-  }
-`;
-
-const Body = styled.div`
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-`;
-
-const Label = styled.label`
-  font-size: 13px;
-  font-weight: 600;
-  color: #334155;
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #1e293b;
-  background: #ffffff;
-  outline: none;
-
-  &:focus {
-    border-color: #0070ce;
-  }
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #1e293b;
-  outline: none;
-
-  &:focus {
-    border-color: #0070ce;
-  }
-`;
-
-const DropZone = styled.div<{ $hasFile: boolean }>`
-  border: 2px dashed ${(props) => (props.$hasFile ? '#16a34a' : '#cbd5e1')};
-  background: ${(props) => (props.$hasFile ? '#f0fdf4' : '#f8fafc')};
-  border-radius: 12px;
-  padding: 28px 16px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-color: ${(props) => (props.$hasFile ? '#15803d' : '#0070ce')};
-    background: ${(props) => (props.$hasFile ? '#dcfce7' : '#eff6ff')};
-  }
-`;
-
-const Footer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 16px 24px;
-  border-top: 1px solid #e2e8f0;
-  background: #f8fafc;
-`;
-
-const Button = styled.button<{ $primary?: boolean; $disabled?: boolean }>`
-  padding: 8px 18px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: ${(props) => (props.$disabled ? 'not-allowed' : 'pointer')};
-  border: 1px solid
-    ${(props) =>
-      props.$disabled ? '#e2e8f0' : props.$primary ? '#0070ce' : '#cbd5e1'};
-  background: ${(props) =>
-    props.$disabled ? '#f1f5f9' : props.$primary ? '#0070ce' : '#ffffff'};
-  color: ${(props) =>
-    props.$disabled ? '#94a3b8' : props.$primary ? '#ffffff' : '#334155'};
-  transition: all 0.15s ease;
-
-  &:hover {
-    background: ${(props) =>
-      props.$disabled
-        ? '#f1f5f9'
-        : props.$primary
-        ? '#005bb5'
-        : '#f8fafc'};
-  }
-`;
+import { SlideOver, Dropdown, Icon } from '@/components/ds';
 
 export const UploadScheduleModal: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -157,8 +10,8 @@ export const UploadScheduleModal: React.FC = () => {
     (state) => state.schedule
   );
 
-  const [classId, setClassId] = useState(classes[0]?.id || 'cls-1a1');
-  const [semesterId, setSemesterId] = useState(semesters[0]?.id || 'sem-2026-hk1');
+  const [classId, setClassId] = useState('');
+  const [semesterId, setSemesterId] = useState('');
   const [title, setTitle] = useState('');
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState<number>(0);
@@ -166,7 +19,7 @@ export const UploadScheduleModal: React.FC = () => {
   const selectedSemester = semesters.find((s) => s.id === semesterId);
 
   useEffect(() => {
-    if (selectedSemester) {
+    if (selectedSemester && (!title || title.startsWith('Thời khóa biểu'))) {
       setTitle(generateAutoTitle(selectedSemester.name));
     }
   }, [selectedSemester]);
@@ -175,16 +28,26 @@ export const UploadScheduleModal: React.FC = () => {
 
   const handleClose = () => {
     dispatch(setUploadModalOpen(false));
+    setClassId('');
+    setSemesterId('');
+    setTitle('');
     setFileName(null);
+    setFileSize(0);
   };
 
   const handleSimulateFilePick = () => {
-    setFileName('thoi-khoa-bieu-lop-1a1-chinh-thuc.pdf');
+    setFileName('thoi-khoa-bieu-lop-chinh-thuc.pdf');
     setFileSize(1428570);
   };
 
+  const isFormValid =
+    classId !== '' &&
+    semesterId !== '' &&
+    fileName !== null &&
+    title.trim().length > 0;
+
   const handleSubmit = () => {
-    if (!fileName) return; // BR04 guard
+    if (!isFormValid || !fileName) return;
 
     const targetClass = classes.find((c) => c.id === classId);
     const targetSem = semesters.find((s) => s.id === semesterId);
@@ -217,92 +80,135 @@ export const UploadScheduleModal: React.FC = () => {
     handleClose();
   };
 
-  const hasFile = Boolean(fileName);
+  const classOptions = [
+    { value: '', label: '-- Chọn lớp học --' },
+    ...classes.map((cls) => ({ value: cls.id, label: cls.name })),
+  ];
+
+  const semesterOptions = [
+    { value: '', label: '-- Chọn học kỳ --' },
+    ...semesters.map((sem) => ({
+      value: sem.id,
+      label: `${sem.name} (${sem.academicYear})`,
+    })),
+  ];
 
   return (
-    <Overlay onClick={handleClose}>
-      <ModalCard onClick={(e) => e.stopPropagation()}>
-        <Header>
-          <Title>📤 Tải Lên Tệp Thời Khóa Biểu (PDF / Hình ảnh)</Title>
-          <CloseButton onClick={handleClose}>✕</CloseButton>
-        </Header>
+    <SlideOver
+      open={isUploadModalOpen}
+      onClose={handleClose}
+      title="Tải lên tệp thời khóa biểu"
+      description="Đăng tải tệp PDF hoặc hình ảnh thời khóa biểu chính thức cho lớp học"
+      icon="upload"
+      width={480}
+      primaryAction={{
+        label: 'Tải lên & Lưu',
+        icon: 'upload',
+        disabled: !isFormValid,
+        onClick: handleSubmit,
+      }}
+      secondaryAction={{
+        label: 'Hủy',
+        onClick: handleClose,
+      }}
+    >
+      <div className="space-y-4">
+        <div>
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1.5">
+            Lớp học áp dụng <span className="text-red-500">*</span>
+          </label>
+          <Dropdown
+            searchable
+            fullWidth
+            value={classId}
+            onChange={(val) => setClassId(val)}
+            options={classOptions}
+            placeholder="-- Chọn lớp học --"
+          />
+        </div>
 
-        <Body>
-          <FormGroup>
-            <Label>Lớp học áp dụng *</Label>
-            <Select value={classId} onChange={(e) => setClassId(e.target.value)}>
-              {classes.map((cls) => (
-                <option key={cls.id} value={cls.id}>
-                  {cls.name}
-                </option>
-              ))}
-            </Select>
-          </FormGroup>
+        <div>
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1.5">
+            Học kỳ áp dụng <span className="text-red-500">*</span>
+          </label>
+          <Dropdown
+            searchable
+            fullWidth
+            value={semesterId}
+            onChange={(val) => setSemesterId(val)}
+            options={semesterOptions}
+            placeholder="-- Chọn học kỳ --"
+          />
+        </div>
 
-          <FormGroup>
-            <Label>Học kỳ áp dụng *</Label>
-            <Select
-              value={semesterId}
-              onChange={(e) => setSemesterId(e.target.value)}
-            >
-              {semesters.map((sem) => (
-                <option key={sem.id} value={sem.id}>
-                  {sem.name} ({sem.academicYear})
-                </option>
-              ))}
-            </Select>
-          </FormGroup>
+        <div>
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1.5">
+            Tiêu đề thời khóa biểu <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            className="w-full h-10 px-3 border border-[var(--border-default)] rounded-lg text-sm bg-[var(--bg-surface)] text-[var(--text-body)] focus:border-[var(--primary)] outline-none"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="VD: Thời khóa biểu Học kỳ 1 2026-2027"
+          />
+        </div>
 
-          <FormGroup>
-            <Label>Tên thời khóa biểu (Tự động tạo - BR02)</Label>
-            <Input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Thời khóa biểu: Học kỳ..."
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label>Tệp đính kèm (PDF, PNG, JPG - Tối đa 25MB) *</Label>
-            <DropZone $hasFile={hasFile} onClick={handleSimulateFilePick}>
-              {hasFile ? (
-                <div>
-                  <div style={{ fontSize: '28px', marginBottom: '4px' }}>📄</div>
-                  <div style={{ fontWeight: 700, color: '#15803d' }}>
-                    {fileName}
-                  </div>
-                  <div style={{ fontSize: '12px', color: '#64748b' }}>
-                    {(fileSize / 1024 / 1024).toFixed(2)} MB • Nhấp để chọn tệp khác
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <div style={{ fontSize: '28px', marginBottom: '4px' }}>📁</div>
-                  <div style={{ fontWeight: 600, color: '#0070ce' }}>
-                    Kéo thả hoặc nhấp để chọn tệp thời khóa biểu
-                  </div>
-                  <div style={{ fontSize: '12px', color: '#64748b', marginTop: '2px' }}>
-                    Hỗ trợ định dạng PDF, JPG, PNG
-                  </div>
-                </div>
-              )}
-            </DropZone>
-          </FormGroup>
-        </Body>
-
-        <Footer>
-          <Button onClick={handleClose}>Hủy bỏ</Button>
-          <Button
-            $primary
-            $disabled={!hasFile}
-            disabled={!hasFile}
-            onClick={handleSubmit}
+        <div>
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1.5">
+            Tệp đính kèm (PDF / Hình ảnh) <span className="text-red-500">*</span>
+          </label>
+          <div
+            onClick={handleSimulateFilePick}
+            className={`border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-all ${
+              fileName
+                ? 'border-emerald-500 bg-emerald-50/50'
+                : 'border-[var(--border-default)] hover:border-[var(--primary)] bg-[var(--bg-surface)]'
+            }`}
           >
-            {hasFile ? 'Tải lên & Phát hành' : 'Vui lòng chọn tệp (BR04)'}
-          </Button>
-        </Footer>
-      </ModalCard>
-    </Overlay>
+            {fileName ? (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 min-w-0">
+                  <Icon name="file-pdf" size={24} className="text-emerald-600 flex-shrink-0" />
+                  <div className="text-left truncate">
+                    <p className="text-xs font-semibold text-emerald-800 truncate">{fileName}</p>
+                    <p className="text-[11px] text-[var(--text-subtle)]">
+                      {(fileSize / 1024 / 1024).toFixed(2)} MB • Nhấp để thay đổi
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFileName(null);
+                    setFileSize(0);
+                  }}
+                  className="text-xs text-red-500 hover:underline flex-shrink-0 ml-2"
+                >
+                  Gỡ tệp
+                </button>
+              </div>
+            ) : (
+              <div className="py-2">
+                <Icon name="cloud-arrow-up" size={32} className="mx-auto text-[var(--text-subtle)] mb-2" />
+                <p className="text-xs font-semibold text-[var(--primary)]">Nhấp để chọn tệp tải lên</p>
+                <p className="text-[11px] text-[var(--text-subtle)] mt-1">
+                  Định dạng PDF, JPG, PNG (tối đa 15MB)
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="bg-[var(--bg-muted)] border border-[var(--border-default)] rounded-lg p-3 text-xs text-[var(--text-subtle)] space-y-1">
+          <p className="font-semibold text-[var(--text-heading)]">Lưu ý nghiệp vụ:</p>
+          <p>• Thời khóa biểu dạng file sẽ tự động phát hành và gửi thông báo đến ứng dụng phụ huynh.</p>
+          <p>• Phụ huynh có thể phóng to, tải về hoặc lưu trữ tệp PDF trên thiết bị di động.</p>
+        </div>
+      </div>
+    </SlideOver>
   );
 };
+
+export default UploadScheduleModal;
