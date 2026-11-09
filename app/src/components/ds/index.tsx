@@ -983,19 +983,30 @@ export function SidebarNav(p: SidebarNavProps) {
   // Group expansion state:
   // Persisted across page navigation so modules DO NOT auto-collapse when a sub-module is clicked.
   // Modules only hide/expand when the user clicks the hide/expand chevron.
+  // Deterministic initial state to prevent SSR/CSR hydration mismatch.
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem(SIDEBAR_STORAGE_KEY);
-        if (saved) {
-          return JSON.parse(saved);
-        }
-      } catch (e) {
-        // ignore
-      }
-    }
-    return {};
+    const initial: Record<string, boolean> = {};
+    (p.groups || []).forEach((g, gi) => {
+      const groupKey = g.key || g.label || `group_${gi}`;
+      initial[groupKey] = true;
+    });
+    return initial;
   });
+
+  // Hydrate user preference from localStorage after client mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(SIDEBAR_STORAGE_KEY);
+      if (saved) {
+        setExpandedGroups((prev) => ({
+          ...prev,
+          ...JSON.parse(saved),
+        }));
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, []);
 
   const toggleGroup = (groupKey: string) => {
     setExpandedGroups((prev) => {

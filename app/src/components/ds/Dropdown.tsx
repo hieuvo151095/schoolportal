@@ -239,7 +239,7 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
   const size = p.size || 'md';
   const sizeClasses = {
     sm: 'px-2.5 py-1 text-xs min-h-[30px] rounded-lg',
-    md: 'px-3 py-2 text-sm min-h-[38px] rounded-xl',
+    md: 'px-3.5 py-2 text-sm min-h-[38px] rounded-lg',
     lg: 'px-4 py-2.5 text-base min-h-[44px] rounded-xl',
   }[size];
 
@@ -247,28 +247,24 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
   const variant = p.variant || 'default';
   const variantClasses = {
     default: cx(
-      'bg-white border border-slate-200 text-slate-800 shadow-2xs hover:border-slate-300',
-      'focus:border-[#006FDA] focus:ring-2 focus:ring-[#006FDA]/20',
-      isOpen && 'border-[#006FDA] ring-2 ring-[#006FDA]/20'
+      'bg-white text-slate-800 shadow-2xs hover:border-slate-300',
+      isOpen ? 'border-[#0066cc] border-[1.5px] shadow-sm text-slate-900' : 'border border-slate-300'
     ),
     outlined: cx(
-      'bg-transparent border border-slate-300 text-slate-800 hover:border-slate-400',
-      'focus:border-[#006FDA] focus:ring-2 focus:ring-[#006FDA]/20',
-      isOpen && 'border-[#006FDA] ring-2 ring-[#006FDA]/20'
+      'bg-transparent text-slate-800 hover:border-slate-400',
+      isOpen ? 'border-[#0066cc] border-[1.5px]' : 'border border-slate-300'
     ),
     subtle: cx(
-      'bg-slate-50 border border-slate-200/80 text-slate-800 hover:bg-slate-100/80',
-      'focus:border-[#006FDA] focus:ring-2 focus:ring-[#006FDA]/20',
-      isOpen && 'border-[#006FDA] ring-2 ring-[#006FDA]/20'
+      'bg-slate-50 text-slate-800 hover:bg-slate-100/80',
+      isOpen ? 'border-[#0066cc] border-[1.5px] bg-white' : 'border border-slate-200/80'
     ),
     ghost: cx(
       'bg-transparent border-0 shadow-none text-slate-800 px-2 py-1.5 hover:bg-slate-50/60 rounded-lg',
       isOpen && 'bg-slate-50'
     ),
     filter: cx(
-      'bg-white border border-slate-200 text-slate-700 text-xs font-medium shadow-2xs hover:border-slate-300 rounded-lg',
-      'focus:border-[#006FDA] focus:ring-1 focus:ring-[#006FDA]/20',
-      isOpen && 'border-[#006FDA] ring-1 ring-[#006FDA]/20'
+      'bg-white text-slate-700 text-xs font-medium shadow-2xs hover:border-slate-300 rounded-lg',
+      isOpen ? 'border-[#0066cc] border-[1.5px]' : 'border border-slate-200'
     ),
   }[variant];
 
@@ -461,9 +457,9 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
                     }}
                     onMouseEnter={() => setHighlightedIndex(idx)}
                     className={cx(
-                      'px-3.5 py-2.5 text-sm flex items-center justify-between cursor-pointer transition-colors select-none',
+                      'px-3.5 py-2.5 text-sm flex items-center justify-between cursor-pointer transition-colors select-none rounded-lg mx-1 my-0.5',
                       isSelected
-                        ? 'bg-blue-50 text-[#006FDA] font-semibold'
+                        ? 'bg-[#ebf5ff] text-[#0066cc] font-semibold'
                         : isHighlighted
                         ? 'bg-slate-50 text-slate-900'
                         : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900',
@@ -475,7 +471,7 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
                         <span
                           className={cx(
                             'shrink-0',
-                            isSelected ? 'text-[#006FDA]' : 'text-slate-400'
+                            isSelected ? 'text-[#0066cc]' : 'text-slate-400'
                           )}
                         >
                           {typeof opt.icon === 'string' ? (
@@ -486,7 +482,7 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
                         </span>
                       )}
                       <div className="min-w-0">
-                        <div className="truncate">{opt.label}</div>
+                        <div className={cx('truncate', isSelected ? 'font-semibold text-[#0066cc]' : 'font-normal')}>{opt.label}</div>
                         {opt.sublabel && (
                           <div className="text-2xs text-slate-400 truncate mt-0.5 font-normal">
                             {opt.sublabel}
@@ -502,8 +498,10 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
                         </span>
                       )}
                       {isSelected && (
-                        <span className="text-[#006FDA] shrink-0">
-                          <SvgIcon name="check" size={13} />
+                        <span className="w-5 h-5 rounded-full bg-[#0066cc] text-white flex items-center justify-center shrink-0 shadow-xs">
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
                         </span>
                       )}
                     </div>

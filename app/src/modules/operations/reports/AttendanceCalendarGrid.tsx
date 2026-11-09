@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
@@ -8,6 +8,7 @@ import {
 } from '../../../store/slices/reportsSlice';
 import { computeDaysInMonth } from '../../../utils/reportsValidation';
 import { DailyAttendanceRecord } from '../../../types/reports';
+import { PersonAttendanceDetailModal } from './PersonAttendanceDetailModal';
 
 const GridWrapper = styled.div`
   background: transparent;
@@ -64,9 +65,10 @@ const Th = styled.th<{ $isWeekend?: boolean; $isSticky?: boolean; $isHeaderTitle
     box-shadow: 2px 0 4px rgba(0, 0, 0, 0.03);
 
     @media (max-width: 640px) {
-      min-width: 170px;
-      width: 170px;
-      padding-left: 8px;
+      min-width: 125px;
+      width: 125px;
+      padding-left: 6px;
+      padding-right: 6px;
     }
   `}
 `;
@@ -91,9 +93,9 @@ const Td = styled.td<{ $isSticky?: boolean; $isWeekend?: boolean }>`
     box-shadow: 2px 0 4px rgba(0, 0, 0, 0.03);
 
     @media (max-width: 640px) {
-      min-width: 170px;
-      width: 170px;
-      padding: 8px 8px;
+      min-width: 125px;
+      width: 125px;
+      padding: 6px 6px;
     }
   `}
 `;
@@ -145,30 +147,45 @@ const CircleKP = styled.span`
 
 const StudentFrame = styled.div`
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: center;
+  gap: 10px;
+
+  @media (max-width: 640px) {
+    gap: 6px;
+  }
 `;
 
 const AvatarImg = styled.img`
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
   border: 1px solid #e2e8f0;
+
+  @media (max-width: 640px) {
+    width: 24px;
+    height: 24px;
+  }
 `;
 
 const AvatarPlaceholder = styled.div`
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: #e2e8f0;
   color: #94a3b8;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 18px;
   flex-shrink: 0;
+
+  @media (max-width: 640px) {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
 `;
 
 const StudentInfoCol = styled.div`
@@ -188,9 +205,16 @@ const StudentNameText = styled.a`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 170px;
 
   &:hover {
     text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    font-size: 12px;
+    max-width: 85px;
   }
 `;
 
@@ -200,6 +224,11 @@ const ParentNameText = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  @media (max-width: 640px) {
+    font-size: 10px;
+    max-width: 80px;
+  }
 `;
 
 const PhoneText = styled.div`
@@ -208,6 +237,10 @@ const PhoneText = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
+
+  @media (max-width: 640px) {
+    display: none;
+  }
 `;
 
 const TotalsBadgeRow = styled.div`
@@ -222,6 +255,13 @@ const TotalsBadgeRow = styled.div`
   border-radius: 6px;
   border: 1px solid #f1f5f9;
   width: fit-content;
+
+  @media (max-width: 640px) {
+    margin-top: 2px;
+    font-size: 10px;
+    gap: 3px;
+    padding: 2px 4px;
+  }
 
   .item {
     display: inline-flex;
@@ -270,6 +310,20 @@ export const AttendanceCalendarGrid: React.FC = () => {
 
   const days = computeDaysInMonth(selectedYear, selectedMonth);
 
+  const [personDetail, setPersonDetail] = useState<{
+    name: string;
+    code: string;
+    roleOrClass: string;
+    phone?: string;
+    avatarUrl?: string;
+    isStaff: boolean;
+    totalPresent: number;
+    totalAbsentExcused: number;
+    totalAbsentUnexcused: number;
+    totalLate: number;
+    records: Record<string, any>;
+  } | null>(null);
+
   const handleCellClick = (
     studentName: string,
     studentId: string,
@@ -307,14 +361,14 @@ export const AttendanceCalendarGrid: React.FC = () => {
             <thead>
               {/* Row 1: Fixed Headers and Spanning Month Title */}
               <tr>
-                <Th rowSpan={2} style={{ width: '40px', textAlign: 'center' }}>
+                <Th rowSpan={2} style={{ width: '28px', minWidth: '28px', padding: '4px 2px', textAlign: 'center' }}>
                   #
                 </Th>
                 <Th rowSpan={2} $isSticky>
                   <span>Nhân viên</span>
-                  <span style={{ color: '#94a3b8', marginLeft: '6px' }}>⇅</span>
+                  <span style={{ color: '#94a3b8', marginLeft: '4px' }}>⇅</span>
                 </Th>
-                <Th rowSpan={2} style={{ width: '64px', textAlign: 'center' }}>
+                <Th rowSpan={2} style={{ width: '44px', minWidth: '44px', padding: '4px 2px', textAlign: 'center', fontSize: '11px' }}>
                   Buổi
                 </Th>
                 <Th
@@ -377,8 +431,23 @@ export const AttendanceCalendarGrid: React.FC = () => {
 
                           <StudentInfoCol>
                             <StudentNameText
-                              style={{ cursor: 'default' }}
-                              title={`Mã nhân viên: ${staff.staffCode}`}
+                              title="Bấm để xem chi tiết điểm danh tháng"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setPersonDetail({
+                                  name: staff.staffName,
+                                  code: staff.staffCode,
+                                  roleOrClass: `${staff.roleName} • ${staff.department}`,
+                                  phone: staff.phone,
+                                  avatarUrl: staff.avatarUrl,
+                                  isStaff: true,
+                                  totalPresent: staff.totalPresent,
+                                  totalAbsentExcused: staff.totalAbsentExcused || 0,
+                                  totalAbsentUnexcused: staff.totalAbsentUnexcused || 0,
+                                  totalLate: staff.totalLate || 0,
+                                  records: staff.records,
+                                });
+                              }}
                             >
                               {staff.staffName}
                             </StudentNameText>
@@ -534,6 +603,16 @@ export const AttendanceCalendarGrid: React.FC = () => {
             <span>Đến/Về muộn</span>
           </LegendItem>
         </LegendBar>
+
+        {personDetail && (
+          <PersonAttendanceDetailModal
+            person={personDetail}
+            days={days}
+            month={selectedMonth}
+            year={selectedYear}
+            onClose={() => setPersonDetail(null)}
+          />
+        )}
       </GridWrapper>
     );
   }
@@ -554,14 +633,14 @@ export const AttendanceCalendarGrid: React.FC = () => {
           <thead>
             {/* Row 1: Fixed Headers and Spanning Month Title */}
             <tr>
-              <Th rowSpan={2} style={{ width: '40px', textAlign: 'center' }}>
+              <Th rowSpan={2} style={{ width: '28px', minWidth: '28px', padding: '4px 2px', textAlign: 'center' }}>
                 #
               </Th>
               <Th rowSpan={2} $isSticky>
                 <span>Học sinh</span>
-                <span style={{ color: '#94a3b8', marginLeft: '6px' }}>⇅</span>
+                <span style={{ color: '#94a3b8', marginLeft: '4px' }}>⇅</span>
               </Th>
-              <Th rowSpan={2} style={{ width: '64px', textAlign: 'center' }}>
+              <Th rowSpan={2} style={{ width: '44px', minWidth: '44px', padding: '4px 2px', textAlign: 'center', fontSize: '11px' }}>
                 Buổi
               </Th>
               <Th
@@ -625,10 +704,22 @@ export const AttendanceCalendarGrid: React.FC = () => {
 
                         <StudentInfoCol>
                           <StudentNameText
-                            title="Bấm để xem hồ sơ học sinh"
+                            title="Bấm để xem chi tiết điểm danh tháng"
                             onClick={(e) => {
                               e.preventDefault();
-                              dispatch(openLateFeeModal(student));
+                              setPersonDetail({
+                                name: student.studentName,
+                                code: student.studentCode,
+                                roleOrClass: `${classDisplayName} • Phụ huynh: ${student.parentName || 'Chưa cập nhật'}`,
+                                phone: student.phone,
+                                avatarUrl: student.avatarUrl,
+                                isStaff: false,
+                                totalPresent: student.totalPresent,
+                                totalAbsentExcused: student.totalAbsentExcused || 0,
+                                totalAbsentUnexcused: student.totalAbsentUnexcused || 0,
+                                totalLate: (student.totalLateArrivals || 0) + (student.totalLateDepartures || 0),
+                                records: student.records,
+                              });
                             }}
                           >
                             {student.studentName}
@@ -843,6 +934,16 @@ export const AttendanceCalendarGrid: React.FC = () => {
           <span>Đến/Về muộn</span>
         </LegendItem>
       </LegendBar>
+
+      {personDetail && (
+        <PersonAttendanceDetailModal
+          person={personDetail}
+          days={days}
+          month={selectedMonth}
+          year={selectedYear}
+          onClose={() => setPersonDetail(null)}
+        />
+      )}
     </GridWrapper>
   );
 };

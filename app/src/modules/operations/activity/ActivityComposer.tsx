@@ -6,7 +6,7 @@ import {
   MOCK_HASHTAGS,
 } from '../../../services/mockActivityData';
 import { validatePostContent } from '../../../utils/activityValidation';
-import { Icon, Avatar, Button } from '@/components/ds';
+import { Icon, Avatar, Button, SelectField } from '@/components/ds';
 
 interface ActivityComposerProps {
   currentClassId: string;
@@ -220,27 +220,19 @@ export const ActivityComposer: React.FC<ActivityComposerProps> = ({
         </div>
 
         {/* BR01 Audience Scope Dropdown */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}>
-          <Icon name="users" size={14} color="var(--text-subtle)" />
-          <select
+        <div className="relative w-full sm:w-auto min-w-[210px]">
+          <SelectField
             value={audienceScope}
-            onChange={(e) => setAudienceScope(e.target.value as AudienceScope)}
-            style={{
-              fontSize: '12px',
-              fontWeight: 600,
-              background: 'var(--bg-subtle)',
-              border: '1px solid var(--border-default)',
-              borderRadius: 'var(--radius-8)',
-              padding: '6px 12px',
-              color: 'var(--text-heading)',
-              cursor: 'pointer',
-              outline: 'none',
-            }}
-          >
-            <option value="current_class">Phạm vi: {classNameLabel}</option>
-            <option value="whole_school">Phạm vi: Toàn trường</option>
-            <option value="custom_classes">Phạm vi: Khối 1 (Tất cả các lớp)</option>
-          </select>
+            onChange={(val) => setAudienceScope(val as AudienceScope)}
+            options={[
+              { value: 'current_class', label: `Phạm vi: ${classNameLabel}` },
+              { value: 'whole_school', label: 'Phạm vi: Toàn trường' },
+              { value: 'custom_classes', label: 'Phạm vi: Khối 1 (Tất cả các lớp)' },
+            ]}
+            prefixIcon="users"
+            size="sm"
+            className="w-full sm:w-auto"
+          />
         </div>
       </div>
 

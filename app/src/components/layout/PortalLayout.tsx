@@ -396,7 +396,10 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
   ];
 
   return (
-    <div className={`ecomd-shell h-screen overflow-hidden flex flex-col items-stretch bg-[var(--bg-canvas)] w-full max-w-full min-w-0 ${mounted && isMobile ? 'ecomd-shell--mobile' : 'ecomd-shell--desktop'}`}>
+    <div
+      suppressHydrationWarning
+      className={`ecomd-shell h-screen overflow-hidden flex flex-col items-stretch bg-[var(--bg-canvas)] w-full max-w-full min-w-0 ${mounted && isMobile ? 'ecomd-shell--mobile' : 'ecomd-shell--desktop'}`}
+    >
       {/* Global Top-Right Toast Notifications for all modules */}
       <GlobalToastContainer />
 

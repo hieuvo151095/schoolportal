@@ -33,36 +33,52 @@ const ThreadContainer = styled.main`
 `;
 
 const ThreadHeader = styled.div`
-  padding: 14px 20px;
+  padding: 12px 16px;
   background: #ffffff;
   border-bottom: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   flex-shrink: 0;
   position: relative;
+
+  @media (max-width: 640px) {
+    padding: 10px 12px;
+  }
 `;
 
 const HeaderTopRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
+  width: 100%;
 `;
 
 const ConvInfo = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
 `;
 
 const ConvName = styled.h3`
   font-family: var(--font-heading);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
   color: #0f172a;
   display: flex;
   align-items: center;
   gap: 6px;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @media (max-width: 640px) {
+    font-size: 15px;
+  }
 `;
 
 const ClassPill = styled.span`
@@ -197,15 +213,26 @@ const FilterRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
 `;
 
 const ChipsGroup = styled.div`
   display: flex;
   gap: 6px;
   align-items: center;
-  flex-wrap: wrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  flex-wrap: nowrap;
+  width: 100%;
+  padding-bottom: 2px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const CategoryChip = styled.button<{ $active: boolean }>`
@@ -218,6 +245,8 @@ const CategoryChip = styled.button<{ $active: boolean }>`
   color: ${({ $active }) => ($active ? '#0070ce' : '#475569')};
   cursor: pointer;
   transition: all 0.12s;
+  white-space: nowrap;
+  flex-shrink: 0;
 
   &:hover {
     border-color: #0070ce;
@@ -232,19 +261,26 @@ const ClearFilterBtn = styled.button`
   font-weight: 700;
   cursor: pointer;
   text-decoration: underline;
+  white-space: nowrap;
+  flex-shrink: 0;
 `;
 
 
 const StatusBanner = styled.div<{ $bg: string; $border: string; $color: string }>`
   background: ${({ $bg }) => $bg};
   border-bottom: 1px solid ${({ $border }) => $border};
-  padding: 8px 20px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   font-size: 12px;
   color: ${({ $color }) => $color};
   flex-shrink: 0;
+
+  @media (max-width: 640px) {
+    padding: 8px 12px;
+  }
 `;
 
 const BannerActionBtn = styled.button`
@@ -383,6 +419,10 @@ const BubbleWrapper = styled.div`
   max-width: 70%;
   position: relative;
 
+  @media (max-width: 767.98px) {
+    max-width: 88%;
+  }
+
   &:hover .msg-menu {
     opacity: 1;
   }
@@ -459,12 +499,16 @@ const ActionBtn = styled.button<{ $danger?: boolean }>`
 const ComposerContainer = styled.div<{ $disabled?: boolean }>`
   background: #ffffff;
   border-top: 1px solid #e2e8f0;
-  padding: 14px 20px;
+  padding: 10px 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
   opacity: ${({ $disabled }) => ($disabled ? 0.75 : 1)};
+
+  @media (max-width: 640px) {
+    padding: 8px 12px;
+  }
 `;
 
 const ComposerToolbar = styled.div`
@@ -627,19 +671,20 @@ const BubbleAttachmentItem = styled.a`
 
 const InputRow = styled.div`
   display: flex;
-  gap: 12px;
+  gap: 8px;
   align-items: flex-end;
+  width: 100%;
 `;
 
 const TextArea = styled.textarea`
   flex: 1;
-  padding: 10px 12px;
+  padding: 8px 12px;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   font-size: 13px;
   font-family: inherit;
   resize: none;
-  min-height: 44px;
+  min-height: 40px;
   max-height: 120px;
   outline: none;
   box-sizing: border-box;
@@ -659,15 +704,25 @@ const SendBtn = styled.button<{ disabled?: boolean }>`
   background: ${({ disabled }) => (disabled ? '#cbd5e1' : '#0070ce')};
   color: white;
   border: none;
-  padding: 10px 18px;
+  padding: 8px 16px;
+  height: 40px;
   border-radius: 8px;
   font-weight: 700;
   font-size: 13px;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   transition: background 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-shrink: 0;
 
   &:hover {
     background: ${({ disabled }) => (disabled ? '#cbd5e1' : '#005096')};
+  }
+
+  @media (max-width: 640px) {
+    padding: 8px 12px;
   }
 `;
 
@@ -983,7 +1038,7 @@ export const ChatThread: React.FC<Props> = ({
               <button
                 type="button"
                 onClick={onBack}
-                className="md:hidden inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 mr-2 py-1 px-2 rounded bg-blue-50 border border-blue-200 cursor-pointer"
+                className="md:hidden inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 py-1 px-2.5 rounded-lg bg-blue-50 border border-blue-200 cursor-pointer flex-shrink-0"
                 aria-label="Quay lại danh sách hội thoại"
               >
                 <span>← Danh sách</span>
@@ -1011,7 +1066,8 @@ export const ChatThread: React.FC<Props> = ({
               onClick={() => setIsSettingsOpen(!isSettingsOpen)}
               title="Cài đặt cuộc trò chuyện"
             >
-              ⚙️ Cài đặt
+              <span>⚙️</span>
+              <span className="hidden sm:inline"> Cài đặt</span>
             </SettingsBtn>
 
             {isSettingsOpen && (
@@ -1149,10 +1205,10 @@ export const ChatThread: React.FC<Props> = ({
 
       {activeConv.importantAlertsCount > 0 && (
         <StatusBanner $bg="#fffbeb" $border="#fde68a" $color="#92400e">
-          <span>
+          <span style={{ flex: 1, minWidth: 0, paddingRight: '8px' }}>
             📌 Cuộc trò chuyện này có <strong>{activeConv.importantAlertsCount}</strong> thông báo quan trọng (báo ốm, báo vắng)
           </span>
-          <BannerActionBtn onClick={onOpenImportantAlerts}>Xem chi tiết</BannerActionBtn>
+          <BannerActionBtn onClick={onOpenImportantAlerts} style={{ flexShrink: 0 }}>Xem chi tiết</BannerActionBtn>
         </StatusBanner>
       )}
 

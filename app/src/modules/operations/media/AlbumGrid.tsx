@@ -74,7 +74,7 @@ export const AlbumGrid: React.FC<AlbumGridProps> = ({
                     onClick={() => onSelectAlbum(album.id)}
                     style={{ cursor: 'pointer' }}
                   >
-                    <td className="is-primary" style={{ paddingLeft: 'var(--space-20)' }}>
+                    <td className="is-primary pr-10 sm:pr-0" style={{ paddingLeft: 'var(--space-20)' }}>
                       <div className="ecomd-cell__value">
                         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-12)' }}>
                           <img
@@ -89,11 +89,11 @@ export const AlbumGrid: React.FC<AlbumGridProps> = ({
                               flexShrink: 0,
                             }}
                           />
-                          <div>
-                            <div className="body-sm-bold" style={{ color: 'var(--text-heading)' }}>
+                          <div className="min-w-0 max-w-[210px] sm:max-w-none">
+                            <div className="body-sm-bold truncate" style={{ color: 'var(--text-heading)' }}>
                               {album.title}
                             </div>
-                            <div className="body-xs" style={{ color: 'var(--text-subtle)', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            <div className="body-xs truncate" style={{ color: 'var(--text-subtle)' }}>
                               {album.description || 'Chưa có mô tả'}
                             </div>
                           </div>
@@ -132,18 +132,21 @@ export const AlbumGrid: React.FC<AlbumGridProps> = ({
                         </span>
                       </div>
                     </td>
-                    <td className="is-actions" style={{ textAlign: 'right', paddingRight: 'var(--space-20)' }}>
+                    <td className="is-actions sm:pr-5">
                       <div className="ecomd-cell__value">
                         {!album.isSystem && onDeleteAlbum && (
-                          <IconButton
-                            icon="trash"
-                            label="Xóa album"
-                            size="sm"
-                            onClick={(e?: React.MouseEvent) => {
-                              if (e) e.stopPropagation();
+                          <button
+                            type="button"
+                            className="w-8 h-8 rounded-lg bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-600 flex items-center justify-center border border-slate-200 hover:border-red-200 transition-colors shadow-2xs"
+                            aria-label="Xóa album"
+                            title="Xóa album"
+                            onClick={(e) => {
+                              e.stopPropagation();
                               setAlbumToDelete(album);
                             }}
-                          />
+                          >
+                            <Icon name="trash" size={13} />
+                          </button>
                         )}
                       </div>
                     </td>

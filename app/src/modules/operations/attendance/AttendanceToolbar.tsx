@@ -159,6 +159,8 @@ export const AttendanceToolbar: React.FC<AttendanceToolbarProps> = ({
               value={searchQuery}
               onChange={onSearchChange}
               placeholder="Tìm tên bé, mã học sinh..."
+              block
+              className="w-full"
             />
           </div>
         </div>

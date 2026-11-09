@@ -46,6 +46,8 @@ export const ActivityToolbar: React.FC<ActivityToolbarProps> = ({
             value={searchQuery}
             onChange={onSearchQueryChange}
             placeholder="Tìm kiếm hoạt động, tên bé, môn học..."
+            block
+            className="w-full"
           />
         </div>
 

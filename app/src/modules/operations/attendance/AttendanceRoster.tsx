@@ -444,13 +444,13 @@ export const AttendanceRoster: React.FC<AttendanceRosterProps> = ({
                     {/* Người đón */}
                     <td>
                       <span className="ecomd-cell__label body-xs-medium" aria-hidden="true">Người đón</span>
-                      <div className="ecomd-cell__value">
+                      <div className="ecomd-cell__value" style={{ justifyContent: 'flex-end', textAlign: 'right' }}>
                         {student.pickupGuardianName ? (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
                             <Icon name="user-shield" size={13} color="var(--semantic-success)" />
                             <span
                               className="body-xs-semibold"
-                              style={{ color: 'var(--text-heading)', maxWidth: '90px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                              style={{ color: 'var(--text-heading)', maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                               title={student.pickupGuardianName}
                             >
                               {student.pickupGuardianName}
@@ -465,10 +465,10 @@ export const AttendanceRoster: React.FC<AttendanceRosterProps> = ({
                     {/* Sức khỏe & Thân nhiệt */}
                     <td>
                       <span className="ecomd-cell__label body-xs-medium" aria-hidden="true">Sức khỏe</span>
-                      <div className="ecomd-cell__value">
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <div className="ecomd-cell__value" style={{ justifyContent: 'flex-end', textAlign: 'right' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px', width: '100%' }}>
                           {/* Temperature click-to-edit */}
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '6px' }}>
                             {editingTempStudentId === student.studentId ? (
                               <div style={{ display: 'inline-flex', alignItems: 'center', background: 'var(--bg-surface)', padding: '2px 4px', borderRadius: 'var(--radius-6)', border: '2px solid var(--eco-blue-strong)' }}>
                                 <input
@@ -546,6 +546,8 @@ export const AttendanceRoster: React.FC<AttendanceRosterProps> = ({
                                   ? 'var(--text-body)'
                                   : 'var(--semantic-warning-strong)',
                               cursor: 'pointer',
+                              textAlign: 'right',
+                              direction: 'ltr',
                             }}
                           >
                             {HEALTH_CONDITIONS.map((cond) => (
@@ -561,9 +563,9 @@ export const AttendanceRoster: React.FC<AttendanceRosterProps> = ({
                     {/* Ghi chú */}
                     <td>
                       <span className="ecomd-cell__label body-xs-medium" aria-hidden="true">Ghi chú</span>
-                      <div className="ecomd-cell__value">
+                      <div className="ecomd-cell__value" style={{ justifyContent: 'flex-end', textAlign: 'right' }}>
                         {editingNotesId === student.studentId ? (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
                             <input
                               type="text"
                               value={tempNotes}
@@ -590,6 +592,7 @@ export const AttendanceRoster: React.FC<AttendanceRosterProps> = ({
                             style={{
                               display: 'flex',
                               alignItems: 'center',
+                              justifyContent: 'flex-end',
                               gap: '4px',
                               cursor: 'pointer',
                               fontSize: '12px',

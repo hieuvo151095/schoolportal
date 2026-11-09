@@ -86,4 +86,39 @@ html, body, #__next {
     padding-left: var(--space-12) !important;
     padding-right: var(--space-12) !important;
   }
+
+  /* Mobile card action button positioning (anchored top-right corner) */
+  .ecomd-table tbody tr,
+  .ds-table tbody tr {
+    position: relative !important;
+  }
+
+  .ecomd-table tbody td.is-actions,
+  .ds-table tbody td.is-actions {
+    position: absolute !important;
+    top: var(--space-12) !important;
+    right: var(--space-12) !important;
+    grid-column: unset !important;
+    grid-row: unset !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 2 !important;
+  }
+
+  /* Full-width search input on mobile */
+  .ecomd-search.is-block,
+  .ecomd-search.is-block input {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Ensure all mobile card cells have right-aligned values and icons */
+  .ecomd-table tbody td:not(.is-primary):not(.is-check) > .ecomd-cell__value,
+  .ds-table tbody td:not(.is-primary):not(.is-check) > .ecomd-cell__value {
+    justify-content: flex-end !important;
+    text-align: right !important;
+    margin-left: auto !important;
+  }
 }
