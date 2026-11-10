@@ -797,3 +797,25 @@
 - **Consequences:** Eliminates manual misclassification of online payment flows, protects financial audit integrity, and streamlines user experience by removing redundant dropdown options.
 - **Rollback Trigger:** None.
 
+---
+
+### ADR-037: Official Standard Invoice Print Template ("PHIẾU BÁO THU TIỀN") & Print Layout Isolation
+- **Status:** Accepted
+- **Context:**
+  When school accountants or parents clicked "In phiếu" on an invoice (`/school/fee/[id]`), the legacy web view printed the entire portal shell (AppHeader, Sidebar navigation, action buttons, cancellation banners, interactive VietQR copy controls, and payment history). Furthermore, the invoice paper sheet lacked standard corporate branding, official terminology, required legal/accounting columns, and clear payment instructions.
+  Production benchmark analysis (`ecoschool.com.vn/34FINVIET/school/invoice/info/1679/`) established the exact Single Source of Truth (SSOT) for the official printed invoice:
+  1. *Title Standardization:* Standardized as **`PHIẾU BÁO THU TIỀN`** (replacing previous "PHIẾU BÁO HỌC PHÍ VÀ DỊCH VỤ") accompanied by `Mã hóa đơn: {invoiceNo}` centered prominently below the header.
+  2. *Header Trio:* Left-aligned ECO Brand Logo (`EcoBrandLogo`), centered title + invoice number, and right-aligned VietQR payment code square with caption *"Quét mã QR để thanh toán"*.
+  3. *Metadata Block:* Structured as clean single lines on the left: `Trường FINVIET`, `Địa chỉ: 34 Hoàng Việt, Phường Tân Sơn Nhất, TP.HCM`, `Tên học sinh`, `Mã học sinh`, `Lớp`, and `Kỳ phí: MM/YYYY`.
+  4. *7-Column Standard Table:* Standardized columns: `STT` (index), `Nội dung` (line item name & note), `ĐVT` (Unit: Tháng, Ngày, Bộ, Năm...), `Số tiền (VNĐ)` (unit price), `Số lượng` (quantity), `Khấu trừ / Miễn giảm` (deductions), `Thành tiền (VNĐ)` (line amount), concluding with a bold `Tổng cộng` row spanning columns 1-6.
+  5. *Official Notes (Ghi chú):* Explicit guidance for mobile banking / e-wallet QR scan, announcement of the **ECO Me app** for transaction fee waiver and deferred installment tuition payment ("thanh toán học phí trả sau"), and customer support hotline `1900 9005`.
+  6. *Tripartite Signature Block:* Right-aligned date `Ngày ... tháng ... năm ...`, and 3 balanced signature columns: `Kế toán`, `Thủ quỹ`, `Hiệu trưởng` with dedicated signing space.
+  7. *Print Isolation (@media print):* Dedicated CSS `@media print` rules enforcing A4 portrait sizing (`@page { size: A4 portrait; margin: 8mm 12mm; }`), completely hiding navigation chrome (`.ecomd-header`, `.ecomd-sidebar`, `.ecomd-rail`), breadcrumbs, interactive tools, and web-only settlement panels (`.no-print`, `.screen-only`). Exactly 1 sheet of paper is outputted without spilling over to page 2.
+- **Decision:**
+  Adopt the standardized 7-column layout, header trio, ECO Me credit guidelines, 3-signature block, and `@media print` stylesheet isolation across all invoice detail and print preview views (`InvoiceDetailView.tsx` & `globals.css`).
+- **Alternatives Rejected:**
+  - *Keep web layout in print mode:* Rejected because browser print preview was completely distorted, printing sidebar links and button chrome across multiple pages.
+  - *6-column table without ĐVT (Unit):* Rejected because Vietnamese educational accounting standards require explicit measurement units (e.g. Tháng for tuition, Ngày for meals, Bộ for uniforms).
+- **Consequences:** Provides school finance departments and parents with a professional, legally compliant, pixel-perfect A4 invoice printout matching official production systems.
+- **Rollback Trigger:** None.
+

@@ -980,5 +980,68 @@ describe('Finance Tuition Invoices (Học Phí) Business Rules & Engine', () => 
 
   });
 
+  describe('ADR-036 & ADR-037: Official Standard Invoice Template ("PHIẾU BÁO THU TIỀN") & Manual Cash Invariant', () => {
+
+    test('ADR-036: Manual payment confirmation strictly offers only 1 option: Cash (Tiền mặt)', async () => {
+      const fs = await import('fs');
+      const modalPath = 'src/modules/finance/invoices/ManualPaymentModal.tsx';
+      const content = fs.readFileSync(modalPath, 'utf8');
+
+      // Assert that paymentOptions contains only tien_mat and no other options
+      assert.ok(content.includes("{ value: 'tien_mat', label: 'Tiền mặt' }"));
+      assert.ok(!content.includes("{ value: 'qr_ecopay'"));
+      assert.ok(!content.includes("{ value: 'vi_finviet'"));
+      assert.ok(!content.includes("{ value: 'the_pos'"));
+    });
+
+    test('ADR-037: Invoice detail template matches official "PHIẾU BÁO THU TIỀN" specification', async () => {
+      const fs = await import('fs');
+      const viewPath = 'src/modules/finance/invoices/InvoiceDetailView.tsx';
+      const content = fs.readFileSync(viewPath, 'utf8');
+
+      // Title & Header invariants
+      assert.ok(content.includes('PHIẾU BÁO THU TIỀN'), 'Must feature PHIẾU BÁO THU TIỀN title');
+      assert.ok(content.includes('EcoBrandLogo'), 'Must render ECO brand logo');
+      assert.ok(content.includes('Quét mã QR để thanh toán'), 'Must render QR payment caption');
+
+      // 7-Column Table headers
+      assert.ok(content.includes('STT'), 'Must include STT column');
+      assert.ok(content.includes('Nội dung'), 'Must include Nội dung column');
+      assert.ok(content.includes('ĐVT'), 'Must include ĐVT column');
+      assert.ok(content.includes('Số tiền (VNĐ)'), 'Must include Số tiền column');
+      assert.ok(content.includes('Số lượng'), 'Must include Số lượng column');
+      assert.ok(content.includes('Khấu trừ / Miễn giảm'), 'Must include Khấu trừ / Miễn giảm column');
+      assert.ok(content.includes('Thành tiền (VNĐ)'), 'Must include Thành tiền column');
+      assert.ok(content.includes('Tổng cộng'), 'Must include Tổng cộng row');
+
+      // Official Notes & ECO Me credit
+      assert.ok(content.includes('Ghi chú:'));
+      assert.ok(content.includes('ứng dụng ECO Me'));
+      assert.ok(content.includes('thanh toán học phí trả sau'));
+      assert.ok(content.includes('1900 9005'));
+
+      // Signatures
+      assert.ok(content.includes('>Kế toán<'));
+      assert.ok(content.includes('>Thủ quỹ<'));
+      assert.ok(content.includes('>Hiệu trưởng<'));
+      assert.ok(content.includes('Powered by finviet'));
+    });
+
+    test('ADR-037: Global print stylesheet enforces A4 portrait isolation and hides UI chrome', async () => {
+      const fs = await import('fs');
+      const cssPath = 'src/styles/globals.css';
+      const css = fs.readFileSync(cssPath, 'utf8');
+
+      assert.ok(css.includes('@media print'));
+      assert.ok(css.includes('size: A4 portrait'));
+      assert.ok(css.includes('.printable-invoice-container'));
+      assert.ok(css.includes('.ecomd-header'));
+      assert.ok(css.includes('.ecomd-sidebar'));
+      assert.ok(css.includes('.screen-only'));
+      assert.ok(css.includes('.no-print'));
+    });
+
+  });
+
 });
 

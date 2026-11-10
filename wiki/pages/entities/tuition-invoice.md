@@ -34,6 +34,7 @@ Thực thể Hóa đơn học phí thể hiện nghĩa vụ tài chính định 
 | TC-02 | Chốt dữ liệu điểm danh tự động cuối tháng (OQ-21): Đợt hóa đơn tháng M+1 tự động truy xuất dữ liệu hoàn tiền ăn từ tháng M sau khi hệ thống tự động đóng băng sổ điểm danh vào 23:59:59 ngày cuối tháng | Tránh xung đột sửa điểm danh |
 | TC-01 | Toàn bộ giao dịch cập nhật trạng thái hóa đơn bắt buộc sử dụng Pessimistic Row Lock (`SELECT ... FOR UPDATE`) trong CSDL | Tuân thủ kiến trúc kiểm soát đồng thời |
 | TC-22 | Quy tắc xác nhận thanh toán thủ công (ADR-036): Trong modal Xác nhận thanh toán, dropdown phương thức chỉ có duy nhất 1 tùy chọn là "Tiền mặt". Các kênh thanh toán điện tử được đối soát tự động qua webhook cổng thanh toán | Bảo vệ tính toàn vẹn của sổ kế toán |
+| TC-01 | Mẫu in chuẩn PHIẾU BÁO THU TIỀN (ADR-037): Bản in hóa đơn tuân thủ cấu trúc 7 cột (STT, Nội dung, ĐVT, Số tiền, Số lượng, Khấu trừ, Thành tiền), khối logo-tiêu đề-VietQR cân đối, ghi chú thanh toán ECO Me và 3 chữ ký (Kế toán, Thủ quỹ, Hiệu trưởng) trên 1 trang A4 | Bản in chuẩn doanh nghiệp |
 
 ## Quan hệ
 - Thuộc về một [Hồ sơ học sinh 360](student-profile.md).

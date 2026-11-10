@@ -36,6 +36,14 @@ Quản lý vòng đời hóa đơn học phí, tích hợp VietQR động, áp d
 - **Bảo toàn kênh thanh toán điện tử:** Các hình thức thanh toán điện tử (như QR ECOPay, Ví Finviet, chuyển khoản ngân hàng) được xử lý tự động thông qua webhook cổng thanh toán và đối soát (`Xác nhận tự động`), tuyệt đối không cho phép xác nhận thủ công từ người dùng để ngăn ngừa rủi ro sai lệch số dư và đối soát ngân hàng.
 - **Lịch sử thanh toán bất biến (TC-22):** Mỗi lần xác nhận thanh toán tiền mặt thành công ghi thêm đúng 1 bản ghi mới vào lịch sử thanh toán (`paymentHistory`), tính toán lại công nợ còn lại và gửi thông báo thành công chuẩn Redux toast (`addToast`).
 
+## Mẫu in hóa đơn chuẩn "PHIẾU BÁO THU TIỀN" & Cách ly in ấn (ADR-037)
+- **Tiêu đề & Đầu phiếu:** Tiêu đề chuẩn hóa **PHIẾU BÁO THU TIỀN** kèm `Mã hóa đơn: {invoiceNo}` đặt ở vị trí trung tâm. Góc trái hiển thị Logo thương hiệu ECO (`EcoBrandLogo`), góc phải là mã VietQR thanh toán kèm dòng phụ đề *"Quét mã QR để thanh toán"*.
+- **Thông tin học sinh & trường:** Danh sách thông tin cơ bản đặt bên trái: `Trường FINVIET`, `Địa chỉ: 34 Hoàng Việt, Phường Tân Sơn Nhất, TP.HCM`, `Tên học sinh`, `Mã học sinh`, `Lớp`, `Kỳ phí: MM/YYYY`.
+- **Bảng chi tiết 7 cột:** Chuẩn hóa 7 cột kế toán giáo dục: `STT`, `Nội dung`, `ĐVT` (Tháng, Ngày, Bộ, Năm...), `Số tiền (VNĐ)`, `Số lượng`, `Khấu trừ / Miễn giảm`, `Thành tiền (VNĐ)`, kết thúc bằng dòng `Tổng cộng` in đậm gộp 6 cột đầu.
+- **Khối Ghi chú:** Hướng dẫn mở App ngân hàng quét mã QR; lưu ý cài đặt ứng dụng **ECO Me** để miễn phí giao dịch và sử dụng tính năng **thanh toán học phí trả sau**; hotline hỗ trợ `1900 9005`.
+- **Khối Chữ ký:** Ngày lập căn phải `Ngày ... tháng ... năm ...`, 3 cột chữ ký cân đối: `Kế toán`, `Thủ quỹ`, `Hiệu trưởng`.
+- **Cách ly in ấn (@media print):** Khổ giấy `A4 portrait`, lề `8mm 12mm`. Ẩn toàn bộ AppHeader, Sidebar, breadcrumb, nút thao tác và khối đối soát web (`.screen-only`, `.no-print`), đảm bảo phiếu in ra vừa khít 01 trang giấy A4 mà không bị phân mảnh hay tràn layout.
+
 ## Yêu cầu spec
 | Mã | Yêu cầu | Trạng thái |
 |---|---|---|

@@ -137,3 +137,64 @@ html, body, #__next {
     margin-left: auto !important;
   }
 }
+
+/* ==========================================================================
+   ADR-037: Official Standard Invoice Print Engine & Layout Isolation
+   ========================================================================== */
+@media print {
+  /* Strictly suppress all non-printable application chrome */
+  .ecomd-header,
+  .ecomd-sidebar,
+  .ecomd-rail,
+  .no-print,
+  .screen-only,
+  header,
+  nav,
+  aside,
+  #global-toast-container {
+    display: none !important;
+  }
+
+  /* Reset viewports and canvas to clean white single-sheet layout */
+  html, body, #__next, .ecomd-shell, main {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Standard A4 Portrait Page with exact margins */
+  @page {
+    size: A4 portrait;
+    margin: 8mm 12mm 8mm 12mm;
+  }
+
+  /* Printable invoice container expands to full width with zero clipping */
+  .printable-invoice-container {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+}
+
+@media screen {
+  .print-only {
+    display: none !important;
+  }
+}
