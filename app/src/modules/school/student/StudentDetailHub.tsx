@@ -1,30 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faEdit,
-  faExchangeAlt,
-  faHeartbeat,
-  faStickyNote,
-  faUser,
-  faPhone,
-  faEnvelope,
-  faBriefcase,
-  faCalendarAlt,
-  faCheckCircle,
-  faImages,
-  faClipboardList,
-  faReceipt,
-  faTag,
-  faInfoCircle,
-  faTimes,
-  faSave,
-  faPlus,
-  faGraduationCap,
-  faUtensils,
-  faBus,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown, IconName } from '@/components/ds';
 import { Student } from '../../../types/student';
 import {
   formatLegacyField,
@@ -106,29 +82,29 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
       : null;
 
   // Fee category badge color & icon mapper
-  const getFeeBadgeStyle = (feeName: string) => {
+  const getFeeBadgeStyle = (feeName: string): { bg: string; icon: IconName } => {
     const lower = feeName.toLowerCase();
     if (lower.includes('học phí')) {
       return {
         bg: 'bg-blue-50 text-blue-700 border-blue-200',
-        icon: faGraduationCap,
+        icon: 'graduation-cap',
       };
     }
     if (lower.includes('ăn') || lower.includes('bán trú')) {
       return {
         bg: 'bg-amber-50 text-amber-800 border-amber-200',
-        icon: faUtensils,
+        icon: 'utensils',
       };
     }
     if (lower.includes('xe') || lower.includes('đưa đón')) {
       return {
         bg: 'bg-purple-50 text-purple-700 border-purple-200',
-        icon: faBus,
+        icon: 'compass',
       };
     }
     return {
       bg: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-      icon: faTag,
+      icon: 'coins',
     };
   };
 
@@ -239,7 +215,7 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base font-bold shadow-2xs">
-            <FontAwesomeIcon icon={faTag} />
+            <Icon name="coins" size={18} />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -264,16 +240,16 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-xl transition-colors shadow-2xs self-start sm:self-auto"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-xl transition-colors shadow-2xs self-start sm:self-auto cursor-pointer"
         >
-          <FontAwesomeIcon icon={faPlus} className="text-2xs" />
+          <Icon name="plus" size={12} />
           <span>Thêm miễn giảm</span>
         </button>
       </div>
 
       {activeDiscounts.length === 0 ? (
         <div className="py-10 text-center text-slate-400 text-xs bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
-          <FontAwesomeIcon icon={faTag} className="text-3xl text-slate-300 mb-2 block mx-auto" />
+          <Icon name="coins" size={32} className="text-slate-300 mb-2 block mx-auto" />
           <span className="font-semibold text-slate-600 block text-sm">
             Học sinh hiện không áp dụng chương trình miễn giảm nào
           </span>
@@ -321,7 +297,7 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
                         <span
                           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-2xs font-semibold border ${feeBadge.bg}`}
                         >
-                          <FontAwesomeIcon icon={feeBadge.icon} className="text-2xs opacity-80" />
+                          <Icon name={feeBadge.icon} size={11} className="opacity-80" />
                           <span>{item.feeItemName}</span>
                         </span>
                       </td>
@@ -348,10 +324,10 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
                       <td className="py-3.5 px-3.5 text-right whitespace-nowrap">
                         <button
                           onClick={() => handleOpenEdit(item)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-[#0070CE] bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-200/60 shadow-2xs"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-[#0070CE] bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-200/60 shadow-2xs cursor-pointer"
                           title="Chỉnh sửa chương trình miễn giảm này"
                         >
-                          <FontAwesomeIcon icon={faEdit} className="text-2xs" />
+                          <Icon name="pen" size={11} />
                           <span>Sửa</span>
                         </button>
                       </td>
@@ -364,7 +340,7 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
 
           {hasMultipleDiscountsForSameFee && highestTuitionItem && (
             <div className="p-3.5 bg-amber-50/90 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-start gap-2.5">
-              <FontAwesomeIcon icon={faInfoCircle} className="text-amber-500 mt-0.5 shrink-0 text-sm" />
+              <Icon name="circle-info" size={16} className="text-amber-500 mt-0.5 shrink-0" />
               <div className="space-y-0.5">
                 <span className="font-semibold block">Quy tắc tự động áp dụng khi lập hóa đơn:</span>
                 <span className="text-amber-700 leading-relaxed block">
@@ -386,7 +362,7 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
           href={`/${schoolCode}/school/kid`}
           className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-[#0070CE] transition-colors"
         >
-          <FontAwesomeIcon icon={faArrowLeft} className="text-xs" />
+          <Icon name="arrow-left" size={13} />
           <span>Danh sách học sinh</span>
         </Link>
       </div>
@@ -459,48 +435,48 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
           <div className="flex flex-wrap items-center gap-2 self-stretch md:self-auto">
             <button
               onClick={onOpenTransfer}
-              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
             >
-              <FontAwesomeIcon icon={faExchangeAlt} className="text-slate-500" />
+              <Icon name="rotate-right" size={13} className="text-slate-500" />
               <span>Chuyển lớp</span>
             </button>
 
             <button
               onClick={onOpenGrowth}
-              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors border border-red-200"
+              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors border border-red-200 cursor-pointer"
             >
-              <FontAwesomeIcon icon={faHeartbeat} />
+              <Icon name="circle-info" size={13} />
               <span>Đo thể trạng</span>
             </button>
 
             <button
               onClick={onOpenNotes}
-              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-yellow-800 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors border border-yellow-200"
+              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-yellow-800 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors border border-yellow-200 cursor-pointer"
             >
-              <FontAwesomeIcon icon={faStickyNote} />
+              <Icon name="clipboard-list" size={13} />
               <span>Ghi chú</span>
             </button>
           </div>
         </div>
 
         {/* 4-Tab Navigation Bar */}
-        <div className="flex items-center gap-1 border-b border-slate-200 mt-6 pt-2">
+        <div className="flex items-center gap-1 border-b border-slate-200 mt-6 pt-2 overflow-x-auto no-scrollbar">
           {[
-            { key: 'profile', label: 'Hồ sơ học sinh', icon: faUser },
-            { key: 'media', label: 'Thư viện ảnh', icon: faImages },
-            { key: 'attendance', label: 'Điểm danh', icon: faCalendarAlt },
-            { key: 'finance', label: 'Học phí', icon: faReceipt },
+            { key: 'profile', label: 'Hồ sơ học sinh', icon: 'user' as IconName },
+            { key: 'media', label: 'Thư viện ảnh', icon: 'images' as IconName },
+            { key: 'attendance', label: 'Điểm danh', icon: 'calendar-check' as IconName },
+            { key: 'finance', label: 'Học phí', icon: 'receipt' as IconName },
           ].map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key as TabKey)}
-              className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-colors ${
+              className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-colors shrink-0 whitespace-nowrap cursor-pointer ${
                 activeTab === tab.key
                   ? 'border-[#0070CE] text-[#0070CE]'
                   : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
               }`}
             >
-              <FontAwesomeIcon icon={tab.icon} className="text-xs" />
+              <Icon name={tab.icon} size={14} />
               <span>{tab.label}</span>
             </button>
           ))}
@@ -586,22 +562,23 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
               <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-6 space-y-4">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <div className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faHeartbeat} className="text-red-500 text-sm" />
+                    <Icon name="circle-info" size={14} className="text-red-500" />
                     <h3 className="text-base font-bold text-slate-800">
                       Lịch sử phát triển thể chất & BMI
                     </h3>
                   </div>
                   <button
                     onClick={onOpenGrowth}
-                    className="text-xs font-semibold text-[#0070CE] hover:underline"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#0070CE] hover:underline cursor-pointer"
                   >
-                    + Thêm lần đo
+                    <Icon name="plus" size={10} />
+                    <span>Thêm lần đo</span>
                   </button>
                 </div>
 
                 {student.growthRecords.length === 0 ? (
                   <div className="py-8 text-center text-slate-400 text-xs">
-                    Chưa có dữ liệu đo chiều cao / cân nặng. Nhấn "+ Thêm lần đo" để ghi nhận.
+                    Chưa có dữ liệu đo chiều cao / cân nặng. Nhấn "Thêm lần đo" để ghi nhận.
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
@@ -683,7 +660,7 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
 
                       <div className="space-y-1 text-xs text-slate-600">
                         <div className="flex items-center gap-2">
-                          <FontAwesomeIcon icon={faPhone} className="w-3 text-slate-400" />
+                          <Icon name="phone" size={12} className="text-slate-400" />
                           <a
                             href={`tel:${guardian.phone}`}
                             className="hover:text-[#0070CE] font-medium"
@@ -693,13 +670,13 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
                         </div>
                         {guardian.email && (
                           <div className="flex items-center gap-2">
-                            <FontAwesomeIcon icon={faEnvelope} className="w-3 text-slate-400" />
+                            <Icon name="envelope" size={12} className="text-slate-400" />
                             <span className="truncate">{guardian.email}</span>
                           </div>
                         )}
                         {guardian.occupation && (
                           <div className="flex items-center gap-2">
-                            <FontAwesomeIcon icon={faBriefcase} className="w-3 text-slate-400" />
+                            <Icon name="id-badge" size={12} className="text-slate-400" />
                             <span>{guardian.occupation}</span>
                           </div>
                         )}
@@ -708,12 +685,12 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
                       <div className="flex items-center gap-2 pt-1 border-t border-slate-200/60 text-2xs">
                         {guardian.isPrimaryPickup && (
                           <span className="text-emerald-700 font-semibold flex items-center gap-1">
-                            <FontAwesomeIcon icon={faCheckCircle} /> Đón chính
+                            <Icon name="circle-check" size={12} /> Đón chính
                           </span>
                         )}
                         {guardian.isEmergencyContact && (
                           <span className="text-red-700 font-semibold flex items-center gap-1">
-                            <FontAwesomeIcon icon={faCheckCircle} /> Liên hệ khẩn cấp
+                            <Icon name="circle-check" size={12} /> Liên hệ khẩn cấp
                           </span>
                         )}
                       </div>
@@ -774,7 +751,7 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0070CE] flex items-center justify-center font-bold text-sm">
-                  <FontAwesomeIcon icon={faEdit} />
+                  <Icon name="pen" size={14} />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-900">
@@ -785,9 +762,10 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
               </div>
               <button
                 onClick={() => setEditingItem(null)}
-                className="text-slate-400 hover:text-slate-600 transition-colors p-1"
+                className="text-slate-400 hover:text-slate-600 transition-colors p-1 cursor-pointer"
+                aria-label="Đóng"
               >
-                <FontAwesomeIcon icon={faTimes} />
+                <Icon name="xmark" size={14} />
               </button>
             </div>
 
@@ -811,31 +789,30 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Khoản thu áp dụng <span className="text-red-500">*</span>
                   </label>
-                  <select
+                  <Dropdown
                     value={editFeeItemId}
-                    onChange={(e) => setEditFeeItemId(e.target.value)}
-                    className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0070CE] bg-white"
-                  >
-                    {AVAILABLE_FEE_ITEMS_FOR_DISCOUNT.map((fee) => (
-                      <option key={fee.id} value={fee.id}>
-                        {fee.name}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(val) => setEditFeeItemId(val)}
+                    options={AVAILABLE_FEE_ITEMS_FOR_DISCOUNT.map((fee) => ({
+                      value: fee.id,
+                      label: fee.name,
+                    }))}
+                    fullWidth
+                  />
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Thời gian hiệu lực
                   </label>
-                  <select
+                  <Dropdown
                     value={editValidityType}
-                    onChange={(e) => setEditValidityType(e.target.value as any)}
-                    className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0070CE] bg-white"
-                  >
-                    <option value="academic_year">Năm học 2026 - 2027</option>
-                    <option value="month_range">Theo khoảng tháng</option>
-                  </select>
+                    onChange={(val) => setEditValidityType(val as any)}
+                    options={[
+                      { value: 'academic_year', label: 'Năm học 2026 - 2027' },
+                      { value: 'month_range', label: 'Theo khoảng tháng' },
+                    ]}
+                    fullWidth
+                  />
                 </div>
               </div>
 
@@ -911,7 +888,7 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
                   type="submit"
                   className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-xl transition-colors shadow-2xs"
                 >
-                  <FontAwesomeIcon icon={faSave} className="text-2xs" />
+                  <Icon name="check" size={12} />
                   <span>Lưu thay đổi</span>
                 </button>
               </div>
@@ -927,7 +904,7 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
-                  <FontAwesomeIcon icon={faPlus} />
+                  <Icon name="plus" size={14} />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-900">
@@ -940,9 +917,10 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
               </div>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 transition-colors p-1"
+                className="text-slate-400 hover:text-slate-600 transition-colors p-1 cursor-pointer"
+                aria-label="Đóng"
               >
-                <FontAwesomeIcon icon={faTimes} />
+                <Icon name="xmark" size={14} />
               </button>
             </div>
 
@@ -965,17 +943,15 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Khoản thu áp dụng <span className="text-red-500">*</span>
                 </label>
-                <select
+                <Dropdown
                   value={addFeeItemId}
-                  onChange={(e) => setAddFeeItemId(e.target.value)}
-                  className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0070CE] bg-white"
-                >
-                  {AVAILABLE_FEE_ITEMS_FOR_DISCOUNT.map((fee) => (
-                    <option key={fee.id} value={fee.id}>
-                      {fee.name}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setAddFeeItemId(val)}
+                  options={AVAILABLE_FEE_ITEMS_FOR_DISCOUNT.map((fee) => ({
+                    value: fee.id,
+                    label: fee.name,
+                  }))}
+                  fullWidth
+                />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1042,15 +1018,15 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-xl transition-colors shadow-2xs"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-xl transition-colors shadow-2xs cursor-pointer"
                 >
-                  <FontAwesomeIcon icon={faPlus} className="text-2xs" />
+                  <Icon name="plus" size={12} />
                   <span>Tạo và Áp dụng</span>
                 </button>
               </div>

@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faSchool,
-  faUsers,
-  faExclamationTriangle,
-  faCheck,
-  faPlus,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import {
   ClassFormData,
   ClassItem,
@@ -92,7 +83,7 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
         name: '',
         code: '',
         taxonomy: 'chinh_khoa',
-        gradeLevelId: gradeLevels.length > 0 ? gradeLevels[0].id : '',
+        gradeLevelId: '',
         academicYear: '2025-2026',
         roomNumber: '',
         maxCapacity: 30,
@@ -190,8 +181,9 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
             type="button"
             onClick={onClose}
             className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            aria-label="Đóng"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" size={14} />
           </button>
         </div>
 
@@ -212,7 +204,7 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
                     : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                 }`}
               >
-                <FontAwesomeIcon icon={faSchool} className="text-base" />
+                <Icon name="school" size={16} />
                 <span>Lớp chính khóa</span>
               </button>
 
@@ -225,7 +217,7 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
                     : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                 }`}
               >
-                <FontAwesomeIcon icon={faUsers} className="text-base" />
+                <Icon name="users" size={16} />
                 <span>Lớp ngoại khóa & CLB</span>
               </button>
             </div>
@@ -234,7 +226,7 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
           {/* Conflict Warning Banner (BR03 / K027) */}
           {conflictWarning && (
             <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
-              <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-600 text-sm mt-0.5 shrink-0" />
+              <Icon name="triangle-exclamation" size={16} className="text-amber-600 mt-0.5 shrink-0" />
               <div className="text-xs text-amber-800 leading-relaxed font-medium">
                 {conflictWarning}
               </div>
@@ -284,20 +276,19 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Khối lớp <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <Dropdown
                   value={formData.gradeLevelId}
-                  onChange={(e) => setFormData({ ...formData, gradeLevelId: e.target.value })}
-                  className={`w-full px-3 py-2 text-sm bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 focus:bg-white transition-all ${
-                    errors.gradeLevelId ? 'border-rose-400 focus:ring-rose-400' : 'border-slate-200 focus:ring-blue-500'
-                  }`}
-                >
-                  <option value="">-- Chọn khối lớp --</option>
-                  {gradeLevels.map((grd) => (
-                    <option key={grd.id} value={grd.id}>
-                      {grd.name}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setFormData({ ...formData, gradeLevelId: val })}
+                  options={[
+                    { value: '', label: '-- Chọn khối lớp --' },
+                    ...gradeLevels.map((grd) => ({
+                      value: grd.id,
+                      label: grd.name,
+                    })),
+                  ]}
+                  placeholder="-- Chọn khối lớp --"
+                  fullWidth
+                />
                 {errors.gradeLevelId && <p className="text-xs text-rose-500 mt-1">{errors.gradeLevelId}</p>}
               </div>
 
@@ -305,18 +296,19 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Giáo viên chủ nhiệm (GVCN)
                 </label>
-                <select
+                <Dropdown
                   value={formData.homeroomTeacherId || ''}
-                  onChange={(e) => setFormData({ ...formData, homeroomTeacherId: e.target.value })}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
-                >
-                  <option value="">-- Chưa chỉ định GVCN --</option>
-                  {availableTeachers.map((t) => (
-                    <option key={t.id} value={t.id}>
-                      {t.name} ({t.phone})
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setFormData({ ...formData, homeroomTeacherId: val })}
+                  options={[
+                    { value: '', label: '-- Chưa chỉ định GVCN --' },
+                    ...availableTeachers.map((t) => ({
+                      value: t.id,
+                      label: `${t.name} (${t.phone})`,
+                    })),
+                  ]}
+                  placeholder="-- Chưa chỉ định GVCN --"
+                  fullWidth
+                />
               </div>
             </div>
           )}
@@ -329,17 +321,16 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Lĩnh vực / Thể loại
                   </label>
-                  <select
+                  <Dropdown
                     value={formData.clubCategory}
-                    onChange={(e) => setFormData({ ...formData, clubCategory: e.target.value })}
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
-                  >
-                    {CLUB_CATEGORIES.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(val) => setFormData({ ...formData, clubCategory: val })}
+                    options={CLUB_CATEGORIES.map((cat) => ({
+                      value: cat,
+                      label: cat,
+                    }))}
+                    placeholder="-- Chọn lĩnh vực --"
+                    fullWidth
+                  />
                 </div>
 
                 <div>
@@ -367,7 +358,7 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
                     onClick={addInstructor}
                     className="text-xs text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1"
                   >
-                    <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
+                    <Icon name="plus" size={11} />
                     <span>Thêm giáo viên</span>
                   </button>
                 </div>
@@ -384,23 +375,25 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
                           <span className="text-slate-400">({ins.teacherPhone})</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <select
+                          <Dropdown
                             value={ins.role}
-                            onChange={(e) =>
-                              updateInstructorRole(index, e.target.value as ClassInstructorAssignment['role'])
+                            onChange={(val) =>
+                              updateInstructorRole(index, val as ClassInstructorAssignment['role'])
                             }
-                            className="px-2 py-1 bg-white border border-slate-200 rounded text-xs text-slate-700 focus:outline-none"
-                          >
-                            <option value="giao_vien_chinh">Giáo viên chính</option>
-                            <option value="tro_giang">Trợ giảng</option>
-                            <option value="huan_luyen_vien">Huấn luyện viên</option>
-                          </select>
+                            options={[
+                              { value: 'giao_vien_chinh', label: 'Giáo viên chính' },
+                              { value: 'tro_giang', label: 'Trợ giảng' },
+                              { value: 'huan_luyen_vien', label: 'Huấn luyện viên' },
+                            ]}
+                            className="w-40"
+                          />
                           <button
                             type="button"
                             onClick={() => removeInstructor(index)}
-                            className="w-6 h-6 text-slate-400 hover:text-rose-600 transition-colors"
+                            className="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-rose-600 transition-colors"
+                            aria-label="Xóa giáo viên"
                           >
-                            <FontAwesomeIcon icon={faTrash} className="text-xs" />
+                            <Icon name="trash" size={13} />
                           </button>
                         </div>
                       </div>
@@ -449,15 +442,16 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
               <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Trạng thái
               </label>
-              <select
+              <Dropdown
                 value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value as ClassItem['status'] })}
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
-              >
-                <option value="dang_hoat_dong">Đang hoạt động</option>
-                <option value="tam_dung">Tạm dừng</option>
-                <option value="da_ket_thuc">Đã kết thúc</option>
-              </select>
+                onChange={(val) => setFormData({ ...formData, status: val as ClassItem['status'] })}
+                options={[
+                  { value: 'dang_hoat_dong', label: 'Đang hoạt động' },
+                  { value: 'tam_dung', label: 'Tạm dừng' },
+                  { value: 'da_ket_thuc', label: 'Đã kết thúc' },
+                ]}
+                fullWidth
+              />
             </div>
           </div>
 
@@ -486,9 +480,20 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
             </button>
             <button
               type="submit"
-              className="flex items-center gap-2 px-5 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors"
+              disabled={
+                !formData.name.trim() ||
+                !formData.code.trim() ||
+                (formData.taxonomy === 'chinh_khoa' && !formData.gradeLevelId)
+              }
+              className={`flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold shadow-sm transition-colors ${
+                !formData.name.trim() ||
+                !formData.code.trim() ||
+                (formData.taxonomy === 'chinh_khoa' && !formData.gradeLevelId)
+                  ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white cursor-pointer'
+              }`}
             >
-              <FontAwesomeIcon icon={faCheck} />
+              <Icon name="check" size={14} />
               <span>{mode === 'create' ? 'Lưu lớp học' : 'Cập nhật thay đổi'}</span>
             </button>
           </div>

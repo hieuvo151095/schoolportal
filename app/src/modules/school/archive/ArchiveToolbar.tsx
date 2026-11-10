@@ -1,12 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSearch,
-  faTimes,
-  faCalendarAlt,
-  faFileExcel,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 
 interface ArchiveToolbarProps {
   searchQuery: string;
@@ -225,7 +219,7 @@ export const ArchiveToolbar: React.FC<ArchiveToolbarProps> = ({
       <LeftSection>
         <SearchContainer>
           <SearchIconWrapper>
-            <FontAwesomeIcon icon={faSearch} />
+            <Icon name="magnifying-glass" size={14} />
           </SearchIconWrapper>
           <SearchInput
             type="text"
@@ -241,14 +235,14 @@ export const ArchiveToolbar: React.FC<ArchiveToolbarProps> = ({
               title="Xóa tìm kiếm"
               aria-label="Xóa tìm kiếm"
             >
-              <FontAwesomeIcon icon={faTimes} />
+              <Icon name="xmark" size={12} />
             </ClearButton>
           )}
         </SearchContainer>
 
         <MonthPickerContainer>
           <MonthIconWrapper>
-            <FontAwesomeIcon icon={faCalendarAlt} />
+            <Icon name="calendar" size={14} />
           </MonthIconWrapper>
           <MonthInput
             type="month"
@@ -264,7 +258,7 @@ export const ArchiveToolbar: React.FC<ArchiveToolbarProps> = ({
               title="Xoá lọc tháng"
               aria-label="Xoá lọc tháng"
             >
-              <FontAwesomeIcon icon={faTimes} />
+              <Icon name="xmark" size={12} />
             </ClearMonthButton>
           )}
         </MonthPickerContainer>
@@ -280,7 +274,7 @@ export const ArchiveToolbar: React.FC<ArchiveToolbarProps> = ({
           onClick={onExportExcel}
           title="Xuất danh sách học sinh lưu trữ ra file Excel"
         >
-          <FontAwesomeIcon icon={faFileExcel} />
+          <Icon name="download" size={14} />
           <span>Xuất Excel</span>
         </ExportButton>
       </RightSection>

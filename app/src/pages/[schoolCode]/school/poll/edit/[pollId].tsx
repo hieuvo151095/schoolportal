@@ -2,8 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import PortalLayout from '@/components/layout/PortalLayout';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { updatePoll } from '@/store/slices/pollSlice';
@@ -35,7 +34,7 @@ export default function EditPollPage() {
             href={`/${currentSchoolCode}/school/poll`}
             className="inline-flex items-center px-4 py-2 rounded-xl bg-[#0070CE] text-white text-sm font-semibold hover:bg-blue-700 transition-colors shadow-sm"
           >
-            <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
+            <Icon name="arrow-left" className="mr-2 w-4 h-4" />
             Quay lại danh sách
           </Link>
         </div>
@@ -52,7 +51,7 @@ export default function EditPollPage() {
         </Head>
         <div className="bg-white rounded-2xl border border-amber-200 p-8 text-center max-w-lg mx-auto mt-12 shadow-sm">
           <div className="w-14 h-14 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-4 text-2xl">
-            <FontAwesomeIcon icon={faExclamationTriangle} />
+            <Icon name="triangle-exclamation" className="w-7 h-7" />
           </div>
           <h2 className="text-lg font-bold text-slate-800 mb-2">Không thể chỉnh sửa cuộc bình chọn</h2>
           <p className="text-xs text-slate-600 mb-6 leading-relaxed">

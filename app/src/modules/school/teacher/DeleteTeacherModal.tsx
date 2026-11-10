@@ -1,6 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt, faTimes, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import type { Teacher } from '../../../types/teacher';
 import { useAppDispatch } from '../../../store';
 import { deleteTeacher } from '../../../store/slices/teacherSlice';
@@ -40,7 +39,7 @@ export const DeleteTeacherModal: React.FC<DeleteTeacherModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-red-50/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center text-red-600">
-              <FontAwesomeIcon icon={faTrashAlt} className="w-5 h-5" />
+              <Icon name="trash" size={20} />
             </div>
             <div>
               <h3 className="text-base font-bold text-red-900">Xác nhận xóa giáo viên</h3>
@@ -53,16 +52,17 @@ export const DeleteTeacherModal: React.FC<DeleteTeacherModalProps> = ({
             aria-label="Đóng cửa sổ"
             className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} className="w-4 h-4" />
+            <Icon name="xmark" size={14} />
           </button>
         </div>
 
         {/* Modal Body */}
         <div className="p-6 space-y-4">
           <div className="flex items-start gap-3 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs">
-            <FontAwesomeIcon
-              icon={faExclamationTriangle}
-              className="w-4 h-4 text-amber-600 mt-0.5 shrink-0"
+            <Icon
+              name="triangle-exclamation"
+              size={16}
+              className="text-amber-600 mt-0.5 shrink-0"
             />
             <div className="leading-relaxed">
               Hành động này sẽ xóa tài khoản đăng nhập của giáo viên và hủy toàn bộ các phân công
@@ -102,7 +102,7 @@ export const DeleteTeacherModal: React.FC<DeleteTeacherModalProps> = ({
               onClick={handleConfirmDelete}
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors shadow-xs"
             >
-              <FontAwesomeIcon icon={faTrashAlt} className="text-xs" />
+              <Icon name="trash" size={14} />
               <span>Xóa giáo viên</span>
             </button>
           </div>

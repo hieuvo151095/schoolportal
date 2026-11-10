@@ -1,13 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSearch,
-  faFilter,
-  faPlus,
-  faSchool,
-  faUsers,
-  faTimes,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import { ClassTaxonomy, GradeLevel, ClassFilterState } from '../../../types/class';
 
 interface ClassToolbarProps {
@@ -42,17 +34,17 @@ export const ClassToolbar: React.FC<ClassToolbarProps> = ({
       {/* Top row: Tab Switcher & Action CTA */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
         {/* Dual Taxonomy Segmented Control */}
-        <div className="flex items-center bg-slate-100 p-1 rounded-xl">
+        <div className="flex items-center bg-slate-100 p-1 rounded-xl overflow-x-auto no-scrollbar">
           <button
             type="button"
             onClick={() => onSelectTaxonomy('chinh_khoa')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all shrink-0 whitespace-nowrap ${
               activeTaxonomy === 'chinh_khoa'
                 ? 'bg-white text-blue-700 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <FontAwesomeIcon icon={faSchool} className="text-xs" />
+            <Icon name="school" size={14} />
             <span>Lớp chính khóa</span>
             <span
               className={`px-2 py-0.5 rounded-full text-xs font-bold ${
@@ -68,13 +60,13 @@ export const ClassToolbar: React.FC<ClassToolbarProps> = ({
           <button
             type="button"
             onClick={() => onSelectTaxonomy('ngoai_khoa')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all shrink-0 whitespace-nowrap ${
               activeTaxonomy === 'ngoai_khoa'
                 ? 'bg-white text-amber-700 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <FontAwesomeIcon icon={faUsers} className="text-xs" />
+            <Icon name="users" size={14} />
             <span>Lớp ngoại khóa & CLB</span>
             <span
               className={`px-2 py-0.5 rounded-full text-xs font-bold ${
@@ -92,42 +84,41 @@ export const ClassToolbar: React.FC<ClassToolbarProps> = ({
         <button
           type="button"
           onClick={onOpenCreate}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors min-h-[40px] shrink-0"
         >
-          <FontAwesomeIcon icon={faPlus} />
+          <Icon name="plus" size={14} />
           <span>Thêm lớp mới</span>
         </button>
       </div>
 
       {/* Bottom row: Filter Controls & Search */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-3">
-        <div className="flex flex-wrap items-center gap-3 flex-1">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-1">
           {/* Reactive Grade Level dropdown (only for Curricular) */}
           {activeTaxonomy === 'chinh_khoa' && (
-            <div className="w-full sm:w-48">
-              <select
+            <div className="w-full sm:w-52 shrink-0">
+              <Dropdown
                 value={filterCriteria.gradeLevelId || ''}
-                onChange={(e) =>
-                  onUpdateFilter({ gradeLevelId: e.target.value ? e.target.value : undefined })
+                onChange={(val) =>
+                  onUpdateFilter({ gradeLevelId: val ? val : undefined })
                 }
-                className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
-              >
-                <option value="">Tất cả khối lớp</option>
-                {gradeLevels.map((grd) => (
-                  <option key={grd.id} value={grd.id}>
-                    {grd.name}
-                  </option>
-                ))}
-              </select>
+                options={[
+                  { value: '', label: 'Tất cả khối lớp' },
+                  ...gradeLevels.map((grd) => ({
+                    value: grd.id,
+                    label: grd.name,
+                  })),
+                ]}
+                fullWidth
+              />
             </div>
           )}
 
           {/* Search bar */}
           <div className="relative flex-1 min-w-[240px]">
-            <FontAwesomeIcon
-              icon={faSearch}
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none"
-            />
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+              <Icon name="magnifying-glass" size={14} />
+            </span>
             <input
               type="text"
               value={filterCriteria.searchQuery || ''}
@@ -144,8 +135,9 @@ export const ClassToolbar: React.FC<ClassToolbarProps> = ({
                 type="button"
                 onClick={() => onUpdateFilter({ searchQuery: '' })}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
+                aria-label="Xoá tìm kiếm"
               >
-                <FontAwesomeIcon icon={faTimes} className="text-xs" />
+                <Icon name="xmark" size={12} />
               </button>
             )}
           </div>
@@ -162,7 +154,7 @@ export const ClassToolbar: React.FC<ClassToolbarProps> = ({
                 : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
             }`}
           >
-            <FontAwesomeIcon icon={faFilter} className="text-xs" />
+            <Icon name="filter" size={13} />
             <span>Bộ lọc</span>
             {activeFilterCount > 0 && (
               <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center font-bold">

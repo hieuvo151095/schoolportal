@@ -2,17 +2,7 @@ import React, { useState, useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faSave,
-  faUserPlus,
-  faUser,
-  faPhone,
-  faHeartbeat,
-  faExclamationTriangle,
-  faCheckCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import { PortalLayout } from '../../../../../components/layout/PortalLayout';
 import { useAppDispatch } from '../../../../../store';
 import { addStudent } from '../../../../../store/slices/studentSlice';
@@ -25,6 +15,20 @@ import {
   validateStudentCreation,
 } from '../../../../../utils/studentValidation';
 import { StudentGender, GuardianRelationship } from '../../../../../types/student';
+
+const CLASS_OPTIONS = [
+  { value: 'lop-1a1', label: 'Lớp 1A1' },
+  { value: 'lop-1a2', label: 'Lớp 1A2' },
+  { value: 'lop-2a1', label: 'Lớp 2A1' },
+];
+
+const GUARDIAN_RELATIONSHIP_OPTIONS = [
+  { value: 'bo', label: 'Bố' },
+  { value: 'me', label: 'Mẹ' },
+  { value: 'ong', label: 'Ông' },
+  { value: 'ba', label: 'Bà' },
+  { value: 'nguoi_giam_ho', label: 'Người giám hộ hợp pháp' },
+];
 
 export default function CreateStudentPage() {
   const router = useRouter();
@@ -39,7 +43,7 @@ export default function CreateStudentPage() {
   const [cccd, setCccd] = useState('');
   const [dob, setDob] = useState('2020-01-01');
   const [gender, setGender] = useState<StudentGender>('nam');
-  const [classId, setClassId] = useState('lop-1a1');
+  const [classId, setClassId] = useState('');
   const [admissionDate, setAdmissionDate] = useState(new Date().toISOString().split('T')[0]);
   const [address, setAddress] = useState('');
   const [ethnicity, setEthnicity] = useState('Kinh');
@@ -68,10 +72,15 @@ export default function CreateStudentPage() {
       fullName.trim() !== '' ||
       guardianName.trim() !== '' ||
       guardianPhone.trim() !== '' ||
+      classId.trim() !== '' ||
       cccd.trim() !== '' ||
       address.trim() !== ''
     );
-  }, [fullName, guardianName, guardianPhone, cccd, address]);
+  }, [fullName, guardianName, guardianPhone, classId, cccd, address]);
+
+  const isFormValid = useMemo(() => {
+    return fullName.trim() !== '' && classId.trim() !== '' && cccd.trim() !== '' && guardianName.trim() !== '' && guardianPhone.trim() !== '';
+  }, [fullName, classId, cccd, guardianName, guardianPhone]);
 
   // Live BMI calculation
   const numHeight = parseFloat(heightCm) || 0;
@@ -204,7 +213,7 @@ export default function CreateStudentPage() {
             onClick={handleCancelClick}
             className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-[#0070CE] transition-colors"
           >
-            <FontAwesomeIcon icon={faArrowLeft} className="text-xs" />
+            <Icon name="arrow-left" size={16} />
             <span>Hủy và quay lại danh sách</span>
           </button>
         </div>
@@ -214,7 +223,7 @@ export default function CreateStudentPage() {
           <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-6 space-y-5">
             <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
               <div className="w-8 h-8 rounded-lg bg-blue-100 text-[#0070CE] flex items-center justify-center font-semibold text-sm">
-                <FontAwesomeIcon icon={faUserPlus} />
+                <Icon name="user-check" size={16} />
               </div>
               <div>
                 <h2 className="text-base font-bold text-slate-800">Thông tin học sinh</h2>
@@ -328,15 +337,14 @@ export default function CreateStudentPage() {
               {/* Class */}
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">Lớp học *</label>
-                <select
+                <Dropdown
                   value={classId}
-                  onChange={(e) => setClassId(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#0070CE] focus:outline-hidden font-semibold text-slate-800"
-                >
-                  <option value="lop-1a1">Lớp 1A1</option>
-                  <option value="lop-1a2">Lớp 1A2</option>
-                  <option value="lop-2a1">Lớp 2A1</option>
-                </select>
+                  onChange={(val) => setClassId(val)}
+                  options={CLASS_OPTIONS}
+                  placeholder="-- Chọn lớp học --"
+                  fullWidth
+                />
+                {errors.classId && <p className="text-2xs text-red-600 mt-1">{errors.classId}</p>}
               </div>
 
               {/* Admission Date */}
@@ -368,7 +376,7 @@ export default function CreateStudentPage() {
           <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-6 space-y-5">
             <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
               <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-semibold text-sm">
-                <FontAwesomeIcon icon={faUser} />
+                <Icon name="user" size={16} />
               </div>
               <div>
                 <h2 className="text-base font-bold text-slate-800">Thông tin người giám hộ chính *</h2>
@@ -401,17 +409,13 @@ export default function CreateStudentPage() {
               {/* Relationship */}
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">Quan hệ với học sinh *</label>
-                <select
+                <Dropdown
                   value={guardianRelationship}
-                  onChange={(e) => setGuardianRelationship(e.target.value as GuardianRelationship)}
-                  className="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#0070CE] focus:outline-hidden"
-                >
-                  <option value="bo">Bố</option>
-                  <option value="me">Mẹ</option>
-                  <option value="ong">Ông</option>
-                  <option value="ba">Bà</option>
-                  <option value="nguoi_giam_ho">Người giám hộ hợp pháp</option>
-                </select>
+                  onChange={(val) => setGuardianRelationship(val as GuardianRelationship)}
+                  options={GUARDIAN_RELATIONSHIP_OPTIONS}
+                  placeholder="Chọn quan hệ"
+                  fullWidth
+                />
               </div>
 
               {/* Phone */}
@@ -486,7 +490,9 @@ export default function CreateStudentPage() {
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center font-semibold text-sm">
-                  <FontAwesomeIcon icon={faHeartbeat} />
+                  <svg className="w-4 h-4 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
                 </div>
                 <div>
                   <h2 className="text-base font-bold text-slate-800">Chỉ số thể chất ban đầu</h2>
@@ -557,9 +563,14 @@ export default function CreateStudentPage() {
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-xl transition-colors shadow-md hover:shadow-lg"
+              disabled={!isFormValid}
+              className={`inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-xl transition-all shadow-xs ${
+                !isFormValid
+                  ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  : 'text-white bg-[#0070CE] hover:bg-[#005ba8] shadow-md hover:shadow-lg'
+              }`}
             >
-              <FontAwesomeIcon icon={faSave} className="text-xs" />
+              <Icon name="circle-check" size={16} />
               <span>Tạo hồ sơ học sinh</span>
             </button>
           </div>
@@ -570,7 +581,7 @@ export default function CreateStudentPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
             <div className="bg-white rounded-2xl max-w-sm w-full shadow-2xl p-6 space-y-4 animate-in fade-in zoom-in-95 duration-150">
               <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto text-xl">
-                <FontAwesomeIcon icon={faExclamationTriangle} />
+                <Icon name="triangle-exclamation" size={24} />
               </div>
               <div className="text-center space-y-1">
                 <h3 className="text-base font-bold text-slate-800">Rời khỏi trang này?</h3>

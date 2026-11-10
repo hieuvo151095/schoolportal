@@ -1,16 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faCalendarAlt,
-  faClock,
-  faMapMarkerAlt,
-  faPencilAlt,
-  faPaperclip,
-  faCalendarCheck,
-  faFileDownload,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import {
   SchoolEvent,
   EVENT_CATEGORY_MAP,
@@ -57,7 +47,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
               onClick={onClose}
               className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition"
             >
-              <FontAwesomeIcon icon={faTimes} />
+              <Icon name="xmark" className="w-4 h-4" />
             </button>
           </div>
         )}
@@ -92,7 +82,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600 transition p-1"
             >
-              <FontAwesomeIcon icon={faTimes} className="text-lg" />
+              <Icon name="xmark" className="w-5 h-5" />
             </button>
           )}
         </div>
@@ -103,7 +93,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             {/* Date & Time */}
             <div className="bg-gray-50 p-3 rounded-xl border border-gray-100 flex items-start gap-2.5">
-              <FontAwesomeIcon icon={faClock} className="text-[#0070CE] mt-0.5 text-sm" />
+              <Icon name="clock" className="w-4 h-4 text-[#0070CE] mt-0.5 shrink-0" />
               <div>
                 <span className="text-gray-400 font-semibold block text-[11px]">Thời gian</span>
                 <span className="text-gray-800 font-bold block mt-0.5">{timeRangeStr}</span>
@@ -115,7 +105,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
 
             {/* Location */}
             <div className="bg-gray-50 p-3 rounded-xl border border-gray-100 flex items-start gap-2.5">
-              <FontAwesomeIcon icon={faMapMarkerAlt} className="text-amber-500 mt-0.5 text-sm" />
+              <Icon name="location-dot" className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
               <div>
                 <span className="text-gray-400 font-semibold block text-[11px]">Địa điểm</span>
                 <span className="text-gray-800 font-bold block mt-0.5">
@@ -128,7 +118,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
           {/* Holiday Meal Refund Alert Notice (Cross-module interoperability) */}
           {event.category === 'ngay_nghi' && (
             <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-3 text-xs text-rose-800">
-              <FontAwesomeIcon icon={faCalendarCheck} className="text-rose-500 mt-0.5 text-sm" />
+              <Icon name="calendar-check" className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
               <div>
                 <span className="font-bold block">Chính sách hoàn tiền ăn ngày nghỉ:</span>
                 <span className="mt-0.5 block leading-relaxed text-rose-700">
@@ -161,14 +151,16 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                     className="flex items-center justify-between p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-xs"
                   >
                     <div className="flex items-center gap-2 truncate">
-                      <FontAwesomeIcon icon={faPaperclip} className="text-gray-400" />
+                      <Icon name="paperclip" className="w-3.5 h-3.5 text-gray-400" />
                       <span className="font-medium text-gray-800 truncate">{file}</span>
                     </div>
                     <button
                       type="button"
                       className="text-[#0070CE] hover:underline font-semibold flex items-center gap-1 text-[11px]"
                     >
-                      <FontAwesomeIcon icon={faFileDownload} />
+                      <svg className="w-3.5 h-3.5 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                      </svg>
                       Tải về
                     </button>
                   </div>
@@ -191,7 +183,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
             href={`/${schoolCode}/school/calendar/edit/${event.id}`}
             className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#0070CE] hover:bg-[#005bb5] text-white rounded-lg text-xs font-semibold shadow-sm transition active:scale-95"
           >
-            <FontAwesomeIcon icon={faPencilAlt} />
+            <Icon name="pencil" className="w-3.5 h-3.5" />
             <span>Chỉnh sửa</span>
           </Link>
         </div>

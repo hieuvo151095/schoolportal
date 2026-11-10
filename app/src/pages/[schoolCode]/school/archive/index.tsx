@@ -2,14 +2,7 @@ import React, { useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faChevronRight,
-  faArchive,
-  faCheckCircle,
-  faExclamationTriangle,
-  faTimes,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { PortalLayout } from '@/components/layout/PortalLayout';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
@@ -275,13 +268,13 @@ export default function SchoolArchivePage() {
       <PageContainer>
         <Breadcrumbs aria-label="Breadcrumbs">
           <span>Nhà trường</span>
-          <FontAwesomeIcon icon={faChevronRight} className="text-xs text-slate-400" />
+          <Icon name="chevron-right" size={12} className="text-slate-400" />
           <span className="active">Lưu trữ</span>
         </Breadcrumbs>
 
         <PageHeader>
           <PageTitle>
-            <FontAwesomeIcon icon={faArchive} className="text-blue-600" />
+            <Icon name="box-archive" size={22} className="text-[#0070ce]" />
             <span>Lưu trữ học sinh</span>
           </PageTitle>
           <PageSubtitle>
@@ -292,8 +285,9 @@ export default function SchoolArchivePage() {
         {notification && (
           <NotificationBanner $type={notification.type}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <FontAwesomeIcon
-                icon={notification.type === 'success' ? faCheckCircle : faExclamationTriangle}
+              <Icon
+                name={notification.type === 'success' ? 'circle-check' : 'triangle-exclamation'}
+                size={16}
               />
               <span>{notification.message}</span>
             </div>
@@ -302,7 +296,7 @@ export default function SchoolArchivePage() {
               onClick={() => dispatch(clearNotification())}
               aria-label="Đóng thông báo"
             >
-              <FontAwesomeIcon icon={faTimes} />
+              <Icon name="xmark" size={14} />
             </DismissButton>
           </NotificationBanner>
         )}

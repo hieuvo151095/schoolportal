@@ -1,18 +1,5 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPlus,
-  faTrashAlt,
-  faEye,
-  faPen,
-  faCheckCircle,
-  faExclamationCircle,
-  faFire,
-  faUtensils,
-  faStore,
-  faLeaf,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import {
   DayMealSchedule,
   WeekdayKey,
@@ -188,7 +175,7 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                     <div className="mt-1.5 flex justify-center">
                       {dayTickCount === 3 ? (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 shadow-2xs">
-                          <FontAwesomeIcon icon={faCheckCircle} className="text-[9px] text-emerald-600" />
+                          <Icon name="circle-check" className="w-2.5 h-2.5 text-emerald-600" />
                           Tick Xanh (3/3)
                         </span>
                       ) : !readOnly ? (
@@ -204,9 +191,9 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                           className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-dashed border-emerald-400 transition-all cursor-pointer shadow-2xs group"
                           title="Bấm để khai báo hoặc gán nhanh link Tick Xanh cho tất cả bữa ăn trong ngày"
                         >
-                          <FontAwesomeIcon
-                            icon={faPlus}
-                            className="text-[8px] text-emerald-600 group-hover:scale-125 transition-transform"
+                          <Icon
+                            name="plus"
+                            className="w-2.5 h-2.5 text-emerald-600 group-hover:scale-125 transition-transform"
                           />
                           <span>Gán Tick Xanh ({dayTickCount}/3)</span>
                         </button>
@@ -227,7 +214,7 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                 {/* Row Header: Meal Type */}
                 <td className="p-3.5 bg-gray-50/50 font-semibold text-gray-800 text-center align-top">
                   <div className="w-8 h-8 mx-auto rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-1">
-                    <FontAwesomeIcon icon={faUtensils} className="text-xs" />
+                    <Icon name="utensils" className="w-3.5 h-3.5" />
                   </div>
                   <div className="text-amber-600 font-semibold text-xs">{MEAL_LABELS[meal]}</div>
                 </td>
@@ -270,8 +257,8 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                                       <span className="font-semibold text-gray-900 text-xs leading-snug truncate">
                                         {dish.name}
                                       </span>
-                                      <span className="text-[10px] text-gray-400">
-                                        <FontAwesomeIcon icon={faUtensils} className="text-[9px]" />
+                                      <span className="text-gray-400">
+                                        <Icon name="utensils" className="w-2.5 h-2.5" />
                                       </span>
                                     </div>
                                     {!readOnly && (
@@ -281,14 +268,14 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                                         className="text-gray-300 hover:text-red-500 transition-colors p-0.5"
                                         title="Xóa món ăn này"
                                       >
-                                        <FontAwesomeIcon icon={faTrashAlt} className="text-[10px]" />
+                                        <Icon name="trash" className="w-3 h-3" />
                                       </button>
                                     )}
                                   </div>
 
                                   {dish.calories && (
                                     <div className="text-[10px] text-gray-400 flex items-center gap-1">
-                                      <FontAwesomeIcon icon={faFire} className="text-amber-500 text-[9px]" />
+                                      <Icon name="fire" className="w-2.5 h-2.5 text-amber-500" />
                                       <span>{dish.calories} kcal</span>
                                     </div>
                                   )}
@@ -298,7 +285,7 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                                     {ingCount === 0 ? (
                                       <div className="flex items-center justify-between w-full">
                                         <span className="inline-flex items-center gap-1 text-[10px] text-gray-400">
-                                          <FontAwesomeIcon icon={faInfoCircle} className="text-[9px]" />
+                                          <Icon name="circle-info" className="w-2.5 h-2.5" />
                                           Chưa nhập
                                         </span>
                                         {!readOnly && (
@@ -310,7 +297,7 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                                             className="text-xs text-blue-600 hover:text-blue-800 p-0.5 font-medium flex items-center gap-0.5"
                                             title="Khai báo nguyên liệu"
                                           >
-                                            <FontAwesomeIcon icon={faPlus} className="text-[9px]" />
+                                            <Icon name="plus" className="w-2.5 h-2.5" />
                                             <span className="text-[10px]">Thêm</span>
                                           </button>
                                         )}
@@ -327,7 +314,7 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                                               : 'bg-amber-50 text-amber-700 border border-amber-200'
                                           }`}
                                         >
-                                          <FontAwesomeIcon icon={faLeaf} className="text-[9px]" />
+                                          <Icon name="leaf" className="w-2.5 h-2.5" />
                                           {ingCount} thực phẩm
                                         </button>
 
@@ -339,7 +326,7 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                                             className="text-gray-400 hover:text-blue-600 p-0.5"
                                             title="Xem chi tiết nguyên liệu"
                                           >
-                                            <FontAwesomeIcon icon={faEye} className="text-[10px]" />
+                                            <Icon name="eye" className="w-3 h-3" />
                                           </button>
                                           {!readOnly && (
                                             <button
@@ -350,7 +337,7 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                                               className="text-gray-400 hover:text-emerald-600 p-0.5"
                                               title="Chỉnh sửa nguyên liệu"
                                             >
-                                              <FontAwesomeIcon icon={faPen} className="text-[10px]" />
+                                              <Icon name="pencil" className="w-3 h-3" />
                                             </button>
                                           )}
                                         </div>
@@ -408,7 +395,7 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                                   }
                                   className="w-full py-1 border border-dashed border-gray-200 hover:border-blue-400 text-gray-400 hover:text-blue-600 rounded-lg text-[10px] font-medium flex items-center justify-center gap-1 transition-all"
                                 >
-                                  <FontAwesomeIcon icon={faPlus} className="text-[9px]" />
+                                  <Icon name="plus" className="w-2.5 h-2.5" />
                                   Thêm món
                                 </button>
                               )}
@@ -432,9 +419,9 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                                 </span>
                               </span>
                               <div className="flex items-center gap-1 text-emerald-600">
-                                <FontAwesomeIcon
-                                  icon={faCheckCircle}
-                                  className="text-emerald-600 text-xs flex-shrink-0"
+                                <Icon
+                                  name="circle-check"
+                                  className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"
                                 />
                                 {!readOnly && (
                                   <span className="text-[10px] text-emerald-700 ml-1 underline opacity-0 group-hover:opacity-100 transition-opacity">
@@ -450,9 +437,9 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                               className="w-full px-2.5 py-1.5 rounded-lg border border-dashed border-emerald-500/80 bg-emerald-50/50 text-emerald-700 hover:bg-emerald-100 hover:border-emerald-600 hover:text-emerald-900 flex items-center justify-center gap-1.5 text-[11px] font-semibold transition-all shadow-2xs group cursor-pointer"
                               title="Chưa có link Tick Xanh cho buổi ăn này - Bấm để thêm mới"
                             >
-                              <FontAwesomeIcon
-                                icon={faPlus}
-                                className="text-[10px] text-emerald-600 group-hover:scale-125 transition-transform"
+                              <Icon
+                                name="plus"
+                                className="w-2.5 h-2.5 text-emerald-600 group-hover:scale-125 transition-transform"
                               />
                               <span>Thêm link Tick Xanh</span>
                             </button>

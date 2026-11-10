@@ -1,21 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faEdit,
-  faCalendarCheck,
-  faCameraRetro,
-  faImages,
-  faCalendarAlt,
-  faMoneyBillWave,
-  faUserGraduate,
-  faUserTie,
-  faPhone,
-  faSchool,
-  faUsers,
-  faSearch,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, IconName } from '@/components/ds';
 import { ClassItem, StudentClassEnrollment } from '../../../types/class';
 
 interface ClassDetailViewProps {
@@ -48,7 +33,7 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({
     {
       title: 'Điểm danh hàng ngày',
       desc: 'Check-in, check-out, nhiệt độ & đưa đón',
-      icon: faCalendarCheck,
+      icon: 'calendar-check' as IconName,
       href: `/${schoolCode}/class/${classItem.id}/attendance`,
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
@@ -57,7 +42,7 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({
     {
       title: 'Hoạt động & Bài viết',
       desc: 'Nhật ký học tập & tương tác phụ huynh',
-      icon: faCameraRetro,
+      icon: 'camera' as IconName,
       href: `/${schoolCode}/class/${classItem.id}/activity`,
       color: 'text-emerald-600',
       bgColor: 'bg-emerald-50',
@@ -66,7 +51,7 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({
     {
       title: 'Thư viện ảnh lớp',
       desc: 'Album ảnh & AI nhận diện khuôn mặt',
-      icon: faImages,
+      icon: 'images' as IconName,
       href: `/${schoolCode}/class/${classItem.id}/media`,
       color: 'text-purple-600',
       bgColor: 'bg-purple-50',
@@ -75,7 +60,7 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({
     {
       title: 'Thời khóa biểu',
       desc: 'Lịch học hàng tuần & môn học',
-      icon: faCalendarAlt,
+      icon: 'calendar' as IconName,
       href: `/${schoolCode}/school/schedule`,
       color: 'text-amber-600',
       bgColor: 'bg-amber-50',
@@ -84,7 +69,7 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({
     {
       title: 'Quản lý học phí lớp',
       desc: 'Cấu hình biểu phí & định mức thu',
-      icon: faMoneyBillWave,
+      icon: 'coins' as IconName,
       href: `/${schoolCode}/school/tuition-management`,
       color: 'text-rose-600',
       bgColor: 'bg-rose-50',
@@ -101,8 +86,9 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({
             <Link
               href={`/${schoolCode}/school/classes`}
               className="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors"
+              aria-label="Quay lại danh sách lớp"
             >
-              <FontAwesomeIcon icon={faArrowLeft} />
+              <Icon name="arrow-left" size={14} />
             </Link>
             <div>
               <div className="flex items-center gap-2.5">
@@ -134,7 +120,7 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({
               onClick={onEditClass}
               className="flex items-center gap-2 px-4 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-xs font-semibold transition-colors"
             >
-              <FontAwesomeIcon icon={faEdit} />
+              <Icon name="pen" size={12} />
               <span>Chỉnh sửa thông tin</span>
             </button>
           </div>
@@ -156,7 +142,7 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({
                   <div
                     className={`w-8 h-8 rounded-lg ${sc.bgColor} ${sc.color} flex items-center justify-center text-sm shrink-0 group-hover:scale-110 transition-transform`}
                   >
-                    <FontAwesomeIcon icon={sc.icon} />
+                    <Icon name={sc.icon} size={16} />
                   </div>
                   <span className="font-bold text-xs text-slate-800 group-hover:text-blue-600 transition-colors">
                     {sc.title}
@@ -171,43 +157,43 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({
 
       {/* Content Tabs Navigation */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="flex border-b border-slate-200 px-6 bg-slate-50/50">
+        <div className="flex border-b border-slate-200 px-4 sm:px-6 bg-slate-50/50 overflow-x-auto no-scrollbar">
           <button
             type="button"
             onClick={() => setActiveTab('hoc_sinh')}
-            className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
+            className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 shrink-0 whitespace-nowrap ${
               activeTab === 'hoc_sinh'
                 ? 'border-blue-600 text-blue-700 bg-white'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
-            <FontAwesomeIcon icon={faUserGraduate} />
+            <Icon name="graduation-cap" size={14} />
             <span>Danh sách học sinh ({classItem.studentCount})</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('hoc_phi')}
-            className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
+            className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 shrink-0 whitespace-nowrap ${
               activeTab === 'hoc_phi'
                 ? 'border-blue-600 text-blue-700 bg-white'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
-            <FontAwesomeIcon icon={faMoneyBillWave} />
+            <Icon name="coins" size={14} />
             <span>Biểu phí học phí áp dụng</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('giao_vien')}
-            className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
+            className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 shrink-0 whitespace-nowrap ${
               activeTab === 'giao_vien'
                 ? 'border-blue-600 text-blue-700 bg-white'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
-            <FontAwesomeIcon icon={faUserTie} />
+            <Icon name="user-tie" size={14} />
             <span>Phân công giáo viên</span>
           </button>
         </div>
@@ -217,10 +203,9 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({
           <div className="p-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
               <div className="relative w-full sm:w-72">
-                <FontAwesomeIcon
-                  icon={faSearch}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"
-                />
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                  <Icon name="magnifying-glass" size={12} />
+                </span>
                 <input
                   type="text"
                   value={studentSearch}
@@ -261,7 +246,7 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({
                         <td className="px-4 py-3">
                           <div className="font-medium text-slate-800">{stu.guardianName}</div>
                           <div className="text-[11px] text-slate-400 flex items-center gap-1">
-                            <FontAwesomeIcon icon={faPhone} className="text-[9px]" />
+                            <Icon name="phone" size={10} />
                             <span>{stu.guardianPhone}</span>
                           </div>
                         </td>
@@ -338,7 +323,7 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({
                     <div>
                       <h5 className="font-bold text-slate-800 text-sm">{classItem.homeroomTeacherName}</h5>
                       <p className="text-xs text-slate-500 flex items-center gap-1.5 mt-0.5">
-                        <FontAwesomeIcon icon={faPhone} className="text-[10px]" />
+                        <Icon name="phone" size={10} />
                         <span>{classItem.homeroomTeacherPhone}</span>
                       </p>
                       <span className="inline-block mt-1.5 px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-100 text-blue-700">
@@ -358,7 +343,7 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({
                     {classItem.instructors.map((ins, iIdx) => (
                       <div key={iIdx} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs">
-                          <FontAwesomeIcon icon={faUserTie} />
+                          <Icon name="user-tie" size={14} />
                         </div>
                         <div>
                           <div className="font-bold text-slate-800 text-xs">{ins.teacherName}</div>

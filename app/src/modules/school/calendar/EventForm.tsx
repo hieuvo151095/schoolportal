@@ -1,19 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faCalendarAlt,
-  faClock,
-  faMapMarkerAlt,
-  faImage,
-  faPaperclip,
-  faTrash,
-  faSave,
-  faInfoCircle,
-  faCalendarCheck,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import {
   EventFormData,
   SchoolEventType,
@@ -134,6 +122,8 @@ export const EventForm: React.FC<EventFormProps> = ({
     onSubmit(formData);
   };
 
+  const isSubmitDisabled = !formData.title.trim();
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] pb-16">
       {/* Top Header */}
@@ -146,7 +136,7 @@ export const EventForm: React.FC<EventFormProps> = ({
               className="w-9 h-9 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 flex items-center justify-center transition"
               title="Quay lại"
             >
-              <FontAwesomeIcon icon={faArrowLeft} />
+              <Icon name="arrow-left" className="w-4 h-4" />
             </button>
             <div>
               <div className="flex items-center space-x-2 text-xs text-gray-500 mb-0.5">
@@ -180,9 +170,14 @@ export const EventForm: React.FC<EventFormProps> = ({
             <button
               type="button"
               onClick={handleSubmit}
-              className="inline-flex items-center gap-2 bg-[#0070CE] hover:bg-[#005bb5] text-white px-5 py-2 rounded-lg text-xs font-semibold shadow-sm transition active:scale-95"
+              disabled={isSubmitDisabled}
+              className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg text-xs font-semibold shadow-sm transition active:scale-95 ${
+                isSubmitDisabled
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-[#0070CE] hover:bg-[#005bb5] text-white'
+              }`}
             >
-              <FontAwesomeIcon icon={faSave} />
+              <Icon name="check" className="w-4 h-4" />
               <span>{isEdit ? 'Cập nhật sự kiện' : 'Lưu sự kiện'}</span>
             </button>
           </div>
@@ -194,7 +189,7 @@ export const EventForm: React.FC<EventFormProps> = ({
         {/* Card 1: Basic Information & Category */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-6">
           <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wider pb-3 border-b border-gray-100 flex items-center gap-2">
-            <FontAwesomeIcon icon={faCalendarAlt} className="text-[#0070CE]" />
+            <Icon name="calendar-days" className="w-4 h-4 text-[#0070CE]" />
             1. Thông tin chung sự kiện
           </h2>
 
@@ -316,7 +311,7 @@ export const EventForm: React.FC<EventFormProps> = ({
         {/* Card 2: Date & Time Schedule (BR03, BR08) */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-6">
           <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wider pb-3 border-b border-gray-100 flex items-center gap-2">
-            <FontAwesomeIcon icon={faClock} className="text-[#0070CE]" />
+            <Icon name="clock" className="w-4 h-4 text-[#0070CE]" />
             2. Thời gian & Địa điểm tổ chức
           </h2>
 
@@ -416,10 +411,9 @@ export const EventForm: React.FC<EventFormProps> = ({
               Địa điểm tổ chức
             </label>
             <div className="relative">
-              <FontAwesomeIcon
-                icon={faMapMarkerAlt}
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"
-              />
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+                <Icon name="location-dot" className="w-4 h-4" />
+              </span>
               <input
                 type="text"
                 value={formData.location}
@@ -434,7 +428,7 @@ export const EventForm: React.FC<EventFormProps> = ({
         {/* Card 3: Details & Attachments */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-6">
           <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wider pb-3 border-b border-gray-100 flex items-center gap-2">
-            <FontAwesomeIcon icon={faImage} className="text-[#0070CE]" />
+            <Icon name="image" className="w-4 h-4 text-[#0070CE]" />
             3. Ảnh bìa & Nội dung chi tiết
           </h2>
 
@@ -523,7 +517,7 @@ export const EventForm: React.FC<EventFormProps> = ({
                     className="flex items-center justify-between p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs"
                   >
                     <div className="flex items-center gap-2 truncate">
-                      <FontAwesomeIcon icon={faPaperclip} className="text-gray-400" />
+                      <Icon name="paperclip" className="w-3.5 h-3.5 text-gray-400" />
                       <span className="font-medium text-gray-800 truncate">{file}</span>
                     </div>
                     <button
@@ -532,7 +526,7 @@ export const EventForm: React.FC<EventFormProps> = ({
                       className="text-gray-400 hover:text-rose-600 transition p-1"
                       title="Xóa tệp đính kèm"
                     >
-                      <FontAwesomeIcon icon={faTrash} className="text-xs" />
+                      <Icon name="trash" className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ))}
@@ -552,9 +546,14 @@ export const EventForm: React.FC<EventFormProps> = ({
           </button>
           <button
             type="submit"
-            className="inline-flex items-center gap-2 bg-[#0070CE] hover:bg-[#005bb5] text-white px-6 py-2.5 rounded-xl text-xs font-semibold shadow-sm transition active:scale-95"
+            disabled={isSubmitDisabled}
+            className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-semibold shadow-sm transition active:scale-95 ${
+              isSubmitDisabled
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-[#0070CE] hover:bg-[#005bb5] text-white'
+            }`}
           >
-            <FontAwesomeIcon icon={faSave} />
+            <Icon name="check" className="w-4 h-4" />
             <span>{isEdit ? 'Cập nhật sự kiện' : 'Lưu sự kiện'}</span>
           </button>
         </div>

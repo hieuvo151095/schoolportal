@@ -1,6 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faHistory, faBullhorn, faGlobe, faUser } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import { WeeklyMenu } from '../../../types/menu';
 
 interface SendHistoryModalProps {
@@ -36,7 +35,7 @@ export const SendHistoryModal: React.FC<SendHistoryModalProps> = ({ isOpen, menu
         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50/30">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-blue-600/10 flex items-center justify-center text-blue-600">
-              <FontAwesomeIcon icon={faHistory} className="text-sm" />
+              <Icon name="clock-rotate-left" className="w-4 h-4 text-blue-600" />
             </div>
             <div>
               <h3 className="text-base font-semibold text-gray-900">Lịch sử gửi thực đơn</h3>
@@ -47,7 +46,7 @@ export const SendHistoryModal: React.FC<SendHistoryModalProps> = ({ isOpen, menu
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-white/60 transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -71,7 +70,7 @@ export const SendHistoryModal: React.FC<SendHistoryModalProps> = ({ isOpen, menu
                     <div className="bg-gray-50/80 rounded-xl p-3.5 border border-gray-100 text-xs space-y-1.5">
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-gray-800 flex items-center gap-1.5">
-                          <FontAwesomeIcon icon={faUser} className="text-gray-400 text-[10px]" />
+                          <Icon name="user" className="w-3 h-3 text-gray-400" />
                           {entry.senderName}
                           <span className="text-[10px] text-gray-500 font-normal">
                             ({entry.senderRole})
@@ -90,9 +89,9 @@ export const SendHistoryModal: React.FC<SendHistoryModalProps> = ({ isOpen, menu
                               : 'bg-emerald-100 text-emerald-700'
                           }`}
                         >
-                          <FontAwesomeIcon
-                            icon={isAnnouncement ? faBullhorn : faGlobe}
-                            className="text-[10px]"
+                          <Icon
+                            name={isAnnouncement ? 'bullhorn' : 'globe'}
+                            className="w-3 h-3"
                           />
                           {isAnnouncement ? 'Qua Bảng Thông Tin' : 'Chỉ xuất bản cổng'}
                         </span>

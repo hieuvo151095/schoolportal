@@ -1,15 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faUtensils,
-  faCheckCircle,
-  faExclamationCircle,
-  faPen,
-  faBarcode,
-  faBuilding,
-  faBoxes,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import { DishItem } from '../../../types/menu';
 
 interface FoodIngredientViewModalProps {
@@ -38,7 +28,7 @@ export const FoodIngredientViewModal: React.FC<FoodIngredientViewModalProps> = (
         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-emerald-50 to-teal-50/30">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-emerald-600/10 flex items-center justify-center text-emerald-600">
-              <FontAwesomeIcon icon={faUtensils} className="text-sm" />
+              <Icon name="utensils" className="w-4 h-4 text-emerald-600" />
             </div>
             <div>
               <h3 className="text-base font-semibold text-gray-900">
@@ -55,7 +45,7 @@ export const FoodIngredientViewModal: React.FC<FoodIngredientViewModalProps> = (
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-white/60 transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -73,12 +63,12 @@ export const FoodIngredientViewModal: React.FC<FoodIngredientViewModalProps> = (
             </div>
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-[10px]" />
+                <Icon name="circle-check" className="w-3.5 h-3.5 text-emerald-800" />
                 {datChuanCount} Đạt chuẩn
               </span>
               {chuaTruyXuatCount > 0 && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
-                  <FontAwesomeIcon icon={faExclamationCircle} className="text-[10px]" />
+                  <Icon name="circle-exclamation" className="w-3.5 h-3.5 text-amber-800" />
                   {chuaTruyXuatCount} Chưa đủ thông tin
                 </span>
               )}
@@ -106,12 +96,12 @@ export const FoodIngredientViewModal: React.FC<FoodIngredientViewModalProps> = (
                     </div>
                     {ing.status === 'dat_chuan' ? (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800">
-                        <FontAwesomeIcon icon={faCheckCircle} className="text-[9px]" />
+                        <Icon name="circle-check" className="w-3 h-3 text-emerald-800" />
                         Đạt chuẩn
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-800">
-                        <FontAwesomeIcon icon={faExclamationCircle} className="text-[9px]" />
+                        <Icon name="circle-exclamation" className="w-3 h-3 text-amber-800" />
                         Chưa đủ thông tin
                       </span>
                     )}
@@ -122,19 +112,19 @@ export const FoodIngredientViewModal: React.FC<FoodIngredientViewModalProps> = (
                       {ing.traceabilityMethod === 'gtin' ? (
                         <>
                           <div className="text-gray-600 flex items-center gap-1.5 font-mono text-[11px]">
-                            <FontAwesomeIcon icon={faBarcode} className="text-gray-400" />
+                            <Icon name="barcode" className="w-3.5 h-3.5 text-gray-400" />
                             <span>Mã vạch GTIN: {ing.gtin || 'Chưa nhập'}</span>
                           </div>
                           {ing.lotNumber && (
                             <div className="text-gray-600 flex items-center gap-1.5 font-mono text-[11px]">
-                              <FontAwesomeIcon icon={faBoxes} className="text-gray-400" />
+                              <Icon name="box" className="w-3.5 h-3.5 text-gray-400" />
                               <span>Số lô: {ing.lotNumber}</span>
                             </div>
                           )}
                         </>
                       ) : (
                         <div className="text-gray-600 flex items-center gap-1.5 font-mono text-[11px]">
-                          <FontAwesomeIcon icon={faBarcode} className="text-gray-400" />
+                          <Icon name="barcode" className="w-3.5 h-3.5 text-gray-400" />
                           <span>Mã tem nội bộ: {ing.internalCode || 'Chưa nhập'}</span>
                         </div>
                       )}
@@ -143,7 +133,7 @@ export const FoodIngredientViewModal: React.FC<FoodIngredientViewModalProps> = (
                     <div>
                       {ing.supplierName ? (
                         <div className="text-gray-600 flex items-start gap-1.5 text-[11px]">
-                          <FontAwesomeIcon icon={faBuilding} className="text-gray-400 mt-0.5" />
+                          <Icon name="building" className="w-3.5 h-3.5 text-gray-400 mt-0.5" />
                           <div>
                             <div>Nhà cung cấp: <strong className="text-gray-800">{ing.supplierName}</strong></div>
                             {ing.supplierVerified && (
@@ -184,7 +174,7 @@ export const FoodIngredientViewModal: React.FC<FoodIngredientViewModalProps> = (
               }}
               className="px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl inline-flex items-center gap-1.5 shadow-sm transition-all"
             >
-              <FontAwesomeIcon icon={faPen} className="text-xs" />
+              <Icon name="pencil" className="w-3.5 h-3.5" />
               Chỉnh sửa nguyên liệu
             </button>
           )}

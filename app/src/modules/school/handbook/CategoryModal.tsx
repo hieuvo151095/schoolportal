@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faFolderPlus, faLock, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { HandbookCategory } from '../../../types/parentHandbook';
 
 interface CategoryModalProps {
@@ -66,7 +65,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
           <div className="flex items-center gap-2 text-slate-800 font-bold">
-            <FontAwesomeIcon icon={faFolderPlus} className="text-amber-500" />
+            <Icon name="folder" className="w-4 h-4 text-amber-500" />
             <span>
               {isEditing
                 ? isSubCategory
@@ -82,7 +81,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
             onClick={onClose}
             className="text-slate-400 hover:text-slate-600 transition-colors p-1"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -90,7 +89,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-xs text-red-600 flex items-center gap-2">
-              <FontAwesomeIcon icon={faExclamationCircle} className="shrink-0" />
+              <Icon name="circle-info" className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
@@ -102,7 +101,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
                 Danh mục chính (Cấp 1)
               </label>
               <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 border border-slate-200 rounded-lg text-xs text-slate-600 font-medium select-none">
-                <FontAwesomeIcon icon={faLock} className="text-slate-400 text-xs" />
+                <Icon name="lock" className="w-3.5 h-3.5 text-slate-400" />
                 <span>{parentCategory?.name || 'Danh mục cha'}</span>
               </div>
               <p className="text-[11px] text-slate-400 mt-1">
@@ -151,7 +150,12 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-xs font-semibold text-slate-900 bg-[#FEC020] hover:bg-amber-400 active:bg-amber-500 rounded-lg transition-colors shadow-xs"
+              disabled={name.trim().length < 2}
+              className={`px-4 py-2 text-xs font-semibold rounded-lg transition-colors shadow-xs ${
+                name.trim().length >= 2
+                  ? 'text-slate-900 bg-[#FEC020] hover:bg-amber-400 active:bg-amber-500 cursor-pointer'
+                  : 'text-slate-400 bg-slate-200 cursor-not-allowed'
+              }`}
             >
               {isEditing ? 'Lưu thay đổi' : 'Tạo danh mục'}
             </button>

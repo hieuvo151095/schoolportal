@@ -1,23 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faEdit,
-  faGraduationCap,
-  faUtensils,
-  faCoffee,
-  faCoins,
-  faTrashAlt,
-  faPlus,
-  faCheckCircle,
-  faInfoCircle,
-  faCheck,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { updateStudentFees } from '../../../store/slices/studentSlice';
 import { addToast } from '../../../store/slices/toastSlice';
 import type { Student, StudentFeeItem } from '../../../types/student';
-import { Dropdown } from '@/components/ds';
 import {
   formatCurrencyVND,
   formatFeeUnitDisplay,
@@ -293,7 +279,7 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
         <div className="px-6 py-4.5 bg-white border-b border-slate-100 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
-              <FontAwesomeIcon icon={faCoins} />
+              <Icon name="coins" size={20} />
             </div>
             <div>
               <h2 className="text-base font-bold text-slate-800">
@@ -308,9 +294,10 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            aria-label="Đóng"
           >
-            <FontAwesomeIcon icon={faTimes} className="text-sm" />
+            <Icon name="xmark" size={14} />
           </button>
         </div>
 
@@ -323,14 +310,14 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold text-slate-700">Học phí cơ bản</span>
                 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-2xs font-semibold bg-amber-50 text-amber-800 border border-amber-300">
-                  <FontAwesomeIcon icon={faCheckCircle} className="text-2xs" />
+                  <Icon name="circle-check" size={10} />
                   <span>Xuất HĐĐT</span>
                 </span>
               </div>
 
               <div className="flex items-center rounded-xl border border-slate-200 bg-slate-50 overflow-hidden">
                 <div className="px-3.5 py-2.5 bg-amber-50/80 text-amber-700 border-r border-slate-200">
-                  <FontAwesomeIcon icon={faGraduationCap} />
+                  <Icon name="graduation-cap" size={16} />
                 </div>
                 <input
                   type="text"
@@ -349,14 +336,14 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold text-slate-700">Tiền ăn cơ bản</span>
                 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-2xs font-semibold bg-amber-50 text-amber-800 border border-amber-300">
-                  <FontAwesomeIcon icon={faCheckCircle} className="text-2xs" />
+                  <Icon name="circle-check" size={10} />
                   <span>Xuất HĐĐT</span>
                 </span>
               </div>
 
               <div className="flex items-center rounded-xl border border-slate-200 bg-slate-50 overflow-hidden">
                 <div className="px-3.5 py-2.5 bg-amber-50/80 text-amber-700 border-r border-slate-200">
-                  <FontAwesomeIcon icon={faUtensils} />
+                  <Icon name="utensils" size={16} />
                 </div>
                 <input
                   type="text"
@@ -395,7 +382,7 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
                     {/* Fee Select Dropdown */}
                     <div className="w-1/2 flex items-center rounded-xl border border-slate-200 bg-white focus-within:border-[#0070CE] focus-within:ring-1 focus-within:ring-[#0070CE]">
                       <div className="px-3 py-2.5 bg-amber-50 text-amber-600 border-r border-slate-200 shrink-0 rounded-l-xl">
-                        <FontAwesomeIcon icon={faEdit} className="text-xs" />
+                        <Icon name="pen" size={12} />
                       </div>
                       <Dropdown
                         options={availableCatalogOptions.map((opt) => ({
@@ -419,7 +406,7 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
                     {/* Amount Input */}
                     <div className="w-1/2 flex items-center rounded-xl border border-slate-200 bg-white overflow-hidden focus-within:border-[#0070CE] focus-within:ring-1 focus-within:ring-[#0070CE]">
                       <div className="px-3 py-2.5 bg-amber-50 text-amber-600 border-r border-slate-200">
-                        <FontAwesomeIcon icon={isBf ? faCoffee : faCoins} className="text-xs" />
+                        <Icon name={isBf ? 'utensils' : 'coins'} size={14} />
                       </div>
                       <input
                         type="text"
@@ -440,7 +427,7 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
                       className="p-2.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors"
                       title="Xóa khoản phí"
                     >
-                      <FontAwesomeIcon icon={faTrashAlt} className="text-sm" />
+                      <Icon name="trash" size={14} />
                     </button>
                   </div>
                 );
@@ -454,7 +441,7 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
                 onClick={handleAddFeeRow}
                 className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-lg shadow-2xs transition-colors"
               >
-                <FontAwesomeIcon icon={faPlus} className="text-xs" />
+                <Icon name="plus" size={12} />
                 <span>Thêm</span>
               </button>
             </div>
@@ -467,7 +454,7 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
             </label>
             <div className="flex items-start rounded-xl border border-slate-200 bg-white overflow-hidden focus-within:border-[#0070CE] focus-within:ring-1 focus-within:ring-[#0070CE]">
               <div className="px-3 py-2.5 bg-amber-50 text-amber-600 border-r border-slate-200 h-full">
-                <FontAwesomeIcon icon={faEdit} className="text-xs" />
+                <Icon name="pen" size={12} />
               </div>
               <textarea
                 rows={2}
@@ -481,8 +468,9 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
 
           {/* 5. Breakfast Refund Live Insight Banner */}
           <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-2.5 text-xs text-slate-600">
-            <FontAwesomeIcon
-              icon={faInfoCircle}
+            <Icon
+              name="circle-info"
+              size={14}
               className="text-slate-400 mt-0.5 shrink-0"
             />
             <div>
@@ -517,7 +505,7 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
           <div className="absolute inset-0 z-60 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-2xs animate-in fade-in duration-150">
             <div className="w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-slate-200 p-6 text-center space-y-4">
               <div className="w-14 h-14 mx-auto rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl">
-                <FontAwesomeIcon icon={faCheck} />
+                <Icon name="check" size={24} />
               </div>
 
               <div>

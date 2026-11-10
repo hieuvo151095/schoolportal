@@ -1,25 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faReceipt,
-  faFileInvoiceDollar,
-  faCheckCircle,
-  faClock,
-  faExclamationCircle,
-  faTimesCircle,
-  faEye,
-  faPrint,
-  faInfoCircle,
-  faTimes,
-  faChevronDown,
-  faChevronUp,
-  faSearch,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import type { Student } from '../../../types/student';
 import type { InvoiceRecord, InvoiceLineItem } from '../../../types/invoice';
 import { useAppSelector } from '../../../store';
-import { Dropdown } from '@/components/ds';
 import { formatCurrencyVND } from '../../../utils/studentFeeCalculation';
 
 interface StudentTuitionTabProps {
@@ -357,14 +341,14 @@ export const StudentTuitionTab: React.FC<StudentTuitionTabProps> = ({
       case 'da_thanh_toan':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-            <FontAwesomeIcon icon={faCheckCircle} className="text-2xs" />
+            <Icon name="circle-check" size={10} />
             Đã hoàn thành
           </span>
         );
       case 'thanh_toan_mot_phan':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-            <FontAwesomeIcon icon={faClock} className="text-2xs" />
+            <Icon name="clock" size={10} />
             Nộp một phần
           </span>
         );
@@ -372,14 +356,14 @@ export const StudentTuitionTab: React.FC<StudentTuitionTabProps> = ({
       case 'da_tao':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-            <FontAwesomeIcon icon={faClock} className="text-2xs" />
+            <Icon name="clock" size={10} />
             Chưa nộp
           </span>
         );
       case 'qua_han':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
-            <FontAwesomeIcon icon={faExclamationCircle} className="text-2xs" />
+            <Icon name="circle-exclamation" size={10} />
             Quá hạn
           </span>
         );
@@ -472,9 +456,11 @@ export const StudentTuitionTab: React.FC<StudentTuitionTabProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Tìm mã hóa đơn, tiêu đề..."
-              className="w-full pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-[#0070CE] placeholder-slate-400"
+              className="w-full pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-hidden focus:border-[#0070CE] placeholder-slate-400"
             />
-            <FontAwesomeIcon icon={faSearch} className="absolute left-2.5 top-2.5 text-2xs text-slate-400" />
+            <div className="absolute left-2.5 top-2.5 text-slate-400">
+              <Icon name="magnifying-glass" size={12} />
+            </div>
           </div>
         </div>
 
@@ -506,7 +492,7 @@ export const StudentTuitionTab: React.FC<StudentTuitionTabProps> = ({
                   <td className="py-3.5 px-4">
                     <div className="flex items-center gap-2">
                       <div className="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xs shrink-0">
-                        <FontAwesomeIcon icon={faFileInvoiceDollar} />
+                        <Icon name="receipt" size={14} />
                       </div>
                       <div>
                         <span className="font-bold text-[#0070CE]">{inv.invoiceNo}</span>
@@ -556,7 +542,10 @@ export const StudentTuitionTab: React.FC<StudentTuitionTabProps> = ({
                       className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-[#0070CE] hover:bg-blue-50 rounded-lg transition-colors"
                       title="Xem chi tiết hóa đơn"
                     >
-                      <FontAwesomeIcon icon={faEye} />
+                      <svg className="w-3.5 h-3.5 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
                       <span>Chi tiết</span>
                     </button>
                   </td>
@@ -569,7 +558,7 @@ export const StudentTuitionTab: React.FC<StudentTuitionTabProps> = ({
         {/* Footer Insight */}
         <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
           <div className="flex items-center gap-2">
-            <FontAwesomeIcon icon={faInfoCircle} className="text-blue-500" />
+            <Icon name="circle-info" size={14} className="text-blue-500" />
             <span>
               Hóa đơn bao gồm học phí cơ bản, tiền ăn, các khoản phí tự chọn đã cấu hình và khấu trừ hoàn tiền ăn từ chuyên cần.
             </span>
@@ -592,7 +581,7 @@ export const StudentTuitionTab: React.FC<StudentTuitionTabProps> = ({
             <div className="px-6 py-4.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
-                  <FontAwesomeIcon icon={faReceipt} />
+                  <Icon name="receipt" size={18} />
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-slate-800">
@@ -607,9 +596,10 @@ export const StudentTuitionTab: React.FC<StudentTuitionTabProps> = ({
               <button
                 type="button"
                 onClick={() => setSelectedInvoiceForDetail(null)}
-                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-200 transition-colors"
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors"
+                aria-label="Đóng"
               >
-                <FontAwesomeIcon icon={faTimes} />
+                <Icon name="xmark" size={14} />
               </button>
             </div>
 

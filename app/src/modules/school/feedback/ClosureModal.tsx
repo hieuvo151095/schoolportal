@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faExclamationTriangle, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   closeClosureModal,
@@ -66,23 +65,23 @@ export default function ClosureModal() {
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
           <div className="flex items-center space-x-2">
             <span className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm">
-              <FontAwesomeIcon icon={faCheckCircle} />
+              <Icon name="circle-check" className="w-4 h-4 text-emerald-600" />
             </span>
             <h3 className="text-sm font-bold text-slate-800">Xác nhận đóng góp ý</h3>
           </div>
           <button
             type="button"
             onClick={handleCancel}
-            className="text-slate-400 hover:text-slate-600 transition-colors"
+            className="text-slate-400 hover:text-slate-600 transition-colors p-1"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
         {/* Body (Message GY-01) */}
         <div className="p-5">
           <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start space-x-2.5 mb-4">
-            <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-500 mt-0.5 text-xs" />
+            <Icon name="triangle-exclamation" className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
             <p className="text-xs text-amber-800 font-medium leading-relaxed">
               Vui lòng xác nhận Đóng góp ý{' '}
               <span className="font-bold underline">{targetFeedbackForClosure.title}</span> ({targetFeedbackForClosure.code}).

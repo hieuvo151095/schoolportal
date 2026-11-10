@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faUtensils,
-  faSun,
-  faLink,
-  faExternalLinkAlt,
-  faCheckCircle,
-  faPen,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import { WeekdayKey, MealType, DishItem } from '../../../types/menu';
 import { WEEKDAY_LABELS, MEAL_LABELS } from '../../../utils/menuValidation';
 
@@ -93,11 +84,11 @@ export const MealSessionTickXanhModal: React.FC<MealSessionTickXanhModalProps> =
               </h3>
               <div className="mt-1 space-y-0.5">
                 <div className="text-xs font-semibold text-amber-600 flex items-center gap-1.5">
-                  <FontAwesomeIcon icon={faSun} className="text-amber-500 text-[11px]" />
+                  <Icon name="sun" className="w-3.5 h-3.5 text-amber-500" />
                   <span>{sessionSubtitle}</span>
                 </div>
                 <div className="text-xs text-gray-600 flex items-center gap-1.5">
-                  <FontAwesomeIcon icon={faUtensils} className="text-gray-400 text-[10px]" />
+                  <Icon name="utensils" className="w-3 h-3 text-gray-400" />
                   <span>
                     Món ăn: <strong className="text-gray-800">{dishNames}</strong>
                   </span>
@@ -110,7 +101,7 @@ export const MealSessionTickXanhModal: React.FC<MealSessionTickXanhModalProps> =
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-white/80 transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -121,18 +112,7 @@ export const MealSessionTickXanhModal: React.FC<MealSessionTickXanhModalProps> =
             <div className="flex items-center gap-3">
               {/* Official Handshake / Tick Xanh Circular Logo */}
               <div className="w-12 h-12 rounded-full bg-emerald-50 border-2 border-emerald-500 flex items-center justify-center flex-shrink-0 text-emerald-600 shadow-sm">
-                <svg
-                  className="w-7 h-7"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  <path d="m9 12 2 2 4-4" />
-                </svg>
+                <Icon name="shield-halved" className="w-6 h-6 text-emerald-600" />
               </div>
 
               <div>
@@ -169,7 +149,7 @@ export const MealSessionTickXanhModal: React.FC<MealSessionTickXanhModalProps> =
             <div className="flex items-center gap-2">
               <div className="relative flex-1 flex items-center">
                 <div className="absolute left-2 w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center pointer-events-none">
-                  <FontAwesomeIcon icon={faLink} className="text-xs" />
+                  <Icon name="link" className="w-3.5 h-3.5 text-amber-700" />
                 </div>
                 <input
                   type="text"
@@ -196,7 +176,7 @@ export const MealSessionTickXanhModal: React.FC<MealSessionTickXanhModalProps> =
                   onClick={() => setIsEditing(true)}
                   className="px-3 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl inline-flex items-center gap-1 transition-colors"
                 >
-                  <FontAwesomeIcon icon={faPen} className="text-[10px]" />
+                  <Icon name="pencil" className="w-3 h-3" />
                   Sửa
                 </button>
               ) : (
@@ -212,7 +192,9 @@ export const MealSessionTickXanhModal: React.FC<MealSessionTickXanhModalProps> =
                     className="px-3 py-2 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 hover:bg-blue-100 rounded-xl inline-flex items-center gap-1 transition-colors"
                     title="Mở link kiểm tra"
                   >
-                    <FontAwesomeIcon icon={faExternalLinkAlt} className="text-[10px]" />
+                    <svg className="w-3 h-3 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
                     Xem
                   </button>
                 )
@@ -225,7 +207,7 @@ export const MealSessionTickXanhModal: React.FC<MealSessionTickXanhModalProps> =
 
             {url && (
               <p className="text-[11px] text-emerald-600 flex items-center gap-1">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-xs" />
+                <Icon name="circle-check" className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Suất ăn này sẽ hiển thị huy hiệu &quot;Đã có tick xanh&quot; trên cổng và app phụ huynh.</span>
               </p>
             )}

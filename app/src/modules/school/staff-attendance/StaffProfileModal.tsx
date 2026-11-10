@@ -1,18 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faCheckCircle,
-  faEnvelope,
-  faPhone,
-  faMapMarkerAlt,
-  faBirthdayCake,
-  faIdCard,
-  faShieldAlt,
-  faGraduationCap,
-  faExternalLinkAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import { StaffProfile } from '../../../types/staffAttendance';
 import {
   formatMissingField,
@@ -46,7 +34,7 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-gray-100">
           <div className="flex items-center gap-2">
-            <FontAwesomeIcon icon={faShieldAlt} className="text-blue-600" />
+            <Icon name="shield-halved" className="w-5 h-5 text-blue-600" />
             <h3 data-testid="staff-profile-title" className="text-lg font-bold text-gray-900">
               {modalTitle}
             </h3>
@@ -58,7 +46,7 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
             className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
             aria-label="Đóng"
           >
-            <FontAwesomeIcon icon={faTimes} className="text-base" />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -83,7 +71,7 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
                   data-testid="badge-verified"
                   className="inline-flex items-center gap-1 text-xs text-blue-600 bg-blue-100/70 px-2 py-0.5 rounded-full font-medium"
                 >
-                  <FontAwesomeIcon icon={faCheckCircle} className="text-[11px]" />
+                  <Icon name="circle-check" className="w-3.5 h-3.5 text-blue-600" />
                   Đã xác thực
                 </span>
               )}
@@ -110,7 +98,7 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
           {/* Mã NV */}
           <div className="flex items-center justify-between py-2 border-b border-gray-100">
             <span className="text-gray-500 flex items-center gap-2">
-              <FontAwesomeIcon icon={faIdCard} className="w-4 text-gray-400" />
+              <Icon name="id-badge" className="w-4 h-4 text-gray-400" />
               Mã nhân viên:
             </span>
             <span
@@ -124,7 +112,9 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
           {/* Email */}
           <div className="flex items-center justify-between py-2 border-b border-gray-100">
             <span className="text-gray-500 flex items-center gap-2">
-              <FontAwesomeIcon icon={faEnvelope} className="w-4 text-gray-400" />
+              <svg className="w-4 h-4 text-gray-400 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
               Email:
             </span>
             <span
@@ -138,7 +128,7 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
           {/* Điện thoại */}
           <div className="flex items-center justify-between py-2 border-b border-gray-100">
             <span className="text-gray-500 flex items-center gap-2">
-              <FontAwesomeIcon icon={faPhone} className="w-4 text-gray-400" />
+              <Icon name="phone" className="w-4 h-4 text-gray-400" />
               Số điện thoại:
             </span>
             <span
@@ -153,7 +143,7 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
           {!isAdmin && (
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
               <span className="text-gray-500 flex items-center gap-2">
-                <FontAwesomeIcon icon={faBirthdayCake} className="w-4 text-gray-400" />
+                <Icon name="calendar" className="w-4 h-4 text-gray-400" />
                 Ngày sinh:
               </span>
               <span
@@ -169,7 +159,7 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
           {!isAdmin && (
             <div className="flex items-start justify-between py-2 border-b border-gray-100">
               <span className="text-gray-500 flex items-center gap-2 shrink-0">
-                <FontAwesomeIcon icon={faMapMarkerAlt} className="w-4 text-gray-400" />
+                <Icon name="location-dot" className="w-4 h-4 text-gray-400" />
                 Địa chỉ:
               </span>
               <span
@@ -187,7 +177,7 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
           {!isAdmin && (
             <div className="py-2">
               <span className="text-gray-500 flex items-center gap-2 mb-2">
-                <FontAwesomeIcon icon={faGraduationCap} className="w-4 text-gray-400" />
+                <Icon name="graduation-cap" className="w-4 h-4 text-gray-400" />
                 Lớp phụ trách:
               </span>
               {staff.assignedClasses && staff.assignedClasses.length > 0 ? (
@@ -204,7 +194,9 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
                           Chủ nhiệm
                         </span>
                       )}
-                      <FontAwesomeIcon icon={faExternalLinkAlt} className="text-[10px] opacity-70" />
+                      <svg className="w-3 h-3 opacity-70 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
                     </Link>
                   ))}
                 </div>

@@ -1,6 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faTrashAlt, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import { WeeklyMenu } from '../../../types/menu';
 
 interface DeleteMenuModalProps {
@@ -25,7 +24,7 @@ export const DeleteMenuModal: React.FC<DeleteMenuModalProps> = ({
         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-red-50 to-rose-50/30">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center text-red-600">
-              <FontAwesomeIcon icon={faTrashAlt} className="text-sm" />
+              <Icon name="trash" className="w-4 h-4 text-red-600" />
             </div>
             <h3 className="text-base font-semibold text-gray-900">Xóa thực đơn</h3>
           </div>
@@ -33,7 +32,7 @@ export const DeleteMenuModal: React.FC<DeleteMenuModalProps> = ({
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-white/60 transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -41,7 +40,7 @@ export const DeleteMenuModal: React.FC<DeleteMenuModalProps> = ({
         <div className="p-6 space-y-3">
           <div className="flex items-start gap-3">
             <div className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <FontAwesomeIcon icon={faExclamationTriangle} className="text-xs" />
+              <Icon name="triangle-exclamation" className="w-4 h-4 text-red-600" />
             </div>
             <div className="text-sm text-gray-700 leading-relaxed">
               Vui lòng xác nhận xóa thực đơn <span className="font-semibold text-gray-900">"{menu.title}"</span>!

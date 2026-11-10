@@ -2,18 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faSave,
-  faPaperPlane,
-  faCalendarWeek,
-  faSchool,
-  faFileAlt,
-  faThLarge,
-  faExclamationTriangle,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../../../components/ds';
 import { PortalLayout } from '../../../../../components/layout/PortalLayout';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { updateMenu, publishMenu } from '../../../../../store/slices/menuSlice';
@@ -137,7 +126,7 @@ export default function EditSchoolMenuPage() {
             onClick={handleCancelClick}
             className="text-xs text-gray-500 hover:text-gray-800 font-medium inline-flex items-center gap-1.5"
           >
-            <FontAwesomeIcon icon={faArrowLeft} />
+            <Icon name="arrow-left" className="w-3.5 h-3.5" />
             Quay lại danh sách
           </button>
         </div>
@@ -155,7 +144,7 @@ export default function EditSchoolMenuPage() {
           </div>
 
           {/* Action CTAs */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <button
               type="button"
               onClick={handleCancelClick}
@@ -168,7 +157,7 @@ export default function EditSchoolMenuPage() {
               onClick={handleSave}
               className="px-4 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl shadow-2xs inline-flex items-center gap-1.5 transition-colors"
             >
-              <FontAwesomeIcon icon={faSave} className="text-gray-500" />
+              <Icon name="floppy-disk" className="w-3.5 h-3.5 text-gray-500" />
               Lưu thay đổi
             </button>
             <button
@@ -176,15 +165,15 @@ export default function EditSchoolMenuPage() {
               onClick={() => setShowPublishModal(true)}
               className="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 inline-flex items-center gap-1.5 transition-all"
             >
-              <FontAwesomeIcon icon={faPaperPlane} className="text-xs" />
+              <Icon name="paper-plane" className="w-3.5 h-3.5" />
               {existingMenu.status === 'published' ? 'Gửi lại / Công bố lại' : 'Gửi / Xuất bản'}
             </button>
           </div>
         </div>
 
         {/* Content Mode Switcher Card */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3 flex-wrap">
             <span className="text-xs font-semibold text-gray-700 uppercase tracking-wider">
               Hình thức nội dung:
             </span>
@@ -201,7 +190,7 @@ export default function EditSchoolMenuPage() {
                     : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
                 }`}
               >
-                <FontAwesomeIcon icon={faThLarge} className="text-[10px]" />
+                <Icon name="table-cells" className="w-3.5 h-3.5" />
                 Dạng lưới
               </button>
               <button
@@ -216,7 +205,7 @@ export default function EditSchoolMenuPage() {
                     : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
                 }`}
               >
-                <FontAwesomeIcon icon={faFileAlt} className="text-[10px]" />
+                <Icon name="file" className="w-3.5 h-3.5" />
                 Sử dụng file (Tải lên)
               </button>
             </div>
@@ -253,7 +242,7 @@ export default function EditSchoolMenuPage() {
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden p-6 space-y-4">
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
-                  <FontAwesomeIcon icon={faExclamationTriangle} />
+                  <Icon name="triangle-exclamation" className="w-5 h-5 text-amber-600" />
                 </div>
                 <div>
                   <h3 className="text-base font-semibold text-gray-900">Xác nhận rời khỏi trang</h3>

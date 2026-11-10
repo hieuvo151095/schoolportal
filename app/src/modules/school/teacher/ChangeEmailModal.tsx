@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faTimes, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import type { Teacher } from '../../../types/teacher';
 import { validateEmailChange } from '../../../utils/teacherValidation';
 import { useAppDispatch } from '../../../store';
@@ -59,7 +58,9 @@ export const ChangeEmailModal: React.FC<ChangeEmailModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#0070CE]">
-              <FontAwesomeIcon icon={faEnvelope} className="w-5 h-5" />
+              <svg className="w-5 h-5 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-800">Đổi email đăng nhập</h3>
@@ -72,7 +73,7 @@ export const ChangeEmailModal: React.FC<ChangeEmailModalProps> = ({
             aria-label="Đóng cửa sổ"
             className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} className="w-4 h-4" />
+            <Icon name="xmark" size={14} />
           </button>
         </div>
 
@@ -123,9 +124,14 @@ export const ChangeEmailModal: React.FC<ChangeEmailModalProps> = ({
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-lg transition-colors shadow-xs"
+              disabled={!newEmail.trim()}
+              className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors shadow-xs ${
+                !newEmail.trim()
+                  ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  : 'text-white bg-[#0070CE] hover:bg-[#005ba8]'
+              }`}
             >
-              <FontAwesomeIcon icon={faCheckCircle} className="text-xs" />
+              <Icon name="circle-check" size={14} />
               <span>Xác nhận cập nhật</span>
             </button>
           </div>

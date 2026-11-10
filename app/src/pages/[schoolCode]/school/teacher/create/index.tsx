@@ -1,17 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faUserPlus,
-  faCheckCircle,
-  faExclamationTriangle,
-  faShieldAlt,
-  faChalkboardTeacher,
-  faBookOpen,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import { PortalLayout } from '../../../../../components/layout/PortalLayout';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { addTeacher } from '../../../../../store/slices/teacherSlice';
@@ -32,6 +23,12 @@ const AVAILABLE_CLASSES = [
   { id: 'lop-1a2', name: 'Lớp 1A2' },
   { id: 'lop-2a1', name: 'Lớp 2A1' },
   { id: 'lop-nk-ve', name: 'Lớp Vẽ Sáng Tạo' },
+];
+
+const GENDER_OPTIONS = [
+  { value: 'nu', label: 'Nữ' },
+  { value: 'nam', label: 'Nam' },
+  { value: 'khac', label: 'Khác' },
 ];
 
 const SUBJECT_OPTIONS = [
@@ -67,14 +64,18 @@ export default function CreateTeacherPage() {
     cccd: '',
     homeroomClassId: '',
     assignedClassIds: [],
-    subjects: ['Toán', 'Tiếng Việt'],
+    subjects: [],
     permissionTier: 'chinh',
   });
 
-  const [educationLevel, setEducationLevel] = useState('Cử nhân Sư phạm Tiểu học');
-  const [major, setMajor] = useState('Giáo dục Tiểu học');
+  const [educationLevel, setEducationLevel] = useState('');
+  const [major, setMajor] = useState('');
   const [notes, setNotes] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const isFormValid = useMemo(() => {
+    return formData.fullName.trim() !== '' && formData.email.trim() !== '' && formData.password.trim() !== '';
+  }, [formData.fullName, formData.email, formData.password]);
 
   // Resolution K010: Form Abandonment Protection
   const [isDirty, setIsDirty] = useState(false);
@@ -223,7 +224,7 @@ export default function CreateTeacherPage() {
               onClick={handleCancel}
               className="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-slate-800 hover:border-slate-300 transition-colors shadow-2xs"
             >
-              <FontAwesomeIcon icon={faArrowLeft} className="w-3.5 h-3.5" />
+              <Icon name="arrow-left" size={14} />
             </button>
             <div>
               <div className="text-xs text-slate-400 font-medium flex items-center gap-1.5">
@@ -243,7 +244,7 @@ export default function CreateTeacherPage() {
           {/* Section 1: Thông tin tài khoản & Bắt buộc (BR03) */}
           <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-6 space-y-4">
             <div className="flex items-center gap-2.5 text-slate-800 font-bold text-sm border-b border-slate-100 pb-3">
-              <FontAwesomeIcon icon={faUserPlus} className="text-[#0070CE]" />
+              <Icon name="user-tie" size={18} className="text-[#0070CE]" />
               <span>Thông tin tài khoản & Định danh cơ bản</span>
             </div>
 
@@ -336,15 +337,12 @@ export default function CreateTeacherPage() {
               {/* Gender */}
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">Giới tính</label>
-                <select
+                <Dropdown
                   value={formData.gender}
-                  onChange={(e) => updateField('gender', e.target.value as TeacherGender)}
-                  className="w-full px-3.5 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#0070CE]"
-                >
-                  <option value="nu">Nữ</option>
-                  <option value="nam">Nam</option>
-                  <option value="khac">Khác</option>
-                </select>
+                  onChange={(val) => updateField('gender', val as TeacherGender)}
+                  options={GENDER_OPTIONS}
+                  fullWidth
+                />
               </div>
 
               {/* DOB */}
@@ -377,7 +375,7 @@ export default function CreateTeacherPage() {
           {/* Section 2: Phân quyền & Vai trò hệ thống (BR01) */}
           <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-6 space-y-4">
             <div className="flex items-center gap-2.5 text-slate-800 font-bold text-sm border-b border-slate-100 pb-3">
-              <FontAwesomeIcon icon={faShieldAlt} className="text-[#0070CE]" />
+              <Icon name="shield-halved" size={18} className="text-[#0070CE]" />
               <span>Phân quyền & Kiểm duyệt bài đăng (BR01)</span>
             </div>
 
@@ -443,7 +441,7 @@ export default function CreateTeacherPage() {
           {/* Section 3: Phân công lớp học & Giảng dạy */}
           <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-6 space-y-4">
             <div className="flex items-center gap-2.5 text-slate-800 font-bold text-sm border-b border-slate-100 pb-3">
-              <FontAwesomeIcon icon={faChalkboardTeacher} className="text-[#0070CE]" />
+              <Icon name="chalkboard-user" size={16} className="text-[#0070CE]" />
               <span>Phân công lớp học & Môn giảng dạy</span>
             </div>
 
@@ -452,25 +450,23 @@ export default function CreateTeacherPage() {
               <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Lớp chủ nhiệm
               </label>
-              <select
+              <Dropdown
                 value={formData.homeroomClassId}
-                onChange={(e) => updateField('homeroomClassId', e.target.value)}
-                className="w-full px-3.5 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#0070CE] font-medium text-slate-800"
-              >
-                <option value="">-- Chưa phân công chủ nhiệm --</option>
-                {AVAILABLE_CLASSES.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => updateField('homeroomClassId', val)}
+                options={[
+                  { value: '', label: '-- Chưa phân công chủ nhiệm --' },
+                  ...AVAILABLE_CLASSES.map((c) => ({ value: c.id, label: c.name })),
+                ]}
+                fullWidth
+              />
 
               {/* Resolution K006: Conflict Warning */}
               {conflict.hasConflict && (
                 <div className="mt-2.5 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 flex items-start gap-2.5 text-xs">
-                  <FontAwesomeIcon
-                    icon={faExclamationTriangle}
-                    className="w-4 h-4 text-amber-600 mt-0.5 shrink-0"
+                  <Icon
+                    name="triangle-exclamation"
+                    size={16}
+                    className="text-amber-600 mt-0.5 shrink-0"
                   />
                   <div>
                     <span className="font-bold">Cảnh báo trùng lặp:</span> {conflict.warningMessage}
@@ -522,13 +518,14 @@ export default function CreateTeacherPage() {
                       key={sub}
                       type="button"
                       onClick={() => toggleSubject(sub)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors inline-flex items-center gap-1 ${
                         isChecked
-                          ? 'bg-blue-50 text-blue-700 border-blue-200'
+                          ? 'bg-blue-50 text-blue-700 border-blue-200 font-semibold'
                           : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                       }`}
                     >
-                      {sub} {isChecked && '✓'}
+                      <span>{sub}</span>
+                      {isChecked && <Icon name="check" size={10} className="text-blue-600" />}
                     </button>
                   );
                 })}
@@ -539,7 +536,7 @@ export default function CreateTeacherPage() {
           {/* Section 4: Chuyên môn & Ghi chú */}
           <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-6 space-y-4">
             <div className="flex items-center gap-2.5 text-slate-800 font-bold text-sm border-b border-slate-100 pb-3">
-              <FontAwesomeIcon icon={faBookOpen} className="text-[#0070CE]" />
+              <Icon name="graduation-cap" size={16} className="text-[#0070CE]" />
               <span>Chuyên môn & Ghi chú nội bộ</span>
             </div>
 
@@ -550,6 +547,7 @@ export default function CreateTeacherPage() {
                 </label>
                 <input
                   type="text"
+                  placeholder="Ví dụ: Cử nhân Sư phạm Tiểu học"
                   value={educationLevel}
                   onChange={(e) => {
                     setIsDirty(true);
@@ -565,6 +563,7 @@ export default function CreateTeacherPage() {
                 </label>
                 <input
                   type="text"
+                  placeholder="Ví dụ: Giáo dục Tiểu học"
                   value={major}
                   onChange={(e) => {
                     setIsDirty(true);
@@ -603,9 +602,14 @@ export default function CreateTeacherPage() {
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-xl transition-colors shadow-xs"
+              disabled={!isFormValid}
+              className={`inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-xl transition-colors shadow-xs ${
+                !isFormValid
+                  ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  : 'text-white bg-[#0070CE] hover:bg-[#005ba8]'
+              }`}
             >
-              <FontAwesomeIcon icon={faCheckCircle} className="text-xs" />
+              <Icon name="circle-check" size={16} />
               <span>Hoàn tất & Tạo giáo viên</span>
             </button>
           </div>

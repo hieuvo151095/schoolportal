@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faExchangeAlt,
-  faExclamationTriangle,
-  faCheckCircle,
-  faCalendarAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import { Student } from '../../../types/student';
 import { useAppDispatch } from '../../../store';
 import { transferStudents } from '../../../store/slices/studentSlice';
@@ -37,7 +30,7 @@ export const ClassTransferModal: React.FC<ClassTransferModalProps> = ({
   students,
 }) => {
   const dispatch = useAppDispatch();
-  const [targetClassId, setTargetClassId] = useState('lop-1a2');
+  const [targetClassId, setTargetClassId] = useState('');
   const [effectiveDate, setEffectiveDate] = useState('2026-09-16');
   const [showConfirmStep, setShowConfirmStep] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -101,17 +94,19 @@ export const ClassTransferModal: React.FC<ClassTransferModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-semibold text-sm">
-              <FontAwesomeIcon icon={faExchangeAlt} />
+              <Icon name="rotate-right" size={16} />
             </div>
             <h3 className="text-base font-bold text-slate-800">
               {showConfirmStep ? 'Xác nhận chuyển lớp' : 'Chuyển lớp học'}
             </h3>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            aria-label="Đóng"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" size={14} />
           </button>
         </div>
 
@@ -157,17 +152,19 @@ export const ClassTransferModal: React.FC<ClassTransferModalProps> = ({
                   <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                     Lớp chuyển đến *
                   </label>
-                  <select
+                  <Dropdown
                     value={targetClassId}
-                    onChange={(e) => setTargetClassId(e.target.value)}
-                    className="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#0070CE] focus:outline-hidden font-medium text-slate-800"
-                  >
-                    {AVAILABLE_CLASSES.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(val) => setTargetClassId(val)}
+                    options={[
+                      { value: '', label: '-- Chọn lớp chuyển đến --' },
+                      ...AVAILABLE_CLASSES.map((c) => ({
+                        value: c.id,
+                        label: c.name,
+                      })),
+                    ]}
+                    placeholder="-- Chọn lớp chuyển đến --"
+                    fullWidth
+                  />
                 </div>
               </div>
 
@@ -189,7 +186,7 @@ export const ClassTransferModal: React.FC<ClassTransferModalProps> = ({
               {/* Automated Cascade Warning Box (ADR-009) */}
               <div className="p-3.5 bg-amber-50/80 border border-amber-200 rounded-xl space-y-2">
                 <div className="flex items-center gap-2 text-amber-800 font-semibold text-xs">
-                  <FontAwesomeIcon icon={faExclamationTriangle} />
+                  <Icon name="triangle-exclamation" size={14} />
                   <span>3 Quy tắc hệ thống tự động áp dụng (ADR-009):</span>
                 </div>
                 <ul className="text-xs text-amber-900 space-y-1 pl-5 list-disc">
@@ -208,7 +205,7 @@ export const ClassTransferModal: React.FC<ClassTransferModalProps> = ({
           ) : (
             <div className="space-y-4 py-2">
               <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto text-xl">
-                <FontAwesomeIcon icon={faExclamationTriangle} />
+                <Icon name="triangle-exclamation" size={24} />
               </div>
               <div className="text-center space-y-1">
                 <h4 className="text-base font-bold text-slate-800">Xác nhận chuyển lớp học sinh?</h4>
@@ -223,11 +220,11 @@ export const ClassTransferModal: React.FC<ClassTransferModalProps> = ({
 
               <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-600 space-y-1">
                 <div className="flex items-center gap-1.5 text-emerald-700 font-medium">
-                  <FontAwesomeIcon icon={faCheckCircle} />
+                  <Icon name="circle-check" size={14} />
                   <span>Biểu phí học phí lớp mới đã sẵn sàng kích hoạt</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-emerald-700 font-medium">
-                  <FontAwesomeIcon icon={faCheckCircle} />
+                  <Icon name="circle-check" size={14} />
                   <span>Kênh trao đổi phụ huynh sẽ tự động phân quyền</span>
                 </div>
               </div>
@@ -240,14 +237,19 @@ export const ClassTransferModal: React.FC<ClassTransferModalProps> = ({
           <button
             type="button"
             onClick={showConfirmStep ? () => setShowConfirmStep(false) : onClose}
-            className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-200/60 rounded-lg transition-colors"
+            className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-200/60 rounded-lg transition-colors cursor-pointer"
           >
             {showConfirmStep ? 'Quay lại' : 'Hủy bỏ'}
           </button>
           <button
             type="button"
+            disabled={!showConfirmStep && !targetClassId}
             onClick={showConfirmStep ? handleExecuteTransfer : handleProceed}
-            className="px-4 py-2 text-sm font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-lg transition-colors shadow-xs"
+            className={`px-4 py-2 text-sm font-semibold text-white rounded-lg transition-colors shadow-xs ${
+              !showConfirmStep && !targetClassId
+                ? 'bg-slate-300 cursor-not-allowed text-slate-500'
+                : 'bg-[#0070CE] hover:bg-[#005ba8] cursor-pointer'
+            }`}
           >
             {showConfirmStep ? 'Xác nhận chuyển ngay' : 'Tiếp tục'}
           </button>

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faFilter, faCalendarAlt, faFileAlt } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import { MenuFilterState } from '../../../types/menu';
 
 interface ExtendedMenuFilterModalProps {
@@ -50,7 +49,7 @@ export const ExtendedMenuFilterModal: React.FC<ExtendedMenuFilterModalProps> = (
         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50/30">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-blue-600/10 flex items-center justify-center text-blue-600">
-              <FontAwesomeIcon icon={faFilter} className="text-sm" />
+              <Icon name="filter" className="w-4 h-4 text-blue-600" />
             </div>
             <h3 className="text-base font-semibold text-gray-900">Lọc mở rộng thực đơn</h3>
           </div>
@@ -58,7 +57,7 @@ export const ExtendedMenuFilterModal: React.FC<ExtendedMenuFilterModalProps> = (
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-white/60 transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -66,8 +65,8 @@ export const ExtendedMenuFilterModal: React.FC<ExtendedMenuFilterModalProps> = (
         <div className="p-6 space-y-5">
           {/* Thời gian / Tháng */}
           <div>
-            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
-              <FontAwesomeIcon icon={faCalendarAlt} className="mr-1.5 text-blue-600" />
+            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Icon name="calendar" className="w-3.5 h-3.5 text-blue-600" />
               Thời gian (Tháng)
             </label>
             <input
@@ -80,8 +79,8 @@ export const ExtendedMenuFilterModal: React.FC<ExtendedMenuFilterModalProps> = (
 
           {/* Sử dụng file (BR04, BR05) */}
           <div>
-            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
-              <FontAwesomeIcon icon={faFileAlt} className="mr-1.5 text-blue-600" />
+            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Icon name="file" className="w-3.5 h-3.5 text-blue-600" />
               Hình thức nội dung (Sử dụng file)
             </label>
             <div className="grid grid-cols-3 gap-2">

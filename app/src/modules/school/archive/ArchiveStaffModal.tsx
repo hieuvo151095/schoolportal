@@ -1,13 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faUserTie,
-  faPhone,
-  faEnvelope,
-  faIdBadge,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import type { ArchiveStaffOperator } from '@/types/archive';
 
 interface ArchiveStaffModalProps {
@@ -185,17 +178,17 @@ export const ArchiveStaffModal: React.FC<ArchiveStaffModalProps> = ({
       <ModalCard onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
         <ModalHeader>
           <ModalTitle>
-            <FontAwesomeIcon icon={faUserTie} style={{ color: '#0070ce' }} />
+            <Icon name="user-tie" size={18} className="text-[#0070ce]" />
             Người Thực Hiện Lưu Trữ
           </ModalTitle>
           <CloseButton type="button" onClick={onClose} aria-label="Đóng">
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" size={16} />
           </CloseButton>
         </ModalHeader>
 
         <ModalBody>
           <StaffAvatar>
-            <FontAwesomeIcon icon={faUserTie} />
+            <Icon name="user-tie" size={32} />
           </StaffAvatar>
 
           <StaffName>{staff.name}</StaffName>
@@ -205,7 +198,7 @@ export const ArchiveStaffModal: React.FC<ArchiveStaffModalProps> = ({
             {staff.code && (
               <ContactItem>
                 <ContactIcon>
-                  <FontAwesomeIcon icon={faIdBadge} />
+                  <Icon name="id-badge" size={14} />
                 </ContactIcon>
                 <span>Mã nhân sự: <strong>{staff.code}</strong></span>
               </ContactItem>
@@ -213,7 +206,7 @@ export const ArchiveStaffModal: React.FC<ArchiveStaffModalProps> = ({
             {staff.phone && (
               <ContactItem>
                 <ContactIcon>
-                  <FontAwesomeIcon icon={faPhone} />
+                  <Icon name="phone" size={14} />
                 </ContactIcon>
                 <span>Điện thoại: <strong>{staff.phone}</strong></span>
               </ContactItem>
@@ -221,7 +214,7 @@ export const ArchiveStaffModal: React.FC<ArchiveStaffModalProps> = ({
             {staff.email && (
               <ContactItem>
                 <ContactIcon>
-                  <FontAwesomeIcon icon={faEnvelope} />
+                  <Icon name="envelope" size={14} />
                 </ContactIcon>
                 <span>Email: <strong>{staff.email}</strong></span>
               </ContactItem>

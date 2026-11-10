@@ -1,13 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faUndo,
-  faCheckCircle,
-  faExclamationTriangle,
-  faGraduationCap,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import type { ArchivedStudent } from '@/types/archive';
 import { evaluateRestorationClass } from '@/utils/archiveValidation';
 
@@ -212,17 +205,17 @@ export const RestoreConfirmModal: React.FC<RestoreConfirmModalProps> = ({
       <ModalCard onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
         <ModalHeader>
           <ModalTitle>
-            <FontAwesomeIcon icon={faUndo} style={{ color: '#059669' }} />
+            <Icon name="rotate-right" size={18} className="text-emerald-600" />
             Xác Nhận Phục Hồi Học Sinh
           </ModalTitle>
           <CloseButton type="button" onClick={onClose} aria-label="Đóng">
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" size={16} />
           </CloseButton>
         </ModalHeader>
 
         <ModalBody>
           <RestoreIconWrapper>
-            <FontAwesomeIcon icon={faUndo} />
+            <Icon name="rotate-right" size={24} />
           </RestoreIconWrapper>
 
           {/* BR05 Mandatory Prompt */}
@@ -237,7 +230,7 @@ export const RestoreConfirmModal: React.FC<RestoreConfirmModalProps> = ({
           {/* K066 Class Continuity Evaluation */}
           {restoration.isClassActive ? (
             <ClassNoticeBox>
-              <FontAwesomeIcon icon={faCheckCircle} style={{ color: '#16a34a', marginTop: '2px' }} />
+              <Icon name="circle-check" size={16} className="text-emerald-600 shrink-0 mt-0.5" />
               <div>
                 <strong>Lớp tiếp nhận:</strong> Học sinh sẽ được đưa trở lại lớp{' '}
                 <strong>{restoration.restoredClassName}</strong> (lớp đang hoạt động trong năm học này).
@@ -245,7 +238,7 @@ export const RestoreConfirmModal: React.FC<RestoreConfirmModalProps> = ({
             </ClassNoticeBox>
           ) : (
             <ClassNoticeBox $isWarning>
-              <FontAwesomeIcon icon={faExclamationTriangle} style={{ color: '#d97706', marginTop: '2px' }} />
+              <Icon name="triangle-exclamation" size={16} className="text-amber-600 shrink-0 mt-0.5" />
               <div>
                 <strong>Lưu ý xếp lớp:</strong> {restoration.warningMessage}
               </div>
@@ -261,7 +254,7 @@ export const RestoreConfirmModal: React.FC<RestoreConfirmModalProps> = ({
             type="button"
             onClick={() => onConfirmRestore(student.id)}
           >
-            <FontAwesomeIcon icon={faUndo} />
+            <Icon name="rotate-right" size={14} />
             <span>Xác nhận phục hồi</span>
           </ConfirmRestoreButton>
         </ModalFooter>

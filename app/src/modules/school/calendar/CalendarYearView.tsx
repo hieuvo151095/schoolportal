@@ -1,9 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCalendarCheck,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import {
   SchoolEvent,
   EVENT_CATEGORY_MAP,
@@ -168,7 +164,7 @@ export const CalendarYearView: React.FC<CalendarYearViewProps> = ({
       {/* Bottom Color Legend Bar ("Chú thích") per BR02 */}
       <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <FontAwesomeIcon icon={faInfoCircle} className="text-[#0070CE]" />
+          <Icon name="circle-info" className="w-4 h-4 text-[#0070CE]" />
           <span className="text-sm font-bold text-gray-900">Chú thích phân loại sự kiện:</span>
         </div>
 
@@ -209,7 +205,7 @@ export const CalendarYearView: React.FC<CalendarYearViewProps> = ({
 
         {/* Holiday meal refund interoperability note */}
         <div className="text-xs text-gray-500 flex items-center gap-1.5">
-          <FontAwesomeIcon icon={faCalendarCheck} className="text-rose-500" />
+          <Icon name="calendar-check" className="w-4 h-4 text-rose-500" />
           <span>Sự kiện Ngày nghỉ tự động khấu trừ hoàn 100% tiền ăn học sinh.</span>
         </div>
       </div>

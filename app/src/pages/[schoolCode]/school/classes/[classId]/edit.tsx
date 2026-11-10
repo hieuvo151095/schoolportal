@@ -2,16 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faSchool,
-  faUsers,
-  faCheck,
-  faExclamationTriangle,
-  faPlus,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { updateClass } from '../../../../../store/slices/classSlice';
 import { addToast } from '../../../../../store/slices/toastSlice';
@@ -174,8 +165,9 @@ export default function EditClassPage() {
               <Link
                 href={`/${schoolCode}/school/classes/${currentClass.id}`}
                 className="w-9 h-9 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors shadow-2xs"
+                aria-label="Quay lại chi tiết lớp"
               >
-                <FontAwesomeIcon icon={faArrowLeft} />
+                <Icon name="arrow-left" size={14} />
               </Link>
               <div>
                 <h1 className="text-xl font-bold text-slate-800">Chỉnh sửa lớp: {currentClass.name}</h1>
@@ -191,7 +183,7 @@ export default function EditClassPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {conflictWarning && (
                 <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
-                  <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-600 text-sm mt-0.5 shrink-0" />
+                  <Icon name="triangle-exclamation" size={16} className="text-amber-600 mt-0.5 shrink-0" />
                   <div className="text-xs text-amber-800 leading-relaxed font-medium">
                     {conflictWarning}
                   </div>
@@ -238,35 +230,38 @@ export default function EditClassPage() {
                     <label className="block text-xs font-semibold text-slate-700 mb-1">
                       Khối lớp <span className="text-rose-500">*</span>
                     </label>
-                    <select
+                    <Dropdown
                       value={formData.gradeLevelId}
-                      onChange={(e) => setFormData({ ...formData, gradeLevelId: e.target.value })}
-                      className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"
-                    >
-                      {gradeLevels.map((grd) => (
-                        <option key={grd.id} value={grd.id}>
-                          {grd.name}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(val) => setFormData({ ...formData, gradeLevelId: val })}
+                      options={[
+                        { value: '', label: '-- Chọn khối lớp --' },
+                        ...gradeLevels.map((grd) => ({
+                          value: grd.id,
+                          label: grd.name,
+                        })),
+                      ]}
+                      placeholder="-- Chọn khối lớp --"
+                      fullWidth
+                    />
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 mb-1">
                       Giáo viên chủ nhiệm (GVCN)
                     </label>
-                    <select
+                    <Dropdown
                       value={formData.homeroomTeacherId || ''}
-                      onChange={(e) => handleTeacherChange(e.target.value)}
-                      className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"
-                    >
-                      <option value="">-- Chưa chỉ định GVCN --</option>
-                      {MOCK_AVAILABLE_TEACHERS.map((t) => (
-                        <option key={t.id} value={t.id}>
-                          {t.name} ({t.phone})
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(val) => handleTeacherChange(val)}
+                      options={[
+                        { value: '', label: '-- Chưa chỉ định GVCN --' },
+                        ...MOCK_AVAILABLE_TEACHERS.map((t) => ({
+                          value: t.id,
+                          label: `${t.name} (${t.phone})`,
+                        })),
+                      ]}
+                      placeholder="-- Chưa chỉ định GVCN --"
+                      fullWidth
+                    />
                   </div>
                 </div>
               )}
@@ -303,15 +298,16 @@ export default function EditClassPage() {
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Trạng thái hoạt động
                   </label>
-                  <select
+                  <Dropdown
                     value={formData.status}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                    className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"
-                  >
-                    <option value="dang_hoat_dong">Đang hoạt động</option>
-                    <option value="tam_dung">Tạm dừng</option>
-                    <option value="da_ket_thuc">Đã kết thúc</option>
-                  </select>
+                    onChange={(val) => setFormData({ ...formData, status: val as any })}
+                    options={[
+                      { value: 'dang_hoat_dong', label: 'Đang hoạt động' },
+                      { value: 'tam_dung', label: 'Tạm dừng' },
+                      { value: 'da_ket_thuc', label: 'Đã kết thúc' },
+                    ]}
+                    fullWidth
+                  />
                 </div>
               </div>
 
@@ -338,9 +334,9 @@ export default function EditClassPage() {
                 </Link>
                 <button
                   type="submit"
-                  className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors"
+                  className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors cursor-pointer"
                 >
-                  <FontAwesomeIcon icon={faCheck} />
+                  <Icon name="check" size={14} />
                   <span>Cập nhật thay đổi</span>
                 </button>
               </div>

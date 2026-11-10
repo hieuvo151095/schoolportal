@@ -1,15 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCalendarAlt,
-  faClock,
-  faMapMarkerAlt,
-  faPencilAlt,
-  faTrash,
-  faPaperclip,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import {
   SchoolEvent,
   EVENT_CATEGORY_MAP,
@@ -36,7 +27,7 @@ export const CalendarAgendaView: React.FC<CalendarAgendaViewProps> = ({
     return (
       <div className="p-12 text-center">
         <div className="w-16 h-16 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-4">
-          <FontAwesomeIcon icon={faCalendarAlt} className="text-2xl" />
+          <Icon name="calendar-days" className="w-8 h-8" />
         </div>
         <h3 className="text-base font-bold text-gray-800 mb-1">
           Không tìm thấy sự kiện nào
@@ -48,7 +39,7 @@ export const CalendarAgendaView: React.FC<CalendarAgendaViewProps> = ({
           href={`/${schoolCode}/school/calendar/create`}
           className="inline-flex items-center gap-2 bg-[#0070CE] hover:bg-[#005bb5] text-white px-4 py-2 rounded-lg text-xs font-semibold shadow-sm transition"
         >
-          <FontAwesomeIcon icon={faCalendarAlt} />
+          <Icon name="calendar-days" className="w-4 h-4" />
           <span>Thêm sự kiện mới</span>
         </Link>
       </div>
@@ -98,14 +89,14 @@ export const CalendarAgendaView: React.FC<CalendarAgendaViewProps> = ({
 
                   {/* Time Range Badge */}
                   <span className="inline-flex items-center gap-1 text-xs text-gray-500 font-medium bg-gray-100 px-2 py-0.5 rounded-md">
-                    <FontAwesomeIcon icon={faClock} className="text-gray-400 text-[10px]" />
+                    <Icon name="clock" className="w-3 h-3 text-gray-400" />
                     {timeRangeStr}
                   </span>
 
                   {/* Location Badge */}
                   {ev.location && (
                     <span className="inline-flex items-center gap-1 text-xs text-gray-500 font-medium bg-gray-50 px-2 py-0.5 rounded-md">
-                      <FontAwesomeIcon icon={faMapMarkerAlt} className="text-gray-400 text-[10px]" />
+                      <Icon name="location-dot" className="w-3 h-3 text-gray-400" />
                       {ev.location}
                     </span>
                   )}
@@ -130,7 +121,7 @@ export const CalendarAgendaView: React.FC<CalendarAgendaViewProps> = ({
                 {/* Attachments indicator */}
                 {ev.attachments && ev.attachments.length > 0 && (
                   <div className="mt-2 flex items-center gap-1 text-xs text-gray-400">
-                    <FontAwesomeIcon icon={faPaperclip} />
+                    <Icon name="paperclip" className="w-3 h-3" />
                     <span>{ev.attachments.length} tệp đính kèm</span>
                   </div>
                 )}
@@ -151,20 +142,20 @@ export const CalendarAgendaView: React.FC<CalendarAgendaViewProps> = ({
               {/* Direct Edit link */}
               <Link
                 href={`/${schoolCode}/school/calendar/edit/${ev.id}`}
-                className="p-2 rounded-lg border border-gray-300 text-gray-600 hover:text-[#0070CE] hover:border-[#0070CE] hover:bg-blue-50 transition"
+                className="p-2 rounded-lg border border-gray-300 text-gray-600 hover:text-[#0070CE] hover:border-[#0070CE] hover:bg-blue-50 transition flex items-center justify-center"
                 title="Chỉnh sửa sự kiện"
               >
-                <FontAwesomeIcon icon={faPencilAlt} className="text-xs" />
+                <Icon name="pencil" className="w-3.5 h-3.5" />
               </Link>
 
               {/* Direct Delete button */}
               <button
                 type="button"
                 onClick={() => onDeleteEvent(ev.id)}
-                className="p-2 rounded-lg border border-gray-300 text-gray-600 hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50 transition"
+                className="p-2 rounded-lg border border-gray-300 text-gray-600 hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50 transition flex items-center justify-center"
                 title="Xóa sự kiện"
               >
-                <FontAwesomeIcon icon={faTrash} className="text-xs" />
+                <Icon name="trash" className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>

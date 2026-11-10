@@ -2,27 +2,12 @@ import React, { useState, useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faEdit,
-  faGraduationCap,
-  faUtensils,
-  faCoffee,
-  faCoins,
-  faTrashAlt,
-  faPlus,
-  faCheckCircle,
-  faTimes,
-  faFileInvoiceDollar,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import { PortalLayout } from '../../../../../../components/layout/PortalLayout';
 import { useAppDispatch, useAppSelector } from '../../../../../../store';
 import { updateStudentFees } from '../../../../../../store/slices/studentSlice';
 import { addToast } from '../../../../../../store/slices/toastSlice';
 import type { StudentFeeItem } from '../../../../../../types/student';
-import { Dropdown } from '../../../../../../components/ds';
 import {
   formatCurrencyVND,
   formatFeeUnitDisplay,
@@ -284,12 +269,12 @@ export default function EditStudentFeePage() {
             href={`/${schoolCode}/school/kid/detail/${student.id}`}
             className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
           >
-            <FontAwesomeIcon icon={faArrowLeft} />
+            <Icon name="arrow-left" size={16} />
           </Link>
 
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0070CE] flex items-center justify-center text-lg">
-              <FontAwesomeIcon icon={faFileInvoiceDollar} />
+              <Icon name="receipt" size={20} />
             </div>
             <div>
               <h1 className="text-lg font-bold text-slate-900 leading-tight">
@@ -311,14 +296,14 @@ export default function EditStudentFeePage() {
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold text-slate-700">Học phí cơ bản</span>
                 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-2xs font-semibold bg-amber-50 text-amber-800 border border-amber-300">
-                  <FontAwesomeIcon icon={faCheckCircle} className="text-2xs" />
+                  <Icon name="circle-check" size={10} />
                   <span>Xuất HĐĐT</span>
                 </span>
               </div>
 
               <div className="flex items-center rounded-xl border border-slate-200 bg-slate-50 overflow-hidden">
                 <div className="px-3.5 py-2.5 bg-amber-50/80 text-amber-700 border-r border-slate-200">
-                  <FontAwesomeIcon icon={faGraduationCap} />
+                  <Icon name="graduation-cap" size={16} />
                 </div>
                 <input
                   type="text"
@@ -337,14 +322,14 @@ export default function EditStudentFeePage() {
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold text-slate-700">Tiền ăn cơ bản</span>
                 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-2xs font-semibold bg-amber-50 text-amber-800 border border-amber-300">
-                  <FontAwesomeIcon icon={faCheckCircle} className="text-2xs" />
+                  <Icon name="circle-check" size={10} />
                   <span>Xuất HĐĐT</span>
                 </span>
               </div>
 
               <div className="flex items-center rounded-xl border border-slate-200 bg-slate-50 overflow-hidden">
                 <div className="px-3.5 py-2.5 bg-amber-50/80 text-amber-700 border-r border-slate-200">
-                  <FontAwesomeIcon icon={faUtensils} />
+                  <Icon name="utensils" size={16} />
                 </div>
                 <input
                   type="text"
@@ -378,7 +363,7 @@ export default function EditStudentFeePage() {
                     {/* Fee Select Dropdown */}
                     <div className="w-1/2 flex items-center rounded-xl border border-slate-200 bg-white focus-within:border-[#0070CE] focus-within:ring-1 focus-within:ring-[#0070CE]">
                       <div className="px-3 py-2.5 bg-amber-50 text-amber-600 border-r border-slate-200 shrink-0 rounded-l-xl">
-                        <FontAwesomeIcon icon={faEdit} className="text-xs" />
+                        <Icon name="pen" size={12} />
                       </div>
                       <Dropdown
                         options={availableCatalogOptions.map((opt) => ({
@@ -402,7 +387,7 @@ export default function EditStudentFeePage() {
                     {/* Amount Input */}
                     <div className="w-1/2 flex items-center rounded-xl border border-slate-200 bg-white overflow-hidden focus-within:border-[#0070CE] focus-within:ring-1 focus-within:ring-[#0070CE]">
                       <div className="px-3 py-2.5 bg-amber-50 text-amber-600 border-r border-slate-200">
-                        <FontAwesomeIcon icon={isBf ? faCoffee : faCoins} className="text-xs" />
+                        <Icon name={isBf ? 'utensils' : 'coins'} size={14} />
                       </div>
                       <input
                         type="text"
@@ -423,7 +408,7 @@ export default function EditStudentFeePage() {
                       className="p-2.5 text-slate-400 hover:text-red-600 rounded-lg transition-colors"
                       title="Xóa khoản phí"
                     >
-                      <FontAwesomeIcon icon={faTrashAlt} className="text-sm" />
+                      <Icon name="trash" size={14} />
                     </button>
                   </div>
                 );
@@ -437,7 +422,7 @@ export default function EditStudentFeePage() {
                 onClick={handleAddFeeRow}
                 className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-xl shadow-xs transition-colors"
               >
-                <FontAwesomeIcon icon={faPlus} />
+                <Icon name="plus" size={14} />
                 <span>Thêm</span>
               </button>
             </div>
@@ -448,7 +433,7 @@ export default function EditStudentFeePage() {
             <h3 className="text-xs font-semibold text-slate-700">Ghi chú</h3>
             <div className="flex rounded-xl border border-slate-200 bg-white overflow-hidden focus-within:border-[#0070CE] focus-within:ring-1 focus-within:ring-[#0070CE]">
               <div className="px-3.5 py-3 bg-amber-50 text-amber-600 border-r border-slate-200">
-                <FontAwesomeIcon icon={faEdit} className="text-xs" />
+                <Icon name="pen" size={12} />
               </div>
               <textarea
                 rows={3}
@@ -470,7 +455,7 @@ export default function EditStudentFeePage() {
                 : 'bg-slate-50 border-slate-200 text-slate-600'
             }`}
           >
-            <FontAwesomeIcon icon={faInfoCircle} className="mt-0.5" />
+            <Icon name="circle-info" size={14} className="mt-0.5" />
             <div>
               <span className="font-bold block">Quy tắc hoàn tiền ăn sáng:</span>
               <p>{breakfastEvaluation.reason}</p>
@@ -508,7 +493,7 @@ export default function EditStudentFeePage() {
                 onClick={() => setIsConfirmModalOpen(false)}
                 className="p-1 text-slate-400 hover:text-slate-600 rounded-lg"
               >
-                <FontAwesomeIcon icon={faTimes} className="text-sm" />
+                <Icon name="xmark" size={14} />
               </button>
             </div>
 
@@ -521,7 +506,7 @@ export default function EditStudentFeePage() {
                 <div className="w-5 h-1 bg-amber-200 rounded-full" />
               </div>
               <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center border-2 border-white shadow-xs">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-xs" />
+                <Icon name="circle-check" size={14} />
               </div>
             </div>
 

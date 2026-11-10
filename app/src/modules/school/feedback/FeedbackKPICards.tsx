@@ -1,14 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPlus,
-  faSpinner,
-  faCheck,
-  faRotateLeft,
-  faFilterCircleXmark,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   setStatusCardFilter,
@@ -75,7 +67,7 @@ export default function FeedbackKPICards() {
     status: FeedbackStatus;
     label: string;
     count: number;
-    icon: any;
+    icon: string;
     themeColor: string;
     bgColor: string;
     tooltip?: string;
@@ -84,16 +76,16 @@ export default function FeedbackKPICards() {
       status: 'new',
       label: 'Yêu cầu mới',
       count: kpis.newCount,
-      icon: faPlus,
+      icon: 'plus',
       themeColor: '#0070CE',
       bgColor: '#EFF6FF',
-      tooltip: 'Góp ý mới gửi từ phụ huynh qua App (Icon + chỉ là biểu tượng nhận diện và lọc)',
+      tooltip: 'Góp ý mới gửi từ phụ huynh qua App',
     },
     {
       status: 'processing',
       label: 'Đang xử lý',
       count: kpis.processingCount,
-      icon: faSpinner,
+      icon: 'clock',
       themeColor: '#8B5CF6',
       bgColor: '#F5F3FF',
       tooltip: 'Góp ý đang được nhà trường giải quyết và trao đổi',
@@ -102,7 +94,7 @@ export default function FeedbackKPICards() {
       status: 'completed',
       label: 'Hoàn tất',
       count: kpis.completedCount,
-      icon: faCheck,
+      icon: 'check',
       themeColor: '#10B981',
       bgColor: '#ECFDF5',
       tooltip: 'Góp ý đã được xử lý xong và đóng chính thức',
@@ -111,7 +103,7 @@ export default function FeedbackKPICards() {
       status: 'reopened',
       label: 'Mở lại',
       count: kpis.reopenedCount,
-      icon: faRotateLeft,
+      icon: 'rotate-right',
       themeColor: '#F59E0B',
       bgColor: '#FFFBEB',
       tooltip: 'Góp ý phụ huynh gửi thêm ý kiến sau khi đã đóng',
@@ -129,7 +121,7 @@ export default function FeedbackKPICards() {
             className="text-xs text-slate-400 cursor-help"
             title="Nhấp vào thẻ để lọc danh sách theo trạng thái"
           >
-            <FontAwesomeIcon icon={faInfoCircle} />
+            <Icon name="circle-info" className="w-3.5 h-3.5 inline" />
           </span>
         </div>
         {activeCardFilter !== 'all' && (
@@ -137,7 +129,7 @@ export default function FeedbackKPICards() {
             onClick={() => dispatch(clearStatusCardFilter())}
             className="inline-flex items-center text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors"
           >
-            <FontAwesomeIcon icon={faFilterCircleXmark} className="mr-1" />
+            <Icon name="filter" className="mr-1 w-3 h-3" />
             Xóa bộ lọc thẻ (Hiện tất cả {kpis.totalCount})
           </button>
         )}
@@ -160,7 +152,7 @@ export default function FeedbackKPICards() {
                   <p className="text-2xl font-bold text-slate-800">{card.count}</p>
                 </div>
                 <IconBadge $bgColor={card.bgColor} $color={card.themeColor}>
-                  <FontAwesomeIcon icon={card.icon} />
+                  <Icon name={card.icon} className="w-5 h-5" />
                 </IconBadge>
               </div>
               <div className="mt-2 flex items-center justify-between">

@@ -1,10 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faExclamationTriangle,
-  faTrash,
-  faTimes,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import { SchoolEvent } from '../../../types/calendar';
 
 interface EventDeleteConfirmModalProps {
@@ -28,7 +23,7 @@ export const EventDeleteConfirmModal: React.FC<EventDeleteConfirmModalProps> = (
         {/* Header with warning icon */}
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center flex-shrink-0">
-            <FontAwesomeIcon icon={faExclamationTriangle} className="text-xl" />
+            <Icon name="triangle-exclamation" className="w-6 h-6 text-rose-600" />
           </div>
           <div className="flex-1">
             <h3 className="text-base font-bold text-gray-900 mb-1">
@@ -45,7 +40,7 @@ export const EventDeleteConfirmModal: React.FC<EventDeleteConfirmModalProps> = (
             onClick={onCancel}
             className="text-gray-400 hover:text-gray-600 p-1"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -73,7 +68,7 @@ export const EventDeleteConfirmModal: React.FC<EventDeleteConfirmModalProps> = (
             onClick={onConfirm}
             className="inline-flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold shadow-sm transition active:scale-95"
           >
-            <FontAwesomeIcon icon={faTrash} />
+            <Icon name="trash" className="w-4 h-4" />
             <span>Xác nhận xóa</span>
           </button>
         </div>

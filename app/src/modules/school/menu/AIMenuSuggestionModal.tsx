@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faMagic,
-  faStar,
-  faCheck,
-  faThumbsUp,
-  faThumbsDown,
-  faUtensils,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import { DayMealSchedule, WeekdayKey } from '../../../types/menu';
 
 interface AIMenuSuggestionModalProps {
@@ -277,7 +268,7 @@ export const AIMenuSuggestionModal: React.FC<AIMenuSuggestionModalProps> = ({
         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-purple-50 to-pink-50/30">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-purple-600/10 flex items-center justify-center text-purple-600">
-              <FontAwesomeIcon icon={faMagic} className="text-sm" />
+              <Icon name="wand-magic-sparkles" className="w-4 h-4 text-purple-600" />
             </div>
             <div>
               <h3 className="text-base font-semibold text-gray-900">Gợi ý thực đơn bằng AI</h3>
@@ -288,7 +279,7 @@ export const AIMenuSuggestionModal: React.FC<AIMenuSuggestionModalProps> = ({
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-white/60 transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -352,7 +343,7 @@ export const AIMenuSuggestionModal: React.FC<AIMenuSuggestionModalProps> = ({
 
           {!generated ? (
             <div className="text-center py-6 bg-purple-50/40 rounded-xl border border-dashed border-purple-200">
-              <FontAwesomeIcon icon={faStar} className="text-3xl text-purple-400 mb-2" />
+              <Icon name="star" className="w-8 h-8 text-purple-400 mx-auto mb-2" />
               <p className="text-xs text-purple-800 font-medium">
                 Mô hình AI sẽ tự động phân bổ tỷ lệ Đạm - Đường bột - Chất béo cân đối theo khuyến nghị của Viện Dinh Dưỡng Quốc Gia.
               </p>
@@ -361,7 +352,7 @@ export const AIMenuSuggestionModal: React.FC<AIMenuSuggestionModalProps> = ({
                 onClick={handleGenerate}
                 className="mt-4 px-4 py-2 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 rounded-xl shadow-sm shadow-purple-500/20 inline-flex items-center gap-1.5 transition-all"
               >
-                <FontAwesomeIcon icon={faMagic} className="text-[11px]" />
+                <Icon name="wand-magic-sparkles" className="w-3.5 h-3.5" />
                 Sinh thực đơn tuần gợi ý
               </button>
             </div>
@@ -369,7 +360,7 @@ export const AIMenuSuggestionModal: React.FC<AIMenuSuggestionModalProps> = ({
             <div className="space-y-3 animate-in fade-in">
               <div className="p-3.5 rounded-xl bg-purple-50/80 border border-purple-200 text-xs text-purple-900 space-y-1">
                 <div className="font-semibold flex items-center gap-1.5 text-purple-800">
-                  <FontAwesomeIcon icon={faCheck} className="text-purple-600" />
+                  <Icon name="check" className="w-3.5 h-3.5 text-purple-600" />
                   Đã sinh thực đơn 6 ngày (Thứ 2 - Thứ 7) cho lứa tuổi {gradeTier === 'mam_non' ? 'Mầm non' : gradeTier === 'tieu_hoc' ? 'Tiểu học' : 'Trung học'}
                 </div>
                 <div className="text-[11px] text-purple-700">
@@ -390,7 +381,7 @@ export const AIMenuSuggestionModal: React.FC<AIMenuSuggestionModalProps> = ({
                         : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
                     }`}
                   >
-                    <FontAwesomeIcon icon={faThumbsUp} /> Hữu ích
+                    <Icon name="thumbs-up" className="w-3.5 h-3.5" /> Hữu ích
                   </button>
                   <button
                     type="button"
@@ -401,7 +392,7 @@ export const AIMenuSuggestionModal: React.FC<AIMenuSuggestionModalProps> = ({
                         : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
                     }`}
                   >
-                    <FontAwesomeIcon icon={faThumbsDown} /> Chưa phù hợp
+                    <Icon name="thumbs-down" className="w-3.5 h-3.5" /> Chưa phù hợp
                   </button>
                 </div>
               </div>

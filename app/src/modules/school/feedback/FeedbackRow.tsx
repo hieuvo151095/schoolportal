@@ -1,14 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faEye,
-  faCheckCircle,
-  faUserGraduate,
-  faUser,
-  faComments,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import { useAppDispatch } from '@/store';
 import {
   updatePriority,
@@ -127,7 +120,7 @@ export default function FeedbackRow({ item }: FeedbackRowProps) {
         >
           <div className="flex items-center space-x-1.5">
             <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">
-              <FontAwesomeIcon icon={faUserGraduate} />
+              <Icon name="graduation-cap" className="w-3 h-3" />
             </span>
             <div>
               <p className="font-semibold text-slate-800 group-hover:text-blue-600">
@@ -163,7 +156,7 @@ export default function FeedbackRow({ item }: FeedbackRowProps) {
         >
           <div className="flex items-center space-x-1.5">
             <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[10px] font-bold">
-              <FontAwesomeIcon icon={faUser} />
+              <Icon name="user" className="w-3 h-3" />
             </span>
             <div>
               <p className="font-medium text-slate-700 group-hover:text-blue-600">
@@ -209,33 +202,65 @@ export default function FeedbackRow({ item }: FeedbackRowProps) {
       </td>
 
       {/* Inline Assignee Select */}
-      <td className="py-3 px-3 whitespace-nowrap">
-        <select
+      <td className="py-3 px-3 whitespace-nowrap min-w-[140px]">
+        <Dropdown
           value={item.assigneeId || 'unassigned'}
-          onChange={handleAssigneeChange}
-          className="text-xs bg-white border border-slate-200 rounded px-2 py-1 text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer max-w-[140px]"
-        >
-          <option value="unassigned">-- Chưa chọn --</option>
-          {MOCK_STAFF_LIST.map((staff) => (
-            <option key={staff.id} value={staff.id}>
-              {staff.name}
-            </option>
-          ))}
-        </select>
+          onChange={(val) => {
+            const v = String(val);
+            if (!v || v === 'unassigned') {
+              dispatch(
+                updateAssignee({
+                  feedbackId: item.id,
+                  assigneeId: undefined,
+                  assigneeName: undefined,
+                  assigneeAvatar: undefined,
+                })
+              );
+            } else {
+              const staff = MOCK_STAFF_LIST.find((s) => s.id === v);
+              dispatch(
+                updateAssignee({
+                  feedbackId: item.id,
+                  assigneeId: staff?.id,
+                  assigneeName: staff?.name,
+                  assigneeAvatar: staff?.avatarUrl,
+                })
+              );
+            }
+          }}
+          options={[
+            { value: 'unassigned', label: '-- Chưa chọn --' },
+            ...MOCK_STAFF_LIST.map((staff) => ({
+              value: staff.id,
+              label: staff.name,
+            })),
+          ]}
+          size="sm"
+          fullWidth
+        />
       </td>
 
       {/* Inline Priority Select (BR04, K056) */}
-      <td className="py-3 px-3 whitespace-nowrap">
-        <select
+      <td className="py-3 px-3 whitespace-nowrap min-w-[120px]">
+        <Dropdown
           value={item.priority}
-          onChange={handlePriorityChange}
-          className={`text-xs font-semibold rounded px-2 py-1 border cursor-pointer ${priorityMeta.badgeColor}`}
-        >
-          <option value="low">Thấp</option>
-          <option value="medium">Trung bình</option>
-          <option value="high">Cao</option>
-          <option value="urgent">Khẩn cấp</option>
-        </select>
+          onChange={(val) => {
+            dispatch(
+              updatePriority({
+                feedbackId: item.id,
+                priority: val as FeedbackPriority,
+              })
+            );
+          }}
+          options={[
+            { value: 'low', label: 'Thấp' },
+            { value: 'medium', label: 'Trung bình' },
+            { value: 'high', label: 'Cao' },
+            { value: 'urgent', label: 'Khẩn cấp' },
+          ]}
+          size="sm"
+          fullWidth
+        />
       </td>
 
       {/* Created At */}
@@ -251,7 +276,7 @@ export default function FeedbackRow({ item }: FeedbackRowProps) {
             className="p-1 text-slate-500 hover:text-blue-600 rounded transition-colors"
             title="Xem chi tiết & thảo luận"
           >
-            <FontAwesomeIcon icon={faEye} />
+            <Icon name="eye" className="w-3.5 h-3.5" />
           </Link>
 
           {item.status !== 'completed' && (
@@ -261,7 +286,7 @@ export default function FeedbackRow({ item }: FeedbackRowProps) {
               className="p-1 text-slate-500 hover:text-emerald-600 rounded transition-colors"
               title="Đóng góp ý (Hoàn tất)"
             >
-              <FontAwesomeIcon icon={faCheckCircle} />
+              <Icon name="circle-check" className="w-3.5 h-3.5" />
             </button>
           )}
         </div>

@@ -1,20 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBullhorn,
-  faEnvelope,
-  faCommentDots,
-  faMobileAlt,
-  faUsers,
-  faClock,
-  faPaperclip,
-  faTrash,
-  faExclamationTriangle,
-  faCheck,
-  faArrowLeft
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '../../../components/ds';
 import {
   Announcement,
   AnnouncementAudienceScope,
@@ -226,7 +213,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
           onClick={() => router.push(`/${schoolCode}/school/announcements`)}
           className="text-sm font-semibold text-slate-600 hover:text-blue-600 flex items-center gap-2 transition-colors"
         >
-          <FontAwesomeIcon icon={faArrowLeft} />
+          <Icon name="arrow-left" className="w-4 h-4" />
           <span>Quay lại Bảng thông tin</span>
         </button>
         <h1 className="text-lg font-bold text-slate-800">
@@ -237,7 +224,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
       {/* Lock alert for published items */}
       {isLockedPublished && (
         <div className="bg-amber-50 border border-amber-300 rounded-xl p-4 flex gap-3 text-amber-900">
-          <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-600 mt-1" />
+          <Icon name="triangle-exclamation" className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <div className="text-sm">
             <p className="font-bold">Thông báo này đã được phát hành chính thức!</p>
             <p className="text-xs mt-0.5">
@@ -251,7 +238,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
       {/* Section 1: General Information */}
       <FormCard>
         <FormSectionTitle>
-          <FontAwesomeIcon icon={faBullhorn} className="text-blue-600" />
+          <Icon name="bullhorn" className="w-4 h-4 text-blue-600" />
           <span>1. Thông tin chung thông báo</span>
         </FormSectionTitle>
 
@@ -300,35 +287,37 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                 Danh mục phân loại <span className="text-rose-500">*</span>
               </label>
-              <select
+              <Dropdown
                 value={category}
                 disabled={isLockedPublished}
-                onChange={e => setCategory(e.target.value as AnnouncementCategory)}
-                className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 cursor-pointer"
-              >
-                <option value="chung">Thông báo chung</option>
-                <option value="hoc_phi">Học phí & Thu chi</option>
-                <option value="su_kien">Sự kiện & Lễ hội</option>
-                <option value="khan_cap">Khẩn cấp (thời tiết, dịch bệnh)</option>
-                <option value="hoc_tap">Học tập & Thi cử</option>
-                <option value="nghi_le">Nghỉ lễ & Nghỉ hè</option>
-              </select>
+                onChange={val => setCategory(val as AnnouncementCategory)}
+                options={[
+                  { value: 'chung', label: 'Thông báo chung' },
+                  { value: 'hoc_phi', label: 'Học phí & Thu chi' },
+                  { value: 'su_kien', label: 'Sự kiện & Lễ hội' },
+                  { value: 'khan_cap', label: 'Khẩn cấp (thời tiết, dịch bệnh)' },
+                  { value: 'hoc_tap', label: 'Học tập & Thi cử' },
+                  { value: 'nghi_le', label: 'Nghỉ lễ & Nghỉ hè' },
+                ]}
+                fullWidth
+              />
             </div>
 
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                 Mức độ ưu tiên
               </label>
-              <select
+              <Dropdown
                 value={priority}
                 disabled={isLockedPublished}
-                onChange={e => setPriority(e.target.value as AnnouncementPriority)}
-                className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 cursor-pointer"
-              >
-                <option value="normal">Bình thường</option>
-                <option value="important">Quan trọng (gắn cờ vàng)</option>
-                <option value="urgent">Hỏa tốc (cảnh báo đỏ)</option>
-              </select>
+                onChange={val => setPriority(val as AnnouncementPriority)}
+                options={[
+                  { value: 'normal', label: 'Bình thường' },
+                  { value: 'important', label: 'Quan trọng (gắn cờ vàng)' },
+                  { value: 'urgent', label: 'Hỏa tốc (cảnh báo đỏ)' },
+                ]}
+                fullWidth
+              />
             </div>
           </div>
 
@@ -352,7 +341,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
       {/* Section 2: Delivery Channels */}
       <FormCard>
         <FormSectionTitle>
-          <FontAwesomeIcon icon={faEnvelope} className="text-emerald-600" />
+          <Icon name="envelope" className="w-4 h-4 text-emerald-600" />
           <span>2. Kênh phát hành (Chọn ít nhất 1 kênh)</span>
         </FormSectionTitle>
 
@@ -421,7 +410,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
       {/* Section 3: Audience Scope Targeting */}
       <FormCard>
         <FormSectionTitle>
-          <FontAwesomeIcon icon={faUsers} className="text-indigo-600" />
+          <Icon name="users" className="w-4 h-4 text-indigo-600" />
           <span>3. Đối tượng nhận thông báo</span>
         </FormSectionTitle>
 
@@ -431,34 +420,36 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                 Phạm vi nhận
               </label>
-              <select
+              <Dropdown
                 value={audienceScope}
                 disabled={isLockedPublished}
-                onChange={e => setAudienceScope(e.target.value as AnnouncementAudienceScope)}
-                className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 cursor-pointer"
-              >
-                <option value="toan_truong">Toàn trường (Tất cả phụ huynh & học sinh)</option>
-                <option value="khoi_lop">Theo Khối lớp cụ thể</option>
-                <option value="lop_hoc">Theo Lớp học cụ thể</option>
-                <option value="nhan_vien">Toàn thể Cán bộ & Giáo viên</option>
-              </select>
+                onChange={val => setAudienceScope(val as AnnouncementAudienceScope)}
+                options={[
+                  { value: 'toan_truong', label: 'Toàn trường (Tất cả phụ huynh & học sinh)' },
+                  { value: 'khoi_lop', label: 'Theo Khối lớp cụ thể' },
+                  { value: 'lop_hoc', label: 'Theo Lớp học cụ thể' },
+                  { value: 'nhan_vien', label: 'Toàn thể Cán bộ & Giáo viên' },
+                ]}
+                fullWidth
+              />
             </div>
 
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                 Nhóm đối tượng
               </label>
-              <select
+              <Dropdown
                 value={subAudience}
                 disabled={isLockedPublished}
-                onChange={e => setSubAudience(e.target.value as AnnouncementSubAudience)}
-                className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 cursor-pointer"
-              >
-                <option value="all">Tất cả (Phụ huynh, Học sinh, Giáo viên)</option>
-                <option value="parents">Chỉ Phụ huynh học sinh</option>
-                <option value="students">Chỉ Học sinh</option>
-                <option value="teachers">Chỉ Giáo viên phụ trách</option>
-              </select>
+                onChange={val => setSubAudience(val as AnnouncementSubAudience)}
+                options={[
+                  { value: 'all', label: 'Tất cả (Phụ huynh, Học sinh, Giáo viên)' },
+                  { value: 'parents', label: 'Chỉ Phụ huynh học sinh' },
+                  { value: 'students', label: 'Chỉ Học sinh' },
+                  { value: 'teachers', label: 'Chỉ Giáo viên phụ trách' },
+                ]}
+                fullWidth
+              />
             </div>
           </div>
 
@@ -487,7 +478,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
                         : 'bg-white text-slate-700 border-slate-300 hover:border-blue-400'
                     }`}
                   >
-                    {targetGradeIds.includes(g.id) && <FontAwesomeIcon icon={faCheck} className="mr-1" />}
+                    {targetGradeIds.includes(g.id) && <Icon name="check" className="w-3 h-3 mr-1" />}
                     {g.name}
                   </button>
                 ))}
@@ -520,7 +511,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
                         : 'bg-white text-slate-700 border-slate-300 hover:border-blue-400'
                     }`}
                   >
-                    {targetClassIds.includes(c.id) && <FontAwesomeIcon icon={faCheck} className="mr-1" />}
+                    {targetClassIds.includes(c.id) && <Icon name="check" className="w-3 h-3 mr-1" />}
                     {c.name} ({c.studentCount} HS)
                   </button>
                 ))}
@@ -541,7 +532,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
               onClick={() => setShowPreviewModal(true)}
               className="text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5"
             >
-              <FontAwesomeIcon icon={faUsers} />
+              <Icon name="users" className="w-3.5 h-3.5" />
               <span>Xem trước danh sách người nhận</span>
             </button>
           </div>
@@ -551,7 +542,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
       {/* Section 4: Content Body */}
       <FormCard>
         <FormSectionTitle>
-          <FontAwesomeIcon icon={faBullhorn} className="text-amber-600" />
+          <Icon name="bullhorn" className="w-4 h-4 text-amber-600" />
           <span>4. Nội dung thông báo</span>
         </FormSectionTitle>
 
@@ -586,7 +577,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
                   isLockedPublished ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >
-                <FontAwesomeIcon icon={faPaperclip} />
+                <Icon name="paperclip" className="w-3.5 h-3.5" />
                 <span>Thêm tệp tin</span>
                 <input
                   type="file"
@@ -608,7 +599,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
                     className="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs"
                   >
                     <div className="flex items-center gap-2">
-                      <FontAwesomeIcon icon={faPaperclip} className="text-slate-400" />
+                      <Icon name="paperclip" className="w-3.5 h-3.5 text-slate-400" />
                       <span className="font-semibold text-slate-700">{att.fileName}</span>
                       <span className="text-slate-400">
                         ({(att.fileSize / 1024 / 1024).toFixed(2)} MB)
@@ -620,7 +611,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
                         onClick={() => handleRemoveAttachment(att.id)}
                         className="text-slate-400 hover:text-rose-600 p-1"
                       >
-                        <FontAwesomeIcon icon={faTrash} />
+                        <Icon name="trash" className="w-3.5 h-3.5" />
                       </button>
                     )}
                   </div>
@@ -635,7 +626,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
       {!isLockedPublished && (
         <FormCard>
           <FormSectionTitle>
-            <FontAwesomeIcon icon={faClock} className="text-purple-600" />
+            <Icon name="clock" className="w-4 h-4 text-purple-600" />
             <span>5. Thời gian phát hành</span>
           </FormSectionTitle>
 
@@ -691,7 +682,12 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
             <button
               type="button"
               onClick={() => handleSubmit('nhap')}
-              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-lg transition-colors"
+              disabled={!title.trim() || !content.trim()}
+              className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${
+                !title.trim() || !content.trim()
+                  ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+              }`}
             >
               Lưu bản nháp
             </button>
@@ -700,18 +696,28 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
               <button
                 type="button"
                 onClick={() => handleSubmit('da_len_lich')}
-                className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold rounded-lg shadow-sm transition-colors flex items-center gap-2"
+                disabled={!title.trim() || !content.trim()}
+                className={`px-5 py-2 text-sm font-bold rounded-lg shadow-sm transition-colors flex items-center gap-2 ${
+                  !title.trim() || !content.trim()
+                    ? 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none'
+                    : 'bg-purple-600 hover:bg-purple-700 text-white'
+                }`}
               >
-                <FontAwesomeIcon icon={faClock} />
+                <Icon name="clock" className="w-4 h-4" />
                 <span>Lên lịch phát hành</span>
               </button>
             ) : (
               <button
                 type="button"
                 onClick={() => handleSubmit('da_gui')}
-                className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg shadow-sm transition-colors flex items-center gap-2"
+                disabled={!title.trim() || !content.trim()}
+                className={`px-5 py-2 text-sm font-bold rounded-lg shadow-sm transition-colors flex items-center gap-2 ${
+                  !title.trim() || !content.trim()
+                    ? 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none'
+                    : 'bg-blue-600 hover:bg-blue-700 text-white'
+                }`}
               >
-                <FontAwesomeIcon icon={faBullhorn} />
+                <Icon name="bullhorn" className="w-4 h-4" />
                 <span>Phát hành ngay</span>
               </button>
             )}

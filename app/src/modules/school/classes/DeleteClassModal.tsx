@@ -1,11 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faExclamationTriangle,
-  faTimes,
-  faTrash,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { ClassItem } from '../../../types/class';
 import { canDeleteClass, getDeletionBlockReason } from '../../../utils/classValidation';
 
@@ -39,7 +33,7 @@ export const DeleteClassModal: React.FC<DeleteClassModalProps> = ({
                 : 'bg-amber-50 text-amber-600 border border-amber-100'
             }`}
           >
-            <FontAwesomeIcon icon={isDeletable ? faTrash : faExclamationTriangle} />
+            <Icon name={isDeletable ? 'trash' : 'triangle-exclamation'} size={24} />
           </div>
 
           <h3 className="text-lg font-bold text-slate-800 mb-1">
@@ -80,7 +74,7 @@ export const DeleteClassModal: React.FC<DeleteClassModalProps> = ({
             </p>
           ) : (
             <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 leading-relaxed text-left flex items-start gap-2.5">
-              <FontAwesomeIcon icon={faInfoCircle} className="text-rose-600 mt-0.5 shrink-0" />
+              <Icon name="circle-info" size={16} className="text-rose-600 mt-0.5 shrink-0" />
               <span>{blockReason}</span>
             </div>
           )}
@@ -102,7 +96,7 @@ export const DeleteClassModal: React.FC<DeleteClassModalProps> = ({
               onClick={() => onConfirm(classItem.id)}
               className="px-4 py-2 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors flex items-center gap-2"
             >
-              <FontAwesomeIcon icon={faTrash} />
+              <Icon name="trash" size={14} />
               <span>Xóa vĩnh viễn</span>
             </button>
           )}

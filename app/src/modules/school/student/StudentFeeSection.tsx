@@ -1,18 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faEdit,
-  faChevronDown,
-  faChevronUp,
-  faGraduationCap,
-  faUtensils,
-  faCoffee,
-  faCoins,
-  faCheckCircle,
-  faExclamationTriangle,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
+import type { IconName } from '@/components/ds';
 import type { Student, StudentFeeItem } from '../../../types/student';
 import { useAppSelector } from '../../../store';
 import { EditStudentFeeModal } from './EditStudentFeeModal';
@@ -111,17 +100,17 @@ export const StudentFeeSection: React.FC<StudentFeeSectionProps> = ({
     mealRefundConfig
   );
 
-  const getFeeItemIcon = (fee: StudentFeeItem) => {
+  const getFeeItemIcon = (fee: StudentFeeItem): IconName => {
     if (fee.category === 'hoc_phi' || fee.code === 'HOC_PHI' || fee.name.toLowerCase().includes('học phí')) {
-      return faGraduationCap;
+      return 'graduation-cap';
     }
     if (fee.category === 'tien_an' || fee.code === 'TIEN_AN' || fee.name.toLowerCase().includes('tiền ăn')) {
-      return faUtensils;
+      return 'utensils';
     }
     if (isBreakfastFeeItem(fee)) {
-      return faCoffee;
+      return 'utensils';
     }
-    return faCoins;
+    return 'coins';
   };
 
   return (
@@ -143,7 +132,7 @@ export const StudentFeeSection: React.FC<StudentFeeSectionProps> = ({
             title="Chỉnh sửa học phí học sinh"
             className="p-1.5 text-slate-500 hover:text-[#0070CE] hover:bg-slate-100 rounded-lg transition-colors inline-flex items-center justify-center cursor-pointer"
           >
-            <FontAwesomeIcon icon={faEdit} className="text-base" />
+            <Icon name="pen" size={16} />
           </button>
 
           {/* Accordion toggle */}
@@ -152,7 +141,7 @@ export const StudentFeeSection: React.FC<StudentFeeSectionProps> = ({
             onClick={() => setIsExpanded(!isExpanded)}
             className="p-1 text-slate-400 hover:text-slate-600 transition-colors"
           >
-            <FontAwesomeIcon icon={isExpanded ? faChevronUp : faChevronDown} className="text-sm" />
+            <Icon name={isExpanded ? 'chevron-up' : 'chevron-down'} size={14} />
           </button>
         </div>
       </div>
@@ -163,7 +152,7 @@ export const StudentFeeSection: React.FC<StudentFeeSectionProps> = ({
           {/* Fee Items Grid - 2 columns */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {feeItems.map((fee) => {
-              const icon = getFeeItemIcon(fee);
+              const iconName = getFeeItemIcon(fee);
               const isBf = isBreakfastFeeItem(fee);
 
               return (
@@ -177,7 +166,7 @@ export const StudentFeeSection: React.FC<StudentFeeSectionProps> = ({
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 shadow-2xs">
-                      <FontAwesomeIcon icon={icon} className="text-sm" />
+                      <Icon name={iconName} size={14} />
                     </div>
 
                     <div className="space-y-0.5">
@@ -188,7 +177,7 @@ export const StudentFeeSection: React.FC<StudentFeeSectionProps> = ({
 
                         {fee.exportElectronicInvoice && (
                           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-2xs font-semibold bg-amber-100 text-amber-800 border border-amber-300">
-                            <FontAwesomeIcon icon={faCheckCircle} className="text-2xs" />
+                            <Icon name="circle-check" size={10} />
                             <span>Xuất HĐĐT</span>
                           </span>
                         )}
@@ -224,11 +213,11 @@ export const StudentFeeSection: React.FC<StudentFeeSectionProps> = ({
           >
             <div className="mt-0.5 shrink-0">
               {refundEvaluation.status === 'eligible' ? (
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-sm" />
+                <Icon name="circle-check" size={14} className="text-emerald-600" />
               ) : refundEvaluation.status === 'school_disabled' ? (
-                <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-600 text-sm" />
+                <Icon name="triangle-exclamation" size={14} className="text-amber-600" />
               ) : (
-                <FontAwesomeIcon icon={faInfoCircle} className="text-slate-400 text-sm" />
+                <Icon name="circle-info" size={14} className="text-slate-400" />
               )}
             </div>
 

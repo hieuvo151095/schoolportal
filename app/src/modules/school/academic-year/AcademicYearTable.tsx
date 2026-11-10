@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { AcademicYear } from '../../../types/academicYear';
 import { isCurrentAcademicYear, formatDateDisplay } from '../../../utils/academicYearValidation';
 import { Tag, StatusTag, Button, EmptyState } from '../../../components/ds';
@@ -126,6 +125,7 @@ export const AcademicYearTable: React.FC<AcademicYearTableProps> = ({
                     {/* Action */}
                     <td className="body-sm is-right is-actions" style={{ textAlign: 'right' }}>
                       <div className="ecomd-cell__value flex justify-end">
+                        {/* faEdit in-place editing action mapped to DS Button icon pencil */}
                         <Button
                           variant="secondary"
                           size="sm"

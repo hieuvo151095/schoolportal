@@ -10,8 +10,7 @@ import {
 } from '@/store/slices/announcementSlice';
 import { addToast } from '@/store/slices/toastSlice';
 import AnnouncementDetailView from '@/modules/school/announcements/AnnouncementDetailView';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 
 export default function AnnouncementDetailPage() {
   const router = useRouter();
@@ -51,8 +50,8 @@ export default function AnnouncementDetailPage() {
     return (
       <PortalLayout schoolCode={schoolCode}>
         <div className="p-8 text-center max-w-md mx-auto my-12 bg-white border border-slate-200 rounded-xl shadow-sm">
-          <div className="text-slate-400 text-3xl mb-3">
-            <FontAwesomeIcon icon={faExclamationCircle} />
+          <div className="text-slate-400 mb-3 flex justify-center">
+            <Icon name="circle-exclamation" className="w-8 h-8 text-slate-400" />
           </div>
           <h2 className="text-base font-bold text-slate-700 mb-1">
             Không tìm thấy thông báo
@@ -64,7 +63,7 @@ export default function AnnouncementDetailPage() {
             href={`/${schoolCode}/school/announcements`}
             className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition-colors"
           >
-            <FontAwesomeIcon icon={faArrowLeft} />
+            <Icon name="arrow-left" className="w-4 h-4" />
             <span>Quay lại Bảng thông tin</span>
           </Link>
         </div>

@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCloudUploadAlt,
-  faFilePdf,
-  faFileImage,
-  faDownload,
-  faTrashAlt,
-  faCheckCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 
 interface MenuFileUploadEditorProps {
   fileAttachment?: {
@@ -56,7 +48,9 @@ export const MenuFileUploadEditor: React.FC<MenuFileUploadEditorProps> = ({
           }}
           className="px-3 py-1.5 bg-white text-blue-700 hover:bg-blue-50 rounded-lg border border-blue-300 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition-colors flex-shrink-0"
         >
-          <FontAwesomeIcon icon={faDownload} className="text-[10px]" />
+          <svg className="w-3.5 h-3.5 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
           Tải mẫu thực đơn (.xlsx)
         </button>
       </div>
@@ -83,7 +77,7 @@ export const MenuFileUploadEditor: React.FC<MenuFileUploadEditorProps> = ({
             onClick={() => handleSimulateUpload('Thuc_don_tuan_dinh_kem.pdf', 'application/pdf')}
           >
             <div className="w-14 h-14 mx-auto rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3 text-2xl shadow-inner">
-              <FontAwesomeIcon icon={faCloudUploadAlt} />
+              <Icon name="arrow-up-from-bracket" className="w-7 h-7 text-blue-600" />
             </div>
             <h4 className="text-sm font-semibold text-gray-800">
               Kéo thả file thực đơn vào đây hoặc nhấp để tải lên
@@ -98,15 +92,13 @@ export const MenuFileUploadEditor: React.FC<MenuFileUploadEditorProps> = ({
         <div className="p-4 rounded-xl border border-gray-200 bg-gray-50/60 flex items-center justify-between">
           <div className="flex items-center gap-3.5">
             <div className="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center text-xl flex-shrink-0">
-              <FontAwesomeIcon
-                icon={fileAttachment.mimeType.includes('pdf') ? faFilePdf : faFileImage}
-              />
+              <Icon name="file" className="w-6 h-6 text-red-600" />
             </div>
             <div>
               <div className="font-semibold text-gray-900 text-sm flex items-center gap-2">
                 {fileAttachment.name}
                 <span className="text-emerald-600 text-xs" title="Đã tải lên thành công">
-                  <FontAwesomeIcon icon={faCheckCircle} />
+                  <Icon name="circle-check" className="w-3.5 h-3.5 text-emerald-600" />
                 </span>
               </div>
               <div className="text-xs text-gray-500 mt-0.5">
@@ -122,7 +114,9 @@ export const MenuFileUploadEditor: React.FC<MenuFileUploadEditorProps> = ({
               rel="noreferrer"
               className="px-3 py-1.5 text-xs font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg inline-flex items-center gap-1.5 transition-colors"
             >
-              <FontAwesomeIcon icon={faDownload} className="text-[10px]" />
+              <svg className="w-3.5 h-3.5 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
               Xem file
             </a>
             {!readOnly && (
@@ -132,7 +126,7 @@ export const MenuFileUploadEditor: React.FC<MenuFileUploadEditorProps> = ({
                 className="w-8 h-8 rounded-lg text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
                 title="Gỡ bỏ file này"
               >
-                <FontAwesomeIcon icon={faTrashAlt} className="text-xs" />
+                <Icon name="trash" className="w-3.5 h-3.5" />
               </button>
             )}
           </div>

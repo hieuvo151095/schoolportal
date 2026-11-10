@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faPaperclip, faTimes, faImage } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { useAppDispatch } from '@/store';
 import { addComment } from '@/store/slices/feedbackSlice';
 import { validateCommentSubmission } from '@/utils/feedbackValidation';
@@ -91,14 +90,14 @@ export default function DiscussionComposer({
               key={att.id}
               className="inline-flex items-center space-x-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded px-2 py-1 text-[11px]"
             >
-              <FontAwesomeIcon icon={faImage} />
+              <Icon name="images" className="w-3.5 h-3.5" />
               <span className="truncate max-w-[150px]">{att.fileName}</span>
               <button
                 type="button"
                 onClick={() => handleRemoveAttachment(att.id)}
-                className="text-blue-500 hover:text-blue-800 ml-1"
+                className="text-blue-500 hover:text-blue-800 ml-1 p-0.5"
               >
-                <FontAwesomeIcon icon={faTimes} />
+                <Icon name="xmark" className="w-3 h-3" />
               </button>
             </div>
           ))}
@@ -115,7 +114,7 @@ export default function DiscussionComposer({
           className="inline-flex items-center text-xs text-slate-500 hover:text-blue-600 font-medium px-2 py-1 rounded hover:bg-slate-50 transition-colors"
           title="Đính kèm ảnh minh chứng"
         >
-          <FontAwesomeIcon icon={faPaperclip} className="mr-1.5" />
+          <Icon name="paperclip" className="mr-1.5 w-3.5 h-3.5" />
           Đính kèm ảnh ({attachments.length})
         </button>
 
@@ -129,7 +128,7 @@ export default function DiscussionComposer({
               : 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer active:scale-95'
           }`}
         >
-          <FontAwesomeIcon icon={faPaperPlane} className="mr-1.5" />
+          <Icon name="paper-plane" className="mr-1.5 w-3.5 h-3.5" />
           Gửi phản hồi
         </button>
       </div>

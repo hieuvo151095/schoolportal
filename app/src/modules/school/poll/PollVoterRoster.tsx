@@ -1,13 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSearch,
-  faHistory,
-  faUserCheck,
-  faUserClock,
-  faUserTimes,
-  faFilter,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import { StudentVoterRecord } from '@/types/poll';
 import { normalizeVietnameseText } from '@/utils/pollValidation';
 
@@ -83,11 +75,11 @@ export const PollVoterRoster: React.FC<PollVoterRosterProps> = ({
         {/* Quick Tally Chips */}
         <div className="flex items-center space-x-2">
           <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center">
-            <FontAwesomeIcon icon={faUserCheck} className="mr-1 text-[10px]" />
+            <Icon name="check" className="mr-1 text-[10px]" />
             Đã bình chọn: {votedCount}
           </span>
           <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200 flex items-center">
-            <FontAwesomeIcon icon={faUserTimes} className="mr-1 text-[10px]" />
+            <Icon name="xmark" className="mr-1 text-[10px]" />
             Chưa bình chọn: {notVotedCount}
           </span>
         </div>
@@ -98,7 +90,7 @@ export const PollVoterRoster: React.FC<PollVoterRosterProps> = ({
         {/* Search Input */}
         <div className="relative flex-1 w-full">
           <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-            <FontAwesomeIcon icon={faSearch} />
+            <Icon name="magnifying-glass" className="w-4 h-4" />
           </span>
           <input
             type="text"
@@ -111,31 +103,33 @@ export const PollVoterRoster: React.FC<PollVoterRosterProps> = ({
 
         {/* Class Filter */}
         <div className="w-full sm:w-48">
-          <select
+          <Dropdown
             value={selectedClassId}
-            onChange={(e) => setSelectedClassId(e.target.value)}
-            className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs text-slate-700 bg-white outline-none cursor-pointer focus:border-[#0070CE]"
-          >
-            <option value="all">Tất cả lớp</option>
-            {classes.map((cls) => (
-              <option key={cls.id} value={cls.id}>
-                Lớp {cls.name}
-              </option>
-            ))}
-          </select>
+            onChange={(val) => setSelectedClassId(String(val))}
+            options={[
+              { value: 'all', label: 'Tất cả lớp' },
+              ...classes.map((cls) => ({ value: cls.id, label: `Lớp ${cls.name}` })),
+            ]}
+            placeholder="Tất cả lớp"
+            size="sm"
+            fullWidth
+          />
         </div>
 
         {/* Status Filter */}
         <div className="w-full sm:w-44">
-          <select
+          <Dropdown
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs text-slate-700 bg-white outline-none cursor-pointer focus:border-[#0070CE]"
-          >
-            <option value="all">Tất cả trạng thái</option>
-            <option value="voted">Đã bình chọn</option>
-            <option value="not_voted">Chưa bình chọn</option>
-          </select>
+            onChange={(val) => setStatusFilter(val as any)}
+            options={[
+              { value: 'all', label: 'Tất cả trạng thái' },
+              { value: 'voted', label: 'Đã bình chọn' },
+              { value: 'not_voted', label: 'Chưa bình chọn' },
+            ]}
+            placeholder="Tất cả trạng thái"
+            size="sm"
+            fullWidth
+          />
         </div>
       </div>
 
@@ -223,7 +217,7 @@ export const PollVoterRoster: React.FC<PollVoterRosterProps> = ({
                           className="w-7 h-7 rounded-lg text-slate-400 hover:text-[#0070CE] hover:bg-blue-50 flex items-center justify-center transition-colors mx-auto"
                           title="Lịch sử thay đổi lựa chọn"
                         >
-                          <FontAwesomeIcon icon={faHistory} className="text-xs" />
+                          <Icon name="clock" className="w-3.5 h-3.5" />
                         </button>
                       ) : (
                         <span className="text-slate-300">-</span>

@@ -1,21 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faEnvelope,
-  faPhone,
-  faIdCard,
-  faCalendarAlt,
-  faChalkboardTeacher,
-  faBookOpen,
-  faShieldAlt,
-  faGraduationCap,
-  faAward,
-  faCheckCircle,
-  faUserTie,
-  faEdit,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import type { Teacher } from '../../../types/teacher';
 import {
   formatTeacherStatus,
@@ -54,7 +39,7 @@ export const TeacherDetailView: React.FC<TeacherDetailViewProps> = ({
             href={`/${schoolCode}/school/teacher`}
             className="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-slate-800 hover:border-slate-300 transition-colors shadow-2xs"
           >
-            <FontAwesomeIcon icon={faArrowLeft} className="w-3.5 h-3.5" />
+            <Icon name="arrow-left" size={14} />
           </Link>
           <div>
             <div className="text-xs text-slate-400 font-medium flex items-center gap-1.5">
@@ -75,7 +60,7 @@ export const TeacherDetailView: React.FC<TeacherDetailViewProps> = ({
             onClick={onOpenAssignClass}
             className="inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors shadow-2xs"
           >
-            <FontAwesomeIcon icon={faChalkboardTeacher} className="text-xs text-[#0070CE]" />
+            <Icon name="chalkboard-user" size={14} className="text-[#0070CE]" />
             <span>Phân công lớp</span>
           </button>
           <button
@@ -83,7 +68,9 @@ export const TeacherDetailView: React.FC<TeacherDetailViewProps> = ({
             onClick={onOpenChangeEmail}
             className="inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors shadow-2xs"
           >
-            <FontAwesomeIcon icon={faEnvelope} className="text-xs text-[#0070CE]" />
+            <svg className="w-3.5 h-3.5 text-[#0070CE] fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
             <span>Đổi email</span>
           </button>
         </div>
@@ -127,18 +114,20 @@ export const TeacherDetailView: React.FC<TeacherDetailViewProps> = ({
                   {formatLegacyField(teacher.staffCode, 'Chưa có mã NV')}
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <FontAwesomeIcon icon={faEnvelope} className="text-slate-400" />
+                  <svg className="w-3.5 h-3.5 text-slate-400 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
                   <span>{teacher.email}</span>
                 </span>
                 {teacher.phone && (
                   <span className="flex items-center gap-1.5">
-                    <FontAwesomeIcon icon={faPhone} className="text-slate-400" />
+                    <Icon name="phone" size={12} className="text-slate-400" />
                     <span>{teacher.phone}</span>
                   </span>
                 )}
                 {teacher.csdlSoCode && (
                   <span className="flex items-center gap-1.5 text-emerald-600 font-medium">
-                    <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500" />
+                    <Icon name="circle-check" size={12} className="text-emerald-500" />
                     <span>CSDL Sở: {teacher.csdlSoCode}</span>
                   </span>
                 )}
@@ -170,7 +159,7 @@ export const TeacherDetailView: React.FC<TeacherDetailViewProps> = ({
         {/* Section 1: Phân công giảng dạy */}
         <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-6 space-y-4">
           <div className="flex items-center gap-2.5 text-slate-800 font-bold text-sm border-b border-slate-100 pb-3">
-            <FontAwesomeIcon icon={faChalkboardTeacher} className="text-[#0070CE]" />
+            <Icon name="chalkboard-user" size={16} className="text-[#0070CE]" />
             <span>Phân công giảng dạy & Lớp học</span>
           </div>
 
@@ -227,7 +216,7 @@ export const TeacherDetailView: React.FC<TeacherDetailViewProps> = ({
         {/* Section 2: Quyền hạn & Kiểm duyệt bài đăng (BR01) */}
         <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-6 space-y-4">
           <div className="flex items-center gap-2.5 text-slate-800 font-bold text-sm border-b border-slate-100 pb-3">
-            <FontAwesomeIcon icon={faShieldAlt} className="text-[#0070CE]" />
+            <Icon name="shield-halved" size={16} className="text-[#0070CE]" />
             <span>Phân quyền & Kiểm duyệt nội dung</span>
           </div>
 
@@ -265,7 +254,7 @@ export const TeacherDetailView: React.FC<TeacherDetailViewProps> = ({
         {/* Section 3: Thông tin cá nhân */}
         <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-6 space-y-4">
           <div className="flex items-center gap-2.5 text-slate-800 font-bold text-sm border-b border-slate-100 pb-3">
-            <FontAwesomeIcon icon={faIdCard} className="text-[#0070CE]" />
+            <Icon name="id-badge" size={16} className="text-[#0070CE]" />
             <span>Thông tin cá nhân</span>
           </div>
 
@@ -303,7 +292,7 @@ export const TeacherDetailView: React.FC<TeacherDetailViewProps> = ({
         {/* Section 4: Học vấn & Chứng chỉ */}
         <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-6 space-y-4">
           <div className="flex items-center gap-2.5 text-slate-800 font-bold text-sm border-b border-slate-100 pb-3">
-            <FontAwesomeIcon icon={faGraduationCap} className="text-[#0070CE]" />
+            <Icon name="graduation-cap" size={16} className="text-[#0070CE]" />
             <span>Học vấn & Bằng cấp chuyên môn</span>
           </div>
 
@@ -328,7 +317,9 @@ export const TeacherDetailView: React.FC<TeacherDetailViewProps> = ({
                 <ul className="space-y-1">
                   {teacher.certificates.map((cert, idx) => (
                     <li key={idx} className="flex items-center gap-2 text-slate-700">
-                      <FontAwesomeIcon icon={faAward} className="text-amber-500 text-xs" />
+                      <svg className="w-3.5 h-3.5 text-amber-500 fill-currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
                       <span>{cert}</span>
                     </li>
                   ))}

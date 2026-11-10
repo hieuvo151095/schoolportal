@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faTrashAlt,
-  faExclamationTriangle,
-  faShieldAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import type { ArchivedStudent } from '@/types/archive';
 
 interface PermanentDeleteModalProps {
@@ -244,17 +238,17 @@ export const PermanentDeleteModal: React.FC<PermanentDeleteModalProps> = ({
       <ModalCard onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
         <ModalHeader>
           <ModalTitle>
-            <FontAwesomeIcon icon={faExclamationTriangle} />
+            <Icon name="triangle-exclamation" size={18} />
             Cảnh Báo Xoá Vĩnh Viễn (Purge)
           </ModalTitle>
           <CloseButton type="button" onClick={onClose} aria-label="Đóng">
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" size={16} />
           </CloseButton>
         </ModalHeader>
 
         <ModalBody>
           <HazardIconWrapper>
-            <FontAwesomeIcon icon={faTrashAlt} />
+            <Icon name="trash" size={24} />
           </HazardIconWrapper>
 
           {/* BR06 Mandatory Prompt */}
@@ -264,9 +258,10 @@ export const PermanentDeleteModal: React.FC<PermanentDeleteModalProps> = ({
 
           {/* K065 Irreversible Purge Warning */}
           <IrreversibleWarningBox>
-            <FontAwesomeIcon
-              icon={faExclamationTriangle}
-              style={{ color: '#e11d48', marginTop: '2px', fontSize: '1rem' }}
+            <Icon
+              name="triangle-exclamation"
+              size={18}
+              className="text-rose-600 shrink-0 mt-0.5"
             />
             <div>
               <strong>Cảnh báo quan trọng:</strong> Hành động này sẽ xoá hoàn toàn hồ sơ lưu trữ của học sinh{' '}
@@ -296,7 +291,7 @@ export const PermanentDeleteModal: React.FC<PermanentDeleteModalProps> = ({
             disabled={!isAffirmed}
             onClick={() => onConfirmPurge(student.id)}
           >
-            <FontAwesomeIcon icon={faTrashAlt} />
+            <Icon name="trash" size={14} />
             <span>Xoá vĩnh viễn</span>
           </ConfirmPurgeButton>
         </ModalFooter>

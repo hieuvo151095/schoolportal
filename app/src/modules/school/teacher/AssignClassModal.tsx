@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faChalkboardTeacher,
-  faTimes,
-  faExclamationTriangle,
-  faCheckCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import type { Teacher, AssignedClassItem } from '../../../types/teacher';
 import { checkHomeroomConflict } from '../../../utils/teacherValidation';
 import { useAppDispatch, useAppSelector } from '../../../store';
@@ -90,6 +84,11 @@ export const AssignClassModal: React.FC<AssignClassModalProps> = ({
     onClose();
   };
 
+  const homeroomOptions = [
+    { value: '', label: '-- Không phân công chủ nhiệm --' },
+    ...AVAILABLE_CLASSES.map((c) => ({ value: c.id, label: c.name })),
+  ];
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
       <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-150">
@@ -97,7 +96,7 @@ export const AssignClassModal: React.FC<AssignClassModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#0070CE]">
-              <FontAwesomeIcon icon={faChalkboardTeacher} className="w-5 h-5" />
+              <Icon name="chalkboard-user" size={20} />
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-800">Phân công lớp học</h3>
@@ -110,7 +109,7 @@ export const AssignClassModal: React.FC<AssignClassModalProps> = ({
             aria-label="Đóng cửa sổ"
             className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} className="w-4 h-4" />
+            <Icon name="xmark" size={14} />
           </button>
         </div>
 
@@ -121,18 +120,12 @@ export const AssignClassModal: React.FC<AssignClassModalProps> = ({
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
               Lớp chủ nhiệm
             </label>
-            <select
+            <Dropdown
               value={selectedHomeroom}
-              onChange={(e) => setSelectedHomeroom(e.target.value)}
-              className="w-full px-3.5 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#0070CE] font-medium text-slate-800"
-            >
-              <option value="">-- Không phân công chủ nhiệm --</option>
-              {AVAILABLE_CLASSES.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
+              onChange={setSelectedHomeroom}
+              options={homeroomOptions}
+              fullWidth
+            />
             <p className="text-xs text-slate-400 mt-1">
               Giáo viên chủ nhiệm có toàn quyền quản lý điểm danh, hoạt động và trao đổi của lớp.
             </p>
@@ -141,9 +134,10 @@ export const AssignClassModal: React.FC<AssignClassModalProps> = ({
           {/* Resolution K006: Homeroom Conflict Warning Banner */}
           {conflict.hasConflict && (
             <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 flex items-start gap-3 text-xs">
-              <FontAwesomeIcon
-                icon={faExclamationTriangle}
-                className="w-4 h-4 text-amber-600 mt-0.5 shrink-0"
+              <Icon
+                name="triangle-exclamation"
+                size={16}
+                className="text-amber-600 mt-0.5 shrink-0"
               />
               <div>
                 <div className="font-bold text-amber-900">Cảnh báo trùng lặp chủ nhiệm</div>
@@ -198,7 +192,7 @@ export const AssignClassModal: React.FC<AssignClassModalProps> = ({
               type="submit"
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-lg transition-colors shadow-xs"
             >
-              <FontAwesomeIcon icon={faCheckCircle} className="text-xs" />
+              <Icon name="circle-check" size={14} />
               <span>Lưu phân công</span>
             </button>
           </div>

@@ -1,13 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faUser,
-  faSchool,
-  faComments,
-  faPaperclip,
-  faClock,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { FeedbackItem, FeedbackComment } from '@/types/feedback';
 
 interface DiscussionStreamProps {
@@ -30,7 +23,7 @@ export default function DiscussionStream({ item }: DiscussionStreamProps) {
       {/* Turn-Taking Status Banner (BR05) */}
       <div className="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs">
         <div className="flex items-center space-x-2">
-          <FontAwesomeIcon icon={faClock} className="text-slate-400" />
+          <Icon name="clock" className="w-3.5 h-3.5 text-slate-400" />
           <span className="text-slate-600">Trạng thái trao đổi:</span>
           {item.waitingFor === 'school' ? (
             <span className="font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">
@@ -52,7 +45,7 @@ export default function DiscussionStream({ item }: DiscussionStreamProps) {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">
-              <FontAwesomeIcon icon={faUser} />
+              <Icon name="user" className="w-3.5 h-3.5" />
             </span>
             <div>
               <p className="text-xs font-bold text-slate-800">
@@ -84,7 +77,7 @@ export default function DiscussionStream({ item }: DiscussionStreamProps) {
                 rel="noreferrer"
                 className="inline-flex items-center space-x-1.5 bg-white border border-slate-200 rounded px-2.5 py-1 text-xs text-blue-600 hover:text-blue-800 hover:border-blue-300 transition-colors shadow-sm"
               >
-                <FontAwesomeIcon icon={faPaperclip} />
+                <Icon name="paperclip" className="w-3.5 h-3.5" />
                 <span className="max-w-[200px] truncate">{att.fileName}</span>
               </a>
             ))}
@@ -116,7 +109,7 @@ export default function DiscussionStream({ item }: DiscussionStreamProps) {
                         : 'bg-slate-200 text-slate-600'
                     }`}
                   >
-                    <FontAwesomeIcon icon={isSchool ? faSchool : faUser} />
+                    <Icon name={isSchool ? "school" : "user"} className="w-3 h-3" />
                   </span>
                   <span className="font-semibold text-slate-800">
                     {comment.authorName}
@@ -148,7 +141,7 @@ export default function DiscussionStream({ item }: DiscussionStreamProps) {
                       rel="noreferrer"
                       className="inline-flex items-center space-x-1 text-[11px] text-blue-600 hover:underline bg-white px-2 py-0.5 rounded border border-slate-200"
                     >
-                      <FontAwesomeIcon icon={faPaperclip} />
+                      <Icon name="paperclip" className="w-3 h-3" />
                       <span className="truncate max-w-[150px]">{att.fileName}</span>
                     </a>
                   ))}

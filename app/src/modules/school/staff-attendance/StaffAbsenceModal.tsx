@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faExclamationTriangle,
-  faCheck,
-  faBan,
-  faUndo,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { StaffProfile, StaffAttendanceRecord, AbsenceType } from '../../../types/staffAttendance';
 
 interface StaffAbsenceModalProps {
@@ -87,7 +80,7 @@ export const StaffAbsenceModal: React.FC<StaffAbsenceModalProps> = ({
             className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
             aria-label="Đóng"
           >
-            <FontAwesomeIcon icon={faTimes} className="text-base" />
+            <Icon name="xmark" size={14} />
           </button>
         </div>
 
@@ -123,7 +116,7 @@ export const StaffAbsenceModal: React.FC<StaffAbsenceModalProps> = ({
             data-testid="warning-dd03"
             className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2.5 text-xs text-amber-800"
           >
-            <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-500 text-sm mt-0.5 shrink-0" />
+            <Icon name="triangle-exclamation" size={16} className="text-amber-500 mt-0.5 shrink-0" />
             <div>
               <p className="font-semibold">Cảnh báo ghi nhận thời gian:</p>
               {hasCheckIn && (
@@ -214,7 +207,7 @@ export const StaffAbsenceModal: React.FC<StaffAbsenceModalProps> = ({
                 onClick={handleClearAbsence}
                 className="px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-xl transition-colors inline-flex items-center gap-1.5"
               >
-                <FontAwesomeIcon icon={faUndo} />
+                <Icon name="rotate-right" size={12} />
                 Hủy báo vắng
               </button>
             )}
@@ -232,9 +225,9 @@ export const StaffAbsenceModal: React.FC<StaffAbsenceModalProps> = ({
               type="button"
               data-testid="absence-modal-submit"
               onClick={handleSave}
-              className="px-5 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition-colors inline-flex items-center gap-1.5"
+              className="px-5 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-xs transition-colors inline-flex items-center gap-1.5"
             >
-              <FontAwesomeIcon icon={faCheck} />
+              <Icon name="check" size={14} />
               Lưu
             </button>
           </div>

@@ -3,10 +3,10 @@
  * Design System: [DS] ECO ME DASHBOARD v1.1.0 (FilterBar, SearchField, SelectField, DS Tokens)
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { EducationStage, SubjectFilterState } from '@/types/subject';
 import { STAGE_CONFIGS, ACADEMIC_YEARS } from '@/services/mockSubjectData';
-import { FilterBar, Button, Icon } from '@/components/ds';
+import { FilterBar, Button, Icon, Dropdown, DropdownOption } from '@/components/ds';
 
 interface SubjectToolbarProps {
   activeStage: EducationStage;
@@ -65,7 +65,17 @@ export const SubjectToolbar: React.FC<SubjectToolbarProps> = ({
         }}
       >
         {/* 4 Segmented Stage Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', overflowX: 'auto' }}>
+        <div
+          className="no-scrollbar"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-2)',
+            overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'none',
+          }}
+        >
           {STAGE_CONFIGS.map((stage) => {
             const isActive = activeStage === stage.id;
             const count = stageCounts[stage.id] || 0;
@@ -89,6 +99,7 @@ export const SubjectToolbar: React.FC<SubjectToolbarProps> = ({
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
                   whiteSpace: 'nowrap',
+                  flexShrink: 0,
                 }}
               >
                 <Icon name="graduation-cap" size={13} />
@@ -111,31 +122,19 @@ export const SubjectToolbar: React.FC<SubjectToolbarProps> = ({
         </div>
 
         {/* Academic Year Selector */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', fontWeight: 'var(--font-medium)' }}>
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <span className="text-xs text-[var(--text-secondary)] font-medium whitespace-nowrap">
             Năm học:
           </span>
-          <select
-            value={selectedAcademicYear}
-            onChange={(e) => onSelectAcademicYear(e.target.value)}
-            style={{
-              padding: 'var(--space-1) var(--space-3)',
-              borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--border-neutral)',
-              background: 'var(--bg-surface)',
-              fontSize: 'var(--text-xs)',
-              fontWeight: 'var(--font-bold)',
-              color: 'var(--text-primary)',
-              cursor: 'pointer',
-              outline: 'none',
-            }}
-          >
-            {ACADEMIC_YEARS.map((year) => (
-              <option key={year} value={year}>
-                Năm học {year}
-              </option>
-            ))}
-          </select>
+          <div className="w-44">
+            <Dropdown
+              value={selectedAcademicYear}
+              onChange={(val) => onSelectAcademicYear(val)}
+              options={ACADEMIC_YEARS.map((y) => ({ value: y, label: `Năm học ${y}` }))}
+              size="sm"
+              fullWidth
+            />
+          </div>
         </div>
       </div>
 

@@ -1,9 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faExclamationCircle,
-  faTimes,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 
 interface UnsavedChangesModalProps {
   isOpen: boolean;
@@ -23,7 +19,7 @@ export const UnsavedChangesModal: React.FC<UnsavedChangesModalProps> = ({
       <div className="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-gray-100 p-6">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0">
-            <FontAwesomeIcon icon={faExclamationCircle} className="text-xl" />
+            <Icon name="circle-exclamation" className="w-6 h-6 text-amber-600" />
           </div>
           <div className="flex-1">
             <h3 className="text-base font-bold text-gray-900 mb-1">
@@ -39,7 +35,7 @@ export const UnsavedChangesModal: React.FC<UnsavedChangesModalProps> = ({
             onClick={onCancel}
             className="text-gray-400 hover:text-gray-600 p-1"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 

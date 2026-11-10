@@ -1,6 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationTriangle, faTrashAlt, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 
 interface HandbookDeleteModalProps {
   isOpen: boolean;
@@ -32,7 +31,7 @@ export const HandbookDeleteModal: React.FC<HandbookDeleteModalProps> = ({
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-red-50/50">
           <div className="flex items-center gap-2 text-red-700 font-bold">
-            <FontAwesomeIcon icon={faExclamationTriangle} className="text-red-500" />
+            <Icon name="triangle-exclamation" className="w-4 h-4 text-red-500" />
             <span>{isCategory ? 'Xác nhận xóa danh mục' : 'Xác nhận xóa bài viết'}</span>
           </div>
           <button
@@ -40,7 +39,7 @@ export const HandbookDeleteModal: React.FC<HandbookDeleteModalProps> = ({
             onClick={onClose}
             className="text-slate-400 hover:text-slate-600 transition-colors p-1"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -53,7 +52,7 @@ export const HandbookDeleteModal: React.FC<HandbookDeleteModalProps> = ({
                 Vui lòng xác nhận xóa danh mục <strong className="text-slate-900">&ldquo;{targetTitle}&rdquo;</strong>.
               </p>
               <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 leading-relaxed font-medium">
-                ⚠️ <strong>Lưu ý quan trọng:</strong> Tất cả danh mục con{' '}
+                <Icon name="triangle-exclamation" className="w-3.5 h-3.5 inline mr-1 text-red-600 align-text-bottom" /> <strong>Lưu ý quan trọng:</strong> Tất cả danh mục con{' '}
                 {cascadingInfo?.totalSubCategories ? `(${cascadingInfo.totalSubCategories})` : ''} và bài viết{' '}
                 {cascadingInfo?.totalArticles ? `(${cascadingInfo.totalArticles})` : ''} bên trong danh mục này sẽ bị xóa vĩnh viễn và không thể khôi phục!
               </div>
@@ -83,7 +82,7 @@ export const HandbookDeleteModal: React.FC<HandbookDeleteModalProps> = ({
             }}
             className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 active:bg-red-800 rounded-lg transition-colors shadow-xs"
           >
-            <FontAwesomeIcon icon={faTrashAlt} className="text-xs" />
+            <Icon name="trash" className="w-3.5 h-3.5" />
             <span>{isCategory ? 'Xác nhận xóa danh mục' : 'Xác nhận xóa bài viết'}</span>
           </button>
         </div>

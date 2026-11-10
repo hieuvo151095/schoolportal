@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPlus,
-  faTrash,
-  faPoll,
-  faArrowLeft,
-  faSave,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { CreatePollPayload, Poll } from '@/types/poll';
 import { validatePollPayload } from '@/utils/pollValidation';
 
@@ -116,7 +109,7 @@ export const PollComposer: React.FC<PollComposerProps> = ({
           href={`/${currentSchoolCode}/school/poll`}
           className="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
         >
-          <FontAwesomeIcon icon={faArrowLeft} className="mr-1.5" />
+          <Icon name="arrow-left" className="mr-1.5 w-3.5 h-3.5" />
           Quay lại danh sách
         </Link>
       </div>
@@ -126,7 +119,7 @@ export const PollComposer: React.FC<PollComposerProps> = ({
         {/* Card 1: Main Poll Information */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
           <h2 className="text-base font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center">
-            <FontAwesomeIcon icon={faPoll} className="mr-2 text-[#0070CE]" />
+            <Icon name="square-poll-vertical" className="mr-2 w-4 h-4 text-[#0070CE]" />
             Thông tin bình chọn
           </h2>
 
@@ -221,7 +214,7 @@ export const PollComposer: React.FC<PollComposerProps> = ({
               onClick={handleAddOption}
               className="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-50 text-[#0070CE] hover:bg-blue-100 text-xs font-bold transition-colors"
             >
-              <FontAwesomeIcon icon={faPlus} className="mr-1.5" />
+              <Icon name="plus" className="mr-1.5 w-3.5 h-3.5" />
               Thêm phương án
             </button>
           </div>
@@ -252,7 +245,7 @@ export const PollComposer: React.FC<PollComposerProps> = ({
                     className="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors"
                     title="Xóa lựa chọn này"
                   >
-                    <FontAwesomeIcon icon={faTrash} className="text-xs" />
+                    <Icon name="trash" className="w-3.5 h-3.5" />
                   </button>
                 )}
               </div>
@@ -315,13 +308,25 @@ export const PollComposer: React.FC<PollComposerProps> = ({
           >
             Hủy bỏ
           </Link>
-          <button
-            type="submit"
-            className="px-6 py-2.5 rounded-xl bg-[#0070CE] hover:bg-[#005bb5] text-white text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center"
-          >
-            <FontAwesomeIcon icon={faSave} className="mr-2" />
-            {isEditing ? 'Lưu thay đổi' : 'Tạo bình chọn'}
-          </button>
+          {(() => {
+            const isFormValid =
+              title.trim().length > 0 &&
+              options.filter((o) => o.trim().length > 0).length >= 2;
+            return (
+              <button
+                type="submit"
+                disabled={!isFormValid}
+                className={`px-6 py-2.5 rounded-xl text-white text-sm font-bold shadow-md transition-all flex items-center ${
+                  isFormValid
+                    ? 'bg-[#0070CE] hover:bg-[#005bb5] cursor-pointer'
+                    : 'bg-slate-300 cursor-not-allowed'
+                }`}
+              >
+                <Icon name="check" className="mr-2 w-3.5 h-3.5" />
+                {isEditing ? 'Lưu thay đổi' : 'Tạo bình chọn'}
+              </button>
+            );
+          })()}
         </div>
       </form>
     </div>

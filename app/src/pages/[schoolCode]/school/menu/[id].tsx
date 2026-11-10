@@ -2,21 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faPen,
-  faPaperPlane,
-  faCopy,
-  faDownload,
-  faClock,
-  faSchool,
-  faUserGraduate,
-  faCalendarWeek,
-  faThLarge,
-  faFileAlt,
-  faUtensils,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../../components/ds';
 import { PortalLayout } from '../../../../components/layout/PortalLayout';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { publishMenu, cloneMenu, updateMenu, updateMealSessionTickXanh } from '../../../../store/slices/menuSlice';
@@ -103,7 +89,7 @@ export default function MenuDetailPage() {
             href={`/${schoolCode}/school/menu`}
             className="text-xs text-gray-500 hover:text-gray-800 font-medium inline-flex items-center gap-1.5"
           >
-            <FontAwesomeIcon icon={faArrowLeft} />
+            <Icon name="arrow-left" className="w-3.5 h-3.5" />
             Quay lại danh sách
           </Link>
         </div>
@@ -129,9 +115,9 @@ export default function MenuDetailPage() {
 
             <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500">
               <span className="inline-flex items-center gap-1 font-medium text-gray-700">
-                <FontAwesomeIcon
-                  icon={menu.scope === 'all' ? faSchool : faUserGraduate}
-                  className="text-blue-600"
+                <Icon
+                  name={menu.scope === 'all' ? 'school' : 'user'}
+                  className="w-3.5 h-3.5 text-blue-600"
                 />
                 {menu.scope === 'all'
                   ? 'Thực đơn cho Toàn trường'
@@ -141,14 +127,14 @@ export default function MenuDetailPage() {
               <span>•</span>
 
               <span className="inline-flex items-center gap-1">
-                <FontAwesomeIcon icon={faCalendarWeek} className="text-gray-400" />
+                <Icon name="calendar-week" className="w-3.5 h-3.5 text-gray-400" />
                 Tuần {menu.weekNumber} ({formatMenuDateRange(menu.startDate, menu.endDate)})
               </span>
 
               <span>•</span>
 
               <span className="inline-flex items-center gap-1 font-medium">
-                <FontAwesomeIcon icon={isGrid ? faThLarge : faFileAlt} className="text-gray-400" />
+                <Icon name={isGrid ? 'table-cells' : 'file'} className="w-3.5 h-3.5 text-gray-400" />
                 {isGrid ? 'Dạng lưới món ăn' : 'Dạng file đính kèm'}
               </span>
 
@@ -160,7 +146,7 @@ export default function MenuDetailPage() {
                     onClick={() => setShowHistoryModal(true)}
                     className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-semibold"
                   >
-                    <FontAwesomeIcon icon={faClock} />
+                    <Icon name="clock-rotate-left" className="w-3.5 h-3.5" />
                     Lịch sử gửi ({menu.sendHistory?.length || 0})
                   </button>
                 </>
@@ -175,7 +161,9 @@ export default function MenuDetailPage() {
               onClick={handleDownload}
               className="px-3.5 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl inline-flex items-center gap-1.5 transition-colors shadow-2xs"
             >
-              <FontAwesomeIcon icon={faDownload} className="text-gray-500" />
+              <svg className="w-3.5 h-3.5 text-gray-500 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
               Tải xuống
             </button>
 
@@ -185,7 +173,7 @@ export default function MenuDetailPage() {
                 onClick={() => setShowCloneModal(true)}
                 className="px-3.5 py-2 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 rounded-xl inline-flex items-center gap-1.5 transition-colors"
               >
-                <FontAwesomeIcon icon={faCopy} />
+                <Icon name="copy" className="w-3.5 h-3.5" />
                 Sao chép
               </button>
             )}
@@ -194,7 +182,7 @@ export default function MenuDetailPage() {
               href={`/${schoolCode}/school/menu/edit/${menu.id}`}
               className="px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl inline-flex items-center gap-1.5 transition-colors"
             >
-              <FontAwesomeIcon icon={faPen} className="text-gray-500" />
+              <Icon name="pencil" className="w-3.5 h-3.5 text-gray-500" />
               Chỉnh sửa
             </Link>
 
@@ -203,7 +191,7 @@ export default function MenuDetailPage() {
               onClick={() => setShowPublishModal(true)}
               className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 inline-flex items-center gap-1.5 transition-all"
             >
-              <FontAwesomeIcon icon={faPaperPlane} className="text-xs" />
+              <Icon name="paper-plane" className="w-3.5 h-3.5" />
               {isPublished ? 'Gửi lại' : 'Xuất bản'}
             </button>
           </div>
@@ -213,7 +201,7 @@ export default function MenuDetailPage() {
         {isGrid ? (
           <div className="space-y-4">
             <div className="text-xs font-semibold text-gray-600 uppercase tracking-wider flex items-center gap-2">
-              <FontAwesomeIcon icon={faUtensils} className="text-blue-600" />
+              <Icon name="utensils" className="w-4 h-4 text-blue-600" />
               Lưới chi tiết món ăn và truy xuất nguồn gốc
             </div>
             <MenuGridEditor
@@ -239,7 +227,7 @@ export default function MenuDetailPage() {
         ) : (
           <div className="space-y-4">
             <div className="text-xs font-semibold text-gray-600 uppercase tracking-wider flex items-center gap-2">
-              <FontAwesomeIcon icon={faFileAlt} className="text-blue-600" />
+              <Icon name="file" className="w-4 h-4 text-blue-600" />
               Tệp thực đơn đính kèm
             </div>
             <MenuFileUploadEditor

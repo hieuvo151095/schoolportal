@@ -2,16 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faSchool,
-  faUsers,
-  faCheck,
-  faExclamationTriangle,
-  faPlus,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { addClass } from '../../../../store/slices/classSlice';
 import { addToast } from '../../../../store/slices/toastSlice';
@@ -40,7 +31,7 @@ export default function CreateClassPage() {
     name: '',
     code: '',
     taxonomy: 'chinh_khoa',
-    gradeLevelId: gradeLevels.length > 0 ? gradeLevels[0].id : '',
+    gradeLevelId: '',
     academicYear: '2025-2026',
     roomNumber: '',
     maxCapacity: 30,
@@ -134,8 +125,9 @@ export default function CreateClassPage() {
               <Link
                 href={`/${schoolCode}/school/classes`}
                 className="w-9 h-9 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors shadow-2xs"
+                aria-label="Quay lại danh sách lớp"
               >
-                <FontAwesomeIcon icon={faArrowLeft} />
+                <Icon name="arrow-left" size={14} />
               </Link>
               <div>
                 <h1 className="text-xl font-bold text-slate-800">Thêm lớp học mới</h1>
@@ -164,7 +156,7 @@ export default function CreateClassPage() {
                         : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                     }`}
                   >
-                    <FontAwesomeIcon icon={faSchool} className="text-base" />
+                    <Icon name="school" size={16} />
                     <span>Lớp chính khóa</span>
                   </button>
 
@@ -177,7 +169,7 @@ export default function CreateClassPage() {
                         : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                     }`}
                   >
-                    <FontAwesomeIcon icon={faUsers} className="text-base" />
+                    <Icon name="users" size={16} />
                     <span>Lớp ngoại khóa & CLB</span>
                   </button>
                 </div>
@@ -186,7 +178,7 @@ export default function CreateClassPage() {
               {/* Conflict Warning */}
               {conflictWarning && (
                 <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
-                  <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-600 text-sm mt-0.5 shrink-0" />
+                  <Icon name="triangle-exclamation" size={16} className="text-amber-600 mt-0.5 shrink-0" />
                   <div className="text-xs text-amber-800 leading-relaxed font-medium">
                     {conflictWarning}
                   </div>
@@ -241,20 +233,19 @@ export default function CreateClassPage() {
                     <label className="block text-xs font-semibold text-slate-700 mb-1">
                       Khối lớp <span className="text-rose-500">*</span>
                     </label>
-                    <select
+                    <Dropdown
                       value={formData.gradeLevelId}
-                      onChange={(e) => setFormData({ ...formData, gradeLevelId: e.target.value })}
-                      className={`w-full px-3 py-2 text-sm bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 focus:bg-white transition-all ${
-                        errors.gradeLevelId ? 'border-rose-400 focus:ring-rose-400' : 'border-slate-200 focus:ring-blue-500'
-                      }`}
-                    >
-                      <option value="">-- Chọn khối lớp --</option>
-                      {gradeLevels.map((grd) => (
-                        <option key={grd.id} value={grd.id}>
-                          {grd.name}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(val) => setFormData({ ...formData, gradeLevelId: val })}
+                      options={[
+                        { value: '', label: '-- Chọn khối lớp --' },
+                        ...gradeLevels.map((grd) => ({
+                          value: grd.id,
+                          label: grd.name,
+                        })),
+                      ]}
+                      placeholder="-- Chọn khối lớp --"
+                      fullWidth
+                    />
                     {errors.gradeLevelId && <p className="text-xs text-rose-500 mt-1">{errors.gradeLevelId}</p>}
                   </div>
 
@@ -262,18 +253,19 @@ export default function CreateClassPage() {
                     <label className="block text-xs font-semibold text-slate-700 mb-1">
                       Giáo viên chủ nhiệm (GVCN)
                     </label>
-                    <select
+                    <Dropdown
                       value={formData.homeroomTeacherId || ''}
-                      onChange={(e) => handleTeacherChange(e.target.value)}
-                      className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
-                    >
-                      <option value="">-- Chưa chỉ định GVCN --</option>
-                      {MOCK_AVAILABLE_TEACHERS.map((t) => (
-                        <option key={t.id} value={t.id}>
-                          {t.name} ({t.phone})
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(val) => handleTeacherChange(val)}
+                      options={[
+                        { value: '', label: '-- Chưa phân công GVCN --' },
+                        ...MOCK_AVAILABLE_TEACHERS.map((t) => ({
+                          value: t.id,
+                          label: `${t.name} (${t.phone})`,
+                        })),
+                      ]}
+                      placeholder="-- Chưa phân công GVCN --"
+                      fullWidth
+                    />
                   </div>
                 </div>
               )}
@@ -286,17 +278,16 @@ export default function CreateClassPage() {
                       <label className="block text-xs font-semibold text-slate-700 mb-1">
                         Lĩnh vực / Thể loại
                       </label>
-                      <select
+                      <Dropdown
                         value={formData.clubCategory}
-                        onChange={(e) => setFormData({ ...formData, clubCategory: e.target.value })}
-                        className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
-                      >
-                        {CLUB_CATEGORIES.map((cat) => (
-                          <option key={cat} value={cat}>
-                            {cat}
-                          </option>
-                        ))}
-                      </select>
+                        onChange={(val) => setFormData({ ...formData, clubCategory: val })}
+                        options={CLUB_CATEGORIES.map((cat) => ({
+                          value: cat,
+                          label: cat,
+                        }))}
+                        placeholder="-- Chọn lĩnh vực --"
+                        fullWidth
+                      />
                     </div>
 
                     <div>
@@ -323,7 +314,7 @@ export default function CreateClassPage() {
                         onClick={addInstructor}
                         className="text-xs text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1"
                       >
-                        <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
+                        <Icon name="plus" size={10} />
                         <span>Thêm giáo viên</span>
                       </button>
                     </div>
@@ -343,8 +334,9 @@ export default function CreateClassPage() {
                               type="button"
                               onClick={() => removeInstructor(index)}
                               className="text-slate-400 hover:text-rose-600 transition-colors p-1"
+                              aria-label="Xóa giáo viên"
                             >
-                              <FontAwesomeIcon icon={faTrash} className="text-xs" />
+                              <Icon name="trash" size={13} />
                             </button>
                           </div>
                         ))}
@@ -399,9 +391,20 @@ export default function CreateClassPage() {
                 </Link>
                 <button
                   type="submit"
-                  className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors"
+                  disabled={
+                    !formData.name.trim() ||
+                    !formData.code.trim() ||
+                    (formData.taxonomy === 'chinh_khoa' && !formData.gradeLevelId)
+                  }
+                  className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold shadow-sm transition-colors ${
+                    !formData.name.trim() ||
+                    !formData.code.trim() ||
+                    (formData.taxonomy === 'chinh_khoa' && !formData.gradeLevelId)
+                      ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                      : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white cursor-pointer'
+                  }`}
                 >
-                  <FontAwesomeIcon icon={faCheck} />
+                  <Icon name="check" size={14} />
                   <span>Lưu lớp học</span>
                 </button>
               </div>

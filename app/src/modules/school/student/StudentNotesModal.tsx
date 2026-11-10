@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faStickyNote, faSave } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { Student } from '../../../types/student';
 import { useAppDispatch } from '../../../store';
 import { updateStudentNotes } from '../../../store/slices/studentSlice';
@@ -54,7 +53,7 @@ export const StudentNotesModal: React.FC<StudentNotesModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-yellow-100 text-yellow-700 flex items-center justify-center font-semibold text-sm">
-              <FontAwesomeIcon icon={faStickyNote} />
+              <Icon name="clipboard-list" size={16} />
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-800">Ghi chú học sinh</h3>
@@ -62,10 +61,12 @@ export const StudentNotesModal: React.FC<StudentNotesModalProps> = ({
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            aria-label="Đóng"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" size={14} />
           </button>
         </div>
 
@@ -102,7 +103,7 @@ export const StudentNotesModal: React.FC<StudentNotesModalProps> = ({
             onClick={handleSave}
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-lg transition-colors shadow-xs"
           >
-            <FontAwesomeIcon icon={faSave} className="text-xs" />
+            <Icon name="circle-check" size={14} />
             <span>Lưu ghi chú</span>
           </button>
         </div>

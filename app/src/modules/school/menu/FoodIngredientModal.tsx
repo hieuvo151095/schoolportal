@@ -1,16 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faUtensils,
-  faPlus,
-  faTrashAlt,
-  faBarcode,
-  faCheckCircle,
-  faExclamationCircle,
-  faInfoCircle,
-  faBuilding,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '../../../components/ds';
 import { FoodIngredient, DishItem } from '../../../types/menu';
 import {
   lookupSupplierByGTIN,
@@ -104,7 +93,7 @@ export const FoodIngredientModal: React.FC<FoodIngredientModalProps> = ({
         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-emerald-50/70 to-teal-50/30">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-emerald-600/10 flex items-center justify-center text-emerald-600">
-              <FontAwesomeIcon icon={faUtensils} className="text-sm" />
+              <Icon name="utensils" className="w-4 h-4 text-emerald-600" />
             </div>
             <div>
               <h3 className="text-base font-semibold text-gray-900">
@@ -121,7 +110,7 @@ export const FoodIngredientModal: React.FC<FoodIngredientModalProps> = ({
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-white/60 transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -130,7 +119,7 @@ export const FoodIngredientModal: React.FC<FoodIngredientModalProps> = ({
           {/* Summary / Guideline banner */}
           <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-between text-xs">
             <div className="flex items-center gap-2 text-gray-700">
-              <FontAwesomeIcon icon={faInfoCircle} className="text-blue-500 text-sm" />
+              <Icon name="circle-info" className="w-4 h-4 text-blue-500 shrink-0" />
               <span>
                 Khai báo danh mục nguyên liệu cấu thành món ăn để minh bạch thông tin và truy xuất nguồn gốc.
               </span>
@@ -147,7 +136,7 @@ export const FoodIngredientModal: React.FC<FoodIngredientModalProps> = ({
           {ingredients.length === 0 ? (
             <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-2xl space-y-2">
               <div className="w-10 h-10 rounded-full bg-gray-100 text-gray-400 mx-auto flex items-center justify-center">
-                <FontAwesomeIcon icon={faUtensils} />
+                <Icon name="utensils" className="w-5 h-5 text-gray-400" />
               </div>
               <p className="text-xs text-gray-500">Chưa có nguyên liệu nào được khai báo cho món ăn này.</p>
               <button
@@ -155,7 +144,7 @@ export const FoodIngredientModal: React.FC<FoodIngredientModalProps> = ({
                 onClick={handleAddIngredient}
                 className="mt-2 px-3 py-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg inline-flex items-center gap-1.5 transition-colors border border-emerald-200"
               >
-                <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
+                <Icon name="plus" className="w-3.5 h-3.5" />
                 Thêm nguyên liệu đầu tiên
               </button>
             </div>
@@ -173,12 +162,12 @@ export const FoodIngredientModal: React.FC<FoodIngredientModalProps> = ({
                     <div className="flex items-center gap-2">
                       {ing.status === 'dat_chuan' ? (
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800">
-                          <FontAwesomeIcon icon={faCheckCircle} className="text-[9px]" />
+                          <Icon name="circle-check" className="w-3 h-3 text-emerald-800" />
                           Đạt chuẩn
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-800">
-                          <FontAwesomeIcon icon={faExclamationCircle} className="text-[9px]" />
+                          <Icon name="circle-exclamation" className="w-3 h-3 text-amber-800" />
                           Chưa đủ thông tin
                         </span>
                       )}
@@ -188,7 +177,7 @@ export const FoodIngredientModal: React.FC<FoodIngredientModalProps> = ({
                         className="text-gray-400 hover:text-red-600 p-1 rounded transition-colors"
                         title="Xóa nguyên liệu"
                       >
-                        <FontAwesomeIcon icon={faTrashAlt} className="text-xs" />
+                        <Icon name="trash" className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
@@ -211,28 +200,30 @@ export const FoodIngredientModal: React.FC<FoodIngredientModalProps> = ({
                       <label className="block text-[11px] font-semibold text-gray-700 mb-1">
                         Phương thức truy xuất
                       </label>
-                      <select
+                      <Dropdown
+                        size="sm"
                         value={ing.traceabilityMethod || 'gtin'}
-                        onChange={(e) =>
+                        onChange={(val) =>
                           handleIngredientChange(
                             ing.id,
                             'traceabilityMethod',
-                            e.target.value as 'gtin' | 'internal'
+                            val as 'gtin' | 'internal'
                           )
                         }
-                        className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-gray-200 focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-white"
-                      >
-                        <option value="gtin">Mã vạch quốc gia GTIN (GS1 Việt Nam)</option>
-                        <option value="internal">Mã tem nội bộ / Chứng chỉ cơ sở</option>
-                      </select>
+                        options={[
+                          { value: 'gtin', label: 'Mã vạch quốc gia GTIN (GS1 VN)' },
+                          { value: 'internal', label: 'Mã tem nội bộ / Chứng chỉ cơ sở' },
+                        ]}
+                        fullWidth
+                      />
                     </div>
                   </div>
 
                   {ing.traceabilityMethod === 'gtin' ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <div>
-                        <label className="block text-[11px] font-semibold text-gray-700 mb-1">
-                          <FontAwesomeIcon icon={faBarcode} className="mr-1 text-gray-400" />
+                        <label className="block text-[11px] font-semibold text-gray-700 mb-1 flex items-center gap-1">
+                          <Icon name="barcode" className="w-3.5 h-3.5 text-gray-400" />
                           Mã số GTIN (8-13 số)
                         </label>
                         <input
@@ -273,7 +264,7 @@ export const FoodIngredientModal: React.FC<FoodIngredientModalProps> = ({
 
                   {ing.supplierName && (
                     <div className="pt-1 text-[11px] text-gray-600 flex items-center gap-1.5">
-                      <FontAwesomeIcon icon={faBuilding} className="text-gray-400" />
+                      <Icon name="building" className="w-3.5 h-3.5 text-gray-400" />
                       <span>Nhà cung cấp: <strong className="text-gray-800">{ing.supplierName}</strong></span>
                       {ing.supplierVerified && (
                         <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
@@ -290,7 +281,7 @@ export const FoodIngredientModal: React.FC<FoodIngredientModalProps> = ({
                 onClick={handleAddIngredient}
                 className="w-full py-2 border border-dashed border-emerald-300 hover:border-emerald-500 text-emerald-700 hover:bg-emerald-50/50 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
               >
-                <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
+                <Icon name="plus" className="w-3.5 h-3.5" />
                 Thêm nguyên liệu khác
               </button>
             </div>

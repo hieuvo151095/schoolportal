@@ -1,15 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faUserGraduate,
-  faUser,
-  faPhone,
-  faEnvelope,
-  faGraduationCap,
-  faIdCard,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { closeProfileModal } from '@/store/slices/feedbackSlice';
 import { formatFallbackField } from '@/utils/feedbackValidation';
@@ -73,7 +64,7 @@ export default function ProfileQuickViewModal() {
                 isStudent ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'
               }`}
             >
-              <FontAwesomeIcon icon={isStudent ? faUserGraduate : faUser} />
+              <Icon name={isStudent ? "graduation-cap" : "user"} className="w-3.5 h-3.5" />
             </span>
             <h3 className="text-xs font-bold text-slate-800">
               {isStudent ? 'Thông tin học sinh' : 'Thông tin phụ huynh'}
@@ -82,9 +73,9 @@ export default function ProfileQuickViewModal() {
           <button
             type="button"
             onClick={handleClose}
-            className="text-slate-400 hover:text-slate-600 transition-colors"
+            className="text-slate-400 hover:text-slate-600 transition-colors p-1"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -99,7 +90,7 @@ export default function ProfileQuickViewModal() {
               />
             ) : (
               <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center text-lg font-bold">
-                <FontAwesomeIcon icon={isStudent ? faUserGraduate : faUser} />
+                <Icon name={isStudent ? "graduation-cap" : "user"} className="w-5 h-5" />
               </div>
             )}
             <div>
@@ -118,7 +109,7 @@ export default function ProfileQuickViewModal() {
               <>
                 <div className="flex items-center justify-between py-1.5 border-b border-slate-50">
                   <span className="text-slate-500 flex items-center">
-                    <FontAwesomeIcon icon={faIdCard} className="w-4 mr-2 text-slate-400" />
+                    <Icon name="id-badge" className="w-4 h-4 mr-2 text-slate-400" />
                     Mã học sinh:
                   </span>
                   <span className="font-medium text-slate-800">
@@ -127,7 +118,7 @@ export default function ProfileQuickViewModal() {
                 </div>
                 <div className="flex items-center justify-between py-1.5 border-b border-slate-50">
                   <span className="text-slate-500 flex items-center">
-                    <FontAwesomeIcon icon={faGraduationCap} className="w-4 mr-2 text-slate-400" />
+                    <Icon name="graduation-cap" className="w-4 h-4 mr-2 text-slate-400" />
                     Lớp hiện tại:
                   </span>
                   <span className="font-semibold text-blue-600">
@@ -139,7 +130,7 @@ export default function ProfileQuickViewModal() {
               <>
                 <div className="flex items-center justify-between py-1.5 border-b border-slate-50">
                   <span className="text-slate-500 flex items-center">
-                    <FontAwesomeIcon icon={faPhone} className="w-4 mr-2 text-slate-400" />
+                    <Icon name="phone" className="w-4 h-4 mr-2 text-slate-400" />
                     Số điện thoại:
                   </span>
                   <span className="font-medium text-slate-800">
@@ -148,7 +139,7 @@ export default function ProfileQuickViewModal() {
                 </div>
                 <div className="flex items-center justify-between py-1.5 border-b border-slate-50">
                   <span className="text-slate-500 flex items-center">
-                    <FontAwesomeIcon icon={faEnvelope} className="w-4 mr-2 text-slate-400" />
+                    <Icon name="envelope" className="w-4 h-4 mr-2 text-slate-400" />
                     Email liên hệ:
                   </span>
                   <span className="font-medium text-slate-800 truncate max-w-[220px]">
@@ -158,7 +149,7 @@ export default function ProfileQuickViewModal() {
                 {data.studentName && (
                   <div className="flex items-center justify-between py-1.5 border-b border-slate-50">
                     <span className="text-slate-500 flex items-center">
-                      <FontAwesomeIcon icon={faUserGraduate} className="w-4 mr-2 text-slate-400" />
+                      <Icon name="graduation-cap" className="w-4 h-4 mr-2 text-slate-400" />
                       Phụ huynh của:
                     </span>
                     <span className="font-semibold text-blue-600">

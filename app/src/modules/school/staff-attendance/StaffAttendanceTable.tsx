@@ -1,16 +1,5 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSort,
-  faSortUp,
-  faSortDown,
-  faCheck,
-  faClock,
-  faEdit,
-  faCalendarTimes,
-  faLock,
-  faExclamationCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import {
   StaffAttendanceRosterItem,
   StaffRole,
@@ -125,9 +114,10 @@ export const StaffAttendanceTable: React.FC<StaffAttendanceTableProps> = ({
                   aria-label="Sắp xếp theo tên nhân viên"
                 >
                   <span>Nhân viên</span>
-                  <FontAwesomeIcon
-                    icon={sortDirection === 'asc' ? faSortUp : faSortDown}
-                    className="text-[var(--eco-blue-strong)] text-xs transition-transform"
+                  <Icon
+                    name={sortDirection === 'asc' ? 'chevron-up' : 'chevron-down'}
+                    size={12}
+                    className="text-[var(--eco-blue-strong)] transition-transform"
                   />
                 </button>
               </th>
@@ -155,7 +145,7 @@ export const StaffAttendanceTable: React.FC<StaffAttendanceTableProps> = ({
               <tr>
                 <td colSpan={7} className="text-center py-12 px-4 text-gray-400">
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <FontAwesomeIcon icon={faCalendarTimes} className="text-3xl text-gray-300" />
+                    <Icon name="calendar-xmark" size={32} className="text-gray-300" />
                     <p className="text-sm font-medium">Không tìm thấy nhân viên nào phù hợp với bộ lọc.</p>
                   </div>
                 </td>
@@ -275,12 +265,13 @@ export const StaffAttendanceTable: React.FC<StaffAttendanceTableProps> = ({
                             }`}
                             title={isLocked ? 'Đã khóa chỉnh sửa' : 'Nhấp để sửa giờ check-in'}
                           >
-                            <FontAwesomeIcon icon={faClock} className="text-[10px] text-blue-500" />
+                            <Icon name="clock" size={12} className="text-blue-500" />
                             <span>{attendance.checkInTime}</span>
                             {!isLocked && (
-                              <FontAwesomeIcon
-                                icon={faEdit}
-                                className="text-[9px] text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                              <Icon
+                                name="pen"
+                                size={10}
+                                className="text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity"
                               />
                             )}
                           </button>
@@ -297,7 +288,7 @@ export const StaffAttendanceTable: React.FC<StaffAttendanceTableProps> = ({
                               : 'hover:bg-blue-700 active:scale-98'
                           }`}
                         >
-                          <FontAwesomeIcon icon={faCheck} className="text-[11px]" />
+                          <Icon name="check" size={12} />
                           <span>Check-In</span>
                         </button>
                       )}
@@ -335,12 +326,13 @@ export const StaffAttendanceTable: React.FC<StaffAttendanceTableProps> = ({
                             }`}
                             title={isLocked ? 'Đã khóa chỉnh sửa' : 'Nhấp để sửa giờ check-out'}
                           >
-                            <FontAwesomeIcon icon={faClock} className="text-[10px] text-amber-600" />
+                            <Icon name="clock" size={12} className="text-amber-600" />
                             <span>{attendance.checkOutTime}</span>
                             {!isLocked && (
-                              <FontAwesomeIcon
-                                icon={faEdit}
-                                className="text-[9px] text-amber-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                              <Icon
+                                name="pen"
+                                size={10}
+                                className="text-amber-500 opacity-0 group-hover:opacity-100 transition-opacity"
                               />
                             )}
                           </button>
@@ -357,7 +349,7 @@ export const StaffAttendanceTable: React.FC<StaffAttendanceTableProps> = ({
                               : 'hover:bg-amber-500 active:scale-98'
                           }`}
                         >
-                          <FontAwesomeIcon icon={faCheck} className="text-[11px]" />
+                          <Icon name="check" size={12} />
                           <span>Check-Out</span>
                         </button>
                       )}
@@ -430,9 +422,10 @@ export const StaffAttendanceTable: React.FC<StaffAttendanceTableProps> = ({
                             {attendance.generalNote || 'Chưa có ghi chú'}
                           </span>
                           {!isLocked && (
-                            <FontAwesomeIcon
-                              icon={faEdit}
-                              className="text-[10px] text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                            <Icon
+                              name="pen"
+                              size={10}
+                              className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
                             />
                           )}
                         </div>

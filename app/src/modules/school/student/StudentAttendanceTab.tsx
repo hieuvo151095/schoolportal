@@ -1,24 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCalendarCheck,
-  faCheckCircle,
-  faClock,
-  faUserCheck,
-  faThermometerHalf,
-  faHeartbeat,
-  faExclamationTriangle,
-  faTimesCircle,
-  faInfoCircle,
-  faChevronRight,
-  faBus,
-  faCar,
-  faFilter,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import type { Student } from '../../../types/student';
 import { useAppSelector } from '../../../store';
-import { Dropdown } from '@/components/ds';
 
 interface StudentAttendanceTabProps {
   student: Student;
@@ -225,7 +209,7 @@ export const StudentAttendanceTab: React.FC<StudentAttendanceTabProps> = ({
     if (log.status === 'absent_excused') {
       return (
         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-          <FontAwesomeIcon icon={faInfoCircle} className="text-2xs" />
+          <Icon name="circle-info" size={10} />
           Nghỉ có phép
         </span>
       );
@@ -233,7 +217,7 @@ export const StudentAttendanceTab: React.FC<StudentAttendanceTabProps> = ({
     if (log.status === 'absent_unexcused') {
       return (
         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
-          <FontAwesomeIcon icon={faTimesCircle} className="text-2xs" />
+          <Icon name="circle-xmark" size={10} />
           Nghỉ không phép
         </span>
       );
@@ -352,7 +336,7 @@ export const StudentAttendanceTab: React.FC<StudentAttendanceTabProps> = ({
                   <td className="py-3.5 px-4">
                     {log.checkInTime ? (
                       <div className="flex items-center gap-1.5">
-                        <FontAwesomeIcon icon={faClock} className="text-slate-400 text-2xs" />
+                        <Icon name="clock" size={12} className="text-slate-400" />
                         <span className="font-semibold text-slate-800">{log.checkInTime}</span>
                         {log.isLate && (
                           <span className="px-1.5 py-0.2 rounded text-3xs font-bold bg-amber-100 text-amber-800">
@@ -369,7 +353,7 @@ export const StudentAttendanceTab: React.FC<StudentAttendanceTabProps> = ({
                   <td className="py-3.5 px-4">
                     {log.checkOutTime ? (
                       <div className="flex items-center gap-1.5">
-                        <FontAwesomeIcon icon={faClock} className="text-slate-400 text-2xs" />
+                        <Icon name="clock" size={12} className="text-slate-400" />
                         <span className="font-semibold text-slate-800">{log.checkOutTime}</span>
                       </div>
                     ) : (
@@ -389,7 +373,9 @@ export const StudentAttendanceTab: React.FC<StudentAttendanceTabProps> = ({
                     {log.temperature ? (
                       <div className="flex items-center gap-2">
                         <span className="inline-flex items-center gap-1 font-semibold text-slate-800">
-                          <FontAwesomeIcon icon={faThermometerHalf} className="text-rose-500 text-2xs" />
+                          <svg className="w-3.5 h-3.5 text-rose-500 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 0a3 3 0 100 6 3 3 0 000-6zm-7 3a7 7 0 1114 0" />
+                          </svg>
                           {log.temperature}°C
                         </span>
                         <span className="text-2xs text-slate-500">• {log.healthNote}</span>
@@ -419,7 +405,7 @@ export const StudentAttendanceTab: React.FC<StudentAttendanceTabProps> = ({
         {/* Footer Insight */}
         <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
           <div className="flex items-center gap-2">
-            <FontAwesomeIcon icon={faInfoCircle} className="text-blue-500" />
+            <Icon name="circle-info" size={14} className="text-blue-500" />
             <span>
               Dữ liệu chuyên cần được tự động đồng bộ từ sổ điểm danh lớp học của giáo viên chủ nhiệm.
             </span>
@@ -430,7 +416,7 @@ export const StudentAttendanceTab: React.FC<StudentAttendanceTabProps> = ({
             className="text-[#0070CE] font-semibold hover:underline inline-flex items-center gap-1"
           >
             <span>Mở sổ điểm danh lớp</span>
-            <FontAwesomeIcon icon={faChevronRight} className="text-2xs" />
+            <Icon name="arrow-right" size={12} />
           </Link>
         </div>
       </div>

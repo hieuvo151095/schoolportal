@@ -1,11 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faFilter,
-  faUndo,
-  faCheck,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import { ClassFilterState } from '../../../types/class';
 
 interface ClassFilterDrawerProps {
@@ -33,15 +27,16 @@ export const ClassFilterDrawer: React.FC<ClassFilterDrawerProps> = ({
         {/* Header */}
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
           <div className="flex items-center gap-2">
-            <FontAwesomeIcon icon={faFilter} className="text-blue-600 text-sm" />
+            <Icon name="filter" size={14} className="text-blue-600" />
             <h3 className="font-bold text-slate-800 text-sm">Bộ lọc nâng cao</h3>
           </div>
           <button
             type="button"
             onClick={onClose}
             className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            aria-label="Đóng"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" size={14} />
           </button>
         </div>
 
@@ -52,20 +47,21 @@ export const ClassFilterDrawer: React.FC<ClassFilterDrawerProps> = ({
             <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
               Trạng thái hoạt động
             </label>
-            <select
+            <Dropdown
               value={filterCriteria.status || ''}
-              onChange={(e) =>
+              onChange={(val) =>
                 onUpdateFilter({
-                  status: e.target.value ? (e.target.value as ClassFilterState['status']) : undefined,
+                  status: val ? (val as ClassFilterState['status']) : undefined,
                 })
               }
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Tất cả trạng thái</option>
-              <option value="dang_hoat_dong">Đang hoạt động</option>
-              <option value="tam_dung">Tạm dừng</option>
-              <option value="da_ket_thuc">Đã kết thúc</option>
-            </select>
+              options={[
+                { value: '', label: 'Tất cả trạng thái' },
+                { value: 'dang_hoat_dong', label: 'Đang hoạt động' },
+                { value: 'tam_dung', label: 'Tạm dừng' },
+                { value: 'da_ket_thuc', label: 'Đã kết thúc' },
+              ]}
+              fullWidth
+            />
           </div>
 
           {/* Teacher Role Filter */}
@@ -105,22 +101,22 @@ export const ClassFilterDrawer: React.FC<ClassFilterDrawerProps> = ({
             <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
               Giáo viên cụ thể
             </label>
-            <select
+            <Dropdown
               value={filterCriteria.teacherId || ''}
-              onChange={(e) =>
+              onChange={(val) =>
                 onUpdateFilter({
-                  teacherId: e.target.value ? e.target.value : undefined,
+                  teacherId: val ? val : undefined,
                 })
               }
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Tất cả giáo viên</option>
-              {availableTeachers.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
+              options={[
+                { value: '', label: 'Tất cả giáo viên' },
+                ...availableTeachers.map((t) => ({
+                  value: t.id,
+                  label: t.name,
+                })),
+              ]}
+              fullWidth
+            />
           </div>
 
           {/* CSDL Sở Status Filter */}
@@ -128,21 +124,22 @@ export const ClassFilterDrawer: React.FC<ClassFilterDrawerProps> = ({
             <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
               Liên kết CSDL Sở GD&ĐT
             </label>
-            <select
+            <Dropdown
               value={filterCriteria.csdlStatus || ''}
-              onChange={(e) =>
+              onChange={(val) =>
                 onUpdateFilter({
-                  csdlStatus: e.target.value
-                    ? (e.target.value as ClassFilterState['csdlStatus'])
+                  csdlStatus: val
+                    ? (val as ClassFilterState['csdlStatus'])
                     : undefined,
                 })
               }
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Tất cả trạng thái liên kết</option>
-              <option value="da_lien_ket">Đã liên kết CSDL Sở</option>
-              <option value="chua_lien_ket">Chưa liên kết</option>
-            </select>
+              options={[
+                { value: '', label: 'Tất cả trạng thái liên kết' },
+                { value: 'da_lien_ket', label: 'Đã liên kết CSDL Sở' },
+                { value: 'chua_lien_ket', label: 'Chưa liên kết' },
+              ]}
+              fullWidth
+            />
           </div>
 
           {/* Capacity Range */}
@@ -190,7 +187,7 @@ export const ClassFilterDrawer: React.FC<ClassFilterDrawerProps> = ({
             onClick={onResetFilter}
             className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg hover:bg-white transition-colors"
           >
-            <FontAwesomeIcon icon={faUndo} />
+            <Icon name="rotate-right" size={12} />
             <span>Đặt lại</span>
           </button>
           <button
@@ -198,7 +195,7 @@ export const ClassFilterDrawer: React.FC<ClassFilterDrawerProps> = ({
             onClick={onClose}
             className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-sm transition-colors"
           >
-            <FontAwesomeIcon icon={faCheck} />
+            <Icon name="check" size={12} />
             <span>Áp dụng</span>
           </button>
         </div>

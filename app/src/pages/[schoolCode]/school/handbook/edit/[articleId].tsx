@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faSave,
-  faPaperPlane,
-  faLock,
-  faFileUpload,
-  faTrashAlt,
-  faExclamationCircle,
-  faFilePdf,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import PortalLayout from '../../../../../components/layout/PortalLayout';
 import { useAppSelector, useAppDispatch } from '../../../../../store';
 import { updateArticle } from '../../../../../store/slices/parentHandbookSlice';
@@ -120,7 +110,7 @@ export default function EditHandbookArticlePage() {
               onClick={() => router.push(`/${currentSchoolCode}/school/handbook`)}
               className="w-9 h-9 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-colors shadow-2xs"
             >
-              <FontAwesomeIcon icon={faArrowLeft} className="text-xs" />
+              <Icon name="arrow-left" className="w-3.5 h-3.5" />
             </button>
             <div>
               <h1 className="text-lg font-bold text-slate-800">Chỉnh sửa bài viết Sổ tay PH</h1>
@@ -129,30 +119,45 @@ export default function EditHandbookArticlePage() {
           </div>
 
           {/* Dual Save Buttons (BR08) */}
-          <div className="flex items-center gap-2.5">
-            <button
-              type="button"
-              onClick={() => handleSave('draft')}
-              className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg transition-colors shadow-2xs"
-            >
-              <FontAwesomeIcon icon={faSave} className="text-slate-400 text-xs" />
-              <span>Lưu nháp</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSave('published')}
-              className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-900 bg-[#FEC020] hover:bg-amber-400 active:bg-amber-500 rounded-lg transition-colors shadow-xs"
-            >
-              <FontAwesomeIcon icon={faPaperPlane} className="text-xs" />
-              <span>Lưu &amp; Xuất bản</span>
-            </button>
-          </div>
+          {(() => {
+            const isFormValid = !!selectedCategoryId && title.trim().length > 0 && content.trim().length > 0;
+            return (
+              <div className="flex items-center gap-2.5">
+                <button
+                  type="button"
+                  disabled={!isFormValid}
+                  onClick={() => handleSave('draft')}
+                  className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg transition-colors shadow-2xs ${
+                    isFormValid
+                      ? 'text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 cursor-pointer'
+                      : 'text-slate-400 bg-slate-100 border border-slate-200 cursor-not-allowed'
+                  }`}
+                >
+                  <Icon name="bookmark" className="w-3.5 h-3.5" />
+                  <span>Lưu nháp</span>
+                </button>
+                <button
+                  type="button"
+                  disabled={!isFormValid}
+                  onClick={() => handleSave('published')}
+                  className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg transition-colors shadow-xs ${
+                    isFormValid
+                      ? 'text-slate-900 bg-[#FEC020] hover:bg-amber-400 active:bg-amber-500 cursor-pointer'
+                      : 'text-slate-400 bg-slate-200 cursor-not-allowed'
+                  }`}
+                >
+                  <Icon name="paper-plane" className="w-3.5 h-3.5" />
+                  <span>Lưu &amp; Xuất bản</span>
+                </button>
+              </div>
+            );
+          })()}
         </div>
 
         {/* Error Alert */}
         {error && (
           <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 flex items-center gap-2">
-            <FontAwesomeIcon icon={faExclamationCircle} className="shrink-0" />
+            <Icon name="circle-info" className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}
@@ -166,7 +171,7 @@ export default function EditHandbookArticlePage() {
             </label>
             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <div className="flex items-center gap-2 px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-lg text-xs font-medium text-slate-700 select-none">
-                <FontAwesomeIcon icon={faLock} className="text-amber-500 text-xs" />
+                <Icon name="lock" className="w-3.5 h-3.5 text-amber-500" />
                 <span>
                   {parentCategory
                     ? `${parentCategory.name} > ${targetCategory?.name}`
@@ -174,25 +179,27 @@ export default function EditHandbookArticlePage() {
                 </span>
               </div>
 
-              <select
-                value={selectedCategoryId}
-                onChange={(e) => {
-                  setSelectedCategoryId(e.target.value);
-                  setError(null);
-                }}
-                className="px-3 py-2 text-xs text-slate-700 bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-amber-400"
-              >
-                {categories.map((c) => {
-                  const parent = c.parentCategoryId
-                    ? categories.find((p) => p.id === c.parentCategoryId)
-                    : null;
-                  return (
-                    <option key={c.id} value={c.id}>
-                      {parent ? `↳ ${c.name} (${parent.name})` : `📁 ${c.name}`}
-                    </option>
-                  );
-                })}
-              </select>
+              <div className="w-full sm:w-64">
+                <Dropdown
+                  value={selectedCategoryId}
+                  onChange={(val) => {
+                    setSelectedCategoryId(String(val));
+                    setError(null);
+                  }}
+                  options={categories.map((c) => {
+                    const parent = c.parentCategoryId
+                      ? categories.find((p) => p.id === c.parentCategoryId)
+                      : null;
+                    return {
+                      value: c.id,
+                      label: parent ? `${c.name} (${parent.name})` : c.name,
+                    };
+                  })}
+                  placeholder="Chọn danh mục"
+                  size="sm"
+                  fullWidth
+                />
+              </div>
             </div>
           </div>
 
@@ -249,7 +256,7 @@ export default function EditHandbookArticlePage() {
                 onClick={handleAddAttachment}
                 className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
               >
-                <FontAwesomeIcon icon={faFileUpload} />
+                <Icon name="upload" className="w-3.5 h-3.5" />
                 <span>Thêm tệp</span>
               </button>
             </div>
@@ -262,7 +269,7 @@ export default function EditHandbookArticlePage() {
                     className="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs"
                   >
                     <div className="flex items-center gap-2">
-                      <FontAwesomeIcon icon={faFilePdf} className="text-red-500" />
+                      <Icon name="file-lines" className="w-3.5 h-3.5 text-red-500" />
                       <span className="font-medium text-slate-800">{file.name}</span>
                       <span className="text-[10px] text-slate-400">({file.size})</span>
                     </div>
@@ -271,7 +278,7 @@ export default function EditHandbookArticlePage() {
                       onClick={() => handleRemoveAttachment(file.id)}
                       className="text-slate-400 hover:text-red-500 transition-colors p-1"
                     >
-                      <FontAwesomeIcon icon={faTrashAlt} />
+                      <Icon name="trash" className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ))}

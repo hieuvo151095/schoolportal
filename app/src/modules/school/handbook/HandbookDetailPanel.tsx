@@ -1,20 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBookOpen,
-  faEdit,
-  faEye,
-  faEyeSlash,
-  faTrashAlt,
-  faFileDownload,
-  faFilePdf,
-  faFileWord,
-  faFileAlt,
-  faUser,
-  faClock,
-  faCalendarCheck,
-  faFolderOpen,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import {
   HandbookArticle,
   HandbookCategory,
@@ -40,7 +25,7 @@ export const HandbookDetailPanel: React.FC<HandbookDetailPanelProps> = ({
     return (
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-12 text-center flex flex-col items-center justify-center min-h-[500px]">
         <div className="w-16 h-16 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 mb-4">
-          <FontAwesomeIcon icon={faBookOpen} className="text-2xl" />
+          <Icon name="book-open" className="w-8 h-8" />
         </div>
         <h3 className="text-base font-bold text-slate-800 mb-1">Chưa chọn bài viết</h3>
         <p className="text-xs text-slate-500 max-w-sm leading-relaxed">
@@ -57,13 +42,6 @@ export const HandbookDetailPanel: React.FC<HandbookDetailPanelProps> = ({
     : null;
 
   const isDraft = article.status === 'draft';
-
-  const getFileIcon = (fileName: string) => {
-    const ext = fileName.split('.').pop()?.toLowerCase();
-    if (ext === 'pdf') return faFilePdf;
-    if (ext === 'doc' || ext === 'docx') return faFileWord;
-    return faFileAlt;
-  };
 
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden flex flex-col">
@@ -106,7 +84,7 @@ export const HandbookDetailPanel: React.FC<HandbookDetailPanelProps> = ({
               {/* Category Tag */}
               {category && (
                 <span className="text-xs text-slate-500 flex items-center gap-1.5">
-                  <FontAwesomeIcon icon={faFolderOpen} className="text-slate-400 text-xs" />
+                  <Icon name="folder-open" className="text-slate-400 w-3.5 h-3.5" />
                   <span>{category.name}</span>
                 </span>
               )}
@@ -129,7 +107,7 @@ export const HandbookDetailPanel: React.FC<HandbookDetailPanelProps> = ({
                   : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
               }`}
             >
-              <FontAwesomeIcon icon={isDraft ? faEye : faEyeSlash} className="text-xs" />
+              <Icon name={isDraft ? "eye" : "eye-slash"} className="w-3.5 h-3.5" />
               <span>{isDraft ? 'Xuất bản' : 'Ẩn bài viết'}</span>
             </button>
 
@@ -139,7 +117,7 @@ export const HandbookDetailPanel: React.FC<HandbookDetailPanelProps> = ({
               onClick={() => onNavigateEditArticle(article.id)}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg transition-colors"
             >
-              <FontAwesomeIcon icon={faEdit} className="text-xs text-slate-500" />
+              <Icon name="pen" className="w-3.5 h-3.5 text-slate-500" />
               <span>Chỉnh sửa</span>
             </button>
 
@@ -150,7 +128,7 @@ export const HandbookDetailPanel: React.FC<HandbookDetailPanelProps> = ({
               className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-red-600 bg-white border border-red-200 hover:bg-red-50 rounded-lg transition-colors"
               title="Xóa bài viết"
             >
-              <FontAwesomeIcon icon={faTrashAlt} className="text-xs" />
+              <Icon name="trash" className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
@@ -158,18 +136,18 @@ export const HandbookDetailPanel: React.FC<HandbookDetailPanelProps> = ({
         {/* Metadata Footer */}
         <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 mt-4 pt-3 border-t border-slate-200/60">
           <div className="flex items-center gap-1.5">
-            <FontAwesomeIcon icon={faUser} className="text-slate-400" />
+            <Icon name="user" className="w-3.5 h-3.5 text-slate-400" />
             <span>Tác giả: <strong>{article.authorName}</strong></span>
           </div>
           <div className="flex items-center gap-1.5">
-            <FontAwesomeIcon icon={faClock} className="text-slate-400" />
+            <Icon name="clock" className="w-3.5 h-3.5 text-slate-400" />
             <span>
               Cập nhật: {new Date(article.updatedAt).toLocaleDateString('vi-VN')}
             </span>
           </div>
           {article.publishedAt && (
             <div className="flex items-center gap-1.5 text-emerald-600 font-medium">
-              <FontAwesomeIcon icon={faCalendarCheck} />
+              <Icon name="calendar-check" className="w-3.5 h-3.5" />
               <span>
                 Phát hành: {new Date(article.publishedAt).toLocaleDateString('vi-VN')}
               </span>
@@ -199,9 +177,9 @@ export const HandbookDetailPanel: React.FC<HandbookDetailPanelProps> = ({
                   className="flex items-center justify-between p-3 rounded-lg border border-slate-200 bg-slate-50/70 hover:bg-slate-100 transition-colors"
                 >
                   <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                    <FontAwesomeIcon
-                      icon={getFileIcon(file.name)}
-                      className="text-base text-red-500 shrink-0"
+                    <Icon
+                      name="file-lines"
+                      className="w-4 h-4 text-red-500 shrink-0"
                     />
                     <div className="min-w-0">
                       <p className="text-xs font-semibold text-slate-800 truncate">
@@ -216,7 +194,7 @@ export const HandbookDetailPanel: React.FC<HandbookDetailPanelProps> = ({
                     className="p-1.5 text-slate-400 hover:text-amber-600 transition-colors shrink-0"
                     title="Tải tệp tin"
                   >
-                    <FontAwesomeIcon icon={faFileDownload} className="text-sm" />
+                    <Icon name="download" className="w-4 h-4" />
                   </a>
                 </div>
               ))}

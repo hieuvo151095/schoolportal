@@ -2,17 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faCheckCircle,
-  faUserGraduate,
-  faUser,
-  faHistory,
-  faTag,
-  faCalendarAlt,
-  faExclamationCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   updatePriority,
@@ -69,17 +59,17 @@ export default function FeedbackDetailPane({ item }: FeedbackDetailPaneProps) {
     .filter((i) => i.parentId === item.parentId && i.id !== item.id)
     .slice(0, 4);
 
-  const handlePriorityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handlePriorityChange = (val: string | number) => {
     dispatch(
       updatePriority({
         feedbackId: item.id,
-        priority: e.target.value as FeedbackPriority,
+        priority: val as FeedbackPriority,
       })
     );
   };
 
-  const handleAssigneeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedId = e.target.value;
+  const handleAssigneeChange = (val: string | number) => {
+    const selectedId = String(val);
     if (!selectedId || selectedId === 'unassigned') {
       dispatch(
         updateAssignee({
@@ -123,7 +113,7 @@ export default function FeedbackDetailPane({ item }: FeedbackDetailPaneProps) {
             href={`/${schoolCode}/school/feedback`}
             className="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg shadow-sm transition-all"
           >
-            <FontAwesomeIcon icon={faArrowLeft} className="mr-1.5" />
+            <Icon name="arrow-left" className="mr-1.5 w-3.5 h-3.5" />
             Quay lại danh sách
           </Link>
           <div className="flex items-center space-x-2 text-xs text-slate-500">
@@ -179,7 +169,7 @@ export default function FeedbackDetailPane({ item }: FeedbackDetailPaneProps) {
           <SidebarCard>
             <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 pb-2 border-b border-slate-100 flex items-center justify-between">
               <span>Thông tin góp ý</span>
-              <FontAwesomeIcon icon={faTag} className="text-slate-400" />
+              <Icon name="bookmark" className="w-3.5 h-3.5 text-slate-400" />
             </h3>
 
             <div className="space-y-3 text-xs">
@@ -212,7 +202,7 @@ export default function FeedbackDetailPane({ item }: FeedbackDetailPaneProps) {
                   }
                   className="font-semibold text-blue-600 hover:underline flex items-center space-x-1"
                 >
-                  <FontAwesomeIcon icon={faUserGraduate} className="text-[10px]" />
+                  <Icon name="graduation-cap" className="w-3 h-3" />
                   <span>
                     {item.studentName} ({item.studentClass})
                   </span>
@@ -221,32 +211,35 @@ export default function FeedbackDetailPane({ item }: FeedbackDetailPaneProps) {
 
               <div>
                 <p className="text-[11px] text-slate-400 mb-1">Người xử lý</p>
-                <select
+                <Dropdown
                   value={item.assigneeId || 'unassigned'}
                   onChange={handleAssigneeChange}
-                  className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                >
-                  <option value="unassigned">-- Chưa phân công --</option>
-                  {MOCK_STAFF_LIST.map((staff) => (
-                    <option key={staff.id} value={staff.id}>
-                      {staff.name} ({staff.role})
-                    </option>
-                  ))}
-                </select>
+                  options={[
+                    { value: 'unassigned', label: '-- Chưa phân công --' },
+                    ...MOCK_STAFF_LIST.map((staff) => ({
+                      value: staff.id,
+                      label: `${staff.name} (${staff.role})`,
+                    })),
+                  ]}
+                  size="sm"
+                  fullWidth
+                />
               </div>
 
               <div>
                 <p className="text-[11px] text-slate-400 mb-1">Độ ưu tiên</p>
-                <select
+                <Dropdown
                   value={item.priority}
                   onChange={handlePriorityChange}
-                  className={`w-full text-xs font-semibold rounded-lg px-2.5 py-1.5 border cursor-pointer ${priorityMeta.badgeColor}`}
-                >
-                  <option value="low">Thấp</option>
-                  <option value="medium">Trung bình</option>
-                  <option value="high">Cao</option>
-                  <option value="urgent">Khẩn cấp</option>
-                </select>
+                  options={[
+                    { value: 'low', label: 'Thấp' },
+                    { value: 'medium', label: 'Trung bình' },
+                    { value: 'high', label: 'Cao' },
+                    { value: 'urgent', label: 'Khẩn cấp' },
+                  ]}
+                  size="sm"
+                  fullWidth
+                />
               </div>
 
               {/* Action Button: Đóng góp ý (BR07, GY-01) */}
@@ -257,7 +250,7 @@ export default function FeedbackDetailPane({ item }: FeedbackDetailPaneProps) {
                     onClick={() => dispatch(openClosureModal(item.id))}
                     className="w-full inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-all"
                   >
-                    <FontAwesomeIcon icon={faCheckCircle} className="mr-1.5" />
+                    <Icon name="circle-check" className="mr-1.5 w-3.5 h-3.5" />
                     Đóng góp ý (Hoàn tất)
                   </button>
                 ) : (
@@ -273,7 +266,7 @@ export default function FeedbackDetailPane({ item }: FeedbackDetailPaneProps) {
           <SidebarCard>
             <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 pb-2 border-b border-slate-100 flex items-center justify-between">
               <span>Thông tin người tạo</span>
-              <FontAwesomeIcon icon={faUser} className="text-slate-400" />
+              <Icon name="user" className="w-3.5 h-3.5 text-slate-400" />
             </h3>
 
             <div className="space-y-2.5 text-xs">
@@ -330,7 +323,7 @@ export default function FeedbackDetailPane({ item }: FeedbackDetailPaneProps) {
           <SidebarCard>
             <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 pb-2 border-b border-slate-100 flex items-center justify-between">
               <span>Góp ý gần đây</span>
-              <FontAwesomeIcon icon={faHistory} className="text-slate-400" />
+              <Icon name="clock" className="w-3.5 h-3.5 text-slate-400" />
             </h3>
 
             {recentTickets.length === 0 ? (

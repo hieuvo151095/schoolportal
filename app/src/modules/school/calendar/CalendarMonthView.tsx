@@ -1,9 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faClock,
-  faMapMarkerAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import {
   SchoolEvent,
   EVENT_CATEGORY_MAP,
@@ -129,7 +125,7 @@ export const CalendarMonthView: React.FC<CalendarMonthViewProps> = ({
                         </span>
                         {ev.hasSpecificTime && ev.startTime && (
                           <span className="text-[10px] opacity-80 flex-shrink-0 flex items-center gap-0.5">
-                            <FontAwesomeIcon icon={faClock} className="text-[8px]" />
+                            <Icon name="clock" className="w-2.5 h-2.5" />
                             {ev.startTime}
                           </span>
                         )}

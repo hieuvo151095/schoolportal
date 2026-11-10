@@ -1,22 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faLayerGroup,
-  faFolder,
-  faFolderOpen,
-  faBook,
-  faChevronRight,
-  faChevronDown,
-  faEllipsisV,
-  faPlus,
-  faEdit,
-  faTrashAlt,
-  faEye,
-  faEyeSlash,
-  faGripVertical,
-  faFolderPlus,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import {
   HandbookCategory,
   HandbookArticle,
@@ -80,7 +63,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
     return (
       <div className="bg-white rounded-xl border border-slate-200 p-8 text-center flex flex-col items-center justify-center min-h-[400px]">
         <div className="w-16 h-16 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-500 mb-4">
-          <FontAwesomeIcon icon={faBook} className="text-2xl" />
+          <Icon name="book-open" className="w-8 h-8" />
         </div>
         <h3 className="text-base font-bold text-slate-800 mb-1">Chưa có nội dung hiển thị</h3>
         <p className="text-xs text-slate-500 max-w-sm mb-6 leading-relaxed">
@@ -91,7 +74,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
           onClick={() => onOpenCreateCategoryModal()}
           className="flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-slate-900 bg-[#FEC020] hover:bg-amber-400 active:bg-amber-500 rounded-lg transition-colors shadow-xs"
         >
-          <FontAwesomeIcon icon={faPlus} className="text-xs" />
+          <Icon name="plus" className="w-3.5 h-3.5" />
           <span>Tạo danh mục mới</span>
         </button>
       </div>
@@ -120,15 +103,15 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                   aria-label="Thu gọn hoặc mở rộng danh mục"
                   className="w-5 h-5 flex items-center justify-center text-slate-400 hover:text-slate-600"
                 >
-                  <FontAwesomeIcon
-                    icon={isRootExpanded ? faChevronDown : faChevronRight}
-                    className="text-xs transition-transform"
+                  <Icon
+                    name={isRootExpanded ? "chevron-down" : "chevron-right"}
+                    className="w-3.5 h-3.5 transition-transform"
                   />
                 </button>
 
                 {/* Category Icon */}
                 <div className="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-                  <FontAwesomeIcon icon={faLayerGroup} className="text-xs" />
+                  <Icon name="layer-group" className="w-3.5 h-3.5" />
                 </div>
 
                 {/* Name & Note */}
@@ -158,7 +141,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                   aria-label="Thao tác danh mục"
                   className="w-7 h-7 rounded-lg hover:bg-slate-200/60 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors"
                 >
-                  <FontAwesomeIcon icon={faEllipsisV} className="text-xs" />
+                  <Icon name="ellipsis-vertical" className="w-3.5 h-3.5" />
                 </button>
 
                 {openMenuId === `menu-cat-${rootCategory.id}` && (
@@ -173,7 +156,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                         }}
                         className="w-full text-left px-3 py-2 hover:bg-amber-50 hover:text-amber-900 flex items-center gap-2 transition-colors font-medium"
                       >
-                        <FontAwesomeIcon icon={faFolderPlus} className="text-amber-500 text-xs" />
+                        <Icon name="folder" className="text-amber-500 w-3.5 h-3.5" />
                         <span>Thêm danh mục con</span>
                       </button>
                       <button
@@ -185,7 +168,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                         }}
                         className="w-full text-left px-3 py-2 hover:bg-amber-50 hover:text-amber-900 flex items-center gap-2 transition-colors font-medium"
                       >
-                        <FontAwesomeIcon icon={faPlus} className="text-emerald-500 text-xs" />
+                        <Icon name="plus" className="text-emerald-500 w-3.5 h-3.5" />
                         <span>Thêm bài viết</span>
                       </button>
                     </div>
@@ -199,7 +182,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                         }}
                         className="w-full text-left px-3 py-2 hover:bg-slate-50 flex items-center gap-2 transition-colors"
                       >
-                        <FontAwesomeIcon icon={faEdit} className="text-slate-400 text-xs" />
+                        <Icon name="pen" className="text-slate-400 w-3.5 h-3.5" />
                         <span>Chỉnh sửa danh mục</span>
                       </button>
                       <button
@@ -211,7 +194,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                         }}
                         className="w-full text-left px-3 py-2 hover:bg-red-50 text-red-600 flex items-center gap-2 transition-colors"
                       >
-                        <FontAwesomeIcon icon={faTrashAlt} className="text-red-500 text-xs" />
+                        <Icon name="trash" className="text-red-500 w-3.5 h-3.5" />
                         <span>Xóa danh mục</span>
                       </button>
                     </div>
@@ -226,7 +209,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                 {/* Expanded Callout Box Note (BR03) */}
                 {rootCategory.note && (
                   <div className="border border-dashed border-amber-300 bg-amber-50/70 p-2.5 rounded-lg text-xs text-slate-700 flex items-start gap-2 my-2">
-                    <FontAwesomeIcon icon={faInfoCircle} className="text-amber-500 text-xs mt-0.5 shrink-0" />
+                    <Icon name="circle-info" className="text-amber-500 w-3.5 h-3.5 mt-0.5 shrink-0" />
                     <span className="leading-relaxed">{rootCategory.note}</span>
                   </div>
                 )}
@@ -255,7 +238,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                             title="Kéo thả sắp xếp thứ tự"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <FontAwesomeIcon icon={faGripVertical} className="text-xs" />
+                            <Icon name="grip-vertical" className="w-3 h-3" />
                           </div>
 
                           {/* Expand/Collapse Chevron */}
@@ -264,16 +247,16 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                             aria-label="Thu gọn hoặc mở rộng danh mục con"
                             className="w-4 h-4 flex items-center justify-center text-slate-400"
                           >
-                            <FontAwesomeIcon
-                              icon={isSubExpanded ? faChevronDown : faChevronRight}
-                              className="text-[10px]"
+                            <Icon
+                              name={isSubExpanded ? "chevron-down" : "chevron-right"}
+                              className="w-3 h-3"
                             />
                           </button>
 
                           {/* Folder Icon */}
-                          <FontAwesomeIcon
-                            icon={isSubExpanded ? faFolderOpen : faFolder}
-                            className="text-amber-500 text-xs shrink-0"
+                          <Icon
+                            name={isSubExpanded ? "folder-open" : "folder"}
+                            className="text-amber-500 w-3.5 h-3.5 shrink-0"
                           />
 
                           {/* Sub-Category Name & Count */}
@@ -303,7 +286,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                             aria-label="Thao tác danh mục con"
                             className="w-6 h-6 rounded-md hover:bg-slate-200/60 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors"
                           >
-                            <FontAwesomeIcon icon={faEllipsisV} className="text-xs" />
+                            <Icon name="ellipsis-vertical" className="w-3.5 h-3.5" />
                           </button>
 
                           {openMenuId === `menu-sub-${subCategory.id}` && (
@@ -319,7 +302,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                                   }}
                                   className="w-full text-left px-3 py-1.5 hover:bg-amber-50 hover:text-amber-900 flex items-center gap-2 transition-colors font-medium"
                                 >
-                                  <FontAwesomeIcon icon={faPlus} className="text-emerald-500 text-xs" />
+                                  <Icon name="plus" className="text-emerald-500 w-3.5 h-3.5" />
                                   <span>Thêm bài viết</span>
                                 </button>
                               </div>
@@ -333,7 +316,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                                   }}
                                   className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2 transition-colors"
                                 >
-                                  <FontAwesomeIcon icon={faEdit} className="text-slate-400 text-xs" />
+                                  <Icon name="pen" className="text-slate-400 w-3.5 h-3.5" />
                                   <span>Chỉnh sửa</span>
                                 </button>
                                 <button
@@ -345,7 +328,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                                   }}
                                   className="w-full text-left px-3 py-1.5 hover:bg-red-50 text-red-600 flex items-center gap-2 transition-colors"
                                 >
-                                  <FontAwesomeIcon icon={faTrashAlt} className="text-red-500 text-xs" />
+                                  <Icon name="trash" className="text-red-500 w-3.5 h-3.5" />
                                   <span>Xóa danh mục</span>
                                 </button>
                               </div>
@@ -360,7 +343,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                           {/* Sub-category note callout when expanded (BR03) */}
                           {subCategory.note && (
                             <div className="border border-dashed border-slate-200 bg-white/80 p-2 rounded-lg text-xs text-slate-600 flex items-start gap-1.5 my-1.5">
-                              <FontAwesomeIcon icon={faInfoCircle} className="text-slate-400 text-[11px] mt-0.5 shrink-0" />
+                              <Icon name="circle-info" className="text-slate-400 w-3 h-3 mt-0.5 shrink-0" />
                               <span className="leading-relaxed text-[11px]">{subCategory.note}</span>
                             </div>
                           )}
@@ -391,13 +374,13 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                                       title="Kéo thả sắp xếp thứ tự"
                                       onClick={(e) => e.stopPropagation()}
                                     >
-                                      <FontAwesomeIcon icon={faGripVertical} className="text-xs" />
+                                      <Icon name="grip-vertical" className="w-3 h-3" />
                                     </div>
 
                                     {/* Article Icon */}
-                                    <FontAwesomeIcon
-                                      icon={faBook}
-                                      className={`text-xs shrink-0 ${
+                                    <Icon
+                                      name="book-open"
+                                      className={`w-3.5 h-3.5 shrink-0 ${
                                         isSelected ? 'text-amber-600' : 'text-slate-400'
                                       }`}
                                     />
@@ -431,7 +414,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                                       aria-label="Thao tác bài viết"
                                       className="w-6 h-6 rounded-md hover:bg-slate-200/60 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors"
                                     >
-                                      <FontAwesomeIcon icon={faEllipsisV} className="text-xs" />
+                                      <Icon name="ellipsis-vertical" className="w-3.5 h-3.5" />
                                     </button>
 
                                     {openMenuId === `menu-art-${article.id}` && (
@@ -446,7 +429,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                                             }}
                                             className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2 transition-colors"
                                           >
-                                            <FontAwesomeIcon icon={faEdit} className="text-slate-400 text-xs" />
+                                            <Icon name="pen" className="text-slate-400 w-3.5 h-3.5" />
                                             <span>Chỉnh sửa bài viết</span>
                                           </button>
                                           {/* 1-Click Status Toggling (BR05, BR12) */}
@@ -459,9 +442,9 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                                             }}
                                             className="w-full text-left px-3 py-1.5 hover:bg-amber-50 hover:text-amber-900 flex items-center gap-2 transition-colors font-medium"
                                           >
-                                            <FontAwesomeIcon
-                                              icon={isDraft ? faEye : faEyeSlash}
-                                              className={isDraft ? 'text-emerald-500 text-xs' : 'text-slate-400 text-xs'}
+                                            <Icon
+                                              name={isDraft ? "eye" : "eye-slash"}
+                                              className={isDraft ? 'text-emerald-500 w-3.5 h-3.5' : 'text-slate-400 w-3.5 h-3.5'}
                                             />
                                             <span>{isDraft ? 'Xuất bản bài viết' : 'Ẩn bài viết'}</span>
                                           </button>
@@ -476,7 +459,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                                             }}
                                             className="w-full text-left px-3 py-1.5 hover:bg-red-50 text-red-600 flex items-center gap-2 transition-colors"
                                           >
-                                            <FontAwesomeIcon icon={faTrashAlt} className="text-red-500 text-xs" />
+                                            <Icon name="trash" className="text-red-500 w-3.5 h-3.5" />
                                             <span>Xóa bài viết</span>
                                           </button>
                                         </div>
@@ -519,12 +502,12 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                               title="Kéo thả sắp xếp thứ tự"
                               onClick={(e) => e.stopPropagation()}
                             >
-                              <FontAwesomeIcon icon={faGripVertical} className="text-xs" />
+                              <Icon name="grip-vertical" className="w-3 h-3" />
                             </div>
 
-                            <FontAwesomeIcon
-                              icon={faBook}
-                              className={`text-xs shrink-0 ${
+                            <Icon
+                              name="book-open"
+                              className={`w-3.5 h-3.5 shrink-0 ${
                                 isSelected ? 'text-amber-600' : 'text-slate-400'
                               }`}
                             />
@@ -553,7 +536,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                               aria-label="Thao tác bài viết trực tiếp"
                               className="w-6 h-6 rounded-md hover:bg-slate-200/60 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors"
                             >
-                              <FontAwesomeIcon icon={faEllipsisV} className="text-xs" />
+                              <Icon name="ellipsis-vertical" className="w-3.5 h-3.5" />
                             </button>
 
                             {openMenuId === `menu-art-root-${article.id}` && (
@@ -568,7 +551,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                                     }}
                                     className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2 transition-colors"
                                   >
-                                    <FontAwesomeIcon icon={faEdit} className="text-slate-400 text-xs" />
+                                    <Icon name="pen" className="text-slate-400 w-3.5 h-3.5" />
                                     <span>Chỉnh sửa bài viết</span>
                                   </button>
                                   <button
@@ -580,9 +563,9 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                                     }}
                                     className="w-full text-left px-3 py-1.5 hover:bg-amber-50 hover:text-amber-900 flex items-center gap-2 transition-colors font-medium"
                                   >
-                                    <FontAwesomeIcon
-                                      icon={isDraft ? faEye : faEyeSlash}
-                                      className={isDraft ? 'text-emerald-500 text-xs' : 'text-slate-400 text-xs'}
+                                    <Icon
+                                      name={isDraft ? "eye" : "eye-slash"}
+                                      className={isDraft ? 'text-emerald-500 w-3.5 h-3.5' : 'text-slate-400 w-3.5 h-3.5'}
                                     />
                                     <span>{isDraft ? 'Xuất bản bài viết' : 'Ẩn bài viết'}</span>
                                   </button>
@@ -597,7 +580,7 @@ export const HandbookAccordionTree: React.FC<HandbookAccordionTreeProps> = ({
                                     }}
                                     className="w-full text-left px-3 py-1.5 hover:bg-red-50 text-red-600 flex items-center gap-2 transition-colors"
                                   >
-                                    <FontAwesomeIcon icon={faTrashAlt} className="text-red-500 text-xs" />
+                                    <Icon name="trash" className="text-red-500 w-3.5 h-3.5" />
                                     <span>Xóa bài viết</span>
                                   </button>
                                 </div>

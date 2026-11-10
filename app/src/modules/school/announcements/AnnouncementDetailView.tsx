@@ -1,22 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faEdit,
-  faTrash,
-  faThumbtack,
-  faPaperclip,
-  faDownload,
-  faGlobe,
-  faEnvelope,
-  faCommentDots,
-  faMobileAlt,
-  faUsers,
-  faCheckCircle,
-  faEye
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import { Announcement, AnnouncementChannel } from '../../../types/announcement';
 import {
   getCategoryLabel,
@@ -68,7 +53,7 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
             key="portal"
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200"
           >
-            <FontAwesomeIcon icon={faGlobe} />
+            <Icon name="globe" className="w-3.5 h-3.5" />
             <span>Bảng tin Portal</span>
           </span>
         );
@@ -78,7 +63,7 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
             key="email"
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"
           >
-            <FontAwesomeIcon icon={faEnvelope} />
+            <Icon name="envelope" className="w-3.5 h-3.5" />
             <span>Email</span>
           </span>
         );
@@ -88,7 +73,7 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
             key="sms"
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200"
           >
-            <FontAwesomeIcon icon={faCommentDots} />
+            <Icon name="comment-dots" className="w-3.5 h-3.5" />
             <span>SMS Brandname</span>
           </span>
         );
@@ -98,7 +83,7 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
             key="push"
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200"
           >
-            <FontAwesomeIcon icon={faMobileAlt} />
+            <Icon name="mobile-screen" className="w-3.5 h-3.5" />
             <span>Mobile Push</span>
           </span>
         );
@@ -115,7 +100,7 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
           href={`/${schoolCode}/school/announcements`}
           className="text-sm font-semibold text-slate-600 hover:text-blue-600 flex items-center gap-2 transition-colors"
         >
-          <FontAwesomeIcon icon={faArrowLeft} />
+          <Icon name="arrow-left" className="w-4 h-4" />
           <span>Quay lại Bảng thông tin</span>
         </Link>
 
@@ -130,7 +115,9 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
                 : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'
             }`}
           >
-            <FontAwesomeIcon icon={faThumbtack} />
+            <svg className="w-3.5 h-3.5 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+            </svg>
             <span>{announcement.isPinned ? 'Đã ghim' : 'Ghim thông báo'}</span>
           </button>
 
@@ -140,7 +127,7 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
               href={`/${schoolCode}/school/announcements/edit/${announcement.id}`}
               className="px-3 py-1.5 text-xs font-semibold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 rounded-lg flex items-center gap-1.5 transition-colors"
             >
-              <FontAwesomeIcon icon={faEdit} />
+              <Icon name="pencil" className="w-3.5 h-3.5" />
               <span>Chỉnh sửa nháp</span>
             </Link>
           )}
@@ -151,7 +138,7 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
             onClick={() => setShowDeleteModal(true)}
             className="px-3 py-1.5 text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100 rounded-lg flex items-center gap-1.5 transition-colors"
           >
-            <FontAwesomeIcon icon={faTrash} />
+            <Icon name="trash" className="w-3.5 h-3.5" />
             <span>Xóa thông báo</span>
           </button>
         </div>
@@ -188,7 +175,9 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
 
           {announcement.isPinned && (
             <span className="text-xs bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded font-semibold flex items-center gap-1">
-              <FontAwesomeIcon icon={faThumbtack} />
+              <svg className="w-3 h-3 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              </svg>
               <span>Ghim đầu trang</span>
             </span>
           )}
@@ -263,7 +252,7 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
               Phạm vi đối tượng
             </div>
             <div className="flex items-center gap-2 text-slate-700 font-medium">
-              <FontAwesomeIcon icon={faUsers} className="text-slate-400" />
+              <Icon name="users" className="w-4 h-4 text-slate-400" />
               <span>{getAudienceScopeLabel(announcement.audienceScope)}</span>
               <span className="text-slate-400">
                 (~{announcement.recipientCount.toLocaleString('vi-VN')} người nhận)
@@ -281,7 +270,7 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
         {announcement.attachments.length > 0 && (
           <div className="pt-4 border-t border-slate-100">
             <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2">
-              <FontAwesomeIcon icon={faPaperclip} className="text-blue-600" />
+              <Icon name="paperclip" className="w-4 h-4 text-blue-600" />
               <span>Tệp đính kèm ({announcement.attachments.length})</span>
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -309,7 +298,9 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
                     className="p-2 text-slate-500 hover:text-blue-600 hover:bg-slate-200 rounded transition-colors"
                     title="Tải tệp tin về máy"
                   >
-                    <FontAwesomeIcon icon={faDownload} />
+                    <svg className="w-4 h-4 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
                   </a>
                 </div>
               ))}
@@ -322,7 +313,7 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
       {announcement.status === 'da_gui' && (
         <DetailCard>
           <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
-            <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600" />
+            <Icon name="circle-check" className="w-4 h-4 text-emerald-600" />
             <span>Thống kê tiếp cận & Đọc thông báo</span>
           </h3>
 

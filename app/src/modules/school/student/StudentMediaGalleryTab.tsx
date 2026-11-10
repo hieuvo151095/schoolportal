@@ -1,23 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faImages,
-  faWandMagicSparkles,
-  faDownload,
-  faExpand,
-  faTimes,
-  faCheckCircle,
-  faCalendarAlt,
-  faFolderOpen,
-  faFilter,
-  faSyncAlt,
-  faSearch,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import type { Student } from '../../../types/student';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { addToast } from '../../../store/slices/toastSlice';
-import { Dropdown } from '@/components/ds';
 
 interface StudentMediaGalleryTabProps {
   student: Student;
@@ -207,8 +193,8 @@ export const StudentMediaGalleryTab: React.FC<StudentMediaGalleryTabProps> = ({
       <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-500 to-indigo-600 text-white flex items-center justify-center text-xl shadow-sm shrink-0">
-              <FontAwesomeIcon icon={faImages} />
+            <div className="w-12 h-12 rounded-2xl bg-linear-to-tr from-purple-500 to-indigo-600 text-white flex items-center justify-center text-xl shadow-xs shrink-0">
+              <Icon name="images" size={24} />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -231,16 +217,13 @@ export const StudentMediaGalleryTab: React.FC<StudentMediaGalleryTabProps> = ({
               type="button"
               disabled={isScanning}
               onClick={handleTriggerAIScan}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-white transition-all shadow-sm ${
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-white transition-all shadow-xs ${
                 isScanning
                   ? 'bg-purple-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-purple-200 active:scale-95'
+                  : 'bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-purple-200 active:scale-95'
               }`}
             >
-              <FontAwesomeIcon
-                icon={isScanning ? faSyncAlt : faWandMagicSparkles}
-                className={isScanning ? 'animate-spin' : ''}
-              />
+              <Icon name="rotate-right" size={14} className={isScanning ? 'animate-spin' : ''} />
               <span>{isScanning ? 'Đang quét ảnh AI...' : 'Quét nhận diện ảnh mới'}</span>
             </button>
 
@@ -248,7 +231,7 @@ export const StudentMediaGalleryTab: React.FC<StudentMediaGalleryTabProps> = ({
               href={`/${schoolCode}/class/${student.classId || 'class-11a1'}/media`}
               className="inline-flex items-center gap-2 px-3.5 py-2.5 text-xs font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 transition-colors"
             >
-              <FontAwesomeIcon icon={faFolderOpen} className="text-slate-400" />
+              <Icon name="folder" size={14} className="text-slate-400" />
               <span>Thư viện ảnh lớp</span>
             </Link>
           </div>
@@ -317,7 +300,7 @@ export const StudentMediaGalleryTab: React.FC<StudentMediaGalleryTabProps> = ({
       {filteredPhotos.length === 0 ? (
         <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-12 text-center space-y-3">
           <div className="w-16 h-16 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center mx-auto text-2xl">
-            <FontAwesomeIcon icon={faImages} />
+            <Icon name="images" size={32} />
           </div>
           <h4 className="text-base font-bold text-slate-800">Không tìm thấy ảnh phù hợp</h4>
           <p className="text-xs text-slate-500 max-w-sm mx-auto">
@@ -342,7 +325,9 @@ export const StudentMediaGalleryTab: React.FC<StudentMediaGalleryTabProps> = ({
 
                 {/* AI Tag Badge */}
                 <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-semibold bg-purple-900/80 text-white backdrop-blur-xs shadow-xs">
-                  <FontAwesomeIcon icon={faWandMagicSparkles} className="text-amber-300 text-2xs" />
+                  <svg className="w-3 h-3 text-amber-300 fill-currentColor" viewBox="0 0 20 20">
+                    <path d="M10 2l1.5 4.5L16 8l-4.5 1.5L10 14l-1.5-4.5L4 8l4.5-1.5L10 2z" />
+                  </svg>
                   <span>AI: {photo.confidence}%</span>
                 </div>
 
@@ -362,7 +347,9 @@ export const StudentMediaGalleryTab: React.FC<StudentMediaGalleryTabProps> = ({
                     className="w-9 h-9 rounded-full bg-white/90 text-slate-800 hover:bg-white flex items-center justify-center text-sm shadow-md transition-transform hover:scale-110"
                     title="Phóng to"
                   >
-                    <FontAwesomeIcon icon={faExpand} />
+                    <svg className="w-4 h-4 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                    </svg>
                   </button>
                   <a
                     href={photo.url}
@@ -373,7 +360,9 @@ export const StudentMediaGalleryTab: React.FC<StudentMediaGalleryTabProps> = ({
                     className="w-9 h-9 rounded-full bg-white/90 text-slate-800 hover:bg-white flex items-center justify-center text-sm shadow-md transition-transform hover:scale-110"
                     title="Tải ảnh về"
                   >
-                    <FontAwesomeIcon icon={faDownload} />
+                    <svg className="w-4 h-4 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
                   </a>
                 </div>
               </div>
@@ -382,7 +371,7 @@ export const StudentMediaGalleryTab: React.FC<StudentMediaGalleryTabProps> = ({
               <div className="p-4 flex-1 flex flex-col justify-between space-y-2.5">
                 <div>
                   <div className="flex items-center gap-1.5 text-2xs font-semibold text-purple-700 mb-1">
-                    <FontAwesomeIcon icon={faFolderOpen} className="text-2xs" />
+                    <Icon name="folder" size={12} />
                     <span className="truncate">{photo.albumTitle}</span>
                   </div>
                   <p className="text-xs text-slate-700 font-medium line-clamp-2">
@@ -430,9 +419,10 @@ export const StudentMediaGalleryTab: React.FC<StudentMediaGalleryTabProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveLightboxPhoto(null)}
-                className="p-1.5 text-slate-400 hover:text-white rounded-lg transition-colors"
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+                aria-label="Đóng"
               >
-                <FontAwesomeIcon icon={faTimes} className="text-base" />
+                <Icon name="xmark" size={16} />
               </button>
             </div>
 
@@ -478,9 +468,11 @@ export const StudentMediaGalleryTab: React.FC<StudentMediaGalleryTabProps> = ({
                   download={`photo-${student.id}.jpg`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-xl transition-colors shadow-sm"
+                  className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-xl transition-colors shadow-xs"
                 >
-                  <FontAwesomeIcon icon={faDownload} />
+                  <svg className="w-3.5 h-3.5 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
                   <span>Tải ảnh gốc</span>
                 </a>
               </div>

@@ -1,6 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faPaperPlane, faBullhorn, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import { WeeklyMenu } from '../../../types/menu';
 
 interface PublishMenuModalProps {
@@ -25,7 +24,7 @@ export const PublishMenuModal: React.FC<PublishMenuModalProps> = ({
         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50/30">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-blue-600/10 flex items-center justify-center text-blue-600">
-              <FontAwesomeIcon icon={faPaperPlane} className="text-sm" />
+              <Icon name="paper-plane" className="w-4 h-4 text-blue-600" />
             </div>
             <h3 className="text-base font-semibold text-gray-900">Gửi / Xuất bản thực đơn</h3>
           </div>
@@ -33,7 +32,7 @@ export const PublishMenuModal: React.FC<PublishMenuModalProps> = ({
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-white/60 transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -52,7 +51,7 @@ export const PublishMenuModal: React.FC<PublishMenuModalProps> = ({
               className="w-full text-left p-4 rounded-xl border border-blue-200 bg-blue-50/50 hover:bg-blue-50 hover:border-blue-400 transition-all group flex items-start gap-3.5"
             >
               <div className="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform shadow-sm">
-                <FontAwesomeIcon icon={faBullhorn} className="text-sm" />
+                <Icon name="bullhorn" className="w-4 h-4" />
               </div>
               <div>
                 <div className="font-semibold text-blue-900 text-sm flex items-center gap-2">
@@ -74,7 +73,7 @@ export const PublishMenuModal: React.FC<PublishMenuModalProps> = ({
               className="w-full text-left p-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all group flex items-start gap-3.5"
             >
               <div className="w-9 h-9 rounded-lg bg-gray-100 text-gray-700 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-                <FontAwesomeIcon icon={faGlobe} className="text-sm" />
+                <Icon name="globe" className="w-4 h-4 text-gray-700" />
               </div>
               <div>
                 <div className="font-semibold text-gray-900 text-sm">Chỉ xuất bản</div>

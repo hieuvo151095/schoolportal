@@ -2,19 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faSave,
-  faPaperPlane,
-  faCalendarWeek,
-  faSchool,
-  faUserGraduate,
-  faFileAlt,
-  faThLarge,
-  faExclamationTriangle,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '../../../../components/ds';
 import { PortalLayout } from '../../../../components/layout/PortalLayout';
 import { useAppDispatch } from '../../../../store';
 import { createMenu } from '../../../../store/slices/menuSlice';
@@ -55,8 +43,8 @@ export default function CreateSchoolMenuPage() {
 
   const [selectedWeek, setSelectedWeek] = useState(weekOptions[0]);
   const [scope, setScope] = useState<MenuScopeType>('all');
-  const [classId, setClassId] = useState<string>('10A1');
-  const [className, setClassName] = useState<string>('Lớp 10A1');
+  const [classId, setClassId] = useState<string>('');
+  const [className, setClassName] = useState<string>('');
   const [contentType, setContentType] = useState<MenuContentType>('grid');
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const [showDiscardModal, setShowDiscardModal] = useState<boolean>(false);
@@ -98,27 +86,89 @@ export default function CreateSchoolMenuPage() {
           lunch: [
             { id: 'ai-2', name: 'Cơm tám thơm & Thịt heo kho cút', calories: 460, ingredients: [] },
             { id: 'ai-3', name: 'Canh rau ngót nấu thịt nạc', calories: 85, ingredients: [] },
+            { id: 'ai-4', name: 'Dưa hấu tráng miệng', calories: 45, ingredients: [] },
           ],
-          snack: [{ id: 'ai-4', name: 'Sữa chua Ba Vì', calories: 110, ingredients: [] }],
+          snack: [{ id: 'ai-5', name: 'Sữa chua men sống & Bánh quy hạt', calories: 120, ingredients: [] }],
         },
         tuesday: {
-          breakfast: [{ id: 'ai-5', name: 'Bánh cuốn chả quế', calories: 350, ingredients: [] }],
+          breakfast: [{ id: 'ai-6', name: 'Bánh cuốn chả lụa', calories: 350, ingredients: [] }],
           lunch: [
-            { id: 'ai-6', name: 'Cơm trắng & Gà om nấm đông cô', calories: 440, ingredients: [] },
-            { id: 'ai-7', name: 'Canh cải ngọt nấu tôm', calories: 90, ingredients: [] },
+            { id: 'ai-7', name: 'Cơm trắng & Gà ram sả ớt', calories: 480, ingredients: [] },
+            { id: 'ai-8', name: 'Canh bí đao sườn non', calories: 95, ingredients: [] },
+            { id: 'ai-9', name: 'Chuối già Nam Mỹ', calories: 60, ingredients: [] },
           ],
-          snack: [{ id: 'ai-8', name: 'Chè đậu đỏ', calories: 140, ingredients: [] }],
+          snack: [{ id: 'ai-10', name: 'Chè đậu đỏ hạt sen', calories: 140, ingredients: [] }],
         },
-        wednesday: { breakfast: [], lunch: [], snack: [] },
-        thursday: { breakfast: [], lunch: [], snack: [] },
-        friday: { breakfast: [], lunch: [], snack: [] },
-        saturday: { breakfast: [], lunch: [], snack: [] },
+        wednesday: emptySchedule().wednesday,
+        thursday: emptySchedule().thursday,
+        friday: emptySchedule().friday,
+        saturday: emptySchedule().saturday,
       });
       setIsDirty(true);
     }
   }, [router.query]);
 
-  // Dirty navigation guard (BR10, TD-04)
+  // Validation
+  const isFormValid = scope === 'all' || (scope === 'class' && classId.trim() !== '');
+
+  // Handlers
+  const handleSaveDraft = () => {
+    if (!isFormValid) return;
+    const newMenu = {
+      id: `menu-${Date.now()}`,
+      weekNumber: selectedWeek.weekNumber,
+      year: selectedWeek.year,
+      startDate: selectedWeek.startDate,
+      endDate: selectedWeek.endDate,
+      title: `Thực đơn Tuần ${selectedWeek.weekNumber} (${formatMenuDateRange(selectedWeek.startDate, selectedWeek.endDate)})`,
+      scope,
+      classId: scope === 'class' ? classId : undefined,
+      className: scope === 'class' ? className : undefined,
+      status: 'ban_nhap' as const,
+      contentType,
+      schedule: contentType === 'grid' ? schedule : undefined,
+      fileAttachment: contentType === 'file' ? fileAttachment : undefined,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      recipientScope: scope === 'all' ? 'Toàn trường' : (className || 'Lớp học'),
+      targetStudentCount: scope === 'all' ? 420 : 35,
+    };
+
+    dispatch(createMenu(newMenu as any));
+    setIsDirty(false);
+    router.push(`/${schoolCode}/school/menu`);
+  };
+
+  const handleConfirmPublish = (viaAnnouncement: boolean) => {
+    if (!isFormValid) return;
+    const newMenu = {
+      id: `menu-${Date.now()}`,
+      weekNumber: selectedWeek.weekNumber,
+      year: selectedWeek.year,
+      startDate: selectedWeek.startDate,
+      endDate: selectedWeek.endDate,
+      title: `Thực đơn Tuần ${selectedWeek.weekNumber} (${formatMenuDateRange(selectedWeek.startDate, selectedWeek.endDate)})`,
+      scope,
+      classId: scope === 'class' ? classId : undefined,
+      className: scope === 'class' ? className : undefined,
+      status: 'published' as const,
+      contentType,
+      schedule: contentType === 'grid' ? schedule : undefined,
+      fileAttachment: contentType === 'file' ? fileAttachment : undefined,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      publishedAt: new Date().toISOString(),
+      recipientScope: scope === 'all' ? 'Toàn trường' : (className || 'Lớp học'),
+      targetStudentCount: scope === 'all' ? 420 : 35,
+      publishedViaAnnouncement: viaAnnouncement,
+    };
+
+    dispatch(createMenu(newMenu as any));
+    setIsDirty(false);
+    setShowPublishModal(false);
+    router.push(`/${schoolCode}/school/menu`);
+  };
+
   const handleCancelClick = () => {
     if (isDirty) {
       setShowDiscardModal(true);
@@ -127,75 +177,34 @@ export default function CreateSchoolMenuPage() {
     }
   };
 
-  const handleSaveDraft = () => {
-    dispatch(
-      createMenu({
-        scope,
-        classId: scope === 'class' ? classId : undefined,
-        className: scope === 'class' ? className : undefined,
-        weekNumber: selectedWeek.weekNumber,
-        year: selectedWeek.year,
-        startDate: selectedWeek.startDate,
-        endDate: selectedWeek.endDate,
-        contentType,
-        schedule: contentType === 'grid' ? schedule : undefined,
-        fileAttachment: contentType === 'file' ? fileAttachment : undefined,
-        publishNow: false,
-      })
-    );
-    router.push(`/${schoolCode}/school/menu`);
-  };
-
-  const handleConfirmPublish = (viaAnnouncement: boolean) => {
-    dispatch(
-      createMenu({
-        scope,
-        classId: scope === 'class' ? classId : undefined,
-        className: scope === 'class' ? className : undefined,
-        weekNumber: selectedWeek.weekNumber,
-        year: selectedWeek.year,
-        startDate: selectedWeek.startDate,
-        endDate: selectedWeek.endDate,
-        contentType,
-        schedule: contentType === 'grid' ? schedule : undefined,
-        fileAttachment: contentType === 'file' ? fileAttachment : undefined,
-        publishNow: true,
-        publishedViaAnnouncement: viaAnnouncement,
-      })
-    );
-    setShowPublishModal(false);
-    router.push(`/${schoolCode}/school/menu`);
-  };
-
   const dummyMenuForPublishModal = {
-    id: 'new-menu',
-    title: `Thực đơn tuần: ${formatMenuDateRange(selectedWeek.startDate, selectedWeek.endDate)}`,
+    id: 'draft-temp',
+    title: `Thực đơn Tuần ${selectedWeek.weekNumber}`,
     scope,
-    weekNumber: selectedWeek.weekNumber,
-    year: selectedWeek.year,
-    startDate: selectedWeek.startDate,
-    endDate: selectedWeek.endDate,
-    contentType,
-    status: 'draft' as const,
-    updatedAt: new Date().toISOString(),
-    sendHistory: [],
+    className,
+    recipientScope: scope === 'all' ? 'Toàn trường' : className,
+    targetStudentCount: scope === 'all' ? 420 : 35,
   };
+
+  const classOptions = [
+    { value: '10A1', label: 'Lớp 10A1' },
+    { value: '12A1', label: 'Lớp 12A1' },
+    { value: 'MN-CHOI', label: 'Lớp Chồi 1 (Mầm non)' },
+    { value: 'lop-1a1', label: 'Lớp 1A1 (Tiểu học)' },
+  ];
 
   return (
-    <PortalLayout schoolCode={schoolCode}>
+    <PortalLayout>
       <Head>
-        <title>Tạo Thực đơn mới | Cổng Vận Hành</title>
+        <title>Tạo mới thực đơn tuần | ECO School Portal</title>
       </Head>
 
-      <div className="w-full space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6 pb-20">
         {/* Breadcrumb & Navigation */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs text-gray-500">
-            <Link
-              href={`/${schoolCode}/school/menu`}
-              className="hover:text-blue-600 font-medium transition-colors"
-            >
-              Thực đơn
+            <Link href={`/${schoolCode}/school/menu`} className="hover:text-blue-600 transition-colors">
+              Quản lý thực đơn
             </Link>
             <span>/</span>
             <span className="font-semibold text-gray-800">Tạo mới thực đơn</span>
@@ -206,7 +215,7 @@ export default function CreateSchoolMenuPage() {
             onClick={handleCancelClick}
             className="text-xs text-gray-500 hover:text-gray-800 font-medium inline-flex items-center gap-1.5"
           >
-            <FontAwesomeIcon icon={faArrowLeft} />
+            <Icon name="arrow-left" className="w-3.5 h-3.5" />
             Quay lại danh sách
           </button>
         </div>
@@ -221,7 +230,7 @@ export default function CreateSchoolMenuPage() {
           </div>
 
           {/* Action CTAs */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <button
               type="button"
               onClick={handleCancelClick}
@@ -232,17 +241,27 @@ export default function CreateSchoolMenuPage() {
             <button
               type="button"
               onClick={handleSaveDraft}
-              className="px-4 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl shadow-2xs inline-flex items-center gap-1.5 transition-colors"
+              disabled={!isFormValid}
+              className={`px-4 py-2 text-xs font-semibold rounded-xl shadow-2xs inline-flex items-center gap-1.5 transition-colors border ${
+                !isFormValid
+                  ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                  : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+              }`}
             >
-              <FontAwesomeIcon icon={faSave} className="text-gray-500" />
+              <Icon name="floppy-disk" className="w-3.5 h-3.5 text-gray-500" />
               Lưu bản nháp
             </button>
             <button
               type="button"
               onClick={() => setShowPublishModal(true)}
-              className="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 inline-flex items-center gap-1.5 transition-all"
+              disabled={!isFormValid}
+              className={`px-5 py-2 text-xs font-semibold rounded-xl shadow-sm inline-flex items-center gap-1.5 transition-all ${
+                !isFormValid
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
+                  : 'text-white bg-blue-600 hover:bg-blue-700 shadow-blue-500/20'
+              }`}
             >
-              <FontAwesomeIcon icon={faPaperPlane} className="text-xs" />
+              <Icon name="paper-plane" className="w-3.5 h-3.5" />
               Gửi / Xuất bản
             </button>
           </div>
@@ -253,34 +272,31 @@ export default function CreateSchoolMenuPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* 1. Chọn tuần áp dụng (BR01 - Max 8 weeks) */}
             <div>
-              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
-                <FontAwesomeIcon icon={faCalendarWeek} className="mr-1.5 text-blue-600" />
+              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <Icon name="calendar-week" className="w-3.5 h-3.5 text-blue-600" />
                 Tuần áp dụng (Tối đa 8 tuần)
               </label>
-              <select
-                value={selectedWeek.weekNumber}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  const opt = weekOptions.find((w) => w.weekNumber === val);
+              <Dropdown
+                value={String(selectedWeek.weekNumber)}
+                onChange={(val) => {
+                  const opt = weekOptions.find((w) => w.weekNumber === Number(val));
                   if (opt) {
                     setSelectedWeek(opt);
                     setIsDirty(true);
                   }
                 }}
-                className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-gray-800 bg-white font-medium"
-              >
-                {weekOptions.map((w) => (
-                  <option key={w.weekNumber} value={w.weekNumber}>
-                    {w.label}
-                  </option>
-                ))}
-              </select>
+                options={weekOptions.map((w) => ({
+                  value: String(w.weekNumber),
+                  label: w.label,
+                }))}
+                fullWidth
+              />
             </div>
 
             {/* 2. Thực đơn cho (Toàn trường vs Lớp học) (BR02) */}
             <div>
-              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
-                <FontAwesomeIcon icon={faSchool} className="mr-1.5 text-blue-600" />
+              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <Icon name="school" className="w-3.5 h-3.5 text-blue-600" />
                 Phạm vi áp dụng
               </label>
               <div className="flex gap-2">
@@ -316,21 +332,17 @@ export default function CreateSchoolMenuPage() {
 
               {scope === 'class' && (
                 <div className="mt-2 animate-in fade-in">
-                  <select
+                  <Dropdown
+                    placeholder="-- Chọn lớp học --"
                     value={classId}
-                    onChange={(e) => {
-                      setClassId(e.target.value);
-                      const name = e.target.options[e.target.selectedIndex].text;
-                      setClassName(name);
+                    onChange={(val, opt) => {
+                      setClassId(val);
+                      setClassName(opt?.label || val);
                       setIsDirty(true);
                     }}
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 text-gray-800 bg-white"
-                  >
-                    <option value="10A1">Lớp 10A1</option>
-                    <option value="12A1">Lớp 12A1</option>
-                    <option value="MN-CHOI">Lớp Chồi 1 (Mầm non)</option>
-                    <option value="lop-1a1">Lớp 1A1 (Tiểu học)</option>
-                  </select>
+                    options={classOptions}
+                    fullWidth
+                  />
                 </div>
               )}
             </div>
@@ -353,7 +365,7 @@ export default function CreateSchoolMenuPage() {
                       : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
                   }`}
                 >
-                  <FontAwesomeIcon icon={faThLarge} className="text-[10px]" />
+                  <Icon name="table-cells" className="w-3.5 h-3.5" />
                   Dạng lưới
                 </button>
                 <button
@@ -368,7 +380,7 @@ export default function CreateSchoolMenuPage() {
                       : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
                   }`}
                 >
-                  <FontAwesomeIcon icon={faFileAlt} className="text-[10px]" />
+                  <Icon name="file" className="w-3.5 h-3.5" />
                   Sử dụng file (Tải lên)
                 </button>
               </div>
@@ -377,7 +389,7 @@ export default function CreateSchoolMenuPage() {
 
           {/* Mandatory Business Rule Note (BR02) */}
           <div className="p-3 bg-blue-50/70 border border-blue-200/60 rounded-xl text-xs text-blue-900 flex items-center gap-2">
-            <FontAwesomeIcon icon={faInfoCircle} className="text-blue-600" />
+            <Icon name="circle-info" className="w-4 h-4 text-blue-600 shrink-0" />
             <span>
               <strong>Lưu ý nghiệp vụ:</strong> Toàn trường chỉ có thể có 1 thực đơn / tuần. Lớp không
               có thực đơn riêng sẽ tự động dùng thực đơn toàn trường.
@@ -411,7 +423,7 @@ export default function CreateSchoolMenuPage() {
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden p-6 space-y-4">
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
-                  <FontAwesomeIcon icon={faExclamationTriangle} />
+                  <Icon name="triangle-exclamation" className="w-5 h-5 text-amber-600" />
                 </div>
                 <div>
                   <h3 className="text-base font-semibold text-gray-900">Xác nhận rời khỏi trang</h3>

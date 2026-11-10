@@ -1,12 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSearch,
-  faRotateRight,
-  faFilter,
-  faCalendarAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   setSchoolYearFilter,
@@ -43,17 +37,15 @@ export default function FeedbackToolbar() {
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center space-x-2">
             <span className="text-xs font-semibold text-slate-600">Năm học:</span>
-            <select
-              value={filters.schoolYear}
-              onChange={(e) => dispatch(setSchoolYearFilter(e.target.value))}
-              className="text-xs font-semibold bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-            >
-              {schoolYears.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
+            <div className="w-36">
+              <Dropdown
+                value={filters.schoolYear}
+                onChange={(val) => dispatch(setSchoolYearFilter(String(val)))}
+                options={schoolYears.map((year) => ({ value: year, label: year }))}
+                size="sm"
+                fullWidth
+              />
+            </div>
           </div>
 
           <div className="relative min-w-[260px] md:min-w-[320px]">
@@ -64,9 +56,9 @@ export default function FeedbackToolbar() {
               onChange={(e) => dispatch(setSearchQuery(e.target.value))}
               className="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
             />
-            <FontAwesomeIcon
-              icon={faSearch}
-              className="absolute left-3 top-2.5 text-slate-400 text-xs"
+            <Icon
+              name="magnifying-glass"
+              className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400"
             />
           </div>
         </div>
@@ -77,7 +69,7 @@ export default function FeedbackToolbar() {
             onClick={() => dispatch(resetFilters())}
             className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
           >
-            <FontAwesomeIcon icon={faRotateRight} className="mr-1.5 text-slate-500" />
+            <Icon name="rotate-right" className="mr-1.5 w-3 h-3 text-slate-500" />
             Đặt lại bộ lọc
           </button>
         </div>
@@ -90,24 +82,25 @@ export default function FeedbackToolbar() {
           <label className="block text-[11px] font-medium text-slate-500 mb-1">
             Loại góp ý
           </label>
-          <select
+          <Dropdown
             value={filters.category}
-            onChange={(e) =>
+            onChange={(val) =>
               dispatch(
                 setAdvancedFilters({
-                  category: e.target.value as FeedbackType | 'all',
+                  category: val as FeedbackType | 'all',
                 })
               )
             }
-            className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-          >
-            <option value="all">Tất cả loại ({Object.keys(FEEDBACK_CATEGORY_MAP).length})</option>
-            {Object.entries(FEEDBACK_CATEGORY_MAP).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
+            options={[
+              { value: 'all', label: `Tất cả loại (${Object.keys(FEEDBACK_CATEGORY_MAP).length})` },
+              ...Object.entries(FEEDBACK_CATEGORY_MAP).map(([key, label]) => ({
+                value: key,
+                label,
+              })),
+            ]}
+            size="sm"
+            fullWidth
+          />
         </div>
 
         {/* Priority Filter */}
@@ -115,24 +108,25 @@ export default function FeedbackToolbar() {
           <label className="block text-[11px] font-medium text-slate-500 mb-1">
             Độ ưu tiên
           </label>
-          <select
+          <Dropdown
             value={filters.priority}
-            onChange={(e) =>
+            onChange={(val) =>
               dispatch(
                 setAdvancedFilters({
-                  priority: e.target.value as FeedbackPriority | 'all',
+                  priority: val as FeedbackPriority | 'all',
                 })
               )
             }
-            className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-          >
-            <option value="all">Tất cả độ ưu tiên</option>
-            {Object.entries(FEEDBACK_PRIORITY_MAP).map(([key, item]) => (
-              <option key={key} value={key}>
-                {item.label}
-              </option>
-            ))}
-          </select>
+            options={[
+              { value: 'all', label: 'Tất cả độ ưu tiên' },
+              ...Object.entries(FEEDBACK_PRIORITY_MAP).map(([key, item]) => ({
+                value: key,
+                label: item.label,
+              })),
+            ]}
+            size="sm"
+            fullWidth
+          />
         </div>
 
         {/* Assignee Filter */}
@@ -140,21 +134,22 @@ export default function FeedbackToolbar() {
           <label className="block text-[11px] font-medium text-slate-500 mb-1">
             Người xử lý
           </label>
-          <select
+          <Dropdown
             value={filters.assigneeId}
-            onChange={(e) =>
-              dispatch(setAdvancedFilters({ assigneeId: e.target.value }))
+            onChange={(val) =>
+              dispatch(setAdvancedFilters({ assigneeId: String(val) }))
             }
-            className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-          >
-            <option value="all">Tất cả người xử lý</option>
-            <option value="unassigned">Chưa phân công</option>
-            {MOCK_STAFF_LIST.map((staff) => (
-              <option key={staff.id} value={staff.id}>
-                {staff.name}
-              </option>
-            ))}
-          </select>
+            options={[
+              { value: 'all', label: 'Tất cả người xử lý' },
+              { value: 'unassigned', label: 'Chưa phân công' },
+              ...MOCK_STAFF_LIST.map((staff) => ({
+                value: staff.id,
+                label: staff.name,
+              })),
+            ]}
+            size="sm"
+            fullWidth
+          />
         </div>
 
         {/* Waiting For Filter */}
@@ -162,21 +157,23 @@ export default function FeedbackToolbar() {
           <label className="block text-[11px] font-medium text-slate-500 mb-1">
             Chờ phản hồi
           </label>
-          <select
+          <Dropdown
             value={filters.waitingFor}
-            onChange={(e) =>
+            onChange={(val) =>
               dispatch(
                 setAdvancedFilters({
-                  waitingFor: e.target.value as FeedbackWaitingFor | 'all',
+                  waitingFor: val as FeedbackWaitingFor | 'all',
                 })
               )
             }
-            className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-          >
-            <option value="all">Tất cả</option>
-            <option value="school">Từ nhà trường</option>
-            <option value="parent">Từ phụ huynh</option>
-          </select>
+            options={[
+              { value: 'all', label: 'Tất cả' },
+              { value: 'school', label: 'Từ nhà trường' },
+              { value: 'parent', label: 'Từ phụ huynh' },
+            ]}
+            size="sm"
+            fullWidth
+          />
         </div>
 
         {/* Date From */}

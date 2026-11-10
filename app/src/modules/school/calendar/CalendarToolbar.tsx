@@ -6,7 +6,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { CalendarViewMode, EventScopeFilter } from '../../../types/calendar';
-import { Button, Icon } from '../../../components/ds';
+import { Button, Icon, Dropdown } from '../../../components/ds';
 
 interface CalendarToolbarProps {
   schoolCode: string;
@@ -215,19 +215,17 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                border: '1px solid var(--border-neutral)',
-                borderRadius: 'var(--radius-md)',
-                overflow: 'hidden',
-                background: 'var(--bg-surface)',
+                gap: '4px',
               }}
             >
               <button
                 type="button"
                 onClick={() => onYearChange(selectedYear - 1)}
                 style={{
-                  padding: '4px 8px',
-                  border: 'none',
-                  background: 'transparent',
+                  padding: '6px 8px',
+                  border: '1px solid var(--border-neutral)',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--bg-surface)',
                   cursor: 'pointer',
                   color: 'var(--text-secondary)',
                 }}
@@ -235,33 +233,22 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
               >
                 <Icon name="chevron-left" size={11} />
               </button>
-              <select
-                value={selectedYear}
-                onChange={(e) => onYearChange(Number(e.target.value))}
-                style={{
-                  padding: '4px 8px',
-                  border: 'none',
-                  background: 'transparent',
-                  fontWeight: 'var(--font-bold)',
-                  fontSize: 'var(--text-xs)',
-                  color: 'var(--text-primary)',
-                  cursor: 'pointer',
-                  outline: 'none',
-                }}
-              >
-                {availableYears.map((yr) => (
-                  <option key={yr} value={yr}>
-                    {yr}
-                  </option>
-                ))}
-              </select>
+              <div style={{ width: '90px' }}>
+                <Dropdown
+                  size="sm"
+                  value={String(selectedYear)}
+                  onChange={(val) => onYearChange(Number(val))}
+                  options={availableYears.map((yr) => ({ value: String(yr), label: `${yr}` }))}
+                />
+              </div>
               <button
                 type="button"
                 onClick={() => onYearChange(selectedYear + 1)}
                 style={{
-                  padding: '4px 8px',
-                  border: 'none',
-                  background: 'transparent',
+                  padding: '6px 8px',
+                  border: '1px solid var(--border-neutral)',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--bg-surface)',
                   cursor: 'pointer',
                   color: 'var(--text-secondary)',
                 }}
@@ -280,19 +267,17 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  border: '1px solid var(--border-neutral)',
-                  borderRadius: 'var(--radius-md)',
-                  overflow: 'hidden',
-                  background: 'var(--bg-surface)',
+                  gap: '4px',
                 }}
               >
                 <button
                   type="button"
                   onClick={onPrevMonth}
                   style={{
-                    padding: '4px 8px',
-                    border: 'none',
-                    background: 'transparent',
+                    padding: '6px 8px',
+                    border: '1px solid var(--border-neutral)',
+                    borderRadius: 'var(--radius-md)',
+                    background: 'var(--bg-surface)',
                     cursor: 'pointer',
                     color: 'var(--text-secondary)',
                   }}
@@ -300,33 +285,22 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
                 >
                   <Icon name="chevron-left" size={11} />
                 </button>
-                <select
-                  value={selectedMonth}
-                  onChange={(e) => onMonthChange(Number(e.target.value))}
-                  style={{
-                    padding: '4px 8px',
-                    border: 'none',
-                    background: 'transparent',
-                    fontWeight: 'var(--font-bold)',
-                    fontSize: 'var(--text-xs)',
-                    color: 'var(--text-primary)',
-                    cursor: 'pointer',
-                    outline: 'none',
-                  }}
-                >
-                  {monthNames.map((name, idx) => (
-                    <option key={idx + 1} value={idx + 1}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
+                <div style={{ width: '120px' }}>
+                  <Dropdown
+                    size="sm"
+                    value={String(selectedMonth)}
+                    onChange={(val) => onMonthChange(Number(val))}
+                    options={monthNames.map((name, idx) => ({ value: String(idx + 1), label: name }))}
+                  />
+                </div>
                 <button
                   type="button"
                   onClick={onNextMonth}
                   style={{
-                    padding: '4px 8px',
-                    border: 'none',
-                    background: 'transparent',
+                    padding: '6px 8px',
+                    border: '1px solid var(--border-neutral)',
+                    borderRadius: 'var(--radius-md)',
+                    background: 'var(--bg-surface)',
                     cursor: 'pointer',
                     color: 'var(--text-secondary)',
                   }}
@@ -341,7 +315,7 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
                 type="button"
                 onClick={onTodayClick}
                 style={{
-                  padding: '4px 10px',
+                  padding: '6px 12px',
                   borderRadius: 'var(--radius-md)',
                   border: '1px solid var(--border-neutral)',
                   background: 'var(--bg-secondary)',
@@ -443,10 +417,13 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
                 border: 'none',
                 color: 'var(--text-secondary)',
                 cursor: 'pointer',
-                fontSize: '11px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
+              title="Xóa tìm kiếm"
             >
-              ✕
+              <Icon name="xmark" size={12} />
             </button>
           )}
         </div>

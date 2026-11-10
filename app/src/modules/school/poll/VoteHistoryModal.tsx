@@ -1,6 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHistory, faClock, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { StudentVoterRecord } from '@/types/poll';
 
 interface VoteHistoryModalProps {
@@ -37,16 +36,16 @@ export const VoteHistoryModal: React.FC<VoteHistoryModalProps> = ({
         {/* Header */}
         <div className="bg-slate-50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center space-x-2 text-[#0070CE]">
-            <FontAwesomeIcon icon={faHistory} />
+            <Icon name="clock" className="w-4 h-4" />
             <span className="text-sm font-bold text-slate-800">
               Lịch sử bình chọn: {voter.studentName}
             </span>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 text-lg font-bold"
+            className="text-slate-400 hover:text-slate-600 p-1"
           >
-            &times;
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -95,15 +94,15 @@ export const VoteHistoryModal: React.FC<VoteHistoryModalProps> = ({
                         Lần {index + 1} {isLatest && '(Hiện tại)'}
                       </span>
                       <span className="text-slate-500 font-medium flex items-center">
-                        <FontAwesomeIcon icon={faClock} className="mr-1 text-[10px] text-slate-400" />
+                        <Icon name="clock" className="mr-1 w-3 h-3 text-slate-400" />
                         {formatTimestamp(item.timestamp)}
                       </span>
                     </div>
 
                     <div className="text-sm font-semibold text-slate-800 flex items-start mt-2">
-                      <FontAwesomeIcon
-                        icon={faCheck}
-                        className={`mr-2 mt-1 text-xs ${
+                      <Icon
+                        name="check"
+                        className={`mr-2 mt-1 w-3.5 h-3.5 shrink-0 ${
                           isLatest ? 'text-emerald-600' : 'text-slate-400'
                         }`}
                       />

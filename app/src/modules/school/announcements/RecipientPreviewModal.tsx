@@ -1,15 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faUsers,
-  faUserGraduate,
-  faChalkboardTeacher,
-  faUserTie,
-  faTimes,
-  faInfoCircle,
-  faSchool
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 import { AnnouncementRecipientBreakdown } from '../../../types/announcement';
 
 interface RecipientPreviewModalProps {
@@ -58,7 +49,7 @@ export const RecipientPreviewModal: React.FC<RecipientPreviewModalProps> = ({
         <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
-              <FontAwesomeIcon icon={faUsers} />
+              <Icon name="users" className="w-5 h-5 text-blue-600" />
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-800">
@@ -73,7 +64,7 @@ export const RecipientPreviewModal: React.FC<RecipientPreviewModalProps> = ({
             onClick={onClose}
             className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -83,7 +74,7 @@ export const RecipientPreviewModal: React.FC<RecipientPreviewModalProps> = ({
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xl font-bold">
-                <FontAwesomeIcon icon={faSchool} />
+                <Icon name="school" className="w-6 h-6 text-white" />
               </div>
               <div>
                 <p className="text-xs font-semibold text-blue-900 uppercase tracking-wider">
@@ -94,9 +85,9 @@ export const RecipientPreviewModal: React.FC<RecipientPreviewModalProps> = ({
                 </p>
               </div>
             </div>
-            <div className="text-right text-xs text-slate-500 max-w-xs">
-              <FontAwesomeIcon icon={faInfoCircle} className="mr-1 text-blue-500" />
-              Bao gồm tài khoản phụ huynh, học sinh và cán bộ liên quan
+            <div className="text-right text-xs text-slate-500 max-w-xs flex items-center gap-1 justify-end">
+              <Icon name="circle-info" className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+              <span>Bao gồm tài khoản phụ huynh, học sinh và cán bộ liên quan</span>
             </div>
           </div>
 
@@ -107,8 +98,8 @@ export const RecipientPreviewModal: React.FC<RecipientPreviewModalProps> = ({
             </h4>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-center">
-                <div className="text-emerald-600 mb-1 text-base">
-                  <FontAwesomeIcon icon={faUsers} />
+                <div className="text-emerald-600 mb-1 flex justify-center">
+                  <Icon name="users" className="w-4 h-4 text-emerald-600" />
                 </div>
                 <div className="text-xs font-medium text-slate-500">Phụ huynh</div>
                 <div className="text-lg font-bold text-slate-800 mt-0.5">
@@ -117,8 +108,8 @@ export const RecipientPreviewModal: React.FC<RecipientPreviewModalProps> = ({
               </div>
 
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-center">
-                <div className="text-blue-600 mb-1 text-base">
-                  <FontAwesomeIcon icon={faUserGraduate} />
+                <div className="text-blue-600 mb-1 flex justify-center">
+                  <Icon name="graduation-cap" className="w-4 h-4 text-blue-600" />
                 </div>
                 <div className="text-xs font-medium text-slate-500">Học sinh</div>
                 <div className="text-lg font-bold text-slate-800 mt-0.5">
@@ -127,8 +118,8 @@ export const RecipientPreviewModal: React.FC<RecipientPreviewModalProps> = ({
               </div>
 
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-center">
-                <div className="text-amber-600 mb-1 text-base">
-                  <FontAwesomeIcon icon={faChalkboardTeacher} />
+                <div className="text-amber-600 mb-1 flex justify-center">
+                  <Icon name="chalkboard-user" className="w-4 h-4 text-amber-600" />
                 </div>
                 <div className="text-xs font-medium text-slate-500">Giáo viên</div>
                 <div className="text-lg font-bold text-slate-800 mt-0.5">
@@ -137,8 +128,8 @@ export const RecipientPreviewModal: React.FC<RecipientPreviewModalProps> = ({
               </div>
 
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-center">
-                <div className="text-purple-600 mb-1 text-base">
-                  <FontAwesomeIcon icon={faUserTie} />
+                <div className="text-purple-600 mb-1 flex justify-center">
+                  <Icon name="id-badge" className="w-4 h-4 text-purple-600" />
                 </div>
                 <div className="text-xs font-medium text-slate-500">Cán bộ/Nhân viên</div>
                 <div className="text-lg font-bold text-slate-800 mt-0.5">

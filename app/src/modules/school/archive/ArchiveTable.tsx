@@ -4,14 +4,6 @@
  */
 
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSort,
-  faSortUp,
-  faSortDown,
-  faUndo,
-  faTrashAlt,
-} from '@fortawesome/free-solid-svg-icons';
 import type {
   ArchivedStudent,
   ArchiveStaffOperator,
@@ -19,7 +11,7 @@ import type {
   ArchiveSortState,
 } from '@/types/archive';
 import { formatArchiveDate, formatGender } from '@/utils/archiveValidation';
-import { EmptyState, Tag } from '@/components/ds';
+import { EmptyState, Tag, Icon } from '@/components/ds';
 
 interface ArchiveTableProps {
   students: ArchivedStudent[];
@@ -43,14 +35,14 @@ export const ArchiveTable: React.FC<ArchiveTableProps> = ({
   const renderSortIcon = (field: ArchiveSortField) => {
     if (sort.field !== field) {
       return (
-        <span className="ml-1 text-[var(--text-subtle)] text-xs">
-          <FontAwesomeIcon icon={faSort} />
+        <span className="ml-1 text-[var(--text-subtle)] text-xs inline-flex items-center">
+          <Icon name="sort" size={12} />
         </span>
       );
     }
     return (
-      <span className="ml-1 text-[var(--eco-blue-strong)] text-xs">
-        <FontAwesomeIcon icon={sort.direction === 'asc' ? faSortUp : faSortDown} />
+      <span className="ml-1 text-[var(--eco-blue-strong)] text-xs inline-flex items-center">
+        <Icon name={sort.direction === 'asc' ? 'sort-up' : 'sort-down'} size={12} />
       </span>
     );
   };
@@ -233,18 +225,18 @@ export const ArchiveTable: React.FC<ArchiveTableProps> = ({
                       onClick={() => onOpenRestoreModal(student)}
                       title={`Phục hồi học sinh ${student.fullName}`}
                       aria-label={`Phục hồi học sinh ${student.fullName}`}
-                      className="p-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--eco-blue-strong)] hover:bg-[var(--bg-muted)] cursor-pointer"
+                      className="p-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--eco-blue-strong)] hover:bg-[var(--bg-muted)] cursor-pointer inline-flex items-center justify-center min-w-[32px] min-h-[32px]"
                     >
-                      <FontAwesomeIcon icon={faUndo} className="w-3.5 h-3.5" />
+                      <Icon name="rotate-right" size={14} />
                     </button>
                     <button
                       type="button"
                       onClick={() => onOpenPurgeModal(student)}
                       title={`Xoá vĩnh viễn học sinh ${student.fullName}`}
                       aria-label={`Xoá vĩnh viễn học sinh ${student.fullName}`}
-                      className="p-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--semantic-danger)] hover:bg-rose-50 cursor-pointer"
+                      className="p-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--semantic-danger)] hover:bg-rose-50 cursor-pointer inline-flex items-center justify-center min-w-[32px] min-h-[32px]"
                     >
-                      <FontAwesomeIcon icon={faTrashAlt} className="w-3.5 h-3.5" />
+                      <Icon name="trash" size={14} />
                     </button>
                   </div>
                 </td>

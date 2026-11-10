@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faCoins, faPercent, faSave, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { Student } from '../../../types/student';
 import { useAppDispatch } from '../../../store';
 import { updateTuitionOverride } from '../../../store/slices/studentSlice';
@@ -61,7 +60,7 @@ export const TuitionOverrideModal: React.FC<TuitionOverrideModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-semibold text-sm">
-              <FontAwesomeIcon icon={faCoins} />
+              <Icon name="coins" size={16} />
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-800">Miễn giảm & Ưu đãi học phí</h3>
@@ -69,10 +68,12 @@ export const TuitionOverrideModal: React.FC<TuitionOverrideModalProps> = ({
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            aria-label="Đóng"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" size={14} />
           </button>
         </div>
 
@@ -91,12 +92,11 @@ export const TuitionOverrideModal: React.FC<TuitionOverrideModalProps> = ({
                     max="100"
                     value={discountPercent}
                     onChange={(e) => setDiscountPercent(Math.min(100, Math.max(0, parseInt(e.target.value) || 0)))}
-                    className="w-full pl-9 pr-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#0070CE] focus:outline-hidden font-bold text-slate-800"
+                    className="w-full pl-8 pr-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#0070CE] focus:outline-hidden font-bold text-slate-800"
                   />
-                  <FontAwesomeIcon
-                    icon={faPercent}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"
-                  />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 font-bold text-slate-400 text-xs">
+                    %
+                  </span>
                 </div>
                 <span className="text-2xs text-slate-400 mt-1 block">
                   Áp dụng giảm trừ trực tiếp trên tổng học phí định kỳ hàng tháng.
@@ -126,7 +126,7 @@ export const TuitionOverrideModal: React.FC<TuitionOverrideModalProps> = ({
           ) : (
             <div className="text-center py-3 space-y-3">
               <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto text-xl">
-                <FontAwesomeIcon icon={faExclamationTriangle} />
+                <Icon name="triangle-exclamation" size={24} />
               </div>
               <div>
                 <h4 className="text-base font-bold text-slate-800">Xác nhận thay đổi chính sách học phí?</h4>
@@ -154,7 +154,7 @@ export const TuitionOverrideModal: React.FC<TuitionOverrideModalProps> = ({
             onClick={showConfirm ? handleSave : () => setShowConfirm(true)}
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-lg transition-colors shadow-xs"
           >
-            <FontAwesomeIcon icon={faSave} className="text-xs" />
+            <Icon name="circle-check" size={14} />
             <span>{showConfirm ? 'Xác nhận áp dụng' : 'Lưu thay đổi'}</span>
           </button>
         </div>

@@ -1,12 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTriangleExclamation,
-  faTrash,
-  faTimes,
-  faEnvelope
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../components/ds';
 
 interface DeleteAnnouncementModalProps {
   isOpen: boolean;
@@ -57,7 +51,7 @@ export const DeleteAnnouncementModal: React.FC<DeleteAnnouncementModalProps> = (
         <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-rose-50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-lg">
-              <FontAwesomeIcon icon={faTriangleExclamation} />
+              <Icon name="triangle-exclamation" className="w-5 h-5 text-rose-600" />
             </div>
             <div>
               <h3 className="text-base font-bold text-rose-900">
@@ -72,7 +66,7 @@ export const DeleteAnnouncementModal: React.FC<DeleteAnnouncementModalProps> = (
             onClick={onClose}
             className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" className="w-4 h-4" />
           </button>
         </div>
 
@@ -94,7 +88,7 @@ export const DeleteAnnouncementModal: React.FC<DeleteAnnouncementModalProps> = (
           {/* Statutory Irrevocable Email Notice (BR10, BT-01, BT-02, K040) */}
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
             <div className="text-amber-600 text-lg flex-shrink-0 mt-0.5">
-              <FontAwesomeIcon icon={faEnvelope} />
+              <Icon name="envelope" className="w-5 h-5 text-amber-600" />
             </div>
             <div className="text-xs text-amber-900 leading-relaxed">
               <p className="font-bold mb-1 text-amber-950">Cảnh báo tính pháp lý & Lưu ý ngoại lệ:</p>
@@ -122,7 +116,7 @@ export const DeleteAnnouncementModal: React.FC<DeleteAnnouncementModalProps> = (
             }}
             className="px-4 py-2 bg-rose-600 text-white text-sm font-semibold rounded-lg hover:bg-rose-700 transition-colors shadow-sm flex items-center gap-2"
           >
-            <FontAwesomeIcon icon={faTrash} />
+            <Icon name="trash" className="w-4 h-4" />
             <span>Xác nhận xóa</span>
           </button>
         </div>

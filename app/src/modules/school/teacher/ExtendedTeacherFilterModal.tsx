@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faTimes, faRedo, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { setFilter, resetFilter } from '../../../store/slices/teacherSlice';
 
@@ -38,7 +37,7 @@ export const ExtendedTeacherFilterModal: React.FC<ExtendedTeacherFilterModalProp
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#0070CE]">
-              <FontAwesomeIcon icon={faFilter} className="w-5 h-5" />
+              <Icon name="filter" size={20} />
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-800">Bộ lọc nâng cao</h3>
@@ -51,7 +50,7 @@ export const ExtendedTeacherFilterModal: React.FC<ExtendedTeacherFilterModalProp
             aria-label="Đóng cửa sổ"
             className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-colors"
           >
-            <FontAwesomeIcon icon={faTimes} className="w-4 h-4" />
+            <Icon name="xmark" size={14} />
           </button>
         </div>
 
@@ -87,7 +86,7 @@ export const ExtendedTeacherFilterModal: React.FC<ExtendedTeacherFilterModalProp
               onClick={handleReset}
               className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-500 hover:text-slate-800 transition-colors"
             >
-              <FontAwesomeIcon icon={faRedo} className="text-xs" />
+              <Icon name="rotate-right" size={12} />
               <span>Đặt lại bộ lọc</span>
             </button>
 
@@ -104,7 +103,7 @@ export const ExtendedTeacherFilterModal: React.FC<ExtendedTeacherFilterModalProp
                 onClick={handleApply}
                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-lg transition-colors shadow-xs"
               >
-                <FontAwesomeIcon icon={faCheck} className="text-xs" />
+                <Icon name="check" size={14} />
                 <span>Áp dụng</span>
               </button>
             </div>

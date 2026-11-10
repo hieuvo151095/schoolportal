@@ -1,25 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faClock,
-  faUserTie,
-  faUsers,
-  faCheckSquare,
-  faEye,
-  faEyeSlash,
-  faPaperPlane,
-  faEdit,
-  faTrashAlt,
-  faLock,
-  faChevronDown,
-  faChevronUp,
-  faChartPie,
-  faVoteYea,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   closePoll,
@@ -64,7 +46,7 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
     return (
       <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-sm">
         <div className="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4 text-2xl">
-          <FontAwesomeIcon icon={faInfoCircle} />
+          <Icon name="circle-info" className="w-8 h-8" />
         </div>
         <h2 className="text-xl font-bold text-slate-800 mb-2">Không tìm thấy cuộc bình chọn</h2>
         <p className="text-sm text-slate-500 mb-6">
@@ -74,7 +56,7 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
           href={`/${currentSchoolCode}/school/poll`}
           className="inline-flex items-center px-4 py-2 rounded-xl bg-[#0070CE] text-white text-sm font-semibold hover:bg-blue-700 transition-colors shadow-sm"
         >
-          <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
+          <Icon name="arrow-left" className="mr-2 w-4 h-4" />
           Quay lại danh sách
         </Link>
       </div>
@@ -145,7 +127,7 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
             href={`/${currentSchoolCode}/school/poll`}
             className="hover:text-[#0070CE] transition-colors flex items-center"
           >
-            <FontAwesomeIcon icon={faArrowLeft} className="mr-2 text-xs" />
+            <Icon name="arrow-left" className="mr-2 w-3.5 h-3.5" />
             Bình chọn
           </Link>
           <span>/</span>
@@ -161,7 +143,7 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
               onClick={() => dispatch(openSendModal(poll.id))}
               className="inline-flex items-center px-4 py-2 rounded-xl bg-[#0070CE] hover:bg-blue-700 text-white text-sm font-semibold shadow-sm transition-colors"
             >
-              <FontAwesomeIcon icon={faPaperPlane} className="mr-2 text-xs" />
+              <Icon name="paper-plane" className="mr-2 w-3.5 h-3.5" />
               Gửi bình chọn
             </button>
           )}
@@ -171,7 +153,7 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
               href={`/${currentSchoolCode}/school/poll/edit/${poll.id}`}
               className="inline-flex items-center px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold shadow-sm transition-colors"
             >
-              <FontAwesomeIcon icon={faEdit} className="mr-2 text-xs text-blue-600" />
+              <Icon name="pen" className="mr-2 w-3.5 h-3.5 text-blue-600" />
               Chỉnh sửa
             </Link>
           )}
@@ -181,7 +163,7 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
               onClick={() => dispatch(openDeleteModal(poll.id))}
               className="inline-flex items-center px-3.5 py-2 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold shadow-sm transition-colors"
             >
-              <FontAwesomeIcon icon={faTrashAlt} className="mr-2 text-xs" />
+              <Icon name="trash" className="mr-2 w-3.5 h-3.5" />
               Xóa
             </button>
           )}
@@ -191,7 +173,7 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
               onClick={handleClosePoll}
               className="inline-flex items-center px-3.5 py-2 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-800 text-sm font-semibold shadow-sm transition-colors"
             >
-              <FontAwesomeIcon icon={faLock} className="mr-2 text-xs" />
+              <Icon name="lock" className="mr-2 w-3.5 h-3.5" />
               Đóng bình chọn
             </button>
           )}
@@ -245,9 +227,9 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
                   className="mt-2 text-xs font-bold text-[#0070CE] hover:underline flex items-center"
                 >
                   <span>{isDescriptionExpanded ? 'Thu gọn' : 'Xem thêm'}</span>
-                  <FontAwesomeIcon
-                    icon={isDescriptionExpanded ? faChevronUp : faChevronDown}
-                    className="ml-1 text-[10px]"
+                  <Icon
+                    name={isDescriptionExpanded ? "chevron-up" : "chevron-down"}
+                    className="ml-1 w-2.5 h-2.5"
                   />
                 </button>
               )}
@@ -259,7 +241,7 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
             {/* Deadline */}
             <div className="flex items-start space-x-3">
               <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0070CE] flex items-center justify-center flex-shrink-0">
-                <FontAwesomeIcon icon={faClock} className="text-sm" />
+                <Icon name="clock" className="w-4 h-4" />
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-medium">Thời hạn</p>
@@ -272,7 +254,7 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
             {/* Author */}
             <div className="flex items-start space-x-3">
               <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center flex-shrink-0">
-                <FontAwesomeIcon icon={faUserTie} className="text-sm" />
+                <Icon name="id-badge" className="w-4 h-4" />
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-medium">Người khởi tạo</p>
@@ -285,7 +267,7 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
             {/* Audience */}
             <div className="flex items-start space-x-3">
               <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center flex-shrink-0">
-                <FontAwesomeIcon icon={faUsers} className="text-sm" />
+                <Icon name="users" className="w-4 h-4" />
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-medium">Đối tượng nhận</p>
@@ -302,20 +284,31 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
             {/* Config Rules */}
             <div className="flex items-start space-x-3">
               <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0">
-                <FontAwesomeIcon icon={faCheckSquare} className="text-sm" />
+                <Icon name="check" className="w-4 h-4" />
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-medium">Cấu hình bình chọn</p>
-                <div className="text-xs font-semibold text-slate-700 space-y-0.5">
-                  <p>
-                    {poll.config.allowMultipleChoices
-                      ? '✓ Chọn nhiều phương án'
-                      : '✓ Chọn 1 phương án duy nhất'}
+                <div className="text-xs font-semibold text-slate-700 space-y-1">
+                  <p className="flex items-center gap-1.5">
+                    <Icon name="check" className="w-3 h-3 text-emerald-600 inline shrink-0" />
+                    <span>
+                      {poll.config.allowMultipleChoices
+                        ? 'Chọn nhiều phương án'
+                        : 'Chọn 1 phương án duy nhất'}
+                    </span>
                   </p>
-                  <p className="text-slate-500">
-                    {poll.config.allowParentViewResults
-                      ? '✓ PH xem được kết quả'
-                      : '✗ Không công khai kết quả PH'}
+                  <p className="text-slate-500 flex items-center gap-1.5">
+                    {poll.config.allowParentViewResults ? (
+                      <>
+                        <Icon name="check" className="w-3 h-3 text-emerald-600 inline shrink-0" />
+                        <span>PH xem được kết quả</span>
+                      </>
+                    ) : (
+                      <>
+                        <Icon name="xmark" className="w-3 h-3 text-slate-400 inline shrink-0" />
+                        <span>Không công khai kết quả PH</span>
+                      </>
+                    )}
                   </p>
                 </div>
               </div>
@@ -329,7 +322,7 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-6">
           <div>
             <h2 className="text-base font-bold text-slate-900 flex items-center">
-              <FontAwesomeIcon icon={faVoteYea} className="mr-2 text-[#0070CE]" />
+              <Icon name="square-poll-vertical" className="mr-2 w-4 h-4 text-[#0070CE]" />
               Kết quả bình chọn trực tiếp
             </h2>
             <p className="text-xs text-slate-500">
@@ -411,7 +404,7 @@ export const PollDetailCockpit: React.FC<PollDetailCockpitProps> = ({ pollId }) 
           {poll.totalVotes > 0 && (
             <div className="lg:col-span-5 flex flex-col items-center justify-center p-6 bg-slate-50/50 rounded-2xl border border-slate-100">
               <div className="flex items-center space-x-2 text-xs font-bold text-slate-600 uppercase tracking-wider mb-4">
-                <FontAwesomeIcon icon={faChartPie} className="text-[#0070CE]" />
+                <Icon name="chart-pie" className="w-3.5 h-3.5 text-[#0070CE]" />
                 <span>Biểu đồ tỷ lệ (%)</span>
               </div>
 

@@ -1,17 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faLock,
-  faUser,
-  faCalendarAlt,
-  faGraduationCap,
-  faPhone,
-  faMapMarkerAlt,
-  faUndo,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import type { ArchivedStudent } from '@/types/archive';
 import { formatArchiveDate, formatGender } from '@/utils/archiveValidation';
 
@@ -317,21 +306,23 @@ export const ArchivedStudentDetailModal: React.FC<ArchivedStudentDetailModalProp
       <ModalCard onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
         <ModalHeader>
           <ModalTitle>
-            <FontAwesomeIcon icon={faLock} style={{ color: '#d97706' }} />
+            <Icon name="lock" size={18} className="text-amber-600" />
             Hồ Sơ Học Sinh Lưu Trữ
           </ModalTitle>
           <CloseButton type="button" onClick={onClose} aria-label="Đóng">
-            <FontAwesomeIcon icon={faTimes} />
+            <Icon name="xmark" size={16} />
           </CloseButton>
         </ModalHeader>
 
         {/* BR03 Authoritative Warning Banner */}
         <WarningBanner>
           <WarningIcon>
-            <FontAwesomeIcon icon={faLock} />
+            <Icon name="lock" size={16} />
           </WarningIcon>
           <WarningText>
-            <strong>🔒 Học sinh đã được lưu trữ</strong>
+            <strong className="flex items-center gap-1.5">
+              <Icon name="lock" size={13} /> Học sinh đã được lưu trữ
+            </strong>
             Hồ sơ học sinh này hiện đang ở trạng thái lưu trữ (cold storage). Các hoạt động học tập,
             điểm danh và học phí đã được khóa. Để tiếp tục ghi nhận thông tin, vui lòng phục hồi học sinh.
           </WarningText>
@@ -340,7 +331,7 @@ export const ArchivedStudentDetailModal: React.FC<ArchivedStudentDetailModalProp
         <ModalBody>
           <ProfileOverview>
             <AvatarContainer>
-              {student.fullName ? student.fullName.charAt(0) : <FontAwesomeIcon icon={faUser} />}
+              {student.fullName ? student.fullName.charAt(0) : <Icon name="user" size={24} />}
             </AvatarContainer>
             <ProfileMeta>
               <StudentName>{student.fullName}</StudentName>
@@ -380,7 +371,7 @@ export const ArchivedStudentDetailModal: React.FC<ArchivedStudentDetailModalProp
           </InfoGrid>
 
           <SectionTitle>
-            <FontAwesomeIcon icon={faInfoCircle} style={{ color: '#7c3aed' }} />
+            <Icon name="circle-info" size={16} className="text-purple-600" />
             Thông Tin Lưu Trữ
           </SectionTitle>
 
@@ -426,7 +417,7 @@ export const ArchivedStudentDetailModal: React.FC<ArchivedStudentDetailModalProp
               onRestore(student);
             }}
           >
-            <FontAwesomeIcon icon={faUndo} />
+            <Icon name="rotate-right" size={14} />
             <span>Phục hồi học sinh</span>
           </RestoreButton>
         </ModalFooter>
