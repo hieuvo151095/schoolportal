@@ -21,7 +21,7 @@ export default function CreateInvoicePage() {
         />
       </Head>
 
-      <div className="py-4">
+      <div className="space-y-6">
         <CreateInvoiceWizard />
       </div>
     </PortalLayout>

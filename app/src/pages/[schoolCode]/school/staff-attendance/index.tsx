@@ -125,7 +125,7 @@ export default function SchoolStaffAttendancePage() {
         <title>Điểm Danh Nhân Viên | School Operating Portal</title>
       </Head>
 
-      <div style={{ padding: 'var(--space-6)', maxWidth: '1440px', margin: '0 auto' }}>
+      <div className="space-y-6">
         {/* Floating Toast Notification */}
         {toastMessage && (
           <div

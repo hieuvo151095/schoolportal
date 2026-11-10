@@ -132,7 +132,7 @@ export default function GradeDetailPage() {
         <title>{grade.name} | Chi tiết Khối Lớp | School Operating Portal</title>
       </Head>
 
-      <div style={{ padding: 'var(--space-6)', maxWidth: '1440px', margin: '0 auto' }}>
+      <div className="space-y-6">
         {/* Navigation & Page Header */}
         <div style={{ marginBottom: 'var(--space-4)' }}>
           <Link

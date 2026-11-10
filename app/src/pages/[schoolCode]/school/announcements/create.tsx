@@ -38,7 +38,7 @@ export default function CreateAnnouncementPage() {
         <title>Soạn Thông Báo Mới | School Operating Portal</title>
       </Head>
 
-      <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+      <div className="space-y-6">
         <AnnouncementComposer
           schoolCode={schoolCode}
           onSave={handleSave}

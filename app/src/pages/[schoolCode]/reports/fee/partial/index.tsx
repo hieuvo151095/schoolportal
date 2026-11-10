@@ -2,6 +2,7 @@ import React, { useMemo, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { PortalLayout } from '../../../../../components/layout/PortalLayout';
+import { PageHeader } from '../../../../../components/ds';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import {
   setActiveTab,
@@ -52,19 +53,15 @@ export default function PartialFeeReportsPage() {
         <title>Hóa Đơn Thanh Toán Một Phần | Báo Cáo Học Phí</title>
       </Head>
 
-      {/* 4-Tab Navigation (BR01) */}
-      <FeeReportTabsNav schoolCode={schoolCode} />
+      <div className="space-y-6">
+        {/* 4-Tab Navigation (BR01) */}
+        <FeeReportTabsNav schoolCode={schoolCode} />
 
-      <div className="w-full mt-6">
         {/* Page Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 font-heading">
-            Hóa Đơn Thanh Toán Một Phần
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Theo dõi hóa đơn đang thu nhiều đợt, hiển thị số tiền còn thiếu (BR04) và lịch sử thanh toán chi tiết (BR06)
-          </p>
-        </div>
+        <PageHeader
+          title="Hóa Đơn Thanh Toán Một Phần"
+          description="Theo dõi hóa đơn đang thu nhiều đợt, hiển thị số tiền còn thiếu (BR04) và lịch sử thanh toán chi tiết (BR06)"
+        />
 
         {/* Filter Toolbar */}
         <FeeReportToolbar

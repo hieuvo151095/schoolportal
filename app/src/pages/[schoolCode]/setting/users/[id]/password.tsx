@@ -58,7 +58,7 @@ export default function UserChangePasswordPage() {
         <title>Đặt lại mật khẩu - {targetUser?.fullName || 'Người dùng'} | Eco School</title>
       </Head>
 
-      <div className="max-w-2xl mx-auto space-y-6 pb-12">
+      <div className="space-y-6 pb-12">
         {/* Breadcrumb & Navigation */}
         <div className="flex items-center justify-between">
           <Link

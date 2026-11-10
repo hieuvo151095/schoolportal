@@ -11,9 +11,7 @@ import { AudienceType } from '../../../../../types/assignment';
 import { Dropdown } from '@/components/ds';
 
 const Container = styled.div`
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 24px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;

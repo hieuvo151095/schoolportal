@@ -87,9 +87,8 @@ export default function SettingFeePage() {
         <title>Cấu hình Học phí | Finviet School Operating Portal</title>
       </Head>
 
-      <div className="flex-1 overflow-y-auto bg-[#F8FAFC]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-          {/* Page Header */}
+      <div className="space-y-6">
+        {/* Page Header */}
           <PageHeader
             title="Cấu hình Học phí"
             description="Quản lý quy tắc xuất hóa đơn, kết nối thanh toán tự động, phí trả trễ và đối soát."
@@ -135,7 +134,6 @@ export default function SettingFeePage() {
             <ReconciliationEmailBlock />
           </div>
         </div>
-      </div>
 
       {/* Unsaved Changes Confirmation Modal */}
       <UnsavedChangesModal

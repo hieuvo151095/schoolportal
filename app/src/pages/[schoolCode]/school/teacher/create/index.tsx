@@ -215,7 +215,7 @@ export default function CreateTeacherPage() {
         <title>Thêm Giáo Viên Mới | Cổng Vận Hành Trường Học</title>
       </Head>
 
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="space-y-6">
         {/* Breadcrumb & Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">

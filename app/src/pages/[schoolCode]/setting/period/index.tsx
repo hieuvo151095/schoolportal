@@ -10,7 +10,7 @@ export default function PeriodSettingsPage() {
       <Head>
         <title>Cấu hình tính năng - Học Kỳ | Eco School</title>
       </Head>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <div className="space-y-6">
         <FeatureFlagsTabs activeTab="period" />
         <PeriodSettingsTab />
       </div>

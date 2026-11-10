@@ -10,7 +10,7 @@ export default function ActivitySettingsPage() {
       <Head>
         <title>Cấu hình tính năng - Hoạt Động | Eco School</title>
       </Head>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <div className="space-y-6">
         <FeatureFlagsTabs activeTab="activity" />
         <ActivitySettingsTab />
       </div>

@@ -128,7 +128,7 @@ export const EventForm: React.FC<EventFormProps> = ({
     <div className="min-h-screen bg-[#F8FAFC] pb-16">
       {/* Top Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -185,7 +185,7 @@ export const EventForm: React.FC<EventFormProps> = ({
       </div>
 
       {/* Main Form Content */}
-      <form onSubmit={handleSubmit} className="max-w-4xl mx-auto mt-6 px-4 space-y-6">
+      <form onSubmit={handleSubmit} className="mt-6 px-6 space-y-6">
         {/* Card 1: Basic Information & Category */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-6">
           <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wider pb-3 border-b border-gray-100 flex items-center gap-2">

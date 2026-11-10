@@ -131,7 +131,7 @@ export default function SchoolAnnouncementsPage() {
         <title>Bảng Thông Tin | School Operating Portal</title>
       </Head>
 
-      <div style={{ padding: 'var(--space-6)', maxWidth: '1440px', margin: '0 auto' }}>
+      <div className="space-y-6">
         {/* Page Header */}
         <PageHeader
           title="Bảng Thông Tin & Bản Tin Nhà Trường"

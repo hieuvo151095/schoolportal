@@ -117,9 +117,8 @@ export default function CreateClassPage() {
         <title>Thêm Lớp Mới | SOHA Portal</title>
       </Head>
 
-      <div className="flex flex-col h-full bg-[#F8FAFC]">
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto w-full">
-          {/* Header */}
+      <div className="space-y-6">
+        {/* Header */}
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Link
@@ -411,7 +410,6 @@ export default function CreateClassPage() {
             </form>
           </div>
         </div>
-      </div>
     </PortalLayout>
   );
 }

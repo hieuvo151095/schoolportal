@@ -262,7 +262,7 @@ export default function EditStudentFeePage() {
         <title>Cập nhật học phí | {student.fullName}</title>
       </Head>
 
-      <div className="max-w-4xl mx-auto py-6 px-4 space-y-6">
+      <div className="space-y-6">
         {/* Header with Title & Subtitle */}
         <div className="flex items-center gap-3">
           <Link

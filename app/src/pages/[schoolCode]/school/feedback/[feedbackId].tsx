@@ -25,7 +25,7 @@ export default function SchoolFeedbackDetailPage() {
         </title>
       </Head>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <div className="space-y-6">
         {!currentItem ? (
           <div className="bg-white border border-slate-200 rounded-xl p-8 text-center max-w-lg mx-auto my-12 shadow-sm">
             <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-3">

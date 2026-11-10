@@ -68,7 +68,7 @@ export default function ReconciliationOverviewPage() {
         <title>Đối Soát Thanh Toán Điện Tử | FinViet School Portal</title>
       </Head>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+      <div className="space-y-6">
         {/* Page Header */}
         <PageHeader
           title="Đối Soát Thanh Toán Điện Tử"

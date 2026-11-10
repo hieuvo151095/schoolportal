@@ -10,9 +10,7 @@ import { DEVELOPMENTAL_TEMPLATES } from '../../../../../services/mockReportsData
 import { ExtendedReport, ReportTemplateId } from '../../../../../types/reports';
 
 const Container = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 24px;
+  width: 100%;
 `;
 
 const FormCard = styled.div`

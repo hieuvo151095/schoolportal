@@ -199,7 +199,7 @@ export default function CreateSchoolMenuPage() {
         <title>Tạo mới thực đơn tuần | ECO School Portal</title>
       </Head>
 
-      <div className="max-w-7xl mx-auto space-y-6 pb-20">
+      <div className="space-y-6 pb-20">
         {/* Breadcrumb & Navigation */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs text-gray-500">

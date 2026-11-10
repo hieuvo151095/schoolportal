@@ -80,7 +80,7 @@ export default function SchoolMenuPage() {
         <title>Quản lý Thực đơn | Cổng Vận Hành Trường Học</title>
       </Head>
 
-      <div style={{ padding: 'var(--space-6)', maxWidth: '1440px', margin: '0 auto' }}>
+      <div className="space-y-6">
         {/* Page Header */}
         <PageHeader
           title="Thực Đơn Hàng Tuần"

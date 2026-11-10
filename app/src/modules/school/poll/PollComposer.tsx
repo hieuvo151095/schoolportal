@@ -89,7 +89,7 @@ export const PollComposer: React.FC<PollComposerProps> = ({
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="space-y-6">
       {/* Breadcrumb Navigation */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center space-x-2 text-sm text-slate-500">

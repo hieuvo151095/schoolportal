@@ -77,7 +77,7 @@ export default function AnnouncementDetailPage() {
         <title>{announcement.title} | School Operating Portal</title>
       </Head>
 
-      <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+      <div className="space-y-6">
         <AnnouncementDetailView
           schoolCode={schoolCode}
           announcement={announcement}

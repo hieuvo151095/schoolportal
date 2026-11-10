@@ -36,14 +36,7 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 1.5rem;
-  max-width: 1440px;
-  margin: 0 auto;
-
-  @media (max-width: 640px) {
-    padding: 1rem;
-    gap: 1rem;
-  }
+  width: 100%;
 `;
 
 const Breadcrumbs = styled.nav`

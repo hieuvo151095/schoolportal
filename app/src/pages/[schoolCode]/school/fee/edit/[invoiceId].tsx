@@ -39,7 +39,7 @@ export default function EditInvoicePage() {
         />
       </Head>
 
-      <div className="py-4">
+      <div className="space-y-6">
         {invoice ? (
           <InvoiceEditorView invoice={invoice} />
         ) : (

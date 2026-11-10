@@ -47,7 +47,7 @@ export const CalendarAgendaView: React.FC<CalendarAgendaViewProps> = ({
   }
 
   return (
-    <div className="p-6 space-y-4 max-w-5xl mx-auto">
+    <div className="space-y-4">
       {events.map((ev) => {
         const catConfig = EVENT_CATEGORY_MAP[ev.category];
         const timeRangeStr = formatEventTimeRangeNoYear(ev);

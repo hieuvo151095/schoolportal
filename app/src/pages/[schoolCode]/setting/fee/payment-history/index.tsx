@@ -78,9 +78,8 @@ export default function SepayPaymentHistoryPage() {
         <title>Lịch sử thanh toán Sepay | Finviet School Operating Portal</title>
       </Head>
 
-      <div className="flex-1 overflow-y-auto bg-[#F8FAFC]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-          {/* Top Bar / Breadcrumb */}
+      <div className="space-y-6">
+        {/* Top Bar / Breadcrumb */}
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <Link
@@ -309,7 +308,6 @@ export default function SepayPaymentHistoryPage() {
             </div>
           </div>
         </div>
-      </div>
     </PortalLayout>
   );
 }

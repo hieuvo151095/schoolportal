@@ -2,6 +2,7 @@ import React, { useMemo, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { PortalLayout } from '../../../../components/layout/PortalLayout';
+import { PageHeader } from '../../../../components/ds';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { setActiveTab } from '../../../../store/slices/feeReportSlice';
 import { filterPaidInvoices } from '../../../../utils/feeReportValidation';
@@ -37,19 +38,15 @@ export default function PaidFeeReportsPage() {
         <title>Hóa Đơn Đã Thanh Toán | Báo Cáo Học Phí</title>
       </Head>
 
-      {/* 4-Tab Navigation (BR01) */}
-      <FeeReportTabsNav schoolCode={schoolCode} />
+      <div className="space-y-6">
+        {/* 4-Tab Navigation (BR01) */}
+        <FeeReportTabsNav schoolCode={schoolCode} />
 
-      <div className="w-full mt-6">
         {/* Page Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 font-heading">
-            Hóa Đơn Đã Thanh Toán
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Danh sách hóa đơn đã thu hoàn tất, lọc theo ngày xác nhận thanh toán và phương thức giao dịch (BR03)
-          </p>
-        </div>
+        <PageHeader
+          title="Hóa Đơn Đã Thanh Toán"
+          description="Danh sách hóa đơn đã thu hoàn tất, lọc theo ngày xác nhận thanh toán và phương thức giao dịch (BR03)"
+        />
 
         {/* Filter Toolbar with Paid-specific Payment Method Filter */}
         <FeeReportToolbar

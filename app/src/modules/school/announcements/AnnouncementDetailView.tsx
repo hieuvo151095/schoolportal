@@ -93,7 +93,7 @@ export const AnnouncementDetailView: React.FC<AnnouncementDetailViewProps> = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="space-y-6">
       {/* Top action bar and breadcrumbs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <Link

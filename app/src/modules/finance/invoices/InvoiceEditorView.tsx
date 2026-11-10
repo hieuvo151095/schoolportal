@@ -197,7 +197,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({ invoice })
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="space-y-6">
       {/* Top Header */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
         <div className="flex items-center justify-between">

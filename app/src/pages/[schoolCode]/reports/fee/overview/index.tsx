@@ -46,7 +46,7 @@ export default function FeeReportOverviewPage() {
         <title>Báo Cáo Học Phí — Tổng Quan Theo Lớp | Finviet School Portal</title>
       </Head>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+      <div className="space-y-6">
         {/* 4-Tab Navigation */}
         <FeeReportTabsNav schoolCode={schoolCode} />
 

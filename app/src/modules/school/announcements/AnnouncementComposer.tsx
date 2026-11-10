@@ -205,7 +205,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="space-y-6">
       {/* Header breadcrumb & navigation */}
       <div className="flex items-center justify-between">
         <button
