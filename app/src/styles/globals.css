@@ -164,7 +164,7 @@ html, body, #__next {
   .ecomd-filterbar__filters .ecomd-filterbar__select,
   .ecomd-table-card__toolbar .ecomd-dropdown,
   .ecomd-table-card__toolbar .ecomd-select-wrap {
-    flex: 1 1 calc(50% - var(--space-6)) !important;
+    flex: 1 1 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
     width: 100% !important;
@@ -173,7 +173,17 @@ html, body, #__next {
   .ecomd-table-card__toolbar .ecomd-dropdown > div[role="combobox"] {
     width: 100% !important;
   }
-  .ecomd-filterbar__actions,
+  .ecomd-filterbar__filters .ecomd-btn {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .ecomd-filterbar__actions {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: var(--space-8) !important;
+    width: 100% !important;
+  }
   .ecomd-filterbar__actions .ecomd-btn {
     display: flex !important;
     flex: 1 1 100% !important;
@@ -214,16 +224,20 @@ html, body, #__next {
     display: flex !important;
     align-items: center !important;
     flex-wrap: nowrap !important;
-    gap: var(--space-12) !important;
+    gap: var(--space-10) !important;
     flex: 1 1 auto !important;
     min-width: 0 !important;
   }
 
   .ecomd-filterbar__search {
-    flex: 0 1 260px !important;
+    flex: 0 0 260px !important;
     width: 260px !important;
-    min-width: 180px !important;
-    max-width: 320px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+  }
+
+  .ecomd-filterbar__search input {
+    width: 100% !important;
   }
 
   .ecomd-filterbar__filters .ecomd-dropdown,
@@ -232,16 +246,22 @@ html, body, #__next {
   .ecomd-table-card__toolbar .ecomd-dropdown,
   .ecomd-table-card__toolbar .ecomd-select-wrap {
     width: auto !important;
-    min-width: 140px !important;
-    max-width: 220px !important;
+    min-width: 120px !important;
+    max-width: 200px !important;
     flex: 0 0 auto !important;
   }
 
   .ecomd-filterbar__filters .ecomd-dropdown > div[role="combobox"],
   .ecomd-table-card__toolbar .ecomd-dropdown > div[role="combobox"] {
-    min-width: 140px !important;
+    min-width: 120px !important;
     height: 38px !important;
     width: 100% !important;
+  }
+
+  .ecomd-filterbar__filters .ecomd-btn,
+  .ecomd-filterbar__actions .ecomd-btn {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
   }
 
   .ecomd-filterbar__actions {

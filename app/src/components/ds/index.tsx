@@ -554,6 +554,7 @@ export interface FilterBarProps {
   filters?: SelectFieldProps[];
   advanced?: { label?: string; active?: boolean; onClick?: (e: MouseEvent<any>) => void } | false;
   action?: { label: string; icon?: IconName | null; href?: string; onClick?: (e: MouseEvent<any>) => void };
+  actions?: ReactNode;
   children?: ReactNode;
   className?: string;
   style?: CSSProperties;
@@ -586,15 +587,18 @@ export function FilterBar(p: FilterBarProps) {
         )}
         {p.children}
       </div>
-      {a && (
+      {(a || p.actions) && (
         <div className="ecomd-filterbar__actions">
-          <Button
-            icon={a.icon === undefined ? 'plus' : a.icon || undefined}
-            href={a.href}
-            onClick={a.onClick}
-          >
-            {a.label}
-          </Button>
+          {p.actions}
+          {a && (
+            <Button
+              icon={a.icon === undefined ? 'plus' : a.icon || undefined}
+              href={a.href}
+              onClick={a.onClick}
+            >
+              {a.label}
+            </Button>
+          )}
         </div>
       )}
     </div>

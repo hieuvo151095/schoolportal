@@ -5,7 +5,7 @@ import {
   setFilterDrawerOpen,
   resetFilterCriteria,
 } from '../../../store/slices/assignmentSlice';
-import { Button, SearchField, SelectField, CountedTabs } from '@/components/ds';
+import { Button, SearchField, SelectField, CountedTabs, FilterBar } from '@/components/ds';
 
 interface AssignmentToolbarProps {
   schoolCode: string;
@@ -80,74 +80,53 @@ export const AssignmentToolbar: React.FC<AssignmentToolbarProps> = ({ schoolCode
         onChange={handleTabChange}
       />
 
-      {/* 2. Integrated Filterbar Toolbar */}
-      <div
-        className="ecomd-table-card__toolbar flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 sm:p-5 border-b border-[var(--border-default)] bg-[var(--bg-surface)]"
+      {/* 2. Standard FilterBar SSOT */}
+      <FilterBar
+        search={{
+          placeholder: 'Tìm theo tiêu đề, ghi chú...',
+          value: filterCriteria.searchQuery,
+          onChange: (q) => dispatch(setFilterCriteria({ searchQuery: q })),
+        }}
+        filters={[
+          {
+            options: [
+              { value: 'all', label: 'Tất cả lớp học' },
+              { value: '1a1', label: 'Lớp 1A1' },
+              { value: '2a2', label: 'Lớp 2A2' },
+            ],
+            value: filterCriteria.classId,
+            onChange: (val) => dispatch(setFilterCriteria({ classId: val })),
+          },
+          {
+            options: [
+              { value: 'all', label: 'Tất cả môn học' },
+              ...subjects.map((s) => ({ value: s.id, label: s.name })),
+            ],
+            value: filterCriteria.subjectId,
+            onChange: (val) => dispatch(setFilterCriteria({ subjectId: val })),
+          },
+        ]}
+        advanced={{
+          label: 'Bộ lọc nâng cao',
+          active: isFiltered,
+          onClick: () => dispatch(setFilterDrawerOpen(true)),
+        }}
+        action={{
+          label: 'Tạo bài tập',
+          onClick: onOpenCreate,
+        }}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center flex-wrap gap-3 w-full md:w-auto">
-          {/* Class Filter */}
-          <div className="w-full sm:w-[180px]">
-            <SelectField
-              value={filterCriteria.classId}
-              onChange={(val) => dispatch(setFilterCriteria({ classId: val }))}
-              options={[
-                { value: 'all', label: 'Tất cả lớp học' },
-                { value: '1a1', label: 'Lớp 1A1' },
-                { value: '2a2', label: 'Lớp 2A2' },
-              ]}
-            />
-          </div>
-
-          {/* Subject Filter */}
-          <div className="w-full sm:w-[180px]">
-            <SelectField
-              value={filterCriteria.subjectId}
-              onChange={(val) => dispatch(setFilterCriteria({ subjectId: val }))}
-              options={[
-                { value: 'all', label: 'Tất cả môn học' },
-                ...subjects.map((s) => ({ value: s.id, label: s.name })),
-              ]}
-            />
-          </div>
-
-          {/* Search Box */}
-          <div className="w-full sm:w-[260px] sm:flex-1">
-            <SearchField
-              value={filterCriteria.searchQuery}
-              onChange={(q) => dispatch(setFilterCriteria({ searchQuery: q }))}
-              placeholder="Tìm theo tiêu đề, ghi chú..."
-            />
-          </div>
-
-          {isFiltered && (
-            <Button variant="ghost" size="sm" onClick={() => dispatch(resetFilterCriteria())}>
-              Đặt lại bộ lọc
-            </Button>
-          )}
-        </div>
-
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full md:w-auto py-1">
+        {isFiltered && (
           <Button
-            variant="secondary"
-            icon="filter"
-            active={isFiltered}
-            indicator={isFiltered}
-            onClick={() => dispatch(setFilterDrawerOpen(true))}
-            className="flex-none whitespace-nowrap min-h-[40px]"
+            variant="ghost"
+            size="sm"
+            className="flex-none whitespace-nowrap text-xs"
+            onClick={() => dispatch(resetFilterCriteria())}
           >
-            Bộ lọc nâng cao
+            Đặt lại bộ lọc
           </Button>
-
-          <Button
-            variant="primary"
-            icon="plus"
-            onClick={onOpenCreate}
-            className="flex-none whitespace-nowrap min-h-[40px]"
-          >
-            Tạo bài tập
-          </Button>
-        </div>
-      </div>
+        )}
+      </FilterBar>
     </div>
   );
 };

@@ -17,6 +17,7 @@ import {
   Tag,
   StatusTag,
   EmptyState,
+  FilterBar,
 } from '@/components/ds';
 
 function MobileClassScoreboardCard({
@@ -192,56 +193,42 @@ export const ScoreboardOverviewGrid: React.FC<ScoreboardOverviewGridProps> = ({
         ]}
       />
 
-      {/* Toolbar & Filters */}
-      <div className="ecomd-table-card__toolbar flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 sm:p-5 border-b border-[var(--border-default)] bg-[var(--bg-surface)]">
-        <div className="flex flex-col sm:flex-row sm:items-center flex-wrap gap-3 w-full md:w-auto">
-          <div className="w-full sm:w-[260px] sm:flex-1">
-            <SearchField
-              value={filterCriteria.searchQuery}
-              onChange={(q) => dispatch(setFilterCriteria({ searchQuery: q }))}
-              placeholder="Tìm theo tên lớp học, GVCN..."
-            />
-          </div>
-
-          <div className="w-full sm:w-[180px]">
-            <SelectField
-              value={filterCriteria.gradeLevel}
-              onChange={(val) => dispatch(setFilterCriteria({ gradeLevel: val }))}
-              options={[
-                { value: 'Tất cả khối', label: 'Tất cả khối lớp' },
-                { value: 'Khối 1', label: 'Khối 1' },
-                { value: 'Khối 2', label: 'Khối 2' },
-                { value: 'Khối 6', label: 'Khối 6' },
-                { value: 'Khối 12', label: 'Khối 12' },
-                { value: 'Mầm non', label: 'Mầm non' },
-              ]}
-            />
-          </div>
-
-          <div className="w-full sm:w-[200px]">
-            <SelectField
-              value={filterCriteria.academicYear}
-              onChange={(val) => dispatch(setFilterCriteria({ academicYear: val }))}
-              options={[
-                { value: 'Năm học 2025 - 2026', label: 'Năm học 2025 - 2026 (Hiện tại)' },
-                { value: 'Năm học 2024 - 2025', label: 'Năm học 2024 - 2025' },
-                { value: 'Kỳ 1 năm học 2026 - 2027', label: 'Kỳ 1 năm học 2026 - 2027' },
-              ]}
-            />
-          </div>
-        </div>
-
-        <div className="w-full md:w-auto flex items-center justify-end">
-          <Button
-            variant="secondary"
-            icon="filter"
-            className="w-full sm:w-auto min-h-[40px] flex-none whitespace-nowrap"
-            onClick={() => dispatch(setFilterModalOpen(true))}
-          >
-            Bộ lọc nâng cao
-          </Button>
-        </div>
-      </div>
+      {/* Toolbar & Filters (Standard FilterBar SSOT) */}
+      <FilterBar
+        search={{
+          placeholder: 'Tìm theo tên lớp học, GVCN...',
+          value: filterCriteria.searchQuery,
+          onChange: (q) => dispatch(setFilterCriteria({ searchQuery: q })),
+        }}
+        filters={[
+          {
+            options: [
+              { value: 'Tất cả khối', label: 'Tất cả khối lớp' },
+              { value: 'Khối 1', label: 'Khối 1' },
+              { value: 'Khối 2', label: 'Khối 2' },
+              { value: 'Khối 6', label: 'Khối 6' },
+              { value: 'Khối 12', label: 'Khối 12' },
+              { value: 'Mầm non', label: 'Mầm non' },
+            ],
+            value: filterCriteria.gradeLevel,
+            onChange: (val) => dispatch(setFilterCriteria({ gradeLevel: val })),
+          },
+          {
+            options: [
+              { value: 'Năm học 2025 - 2026', label: 'Năm học 2025 - 2026 (Hiện tại)' },
+              { value: 'Năm học 2024 - 2025', label: 'Năm học 2024 - 2025' },
+              { value: 'Kỳ 1 năm học 2026 - 2027', label: 'Kỳ 1 năm học 2026 - 2027' },
+            ],
+            value: filterCriteria.academicYear,
+            onChange: (val) => dispatch(setFilterCriteria({ academicYear: val })),
+          },
+        ]}
+        advanced={{
+          label: 'Bộ lọc nâng cao',
+          active: false,
+          onClick: () => dispatch(setFilterModalOpen(true)),
+        }}
+      />
 
       {/* Main Grid Content */}
       {filteredClasses.length === 0 ? (

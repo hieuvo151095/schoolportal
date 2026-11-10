@@ -9,8 +9,8 @@ import {
   Button,
   SearchField,
   SelectField,
-  SegmentedControl,
   CountedTabs,
+  FilterBar,
 } from '@/components/ds';
 
 interface ScheduleToolbarProps {
@@ -66,55 +66,29 @@ export const ScheduleToolbar: React.FC<ScheduleToolbarProps> = ({ schoolCode, on
         }
       />
 
-      {/* 2. Unified Filterbar Toolbar */}
-      <div
-        className="ecomd-table-card__toolbar flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 sm:p-5 border-b border-[var(--border-default)] bg-[var(--bg-surface)]"
-      >
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center flex-wrap gap-3 flex-1 w-full">
-          <div className="w-full sm:w-[180px]">
-            <SelectField
-              value={filterCriteria.classId}
-              onChange={handleClassChange}
-              options={[
-                { value: 'all', label: 'Tất cả các lớp' },
-                ...classes.map((cls) => ({ value: cls.id, label: cls.name })),
-              ]}
-            />
-          </div>
-
-          <div className="w-full sm:w-[260px] sm:flex-1">
-            <SearchField
-              value={filterCriteria.searchQuery}
-              onChange={handleSearchChange}
-              placeholder="Tìm theo tên TKB, mã, học kỳ..."
-            />
-          </div>
-
-          <div className="w-full sm:w-auto">
-            <SegmentedControl
-              value={filterCriteria.type}
-              onChange={(type) => dispatch(setFilterCriteria({ type: type as 'all' | 'grid' | 'file' }))}
-              items={[
-                { key: 'all', label: 'Tất cả' },
-                { key: 'grid', label: 'Dạng lưới', icon: 'layer-group' },
-                { key: 'file', label: 'Dạng file', icon: 'file-lines' },
-              ]}
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full md:w-auto py-1">
-          <Button
-            variant="secondary"
-            icon="filter"
-            active={isFiltered}
-            indicator={isFiltered}
-            className="flex-none whitespace-nowrap"
-            onClick={() => dispatch(setFilterDrawerOpen(true))}
-          >
-            Bộ lọc
-          </Button>
-
+      {/* 2. Unified FilterBar Toolbar SSOT */}
+      <FilterBar
+        search={{
+          placeholder: 'Tìm theo tên TKB, mã, học kỳ...',
+          value: filterCriteria.searchQuery,
+          onChange: handleSearchChange,
+        }}
+        filters={[
+          {
+            options: [
+              { value: 'all', label: 'Tất cả các lớp' },
+              ...classes.map((cls) => ({ value: cls.id, label: cls.name })),
+            ],
+            value: filterCriteria.classId,
+            onChange: handleClassChange,
+          },
+        ]}
+        advanced={{
+          label: 'Bộ lọc',
+          active: isFiltered,
+          onClick: () => dispatch(setFilterDrawerOpen(true)),
+        }}
+        actions={
           <Button
             variant="secondary"
             icon="upload"
@@ -123,17 +97,12 @@ export const ScheduleToolbar: React.FC<ScheduleToolbarProps> = ({ schoolCode, on
           >
             Tải lên file
           </Button>
-
-          <Button
-            variant="primary"
-            icon="plus"
-            className="flex-none whitespace-nowrap"
-            onClick={onOpenCreate}
-          >
-            Thêm thời khóa biểu
-          </Button>
-        </div>
-      </div>
+        }
+        action={{
+          label: 'Thêm thời khóa biểu',
+          onClick: onOpenCreate,
+        }}
+      />
     </div>
   );
 };
