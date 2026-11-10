@@ -819,3 +819,25 @@
 - **Consequences:** Provides school finance departments and parents with a professional, legally compliant, pixel-perfect A4 invoice printout matching official production systems.
 - **Rollback Trigger:** None.
 
+---
+
+### ADR-038: Itemized Line-Item Payment Allocation and Status Synchronization Invariant
+- **Status:** Accepted
+- **Context:**
+  In the Tuition Billing (`/school/fee`) module, an invoice consists of multiple itemized line items (e.g., Học phí chính khóa, Tiền ăn bán trú, Câu lạc bộ ngoại khóa).
+  In legacy mock prototypes (such as invoice `HD2609-002` for student Trần Thị Bích), when a partial payment of `1.000.000 đ` was recorded at the invoice header level, all three underlying line items (1.200.000 đ, 770.000 đ, and 300.000 đ) remained marked as "Chưa thanh toán" (Unpaid).
+  This caused critical operational and business ambiguities:
+  1. *Lack of Fee Attribution:* Neither school accountants nor parents could determine which fee obligation the 1.000.000 đ covered.
+  2. *Refund & Drop Complications:* If a student drops an extracurricular activity (e.g. Robotics) or requests a refund for meals, accountants cannot determine whether the specific fee was settled or still unpaid.
+  3. *Parent Distrust:* Parents who made a substantial payment see all individual fee items listed as "Chưa thanh toán" in red, creating disputes and inquiries.
+- **Decision:**
+  1. **Nguyên tắc thanh toán dứt điểm từng khoản thu (Itemized Full Settlement Rule):** Mọi khoản thanh toán thu tiền (thủ công hoặc tự động) phải được phân bổ và giải quyết dứt điểm 100% cho từng dòng khoản thu cụ thể với số tiền tương ứng, hoặc cho một tập hợp các dòng khoản thu trọn vẹn. Không cho phép thu những khoản tiền lơ lửng không gán được dứt điểm cho bất kỳ khoản thu nào.
+  2. **Đồng bộ trạng thái dòng thu độc lập:** Khi một dòng khoản thu được thanh toán đủ số tiền tương ứng, trạng thái của dòng đó ngay lập tức chuyển từ text màu đỏ `"Chưa thanh toán"` sang text màu xanh lá `"Đã thanh toán"`. Các dòng chưa được thanh toán đủ vẫn giữ nguyên `"Chưa thanh toán"`.
+  3. **Cơ chế chọn khoản thu khi Xác nhận thanh toán (Manual Payment Allocation UI):** Trong modal xác nhận thanh toán (`ManualPaymentModal`), hệ thống hỗ trợ kế toán chọn trực tiếp các khoản thu cần quyết toán trong đợt này (ví dụ: [x] Tiền ăn 770.000 đ, [x] CLB Robotics 300.000 đ), số tiền thanh toán tự động tính tổng tương ứng (1.070.000 đ), loại bỏ tình trạng nhập số tiền tùy tiện gây treo công nợ không rõ mục.
+  4. **Minh bạch hóa dòng tiền trong Lịch sử thanh toán:** Bản ghi lịch sử thanh toán (`paymentHistory`) bắt buộc lưu trữ danh sách các khoản thu được quyết toán trong đợt thu đó để phục vụ đối soát và hoàn phí độc lập.
+- **Alternatives Rejected:**
+  - *Generic lump-sum invoice-level payment without itemized allocation:* Rejected because it leaves all line items marked as "Chưa thanh toán", confusing parents and destroying accounting traceability.
+  - *Prorating partial payments proportionally across all lines:* Rejected because extracurricular and meal fees must be distinct, auditable liabilities rather than fractional entitlements.
+- **Consequences:** Ensures complete transparency for parents, simplifies audit and refund workflows for accountants, and establishes referential integrity between payments and fee items.
+- **Rollback Trigger:** None.
+

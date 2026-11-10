@@ -178,6 +178,11 @@ Bằng việc tái phát triển toàn diện cổng vận hành trên nền t�
   6. Khối Chữ ký 3 vị trí: Phía trên ghi rõ `Ngày ... tháng ... năm ...` căn phải; 3 cột chữ ký cân đối: `Kế toán`, `Thủ quỹ`, `Hiệu trưởng`.
   7. Footer: Dòng chữ `Powered by finviet`.
   8. Cách ly in ấn (@media print): Đặt khổ chuẩn `A4 portrait` với lề `8mm 12mm`, ẩn hoàn toàn toàn bộ thanh điều hướng (`AppHeader`, `Sidebar`, `Rail`), nút bấm thao tác và thẻ tra cứu web (`.screen-only`, `.no-print`), đảm bảo phiếu báo in ra vừa vặn đúng 01 trang giấy A4 mà không bị tràn trang.
+- `FR-FIN-026 (Phân bổ thanh toán dứt điểm theo dòng khoản thu & Đồng bộ trạng thái Đã/Chưa thanh toán từng mục - ADR-038)`:
+  1. Nguyên tắc thanh toán trọn gói: Mọi giao dịch thanh toán (thu tiền mặt thủ công hoặc chuyển khoản tự động) PHẢI giải quyết dứt điểm 100% cho từng dòng khoản thu cụ thể với số tiền tương ứng (hoặc tổ hợp trọn vẹn các dòng). Nghiêm cấm ghi nhận số tiền thanh toán lẻ lơ lửng không tương ứng với bất kỳ khoản thu nào (như trường hợp thu 1.000.000 đ cho hóa đơn gồm 3 khoản 1.200.000 đ, 770.000 đ, 300.000 đ khiến cả 3 dòng đều bị đánh dấu "Chưa thanh toán").
+  2. Đồng bộ trạng thái dòng: Dòng khoản thu nào được thanh toán đủ số tiền tương ứng thì text trạng thái tại cột Thành tiền ngay lập tức chuyển từ `"Chưa thanh toán"` (đỏ) sang `"Đã thanh toán"` (xanh lá). Dòng nào chưa thanh toán đủ vẫn giữ nguyên `"Chưa thanh toán"`.
+  3. Giao diện xác nhận thanh toán (`ManualPaymentModal`): Cung cấp danh sách các dòng khoản thu kèm hộp kiểm cho phép kế toán tích chọn đích danh mục cần quyết toán trong đợt thu đó; số tiền thu tự động tính bằng tổng của các mục được chọn.
+  4. Nhật ký đối soát minh bạch: Lịch sử thanh toán (`paymentHistory`) ghi rõ danh mục các khoản phí đã được quyết toán trong đợt thu để phục vụ tra cứu, thanh tra và hoàn tiền độc lập khi học sinh thôi học hoặc rút môn ngoại khóa.
 
 ### Phân hệ 4: Nhà Trường (School Administration)
 - `FR-SCH-001` - `FR-SCH-005`: Quản lý danh bạ học sinh, hub chi tiết 360° (5 tab ngữ cảnh), nhập học mới, chuyển lớp / chuyển năm học (tuân thủ 3 nguyên tắc cascade: gán biểu phí mới, thu hồi chat cũ, bảo toàn điểm số), và ghi chú nội bộ.

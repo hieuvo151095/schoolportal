@@ -1041,6 +1041,18 @@ describe('Finance Tuition Invoices (Học Phí) Business Rules & Engine', () => 
       assert.ok(css.includes('.no-print'));
     });
 
+    test('ADR-038 & TC-23: Architectural decision and PRD specify itemized line-item payment settlement', async () => {
+      const fs = await import('fs');
+      const adrContent = fs.readFileSync('../docs/guides/decisions.md', 'utf8');
+      const prdViContent = fs.readFileSync('../docs/prd/PRD_School_Operating_Portal_VI.md', 'utf8');
+
+      assert.ok(adrContent.includes('ADR-038: Itemized Line-Item Payment Allocation'));
+      assert.ok(adrContent.includes('Nguyên tắc thanh toán dứt điểm từng khoản thu'));
+      assert.ok(prdViContent.includes('FR-FIN-026'));
+      assert.ok(prdViContent.includes('Đã thanh toán'));
+      assert.ok(prdViContent.includes('Chưa thanh toán'));
+    });
+
   });
 
 });

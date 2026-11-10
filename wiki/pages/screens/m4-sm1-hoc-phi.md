@@ -13,6 +13,7 @@ spec_ids:
   - TC-13
   - TC-14
   - TC-22
+  - TC-23
 apps:
   - web
 route_ids:
@@ -44,6 +45,12 @@ Quản lý vòng đời hóa đơn học phí, tích hợp VietQR động, áp d
 - **Khối Chữ ký:** Ngày lập căn phải `Ngày ... tháng ... năm ...`, 3 cột chữ ký cân đối: `Kế toán`, `Thủ quỹ`, `Hiệu trưởng`.
 - **Cách ly in ấn (@media print):** Khổ giấy `A4 portrait`, lề `8mm 12mm`. Ẩn toàn bộ AppHeader, Sidebar, breadcrumb, nút thao tác và khối đối soát web (`.screen-only`, `.no-print`), đảm bảo phiếu in ra vừa khít 01 trang giấy A4 mà không bị phân mảnh hay tràn layout.
 
+## Quy tắc phân bổ thanh toán dứt điểm theo dòng khoản thu (TC-23, ADR-038)
+- **Bất cập của việc thu tiền lơ lửng:** Khi kế toán ghi nhận số tiền thanh toán lẻ/tùy tiện (ví dụ thu `1.000.000 đ` cho hóa đơn gồm 3 khoản: Học phí 1.200.000 đ, Tiền ăn 770.000 đ, CLB Robotics 300.000 đ), số tiền này chỉ được cộng dồn chung ở cấp hóa đơn mà không thuộc về khoản thu nào. Hậu quả là cả 3 dòng khoản thu đều hiển thị text đỏ `"Chưa thanh toán"`, gây hoang mang cho phụ huynh và bế tắc cho kế toán khi cần đối soát hoặc hoàn tiền rút môn.
+- **Nguyên tắc quyết toán trọn gói 100% từng khoản:** Khi phát sinh giao dịch thanh toán (thủ công hoặc tự động), số tiền nộp phải tương ứng với việc **hoàn thành trọn vẹn (100%) một hoặc nhiều khoản thu cụ thể**.
+- **Đồng bộ trạng thái dòng thu tức thì:** Dòng khoản thu nào được thanh toán đủ số tiền tương ứng, text trạng thái của dòng đó lập tức chuyển từ `"Chưa thanh toán"` (đỏ) sang `"Đã thanh toán"` (xanh lá). Dòng nào chưa thanh toán đủ vẫn giữ nguyên `"Chưa thanh toán"`.
+- **Chọn khoản thu khi xác nhận thanh toán:** Modal xác nhận thanh toán thủ công (`ManualPaymentModal`) hỗ trợ kế toán tích chọn đích danh các khoản thu cần quyết toán trong đợt thu (ví dụ chọn Tiền ăn + CLB $\rightarrow$ tự động tính tổng tiền thu), loại bỏ thao tác nhập tiền tự do không gán nguồn gốc.
+
 ## Yêu cầu spec
 | Mã | Yêu cầu | Trạng thái |
 |---|---|---|
@@ -53,6 +60,7 @@ Quản lý vòng đời hóa đơn học phí, tích hợp VietQR động, áp d
 | TC-12 | Công thức tính tiền ăn hoàn trả theo số bữa ăn thực tế và tỷ lệ khấu trừ cấu hình | MISSING |
 | TC-13 | Chốt dữ liệu nghỉ học tháng M, lập bảng tổng hợp công nợ tiền ăn và phê duyệt | MISSING |
 | TC-14 | Tự động kết chuyển suất hoàn tiền ăn thành dòng giảm trừ âm trên hóa đơn học phí tháng M+1 | MISSING |
+| TC-23 | Quy tắc phân bổ thanh toán dứt điểm theo dòng khoản thu và đồng bộ trạng thái Đã/Chưa thanh toán từng mục | MISSING |
 
 ## Khác biệt spec ↔ code
 | Mã spec | Spec yêu cầu | Code hiện tại | Mức | Bằng chứng |
@@ -64,6 +72,7 @@ Quản lý vòng đời hóa đơn học phí, tích hợp VietQR động, áp d
 | TC-13 | Chốt dữ liệu nghỉ học tháng M, lập bảng tổng hợp công nợ tiền ăn và phê duyệt | Redux slice quản lý state hóa đơn | MISSING | repo:app/src/store/slices/invoiceSlice.ts:1 |
 | TC-14 | Tự động kết chuyển suất hoàn tiền ăn thành dòng giảm trừ âm trên hóa đơn học phí tháng M+1 | Validation dữ liệu hóa đơn | MISSING | repo:app/src/utils/invoiceValidation.ts:1 |
 | TC-22 | Chốt chặn bảo toàn lịch sử thanh toán hóa đơn: cấm ghi đè lịch sử cũ khi có giao dịch thanh toán mới | State Redux chưa khóa lịch sử thanh toán bất biến | MISSING | repo:app/src/store/slices/invoiceSlice.ts:1 |
+| TC-23 | Quy tắc phân bổ thanh toán dứt điểm theo dòng khoản thu và đồng bộ trạng thái Đã/Chưa thanh toán từng mục | Chưa có logic gán thanh toán theo từng dòng khoản thu | MISSING | repo:app/src/store/slices/invoiceSlice.ts:1 |
 
 ## Câu hỏi mở
 Không có câu hỏi mở tồn đọng (đã giải quyết dứt điểm tại [Bảng câu hỏi mở](../sources/src-open-questions-resolutions.md) mục OQ-02, OQ-09, OQ-14, OQ-17, OQ-18, OQ-21, OQ-22).

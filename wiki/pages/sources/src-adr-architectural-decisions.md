@@ -55,6 +55,7 @@ Tài liệu định nghĩa các quyết định kiến trúc bất biến đã �
 | VH-10 | Cơ chế cập nhật lạc quan (optimistic update) khi điểm danh và tự động hoàn tác thông báo lỗi khi mất mạng | repo:docs/guides/decisions.md:165 |
 | TC-21 | Lịch sử giao dịch thanh toán tự động Sepay hiển thị dạng nhật ký append-only và bộ lọc đa chiều | repo:docs/guides/decisions.md:240 |
 | TC-22 | Chốt chặn bảo toàn lịch sử thanh toán hóa đơn: cấm ghi đè lịch sử cũ khi có giao dịch thanh toán mới | repo:docs/guides/decisions.md:92 |
+| TC-23 | Quy tắc phân bổ thanh toán dứt điểm theo dòng khoản thu và đồng bộ trạng thái Đã/Chưa thanh toán từng mục | repo:docs/guides/decisions.md:823 |
 | NT-16 | Quy tắc chuyển lớp và chuyển năm học học sinh bảo toàn 3 luồng: định mức học phí, nhóm chat trao đổi và hồ sơ học tập | repo:docs/guides/decisions.md:142 |
 | NT-17 | Cơ chế kho lưu trữ lạnh học sinh: cách ly khỏi danh sách hoạt động, kiểm tra lớp khi phục hồi và bảo vệ 2 bước khi xóa vĩnh viễn | repo:docs/guides/decisions.md:186 |
 | CH-09 | Cấu hình học phí độc lập từng khối (dirty state isolation) và cảnh báo rời trang khi có thay đổi chưa lưu | repo:docs/guides/decisions.md:245 |

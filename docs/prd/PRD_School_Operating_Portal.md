@@ -144,6 +144,11 @@ By re-engineering the portal using Next.js (Pages Router), Redux, Tailwind CSS w
   4. Official Notes: Banking app QR scan instructions; ECO Me deferred payment notice; hotline 1900 9005.
   5. Tripartite Signature Block: Right-aligned date `Ngày ... tháng ... năm ...`, and 3 signature columns: `Kế toán`, `Thủ quỹ`, `Hiệu trưởng`.
   6. Print Isolation: Isolated A4 portrait styling (`8mm 12mm` margins) completely hiding navigation bars, toolbars, and web status panels (`.no-print`, `.screen-only`), outputting strictly 1 page.
+- `FR-FIN-026`: The system MUST enforce itemized line-item payment settlement allocation and status synchronization (ADR-038):
+  1. Full Item Settlement Rule: Every recorded payment transaction (manual cash or automated transfer) MUST fully settle 100% of the corresponding amount for one or more specific fee line items. The system strictly prohibits unassigned lump-sum payments that leave all items marked as unpaid (e.g. collecting 1,000,000 VND on an invoice with items of 1,200,000 VND, 770,000 VND, and 300,000 VND).
+  2. Line Item Status Synchronization: When an individual line item is settled with its exact amount, its status in the table MUST immediately transition from "Chưa thanh toán" (red) to "Đã thanh toán" (green). Unsettled items remain "Chưa thanh toán".
+  3. Payment Confirmation UI (`ManualPaymentModal`): The modal provides line item checkboxes allowing accountants to select specific fees to settle; the payment amount automatically sums the selected items.
+  4. Audit Trail: Payment history logs MUST record the specific fee line items settled in each transaction.
 
 ### Module 4: Nhà Trường (School Administration)
 - `FR-SCH-001`: The system MUST provide a comprehensive Student Directory (`/school/kid/`) filterable by academic year, class, keyword search, enrollment date, and educational authority flag ("CSDL Sở").
