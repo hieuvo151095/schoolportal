@@ -841,3 +841,36 @@
 - **Consequences:** Ensures complete transparency for parents, simplifies audit and refund workflows for accountants, and establishes referential integrity between payments and fee items.
 - **Rollback Trigger:** None.
 
+---
+
+### ADR-039: Universal Dropdown Layering, Z-Index Hoisting & Actionable In-Cell Electronic Invoice Configuration
+- **Status:** Accepted
+- **Context:**
+  Two critical UI/UX bugs in the portal table and toolbar components disrupted user workflows:
+  1. *Stacking Context & Layer Bleeding Bug:* When opening a row action menu (`⋮`) or an in-cell dropdown in a table (e.g., in `/school/school-fees`, `/school/fee`, `/classes`, etc.), sibling table rows below that had equal `z-index` (such as `z-50` on `.ecomd-menu-wrap`) or relative positioning caused action buttons and cell contents from subsequent rows to bleed through or paint ON TOP OF the active floating menu. Furthermore, in toolbars and FilterBars placed above or inside table cards, floating select menus frequently slipped behind table headers or got clipped by table container overflow (`overflow: hidden`).
+  2. *Fee Catalog Electronic Invoice UX Ambiguity:* In the Fee Catalog (`/school/school-fees`), the "Xuất HĐĐT" column previously displayed lengthy text `"Có xuất HĐĐT"` and `"Không"` inside a static status badge without any visual affordance indicating it was clickable. Clicking the badge immediately triggered a confirmation modal without giving users a choice interface, causing confusion and unintentional modal triggers.
+- **Decision:**
+  1. **Hệ thống phân tầng Z-Index & Nâng tầng tự động (Universal Z-Index Hoisting SSOT):**
+     - Thiết lập hệ thống z-index chuẩn cho toàn bộ ứng dụng:
+       - Nội dung bảng tĩnh: `z-index: 1 - 10`.
+       - Tiêu đề bảng cố định (sticky header): `z-index: 20`.
+       - Thanh lọc dữ liệu (`.ecomd-filterbar`): `z-index: 30`, tự động nâng lên `z-index: 100` khi có phần tử focus hoặc dropdown đang mở (`:has(.is-open)`).
+       - Hàng bảng và ô bảng chứa menu/dropdown đang mở (`tr:has(.is-open)`, `td:has(.is-open)`): Tự động nâng tầng lên `z-index: 900`.
+       - Container phần tử mở (`.ecomd-dropdown.is-open`, `.ecomd-menu-wrap.is-open`): `z-index: 950`.
+       - Khối popup/menu thả nổi (`[role="listbox"]`, `.ecomd-menu.is-floating`): `z-index: 1000 !important;`.
+       - Modal xác nhận / Slide-over: `z-index: 1100 - 1200`.
+       - Thông báo Toast toàn cục: `z-index: 9999`.
+     - Chống cắt xén viền bảng: `.ecomd-table-card` được quy định `overflow: visible !important;` và `.ecomd-table-scroll` là `overflow-y: visible !important;` để không cắt cụt các menu thả nổi.
+     - Các hàng không mở menu tuyệt đối không gán `z-50` tĩnh mà dùng `z-auto` để không tạo stacking context đè lên hàng trên.
+  2. **Chuẩn hóa cột "Xuất HĐĐT" (Actionable In-Cell Dropdown Gate):**
+     - Nhãn hiển thị tinh gọn: Chỉ hiển thị text `"Có"` (màu xanh lục kèm icon check) hoặc `"Không"` (màu xám kèm icon minus), loại bỏ chữ rườm rà.
+     - Chỉ báo công thái học (Affordance Icon): Luôn hiển thị icon mũi tên hướng xuống (`chevron-down`) kế bên text để người dùng nhận diện ngay đây là trường có thể bấm chọn option khác.
+     - Luồng tương tác 2 bước (Two-Step Confirmation Flow):
+       - Bước 1: Người dùng bấm vào pill để mở menu thả nổi gồm 2 lựa chọn: `Có` và `Không`.
+       - Bước 2: Chỉ khi người dùng chọn option KHÁC với giá trị hiện tại, menu mới đóng lại và hiển thị modal pop-up xác nhận (`PopupModal`): *"Bạn có chắc chắn muốn thay đổi trạng thái Xuất hóa đơn điện tử của khoản phí '[Tên]' sang [Có/Không]?"*. Nếu người dùng bấm chọn lại chính option hiện tại, menu chỉ đóng lại mà không hiện modal.
+- **Alternatives Rejected:**
+  - *Sử dụng toggle switch hoặc checkbox trực tiếp trong cell:* Bị loại vì dễ bấm nhầm và không thể hiện rõ bản chất chọn giữa 2 trạng thái kế toán chính thức ("Có xuất HĐĐT" vs "Không xuất HĐĐT").
+  - *Click một chạm đổi trạng thái ngay không qua menu chọn:* Bị loại vì người dùng không nhìn thấy các lựa chọn khả dĩ trước khi quyết định và dễ gây bất ngờ khi modal xác nhận bật lên đột ngột.
+- **Consequences:** Loại bỏ hoàn toàn lỗi vỡ layout layer đè lên nhau trên toàn bộ các bảng trong hệ thống; chuẩn hóa UX cột Xuất HĐĐT tinh gọn, trực quan và an toàn.
+- **Rollback Trigger:** None.
+

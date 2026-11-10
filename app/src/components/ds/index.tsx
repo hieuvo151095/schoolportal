@@ -1480,7 +1480,7 @@ export function DropdownMenu(p: DropdownMenuProps) {
         'ecomd-menu',
         p.trigger && 'is-floating',
         p.align === 'left' ? 'is-left' : 'is-right',
-        '!z-[999] shadow-2xl',
+        '!z-[1000] shadow-2xl',
         !p.trigger && p.className
       )}
       role="menu"
@@ -1502,7 +1502,15 @@ export function DropdownMenu(p: DropdownMenuProps) {
   });
 
   return (
-    <div ref={ref} className={cx('ecomd-menu-wrap relative z-50', p.className)} style={p.style}>
+    <div
+      ref={ref}
+      className={cx(
+        'ecomd-menu-wrap relative',
+        open ? 'z-[950] is-open' : 'z-auto',
+        p.className
+      )}
+      style={p.style}
+    >
       {trig}
       {open ? panel : null}
     </div>

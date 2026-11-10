@@ -7,13 +7,14 @@ sources:
 spec_ids:
   - TC-03
   - TC-04
-updated: 2026-11-05
+  - TC-24
+updated: 2026-11-10
 ---
 
 # Danh Mục Khoản Phí (Fee Catalog Item)
 
 ## Định nghĩa
-Thực thể Danh mục khoản phí định nghĩa toàn bộ các loại phí, đơn giá chuẩn, chu kỳ thu và tính chất (bắt buộc hay tự chọn) được áp dụng trong toàn trường và theo từng khối/lớp học, bao gồm các cấu hình biểu phí linh hoạt và phân rã hóa đơn cho lớp ngoại khóa.
+Thực thể Danh mục khoản phí định nghĩa toàn bộ các loại phí, đơn giá chuẩn, chu kỳ thu và tính chất (bắt buộc hay tự chọn) được áp dụng trong toàn trường và theo từng khối/lớp học, bao gồm các cấu hình biểu phí linh hoạt, phân rã hóa đơn cho lớp ngoại khóa và cấu hình xuất hóa đơn điện tử 2 bước an toàn (TC-24).
 
 ## Thuộc tính / quy tắc nghiệp vụ
 | Mã | Quy tắc | Ghi chú |
@@ -22,6 +23,7 @@ Thực thể Danh mục khoản phí định nghĩa toàn bộ các loại phí,
 | TC-03 | Đơn vị tính đa dạng: theo tháng, theo kỳ, theo năm, theo ngày (ví dụ: Tiền ăn tính theo ngày để phục vụ hoàn tiền) | Định dạng tiền tệ có dấu chấm phân cách hàng nghìn |
 | TC-04 | Cấu hình biểu phí theo lớp: Cho phép gán tập hợp con các khoản thu và đơn giá riêng biệt cho từng lớp học | Khi lập hóa đơn, chỉ nạp danh mục phí thuộc lớp đó |
 | TC-04 | Biểu phí ngoại khóa & Phân rã Sub-Invoice (OQ-14): Hỗ trợ tính phí trọn gói theo kỳ (`TERM_FIXED`) hoặc tính theo số buổi thực tế (`PER_SESSION`); các khoản phí ngoại khóa gắn cờ `is_separable = true` để hỗ trợ tách hóa đơn độc lập | Chi tiết tại [Điều phối ngoại khóa](../concepts/extracurricular-billing-scheduling.md) |
+| TC-24 | Trạng thái Xuất HĐĐT hiển thị tinh gọn "Có" / "Không" kèm icon mũi tên xuống `chevron-down`. Click mở menu chọn option; chỉ khi chọn option khác mới bật pop-up confirm xác nhận | ADR-039 / repo:app/src/modules/finance/catalog/FeeCatalogTable.tsx |
 
 ## Quan hệ
 - Được gán vào các [Lớp học](classroom.md).

@@ -275,7 +275,7 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
       ref={rootRef}
       className={cx(
         'ecomd-dropdown relative inline-block text-left',
-        isOpen ? 'z-40' : '',
+        isOpen ? 'z-[950] is-open' : 'z-auto',
         fullWidth && 'w-full',
         p.className
       )}
@@ -372,7 +372,7 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
         <div
           role="listbox"
           className={cx(
-            'absolute z-50 mt-1.5 bg-white rounded-xl border border-slate-200 shadow-xl overflow-hidden',
+            'absolute z-[1000] mt-1.5 bg-white rounded-xl border border-slate-200 shadow-xl overflow-hidden',
             fullWidth ? 'w-full max-w-full left-0 right-0' : '',
             p.placement === 'top-start' || p.placement === 'top-end'
               ? 'bottom-full mb-1.5'

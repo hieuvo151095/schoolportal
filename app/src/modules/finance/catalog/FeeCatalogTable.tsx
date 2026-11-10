@@ -6,7 +6,7 @@
  * Standardized with [DS] ECO ME DASHBOARD
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { addToast } from '../../../store/slices/toastSlice';
 import {
@@ -37,7 +37,110 @@ import {
   Button,
   PopupModal,
   DropdownMenuItem,
+  Icon,
 } from '../../../components/ds';
+
+interface InvoiceToggleCellProps {
+  item: FeeItem;
+  onRequestToggle: (item: FeeItem, newValue: boolean) => void;
+}
+
+const InvoiceToggleCell: React.FC<InvoiceToggleCellProps> = ({ item, onRequestToggle }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isYes = item.exportElectronicInvoice;
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, [isOpen]);
+
+  const handleSelectOption = (newValue: boolean) => {
+    setIsOpen(false);
+    if (newValue !== isYes) {
+      onRequestToggle(item, newValue);
+    }
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className={`relative inline-block text-left ${isOpen ? 'z-[950] is-open' : 'z-auto'}`}
+    >
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border transition-all cursor-pointer select-none ${
+          isYes
+            ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 hover:border-emerald-300'
+            : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200 hover:border-slate-300'
+        }`}
+        title="Bấm để chọn trạng thái Xuất HĐĐT"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+      >
+        <Icon
+          name={isYes ? 'circle-check' : 'circle-minus'}
+          size={12}
+          className={isYes ? 'text-emerald-600' : 'text-slate-400'}
+        />
+        <span>{isYes ? 'Có' : 'Không'}</span>
+        <Icon
+          name="chevron-down"
+          size={10}
+          className={`transition-transform duration-150 ${
+            isYes ? 'text-emerald-500' : 'text-slate-400'
+          } ${isOpen ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      {isOpen && (
+        <div
+          role="listbox"
+          className="absolute z-[1000] left-0 mt-1.5 w-32 bg-white rounded-xl border border-slate-200 shadow-xl overflow-hidden py-1"
+        >
+          <button
+            type="button"
+            role="option"
+            aria-selected={isYes}
+            onClick={() => handleSelectOption(true)}
+            className={`w-full px-3 py-2 text-xs flex items-center justify-between text-left transition-colors cursor-pointer border-0 ${
+              isYes ? 'bg-emerald-50 text-emerald-700 font-semibold' : 'text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Icon name="circle-check" size={13} className={isYes ? 'text-emerald-600' : 'text-slate-400'} />
+              <span>Có</span>
+            </div>
+            {isYes && <Icon name="check" size={12} className="text-emerald-600" />}
+          </button>
+
+          <button
+            type="button"
+            role="option"
+            aria-selected={!isYes}
+            onClick={() => handleSelectOption(false)}
+            className={`w-full px-3 py-2 text-xs flex items-center justify-between text-left transition-colors cursor-pointer border-0 ${
+              !isYes ? 'bg-slate-100 text-slate-800 font-semibold' : 'text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Icon name="circle-minus" size={13} className={!isYes ? 'text-slate-600' : 'text-slate-400'} />
+              <span>Không</span>
+            </div>
+            {!isYes && <Icon name="check" size={12} className="text-slate-600" />}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const FeeCatalogTable: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -217,16 +320,10 @@ export const FeeCatalogTable: React.FC = () => {
       title: 'Xuất HĐĐT',
       render: (item) => {
         return (
-          <button
-            type="button"
-            onClick={() => handleRequestInvoiceToggle(item, !item.exportElectronicInvoice)}
-            className="cursor-pointer bg-transparent border-0 p-0"
-            title="Bấm để thay đổi cấu hình Xuất HĐĐT"
-          >
-            <StatusTag tone={item.exportElectronicInvoice ? 'success' : 'neutral'} icon={true}>
-              {item.exportElectronicInvoice ? 'Có xuất HĐĐT' : 'Không'}
-            </StatusTag>
-          </button>
+          <InvoiceToggleCell
+            item={item}
+            onRequestToggle={handleRequestInvoiceToggle}
+          />
         );
       },
     },
@@ -396,7 +493,7 @@ export const FeeCatalogTable: React.FC = () => {
               </strong>{' '}
               sang{' '}
               <StatusTag tone={pendingInvoiceToggle.newValue ? 'success' : 'neutral'} icon={true}>
-                {pendingInvoiceToggle.newValue ? 'Có xuất HĐĐT' : 'Không xuất HĐĐT'}
+                {pendingInvoiceToggle.newValue ? 'Có' : 'Không'}
               </StatusTag>?
             </p>
             <div className="p-3 bg-[var(--semantic-warning-soft)] border border-[var(--border-warning-soft)] rounded-lg body-xs text-[var(--semantic-warning-strong)]">

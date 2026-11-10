@@ -263,6 +263,56 @@ html, body, #__next {
 }
 
 /* ==========================================================================
+   Universal Dropdown & Menu Layering SSOT (All Modules)
+   Guarantees that all active dropdowns, listboxes, floating filter options,
+   and row action menus strictly paint above all table layers, headers, cards,
+   and adjacent rows without clipping.
+   ========================================================================== */
+.ecomd-filterbar {
+  position: relative;
+  z-index: 30;
+}
+
+.ecomd-filterbar:focus-within,
+.ecomd-filterbar:has(.is-open),
+.ecomd-filterbar:has([role="listbox"]) {
+  z-index: 100 !important;
+}
+
+.ecomd-dropdown.is-open,
+.ecomd-menu-wrap.is-open {
+  position: relative !important;
+  z-index: 950 !important;
+}
+
+.ecomd-dropdown [role="listbox"],
+.ecomd-menu.is-floating {
+  position: absolute !important;
+  z-index: 1000 !important;
+}
+
+/* Hoist any table row or cell containing an open dropdown or action menu */
+tr:has(.is-open),
+tr:has([role="listbox"]),
+tr:has(.ecomd-menu.is-floating),
+td:has(.is-open),
+td:has([role="listbox"]),
+td:has(.ecomd-menu.is-floating) {
+  position: relative !important;
+  z-index: 900 !important;
+}
+
+/* Prevent table cards from clipping floating dropdown menus */
+.ecomd-table-card {
+  overflow: visible !important;
+}
+
+.ecomd-table-scroll {
+  overflow-x: auto;
+  overflow-y: visible !important;
+}
+
+/* ==========================================================================
    ADR-037: Official Standard Invoice Print Engine & Layout Isolation
    ========================================================================== */
 @media print {
