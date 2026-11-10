@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { PortalLayout } from '../../../../components/layout/PortalLayout';
@@ -16,6 +16,8 @@ import {
   openDeleteModal,
   closeDeleteModal,
   deleteEvent,
+  addEvent,
+  updateEvent,
 } from '../../../../store/slices/calendarSlice';
 import { addToast } from '../../../../store/slices/toastSlice';
 import { CalendarToolbar } from '../../../../modules/school/calendar/CalendarToolbar';
@@ -24,6 +26,8 @@ import { CalendarMonthView } from '../../../../modules/school/calendar/CalendarM
 import { CalendarAgendaView } from '../../../../modules/school/calendar/CalendarAgendaView';
 import { EventDetailModal } from '../../../../modules/school/calendar/EventDetailModal';
 import { EventDeleteConfirmModal } from '../../../../modules/school/calendar/EventDeleteConfirmModal';
+import { CreateEventSlideOver } from '../../../../modules/school/calendar/CreateEventSlideOver';
+import { EventFormData, SchoolEvent } from '../../../../types/calendar';
 import {
   filterEventsByYear,
   filterEventsByMonth,
@@ -49,6 +53,72 @@ export default function SchoolCalendarPage() {
 
   // Selected event for modal view / delete confirmation
   const selectedEvent = events.find((ev) => ev.id === selectedEventId) || null;
+
+  const [isCreateSlideOverOpen, setIsCreateSlideOverOpen] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<SchoolEvent | null>(null);
+
+  useEffect(() => {
+    if (router.query.create === 'true') {
+      setEditingEvent(null);
+      setIsCreateSlideOverOpen(true);
+    } else if (router.query.edit && typeof router.query.edit === 'string') {
+      const target = events.find((e) => e.id === router.query.edit);
+      if (target) {
+        setEditingEvent(target);
+        setIsCreateSlideOverOpen(true);
+      }
+    }
+  }, [router.query.create, router.query.edit, events]);
+
+  const handleSubmitEvent = (formData: EventFormData) => {
+    if (editingEvent) {
+      dispatch(
+        updateEvent({
+          id: editingEvent.id,
+          title: formData.title,
+          category: formData.category,
+          startDate: formData.startDate,
+          endDate: formData.endDate,
+          hasSpecificTime: formData.hasSpecificTime,
+          startTime: formData.startTime,
+          endTime: formData.endTime,
+          location: formData.location,
+          description: formData.description,
+          coverImage: formData.coverImage,
+          attachments: formData.attachments,
+        })
+      );
+      dispatch(
+        addToast({
+          type: 'success',
+          message: `Đã cập nhật sự kiện "${formData.title}" thành công.`,
+        })
+      );
+    } else {
+      dispatch(
+        addEvent({
+          schoolCode,
+          title: formData.title,
+          category: formData.category,
+          startDate: formData.startDate,
+          endDate: formData.endDate,
+          hasSpecificTime: formData.hasSpecificTime,
+          startTime: formData.startTime,
+          endTime: formData.endTime,
+          location: formData.location,
+          description: formData.description,
+          coverImage: formData.coverImage,
+          attachments: formData.attachments,
+        })
+      );
+      dispatch(
+        addToast({
+          type: 'success',
+          message: `Đã thêm sự kiện "${formData.title}" vào lịch thành công!`,
+        })
+      );
+    }
+  };
 
   // Filter events by search query if applicable
   const filteredEvents = searchQuery
@@ -115,6 +185,10 @@ export default function SchoolCalendarPage() {
           onViewModeChange={(mode) => dispatch(setViewMode(mode))}
           onScopeFilterChange={(scope) => dispatch(setEventScopeFilter(scope))}
           onSearchChange={(q) => dispatch(setSearchQuery(q))}
+          onOpenCreate={() => {
+            setEditingEvent(null);
+            setIsCreateSlideOverOpen(true);
+          }}
         />
 
         {/* Dynamic Calendar View Content */}
@@ -165,6 +239,22 @@ export default function SchoolCalendarPage() {
         event={selectedEvent}
         onConfirm={handleConfirmDelete}
         onCancel={() => dispatch(closeDeleteModal())}
+      />
+
+      {/* Create / Edit Event SlideOver (Right-Sheet Standard) */}
+      <CreateEventSlideOver
+        isOpen={isCreateSlideOverOpen}
+        onClose={() => {
+          setIsCreateSlideOverOpen(false);
+          setEditingEvent(null);
+          if (router.query.create || router.query.edit) {
+            router.replace(`/${schoolCode}/school/calendar`, undefined, { shallow: true });
+          }
+        }}
+        schoolCode={schoolCode}
+        initialData={editingEvent || undefined}
+        isEdit={!!editingEvent}
+        onSubmit={handleSubmitEvent}
       />
     </PortalLayout>
   );

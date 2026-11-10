@@ -22,6 +22,7 @@ interface PollToolbarProps {
   onClassChange: (classId: string) => void;
   onSearchChange: (query: string) => void;
   onResetFilter?: () => void;
+  onOpenCreate?: () => void;
 }
 
 export const PollToolbar: React.FC<PollToolbarProps> = ({
@@ -31,6 +32,7 @@ export const PollToolbar: React.FC<PollToolbarProps> = ({
   onStatusChange,
   onClassChange,
   onSearchChange,
+  onOpenCreate,
 }) => {
   const router = useRouter();
   const schoolCode = (router.query.schoolCode as string) || 'demo';
@@ -82,7 +84,7 @@ export const PollToolbar: React.FC<PollToolbarProps> = ({
             <Button
               variant="primary"
               icon="plus"
-              onClick={() => router.push(`/${schoolCode}/school/poll/create`)}
+              onClick={onOpenCreate || (() => router.push(`/${schoolCode}/school/poll/create`))}
             >
               Tạo bình chọn
             </Button>

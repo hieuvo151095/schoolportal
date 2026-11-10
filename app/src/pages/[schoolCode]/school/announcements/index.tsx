@@ -3,7 +3,7 @@
  * Design System: [DS] ECO ME DASHBOARD v1.1.0 (PageHeader, FilterBar, StatCard, DataTable)
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import PortalLayout from '@/components/layout/PortalLayout';
@@ -19,7 +19,10 @@ import {
   deleteMultipleAnnouncements,
   toggleSelectForBulk,
   selectAllForBulk,
-  clearBulkSelection
+  clearBulkSelection,
+  createAnnouncement,
+  updateDraftAnnouncement,
+  scheduleAnnouncement,
 } from '@/store/slices/announcementSlice';
 import { addToast } from '@/store/slices/toastSlice';
 import {
@@ -31,6 +34,7 @@ import { AnnouncementSummaryCards } from '@/modules/school/announcements/Announc
 import { AnnouncementToolbar } from '@/modules/school/announcements/AnnouncementToolbar';
 import { AnnouncementTable } from '@/modules/school/announcements/AnnouncementTable';
 import DeleteAnnouncementModal from '@/modules/school/announcements/DeleteAnnouncementModal';
+import { AnnouncementSlideOver } from '@/modules/school/announcements/AnnouncementSlideOver';
 import { PageHeader } from '@/components/ds';
 
 export default function SchoolAnnouncementsPage() {
@@ -42,7 +46,7 @@ export default function SchoolAnnouncementsPage() {
     state => state.announcement
   );
 
-  // Modal states
+  // Modal & SlideOver states
   const [deleteModalState, setDeleteModalState] = useState<{
     isOpen: boolean;
     announcement?: Announcement;
@@ -50,6 +54,21 @@ export default function SchoolAnnouncementsPage() {
   }>({
     isOpen: false
   });
+  const [isSlideOverOpen, setIsSlideOverOpen] = useState(false);
+  const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
+
+  useEffect(() => {
+    if (router.query.create === 'true') {
+      setEditingAnnouncement(null);
+      setIsSlideOverOpen(true);
+    } else if (router.query.edit) {
+      const target = announcements.find((a) => a.id === router.query.edit);
+      if (target) {
+        setEditingAnnouncement(target);
+        setIsSlideOverOpen(true);
+      }
+    }
+  }, [router.query.create, router.query.edit, announcements]);
 
   // Calculate 4 summary KPIs
   const kpis = useMemo(() => {
@@ -125,6 +144,44 @@ export default function SchoolAnnouncementsPage() {
     }
   };
 
+  const handleSaveAnnouncement = (payload: any, status: 'nhap' | 'da_len_lich' | 'da_gui') => {
+    if (editingAnnouncement) {
+      dispatch(updateDraftAnnouncement({ id: editingAnnouncement.id, updates: payload }));
+      if (status === 'da_len_lich') {
+        dispatch(
+          scheduleAnnouncement({
+            id: editingAnnouncement.id,
+            scheduledAt: payload.scheduledAt || new Date().toISOString(),
+          })
+        );
+      }
+      dispatch(
+        addToast({
+          type: 'success',
+          message:
+            status === 'da_gui'
+              ? 'Đã phát hành thông báo thành công!'
+              : status === 'da_len_lich'
+              ? 'Đã lên lịch phát hành thông báo thành công!'
+              : 'Đã cập nhật bản nháp thành công!',
+        })
+      );
+    } else {
+      dispatch(createAnnouncement(payload));
+      dispatch(
+        addToast({
+          type: 'success',
+          message:
+            status === 'da_gui'
+              ? 'Đã phát hành thông báo chính thức thành công!'
+              : status === 'da_len_lich'
+              ? 'Đã lên lịch phát hành thông báo thành công!'
+              : 'Đã lưu bản nháp thông báo thành công!',
+        })
+      );
+    }
+  };
+
   return (
     <PortalLayout schoolCode={schoolCode}>
       <Head>
@@ -150,6 +207,10 @@ export default function SchoolAnnouncementsPage() {
           onResetFilters={handleResetFilters}
           selectedCount={selectedIdsForBulk.length}
           onBulkDelete={handleOpenBulkDelete}
+          onOpenCreate={() => {
+            setEditingAnnouncement(null);
+            setIsSlideOverOpen(true);
+          }}
         />
 
         {/* 8-Column Data Table */}
@@ -161,6 +222,10 @@ export default function SchoolAnnouncementsPage() {
           onSelectAll={ids => dispatch(selectAllForBulk(ids))}
           onTogglePin={handleTogglePin}
           onOpenDeleteModal={handleOpenSingleDelete}
+          onOpenEdit={(announcement) => {
+            setEditingAnnouncement(announcement);
+            setIsSlideOverOpen(true);
+          }}
         />
 
         {/* Delete Confirmation Modal */}
@@ -171,6 +236,22 @@ export default function SchoolAnnouncementsPage() {
           announcementTitle={deleteModalState.announcement?.title}
           isBulk={deleteModalState.isBulk}
           bulkCount={selectedIdsForBulk.length}
+        />
+
+        {/* Create / Edit SlideOver (Right-Sheet Standard) */}
+        <AnnouncementSlideOver
+          isOpen={isSlideOverOpen}
+          onClose={() => {
+            setIsSlideOverOpen(false);
+            setEditingAnnouncement(null);
+            if (router.query.create || router.query.edit) {
+              router.replace(`/${schoolCode}/school/announcements`, undefined, { shallow: true });
+            }
+          }}
+          schoolCode={schoolCode}
+          initialAnnouncement={editingAnnouncement}
+          isEditMode={!!editingAnnouncement}
+          onSave={handleSaveAnnouncement}
         />
       </div>
     </PortalLayout>

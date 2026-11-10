@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Icon, Dropdown } from '@/components/ds';
+import { Icon, Dropdown, SlideOver } from '@/components/ds';
 import type { Student } from '../../../types/student';
 import type { InvoiceRecord, InvoiceLineItem } from '../../../types/invoice';
 import { useAppSelector } from '../../../store';
@@ -573,136 +573,107 @@ export const StudentTuitionTab: React.FC<StudentTuitionTabProps> = ({
         </div>
       </div>
 
-      {/* 4. Invoice Detail Modal */}
+      {/* 4. Invoice Detail SlideOver */}
       {selectedInvoiceForDetail && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-150">
-          <div className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
-            {/* Modal Header */}
-            <div className="px-6 py-4.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
-                  <Icon name="receipt" size={18} />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-slate-800">
-                    Chi tiết hóa đơn {selectedInvoiceForDetail.invoiceNo}
-                  </h3>
-                  <p className="text-xs text-slate-500 font-medium">
-                    {selectedInvoiceForDetail.title} — {student.fullName} ({student.className || 'Lớp 11A1'})
-                  </p>
-                </div>
+        <SlideOver
+          open={Boolean(selectedInvoiceForDetail)}
+          onClose={() => setSelectedInvoiceForDetail(null)}
+          title={`Hóa đơn ${selectedInvoiceForDetail.invoiceNo}`}
+          description={`${selectedInvoiceForDetail.title} — ${student.fullName} (${student.className || 'Học sinh'})`}
+          icon="receipt"
+          width={560}
+          secondaryAction={{
+            label: 'Đóng',
+            onClick: () => setSelectedInvoiceForDetail(null),
+          }}
+        >
+          <div className="space-y-5 text-xs text-slate-700">
+            {/* Status and Issue dates */}
+            <div className="grid grid-cols-2 gap-4 p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+              <div>
+                <span className="text-slate-400 block mb-1">Trạng thái:</span>
+                <div>{renderStatusBadge(selectedInvoiceForDetail.status)}</div>
               </div>
-
-              <button
-                type="button"
-                onClick={() => setSelectedInvoiceForDetail(null)}
-                className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors"
-                aria-label="Đóng"
-              >
-                <Icon name="xmark" size={14} />
-              </button>
+              <div>
+                <span className="text-slate-400 block mb-1">Hạn thanh toán:</span>
+                <div className="font-semibold text-slate-800">{selectedInvoiceForDetail.dueDate}</div>
+              </div>
             </div>
 
-            {/* Modal Body */}
-            <div className="p-6 overflow-y-auto space-y-5 text-xs text-slate-700">
-              {/* Status and Issue dates */}
-              <div className="grid grid-cols-2 gap-4 p-3.5 bg-slate-50 rounded-xl border border-slate-200/80">
-                <div>
-                  <span className="text-slate-400 block mb-0.5">Trạng thái:</span>
-                  <div>{renderStatusBadge(selectedInvoiceForDetail.status)}</div>
-                </div>
-                <div>
-                  <span className="text-slate-400 block mb-0.5">Hạn thanh toán:</span>
-                  <div className="font-semibold text-slate-800">{selectedInvoiceForDetail.dueDate}</div>
-                </div>
+            {/* Line items list */}
+            <div>
+              <h4 className="font-bold text-slate-800 mb-2 uppercase text-2xs tracking-wider">
+                Bảng kê các khoản thu
+              </h4>
+              <div className="border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-100">
+                {selectedInvoiceForDetail.items.map((item, idx) => (
+                  <div key={item.id || idx} className="p-3 flex items-center justify-between hover:bg-slate-50">
+                    <div>
+                      <div className="font-semibold text-slate-800">{item.name}</div>
+                      {item.description && (
+                        <div className="text-2xs text-slate-400">{item.description}</div>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <div className="font-bold text-slate-800">{formatCurrencyVND(item.amount)}</div>
+                      <div className="text-3xs text-slate-400">
+                        {formatCurrencyVND(item.unitPrice)} x {item.quantity}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
+            </div>
 
-              {/* Line items list */}
+            {/* Summary totals */}
+            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+              <div className="flex items-center justify-between text-slate-600">
+                <span>Tổng tiền học phí:</span>
+                <span className="font-semibold">{formatCurrencyVND(selectedInvoiceForDetail.totalAmount)}</span>
+              </div>
+              <div className="flex items-center justify-between text-emerald-700">
+                <span>Đã thanh toán:</span>
+                <span className="font-bold">{formatCurrencyVND(selectedInvoiceForDetail.paidAmount)}</span>
+              </div>
+              <div className="flex items-center justify-between text-amber-700 pt-2 border-t border-slate-200 font-bold text-sm">
+                <span>Còn nợ cần thu:</span>
+                <span>
+                  {formatCurrencyVND(
+                    selectedInvoiceForDetail.remainingAmount !== undefined
+                      ? selectedInvoiceForDetail.remainingAmount
+                      : selectedInvoiceForDetail.totalAmount - selectedInvoiceForDetail.paidAmount
+                  )}
+                </span>
+              </div>
+            </div>
+
+            {/* Payment History */}
+            {selectedInvoiceForDetail.paymentHistory && selectedInvoiceForDetail.paymentHistory.length > 0 && (
               <div>
                 <h4 className="font-bold text-slate-800 mb-2 uppercase text-2xs tracking-wider">
-                  Bảng kê các khoản thu
+                  Lịch sử các lần nộp tiền
                 </h4>
                 <div className="border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-100">
-                  {selectedInvoiceForDetail.items.map((item, idx) => (
-                    <div key={item.id || idx} className="p-3 flex items-center justify-between hover:bg-slate-50">
+                  {selectedInvoiceForDetail.paymentHistory.map((pay) => (
+                    <div key={pay.id} className="p-3 flex items-center justify-between">
                       <div>
-                        <div className="font-semibold text-slate-800">{item.name}</div>
-                        {item.description && (
-                          <div className="text-2xs text-slate-400">{item.description}</div>
-                        )}
-                      </div>
-                      <div className="text-right">
-                        <div className="font-bold text-slate-800">{formatCurrencyVND(item.amount)}</div>
-                        <div className="text-3xs text-slate-400">
-                          {formatCurrencyVND(item.unitPrice)} x {item.quantity}
+                        <div className="font-semibold text-slate-800">
+                          {formatCurrencyVND(pay.amount)}
+                        </div>
+                        <div className="text-2xs text-slate-400">
+                          {pay.paidAt} • {pay.transactionRef || 'Tiền mặt'}
                         </div>
                       </div>
+                      <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 text-2xs font-semibold">
+                        Thành công
+                      </span>
                     </div>
                   ))}
                 </div>
               </div>
-
-              {/* Summary totals */}
-              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                <div className="flex items-center justify-between text-slate-600">
-                  <span>Tổng tiền học phí:</span>
-                  <span className="font-semibold">{formatCurrencyVND(selectedInvoiceForDetail.totalAmount)}</span>
-                </div>
-                <div className="flex items-center justify-between text-emerald-700">
-                  <span>Đã thanh toán:</span>
-                  <span className="font-bold">{formatCurrencyVND(selectedInvoiceForDetail.paidAmount)}</span>
-                </div>
-                <div className="flex items-center justify-between text-amber-700 pt-2 border-t border-slate-200 font-bold text-sm">
-                  <span>Còn nợ cần thu:</span>
-                  <span>
-                    {formatCurrencyVND(
-                      selectedInvoiceForDetail.remainingAmount !== undefined
-                        ? selectedInvoiceForDetail.remainingAmount
-                        : selectedInvoiceForDetail.totalAmount - selectedInvoiceForDetail.paidAmount
-                    )}
-                  </span>
-                </div>
-              </div>
-
-              {/* Payment History */}
-              {selectedInvoiceForDetail.paymentHistory && selectedInvoiceForDetail.paymentHistory.length > 0 && (
-                <div>
-                  <h4 className="font-bold text-slate-800 mb-2 uppercase text-2xs tracking-wider">
-                    Lịch sử các lần nộp tiền
-                  </h4>
-                  <div className="border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-100">
-                    {selectedInvoiceForDetail.paymentHistory.map((pay) => (
-                      <div key={pay.id} className="p-3 flex items-center justify-between">
-                        <div>
-                          <div className="font-semibold text-slate-800">
-                            {formatCurrencyVND(pay.amount)}
-                          </div>
-                          <div className="text-2xs text-slate-400">
-                            {pay.paidAt} • {pay.transactionRef || 'Tiền mặt'}
-                          </div>
-                        </div>
-                        <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 text-2xs font-semibold">
-                          Thành công
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Modal Footer */}
-            <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-end">
-              <button
-                type="button"
-                onClick={() => setSelectedInvoiceForDetail(null)}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 bg-white hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors"
-              >
-                Đóng
-              </button>
-            </div>
+            )}
           </div>
-        </div>
+        </SlideOver>
       )}
     </div>
   );

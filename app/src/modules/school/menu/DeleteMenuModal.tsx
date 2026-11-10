@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from '../../../components/ds';
+import { Icon, SlideOver } from '../../../components/ds';
 import { WeeklyMenu } from '../../../types/menu';
 
 interface DeleteMenuModalProps {
@@ -15,63 +15,59 @@ export const DeleteMenuModal: React.FC<DeleteMenuModalProps> = ({
   onClose,
   onConfirmDelete,
 }) => {
-  if (!isOpen || !menu) return null;
+  if (!menu) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-red-50 to-rose-50/30">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center text-red-600">
-              <Icon name="trash" className="w-4 h-4 text-red-600" />
-            </div>
-            <h3 className="text-base font-semibold text-gray-900">Xóa thực đơn</h3>
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title="Xóa thực đơn"
+      description="Xác nhận hủy và loại bỏ thực đơn khỏi hệ thống"
+      icon="trash"
+      width={480}
+      primaryAction={{
+        label: 'Xác nhận xóa',
+        icon: 'trash',
+        onClick: () => {
+          onConfirmDelete(menu.id);
+          onClose();
+        },
+      }}
+      secondaryAction={{
+        label: 'Hủy bỏ',
+        onClick: onClose,
+      }}
+    >
+      <div className="space-y-6">
+        <div className="flex flex-col items-center text-center p-6 bg-rose-50 border border-rose-200 rounded-2xl">
+          <div className="w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-2xl font-bold mb-3 border-2 border-rose-300">
+            <Icon name="trash" size={28} />
           </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-white/60 transition-colors"
-          >
-            <Icon name="xmark" className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Content */}
-        <div className="p-6 space-y-3">
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Icon name="triangle-exclamation" className="w-4 h-4 text-red-600" />
-            </div>
-            <div className="text-sm text-gray-700 leading-relaxed">
-              Vui lòng xác nhận xóa thực đơn <span className="font-semibold text-gray-900">"{menu.title}"</span>!
-            </div>
-          </div>
-          <p className="text-xs text-gray-500 pl-11">
+          <h3 className="text-base font-bold text-slate-800 mb-1">
+            Xác nhận xóa thực đơn?
+          </h3>
+          <p className="text-xs text-slate-500 leading-relaxed max-w-sm">
             Hành động này sẽ xóa hoàn toàn bản nháp thực đơn khỏi hệ thống và không thể hoàn tác.
           </p>
         </div>
 
-        {/* Footer */}
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
-          >
-            Hủy bỏ
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              onConfirmDelete(menu.id);
-              onClose();
-            }}
-            className="px-4 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-sm transition-all"
-          >
-            Xác nhận xóa
-          </button>
+        <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-slate-500">Tên thực đơn:</span>
+            <span className="font-bold text-slate-800">{menu.title}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-slate-500">Thời gian:</span>
+            <span className="font-semibold text-slate-700">{menu.startDate} đến {menu.endDate}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-slate-500">Đối tượng:</span>
+            <span className="font-semibold text-slate-700">
+              {menu.scope === 'all' ? 'Toàn trường' : menu.className || 'Lớp cụ thể'}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </SlideOver>
   );
 };

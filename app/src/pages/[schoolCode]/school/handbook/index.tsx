@@ -3,7 +3,7 @@
  * Design System: [DS] ECO ME DASHBOARD v1.1.0 (PageHeader, FilterBar, 2-Column Split Workspace)
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import PortalLayout from '../../../../components/layout/PortalLayout';
@@ -18,7 +18,10 @@ import {
   deleteCategoryCascade,
   deleteArticle,
   toggleArticleStatus,
+  createArticle,
+  updateArticle,
 } from '../../../../store/slices/parentHandbookSlice';
+import { addToast } from '../../../../store/slices/toastSlice';
 import {
   buildCategoryTree,
   filterTreeByArticleCriteria,
@@ -34,6 +37,7 @@ import { HandbookAccordionTree } from '../../../../modules/school/handbook/Handb
 import { HandbookDetailPanel } from '../../../../modules/school/handbook/HandbookDetailPanel';
 import { CategoryModal } from '../../../../modules/school/handbook/CategoryModal';
 import { HandbookDeleteModal } from '../../../../modules/school/handbook/HandbookDeleteModal';
+import { HandbookArticleSlideOver } from '../../../../modules/school/handbook/HandbookArticleSlideOver';
 import { PageHeader } from '../../../../components/ds';
 
 export default function SchoolParentHandbookPage() {
@@ -54,6 +58,27 @@ export default function SchoolParentHandbookPage() {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [parentCategoryForSub, setParentCategoryForSub] = useState<HandbookCategory | null>(null);
   const [categoryToEdit, setCategoryToEdit] = useState<HandbookCategory | null>(null);
+
+  // Article SlideOver States (Right-Sheet Standard)
+  const [isArticleSlideOverOpen, setIsArticleSlideOverOpen] = useState(false);
+  const [editingArticle, setEditingArticle] = useState<HandbookArticle | null>(null);
+  const [activeCreateCategoryId, setActiveCreateCategoryId] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (router.query.create === 'true') {
+      setEditingArticle(null);
+      if (router.query.categoryId && typeof router.query.categoryId === 'string') {
+        setActiveCreateCategoryId(router.query.categoryId);
+      }
+      setIsArticleSlideOverOpen(true);
+    } else if (router.query.edit && typeof router.query.edit === 'string') {
+      const target = articles.find((a) => a.id === router.query.edit);
+      if (target) {
+        setEditingArticle(target);
+        setIsArticleSlideOverOpen(true);
+      }
+    }
+  }, [router.query.create, router.query.edit, router.query.categoryId, articles]);
 
   const [deleteModalState, setDeleteModalState] = useState<{
     isOpen: boolean;
@@ -172,11 +197,60 @@ export default function SchoolParentHandbookPage() {
   };
 
   const handleNavigateCreateArticle = (categoryId: string) => {
-    router.push(`/${currentSchoolCode}/school/handbook/create?categoryId=${categoryId}`);
+    setEditingArticle(null);
+    setActiveCreateCategoryId(categoryId);
+    setIsArticleSlideOverOpen(true);
   };
 
   const handleNavigateEditArticle = (articleId: string) => {
-    router.push(`/${currentSchoolCode}/school/handbook/edit/${articleId}`);
+    const target = articles.find((a) => a.id === articleId);
+    if (target) {
+      setEditingArticle(target);
+      setIsArticleSlideOverOpen(true);
+    }
+  };
+
+  const handleSaveArticle = (payload: {
+    categoryId: string;
+    title: string;
+    content: string;
+    attachments: any[];
+    status: 'draft' | 'published';
+  }) => {
+    if (editingArticle) {
+      dispatch(
+        updateArticle({
+          id: editingArticle.id,
+          title: payload.title,
+          content: payload.content,
+          categoryId: payload.categoryId,
+          attachments: payload.attachments,
+          status: payload.status,
+        })
+      );
+      dispatch(
+        addToast({
+          type: 'success',
+          message: `Đã cập nhật bài viết "${payload.title}" thành công.`,
+        })
+      );
+    } else {
+      dispatch(
+        createArticle({
+          categoryId: payload.categoryId,
+          title: payload.title,
+          content: payload.content,
+          status: payload.status,
+          attachments: payload.attachments,
+        })
+      );
+      dispatch(
+        addToast({
+          type: 'success',
+          message: `Đã tạo bài viết "${payload.title}" thành công.`,
+        })
+      );
+    }
   };
 
   return (
@@ -201,6 +275,11 @@ export default function SchoolParentHandbookPage() {
           onStatusChange={(status) => dispatch(setFilterStatus(status))}
           onSearchChange={(query) => dispatch(setSearchQuery(query))}
           onOpenCreateCategoryModal={handleOpenCreateRootCategory}
+          onOpenCreateArticle={() => {
+            setEditingArticle(null);
+            setActiveCreateCategoryId(undefined);
+            setIsArticleSlideOverOpen(true);
+          }}
         />
 
         {/* 2-Column Split Workspace */}
@@ -258,6 +337,23 @@ export default function SchoolParentHandbookPage() {
           setDeleteModalState((prev) => ({ ...prev, isOpen: false }))
         }
         onConfirm={handleConfirmDelete}
+      />
+
+      {/* Article Creation / Edit SlideOver (Right-Sheet Standard) */}
+      <HandbookArticleSlideOver
+        isOpen={isArticleSlideOverOpen}
+        onClose={() => {
+          setIsArticleSlideOverOpen(false);
+          setEditingArticle(null);
+          setActiveCreateCategoryId(undefined);
+          if (router.query.create || router.query.edit) {
+            router.replace(`/${currentSchoolCode}/school/handbook`, undefined, { shallow: true });
+          }
+        }}
+        categories={categories}
+        initialArticle={editingArticle}
+        defaultCategoryId={activeCreateCategoryId}
+        onSave={handleSaveArticle}
       />
     </PortalLayout>
   );

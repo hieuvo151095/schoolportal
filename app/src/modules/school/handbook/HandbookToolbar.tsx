@@ -16,6 +16,7 @@ interface HandbookToolbarProps {
   onStatusChange: (status: 'all' | ArticleStatus) => void;
   onSearchChange: (query: string) => void;
   onOpenCreateCategoryModal: () => void;
+  onOpenCreateArticle?: () => void;
 }
 
 export const HandbookToolbar: React.FC<HandbookToolbarProps> = ({
@@ -24,6 +25,7 @@ export const HandbookToolbar: React.FC<HandbookToolbarProps> = ({
   onStatusChange,
   onSearchChange,
   onOpenCreateCategoryModal,
+  onOpenCreateArticle,
 }) => {
   const router = useRouter();
   const schoolCode = (router.query.schoolCode as string) || 'demo';
@@ -60,7 +62,7 @@ export const HandbookToolbar: React.FC<HandbookToolbarProps> = ({
             <Button
               variant="primary"
               icon="plus"
-              href={`/${schoolCode}/school/handbook/create`}
+              onClick={onOpenCreateArticle || (() => router.push(`/${schoolCode}/school/handbook/create`))}
             >
               Soạn bài viết
             </Button>

@@ -12,10 +12,13 @@ Tài liệu này định hình quy chuẩn cho các AI Coding Agents khi làm vi
 - `wiki/`: LLM Wiki lưu trữ SSOT về nghiệp vụ, quy tắc và ánh xạ spec ↔ code.
 - `.harness/`: Chứa các symlink trỏ về bộ kit phát triển `harness-loop-kit`.
 
-## 2. Quy Chuẩn Kỹ Thuật
+## 2. Quy Chuẩn Kỹ Thuật & Hiến Pháp UI Design System (Bắt Buộc)
 
-- **Design System v2.6.0**: Mọi giao diện phải sử dụng các components trong `app/src/components/ds/` và tokens semantic (`var(--text-heading)`, `var(--border-default)`, `var(--bg-surface)`...).
-- **Kiểm thử tiền định**: Khi sửa đổi hoặc bổ sung tính năng, phải đảm bảo toàn bộ các bài test trong `app/tests/` chạy qua 100% (`npm test` - hiện tại 711/711 tests).
+- **Design System v2.6.0 (SSOT Tuyệt Đối)**: Mọi giao diện bắt buộc sử dụng 100% các components từ `app/src/components/ds/` (`Button`, `IconButton`, `Dropdown`, `FilterBar`, `SlideOver`, `Modal`, `Tabs`, `CountedTabs`, `StatCard`, `Badge`, `Icon`...) và semantic design tokens (`var(--text-heading)`, `var(--border-default)`, `var(--bg-surface)`...).
+- **Tuyệt đối cấm tự chế components**: CẤM dùng các thẻ HTML nguyên bản (`<button>`, `<select>`, `<input>`) kèm class Tailwind tự chế để thay thế cho components của Design System. Khi cần nút bấm, bắt buộc dùng `<Button variant="primary|secondary|ghost|text">` hoặc `<IconButton>`. Khi cần dropdown, bắt buộc dùng `<Dropdown>`.
+- **Chuẩn Right-Sheet (SlideOver) cho thao tác Tạo mới / Chỉnh sửa**: Mọi tác vụ "Tạo mới..." và "Chỉnh sửa..." (thêm học sinh, thêm giáo viên, thêm lớp học, soạn thông báo, tạo bình chọn, tạo thực đơn, soạn bài viết sổ tay, tạo sự kiện...) BẮT BUỘC mở ngăn kéo trượt từ bên phải (Right-Sheet / `<SlideOver>` từ `@/components/ds`), TUYỆT ĐỐI KHÔNG mở modal popup nổi giữa màn hình làm đè layer, và KHÔNG chuyển hướng sang trang full-page riêng biệt (`/create`, `/edit`).
+- **Chuẩn Toolbar một hàng (Single Frame Line)**: Trên màn hình desktop, FilterBar phải chứa ô tìm kiếm bên trái (`width: 200px`), các dropdown bộ lọc ở giữa, và toàn bộ action buttons ("Xuất Excel", "Tạo mới...") nằm cân phải trên cùng một đường thẳng (frame line). Tuyệt đối không để action buttons nằm cô lập trên `PageHeader`.
+- **Kiểm thử tiền định**: Khi sửa đổi hoặc bổ sung tính năng, phải đảm bảo toàn bộ các bài test trong `app/tests/` chạy qua 100% (`npm test` / `./verify.sh`).
 - **TypeScript Strict**: Không được để xảy ra lỗi compile khi chạy `npx tsc --noEmit`.
 - **Đồng bộ Wiki**: Khi cập nhật logic hoặc bổ sung màn hình mới, phải cập nhật tài liệu tương ứng trong `wiki/pages/` và kiểm tra bằng `python3 wiki/tools/lint_wiki.py wiki`.
 

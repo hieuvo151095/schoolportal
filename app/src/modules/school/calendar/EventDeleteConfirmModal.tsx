@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from '../../../components/ds';
+import { Icon, SlideOver } from '../../../components/ds';
 import { SchoolEvent } from '../../../types/calendar';
 
 interface EventDeleteConfirmModalProps {
@@ -15,64 +15,64 @@ export const EventDeleteConfirmModal: React.FC<EventDeleteConfirmModalProps> = (
   onConfirm,
   onCancel,
 }) => {
-  if (!isOpen || !event) return null;
+  if (!event) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
-      <div className="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-gray-100 p-6">
-        {/* Header with warning icon */}
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center flex-shrink-0">
-            <Icon name="triangle-exclamation" className="w-6 h-6 text-rose-600" />
+    <SlideOver
+      open={isOpen}
+      onClose={onCancel}
+      title="Xác nhận xóa sự kiện"
+      description="Thao tác này sẽ gỡ bỏ sự kiện khỏi lịch trường và phụ huynh"
+      icon="trash"
+      width={480}
+      primaryAction={{
+        label: 'Xác nhận xóa',
+        icon: 'trash',
+        onClick: onConfirm,
+      }}
+      secondaryAction={{
+        label: 'Hủy bỏ',
+        onClick: onCancel,
+      }}
+    >
+      <div className="space-y-6">
+        <div className="flex flex-col items-center text-center p-6 bg-rose-50 border border-rose-200 rounded-2xl">
+          <div className="w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-2xl font-bold mb-3 border-2 border-rose-300">
+            <Icon name="trash" size={28} />
           </div>
-          <div className="flex-1">
-            <h3 className="text-base font-bold text-gray-900 mb-1">
-              Xác nhận xóa sự kiện
-            </h3>
-            {/* Exact LS-01 requirement wording */}
-            <p className="text-xs text-gray-600 leading-relaxed">
-              Vui lòng xác nhận xóa sự kiện{' '}
-              <span className="font-bold text-gray-900">"{event.title}"</span>?
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onCancel}
-            className="text-gray-400 hover:text-gray-600 p-1"
-          >
-            <Icon name="xmark" className="w-4 h-4" />
-          </button>
+          <h3 className="text-base font-bold text-slate-800 mb-1">
+            Xác nhận xóa sự kiện?
+          </h3>
+          <p className="text-xs text-slate-500 leading-relaxed max-w-sm">
+            Vui lòng xác nhận xóa sự kiện <strong className="text-slate-800">&quot;{event.title}&quot;</strong> khỏi lịch hoạt động.
+          </p>
         </div>
 
-        {/* Warning if event is holiday */}
+        <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-slate-500">Tên sự kiện:</span>
+            <span className="font-bold text-slate-800">{event.title}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-slate-500">Thời gian bắt đầu:</span>
+            <span className="font-semibold text-slate-700">{event.startDate}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-slate-500">Phân loại:</span>
+            <span className="font-semibold text-slate-700">{event.category}</span>
+          </div>
+        </div>
+
         {event.category === 'ngay_nghi' && (
-          <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900">
-            <span className="font-bold block mb-0.5">Lưu ý ngày nghỉ:</span>
-            <span>
+          <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
+            <Icon name="triangle-exclamation" size={18} className="text-amber-600 shrink-0 mt-0.5" />
+            <div className="text-xs text-amber-900 leading-relaxed">
+              <strong className="font-semibold block mb-0.5">Lưu ý ngày nghỉ:</strong>
               Sự kiện này đang là Ngày nghỉ chính thức. Việc xóa sự kiện có thể thay đổi số ngày khấu trừ hoàn tiền ăn của học sinh trong tháng.
-            </span>
+            </div>
           </div>
         )}
-
-        {/* Action Buttons */}
-        <div className="mt-6 flex items-center justify-end gap-3">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="px-4 py-2 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 transition"
-          >
-            Hủy bỏ
-          </button>
-          <button
-            type="button"
-            onClick={onConfirm}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold shadow-sm transition active:scale-95"
-          >
-            <Icon name="trash" className="w-4 h-4" />
-            <span>Xác nhận xóa</span>
-          </button>
-        </div>
       </div>
-    </div>
+    </SlideOver>
   );
 };

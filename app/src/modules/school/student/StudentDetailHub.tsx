@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Icon, Dropdown, IconName } from '@/components/ds';
+import { Icon, Dropdown, IconName, SlideOver } from '@/components/ds';
 import { Student } from '../../../types/student';
 import {
   formatLegacyField,
@@ -744,208 +744,51 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
         </div>
       )}
 
-      {/* Edit Discount Policy Modal */}
+      {/* Edit Discount Policy SlideOver */}
       {editingItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fadeIn">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-lg overflow-hidden animate-scaleUp">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0070CE] flex items-center justify-center font-bold text-sm">
-                  <Icon name="pen" size={14} />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">
-                    Chỉnh sửa chương trình miễn giảm
-                  </h3>
-                  <p className="text-2xs text-slate-500">Mã chương trình: {editingItem.code}</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setEditingItem(null)}
-                className="text-slate-400 hover:text-slate-600 transition-colors p-1 cursor-pointer"
-                aria-label="Đóng"
-              >
-                <Icon name="xmark" size={14} />
-              </button>
+        <SlideOver
+          open={Boolean(editingItem)}
+          onClose={() => setEditingItem(null)}
+          title="Chỉnh sửa chương trình miễn giảm"
+          description={`Mã chương trình: ${editingItem.code} • Học sinh: ${student.fullName}`}
+          icon="pen"
+          width={520}
+          primaryAction={{
+            label: 'Lưu thay đổi',
+            icon: 'check',
+            onClick: () => {
+              const form = document.getElementById('edit-discount-form') as HTMLFormElement;
+              if (form) form.requestSubmit();
+            },
+          }}
+          secondaryAction={{
+            label: 'Hủy bỏ',
+            onClick: () => setEditingItem(null),
+          }}
+        >
+          <form id="edit-discount-form" onSubmit={handleSaveEdit} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Tên chương trình miễn giảm <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-hidden focus:border-[#0070CE] focus:ring-1 focus:ring-[#0070CE]"
+                placeholder="Ví dụ: Học bổng tài năng học thuật 50%"
+                required
+              />
             </div>
 
-            <form onSubmit={handleSaveEdit} className="p-6 space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Tên chương trình miễn giảm <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={editName}
-                  onChange={(e) => setEditName(e.target.value)}
-                  className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0070CE] focus:ring-1 focus:ring-[#0070CE]"
-                  placeholder="Ví dụ: Học bổng tài năng học thuật 50%"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Khoản thu áp dụng <span className="text-red-500">*</span>
-                  </label>
-                  <Dropdown
-                    value={editFeeItemId}
-                    onChange={(val) => setEditFeeItemId(val)}
-                    options={AVAILABLE_FEE_ITEMS_FOR_DISCOUNT.map((fee) => ({
-                      value: fee.id,
-                      label: fee.name,
-                    }))}
-                    fullWidth
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Thời gian hiệu lực
-                  </label>
-                  <Dropdown
-                    value={editValidityType}
-                    onChange={(val) => setEditValidityType(val as any)}
-                    options={[
-                      { value: 'academic_year', label: 'Năm học 2026 - 2027' },
-                      { value: 'month_range', label: 'Theo khoảng tháng' },
-                    ]}
-                    fullWidth
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Hình thức giảm
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setEditDiscountType('percent')}
-                      className={`py-1.5 px-3 rounded-lg text-xs font-semibold border transition-all ${
-                        editDiscountType === 'percent'
-                          ? 'bg-[#0070CE] text-white border-[#0070CE]'
-                          : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                      }`}
-                    >
-                      Phần trăm (%)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setEditDiscountType('fixed_amount')}
-                      className={`py-1.5 px-3 rounded-lg text-xs font-semibold border transition-all ${
-                        editDiscountType === 'fixed_amount'
-                          ? 'bg-[#0070CE] text-white border-[#0070CE]'
-                          : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                      }`}
-                    >
-                      Số tiền (VNĐ)
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Mức miễn giảm ({editDiscountType === 'percent' ? '%' : 'VNĐ'}) <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    max={editDiscountType === 'percent' ? 100 : 100000000}
-                    value={editDiscountValue}
-                    onChange={(e) => setEditDiscountValue(Number(e.target.value))}
-                    className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0070CE] font-bold text-emerald-700"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Lý do / Căn cứ xét duyệt
-                </label>
-                <textarea
-                  rows={2}
-                  value={editReason}
-                  onChange={(e) => setEditReason(e.target.value)}
-                  className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0070CE]"
-                  placeholder="Căn cứ quyết định khen thưởng hoặc hoàn cảnh..."
-                />
-              </div>
-
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-                <button
-                  type="button"
-                  onClick={() => setEditingItem(null)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
-                >
-                  Hủy
-                </button>
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-xl transition-colors shadow-2xs"
-                >
-                  <Icon name="check" size={12} />
-                  <span>Lưu thay đổi</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Add Discount Policy Modal */}
-      {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fadeIn">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-lg overflow-hidden animate-scaleUp">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
-                  <Icon name="plus" size={14} />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">
-                    Thêm chương trình miễn giảm mới
-                  </h3>
-                  <p className="text-2xs text-slate-500">
-                    Áp dụng riêng cho học sinh: <strong className="text-slate-800">{student.fullName}</strong>
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => setIsAddModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 transition-colors p-1 cursor-pointer"
-                aria-label="Đóng"
-              >
-                <Icon name="xmark" size={14} />
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveAdd} className="p-6 space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Tên chương trình miễn giảm <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={addName}
-                  onChange={(e) => setAddName(e.target.value)}
-                  className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0070CE] focus:ring-1 focus:ring-[#0070CE]"
-                  placeholder="Ví dụ: Hỗ trợ tiền ăn bán trú 30%"
-                  required
-                />
-              </div>
-
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Khoản thu áp dụng <span className="text-red-500">*</span>
                 </label>
                 <Dropdown
-                  value={addFeeItemId}
-                  onChange={(val) => setAddFeeItemId(val)}
+                  value={editFeeItemId}
+                  onChange={(val) => setEditFeeItemId(val)}
                   options={AVAILABLE_FEE_ITEMS_FOR_DISCOUNT.map((fee) => ({
                     value: fee.id,
                     label: fee.name,
@@ -954,85 +797,198 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Hình thức giảm
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setAddDiscountType('percent')}
-                      className={`py-1.5 px-3 rounded-lg text-xs font-semibold border transition-all ${
-                        addDiscountType === 'percent'
-                          ? 'bg-[#0070CE] text-white border-[#0070CE]'
-                          : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                      }`}
-                    >
-                      Phần trăm (%)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setAddDiscountType('fixed_amount')}
-                      className={`py-1.5 px-3 rounded-lg text-xs font-semibold border transition-all ${
-                        addDiscountType === 'fixed_amount'
-                          ? 'bg-[#0070CE] text-white border-[#0070CE]'
-                          : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                      }`}
-                    >
-                      Số tiền (VNĐ)
-                    </button>
-                  </div>
-                </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Thời gian hiệu lực
+                </label>
+                <Dropdown
+                  value={editValidityType}
+                  onChange={(val) => setEditValidityType(val as any)}
+                  options={[
+                    { value: 'academic_year', label: 'Năm học 2026 - 2027' },
+                    { value: 'month_range', label: 'Theo khoảng tháng' },
+                  ]}
+                  fullWidth
+                />
+              </div>
+            </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Mức miễn giảm ({addDiscountType === 'percent' ? '%' : 'VNĐ'}) <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    max={addDiscountType === 'percent' ? 100 : 100000000}
-                    value={addDiscountValue}
-                    onChange={(e) => setAddDiscountValue(Number(e.target.value))}
-                    className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0070CE] font-bold text-emerald-700"
-                    required
-                  />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Hình thức giảm
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditDiscountType('percent')}
+                    className={`py-1.5 px-3 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                      editDiscountType === 'percent'
+                        ? 'bg-[#0070CE] text-white border-[#0070CE]'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    Phần trăm (%)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditDiscountType('fixed_amount')}
+                    className={`py-1.5 px-3 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                      editDiscountType === 'fixed_amount'
+                        ? 'bg-[#0070CE] text-white border-[#0070CE]'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    Số tiền (VNĐ)
+                  </button>
                 </div>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Lý do / Căn cứ xét duyệt
+                  Mức miễn giảm ({editDiscountType === 'percent' ? '%' : 'VNĐ'}) <span className="text-red-500">*</span>
                 </label>
-                <textarea
-                  rows={2}
-                  value={addReason}
-                  onChange={(e) => setAddReason(e.target.value)}
-                  className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0070CE]"
-                  placeholder="Căn cứ quyết định khen thưởng hoặc hoàn cảnh..."
+                <input
+                  type="number"
+                  min="1"
+                  max={editDiscountType === 'percent' ? 100 : 100000000}
+                  value={editDiscountValue}
+                  onChange={(e) => setEditDiscountValue(Number(e.target.value))}
+                  className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-hidden focus:border-[#0070CE] font-bold text-emerald-700"
+                  required
                 />
               </div>
+            </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-                <button
-                  type="button"
-                  onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
-                >
-                  Hủy
-                </button>
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-xl transition-colors shadow-2xs cursor-pointer"
-                >
-                  <Icon name="plus" size={12} />
-                  <span>Tạo và Áp dụng</span>
-                </button>
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Lý do / Căn cứ xét duyệt
+              </label>
+              <textarea
+                rows={2}
+                value={editReason}
+                onChange={(e) => setEditReason(e.target.value)}
+                className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-hidden focus:border-[#0070CE]"
+                placeholder="Căn cứ quyết định khen thưởng hoặc hoàn cảnh..."
+              />
+            </div>
+          </form>
+        </SlideOver>
+      )}
+
+      {/* Add Discount Policy SlideOver */}
+      {isAddModalOpen && (
+        <SlideOver
+          open={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          title="Thêm chính sách miễn giảm"
+          description={`Áp dụng riêng cho học sinh: ${student.fullName} (${student.className || 'Hồ sơ'})`}
+          icon="plus"
+          width={520}
+          primaryAction={{
+            label: 'Tạo và Áp dụng',
+            icon: 'check',
+            onClick: () => {
+              const form = document.getElementById('add-discount-form') as HTMLFormElement;
+              if (form) form.requestSubmit();
+            },
+          }}
+          secondaryAction={{
+            label: 'Hủy bỏ',
+            onClick: () => setIsAddModalOpen(false),
+          }}
+        >
+          <form id="add-discount-form" onSubmit={handleSaveAdd} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Tên chương trình miễn giảm <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={addName}
+                onChange={(e) => setAddName(e.target.value)}
+                className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-hidden focus:border-[#0070CE] focus:ring-1 focus:ring-[#0070CE]"
+                placeholder="Ví dụ: Hỗ trợ tiền ăn bán trú 30%"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Khoản thu áp dụng <span className="text-red-500">*</span>
+              </label>
+              <Dropdown
+                value={addFeeItemId}
+                onChange={(val) => setAddFeeItemId(val)}
+                options={AVAILABLE_FEE_ITEMS_FOR_DISCOUNT.map((fee) => ({
+                  value: fee.id,
+                  label: fee.name,
+                }))}
+                fullWidth
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Hình thức giảm
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setAddDiscountType('percent')}
+                    className={`py-1.5 px-3 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                      addDiscountType === 'percent'
+                        ? 'bg-[#0070CE] text-white border-[#0070CE]'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    Phần trăm (%)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAddDiscountType('fixed_amount')}
+                    className={`py-1.5 px-3 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                      addDiscountType === 'fixed_amount'
+                        ? 'bg-[#0070CE] text-white border-[#0070CE]'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    Số tiền (VNĐ)
+                  </button>
+                </div>
               </div>
-            </form>
-          </div>
-        </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Mức miễn giảm ({addDiscountType === 'percent' ? '%' : 'VNĐ'}) <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max={addDiscountType === 'percent' ? 100 : 100000000}
+                  value={addDiscountValue}
+                  onChange={(e) => setAddDiscountValue(Number(e.target.value))}
+                  className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-hidden focus:border-[#0070CE] font-bold text-emerald-700"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Lý do / Căn cứ xét duyệt
+              </label>
+              <textarea
+                rows={2}
+                value={addReason}
+                onChange={(e) => setAddReason(e.target.value)}
+                className="w-full text-xs px-3 py-2 border border-slate-200 rounded-xl focus:outline-hidden focus:border-[#0070CE]"
+                placeholder="Căn cứ quyết định khen thưởng hoặc hoàn cảnh..."
+              />
+            </div>
+          </form>
+        </SlideOver>
       )}
     </div>
   );

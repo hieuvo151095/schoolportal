@@ -9,12 +9,16 @@ interface PollComposerProps {
   initialPoll?: Poll;
   onSubmit: (payload: CreatePollPayload) => void;
   isEditing?: boolean;
+  hideHeader?: boolean;
+  onCancel?: () => void;
 }
 
 export const PollComposer: React.FC<PollComposerProps> = ({
   initialPoll,
   onSubmit,
   isEditing = false,
+  hideHeader = false,
+  onCancel,
 }) => {
   const router = useRouter();
   const { schoolCode } = router.query;
@@ -91,28 +95,30 @@ export const PollComposer: React.FC<PollComposerProps> = ({
   return (
     <div className="space-y-6">
       {/* Breadcrumb Navigation */}
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center space-x-2 text-sm text-slate-500">
+      {!hideHeader && (
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center space-x-2 text-sm text-slate-500">
+            <Link
+              href={`/${currentSchoolCode}/school/poll`}
+              className="hover:text-[#0070CE] transition-colors"
+            >
+              Bình chọn
+            </Link>
+            <span>/</span>
+            <span className="font-semibold text-slate-800">
+              {isEditing ? 'Chỉnh sửa bình chọn' : 'Tạo bình chọn'}
+            </span>
+          </div>
+
           <Link
             href={`/${currentSchoolCode}/school/poll`}
-            className="hover:text-[#0070CE] transition-colors"
+            className="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
           >
-            Bình chọn
+            <Icon name="arrow-left" className="mr-1.5 w-3.5 h-3.5" />
+            Quay lại danh sách
           </Link>
-          <span>/</span>
-          <span className="font-semibold text-slate-800">
-            {isEditing ? 'Chỉnh sửa bình chọn' : 'Tạo bình chọn'}
-          </span>
         </div>
-
-        <Link
-          href={`/${currentSchoolCode}/school/poll`}
-          className="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
-        >
-          <Icon name="arrow-left" className="mr-1.5 w-3.5 h-3.5" />
-          Quay lại danh sách
-        </Link>
-      </div>
+      )}
 
       {/* Form Container */}
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -302,12 +308,22 @@ export const PollComposer: React.FC<PollComposerProps> = ({
 
         {/* Footer Actions */}
         <div className="flex items-center justify-end space-x-3 pt-2">
-          <Link
-            href={`/${currentSchoolCode}/school/poll`}
-            className="px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
-          >
-            Hủy bỏ
-          </Link>
+          {onCancel ? (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
+            >
+              Hủy bỏ
+            </button>
+          ) : (
+            <Link
+              href={`/${currentSchoolCode}/school/poll`}
+              className="px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
+            >
+              Hủy bỏ
+            </Link>
+          )}
           {(() => {
             const isFormValid =
               title.trim().length > 0 &&

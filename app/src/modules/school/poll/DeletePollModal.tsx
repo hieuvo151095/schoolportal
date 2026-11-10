@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon, SlideOver } from '@/components/ds';
 import { Poll } from '@/types/poll';
 
 interface DeletePollModalProps {
@@ -14,57 +15,54 @@ export const DeletePollModal: React.FC<DeletePollModalProps> = ({
   onClose,
   onConfirm,
 }) => {
-  if (!isOpen || !poll) return null;
+  if (!poll) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        {/* Header with 3 colored circles */}
-        <div className="bg-slate-50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
-            <span className="w-3 h-3 rounded-full bg-amber-500"></span>
-            <span className="w-3 h-3 rounded-full bg-rose-500"></span>
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-2">
-              Xác nhận xóa
-            </span>
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title="Xác nhận xóa bình chọn"
+      description="Hành động này sẽ xóa hoàn toàn bản nháp bình chọn khỏi hệ thống"
+      icon="trash"
+      width={480}
+      primaryAction={{
+        label: 'Xác nhận xóa',
+        icon: 'trash',
+        onClick: () => {
+          onConfirm(poll.id);
+          onClose();
+        },
+      }}
+      secondaryAction={{
+        label: 'Hủy bỏ',
+        onClick: onClose,
+      }}
+    >
+      <div className="space-y-6">
+        <div className="flex flex-col items-center text-center p-6 bg-rose-50 border border-rose-200 rounded-2xl">
+          <div className="w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-2xl font-bold mb-3 border-2 border-rose-300">
+            <Icon name="trash" size={28} />
           </div>
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 text-lg font-bold"
-          >
-            &times;
-          </button>
-        </div>
-
-        {/* Content (BC-02) */}
-        <div className="p-6">
-          <h3 className="text-base font-bold text-slate-800 mb-2">
-            Vui lòng xác nhận xóa bình chọn{' '}
-            <span className="text-rose-600">&ldquo;{poll.title}&rdquo;</span>
+          <h3 className="text-base font-bold text-slate-800 mb-1">
+            Xác nhận xóa bình chọn?
           </h3>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 leading-relaxed max-w-sm">
             Hành động này sẽ xóa hoàn toàn bản nháp bình chọn khỏi hệ thống và không thể phục hồi lại.
           </p>
         </div>
 
-        {/* Footer Actions */}
-        <div className="bg-slate-50 px-6 py-4 border-t border-slate-100 flex items-center justify-end space-x-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
-          >
-            Hủy bỏ
-          </button>
-          <button
-            onClick={() => onConfirm(poll.id)}
-            className="px-5 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold shadow-sm transition-colors"
-          >
-            Xác nhận
-          </button>
+        <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+          <div className="text-xs text-slate-500">Tiêu đề bình chọn:</div>
+          <div className="text-sm font-bold text-slate-800">&ldquo;{poll.title}&rdquo;</div>
+        </div>
+
+        <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-3">
+          <Icon name="triangle-exclamation" size={18} className="text-rose-600 shrink-0 mt-0.5" />
+          <div className="text-xs text-rose-900 leading-relaxed">
+            Dữ liệu khảo sát và các tùy chọn phương án sẽ bị xóa vĩnh viễn.
+          </div>
         </div>
       </div>
-    </div>
+    </SlideOver>
   );
 };
-export default DeletePollModal;

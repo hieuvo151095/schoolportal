@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Icon } from '@/components/ds';
+import { Icon, SlideOver, Checkbox } from '@/components/ds';
 import type { ArchivedStudent } from '@/types/archive';
 
 interface PermanentDeleteModalProps {
@@ -9,213 +8,6 @@ interface PermanentDeleteModalProps {
   onClose: () => void;
   onConfirmPurge: (studentId: string) => void;
 }
-
-const ModalOverlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 50;
-  padding: 1rem;
-`;
-
-const ModalCard = styled.div`
-  background: white;
-  border-radius: 1rem;
-  width: 100%;
-  max-width: 480px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  animation: modalIn 0.2s ease-out;
-
-  @keyframes modalIn {
-    from {
-      opacity: 0;
-      transform: scale(0.96) translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-  }
-`;
-
-const ModalHeader = styled.div`
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid #fee2e2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #fef2f2;
-`;
-
-const ModalTitle = styled.h2`
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #991b1b;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-const CloseButton = styled.button`
-  background: none;
-  border: none;
-  color: #991b1b;
-  font-size: 1.125rem;
-  cursor: pointer;
-  padding: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.375rem;
-
-  &:hover {
-    background: #fecaca;
-  }
-`;
-
-const ModalBody = styled.div`
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-`;
-
-const HazardIconWrapper = styled.div`
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: #fef2f2;
-  color: #dc2626;
-  font-size: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-  border: 2px solid #fecaca;
-  animation: pulse 2s infinite ease-in-out;
-
-  @keyframes pulse {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-  }
-`;
-
-const ConfirmationPrompt = styled.h3`
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 0.75rem 0;
-  line-height: 1.5;
-`;
-
-const HighlightName = styled.span`
-  color: #dc2626;
-`;
-
-const IrreversibleWarningBox = styled.div`
-  width: 100%;
-  background: #fff1f2;
-  border: 1px solid #fecdd3;
-  border-radius: 0.5rem;
-  padding: 0.875rem 1rem;
-  margin-top: 0.5rem;
-  margin-bottom: 1.25rem;
-  text-align: left;
-  font-size: 0.8125rem;
-  line-height: 1.4;
-  color: #9f1239;
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-`;
-
-const CheckboxLabel = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.875rem;
-  color: #334155;
-  cursor: pointer;
-  user-select: none;
-  text-align: left;
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 0.375rem;
-  transition: background 0.15s ease;
-
-  &:hover {
-    background: #f8fafc;
-  }
-
-  input[type='checkbox'] {
-    width: 1.125rem;
-    height: 1.125rem;
-    accent-color: #dc2626;
-    cursor: pointer;
-  }
-`;
-
-const ModalFooter = styled.div`
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #e2e8f0;
-  background: #f8fafc;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.75rem;
-`;
-
-const CancelButton = styled.button`
-  padding: 0.625rem 1.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #475569;
-  background: white;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.15s ease;
-
-  &:hover {
-    background: #f1f5f9;
-    color: #1e293b;
-  }
-`;
-
-const ConfirmPurgeButton = styled.button<{ $disabled: boolean }>`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: white;
-  background: ${(props) => (props.$disabled ? '#94a3b8' : '#dc2626')};
-  border: none;
-  border-radius: 0.5rem;
-  cursor: ${(props) => (props.$disabled ? 'not-allowed' : 'pointer')};
-  transition: all 0.15s ease;
-
-  ${(props) =>
-    !props.$disabled &&
-    `
-    &:hover {
-      background: #b91c1c;
-      box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
-    }
-  `}
-`;
 
 export const PermanentDeleteModal: React.FC<PermanentDeleteModalProps> = ({
   student,
@@ -231,71 +23,79 @@ export const PermanentDeleteModal: React.FC<PermanentDeleteModalProps> = ({
     }
   }, [isOpen]);
 
-  if (!isOpen || !student) return null;
+  if (!student) return null;
 
   return (
-    <ModalOverlay onClick={onClose}>
-      <ModalCard onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
-        <ModalHeader>
-          <ModalTitle>
-            <Icon name="triangle-exclamation" size={18} />
-            Cảnh Báo Xoá Vĩnh Viễn (Purge)
-          </ModalTitle>
-          <CloseButton type="button" onClick={onClose} aria-label="Đóng">
-            <Icon name="xmark" size={16} />
-          </CloseButton>
-        </ModalHeader>
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title="Cảnh báo xóa vĩnh viễn (Purge)"
+      description="Thao tác xóa vĩnh viễn dữ liệu khỏi hệ thống và không thể khôi phục"
+      icon="triangle-exclamation"
+      width={520}
+      primaryAction={{
+        label: 'Xóa vĩnh viễn',
+        icon: 'trash',
+        disabled: !isAffirmed,
+        onClick: () => onConfirmPurge(student.id),
+      }}
+      secondaryAction={{
+        label: 'Hủy bỏ',
+        onClick: onClose,
+      }}
+    >
+      <div className="space-y-6">
+        <div className="flex flex-col items-center text-center p-6 bg-rose-50 border border-rose-200 rounded-2xl">
+          <div className="w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-2xl font-bold mb-3 border-2 border-rose-300">
+            <Icon name="trash" size={28} />
+          </div>
+          <h3 className="text-base font-bold text-slate-800 mb-1">
+            Xác nhận xóa vĩnh viễn <span className="text-rose-600">{student.fullName}</span>?
+          </h3>
+          <p className="text-xs text-slate-500 leading-relaxed max-w-sm">
+            Hồ sơ học sinh sẽ bị xóa hoàn toàn khỏi cơ sở dữ liệu lưu trữ và không thể phục hồi.
+          </p>
+        </div>
 
-        <ModalBody>
-          <HazardIconWrapper>
-            <Icon name="trash" size={24} />
-          </HazardIconWrapper>
+        {/* Irreversible warning notice box */}
+        <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-3">
+          <Icon name="triangle-exclamation" size={18} className="text-rose-600 shrink-0 mt-0.5" />
+          <div className="text-xs text-rose-900 leading-relaxed">
+            <strong className="font-semibold block mb-0.5">Cảnh báo nghiêm trọng:</strong>
+            Hành động này sẽ xóa hoàn toàn hồ sơ lưu trữ của học sinh <strong>{student.fullName}</strong> (Mã: {student.studentCode}) khỏi cơ sở dữ liệu hệ thống. Dữ liệu sau khi xóa <strong>KHÔNG THỂ KHÔI PHỤC</strong> trong bất kỳ trường hợp nào!
+          </div>
+        </div>
 
-          {/* BR06 Mandatory Prompt */}
-          <ConfirmationPrompt>
-            Vui lòng xác nhận xoá học sinh <HighlightName>{student.fullName}</HighlightName>!
-          </ConfirmationPrompt>
+        {/* Student details */}
+        <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-sm">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-slate-500">Mã học sinh:</span>
+            <span className="font-bold text-slate-700 font-mono">{student.studentCode}</span>
+          </div>
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-slate-500">Lớp học cũ:</span>
+            <span className="font-semibold text-slate-700">{student.formerClassName || 'Chưa rõ'}</span>
+          </div>
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-slate-500">Ngày lưu trữ:</span>
+            <span className="font-semibold text-slate-700">{student.archiveDate || 'Chưa rõ'}</span>
+          </div>
+        </div>
 
-          {/* K065 Irreversible Purge Warning */}
-          <IrreversibleWarningBox>
-            <Icon
-              name="triangle-exclamation"
-              size={18}
-              className="text-rose-600 shrink-0 mt-0.5"
-            />
-            <div>
-              <strong>Cảnh báo quan trọng:</strong> Hành động này sẽ xoá hoàn toàn hồ sơ lưu trữ của học sinh{' '}
-              <strong>{student.fullName}</strong> (Mã: {student.studentCode}) khỏi cơ sở dữ liệu hệ thống.
-              Dữ liệu sau khi xoá <strong>KHÔNG THỂ KHÔI PHỤC</strong> trong bất kỳ trường hợp nào!
-            </div>
-          </IrreversibleWarningBox>
-
-          <CheckboxLabel>
+        {/* Affirmation Checkbox */}
+        <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl">
+          <label className="flex items-start gap-3 cursor-pointer text-xs font-medium text-slate-700 select-none">
             <input
               type="checkbox"
+              id="affirm-purge-checkbox"
               checked={isAffirmed}
               onChange={(e) => setIsAffirmed(e.target.checked)}
-              id="affirm-purge-checkbox"
+              className="mt-0.5 w-4 h-4 rounded text-rose-600 border-slate-300 focus:ring-rose-500"
             />
-            <span>Tôi đã hiểu rõ và xác nhận xóa vĩnh viễn học sinh này.</span>
-          </CheckboxLabel>
-        </ModalBody>
-
-        <ModalFooter>
-          <CancelButton type="button" onClick={onClose}>
-            Hủy
-          </CancelButton>
-          <ConfirmPurgeButton
-            type="button"
-            $disabled={!isAffirmed}
-            disabled={!isAffirmed}
-            onClick={() => onConfirmPurge(student.id)}
-          >
-            <Icon name="trash" size={14} />
-            <span>Xoá vĩnh viễn</span>
-          </ConfirmPurgeButton>
-        </ModalFooter>
-      </ModalCard>
-    </ModalOverlay>
+            <span>Tôi đã hiểu rõ hệ quả và hoàn toàn xác nhận xóa vĩnh viễn hồ sơ học sinh này.</span>
+          </label>
+        </div>
+      </div>
+    </SlideOver>
   );
 };

@@ -14,12 +14,14 @@ interface PollTableProps {
   polls: Poll[];
   onOpenSendModal: (pollId: string) => void;
   onOpenDeleteModal: (pollId: string) => void;
+  onOpenEdit?: (poll: Poll) => void;
 }
 
 export const PollTable: React.FC<PollTableProps> = ({
   polls,
   onOpenSendModal,
   onOpenDeleteModal,
+  onOpenEdit,
 }) => {
   const router = useRouter();
   const { schoolCode } = router.query;
@@ -102,7 +104,8 @@ export const PollTable: React.FC<PollTableProps> = ({
                   {
                     label: 'Chỉnh sửa bình chọn',
                     icon: 'pen-to-square',
-                    href: `/${currentSchoolCode}/school/poll/edit/${poll.id}`,
+                    onClick: onOpenEdit ? () => onOpenEdit(poll) : undefined,
+                    href: onOpenEdit ? undefined : `/${currentSchoolCode}/school/poll/edit/${poll.id}`,
                   },
                   {
                     label: 'Gửi bình chọn',

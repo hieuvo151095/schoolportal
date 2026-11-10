@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import PortalLayout from '@/components/layout/PortalLayout';
@@ -13,7 +13,10 @@ import {
   sendPoll,
   deletePoll,
   closeModal,
+  createPoll,
+  updatePoll,
 } from '@/store/slices/pollSlice';
+import { addToast } from '@/store/slices/toastSlice';
 import { filterPolls, computePollKPIs } from '@/utils/pollValidation';
 import { POLL_AVAILABLE_CLASSES } from '@/services/mockPollData';
 import { PollSummaryCards } from '@/modules/school/poll/PollSummaryCards';
@@ -21,7 +24,9 @@ import { PollToolbar } from '@/modules/school/poll/PollToolbar';
 import { PollTable } from '@/modules/school/poll/PollTable';
 import { SendPollModal } from '@/modules/school/poll/SendPollModal';
 import { DeletePollModal } from '@/modules/school/poll/DeletePollModal';
+import { PollSlideOver } from '@/modules/school/poll/PollSlideOver';
 import { PageHeader, Button } from '@/components/ds';
+import { CreatePollPayload, Poll } from '@/types/poll';
 
 export default function SchoolPollDirectoryPage() {
   const router = useRouter();
@@ -58,6 +63,42 @@ export default function SchoolPollDirectoryPage() {
     ? polls.find((p) => p.id === modalTargetPollId) || null
     : null;
 
+  const [isSlideOverOpen, setIsSlideOverOpen] = useState(false);
+  const [editingPoll, setEditingPoll] = useState<Poll | null>(null);
+
+  useEffect(() => {
+    if (router.query.create === 'true') {
+      setEditingPoll(null);
+      setIsSlideOverOpen(true);
+    } else if (router.query.edit) {
+      const target = polls.find((p) => p.id === router.query.edit);
+      if (target) {
+        setEditingPoll(target);
+        setIsSlideOverOpen(true);
+      }
+    }
+  }, [router.query.create, router.query.edit, polls]);
+
+  const handleSubmitPoll = (payload: CreatePollPayload) => {
+    if (editingPoll) {
+      dispatch(updatePoll({ ...payload, id: editingPoll.id }));
+      dispatch(
+        addToast({
+          type: 'success',
+          message: `Đã cập nhật cuộc bình chọn "${payload.title}" thành công.`,
+        })
+      );
+    } else {
+      dispatch(createPoll(payload));
+      dispatch(
+        addToast({
+          type: 'success',
+          message: `Đã tạo mới cuộc bình chọn "${payload.title}" thành công.`,
+        })
+      );
+    }
+  };
+
   return (
     <PortalLayout>
       <Head>
@@ -84,12 +125,20 @@ export default function SchoolPollDirectoryPage() {
             onClassChange={(classId) => dispatch(setFilterClass(classId))}
             onSearchChange={(query) => dispatch(setSearchQuery(query))}
             onResetFilter={() => dispatch(resetFilter())}
+            onOpenCreate={() => {
+              setEditingPoll(null);
+              setIsSlideOverOpen(true);
+            }}
           />
 
           <PollTable
             polls={filteredPolls}
             onOpenSendModal={(pollId) => dispatch(openSendModal(pollId))}
             onOpenDeleteModal={(pollId) => dispatch(openDeleteModal(pollId))}
+            onOpenEdit={(poll) => {
+              setEditingPoll(poll);
+              setIsSlideOverOpen(true);
+            }}
           />
         </div>
 
@@ -108,6 +157,21 @@ export default function SchoolPollDirectoryPage() {
           isOpen={activeModal === 'delete' && Boolean(targetPoll)}
           onClose={() => dispatch(closeModal())}
           onConfirm={(pollId) => dispatch(deletePoll(pollId))}
+        />
+
+        {/* Create / Edit Poll SlideOver (Right-Sheet Standard) */}
+        <PollSlideOver
+          isOpen={isSlideOverOpen}
+          onClose={() => {
+            setIsSlideOverOpen(false);
+            setEditingPoll(null);
+            if (router.query.create || router.query.edit) {
+              router.replace(`/${currentSchoolCode}/school/poll`, undefined, { shallow: true });
+            }
+          }}
+          initialPoll={editingPoll}
+          isEditing={!!editingPoll}
+          onSubmit={handleSubmitPoll}
         />
       </div>
     </PortalLayout>

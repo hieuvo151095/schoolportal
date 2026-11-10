@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from '@/components/ds';
+import { Icon, SlideOver } from '@/components/ds';
 import { ClassItem } from '../../../types/class';
 import { canDeleteClass, getDeletionBlockReason } from '../../../utils/classValidation';
 
@@ -16,92 +16,97 @@ export const DeleteClassModal: React.FC<DeleteClassModalProps> = ({
   onClose,
   onConfirm,
 }) => {
-  if (!isOpen || !classItem) return null;
+  if (!classItem) return null;
 
   const isDeletable = canDeleteClass(classItem);
   const blockReason = getDeletionBlockReason(classItem.studentCount);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-150">
-        {/* Header with icon */}
-        <div className="p-6 text-center">
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title={isDeletable ? 'Xác nhận xóa lớp học' : 'Không thể xóa lớp học này'}
+      description="Kiểm tra điều kiện ràng buộc học sinh và phân công trước khi xóa lớp"
+      icon={isDeletable ? 'trash' : 'triangle-exclamation'}
+      width={480}
+      primaryAction={
+        isDeletable
+          ? {
+              label: 'Xóa vĩnh viễn',
+              icon: 'trash',
+              onClick: () => {
+                onConfirm(classItem.id);
+                onClose();
+              },
+            }
+          : undefined
+      }
+      secondaryAction={{
+        label: isDeletable ? 'Hủy bỏ' : 'Đã hiểu',
+        onClick: onClose,
+      }}
+    >
+      <div className="space-y-6">
+        <div
+          className={`flex flex-col items-center text-center p-6 border rounded-2xl ${
+            isDeletable
+              ? 'bg-rose-50 border-rose-200'
+              : 'bg-amber-50 border-amber-200'
+          }`}
+        >
           <div
-            className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 ${
+            className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-3 border-2 ${
               isDeletable
-                ? 'bg-rose-50 text-rose-600 border border-rose-100'
-                : 'bg-amber-50 text-amber-600 border border-amber-100'
+                ? 'bg-rose-100 text-rose-600 border-rose-300'
+                : 'bg-amber-100 text-amber-600 border-amber-300'
             }`}
           >
-            <Icon name={isDeletable ? 'trash' : 'triangle-exclamation'} size={24} />
+            <Icon name={isDeletable ? 'trash' : 'triangle-exclamation'} size={28} />
           </div>
-
-          <h3 className="text-lg font-bold text-slate-800 mb-1">
-            {isDeletable ? 'Xác nhận xóa lớp học' : 'Không thể xóa lớp học này'}
+          <h3 className="text-base font-bold text-slate-800 mb-1">
+            {isDeletable ? 'Xác nhận xóa lớp học?' : 'Lớp đang có dữ liệu ràng buộc'}
           </h3>
+          <p className="text-xs text-slate-500 leading-relaxed max-w-sm">
+            {isDeletable
+              ? 'Lớp học hiện có sĩ số bằng 0. Bạn có thể xóa an toàn khỏi hệ thống.'
+              : 'Không thể xóa lớp học khi vẫn còn học sinh đang ghi danh.'}
+          </p>
+        </div>
 
-          <div className="my-3 p-3 bg-slate-50 border border-slate-200 rounded-xl text-left text-xs space-y-1">
-            <div className="flex justify-between">
-              <span className="text-slate-500 font-medium">Tên lớp:</span>
-              <span className="font-bold text-slate-800">{classItem.name}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500 font-medium">Mã lớp:</span>
-              <span className="font-mono font-semibold text-slate-700">{classItem.code}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500 font-medium">Phân loại:</span>
-              <span className="font-semibold text-slate-700">
-                {classItem.taxonomy === 'chinh_khoa' ? 'Chính khóa' : 'Ngoại khóa & CLB'}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500 font-medium">Sĩ số thực tế:</span>
-              <span
-                className={`font-bold ${
-                  classItem.studentCount > 0 ? 'text-rose-600' : 'text-emerald-600'
-                }`}
-              >
-                {classItem.studentCount} học sinh
-              </span>
-            </div>
+        <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-2">
+          <div className="flex justify-between">
+            <span className="text-slate-500">Tên lớp:</span>
+            <span className="font-bold text-slate-800">{classItem.name}</span>
           </div>
-
-          {/* Explanation text */}
-          {isDeletable ? (
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Lớp học hiện có <strong>sĩ số bằng 0</strong>. Bạn có chắc chắn muốn xóa lớp học này khỏi hệ thống? Thao tác này không thể hoàn tác.
-            </p>
-          ) : (
-            <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 leading-relaxed text-left flex items-start gap-2.5">
-              <Icon name="circle-info" size={16} className="text-rose-600 mt-0.5 shrink-0" />
-              <span>{blockReason}</span>
-            </div>
-          )}
-        </div>
-
-        {/* Footer actions */}
-        <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 border border-slate-200 hover:bg-white text-slate-700 rounded-xl text-sm font-semibold transition-colors"
-          >
-            {isDeletable ? 'Hủy bỏ' : 'Đã hiểu'}
-          </button>
-
-          {isDeletable && (
-            <button
-              type="button"
-              onClick={() => onConfirm(classItem.id)}
-              className="px-4 py-2 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors flex items-center gap-2"
+          <div className="flex justify-between">
+            <span className="text-slate-500">Mã định danh:</span>
+            <span className="font-mono font-semibold text-slate-700">{classItem.code}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-slate-500">Phân loại:</span>
+            <span className="font-semibold text-slate-700">
+              {classItem.taxonomy === 'chinh_khoa' ? 'Chính khóa' : 'Ngoại khóa & CLB'}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-slate-500">Sĩ số thực tế:</span>
+            <span
+              className={`font-bold ${
+                classItem.studentCount > 0 ? 'text-rose-600' : 'text-emerald-600'
+              }`}
             >
-              <Icon name="trash" size={14} />
-              <span>Xóa vĩnh viễn</span>
-            </button>
-          )}
+              {classItem.studentCount} học sinh
+            </span>
+          </div>
         </div>
+
+        {!isDeletable && (
+          <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 leading-relaxed flex items-start gap-2.5">
+            <Icon name="circle-info" size={16} className="text-rose-600 mt-0.5 shrink-0" />
+            <span>{blockReason}</span>
+          </div>
+        )}
       </div>
-    </div>
+    </SlideOver>
   );
 };

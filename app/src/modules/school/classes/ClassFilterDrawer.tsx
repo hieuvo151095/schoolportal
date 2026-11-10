@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Dropdown } from '@/components/ds';
+import { Icon, Dropdown, SlideOver } from '@/components/ds';
 import { ClassFilterState } from '../../../types/class';
 
 interface ClassFilterDrawerProps {
@@ -19,187 +19,162 @@ export const ClassFilterDrawer: React.FC<ClassFilterDrawerProps> = ({
   onResetFilter,
   availableTeachers,
 }) => {
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="bg-white w-full max-w-sm h-full shadow-2xl flex flex-col border-l border-slate-200 animate-in slide-in-from-right duration-200">
-        {/* Header */}
-        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
-          <div className="flex items-center gap-2">
-            <Icon name="filter" size={14} className="text-blue-600" />
-            <h3 className="font-bold text-slate-800 text-sm">Bộ lọc nâng cao</h3>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-            aria-label="Đóng"
-          >
-            <Icon name="xmark" size={14} />
-          </button>
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title="Bộ lọc nâng cao"
+      description="Lọc chi tiết danh sách lớp học theo trạng thái, GVCN và khoảng sĩ số"
+      icon="filter"
+      width={460}
+      primaryAction={{
+        label: 'Áp dụng',
+        icon: 'check',
+        onClick: onClose,
+      }}
+      secondaryAction={{
+        label: 'Đặt lại',
+        onClick: onResetFilter,
+      }}
+    >
+      <div className="space-y-6">
+        {/* Status Filter */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+            Trạng thái hoạt động
+          </label>
+          <Dropdown
+            value={filterCriteria.status || ''}
+            onChange={(val) =>
+              onUpdateFilter({
+                status: val ? (val as ClassFilterState['status']) : undefined,
+              })
+            }
+            options={[
+              { value: '', label: 'Tất cả trạng thái' },
+              { value: 'dang_hoat_dong', label: 'Đang hoạt động' },
+              { value: 'tam_dung', label: 'Tạm dừng' },
+              { value: 'da_ket_thuc', label: 'Đã kết thúc' },
+            ]}
+            fullWidth
+          />
         </div>
 
-        {/* Filter Form Controls */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-5 text-sm">
-          {/* Status Filter */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-              Trạng thái hoạt động
-            </label>
-            <Dropdown
-              value={filterCriteria.status || ''}
-              onChange={(val) =>
-                onUpdateFilter({
-                  status: val ? (val as ClassFilterState['status']) : undefined,
-                })
-              }
-              options={[
-                { value: '', label: 'Tất cả trạng thái' },
-                { value: 'dang_hoat_dong', label: 'Đang hoạt động' },
-                { value: 'tam_dung', label: 'Tạm dừng' },
-                { value: 'da_ket_thuc', label: 'Đã kết thúc' },
-              ]}
-              fullWidth
-            />
-          </div>
-
-          {/* Teacher Role Filter */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-              Tình trạng GVCN
-            </label>
-            <div className="space-y-1.5">
-              {[
-                { label: 'Tất cả', value: undefined },
-                { label: 'Đã phân công GVCN', value: 'co_gvcn' },
-                { label: 'Chưa có GVCN', value: 'chua_co_gvcn' },
-              ].map((opt, idx) => (
-                <label
-                  key={idx}
-                  className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer text-xs font-medium text-slate-700"
-                >
-                  <input
-                    type="radio"
-                    name="teacherRole"
-                    checked={filterCriteria.teacherRole === opt.value}
-                    onChange={() =>
-                      onUpdateFilter({
-                        teacherRole: opt.value as ClassFilterState['teacherRole'],
-                      })
-                    }
-                    className="text-blue-600 focus:ring-blue-500"
-                  />
-                  <span>{opt.label}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Specific Teacher Filter */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-              Giáo viên cụ thể
-            </label>
-            <Dropdown
-              value={filterCriteria.teacherId || ''}
-              onChange={(val) =>
-                onUpdateFilter({
-                  teacherId: val ? val : undefined,
-                })
-              }
-              options={[
-                { value: '', label: 'Tất cả giáo viên' },
-                ...availableTeachers.map((t) => ({
-                  value: t.id,
-                  label: t.name,
-                })),
-              ]}
-              fullWidth
-            />
-          </div>
-
-          {/* CSDL Sở Status Filter */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-              Liên kết CSDL Sở GD&ĐT
-            </label>
-            <Dropdown
-              value={filterCriteria.csdlStatus || ''}
-              onChange={(val) =>
-                onUpdateFilter({
-                  csdlStatus: val
-                    ? (val as ClassFilterState['csdlStatus'])
-                    : undefined,
-                })
-              }
-              options={[
-                { value: '', label: 'Tất cả trạng thái liên kết' },
-                { value: 'da_lien_ket', label: 'Đã liên kết CSDL Sở' },
-                { value: 'chua_lien_ket', label: 'Chưa liên kết' },
-              ]}
-              fullWidth
-            />
-          </div>
-
-          {/* Capacity Range */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-              Khoảng sĩ số học sinh
-            </label>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
+        {/* Teacher Role Filter */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+            Tình trạng GVCN
+          </label>
+          <div className="space-y-1.5">
+            {[
+              { label: 'Tất cả', value: undefined },
+              { label: 'Đã phân công GVCN', value: 'co_gvcn' },
+              { label: 'Chưa có GVCN', value: 'chua_co_gvcn' },
+            ].map((opt, idx) => (
+              <label
+                key={idx}
+                className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer text-xs font-medium text-slate-700"
+              >
                 <input
-                  type="number"
-                  min="0"
-                  placeholder="Từ (VD: 0)"
-                  value={filterCriteria.capacityMin !== undefined ? filterCriteria.capacityMin : ''}
-                  onChange={(e) =>
+                  type="radio"
+                  name="teacherRole"
+                  checked={filterCriteria.teacherRole === opt.value}
+                  onChange={() =>
                     onUpdateFilter({
-                      capacityMin: e.target.value !== '' ? Number(e.target.value) : undefined,
+                      teacherRole: opt.value as ClassFilterState['teacherRole'],
                     })
                   }
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="text-[#0070CE] focus:ring-[#0070CE]"
                 />
-              </div>
-              <div>
-                <input
-                  type="number"
-                  min="0"
-                  placeholder="Đến (VD: 35)"
-                  value={filterCriteria.capacityMax !== undefined ? filterCriteria.capacityMax : ''}
-                  onChange={(e) =>
-                    onUpdateFilter({
-                      capacityMax: e.target.value !== '' ? Number(e.target.value) : undefined,
-                    })
-                  }
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
+                <span>{opt.label}</span>
+              </label>
+            ))}
           </div>
         </div>
 
-        {/* Footer Actions */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between gap-3">
-          <button
-            type="button"
-            onClick={onResetFilter}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg hover:bg-white transition-colors"
-          >
-            <Icon name="rotate-right" size={12} />
-            <span>Đặt lại</span>
-          </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-sm transition-colors"
-          >
-            <Icon name="check" size={12} />
-            <span>Áp dụng</span>
-          </button>
+        {/* Specific Teacher Filter */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+            Giáo viên cụ thể
+          </label>
+          <Dropdown
+            value={filterCriteria.teacherId || ''}
+            onChange={(val) =>
+              onUpdateFilter({
+                teacherId: val ? val : undefined,
+              })
+            }
+            options={[
+              { value: '', label: 'Tất cả giáo viên' },
+              ...availableTeachers.map((t) => ({
+                value: t.id,
+                label: t.name,
+              })),
+            ]}
+            fullWidth
+          />
+        </div>
+
+        {/* CSDL Sở Status Filter */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+            Liên kết CSDL Sở GD&amp;ĐT
+          </label>
+          <Dropdown
+            value={filterCriteria.csdlStatus || ''}
+            onChange={(val) =>
+              onUpdateFilter({
+                csdlStatus: val
+                  ? (val as ClassFilterState['csdlStatus'])
+                  : undefined,
+              })
+            }
+            options={[
+              { value: '', label: 'Tất cả trạng thái liên kết' },
+              { value: 'da_lien_ket', label: 'Đã liên kết CSDL Sở' },
+              { value: 'chua_lien_ket', label: 'Chưa liên kết' },
+            ]}
+            fullWidth
+          />
+        </div>
+
+        {/* Capacity Range */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+            Khoảng sĩ số học sinh
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <input
+                type="number"
+                min="0"
+                placeholder="Từ (VD: 0)"
+                value={filterCriteria.capacityMin !== undefined ? filterCriteria.capacityMin : ''}
+                onChange={(e) =>
+                  onUpdateFilter({
+                    capacityMin: e.target.value !== '' ? Number(e.target.value) : undefined,
+                  })
+                }
+                className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-[#0070CE]"
+              />
+            </div>
+            <div>
+              <input
+                type="number"
+                min="0"
+                placeholder="Đến (VD: 35)"
+                value={filterCriteria.capacityMax !== undefined ? filterCriteria.capacityMax : ''}
+                onChange={(e) =>
+                  onUpdateFilter({
+                    capacityMax: e.target.value !== '' ? Number(e.target.value) : undefined,
+                  })
+                }
+                className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-[#0070CE]"
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </SlideOver>
   );
 };

@@ -23,6 +23,7 @@ interface AnnouncementTableProps {
   onSelectAll: (ids: string[]) => void;
   onTogglePin: (id: string) => void;
   onOpenDeleteModal: (announcement: Announcement) => void;
+  onOpenEdit?: (announcement: Announcement) => void;
 }
 
 export const AnnouncementTable: React.FC<AnnouncementTableProps> = ({
@@ -32,7 +33,8 @@ export const AnnouncementTable: React.FC<AnnouncementTableProps> = ({
   onToggleSelect,
   onSelectAll,
   onTogglePin,
-  onOpenDeleteModal
+  onOpenDeleteModal,
+  onOpenEdit,
 }) => {
   const allSelected =
     announcements.length > 0 && announcements.every(a => selectedIds.includes(a.id));
@@ -279,8 +281,9 @@ export const AnnouncementTable: React.FC<AnnouncementTableProps> = ({
                               ? [
                                   {
                                     label: 'Chỉnh sửa bản nháp',
-                                    icon: 'pen-to-square',
-                                    href: `/${schoolCode}/school/announcements/edit/${announcement.id}`,
+                                    icon: 'pen-to-square' as const,
+                                    onClick: onOpenEdit ? () => onOpenEdit(announcement) : undefined,
+                                    href: onOpenEdit ? undefined : `/${schoolCode}/school/announcements/edit/${announcement.id}`,
                                   },
                                 ]
                               : []),

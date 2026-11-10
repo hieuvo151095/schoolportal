@@ -15,6 +15,8 @@ interface EventFormProps {
   schoolCode: string;
   initialData?: Partial<EventFormData>;
   isEdit?: boolean;
+  hideHeader?: boolean;
+  onCancel?: () => void;
   onSubmit: (data: EventFormData) => void;
 }
 
@@ -29,6 +31,8 @@ export const EventForm: React.FC<EventFormProps> = ({
   schoolCode,
   initialData,
   isEdit = false,
+  hideHeader = false,
+  onCancel,
   onSubmit,
 }) => {
   const router = useRouter();
@@ -79,6 +83,10 @@ export const EventForm: React.FC<EventFormProps> = ({
   };
 
   const handleBack = () => {
+    if (onCancel) {
+      onCancel();
+      return;
+    }
     if (isDirty) {
       setShowExitModal(true);
     } else {
@@ -125,64 +133,66 @@ export const EventForm: React.FC<EventFormProps> = ({
   const isSubmitDisabled = !formData.title.trim();
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] pb-16">
+    <div className={hideHeader ? 'space-y-4' : 'min-h-screen bg-[#F8FAFC] pb-16'}>
       {/* Top Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={handleBack}
-              className="w-9 h-9 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 flex items-center justify-center transition"
-              title="Quay lại"
-            >
-              <Icon name="arrow-left" className="w-4 h-4" />
-            </button>
-            <div>
-              <div className="flex items-center space-x-2 text-xs text-gray-500 mb-0.5">
-                <span>Nhà trường</span>
-                <span>/</span>
-                <Link
-                  href={`/${schoolCode}/school/calendar`}
-                  className="hover:underline"
-                >
-                  Lịch sự kiện
-                </Link>
-                <span>/</span>
-                <span className="text-[#0070CE] font-semibold">
-                  {isEdit ? 'Chỉnh sửa sự kiện' : 'Thêm sự kiện mới'}
-                </span>
+      {!hideHeader && (
+        <div className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleBack}
+                className="w-9 h-9 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 flex items-center justify-center transition"
+                title="Quay lại"
+              >
+                <Icon name="arrow-left" className="w-4 h-4" />
+              </button>
+              <div>
+                <div className="flex items-center space-x-2 text-xs text-gray-500 mb-0.5">
+                  <span>Nhà trường</span>
+                  <span>/</span>
+                  <Link
+                    href={`/${schoolCode}/school/calendar`}
+                    className="hover:underline"
+                  >
+                    Lịch sự kiện
+                  </Link>
+                  <span>/</span>
+                  <span className="text-[#0070CE] font-semibold">
+                    {isEdit ? 'Chỉnh sửa sự kiện' : 'Thêm sự kiện mới'}
+                  </span>
+                </div>
+                <h1 className="text-xl font-bold text-gray-900">
+                  {isEdit ? 'Chỉnh sửa sự kiện nhà trường' : 'Tạo sự kiện mới cho nhà trường'}
+                </h1>
               </div>
-              <h1 className="text-xl font-bold text-gray-900">
-                {isEdit ? 'Chỉnh sửa sự kiện nhà trường' : 'Tạo sự kiện mới cho nhà trường'}
-              </h1>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleBack}
+                className="px-4 py-2 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 transition"
+              >
+                Hủy bỏ
+              </button>
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={isSubmitDisabled}
+                className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg text-xs font-semibold shadow-sm transition active:scale-95 ${
+                  isSubmitDisabled
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-[#0070CE] hover:bg-[#005bb5] text-white'
+                }`}
+              >
+                <Icon name="check" className="w-4 h-4" />
+                <span>{isEdit ? 'Cập nhật sự kiện' : 'Lưu sự kiện'}</span>
+              </button>
             </div>
           </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={handleBack}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 transition"
-            >
-              Hủy bỏ
-            </button>
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={isSubmitDisabled}
-              className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg text-xs font-semibold shadow-sm transition active:scale-95 ${
-                isSubmitDisabled
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-[#0070CE] hover:bg-[#005bb5] text-white'
-              }`}
-            >
-              <Icon name="check" className="w-4 h-4" />
-              <span>{isEdit ? 'Cập nhật sự kiện' : 'Lưu sự kiện'}</span>
-            </button>
-          </div>
         </div>
-      </div>
+      )}
 
       {/* Main Form Content */}
       <form onSubmit={handleSubmit} className="mt-6 px-6 space-y-6">

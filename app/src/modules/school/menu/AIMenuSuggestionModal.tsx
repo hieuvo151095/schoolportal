@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Icon } from '../../../components/ds';
+import { Icon, SlideOver } from '../../../components/ds';
 import { DayMealSchedule, WeekdayKey } from '../../../types/menu';
 
 interface AIMenuSuggestionModalProps {
@@ -262,164 +262,147 @@ export const AIMenuSuggestionModal: React.FC<AIMenuSuggestionModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden flex flex-col max-h-[90vh]">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-purple-50 to-pink-50/30">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-purple-600/10 flex items-center justify-center text-purple-600">
-              <Icon name="wand-magic-sparkles" className="w-4 h-4 text-purple-600" />
-            </div>
-            <div>
-              <h3 className="text-base font-semibold text-gray-900">Gợi ý thực đơn bằng AI</h3>
-              <p className="text-xs text-gray-500">Cân đối dinh dưỡng tự động theo tiêu chuẩn học đường</p>
-            </div>
-          </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-white/60 transition-colors"
-          >
-            <Icon name="xmark" className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Body */}
-        <div className="p-6 overflow-y-auto space-y-5">
-          {/* Lứa tuổi */}
-          <div>
-            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
-              Lứa tuổi học sinh
-            </label>
-            <div className="grid grid-cols-3 gap-2">
-              {[
-                { id: 'mam_non', label: 'Mầm non (2 - 5 tuổi)' },
-                { id: 'tieu_hoc', label: 'Tiểu học (Lớp 1 - 5)' },
-                { id: 'trung_hoc', label: 'Trung học (Lớp 6 - 12)' },
-              ].map((opt) => (
-                <button
-                  key={opt.id}
-                  type="button"
-                  onClick={() => setGradeTier(opt.id as any)}
-                  className={`p-3 text-xs font-medium rounded-xl border text-left transition-all ${
-                    gradeTier === opt.id
-                      ? 'bg-purple-50 border-purple-500 text-purple-800 shadow-sm font-semibold'
-                      : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Mức giá theo 4 bậc BR12 */}
-          <div>
-            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
-              Mức giá định mức bữa ăn (4 bậc tiêu chuẩn)
-            </label>
-            <div className="grid grid-cols-4 gap-2">
-              {[
-                { id: 'tiet_kiem', label: 'Tiết kiệm', sub: '35.000 đ' },
-                { id: 'pho_thong', label: 'Phổ thông', sub: '50.000 đ' },
-                { id: 'cao_cap', label: 'Cao cấp', sub: '75.000 đ' },
-                { id: 'dac_biet', label: 'Đặc biệt', sub: '100.000 đ' },
-              ].map((opt) => (
-                <button
-                  key={opt.id}
-                  type="button"
-                  onClick={() => setBudgetTier(opt.id as any)}
-                  className={`p-2.5 text-xs rounded-xl border text-center transition-all ${
-                    budgetTier === opt.id
-                      ? 'bg-purple-50 border-purple-500 text-purple-800 shadow-sm font-semibold'
-                      : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  <div>{opt.label}</div>
-                  <div className="text-[10px] text-gray-500 mt-0.5">{opt.sub}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {!generated ? (
-            <div className="text-center py-6 bg-purple-50/40 rounded-xl border border-dashed border-purple-200">
-              <Icon name="star" className="w-8 h-8 text-purple-400 mx-auto mb-2" />
-              <p className="text-xs text-purple-800 font-medium">
-                Mô hình AI sẽ tự động phân bổ tỷ lệ Đạm - Đường bột - Chất béo cân đối theo khuyến nghị của Viện Dinh Dưỡng Quốc Gia.
-              </p>
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title="Gợi ý thực đơn bằng AI"
+      description="Cân đối dinh dưỡng tự động theo tiêu chuẩn học đường và mức giá định mức"
+      icon="wand-magic-sparkles"
+      width={600}
+      primaryAction={
+        generated
+          ? {
+              label: 'Áp dụng vào thực đơn',
+              icon: 'check',
+              onClick: handleApply,
+            }
+          : undefined
+      }
+      secondaryAction={{
+        label: 'Đóng',
+        onClick: onClose,
+      }}
+    >
+      <div className="space-y-6">
+        {/* Lứa tuổi */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
+            Lứa tuổi học sinh
+          </label>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { id: 'mam_non', label: 'Mầm non (2 - 5 tuổi)' },
+              { id: 'tieu_hoc', label: 'Tiểu học (Lớp 1 - 5)' },
+              { id: 'trung_hoc', label: 'Trung học (Lớp 6 - 12)' },
+            ].map((opt) => (
               <button
+                key={opt.id}
                 type="button"
-                onClick={handleGenerate}
-                className="mt-4 px-4 py-2 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 rounded-xl shadow-sm shadow-purple-500/20 inline-flex items-center gap-1.5 transition-all"
+                onClick={() => setGradeTier(opt.id as any)}
+                className={`p-3 text-xs font-medium rounded-xl border text-left transition-all ${
+                  gradeTier === opt.id
+                    ? 'bg-purple-50 border-purple-500 text-purple-800 shadow-2xs font-semibold ring-1 ring-purple-500/20'
+                    : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                }`}
               >
-                <Icon name="wand-magic-sparkles" className="w-3.5 h-3.5" />
-                Sinh thực đơn tuần gợi ý
+                {opt.label}
               </button>
-            </div>
-          ) : (
-            <div className="space-y-3 animate-in fade-in">
-              <div className="p-3.5 rounded-xl bg-purple-50/80 border border-purple-200 text-xs text-purple-900 space-y-1">
-                <div className="font-semibold flex items-center gap-1.5 text-purple-800">
-                  <Icon name="check" className="w-3.5 h-3.5 text-purple-600" />
-                  Đã sinh thực đơn 6 ngày (Thứ 2 - Thứ 7) cho lứa tuổi {gradeTier === 'mam_non' ? 'Mầm non' : gradeTier === 'tieu_hoc' ? 'Tiểu học' : 'Trung học'}
-                </div>
-                <div className="text-[11px] text-purple-700">
-                  Mỗi ngày gồm 3 bữa: Ăn sáng (~350 kcal), Ăn trưa (~450 kcal), Ăn xế (~120 kcal) kèm nguyên liệu đạt chuẩn.
-                </div>
-              </div>
-
-              {/* Feedback buttons (BR12) */}
-              <div className="flex items-center justify-between text-xs text-gray-500 pt-1 px-1">
-                <span>Gợi ý này có hữu ích với bạn không?</span>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setFeedback('up')}
-                    className={`px-2.5 py-1 rounded-lg border text-xs flex items-center gap-1 transition-colors ${
-                      feedback === 'up'
-                        ? 'bg-purple-100 border-purple-400 text-purple-800 font-semibold'
-                        : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
-                    }`}
-                  >
-                    <Icon name="thumbs-up" className="w-3.5 h-3.5" /> Hữu ích
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFeedback('down')}
-                    className={`px-2.5 py-1 rounded-lg border text-xs flex items-center gap-1 transition-colors ${
-                      feedback === 'down'
-                        ? 'bg-gray-200 border-gray-400 text-gray-800 font-semibold'
-                        : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
-                    }`}
-                  >
-                    <Icon name="thumbs-down" className="w-3.5 h-3.5" /> Chưa phù hợp
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+            ))}
+          </div>
         </div>
 
-        {/* Footer */}
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
-          >
-            Đóng
-          </button>
-          {generated && (
+        {/* Mức giá theo 4 bậc BR12 */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
+            Mức giá định mức bữa ăn (4 bậc tiêu chuẩn)
+          </label>
+          <div className="grid grid-cols-4 gap-2">
+            {[
+              { id: 'tiet_kiem', label: 'Tiết kiệm', sub: '35.000 đ' },
+              { id: 'pho_thong', label: 'Phổ thông', sub: '50.000 đ' },
+              { id: 'cao_cap', label: 'Cao cấp', sub: '75.000 đ' },
+              { id: 'dac_biet', label: 'Đặc biệt', sub: '100.000 đ' },
+            ].map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setBudgetTier(opt.id as any)}
+                className={`p-2.5 text-xs rounded-xl border text-center transition-all ${
+                  budgetTier === opt.id
+                    ? 'bg-purple-50 border-purple-500 text-purple-800 shadow-2xs font-semibold ring-1 ring-purple-500/20'
+                    : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                }`}
+              >
+                <div>{opt.label}</div>
+                <div className="text-[10px] text-slate-500 mt-0.5">{opt.sub}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {!generated ? (
+          <div className="text-center py-8 bg-purple-50/50 rounded-2xl border border-dashed border-purple-200 p-6">
+            <div className="w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mx-auto mb-3">
+              <Icon name="wand-magic-sparkles" size={24} />
+            </div>
+            <p className="text-xs text-purple-900 font-medium max-w-sm mx-auto leading-relaxed">
+              Mô hình AI sẽ tự động phân bổ tỷ lệ Đạm - Đường bột - Chất béo cân đối theo khuyến nghị của Viện Dinh Dưỡng Quốc Gia.
+            </p>
             <button
               type="button"
-              onClick={handleApply}
-              className="px-4 py-2 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 rounded-xl shadow-sm transition-all"
+              onClick={handleGenerate}
+              className="mt-5 px-5 py-2.5 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 rounded-xl shadow-xs inline-flex items-center gap-2 transition-all cursor-pointer"
             >
-              Áp dụng vào thực đơn
+              <Icon name="wand-magic-sparkles" size={14} />
+              <span>Sinh thực đơn tuần gợi ý</span>
             </button>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="space-y-4 animate-in fade-in">
+            <div className="p-4 rounded-xl bg-purple-50/80 border border-purple-200 text-xs text-purple-900 space-y-1.5">
+              <div className="font-semibold flex items-center gap-2 text-purple-800">
+                <Icon name="circle-check" size={16} className="text-purple-600" />
+                <span>
+                  Đã sinh thực đơn 6 ngày (Thứ 2 - Thứ 7) cho lứa tuổi{' '}
+                  {gradeTier === 'mam_non' ? 'Mầm non' : gradeTier === 'tieu_hoc' ? 'Tiểu học' : 'Trung học'}
+                </span>
+              </div>
+              <div className="text-[11px] text-purple-700 leading-relaxed">
+                Mỗi ngày gồm 3 bữa: Ăn sáng (~350 kcal), Ăn trưa (~450 kcal), Ăn xế (~120 kcal) kèm nguyên liệu đạt chuẩn.
+              </div>
+            </div>
+
+            {/* Feedback buttons (BR12) */}
+            <div className="flex items-center justify-between text-xs text-slate-500 pt-1 px-1">
+              <span>Gợi ý này có hữu ích với bạn không?</span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setFeedback('up')}
+                  className={`px-3 py-1.5 rounded-lg border text-xs flex items-center gap-1.5 transition-colors cursor-pointer ${
+                    feedback === 'up'
+                      ? 'bg-purple-100 border-purple-400 text-purple-800 font-semibold'
+                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
+                  <Icon name="thumbs-up" size={12} /> Hữu ích
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFeedback('down')}
+                  className={`px-3 py-1.5 rounded-lg border text-xs flex items-center gap-1.5 transition-colors cursor-pointer ${
+                    feedback === 'down'
+                      ? 'bg-slate-200 border-slate-400 text-slate-800 font-semibold'
+                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
+                  <Icon name="thumbs-down" size={12} /> Chưa phù hợp
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+    </SlideOver>
   );
 };

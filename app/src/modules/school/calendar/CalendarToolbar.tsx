@@ -23,6 +23,7 @@ interface CalendarToolbarProps {
   onViewModeChange: (mode: CalendarViewMode) => void;
   onScopeFilterChange: (filter: EventScopeFilter) => void;
   onSearchChange: (query: string) => void;
+  onOpenCreate?: () => void;
 }
 
 export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
@@ -40,6 +41,7 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
   onViewModeChange,
   onScopeFilterChange,
   onSearchChange,
+  onOpenCreate,
 }) => {
   const availableYears = [2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
 
@@ -169,25 +171,35 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
           </div>
 
           {/* CTA Create Button */}
-          <Link
-            href={`/${schoolCode}/school/calendar/create`}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 'var(--space-2)',
-              padding: 'var(--space-2) var(--space-4)',
-              borderRadius: 'var(--radius-md)',
-              background: 'var(--eco-blue-strong)',
-              color: '#ffffff',
-              fontSize: 'var(--text-xs)',
-              fontWeight: 'var(--font-bold)',
-              textDecoration: 'none',
-              boxShadow: 'var(--shadow-xs)',
-            }}
-          >
-            <Icon name="plus" size={13} />
-            <span>Thêm sự kiện</span>
-          </Link>
+          {onOpenCreate ? (
+            <Button
+              variant="primary"
+              icon="plus"
+              onClick={onOpenCreate}
+            >
+              Thêm sự kiện
+            </Button>
+          ) : (
+            <Link
+              href={`/${schoolCode}/school/calendar/create`}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)',
+                padding: 'var(--space-2) var(--space-4)',
+                borderRadius: 'var(--radius-md)',
+                background: 'var(--eco-blue-strong)',
+                color: '#ffffff',
+                fontSize: 'var(--text-xs)',
+                fontWeight: 'var(--font-bold)',
+                textDecoration: 'none',
+                boxShadow: 'var(--shadow-xs)',
+              }}
+            >
+              <Icon name="plus" size={13} />
+              <span>Thêm sự kiện</span>
+            </Link>
+          )}
         </div>
       </div>
 

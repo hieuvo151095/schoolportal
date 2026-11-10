@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Icon } from '@/components/ds';
+import React, { useState, useEffect } from 'react';
+import { Icon, SlideOver, Checkbox } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { setFilter, resetFilter } from '../../../store/slices/teacherSlice';
 
@@ -17,7 +17,9 @@ export const ExtendedTeacherFilterModal: React.FC<ExtendedTeacherFilterModalProp
 
   const [csdlSoOnly, setCsdlSoOnly] = useState(filter.csdlSoOnly);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setCsdlSoOnly(filter.csdlSoOnly);
+  }, [filter.csdlSoOnly, isOpen]);
 
   const handleApply = () => {
     dispatch(setFilter({ csdlSoOnly }));
@@ -31,85 +33,51 @@ export const ExtendedTeacherFilterModal: React.FC<ExtendedTeacherFilterModalProp
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-150">
-        {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#0070CE]">
-              <Icon name="filter" size={20} />
-            </div>
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title="Bộ lọc nâng cao"
+      description="Tùy chọn lọc nâng cao cho danh sách giáo viên & đồng bộ CSDL Sở"
+      icon="filter"
+      width={460}
+      primaryAction={{
+        label: 'Áp dụng bộ lọc',
+        icon: 'check',
+        onClick: handleApply,
+      }}
+      secondaryAction={{
+        label: 'Thiết lập lại',
+        onClick: handleReset,
+      }}
+    >
+      <div className="space-y-6">
+        {/* CSDL Sở GD&ĐT Criteria (BR09) */}
+        <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <label className="flex items-start gap-3 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={csdlSoOnly}
+              onChange={(e) => setCsdlSoOnly(e.target.checked)}
+              className="mt-0.5 w-4 h-4 rounded text-[#0070CE] focus:ring-[#0070CE] border-slate-300"
+            />
             <div>
-              <h3 className="text-base font-bold text-slate-800">Bộ lọc nâng cao</h3>
-              <p className="text-xs text-slate-500">Tùy chọn lọc nâng cao cho danh sách giáo viên</p>
+              <span className="text-xs font-bold text-slate-800 block">
+                Chỉ hiển thị giáo viên đã liên kết CSDL Sở GD&amp;ĐT
+              </span>
+              <span className="text-[11px] text-slate-500 block mt-0.5 leading-relaxed">
+                Lọc danh sách chỉ giữ lại các cán bộ giáo viên đã được đồng bộ mã định danh ngành chuẩn Sở.
+              </span>
             </div>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Đóng cửa sổ"
-            className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-colors"
-          >
-            <Icon name="xmark" size={14} />
-          </button>
+          </label>
         </div>
 
-        {/* Modal Body */}
-        <div className="p-6 space-y-5">
-          {/* CSDL Sở GD&ĐT Criteria (BR09) */}
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
-            <div className="font-semibold text-xs text-slate-700 uppercase tracking-wider">
-              Dữ liệu liên ngành
-            </div>
-            <label className="flex items-start gap-3 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={csdlSoOnly}
-                onChange={(e) => setCsdlSoOnly(e.target.checked)}
-                className="mt-0.5 rounded border-slate-300 text-[#0070CE] focus:ring-[#0070CE]"
-              />
-              <div>
-                <span className="text-sm font-medium text-slate-800">
-                  Đã đồng bộ CSDL Sở GD&ĐT
-                </span>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Chỉ lọc các giáo viên đã có mã định danh liên kết với Cơ sở dữ liệu ngành Giáo dục.
-                </p>
-              </div>
-            </label>
-          </div>
-
-          {/* Modal Actions */}
-          <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-            <button
-              type="button"
-              onClick={handleReset}
-              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-500 hover:text-slate-800 transition-colors"
-            >
-              <Icon name="rotate-right" size={12} />
-              <span>Đặt lại bộ lọc</span>
-            </button>
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
-              >
-                Đóng
-              </button>
-              <button
-                type="button"
-                onClick={handleApply}
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-lg transition-colors shadow-xs"
-              >
-                <Icon name="check" size={14} />
-                <span>Áp dụng</span>
-              </button>
-            </div>
+        <div className="p-4 bg-blue-50/60 border border-blue-200 rounded-xl flex items-start gap-3">
+          <Icon name="circle-info" size={16} className="text-[#0070CE] shrink-0 mt-0.5" />
+          <div className="text-xs text-blue-900 leading-relaxed">
+            Hệ thống tự động liên kết tài khoản giáo viên với CSDL ngành khi mã CCCD/Định danh cá nhân trùng khớp.
           </div>
         </div>
       </div>
-    </div>
+    </SlideOver>
   );
 };

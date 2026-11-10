@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Dropdown } from '@/components/ds';
+import { Icon, Dropdown, Button } from '@/components/ds';
 import { ClassTaxonomy, GradeLevel, ClassFilterState } from '../../../types/class';
 
 interface ClassToolbarProps {
@@ -79,34 +79,42 @@ export const ClassToolbar: React.FC<ClassToolbarProps> = ({
             </span>
           </button>
         </div>
-
-        {/* Primary Action Buttons */}
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => alert('Đang xuất danh sách lớp học ra file Excel...')}
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-sm font-semibold shadow-xs transition-colors min-h-[40px] shrink-0"
-          >
-            <Icon name="download" size={14} />
-            <span>Xuất Excel</span>
-          </button>
-          <button
-            type="button"
-            onClick={onOpenCreate}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors min-h-[40px] shrink-0"
-          >
-            <Icon name="plus" size={14} />
-            <span>Thêm lớp mới</span>
-          </button>
-        </div>
       </div>
 
-      {/* Bottom row: Filter Controls & Search */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-3">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-1">
+      {/* Bottom row: Filter Controls, Search & Actions on same line */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pt-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1">
+          {/* Search bar */}
+          <div className="relative flex-1 min-w-[200px] max-w-[280px]">
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+              <Icon name="magnifying-glass" size={14} />
+            </span>
+            <input
+              type="text"
+              value={filterCriteria.searchQuery || ''}
+              onChange={(e) => onUpdateFilter({ searchQuery: e.target.value })}
+              placeholder={
+                activeTaxonomy === 'chinh_khoa'
+                  ? 'Tìm theo tên lớp, GVCN...'
+                  : 'Tìm theo tên CLB, phụ trách...'
+              }
+              className="w-full h-9 pl-9 pr-8 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+            />
+            {filterCriteria.searchQuery && (
+              <button
+                type="button"
+                onClick={() => onUpdateFilter({ searchQuery: '' })}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
+                aria-label="Xoá tìm kiếm"
+              >
+                <Icon name="xmark" size={12} />
+              </button>
+            )}
+          </div>
+
           {/* Reactive Grade Level dropdown (only for Curricular) */}
           {activeTaxonomy === 'chinh_khoa' && (
-            <div className="w-full sm:w-52 shrink-0">
+            <div className="w-full sm:w-44 shrink-0">
               <Dropdown
                 value={filterCriteria.gradeLevelId || ''}
                 onChange={(val) =>
@@ -124,69 +132,50 @@ export const ClassToolbar: React.FC<ClassToolbarProps> = ({
             </div>
           )}
 
-          {/* Search bar */}
-          <div className="relative flex-1 min-w-[240px]">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-              <Icon name="magnifying-glass" size={14} />
-            </span>
-            <input
-              type="text"
-              value={filterCriteria.searchQuery || ''}
-              onChange={(e) => onUpdateFilter({ searchQuery: e.target.value })}
-              placeholder={
-                activeTaxonomy === 'chinh_khoa'
-                  ? 'Tìm theo tên lớp, mã lớp, GVCN, phòng...'
-                  : 'Tìm theo tên CLB, lĩnh vực, phụ trách, phòng...'
-              }
-              className="w-full h-10 pl-9 pr-9 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
-            />
-            {filterCriteria.searchQuery && (
-              <button
-                type="button"
-                onClick={() => onUpdateFilter({ searchQuery: '' })}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
-                aria-label="Xoá tìm kiếm"
+          {/* Filter Drawer Trigger & Clear Filters */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <Button
+              variant="secondary"
+              icon="filter"
+              active={activeFilterCount > 0}
+              onClick={onOpenFilterDrawer}
+            >
+              Bộ lọc {activeFilterCount > 0 ? `(${activeFilterCount})` : ''}
+            </Button>
+
+            {(filterCriteria.searchQuery ||
+              filterCriteria.gradeLevelId ||
+              filterCriteria.status ||
+              filterCriteria.teacherRole ||
+              filterCriteria.teacherId ||
+              filterCriteria.csdlStatus) && (
+              <Button
+                variant="text"
+                onClick={onResetFilter}
+                style={{ color: 'var(--color-danger, #e11d48)' }}
               >
-                <Icon name="xmark" size={12} />
-              </button>
+                Đặt lại
+              </Button>
             )}
           </div>
         </div>
 
-        {/* Filter Drawer Trigger & Clear Filters */}
+        {/* Primary Action Buttons (Right Aligned on same frame line) */}
         <div className="flex items-center gap-2 shrink-0">
-          <button
-            type="button"
-            onClick={onOpenFilterDrawer}
-            className={`flex items-center gap-2 px-3.5 py-2 h-10 border rounded-lg text-sm font-medium transition-colors ${
-              activeFilterCount > 0
-                ? 'border-blue-300 bg-blue-50 text-blue-700 font-semibold'
-                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
-            }`}
+          <Button
+            variant="secondary"
+            icon="download"
+            onClick={() => alert('Đang xuất danh sách lớp học ra file Excel...')}
           >
-            <Icon name="filter" size={13} />
-            <span>Bộ lọc</span>
-            {activeFilterCount > 0 && (
-              <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center font-bold">
-                {activeFilterCount}
-              </span>
-            )}
-          </button>
-
-          {(filterCriteria.searchQuery ||
-            filterCriteria.gradeLevelId ||
-            filterCriteria.status ||
-            filterCriteria.teacherRole ||
-            filterCriteria.teacherId ||
-            filterCriteria.csdlStatus) && (
-            <button
-              type="button"
-              onClick={onResetFilter}
-              className="text-xs font-semibold text-rose-600 hover:text-rose-700 hover:underline px-2 py-1"
-            >
-              Đặt lại
-            </button>
-          )}
+            Xuất Excel
+          </Button>
+          <Button
+            variant="primary"
+            icon="plus"
+            onClick={onOpenCreate}
+          >
+            Thêm lớp mới
+          </Button>
         </div>
       </div>
     </div>

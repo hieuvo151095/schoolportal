@@ -23,6 +23,7 @@ interface AnnouncementComposerProps {
   schoolCode: string;
   initialAnnouncement?: Announcement;
   isEditMode?: boolean;
+  hideHeader?: boolean;
   onSave: (payload: any, status: 'nhap' | 'da_len_lich' | 'da_gui') => void;
 }
 
@@ -69,6 +70,7 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
   schoolCode,
   initialAnnouncement,
   isEditMode = false,
+  hideHeader = false,
   onSave
 }) => {
   const router = useRouter();
@@ -207,19 +209,21 @@ export const AnnouncementComposer: React.FC<AnnouncementComposerProps> = ({
   return (
     <div className="space-y-6">
       {/* Header breadcrumb & navigation */}
-      <div className="flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => router.push(`/${schoolCode}/school/announcements`)}
-          className="text-sm font-semibold text-slate-600 hover:text-blue-600 flex items-center gap-2 transition-colors"
-        >
-          <Icon name="arrow-left" className="w-4 h-4" />
-          <span>Quay lại Bảng thông tin</span>
-        </button>
-        <h1 className="text-lg font-bold text-slate-800">
-          {isEditMode ? 'Chỉnh Sửa Bản Nháp Thông Báo' : 'Soạn Thông Báo Mới'}
-        </h1>
-      </div>
+      {!hideHeader && (
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={() => router.push(`/${schoolCode}/school/announcements`)}
+            className="text-sm font-semibold text-slate-600 hover:text-blue-600 flex items-center gap-2 transition-colors"
+          >
+            <Icon name="arrow-left" className="w-4 h-4" />
+            <span>Quay lại Bảng thông tin</span>
+          </button>
+          <h1 className="text-lg font-bold text-slate-800">
+            {isEditMode ? 'Chỉnh Sửa Bản Nháp Thông Báo' : 'Soạn Thông Báo Mới'}
+          </h1>
+        </div>
+      )}
 
       {/* Lock alert for published items */}
       {isLockedPublished && (

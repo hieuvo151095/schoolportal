@@ -22,6 +22,7 @@ interface AnnouncementToolbarProps {
   onResetFilters: () => void;
   selectedCount: number;
   onBulkDelete: () => void;
+  onOpenCreate?: () => void;
 }
 
 export const AnnouncementToolbar: React.FC<AnnouncementToolbarProps> = ({
@@ -31,7 +32,8 @@ export const AnnouncementToolbar: React.FC<AnnouncementToolbarProps> = ({
   onFilterChange,
   onResetFilters,
   selectedCount,
-  onBulkDelete
+  onBulkDelete,
+  onOpenCreate
 }) => {
   const isFilterActive =
     Boolean(filters.searchQuery) ||
@@ -208,7 +210,7 @@ export const AnnouncementToolbar: React.FC<AnnouncementToolbarProps> = ({
             <Button
               variant="primary"
               icon="plus"
-              href={`/${schoolCode}/school/announcements/create`}
+              onClick={onOpenCreate}
             >
               Soạn thông báo
             </Button>
