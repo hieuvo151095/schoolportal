@@ -111,11 +111,11 @@ verification:
 - What changed for the POC:
   1. Universal "Thao tác" column standardization across the entire portal: every table row uses a clean `•••` action dropdown menu that opens upward when near the bottom.
   2. "Học phí" invoice roster time filter matches Image 1 with composite `"Lọc theo:"` dropdown (`Thời gian tạo HĐ` vs `Hạn đóng HĐ`) and date range popover.
-  3. "Xác nhận thanh toán học phí" modal strictly offers 3 options (`Tiền mặt`, `QR ECOPay`, `Ví Finviet`) and triggers standard success toast.
+  3. "Xác nhận thanh toán học phí" modal strictly offers 1 option (`Tiền mặt` - Cash) per ADR-036 and triggers standard success toast. Digital payments (QR ECOPay, Ví Finviet) are handled exclusively via automated gateway sync.
   4. Detailed invoice view highlights line item payment status badges (`Đã thanh toán` in green vs `Chưa thanh toán` in red, matching Image 2).
 - What the PM can demo now:
   - Navigate to `/demo/school/fee/`: observe redesigned filter bar and `•••` action dropdown.
-  - Click "Xác nhận thanh toán" from action dropdown: verify 3 payment methods and standard toast feedback.
+  - Click "Xác nhận thanh toán" from action dropdown: verify single cash payment method (`Tiền mặt`) and standard toast feedback.
   - Navigate to `/demo/school/fee/inv-6a1-001/`: observe green `Đã thanh toán` badges on paid line items.
   - Browse `/demo/school/assignment/`, `/demo/school/school-fees/`, `/demo/school/expenses/`, `/demo/school/tuition-management/`, `/demo/school/reconciliation/`: observe identical `•••` action dropdown behavior matching Thời khóa biểu.
 - What remains uncertain: None. All requirements fulfilled.

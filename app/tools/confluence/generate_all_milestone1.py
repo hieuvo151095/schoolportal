@@ -876,7 +876,7 @@ REST_8_TO_16 = [
         "acceptance_criteria": [
             {"code": "AC-01", "title": "Bộ lọc thời gian kép hoạt động chính xác", "desc": "Chuyển đổi giữa 'Thời gian tạo HĐ' và 'Hạn đóng HĐ' trên widget lọc: bảng dữ liệu phải lọc đúng theo trường createdAt hoặc dueDate tương ứng."},
             {"code": "AC-02", "title": "Hiển thị nhãn Đã/Chưa thanh toán ở từng dòng phí", "desc": "Mở trang Chi tiết hóa đơn: bên dưới số tiền của từng dòng phí bắt buộc xuất hiện badge 'Đã thanh toán' màu xanh lá hoặc 'Chưa thanh toán' màu đỏ."},
-            {"code": "AC-03", "title": "Chặn các phương thức thanh toán ngoài danh mục 3", "desc": "Trong modal Xác nhận thanh toán thủ công: dropdown phương thức chỉ hiển thị đúng 3 lựa chọn (Tiền mặt, QR ECOPay, Ví Finviet); không xuất hiện phương thức nào khác."}
+            {"code": "AC-03", "title": "Giới hạn phương thức thanh toán thủ công duy nhất là Tiền mặt", "desc": "Trong modal Xác nhận thanh toán thủ công: dropdown phương thức chỉ hiển thị duy nhất 1 lựa chọn (Tiền mặt); các phương thức thanh toán điện tử như QR ECOPay, Ví Finviet được xử lý tự động qua cổng thanh toán/đối soát."}
         ]
     },
 

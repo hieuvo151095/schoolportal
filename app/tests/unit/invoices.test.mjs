@@ -5,6 +5,8 @@
 
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import {
   formatVND,
@@ -501,6 +503,16 @@ describe('Finance Tuition Invoices (Học Phí) Business Rules & Engine', () => 
       assert.equal(lastPayment.paymentMethod, 'qr_ecopay');
       assert.equal(lastPayment.amount, 500000);
       assert.equal(lastPayment.transactionRef, 'ECO-998811');
+    });
+
+    test('ManualPaymentModal strictly restricts manual payment options to only 1 option (Tiền mặt) per ADR-036', () => {
+      const modalFilePath = path.resolve('src/modules/finance/invoices/ManualPaymentModal.tsx');
+      const modalSource = fs.readFileSync(modalFilePath, 'utf8');
+
+      // Assert paymentOptions array contains strictly tien_mat and excludes digital gateway methods
+      assert.ok(modalSource.includes("value: 'tien_mat', label: 'Tiền mặt'"), 'Must contain Tiền mặt option');
+      assert.ok(!modalSource.includes("value: 'qr_ecopay'"), 'Must not contain qr_ecopay in manual payment modal');
+      assert.ok(!modalSource.includes("value: 'vi_finviet'"), 'Must not contain vi_finviet in manual payment modal');
     });
 
     test('Candidate discount programs pop-up selection & arithmetic for Nguyen Gia Huy (10A1)', () => {

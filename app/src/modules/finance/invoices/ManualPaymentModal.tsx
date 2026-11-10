@@ -77,10 +77,10 @@ export const ManualPaymentModal: React.FC = () => {
 
   const isFullPayment = amount >= targetPaymentInvoice.remainingAmount;
 
+  // ADR-036: Manual payment confirmation strictly offers only 1 option: Cash (Tiền mặt).
+  // Electronic payment methods (QR ECOPay, Ví Finviet) are handled via automated gateway reconciliation.
   const paymentOptions: DropdownOption<PaymentMethod>[] = [
     { value: 'tien_mat', label: 'Tiền mặt' },
-    { value: 'qr_ecopay', label: 'QR ECOPay' },
-    { value: 'vi_finviet', label: 'Ví Finviet' },
   ];
 
   return (

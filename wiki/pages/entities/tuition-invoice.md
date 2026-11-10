@@ -8,6 +8,7 @@ sources:
 spec_ids:
   - TC-01
   - TC-02
+  - TC-22
 updated: 2026-11-05
 ---
 
@@ -32,6 +33,7 @@ Thực thể Hóa đơn học phí thể hiện nghĩa vụ tài chính định 
 | TC-01 | Hóa đơn riêng lẻ độc lập cho từng học sinh (OQ-22): Hệ thống chỉ tạo hóa đơn riêng lẻ cho từng học sinh, tuyệt đối không gộp chung hóa đơn gia đình; mỗi học sinh sở hữu mã hóa đơn riêng, mã VietQR động độc lập và gạch nợ riêng biệt | Chuẩn hóa VAT và hạch toán kế toán |
 | TC-02 | Chốt dữ liệu điểm danh tự động cuối tháng (OQ-21): Đợt hóa đơn tháng M+1 tự động truy xuất dữ liệu hoàn tiền ăn từ tháng M sau khi hệ thống tự động đóng băng sổ điểm danh vào 23:59:59 ngày cuối tháng | Tránh xung đột sửa điểm danh |
 | TC-01 | Toàn bộ giao dịch cập nhật trạng thái hóa đơn bắt buộc sử dụng Pessimistic Row Lock (`SELECT ... FOR UPDATE`) trong CSDL | Tuân thủ kiến trúc kiểm soát đồng thời |
+| TC-22 | Quy tắc xác nhận thanh toán thủ công (ADR-036): Trong modal Xác nhận thanh toán, dropdown phương thức chỉ có duy nhất 1 tùy chọn là "Tiền mặt". Các kênh thanh toán điện tử được đối soát tự động qua webhook cổng thanh toán | Bảo vệ tính toàn vẹn của sổ kế toán |
 
 ## Quan hệ
 - Thuộc về một [Hồ sơ học sinh 360](student-profile.md).

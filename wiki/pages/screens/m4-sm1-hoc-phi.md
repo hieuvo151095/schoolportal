@@ -31,6 +31,11 @@ Quản lý vòng đời hóa đơn học phí, tích hợp VietQR động, áp d
 |---|---|---|
 | web | `/{schoolCode}/school/fee` | repo:app/src/pages/[schoolCode]/school/fee/index.tsx |
 
+## Quy tắc xác nhận thanh toán thủ công (ADR-036)
+- **Phương thức thanh toán duy nhất:** Khi kế toán hoặc quản trị viên chọn thao tác "Xác nhận thanh toán" (`ManualPaymentModal` / SlideOver) trên hóa đơn học phí, dropdown "Hình thức thanh toán" chỉ có đúng 1 lựa chọn là **Tiền mặt** (`tien_mat`).
+- **Bảo toàn kênh thanh toán điện tử:** Các hình thức thanh toán điện tử (như QR ECOPay, Ví Finviet, chuyển khoản ngân hàng) được xử lý tự động thông qua webhook cổng thanh toán và đối soát (`Xác nhận tự động`), tuyệt đối không cho phép xác nhận thủ công từ người dùng để ngăn ngừa rủi ro sai lệch số dư và đối soát ngân hàng.
+- **Lịch sử thanh toán bất biến (TC-22):** Mỗi lần xác nhận thanh toán tiền mặt thành công ghi thêm đúng 1 bản ghi mới vào lịch sử thanh toán (`paymentHistory`), tính toán lại công nợ còn lại và gửi thông báo thành công chuẩn Redux toast (`addToast`).
+
 ## Yêu cầu spec
 | Mã | Yêu cầu | Trạng thái |
 |---|---|---|

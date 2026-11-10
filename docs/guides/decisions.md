@@ -98,7 +98,7 @@
 - **Decision:**
   1. **Standardize Action Column across all tables:** Adopt the "Thời Khóa Biểu" pattern as the universal standard. Every table row's "Thao tác" column features a standardized `•••` (three dots) action button opening an upward-flipping top-layer dropdown menu (`z-index: 9999`) when near the bottom of the table, closing on outside click or item selection.
   2. **Invoice Time Filter Composite:** Implement a composite date filter widget on `InvoiceRosterTable` featuring `"Lọc theo:"` selector (`createdAt` vs `dueDate`) paired with a date range popover (`DD/MM/YYYY - DD/MM/YYYY ▾`).
-  3. **Strict Manual Payment Options & Standard Toast:** Restrict `ManualPaymentModal` to `tien_mat`, `qr_ecopay`, and `vi_finviet`. Replace browser `alert()` with the global Redux toast notification (`addToast`) upon clicking `"Lưu xác nhận"`.
+  3. **Strict Manual Payment Options & Standard Toast:** Restrict `ManualPaymentModal` to `tien_mat` (Tiền mặt - *Updated per ADR-036 to strictly single cash option; digital methods QR ECOPay and Ví Finviet are handled exclusively by automated gateway reconciliation*). Replace browser `alert()` with the global Redux toast notification (`addToast`) upon clicking `"Lưu xác nhận"`.
   4. **Detailed Invoice Line-Item Payment Status Badges:** Render `"Đã thanh toán"` in green (`#059669`) and `"Chưa thanh toán"` in red (`#F43F5E`) beneath `Thành tiền` for billable items.
 - **Alternatives Rejected:**
   - *Keep inline icons on tables with 2 or fewer actions:* Rejected to maintain 100% visual and behavioral consistency across every table in the portal.
@@ -778,5 +778,22 @@
   - *Enabling Email switches across all sections:* Rejected to avoid flooding parent and teacher email inboxes with high-volume operational events.
 - **Evidence Reference:** Claims `C128`–`C137`, Evidence `E133`–`E142`, Sources `S091`–`S093`, Contradictions `K095`–`K104`.
 - **Consequences:** Delivers a robust, predictable, and user-friendly institutional notification cockpit that prevents spam, protects operational milestones, and guarantees delivery integrity across calendar edge cases.
+- **Rollback Trigger:** None.
+
+---
+
+### ADR-036: Strict Single Cash Option for Manual Tuition Payment Confirmation
+- **Status:** Accepted
+- **Context:**
+  In the Tuition Billing (`/school/fee`) module, accountants and school staff can click "Xác nhận thanh toán" to record payments on outstanding invoices. Previously in ADR-007, `ManualPaymentModal` presented three payment options: `Tiền mặt` (Cash), `QR ECOPay`, and `Ví Finviet`.
+  However, digital electronic payments (`QR ECOPay`, `Ví Finviet`, bank transfers) are processed and reconciled automatically via webhook and automated gateway reconciliation (`/reconciliation`), appending immutable automated payment records ("Xác nhận tự động").
+  Allowing staff to manually select electronic payment methods in the manual payment modal created a significant accounting risk of double-counting, reconciliation mismatch with bank logs, and circumvention of automated audit trails.
+- **Decision:**
+  1. **Strict Single Cash Option:** When users click "Xác nhận thanh toán" (in `ManualPaymentModal` / SlideOver), the dropdown "Hình thức thanh toán" offers strictly and exclusively 1 option: `Tiền mặt` (`tien_mat`).
+  2. **Automated Channel Protection:** Online digital payment methods (QR ECOPay, Ví Finviet, chuyển khoản ngân hàng) remain exclusive to automated payment gateways and webhook reconciliation.
+  3. **Toast Notification Preservation:** Clicking "Lưu xác nhận" continues to dispatch standard success toast notification (`addToast`) and appends the manual payment record into `paymentHistory`.
+- **Alternatives Rejected:**
+  - *Keep multiple payment methods in manual modal:* Rejected because manual entry of digital methods bypasses the payment gateway and causes audit discrepancies with bank statements.
+- **Consequences:** Eliminates manual misclassification of online payment flows, protects financial audit integrity, and streamlines user experience by removing redundant dropdown options.
 - **Rollback Trigger:** None.
 
