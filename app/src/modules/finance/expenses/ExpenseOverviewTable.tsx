@@ -15,6 +15,7 @@ interface ExpenseOverviewTableProps {
   schoolCode: string;
   onConfirmDisbursement: (voucherId: string) => void;
   onOpenCancelModal: (voucherId: string) => void;
+  onViewDetail?: (voucher: ExpenseVoucher) => void;
 }
 
 export const ExpenseOverviewTable: React.FC<ExpenseOverviewTableProps> = ({
@@ -22,6 +23,7 @@ export const ExpenseOverviewTable: React.FC<ExpenseOverviewTableProps> = ({
   schoolCode,
   onConfirmDisbursement,
   onOpenCancelModal,
+  onViewDetail,
 }) => {
   const totalAmount = vouchers.reduce(
     (sum, v) => sum + (v.status !== 'da_huy' ? v.totalAmount : 0),
@@ -103,7 +105,8 @@ export const ExpenseOverviewTable: React.FC<ExpenseOverviewTableProps> = ({
                 const menuItems: Array<{ label: string; onClick?: () => void; href?: string; tone?: 'default' | 'danger'; divider?: boolean }> = [
                   {
                     label: 'Xem chi tiết',
-                    href: detailHref,
+                    onClick: onViewDetail ? () => onViewDetail(voucher) : undefined,
+                    href: onViewDetail ? undefined : detailHref,
                   },
                 ];
 
@@ -133,24 +136,44 @@ export const ExpenseOverviewTable: React.FC<ExpenseOverviewTableProps> = ({
                         Mã phiếu
                       </span>
                       <div className="ecomd-cell__value">
-                        <Link
-                          href={detailHref}
-                          className="body-xs font-mono text-[var(--eco-blue-strong)] hover:underline"
-                        >
-                          {voucher.voucherCode}
-                        </Link>
+                        {onViewDetail ? (
+                          <button
+                            type="button"
+                            onClick={() => onViewDetail(voucher)}
+                            className="body-xs font-mono text-[var(--eco-blue-strong)] hover:underline cursor-pointer bg-transparent border-0 p-0 text-left"
+                          >
+                            {voucher.voucherCode}
+                          </button>
+                        ) : (
+                          <Link
+                            href={detailHref}
+                            className="body-xs font-mono text-[var(--eco-blue-strong)] hover:underline"
+                          >
+                            {voucher.voucherCode}
+                          </Link>
+                        )}
                       </div>
                     </td>
 
                     {/* Title & Category */}
                     <td className="body-sm is-primary">
                       <div className="ecomd-cell__value">
-                        <Link
-                          href={detailHref}
-                          className="body-sm-bold text-[var(--text-heading)] hover:text-[var(--eco-blue-strong)] hover:underline inline-block"
-                        >
-                          {voucher.title}
-                        </Link>
+                        {onViewDetail ? (
+                          <button
+                            type="button"
+                            onClick={() => onViewDetail(voucher)}
+                            className="body-sm-bold text-[var(--text-heading)] hover:text-[var(--eco-blue-strong)] hover:underline text-left bg-transparent border-0 p-0 cursor-pointer inline-block"
+                          >
+                            {voucher.title}
+                          </button>
+                        ) : (
+                          <Link
+                            href={detailHref}
+                            className="body-sm-bold text-[var(--text-heading)] hover:text-[var(--eco-blue-strong)] hover:underline inline-block"
+                          >
+                            {voucher.title}
+                          </Link>
+                        )}
                         <div className="body-xs text-[var(--text-subtle)] mt-0.5">
                           Danh mục: {voucher.categoryName}
                         </div>

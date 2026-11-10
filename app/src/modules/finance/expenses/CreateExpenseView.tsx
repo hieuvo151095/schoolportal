@@ -14,12 +14,14 @@ import {
   formatExpenseAmount,
   validateCreateVoucher,
 } from '../../../utils/expenseValidation';
-import { Dropdown, Icon } from '@/components/ds';
+import { Dropdown, Icon, SlideOver } from '@/components/ds';
 
 interface CreateExpenseViewProps {
   categories: ExpenseCategory[];
   beneficiaries: BeneficiaryOption[];
   schoolCode: string;
+  isOpen?: boolean;
+  onClose?: () => void;
   onSubmit: (formData: CreateVoucherFormData, immediateApprove: boolean) => void;
 }
 
@@ -36,6 +38,8 @@ export const CreateExpenseView: React.FC<CreateExpenseViewProps> = ({
   categories,
   beneficiaries,
   schoolCode,
+  isOpen = true,
+  onClose,
   onSubmit,
 }) => {
   const router = useRouter();
@@ -164,7 +168,12 @@ export const CreateExpenseView: React.FC<CreateExpenseViewProps> = ({
 
     setErrors({});
     onSubmit(formData, immediateApprove);
-    router.push(`/${schoolCode}/school/expenses`);
+    setIsDirty(false);
+    if (onClose) {
+      onClose();
+    } else {
+      router.push(`/${schoolCode}/school/expenses`);
+    }
   };
 
   // Cancel / Back with dirty check
@@ -175,58 +184,41 @@ export const CreateExpenseView: React.FC<CreateExpenseViewProps> = ({
       );
       if (!confirmed) return;
     }
-    router.push(`/${schoolCode}/school/expenses`);
+    if (onClose) {
+      onClose();
+    } else {
+      router.push(`/${schoolCode}/school/expenses`);
+    }
   };
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
-    <div className="space-y-6 pb-12">
-      {/* Header */}
-      <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleCancel}
-            className="w-9 h-9 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 flex items-center justify-center transition-colors cursor-pointer"
-            aria-label="Quay lại"
-          >
-            <Icon name="arrow-left" size={16} />
-          </button>
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 m-0">Tạo phiếu chi mới</h1>
-            <p className="text-xs text-slate-500 m-0 mt-0.5">
-              Lập phiếu chi hoàn tiền học phí hoặc chi tiêu nội bộ trường học
-            </p>
-          </div>
-        </div>
-
-        {/* Action Buttons (BR06) */}
-        <div className="flex items-center gap-2.5 flex-wrap">
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 font-medium text-sm transition-all cursor-pointer"
-          >
-            Hủy bỏ
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleFormSubmit(false)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[#0070CE] bg-blue-50 text-[#0070CE] hover:bg-blue-100 font-medium text-sm transition-all cursor-pointer"
-          >
-            <Icon name="save" size={14} />
-            <span>Lưu nháp</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleFormSubmit(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0070CE] hover:bg-blue-700 text-white font-medium text-sm transition-all shadow-sm cursor-pointer"
-          >
-            <Icon name="check" size={14} />
-            <span>Lưu & Duyệt chi</span>
-          </button>
-        </div>
-      </div>
+    <SlideOver
+      open={isOpen}
+      onClose={handleCancel}
+      title="Tạo phiếu chi mới"
+      description="Lập phiếu chi hoàn tiền học phí hoặc chi tiêu nội bộ trường học"
+      icon="plus"
+      width={780}
+      primaryAction={{
+        label: 'Lưu & Duyệt chi',
+        icon: 'check',
+        onClick: () => handleFormSubmit(true),
+      }}
+      secondaryAction={{
+        label: 'Hủy bỏ',
+        onClick: handleCancel,
+      }}
+      extraAction={{
+        label: 'Lưu nháp',
+        icon: 'save',
+        onClick: () => handleFormSubmit(false),
+      }}
+    >
+      <div className="space-y-6">
 
       {/* Validation Alert */}
       {Object.keys(errors).length > 0 && (
@@ -608,6 +600,7 @@ export const CreateExpenseView: React.FC<CreateExpenseViewProps> = ({
           </table>
         </div>
       </div>
-    </div>
+      </div>
+    </SlideOver>
   );
 };

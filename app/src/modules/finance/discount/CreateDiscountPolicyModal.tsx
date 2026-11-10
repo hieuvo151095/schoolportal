@@ -33,7 +33,7 @@ import {
 } from '../../../utils/discountValidation';
 import { StudentPickerModal } from './StudentPickerModal';
 import { ClassPickerModal } from './ClassPickerModal';
-import { PopupModal, Dropdown, DropdownOption, Icon } from '@/components/ds';
+import { SlideOver, Dropdown, DropdownOption, Icon } from '@/components/ds';
 
 interface CreateDiscountPolicyModalProps {
   isOpen: boolean;
@@ -284,13 +284,13 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
 
   return (
     <>
-      <PopupModal
-        isOpen={isOpen}
+      <SlideOver
+        open={isOpen}
         onClose={onClose}
         title={editingPolicy ? 'Chỉnh sửa chính sách miễn giảm' : 'Thiết lập chính sách miễn giảm mới'}
-        subtitle="Cấu hình đối tượng, khoản phí biểu mẫu và mức ưu đãi áp dụng vào hóa đơn thu phí"
+        description="Cấu hình đối tượng, khoản phí biểu mẫu và mức ưu đãi áp dụng vào hóa đơn thu phí"
         icon={editingPolicy ? 'edit' : 'plus'}
-        width={680}
+        width={640}
         primaryAction={{
           label: editingPolicy ? 'Lưu thay đổi' : 'Tạo chính sách',
           onClick: () => handleSubmit(),
@@ -788,7 +788,7 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
             </div>
           </div>
         </div>
-      </PopupModal>
+      </SlideOver>
 
       {/* Student Picker Sub-modal */}
       <StudentPickerModal

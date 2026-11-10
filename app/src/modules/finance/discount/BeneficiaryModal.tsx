@@ -7,7 +7,7 @@
 import React from 'react';
 import { DiscountPolicy } from '../../../types/discount';
 import { formatCurrency, formatDiscountValue } from '../../../utils/discountValidation';
-import { PopupModal, Icon } from '@/components/ds';
+import { SlideOver, Icon } from '@/components/ds';
 
 interface BeneficiaryModalProps {
   policy: DiscountPolicy | null;
@@ -23,7 +23,7 @@ export const BeneficiaryModal: React.FC<BeneficiaryModalProps> = ({
   if (!isOpen || !policy) return null;
 
   return (
-    <PopupModal
+    <SlideOver
       open={isOpen}
       onClose={onClose}
       title="Danh sách thụ hưởng"
@@ -34,6 +34,7 @@ export const BeneficiaryModal: React.FC<BeneficiaryModalProps> = ({
         label: 'Đóng',
         onClick: onClose,
       }}
+      secondaryAction={null}
     >
       <div className="space-y-3">
         {/* Policy Summary Card */}
@@ -104,6 +105,6 @@ export const BeneficiaryModal: React.FC<BeneficiaryModalProps> = ({
           )}
         </div>
       </div>
-    </PopupModal>
+    </SlideOver>
   );
 };

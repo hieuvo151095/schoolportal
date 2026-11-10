@@ -7,7 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { addToast } from '../../../store/slices/toastSlice';
-import { PopupModal, Icon } from '@/components/ds';
+import { SlideOver, Icon } from '@/components/ds';
 import {
   batchUpdateClassFee,
   closeBatchModal,
@@ -107,13 +107,13 @@ export const BatchUpdateFeeModal: React.FC = () => {
   };
 
   return (
-    <PopupModal
-      isOpen={isBatchModalOpen}
+    <SlideOver
+      open={isBatchModalOpen}
       onClose={() => dispatch(closeBatchModal())}
       title="Cập nhật học phí lớp học"
-      subtitle={`${targetFee.feeName} — Lớp ${activeClassId}`}
+      description={`${targetFee.feeName} — Lớp ${activeClassId}`}
       icon="edit"
-      width={540}
+      width={560}
       primaryAction={{
         label: 'Cập nhật số tiền',
         onClick: () => handleSubmit(),
@@ -259,7 +259,7 @@ export const BatchUpdateFeeModal: React.FC = () => {
           </div>
         </div>
       </div>
-    </PopupModal>
+    </SlideOver>
   );
 };
 

@@ -21,17 +21,24 @@ import {
   openCancelModal,
   closeCancelModal,
   confirmDisbursement,
+  approveVoucher,
+  createVoucher,
   cancelVoucher,
   createCategory,
   updateCategory,
   deleteCategory,
 } from '../../../../store/slices/expenseSlice';
+import { addToast } from '../../../../store/slices/toastSlice';
 import { filterVouchers } from '../../../../utils/expenseValidation';
 import { ExpenseSummaryCards } from '../../../../modules/finance/expenses/ExpenseSummaryCards';
 import { ExpenseToolbar } from '../../../../modules/finance/expenses/ExpenseToolbar';
 import { ExpenseOverviewTable } from '../../../../modules/finance/expenses/ExpenseOverviewTable';
 import { ExpenseCategoryModal } from '../../../../modules/finance/expenses/ExpenseCategoryModal';
 import { CancelVoucherModal } from '../../../../modules/finance/expenses/CancelVoucherModal';
+import { CreateExpenseView } from '../../../../modules/finance/expenses/CreateExpenseView';
+import { ExpenseDetailSlideOver } from '../../../../modules/finance/expenses/ExpenseDetailSlideOver';
+import { MOCK_BENEFICIARIES } from '../../../../services/mockExpenseData';
+import { CreateVoucherFormData, ExpenseVoucher } from '../../../../types/expense';
 
 export default function ExpensesOverviewPage() {
   const router = useRouter();
@@ -49,6 +56,41 @@ export default function ExpensesOverviewPage() {
     isCancelModalOpen,
     targetVoucherIdForCancel,
   } = useAppSelector((state) => state.expense);
+
+  const [isCreateSlideOverOpen, setIsCreateSlideOverOpen] = React.useState(false);
+  const [selectedVoucherForDetail, setSelectedVoucherForDetail] = React.useState<ExpenseVoucher | null>(null);
+
+  React.useEffect(() => {
+    if (router.query.create === 'true') {
+      setIsCreateSlideOverOpen(true);
+    }
+    if (router.query.voucherId && typeof router.query.voucherId === 'string') {
+      const found = vouchers.find((v) => v.id === router.query.voucherId);
+      if (found) {
+        setSelectedVoucherForDetail(found);
+      }
+    }
+  }, [router.query.create, router.query.voucherId, vouchers]);
+
+  const handleCreateVoucher = (
+    formData: CreateVoucherFormData,
+    immediateApprove: boolean
+  ) => {
+    dispatch(
+      createVoucher({
+        data: formData,
+        immediateApprove,
+        staffName: 'Kế toán Trần Thị Mai',
+      })
+    );
+    dispatch(
+      addToast({
+        type: 'success',
+        message: `Đã tạo phiếu chi "${formData.title}" thành công!`,
+      })
+    );
+    setIsCreateSlideOverOpen(false);
+  };
 
   // Filter vouchers for active criteria (BR07: includes mandatory single-month)
   const filteredVouchers = filterVouchers(vouchers, {
@@ -92,7 +134,7 @@ export default function ExpensesOverviewPage() {
               <Button
                 variant="primary"
                 icon="plus"
-                onClick={() => router.push(`/${schoolCode}/school/expenses/create`)}
+                onClick={() => setIsCreateSlideOverOpen(true)}
               >
                 Thêm phiếu chi
               </Button>
@@ -127,10 +169,34 @@ export default function ExpensesOverviewPage() {
             schoolCode={schoolCode}
             onConfirmDisbursement={(id) => dispatch(confirmDisbursement({ voucherId: id }))}
             onOpenCancelModal={(id) => dispatch(openCancelModal(id))}
+            onViewDetail={(v) => setSelectedVoucherForDetail(v)}
           />
         </div>
 
-        {/* Category Modal */}
+        {/* Create Expense SlideOver (Right-Sheet) */}
+        <CreateExpenseView
+          isOpen={isCreateSlideOverOpen}
+          onClose={() => setIsCreateSlideOverOpen(false)}
+          categories={categories}
+          beneficiaries={MOCK_BENEFICIARIES}
+          schoolCode={schoolCode}
+          onSubmit={handleCreateVoucher}
+        />
+
+        {/* View Expense Detail SlideOver (Right-Sheet) */}
+        <ExpenseDetailSlideOver
+          isOpen={!!selectedVoucherForDetail}
+          voucher={selectedVoucherForDetail}
+          schoolCode={schoolCode}
+          onClose={() => setSelectedVoucherForDetail(null)}
+          onConfirmDisbursement={(id) => dispatch(confirmDisbursement({ voucherId: id }))}
+          onApproveVoucher={(id) =>
+            dispatch(approveVoucher({ voucherId: id, staffName: 'Kế toán Trần Thị Mai' }))
+          }
+          onOpenCancelModal={(id) => dispatch(openCancelModal(id))}
+        />
+
+        {/* Category Modal (SlideOver) */}
         <ExpenseCategoryModal
           isOpen={isCategoryModalOpen}
           categories={categories}

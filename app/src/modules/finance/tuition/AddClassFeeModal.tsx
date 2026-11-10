@@ -7,7 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { addToast } from '../../../store/slices/toastSlice';
-import { PopupModal, Dropdown, Icon } from '@/components/ds';
+import { SlideOver, Dropdown, Icon } from '@/components/ds';
 import {
   addClassFeeToMatrix,
   closeAddFeeModal,
@@ -142,13 +142,13 @@ export const AddClassFeeModal: React.FC = () => {
   };
 
   return (
-    <PopupModal
-      isOpen={isAddFeeModalOpen}
+    <SlideOver
+      open={isAddFeeModalOpen}
       onClose={() => dispatch(closeAddFeeModal())}
       title="Thêm khoản phí vào lớp"
-      subtitle={`Lớp ${activeClassId}`}
+      description={`Lớp ${activeClassId}`}
       icon="plus"
-      width={540}
+      width={560}
       primaryAction={{
         label: 'Thêm vào lớp',
         onClick: () => handleSubmit(),
@@ -336,7 +336,7 @@ export const AddClassFeeModal: React.FC = () => {
           </>
         )}
       </div>
-    </PopupModal>
+    </SlideOver>
   );
 };
 

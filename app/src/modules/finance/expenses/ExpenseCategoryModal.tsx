@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ExpenseCategory } from '../../../types/expense';
 import { canDeleteCategory } from '../../../utils/expenseValidation';
-import { PopupModal, Icon } from '@/components/ds';
+import { SlideOver, Icon } from '@/components/ds';
 
 interface ExpenseCategoryModalProps {
   isOpen: boolean;
@@ -73,17 +73,18 @@ export const ExpenseCategoryModal: React.FC<ExpenseCategoryModalProps> = ({
   };
 
   return (
-    <PopupModal
-      isOpen={isOpen}
+    <SlideOver
+      open={isOpen}
       onClose={onClose}
       title="Quản lý danh mục chi phí"
-      subtitle="Phân loại các khoản chi của trường học và theo dõi số phiếu áp dụng"
+      description="Phân loại các khoản chi của trường học và theo dõi số phiếu áp dụng"
       icon="folder"
-      width={640}
-      secondaryAction={{
+      width={560}
+      primaryAction={{
         label: 'Đóng',
         onClick: onClose,
       }}
+      secondaryAction={null}
     >
       <div className="space-y-4 text-left">
         {/* Add / Edit Form if active */}
@@ -214,6 +215,6 @@ export const ExpenseCategoryModal: React.FC<ExpenseCategoryModalProps> = ({
           </div>
         )}
       </div>
-    </PopupModal>
+    </SlideOver>
   );
 };

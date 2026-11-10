@@ -1,7 +1,7 @@
 import React from 'react';
 import type { InvoiceRecord } from '../../../types/invoice';
 import { formatFeeReportCurrency } from '../../../utils/feeReportValidation';
-import { PopupModal, Icon } from '@/components/ds';
+import { SlideOver, Icon } from '@/components/ds';
 
 interface PaymentHistoryModalProps {
   isOpen: boolean;
@@ -32,17 +32,18 @@ export const PaymentHistoryModal: React.FC<PaymentHistoryModalProps> = ({
   };
 
   return (
-    <PopupModal
-      isOpen={isOpen}
+    <SlideOver
+      open={isOpen}
       onClose={onClose}
       title={`Lịch Sử Thanh Toán — ${invoice.invoiceNo}`}
-      subtitle={`Học sinh: ${invoice.studentName} (Lớp ${invoice.className})`}
+      description={`Học sinh: ${invoice.studentName} (Lớp ${invoice.className})`}
       icon="clock"
       width={640}
-      secondaryAction={{
+      primaryAction={{
         label: 'Đóng',
         onClick: onClose,
       }}
+      secondaryAction={null}
     >
       <div className="space-y-4 text-left">
         {/* Summary Metric Strip */}
@@ -111,6 +112,6 @@ export const PaymentHistoryModal: React.FC<PaymentHistoryModalProps> = ({
           </table>
         </div>
       </div>
-    </PopupModal>
+    </SlideOver>
   );
 };
