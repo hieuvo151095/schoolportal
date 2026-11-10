@@ -1,5 +1,6 @@
 /* [DS] ECO ME DASHBOARD — SSR-Safe Native React 18 TypeScript Bridge */
 import React, { useRef, useEffect, useState, cloneElement, ReactElement, ReactNode, CSSProperties, MouseEvent, ChangeEvent } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { ICONS, ALIASES, resolveIcon, IconName } from './icons';
 import { Dropdown, DropdownSelect, DropdownOption, DropdownProps } from './Dropdown';
@@ -1597,7 +1598,12 @@ export interface PopupModalProps {
 let _mid = 0;
 export function PopupModal(p: PopupModalProps) {
   const idRef = useRef('ecomd-modal-' + ++_mid);
+  const [mounted, setMounted] = useState(false);
   const open = p.isOpen !== undefined ? !!p.isOpen : (p.open === undefined ? true : !!p.open);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!open || !p.onClose) return;
@@ -1630,7 +1636,7 @@ export function PopupModal(p: PopupModalProps) {
 
   const desc = p.description || p.subtitle;
 
-  return (
+  const content = (
     <div
       className={cx('ecomd-modal-overlay', p.inline && 'is-inline')}
       onMouseDown={(e) => {
@@ -1671,6 +1677,12 @@ export function PopupModal(p: PopupModalProps) {
       </div>
     </div>
   );
+
+  if (!p.inline && mounted && typeof document !== 'undefined' && document.body) {
+    return createPortal(content, document.body);
+  }
+
+  return content;
 }
 
 PopupModal.Section = function (p: { label?: ReactNode; children?: ReactNode }) {

@@ -1,16 +1,16 @@
 /**
- * Edit Fee Modal Component
- * Dialog for editing custom fee items (Name, Default Amount, Unit only)
+ * Edit Fee SlideOver Component (Right Drawer)
+ * Drawer for editing custom fee items (Name, Default Amount, Unit only)
  * Explicitly omits Xuất HĐĐT per BR04
  * Governance: Marcus Fleet V34 / Constitution V1.0.0
  * References: docs_legacy/operating-portal/tai-chinh/khoan-phi.md (BR04)
- * Design System: [DS] ECO ME DASHBOARD v1.1.0 (PopupModal)
+ * Design System: [DS] ECO ME DASHBOARD v1.1.0 (SlideOver)
  */
 
 import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { addToast } from '../../../store/slices/toastSlice';
-import { Dropdown, PopupModal, Icon } from '@/components/ds';
+import { Dropdown, SlideOver, Icon } from '@/components/ds';
 import {
   updateFeeItem,
   closeEditModal,
@@ -103,13 +103,13 @@ export const EditFeeModal: React.FC = () => {
   const isFormValid = name.trim().length > 0 && defaultAmount.replace(/[^\d]/g, '').length > 0;
 
   return (
-    <PopupModal
+    <SlideOver
       open={Boolean(editingFee)}
       onClose={handleClose}
       title="Chỉnh sửa khoản phí"
       description="Cập nhật thông tin khoản phí, định mức và đơn vị tính"
       icon="pen"
-      width={560}
+      width={540}
       primaryAction={{
         label: 'Cập nhật',
         icon: 'check',
@@ -132,7 +132,7 @@ export const EditFeeModal: React.FC = () => {
 
         {/* Tên khoản phí (*) */}
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1.5">
             Tên khoản phí <span className="text-rose-500">*</span>
           </label>
           <input
@@ -144,11 +144,11 @@ export const EditFeeModal: React.FC = () => {
                 setErrors((prev) => ({ ...prev, name: '' }));
               }
             }}
-            placeholder="Nhập tên khoản phí..."
-            className={`w-full px-3.5 py-2.5 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0070CE] transition ${
+            placeholder="Ví dụ: Học STEAM, Kỹ năng sống..."
+            className={`w-full px-3.5 py-2.5 bg-[var(--bg-surface)] text-[var(--text-heading)] border rounded-[var(--radius-md)] focus:outline-none focus:ring-2 focus:ring-[var(--eco-primary)] transition ${
               errors.name
                 ? 'border-rose-300 ring-1 ring-rose-300 bg-rose-50/30'
-                : 'border-slate-200'
+                : 'border-[var(--border-default)]'
             }`}
           />
           {errors.name && (
@@ -161,7 +161,7 @@ export const EditFeeModal: React.FC = () => {
 
         {/* Danh mục thu liên kết */}
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1.5">
             Danh mục thu (CSDL Sở / Quy định)
           </label>
           <Dropdown
@@ -180,7 +180,7 @@ export const EditFeeModal: React.FC = () => {
             searchPlaceholder="Tìm danh mục thu..."
             fullWidth
           />
-          <p className="mt-1 text-[11px] text-slate-400">
+          <p className="mt-1 text-[11px] text-[var(--text-subtle)]">
             Liên kết khoản phí với danh mục thu để đồng bộ mã Hóa đơn điện tử và báo cáo thu.
           </p>
         </div>
@@ -188,7 +188,7 @@ export const EditFeeModal: React.FC = () => {
         {/* Số tiền mặc định (*) & Đơn vị */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1.5">
               Số tiền mặc định (VNĐ) <span className="text-rose-500">*</span>
             </label>
             <input
@@ -202,10 +202,10 @@ export const EditFeeModal: React.FC = () => {
                 }
               }}
               placeholder="Ví dụ: 500.000"
-              className={`w-full px-3.5 py-2.5 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0070CE] transition ${
+              className={`w-full px-3.5 py-2.5 bg-[var(--bg-surface)] text-[var(--text-heading)] border rounded-[var(--radius-md)] focus:outline-none focus:ring-2 focus:ring-[var(--eco-primary)] transition ${
                 errors.defaultAmount
                   ? 'border-rose-300 ring-1 ring-rose-300 bg-rose-50/30'
-                  : 'border-slate-200'
+                  : 'border-[var(--border-default)]'
               }`}
             />
             {errors.defaultAmount && (
@@ -217,7 +217,7 @@ export const EditFeeModal: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1.5">
               Đơn vị tính
             </label>
             <Dropdown
@@ -238,18 +238,21 @@ export const EditFeeModal: React.FC = () => {
 
         {/* Mô tả / Ghi chú */}
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1.5">
             Mô tả / Ghi chú
           </label>
           <textarea
-            rows={2}
+            rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Nhập thông tin chi tiết về khoản phí..."
-            className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0070CE] text-slate-800 placeholder-slate-400"
+            className="w-full px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-md)] focus:outline-none focus:ring-2 focus:ring-[var(--eco-primary)] text-[var(--text-heading)] placeholder-[var(--text-subtle)]"
           />
         </div>
       </form>
-    </PopupModal>
+    </SlideOver>
   );
 };
+
+export const EditFeeSlideOver = EditFeeModal;
+export default EditFeeModal;

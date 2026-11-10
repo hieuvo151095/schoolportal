@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, ReactNode, CSSProperties, MouseEvent } from 'react';
+import React, { useEffect, useRef, useState, ReactNode, CSSProperties, MouseEvent } from 'react';
+import { createPortal } from 'react-dom';
 import { Icon, IconName, IconButton, Button } from './index';
 
 export interface SlideOverAction {
@@ -44,6 +45,11 @@ export function SlideOver({
   style,
 }: SlideOverProps) {
   const panelRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Close on Escape key & Lock body scroll
   useEffect(() => {
@@ -121,9 +127,9 @@ export function SlideOver({
 
   const widthStyle = typeof width === 'number' ? `${width}px` : width;
 
-  return (
+  const content = (
     <div
-      className="fixed inset-0 z-50 overflow-hidden"
+      className={`fixed inset-0 z-[10000] overflow-hidden ecomd-slideover-root`}
       aria-labelledby="slide-over-title"
       role="dialog"
       aria-modal="true"
@@ -131,12 +137,13 @@ export function SlideOver({
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/45 backdrop-blur-[2px] transition-opacity duration-300 ease-out animate-fadeIn"
+        style={{ zIndex: 10000 }}
         onClick={() => {
           if (closeOnOverlay) onClose();
         }}
       />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
+      <div className="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10" style={{ zIndex: 10001 }}>
         {/* Slide-over panel container */}
         <div
           ref={panelRef}
@@ -199,6 +206,12 @@ export function SlideOver({
       </div>
     </div>
   );
+
+  if (mounted && typeof document !== 'undefined' && document.body) {
+    return createPortal(content, document.body);
+  }
+
+  return content;
 }
 
 export default SlideOver;

@@ -351,6 +351,30 @@ td:has(.ecomd-menu.is-floating) {
 }
 
 /* ==========================================================================
+   Universal Overlay Layering SSOT (SlideOver & PopupModal)
+   Guarantees that all dialogs, drawers, and confirmation modals float strictly
+   above all page elements, table headers, sticky columns, filterbars, and in-page menus.
+   ========================================================================== */
+.ecomd-slideover-root,
+.ecomd-modal-overlay,
+[role="dialog"][aria-modal="true"] {
+  z-index: 10000 !important;
+}
+
+.ecomd-modal {
+  z-index: 10001 !important;
+}
+
+/* Ensure inputs, select popups, and dropdowns inside SlideOver or Modal float above the panel */
+.ecomd-slideover-root .ecomd-dropdown.is-open,
+.ecomd-modal-overlay .ecomd-dropdown.is-open,
+.ecomd-slideover-root [role="listbox"],
+.ecomd-modal-overlay [role="listbox"],
+[role="dialog"] [role="listbox"] {
+  z-index: 10050 !important;
+}
+
+/* ==========================================================================
    ADR-037: Official Standard Invoice Print Engine & Layout Isolation
    ========================================================================== */
 @media print {
