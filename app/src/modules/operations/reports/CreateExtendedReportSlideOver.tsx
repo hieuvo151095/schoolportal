@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { SlideOver, Icon, Dropdown } from '@/components/ds';
-import { useAppDispatch } from '../../../store';
+import { useAppDispatch, useAppSelector } from '../../../store';
 import { createExtendedReport } from '../../../store/slices/reportsSlice';
 import { DEVELOPMENTAL_TEMPLATES } from '../../../services/mockReportsData';
+import { mockTeachers } from '../../../services/mockTeacherData';
 import { ExtendedReport, ReportTemplateId } from '../../../types/reports';
 
 interface CreateExtendedReportSlideOverProps {
@@ -69,6 +70,8 @@ export const CreateExtendedReportSlideOver: React.FC<CreateExtendedReportSlideOv
   onClose,
 }) => {
   const dispatch = useAppDispatch();
+  const reduxTeachers = useAppSelector((state) => state.teacher?.teachers) || [];
+  const teacherList = reduxTeachers.length > 0 ? reduxTeachers : mockTeachers;
 
   const [studentId, setStudentId] = useState('');
   const [templateId, setTemplateId] = useState<ReportTemplateId | ''>('');
@@ -296,23 +299,32 @@ export const CreateExtendedReportSlideOver: React.FC<CreateExtendedReportSlideOv
           </div>
         )}
 
-        {/* Người tạo / Cập nhật */}
+        {/* Người tạo / Cập nhật - Chọn từ master data giáo viên */}
         <div>
           <label className="block text-xs font-semibold text-[var(--text-heading)] mb-1">
             Giáo viên phụ trách đánh giá <span className="text-[var(--text-danger)]">*</span>
           </label>
-          <input
-            type="text"
+          <Dropdown
+            options={teacherList.map((t) => {
+              const prefix = t.gender === 'nu' ? 'Cô ' : 'Thầy ';
+              const displayName = `${prefix}${t.fullName}`;
+              return {
+                value: displayName,
+                label: `${displayName} (${t.staffCode})`,
+                sublabel: `${t.homeroomClassName ? `Chủ nhiệm: ${t.homeroomClassName}` : 'Chưa phân công chủ nhiệm'} • Bộ môn: ${t.subjects?.join(', ') || 'Chung'}`,
+              };
+            })}
             value={createdBy}
-            placeholder="Nhập họ và tên giáo viên phụ trách..."
-            onChange={(e) => {
-              setCreatedBy(e.target.value);
+            onChange={(val) => {
+              setCreatedBy(val);
               if (error) setError(null);
             }}
-            className="w-full px-3.5 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--eco-blue-strong)] placeholder:text-[var(--text-disabled)]"
+            placeholder="-- Chọn giáo viên phụ trách --"
+            searchable
+            fullWidth
           />
           <p className="text-[11px] text-[var(--text-subtle)] mt-1">
-            Hiển thị trên phần chữ ký và báo cáo gửi cho phụ huynh.
+            Giáo viên được chọn sẽ hiển thị trên phần chữ ký và báo cáo gửi cho phụ huynh.
           </p>
         </div>
 

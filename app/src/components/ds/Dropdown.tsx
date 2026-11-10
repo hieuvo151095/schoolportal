@@ -372,6 +372,7 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
           role="listbox"
           className={cx(
             'absolute z-50 mt-1.5 bg-white rounded-xl border border-slate-200 shadow-xl overflow-hidden',
+            fullWidth ? 'w-full max-w-full left-0 right-0' : '',
             p.placement === 'top-start' || p.placement === 'top-end'
               ? 'bottom-full mb-1.5'
               : 'top-full',
@@ -381,7 +382,10 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
             p.menuClassName
           )}
           style={{
+            width: fullWidth ? '100%' : undefined,
+            maxWidth: fullWidth ? '100%' : '100vw',
             minWidth: fullWidth ? '100%' : '200px',
+            boxSizing: 'border-box',
             maxHeight: p.maxMenuHeight || 320,
             ...p.menuStyle,
           }}
@@ -457,7 +461,7 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
                     }}
                     onMouseEnter={() => setHighlightedIndex(idx)}
                     className={cx(
-                      'px-3.5 py-2.5 text-sm flex items-center justify-between cursor-pointer transition-colors select-none rounded-lg mx-1 my-0.5',
+                      'px-3.5 py-2.5 text-sm flex items-center justify-between cursor-pointer transition-colors select-none rounded-lg mx-1 my-0.5 min-w-0 max-w-full overflow-hidden',
                       isSelected
                         ? 'bg-[#ebf5ff] text-[#0066cc] font-semibold'
                         : isHighlighted
@@ -466,7 +470,7 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
                       opt.disabled && 'opacity-40 cursor-not-allowed pointer-events-none'
                     )}
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden">
                       {opt.icon && (
                         <span
                           className={cx(
@@ -481,7 +485,7 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
                           )}
                         </span>
                       )}
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1 overflow-hidden">
                         <div className={cx('truncate', isSelected ? 'font-semibold text-[#0066cc]' : 'font-normal')}>{opt.label}</div>
                         {opt.sublabel && (
                           <div className="text-2xs text-slate-400 truncate mt-0.5 font-normal">

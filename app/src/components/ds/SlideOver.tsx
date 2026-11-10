@@ -140,7 +140,7 @@ export function SlideOver({
         {/* Slide-over panel container */}
         <div
           ref={panelRef}
-          className={`w-screen max-w-full sm:max-w-none flex flex-col bg-[var(--bg-surface)] shadow-2xl transition-transform ease-out duration-300 transform translate-x-0 ${className}`}
+          className={`w-screen max-w-full sm:max-w-none flex flex-col bg-[var(--bg-surface)] shadow-2xl transition-transform ease-out duration-300 transform translate-x-0 overflow-hidden ${className}`}
           style={{
             width: typeof window !== 'undefined' && window.innerWidth < 640 ? '100vw' : widthStyle,
             ...style,
@@ -189,7 +189,7 @@ export function SlideOver({
           </div>
 
           {/* Body */}
-          <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden p-5 sm:p-6 space-y-4">
             {children}
           </div>
 
