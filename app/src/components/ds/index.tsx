@@ -481,6 +481,47 @@ export function StatusTag(p: StatusTagProps) {
 }
 
 /* ==========================================================================
+   9b. Meter Component (SSOT Table Cell Proportion Bar)
+   ========================================================================== */
+export interface MeterProps {
+  value?: number;
+  max?: number;
+  text?: string;
+  tone?: 'default' | 'success' | 'warning';
+  showLabel?: boolean;
+  label?: string;
+  className?: string;
+  style?: CSSProperties;
+}
+
+export function Meter(p: MeterProps) {
+  const max = p.max || 100;
+  const v = Math.max(0, Math.min(max, +(p.value || 0)));
+  const pct = max ? Math.round((v / max) * 100) : 0;
+  const tone = pick(p.tone, ['default', 'success', 'warning'], 'default');
+  return (
+    <div
+      className={cx('ecomd-meter', tone !== 'default' && 'ecomd-meter--' + tone, p.className)}
+      style={p.style}
+    >
+      <div
+        className="ecomd-meter__track"
+        role="meter"
+        aria-valuenow={v}
+        aria-valuemin={0}
+        aria-valuemax={max}
+        aria-label={p.label}
+      >
+        <div className="ecomd-meter__fill" style={{ width: `${pct}%` }} />
+      </div>
+      {p.showLabel !== false && (
+        <span className="ecomd-meter__label body-xs">{p.text != null ? p.text : `${pct}%`}</span>
+      )}
+    </div>
+  );
+}
+
+/* ==========================================================================
    10. StatCard Component
    ========================================================================== */
 export interface StatCardProps {

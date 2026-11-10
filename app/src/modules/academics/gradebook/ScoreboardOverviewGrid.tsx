@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   setActiveParadigm,
@@ -16,8 +17,10 @@ import {
   Button,
   Tag,
   StatusTag,
+  Meter,
   EmptyState,
   FilterBar,
+  DataTable,
 } from '@/components/ds';
 
 function MobileClassScoreboardCard({
@@ -48,8 +51,15 @@ function MobileClassScoreboardCard({
     activeTerm?.status === 'da_cong_bo'
       ? 'success'
       : activeTerm?.status === 'tien_hanh'
-      ? 'info'
+      ? 'warning'
       : 'neutral';
+
+  const meterTone: 'default' | 'success' | 'warning' =
+    activeTerm?.status === 'da_cong_bo'
+      ? 'success'
+      : activeTerm?.status === 'tien_hanh'
+      ? 'warning'
+      : 'default';
 
   return (
     <div className="bg-white border border-[#e2e8f0] rounded-xl p-4 shadow-sm flex flex-col gap-3">
@@ -100,39 +110,34 @@ function MobileClassScoreboardCard({
             </div>
           )}
 
-          {/* Progress bar */}
+          {/* Progress bar using Meter SSOT */}
           <div className="w-full">
-            <div className="text-xs flex justify-between text-[#64748b] mb-1">
-              <span>Tiến độ nhập điểm:</span>
-              <span className="font-semibold text-[#0f172a]">
-                {activeTerm.completedStudents}/{activeTerm.totalStudents} HS ({progressPercent}%)
-              </span>
-            </div>
-            <div className="w-full h-2 bg-[#e2e8f0] rounded-full overflow-hidden">
-              <div
-                className="h-full bg-[var(--eco-blue-strong,#0070ce)] rounded-full transition-all"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
+            <Meter
+              value={activeTerm.completedStudents}
+              max={activeTerm.totalStudents}
+              text={`${activeTerm.completedStudents}/${activeTerm.totalStudents} HS (${progressPercent}%)`}
+              tone={meterTone}
+              style={{ width: '100%' }}
+            />
           </div>
 
           {/* Action buttons */}
-          <div className="grid grid-cols-2 gap-2 mt-1">
+          <div className="flex items-center gap-2 mt-1">
             {activeParadigm === 'numeric_gradebook' ? (
               <>
                 <Link
                   href={`/${schoolCode}/school/scoreboard/grade/${cls.classId}/${activeTerm.termId}`}
-                  className="w-full"
+                  className="flex-1"
                 >
-                  <Button variant="primary" size="sm" className="w-full justify-center min-h-[40px]">
-                    Nhập điểm
+                  <Button variant="primary" size="sm" className="w-full justify-center">
+                    {activeTerm.status === 'tien_hanh' ? 'Tiếp tục nhập' : 'Nhập điểm'}
                   </Button>
                 </Link>
                 <Link
                   href={`/${schoolCode}/school/scoreboard/summary/${cls.classId}/${activeTerm.termId}`}
-                  className="w-full"
+                  className="flex-1"
                 >
-                  <Button variant="secondary" size="sm" className="w-full justify-center min-h-[40px]">
+                  <Button variant="secondary" size="sm" className="w-full justify-center">
                     Tổng kết
                   </Button>
                 </Link>
@@ -141,7 +146,7 @@ function MobileClassScoreboardCard({
               <Button
                 variant="primary"
                 size="sm"
-                className="col-span-2 w-full justify-center min-h-[40px]"
+                className="w-full justify-center"
                 onClick={() => onOpenRubric('hs-m01')}
               >
                 Đánh giá định kỳ
@@ -161,6 +166,7 @@ interface ScoreboardOverviewGridProps {
 export const ScoreboardOverviewGrid: React.FC<ScoreboardOverviewGridProps> = ({
   schoolCode = 'demo',
 }) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { classes, activeParadigm, filterCriteria } = useAppSelector(
     (state) => state.gradebook
@@ -330,6 +336,18 @@ export const ScoreboardOverviewGrid: React.FC<ScoreboardOverviewGridProps> = ({
                     </th>
                   </>
                 )}
+                <th
+                  className="body-xs-semibold text-[var(--text-subtle)] is-actions"
+                  rowSpan={activeParadigm === 'numeric_gradebook' ? 2 : 1}
+                  style={{
+                    verticalAlign: 'bottom',
+                    textAlign: 'center',
+                    width: '64px',
+                    borderLeft: '1px solid var(--border-default)',
+                  }}
+                >
+                  Thao tác
+                </th>
               </tr>
               {activeParadigm === 'numeric_gradebook' && (
                 <tr>
@@ -390,17 +408,23 @@ export const ScoreboardOverviewGrid: React.FC<ScoreboardOverviewGridProps> = ({
 
                   {cls.terms.map((term) => {
                     const actionInfo = getTermActionInfo(term.status);
-                    const progressPercent =
-                      term.totalStudents > 0
-                        ? Math.round((term.completedStudents / term.totalStudents) * 100)
-                        : 0;
-
                     const statusTone =
                       term.status === 'da_cong_bo'
                         ? 'success'
                         : term.status === 'tien_hanh'
-                        ? 'info'
+                        ? 'warning'
                         : 'neutral';
+
+                    const meterTone =
+                      term.status === 'da_cong_bo'
+                        ? 'success'
+                        : term.status === 'tien_hanh'
+                        ? 'warning'
+                        : 'default';
+
+                    const meterText = term.publishedAt
+                      ? `Công bố ${term.publishedAt}`
+                      : `${term.completedStudents}/${term.totalStudents} HS`;
 
                     return (
                       <td
@@ -408,7 +432,6 @@ export const ScoreboardOverviewGrid: React.FC<ScoreboardOverviewGridProps> = ({
                         className="body-sm"
                         style={{
                           verticalAlign: 'top',
-                          textAlign: 'center',
                           padding: 'var(--space-12) var(--space-14)',
                           borderLeft: '1px solid var(--border-subtle)',
                         }}
@@ -417,56 +440,49 @@ export const ScoreboardOverviewGrid: React.FC<ScoreboardOverviewGridProps> = ({
                           {term.termName}
                         </span>
                         <div className="ecomd-cell__value">
-                          <div className="flex flex-col items-center gap-1.5">
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'flex-start',
+                              gap: 'var(--space-6)',
+                              minWidth: 'calc(var(--size-40) * 3.5)',
+                            }}
+                          >
                             <StatusTag tone={statusTone} label={actionInfo.statusText} />
 
-                            {term.publishedAt && (
-                              <span className="body-xs text-[var(--text-subtle)]">
-                                Công bố: {term.publishedAt}
-                              </span>
-                            )}
+                            <Meter
+                              value={term.completedStudents}
+                              max={term.totalStudents}
+                              text={meterText}
+                              tone={meterTone}
+                              style={{ width: '100%' }}
+                            />
 
-                            <div className="w-full max-w-[140px] text-left mt-1">
-                              <div className="body-xs flex justify-between text-[var(--text-subtle)]">
-                                <span>Tiến độ:</span>
-                                <span className="body-xs-semibold font-numeric text-[var(--text-body)]">
-                                  {term.completedStudents}/{term.totalStudents} HS
-                                </span>
-                              </div>
-                              <div className="w-full h-1.5 bg-[var(--bg-muted)] rounded-full overflow-hidden mt-1">
-                                <div
-                                  className="h-full bg-[var(--eco-blue-strong)] rounded-full transition-all"
-                                  style={{ width: `${progressPercent}%` }}
-                                />
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-1 mt-2">
+                            <div className="pt-1">
                               {activeParadigm === 'numeric_gradebook' ? (
-                                <>
-                                  <Link
-                                    href={`/${schoolCode}/school/scoreboard/grade/${cls.classId}/${term.termId}`}
-                                  >
-                                    <Button variant="primary" size="sm">
-                                      Nhập điểm
-                                    </Button>
-                                  </Link>
-                                  <Link
-                                    href={`/${schoolCode}/school/scoreboard/summary/${cls.classId}/${term.termId}`}
-                                  >
-                                    <Button variant="secondary" size="sm">
-                                      Tổng kết
-                                    </Button>
-                                  </Link>
-                                </>
+                                <Link
+                                  href={
+                                    term.status === 'da_cong_bo'
+                                      ? `/${schoolCode}/school/scoreboard/summary/${cls.classId}/${term.termId}`
+                                      : `/${schoolCode}/school/scoreboard/grade/${cls.classId}/${term.termId}`
+                                  }
+                                  className="body-xs-semibold text-[var(--eco-blue-strong)] hover:underline whitespace-nowrap inline-flex items-center"
+                                >
+                                  {term.status === 'tien_hanh'
+                                    ? 'Tiếp tục nhập'
+                                    : term.status === 'da_cong_bo'
+                                    ? 'Xem bảng điểm'
+                                    : 'Nhập điểm'}
+                                </Link>
                               ) : (
-                                <Button
-                                  variant="primary"
-                                  size="sm"
+                                <button
+                                  type="button"
                                   onClick={() => dispatch(openRubricModal('hs-m01'))}
+                                  className="body-xs-semibold text-[var(--eco-blue-strong)] hover:underline whitespace-nowrap inline-flex items-center"
                                 >
                                   Đánh giá định kỳ
-                                </Button>
+                                </button>
                               )}
                             </div>
                           </div>
@@ -474,6 +490,44 @@ export const ScoreboardOverviewGrid: React.FC<ScoreboardOverviewGridProps> = ({
                       </td>
                     );
                   })}
+
+                  <td
+                    className="body-sm is-right is-actions"
+                    style={{
+                      verticalAlign: 'middle',
+                      textAlign: 'center',
+                      borderLeft: '1px solid var(--border-subtle)',
+                    }}
+                  >
+                    <div className="ecomd-cell__value flex justify-center">
+                      <DataTable.RowAction
+                        label={`Thao tác với ${cls.className}`}
+                        items={[
+                          {
+                            label: 'Tổng kết học kỳ',
+                            icon: 'clipboard-check',
+                            onClick: () =>
+                              router.push(
+                                `/${schoolCode}/school/scoreboard/summary/${cls.classId}/${cls.terms[0]?.termId}`
+                              ),
+                          },
+                          {
+                            label: 'Xem bảng điểm',
+                            icon: 'clipboard-list',
+                            onClick: () =>
+                              router.push(
+                                `/${schoolCode}/school/scoreboard/grade/${cls.classId}/${cls.terms[0]?.termId}`
+                              ),
+                          },
+                          {
+                            label: 'Xuất bảng điểm',
+                            icon: 'file-excel',
+                            onClick: () => {},
+                          },
+                        ]}
+                      />
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
