@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { FilterBar } from '../../../components/ds';
+import { FilterBar, Button } from '../../../components/ds';
 
 interface AcademicYearToolbarProps {
   searchQuery: string;
@@ -15,6 +15,7 @@ interface AcademicYearToolbarProps {
 export const AcademicYearToolbar: React.FC<AcademicYearToolbarProps> = ({
   searchQuery,
   onSearchChange,
+  onOpenCreateModal,
 }) => {
   return (
     <FilterBar
@@ -23,6 +24,24 @@ export const AcademicYearToolbar: React.FC<AcademicYearToolbarProps> = ({
         value: searchQuery,
         onChange: (val) => onSearchChange(val),
       }}
+      actions={
+        <div className="flex items-center gap-2">
+          <Button
+            variant="secondary"
+            icon="download"
+            onClick={() => alert('Đang xuất danh sách năm học ra file Excel...')}
+          >
+            Xuất Excel
+          </Button>
+          <Button
+            variant="primary"
+            icon="plus"
+            onClick={onOpenCreateModal}
+          >
+            Thêm năm học
+          </Button>
+        </div>
+      }
     />
   );
 };

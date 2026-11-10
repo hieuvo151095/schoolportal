@@ -5,7 +5,7 @@
 
 import React from 'react';
 import type { EducationStage } from '@/types/grade';
-import { FilterBar } from '@/components/ds';
+import { FilterBar, Button } from '@/components/ds';
 
 interface GradeToolbarProps {
   selectedStage: 'ALL' | EducationStage;
@@ -122,6 +122,17 @@ export const GradeToolbar: React.FC<GradeToolbarProps> = ({
             })),
           },
         ]}
+        actions={
+          <div className="flex items-center gap-2">
+            <Button
+              variant="secondary"
+              icon="download"
+              onClick={() => alert('Đang xuất danh sách khối lớp ra file Excel...')}
+            >
+              Xuất Excel
+            </Button>
+          </div>
+        }
       />
     </div>
   );

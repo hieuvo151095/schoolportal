@@ -113,15 +113,6 @@ export default function StudentDirectoryPage() {
         <PageHeader
           title="Danh Sách Học Sinh"
           description="Quản lý hồ sơ học sinh, thông tin người giám hộ, phân bổ lớp học và thể chất."
-          actions={
-            <Button
-              variant="primary"
-              icon="plus"
-              onClick={() => setIsCreateOpen(true)}
-            >
-              Thêm học sinh
-            </Button>
-          }
         />
 
         {/* Stats */}
@@ -160,6 +151,7 @@ export default function StudentDirectoryPage() {
             selectedCount={selectedIds.length}
             onOpenBatchTransfer={handleOpenBatchTransfer}
             onOpenPromotion={handleOpenPromotion}
+            onOpenCreate={() => setIsCreateOpen(true)}
           />
 
           {/* Master Table */}

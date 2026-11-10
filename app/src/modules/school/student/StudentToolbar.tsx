@@ -13,12 +13,16 @@ interface StudentToolbarProps {
   selectedCount: number;
   onOpenBatchTransfer: () => void;
   onOpenPromotion: () => void;
+  onOpenCreate: () => void;
+  onExportExcel?: () => void;
 }
 
 export const StudentToolbar: React.FC<StudentToolbarProps> = ({
   selectedCount,
   onOpenBatchTransfer,
   onOpenPromotion,
+  onOpenCreate,
+  onExportExcel,
 }) => {
   const dispatch = useAppDispatch();
   const filter = useAppSelector((state) => state.student.filter);
@@ -52,34 +56,44 @@ export const StudentToolbar: React.FC<StudentToolbarProps> = ({
           value: filter.status || 'all',
           onChange: (val) => dispatch(setFilter({ status: val })),
         },
-        {
-          options: [
-            { label: 'Tất cả giới tính', value: 'all' },
-            { label: 'Nam', value: 'Nam' },
-            { label: 'Nữ', value: 'Nữ' },
-          ],
-          value: filter.gender || 'all',
-          onChange: (val) => dispatch(setFilter({ gender: val })),
-        },
       ]}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-        <Button
-          variant="secondary"
-          icon="arrow-right"
-          onClick={onOpenBatchTransfer}
-          disabled={selectedCount === 0}
-        >
-          Chuyển lớp ({selectedCount})
-        </Button>
-        <Button
-          variant="secondary"
-          icon="graduation-cap"
-          onClick={onOpenPromotion}
-        >
-          Lên lớp niên khóa
-        </Button>
-      </div>
-    </FilterBar>
+      actions={
+        <div className="flex items-center gap-2">
+          {selectedCount > 0 && (
+            <Button
+              variant="secondary"
+              icon="arrow-right"
+              onClick={onOpenBatchTransfer}
+            >
+              Chuyển lớp ({selectedCount})
+            </Button>
+          )}
+          <Button
+            variant="secondary"
+            icon="graduation-cap"
+            onClick={onOpenPromotion}
+          >
+            Lên lớp
+          </Button>
+          <Button
+            variant="secondary"
+            icon="download"
+            onClick={
+              onExportExcel ||
+              (() => alert('Đang xuất danh sách học sinh ra file Excel...'))
+            }
+          >
+            Xuất Excel
+          </Button>
+          <Button
+            variant="primary"
+            icon="plus"
+            onClick={onOpenCreate}
+          >
+            Thêm học sinh
+          </Button>
+        </div>
+      }
+    />
   );
 };

@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { useRouter } from 'next/router';
 import { ArticleStatus } from '../../../types/parentHandbook';
 import { FilterBar, Button } from '../../../components/ds';
 
@@ -24,6 +25,9 @@ export const HandbookToolbar: React.FC<HandbookToolbarProps> = ({
   onSearchChange,
   onOpenCreateCategoryModal,
 }) => {
+  const router = useRouter();
+  const schoolCode = (router.query.schoolCode as string) || 'demo';
+
   return (
     <div style={{ marginBottom: 'var(--space-4)' }}>
       <FilterBar
@@ -44,11 +48,24 @@ export const HandbookToolbar: React.FC<HandbookToolbarProps> = ({
             ],
           },
         ]}
-        action={{
-          label: 'Thêm danh mục',
-          icon: 'plus',
-          onClick: onOpenCreateCategoryModal,
-        }}
+        actions={
+          <div className="flex items-center gap-2">
+            <Button
+              variant="secondary"
+              icon="folder-plus"
+              onClick={onOpenCreateCategoryModal}
+            >
+              Thêm danh mục
+            </Button>
+            <Button
+              variant="primary"
+              icon="plus"
+              href={`/${schoolCode}/school/handbook/create`}
+            >
+              Soạn bài viết
+            </Button>
+          </div>
+        }
       />
     </div>
   );

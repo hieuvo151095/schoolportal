@@ -47,6 +47,7 @@ import {
   Checkbox,
   Icon,
 } from '../../../components/ds';
+import { addToast } from '../../../store/slices/toastSlice';
 
 export const InvoiceRosterTable: React.FC = () => {
   const router = useRouter();
@@ -67,13 +68,22 @@ export const InvoiceRosterTable: React.FC = () => {
     if (!dateStr) return '';
     const parts = dateStr.split('-');
     if (parts.length === 3) {
-      return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      return `${parts[2]}/${parts[1]}`;
     }
     return dateStr;
   };
 
   // Filter invoices for current criteria
   const filteredInvoices = filterInvoices(invoices, filterCriteria);
+
+  const handleExportExcel = () => {
+    dispatch(
+      addToast({
+        type: 'success',
+        message: 'Đang xuất danh sách học phí ra file Excel...',
+      })
+    );
+  };
 
   // Students belonging to current class
   const classStudents = students.filter((s) => s.classId === selectedClassId);
@@ -249,15 +259,6 @@ export const InvoiceRosterTable: React.FC = () => {
               value: selectedClassId,
               onChange: (val) => dispatch(setSelectedClassId(val)),
             },
-            {
-              options: [
-                { label: 'Thời gian tạo HĐ', value: 'createdAt' },
-                { label: 'Hạn đóng HĐ', value: 'dueDate' },
-              ],
-              value: filterCriteria.dateFilterType || 'createdAt',
-              onChange: (val) =>
-                dispatch(setDateFilterType(val as 'createdAt' | 'dueDate')),
-            },
           ]}
           advanced={{
             label: 'Lọc mở rộng',
@@ -267,6 +268,25 @@ export const InvoiceRosterTable: React.FC = () => {
               filterCriteria.hasDeduction !== null,
             onClick: () => dispatch(setFilterModalOpen(true)),
           }}
+          actions={
+            <div className="flex items-center gap-2">
+              <Button
+                variant="secondary"
+                icon="download"
+                onClick={handleExportExcel}
+                disabled={filteredInvoices.length === 0}
+              >
+                Xuất Excel
+              </Button>
+              <Button
+                variant="primary"
+                icon="plus"
+                onClick={() => router.push(`/${schoolCode}/school/fee/create`)}
+              >
+                Tạo hóa đơn
+              </Button>
+            </div>
+          }
         >
           {/* Date range popover button */}
           <div style={{ position: 'relative' }}>

@@ -26,6 +26,7 @@ import {
   DropdownMenuItem,
   Icon,
 } from '../../../components/ds';
+import { addToast } from '../../../store/slices/toastSlice';
 
 const GRADE_LEVEL_OPTIONS = [
   { value: 'all', label: 'Tất cả khối' },
@@ -186,6 +187,15 @@ export const ClassFeeScheduleTable: React.FC = () => {
     },
   ];
 
+  const handleExportExcel = () => {
+    dispatch(
+      addToast({
+        type: 'success',
+        message: 'Đang xuất danh sách cấu hình học phí theo lớp ra file Excel...',
+      })
+    );
+  };
+
   return (
     <div className="space-y-6">
       {/* 4 StatCards KPI Summary */}
@@ -235,6 +245,18 @@ export const ClassFeeScheduleTable: React.FC = () => {
               onChange: handleGradeLevelChange,
             },
           ]}
+          actions={
+            <div className="flex items-center gap-2">
+              <Button
+                variant="secondary"
+                icon="download"
+                onClick={handleExportExcel}
+                disabled={filteredClasses.length === 0}
+              >
+                Xuất Excel
+              </Button>
+            </div>
+          }
         />
 
         {/* Main Class Schedule DataTable */}

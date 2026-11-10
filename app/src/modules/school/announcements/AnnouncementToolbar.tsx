@@ -148,27 +148,7 @@ export const AnnouncementToolbar: React.FC<AnnouncementToolbarProps> = ({
                 Xóa đã chọn
               </button>
             </div>
-          ) : (
-            <Link
-              href={`/${schoolCode}/school/announcements/create`}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 'var(--space-2)',
-                padding: 'var(--space-2) var(--space-4)',
-                borderRadius: 'var(--radius-md)',
-                background: 'var(--eco-blue-strong)',
-                color: '#ffffff',
-                fontSize: 'var(--text-xs)',
-                fontWeight: 'var(--font-bold)',
-                textDecoration: 'none',
-                boxShadow: 'var(--shadow-xs)',
-              }}
-            >
-              <Icon name="plus" size={13} />
-              <span>Soạn thông báo mới</span>
-            </Link>
-          )}
+          ) : null}
         </div>
       </div>
 
@@ -207,17 +187,34 @@ export const AnnouncementToolbar: React.FC<AnnouncementToolbarProps> = ({
             ],
           },
         ]}
-      >
-        {isFilterActive && (
-          <Button
-            variant="secondary"
-            icon="rotate-right"
-            onClick={onResetFilters}
-          >
-            Đặt lại
-          </Button>
-        )}
-      </FilterBar>
+        actions={
+          <div className="flex items-center gap-2">
+            {isFilterActive && (
+              <Button
+                variant="secondary"
+                icon="rotate-right"
+                onClick={onResetFilters}
+              >
+                Đặt lại
+              </Button>
+            )}
+            <Button
+              variant="secondary"
+              icon="download"
+              onClick={() => alert('Đang xuất danh sách thông báo ra file Excel...')}
+            >
+              Xuất Excel
+            </Button>
+            <Button
+              variant="primary"
+              icon="plus"
+              href={`/${schoolCode}/school/announcements/create`}
+            >
+              Soạn thông báo
+            </Button>
+          </div>
+        }
+      />
     </div>
   );
 };

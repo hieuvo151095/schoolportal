@@ -96,6 +96,15 @@ export default function RevenueCategoriesPage() {
     }, 1200);
   };
 
+  const handleExportExcel = () => {
+    dispatch(
+      addToast({
+        type: 'success',
+        message: 'Đang xuất danh mục thu ra file Excel...',
+      })
+    );
+  };
+
   const formatPeriod = (effectiveFrom: string, effectiveTo?: string | null) => {
     if (effectiveFrom && effectiveTo) {
       return `${effectiveFrom} - ${effectiveTo}`;
@@ -205,11 +214,26 @@ export default function RevenueCategoriesPage() {
               value: searchLocal,
               onChange: handleSearchChange,
             }}
-            action={{
-              label: syncing ? 'Đang đồng bộ...' : 'Đồng bộ CSDL',
-              icon: 'rotate-right',
-              onClick: handleSyncDatabase,
-            }}
+            actions={
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="secondary"
+                  icon="download"
+                  onClick={handleExportExcel}
+                  disabled={filteredList.length === 0}
+                >
+                  Xuất Excel
+                </Button>
+                <Button
+                  variant="primary"
+                  icon="rotate-right"
+                  disabled={syncing}
+                  onClick={handleSyncDatabase}
+                >
+                  {syncing ? 'Đang đồng bộ...' : 'Đồng bộ CSDL'}
+                </Button>
+              </div>
+            }
           />
 
           {/* Master Revenue DataTable */}

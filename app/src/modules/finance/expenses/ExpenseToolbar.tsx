@@ -18,6 +18,7 @@ interface ExpenseToolbarProps {
   selectedStatus: 'all' | VoucherLifecycleStatus;
   onStatusChange: (status: 'all' | VoucherLifecycleStatus) => void;
   onOpenCategoryModal: () => void;
+  onOpenCreate: () => void;
   totalVouchersInMonth: number;
 }
 
@@ -30,6 +31,8 @@ export const ExpenseToolbar: React.FC<ExpenseToolbarProps> = ({
   onTypeChange,
   selectedStatus,
   onStatusChange,
+  onOpenCategoryModal,
+  onOpenCreate,
   totalVouchersInMonth,
 }) => {
   const isExportDisabled = totalVouchersInMonth === 0;
@@ -78,15 +81,32 @@ export const ExpenseToolbar: React.FC<ExpenseToolbarProps> = ({
           onChange: (val) => onStatusChange(val as any),
         },
       ]}
-    >
-      <Button
-        variant="secondary"
-        icon="download"
-        onClick={handleExport}
-        disabled={isExportDisabled}
-      >
-        Xuất Excel
-      </Button>
-    </FilterBar>
+      actions={
+        <div className="flex items-center gap-2">
+          <Button
+            variant="secondary"
+            icon="folder"
+            onClick={onOpenCategoryModal}
+          >
+            Danh mục chi
+          </Button>
+          <Button
+            variant="secondary"
+            icon="download"
+            onClick={handleExport}
+            disabled={isExportDisabled}
+          >
+            Xuất Excel
+          </Button>
+          <Button
+            variant="primary"
+            icon="plus"
+            onClick={onOpenCreate}
+          >
+            Thêm phiếu chi
+          </Button>
+        </div>
+      }
+    />
   );
 };

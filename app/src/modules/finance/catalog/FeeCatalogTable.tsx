@@ -343,6 +343,15 @@ export const FeeCatalogTable: React.FC = () => {
     },
   ];
 
+  const handleExportExcel = () => {
+    dispatch(
+      addToast({
+        type: 'success',
+        message: 'Đang xuất danh sách khoản phí ra file Excel...',
+      })
+    );
+  };
+
   return (
     <div className="space-y-6">
       {/* 4 StatCards KPI Summary */}
@@ -413,11 +422,25 @@ export const FeeCatalogTable: React.FC = () => {
             onChange: handleUnitFilterChange,
           },
         ]}
-        action={{
-          label: 'Thêm khoản phí',
-          icon: 'plus',
-          onClick: () => dispatch(openCreateModal()),
-        }}
+        actions={
+          <div className="flex items-center gap-2">
+            <Button
+              variant="secondary"
+              icon="download"
+              onClick={handleExportExcel}
+              disabled={filteredItems.length === 0}
+            >
+              Xuất Excel
+            </Button>
+            <Button
+              variant="primary"
+              icon="plus"
+              onClick={() => dispatch(openCreateModal())}
+            >
+              Thêm khoản phí
+            </Button>
+          </div>
+        }
       />
 
       {/* Main Fee DataTable */}

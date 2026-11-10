@@ -72,6 +72,14 @@ export default function FeedbackToolbar() {
             <Icon name="rotate-right" className="mr-1.5 w-3 h-3 text-slate-500" />
             Đặt lại bộ lọc
           </button>
+          <button
+            type="button"
+            onClick={() => alert('Đang xuất danh sách góp ý ra file Excel...')}
+            className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors"
+          >
+            <Icon name="download" className="mr-1.5 w-3 h-3 text-emerald-600" />
+            Xuất Excel
+          </button>
         </div>
       </div>
 

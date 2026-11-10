@@ -179,17 +179,27 @@ export const SubjectToolbar: React.FC<SubjectToolbarProps> = ({
             ],
           },
         ]}
-      >
-        {isFilterActive && (
-          <Button
-            variant="secondary"
-            icon="rotate-right"
-            onClick={onResetFilter}
-          >
-            Đặt lại
-          </Button>
-        )}
-      </FilterBar>
+        actions={
+          <div className="flex items-center gap-2">
+            {isFilterActive && (
+              <Button
+                variant="secondary"
+                icon="rotate-right"
+                onClick={onResetFilter}
+              >
+                Đặt lại
+              </Button>
+            )}
+            <Button
+              variant="secondary"
+              icon="download"
+              onClick={() => alert('Đang xuất danh mục môn học ra file Excel...')}
+            >
+              Xuất Excel
+            </Button>
+          </div>
+        }
+      />
     </div>
   );
 };

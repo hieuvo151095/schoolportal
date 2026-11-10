@@ -86,20 +86,26 @@ export const DiscountToolbar: React.FC<DiscountToolbarProps> = ({
             onChange: (val) => dispatch(setFilter({ feeItemIdFilter: val })),
           },
         ]}
-        action={{
-          label: 'Thêm chính sách miễn giảm',
-          onClick: () => dispatch(openCreateModal()),
-        }}
-      >
-        <Button
-          variant="secondary"
-          icon="download"
-          onClick={handleExport}
-          disabled={policies.length === 0}
-        >
-          Xuất Excel
-        </Button>
-      </FilterBar>
+        actions={
+          <div className="flex items-center gap-2">
+            <Button
+              variant="secondary"
+              icon="download"
+              onClick={handleExport}
+              disabled={policies.length === 0}
+            >
+              Xuất Excel
+            </Button>
+            <Button
+              variant="primary"
+              icon="plus"
+              onClick={() => dispatch(openCreateModal())}
+            >
+              Thêm chính sách miễn giảm
+            </Button>
+          </div>
+        }
+      />
     </div>
   );
 };

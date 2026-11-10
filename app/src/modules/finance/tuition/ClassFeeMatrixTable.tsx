@@ -146,6 +146,14 @@ export const ClassFeeMatrixTable: React.FC = () => {
           </div>
 
           <Button
+            variant="secondary"
+            icon="download"
+            onClick={() => alert(`Đang xuất bảng ma trận học phí lớp ${classId} ra file Excel...`)}
+          >
+            Xuất Excel
+          </Button>
+
+          <Button
             variant="primary"
             icon="plus"
             onClick={() => dispatch(openAddFeeModal())}

@@ -103,33 +103,37 @@ export const MenuToolbar: React.FC<MenuToolbarProps> = ({
           active: filters.useFileOnly !== 'all' || filters.status !== 'all' || !!filters.selectedMonth,
           onClick: () => setIsFilterModalOpen(true),
         }}
-        action={{
-          label: 'Tạo thực đơn',
-          icon: 'plus',
-          href: `/${schoolCode}/school/menu/create`,
-        }}
-      >
-        <Button
-          variant="secondary"
-          icon="file-lines"
-          href={`/${schoolCode}/school/menu/create?mode=file`}
-        >
-          Tạo bằng file
-        </Button>
-
-        <Button
-          variant="secondary"
-          icon="sliders"
-          onClick={() => setIsAIModalOpen(true)}
-          style={{
-            color: '#7e22ce',
-            background: '#faf5ff',
-            borderColor: '#e9d5ff',
-          }}
-        >
-          Gợi ý AI
-        </Button>
-      </FilterBar>
+        actions={
+          <div className="flex items-center gap-2">
+            <Button
+              variant="secondary"
+              icon="sliders"
+              onClick={() => setIsAIModalOpen(true)}
+              style={{
+                color: '#7e22ce',
+                background: '#faf5ff',
+                borderColor: '#e9d5ff',
+              }}
+            >
+              Gợi ý AI
+            </Button>
+            <Button
+              variant="secondary"
+              icon="file-lines"
+              href={`/${schoolCode}/school/menu/create?mode=file`}
+            >
+              Tạo bằng file
+            </Button>
+            <Button
+              variant="primary"
+              icon="plus"
+              href={`/${schoolCode}/school/menu/create`}
+            >
+              Tạo thực đơn
+            </Button>
+          </div>
+        }
+      />
 
       {/* Modals */}
       <ExtendedMenuFilterModal

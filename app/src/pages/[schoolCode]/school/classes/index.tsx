@@ -121,15 +121,6 @@ export default function ClassManagementPage() {
         <PageHeader
           title="Quản Lý Lớp Học"
           description="Danh mục lớp học chính khóa, lớp ngoại khóa & câu lạc bộ năm học 2025-2026."
-          actions={
-            <Button
-              variant="primary"
-              icon="plus"
-              onClick={() => dispatch(openCreateModal())}
-            >
-              Tạo lớp học
-            </Button>
-          }
         />
 
         {/* 4 KPI Summary Cards */}

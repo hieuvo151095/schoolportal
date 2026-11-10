@@ -6,15 +6,19 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { setFilter } from '../../../store/slices/teacherSlice';
-import { FilterBar } from '../../../components/ds';
+import { FilterBar, Button } from '../../../components/ds';
 
 interface TeacherToolbarProps {
   schoolCode: string;
   onOpenExtendedFilter: () => void;
+  onOpenCreate: () => void;
+  onExportExcel?: () => void;
 }
 
 export const TeacherToolbar: React.FC<TeacherToolbarProps> = ({
   onOpenExtendedFilter,
+  onOpenCreate,
+  onExportExcel,
 }) => {
   const dispatch = useAppDispatch();
   const filter = useAppSelector((state) => state.teacher.filter);
@@ -58,11 +62,27 @@ export const TeacherToolbar: React.FC<TeacherToolbarProps> = ({
           onChange: (val) => dispatch(setFilter({ status: val })),
         },
       ]}
-      advanced={{
-        label: 'Lọc mở rộng',
-        active: filter.csdlSoOnly,
-        onClick: onOpenExtendedFilter,
-      }}
+      actions={
+        <div className="flex items-center gap-2">
+          <Button
+            variant="secondary"
+            icon="download"
+            onClick={
+              onExportExcel ||
+              (() => alert('Đang xuất danh sách giáo viên ra file Excel...'))
+            }
+          >
+            Xuất Excel
+          </Button>
+          <Button
+            variant="primary"
+            icon="plus"
+            onClick={onOpenCreate}
+          >
+            Thêm giáo viên
+          </Button>
+        </div>
+      }
     />
   );
 };

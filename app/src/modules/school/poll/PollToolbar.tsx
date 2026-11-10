@@ -5,8 +5,9 @@
  */
 
 import React from 'react';
+import { useRouter } from 'next/router';
 import { PollFilterState } from '@/types/poll';
-import { CountedTabs, SearchField, SelectField } from '@/components/ds';
+import { CountedTabs, FilterBar, Button } from '@/components/ds';
 
 interface PollToolbarProps {
   filterState: PollFilterState;
@@ -20,7 +21,7 @@ interface PollToolbarProps {
   onStatusChange: (status: PollFilterState['status']) => void;
   onClassChange: (classId: string) => void;
   onSearchChange: (query: string) => void;
-  onResetFilter: () => void;
+  onResetFilter?: () => void;
 }
 
 export const PollToolbar: React.FC<PollToolbarProps> = ({
@@ -31,6 +32,9 @@ export const PollToolbar: React.FC<PollToolbarProps> = ({
   onClassChange,
   onSearchChange,
 }) => {
+  const router = useRouter();
+  const schoolCode = (router.query.schoolCode as string) || 'demo';
+
   const statusTabs = [
     { id: 'all', label: 'Tất cả', count: statusCounts.all },
     { id: 'da_gui', label: 'Đang diễn ra', count: statusCounts.da_gui },
@@ -52,34 +56,39 @@ export const PollToolbar: React.FC<PollToolbarProps> = ({
         onChange={(id) => onStatusChange(id as PollFilterState['status'])}
       />
 
-      {/* 2. Filter Bar */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 'var(--space-16)',
-          padding: 'var(--space-16) var(--space-20)',
-          background: 'var(--bg-surface)',
-          borderBottom: '1px solid var(--border-default)',
-          flexWrap: 'wrap',
+      {/* 2. Standard FilterBar */}
+      <FilterBar
+        search={{
+          placeholder: 'Tìm kiếm chủ đề bình chọn...',
+          value: filterState.searchQuery,
+          onChange: (val) => onSearchChange(val),
         }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-12)', flex: 1, minWidth: 0, flexWrap: 'wrap' }}>
-          <SearchField
-            placeholder="Tìm kiếm theo chủ đề bình chọn (không dấu)..."
-            value={filterState.searchQuery}
-            onChange={(val) => onSearchChange(val)}
-            style={{ width: '380px', maxWidth: '100%' }}
-          />
-
-          <SelectField
-            options={classOptions}
-            value={filterState.classId}
-            onChange={(val) => onClassChange(val)}
-          />
-        </div>
-      </div>
+        filters={[
+          {
+            options: classOptions,
+            value: filterState.classId,
+            onChange: (val) => onClassChange(val),
+          },
+        ]}
+        actions={
+          <div className="flex items-center gap-2">
+            <Button
+              variant="secondary"
+              icon="download"
+              onClick={() => alert('Đang xuất danh sách bình chọn ra file Excel...')}
+            >
+              Xuất Excel
+            </Button>
+            <Button
+              variant="primary"
+              icon="plus"
+              onClick={() => router.push(`/${schoolCode}/school/poll/create`)}
+            >
+              Tạo bình chọn
+            </Button>
+          </div>
+        }
+      />
     </div>
   );
 };

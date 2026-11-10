@@ -122,24 +122,6 @@ export default function ExpensesOverviewPage() {
         <PageHeader
           title="Quản Lý Khoản Chi"
           description="Theo dõi phiếu chi, hoàn tiền học phí cho phụ huynh và kiểm soát quy trình giải ngân 3 bước."
-          actions={
-            <div className="flex items-center gap-3">
-              <Button
-                variant="secondary"
-                icon="folder"
-                onClick={() => dispatch(setCategoryModalOpen(true))}
-              >
-                Danh mục chi
-              </Button>
-              <Button
-                variant="primary"
-                icon="plus"
-                onClick={() => setIsCreateSlideOverOpen(true)}
-              >
-                Thêm phiếu chi
-              </Button>
-            </div>
-          }
         />
 
         {/* Summary KPI Cards */}
@@ -161,6 +143,7 @@ export default function ExpensesOverviewPage() {
             selectedStatus={selectedStatus}
             onStatusChange={(s) => dispatch(setSelectedStatus(s))}
             onOpenCategoryModal={() => dispatch(setCategoryModalOpen(true))}
+            onOpenCreate={() => setIsCreateSlideOverOpen(true)}
             totalVouchersInMonth={monthTotalVouchers.length}
           />
 

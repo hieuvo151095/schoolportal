@@ -224,16 +224,16 @@ html, body, #__next {
     display: flex !important;
     align-items: center !important;
     flex-wrap: nowrap !important;
-    gap: var(--space-10) !important;
+    gap: var(--space-8) !important;
     flex: 1 1 auto !important;
     min-width: 0 !important;
   }
 
   .ecomd-filterbar__search {
-    flex: 0 0 260px !important;
-    width: 260px !important;
-    min-width: 260px !important;
-    max-width: 260px !important;
+    flex: 0 1 200px !important;
+    width: 200px !important;
+    min-width: 160px !important;
+    max-width: 240px !important;
   }
 
   .ecomd-filterbar__search input {
@@ -246,16 +246,17 @@ html, body, #__next {
   .ecomd-table-card__toolbar .ecomd-dropdown,
   .ecomd-table-card__toolbar .ecomd-select-wrap {
     width: auto !important;
-    min-width: 120px !important;
-    max-width: 200px !important;
+    min-width: 100px !important;
+    max-width: 145px !important;
     flex: 0 0 auto !important;
   }
 
   .ecomd-filterbar__filters .ecomd-dropdown > div[role="combobox"],
   .ecomd-table-card__toolbar .ecomd-dropdown > div[role="combobox"] {
-    min-width: 120px !important;
+    min-width: 100px !important;
     height: 38px !important;
     width: 100% !important;
+    font-size: 13px !important;
   }
 
   .ecomd-filterbar__filters .ecomd-btn,

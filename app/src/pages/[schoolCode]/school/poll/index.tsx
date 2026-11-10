@@ -69,15 +69,6 @@ export default function SchoolPollDirectoryPage() {
         <PageHeader
           title="Bình chọn & Khảo sát"
           description="Khảo sát ý kiến phụ huynh và học sinh toàn trường hoặc theo từng khối lớp"
-          actions={
-            <Button
-              variant="primary"
-              icon="plus"
-              onClick={() => router.push(`/${currentSchoolCode}/school/poll/create`)}
-            >
-              Tạo bình chọn
-            </Button>
-          }
         />
 
         {/* 4 Summary KPI Cards */}

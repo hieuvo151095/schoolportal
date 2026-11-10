@@ -35,15 +35,6 @@ export default function FeeRosterPage() {
         <PageHeader
           title="Danh Sách Học Phí & Hóa Đơn"
           description="Theo dõi hóa đơn thu học phí, tiền ăn bán trú, cơ sở vật chất và quản lý lịch sử thanh toán học sinh."
-          actions={
-            <Button
-              variant="primary"
-              icon="plus"
-              onClick={() => router.push(`/${schoolCode}/school/fee/create`)}
-            >
-              Tạo hóa đơn
-            </Button>
-          }
         />
 
         {/* Tuition Roster Table */}

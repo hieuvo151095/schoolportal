@@ -80,15 +80,25 @@ export const ClassToolbar: React.FC<ClassToolbarProps> = ({
           </button>
         </div>
 
-        {/* Primary Action Button */}
-        <button
-          type="button"
-          onClick={onOpenCreate}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors min-h-[40px] shrink-0"
-        >
-          <Icon name="plus" size={14} />
-          <span>Thêm lớp mới</span>
-        </button>
+        {/* Primary Action Buttons */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => alert('Đang xuất danh sách lớp học ra file Excel...')}
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-sm font-semibold shadow-xs transition-colors min-h-[40px] shrink-0"
+          >
+            <Icon name="download" size={14} />
+            <span>Xuất Excel</span>
+          </button>
+          <button
+            type="button"
+            onClick={onOpenCreate}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors min-h-[40px] shrink-0"
+          >
+            <Icon name="plus" size={14} />
+            <span>Thêm lớp mới</span>
+          </button>
+        </div>
       </div>
 
       {/* Bottom row: Filter Controls & Search */}

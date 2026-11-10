@@ -14,7 +14,7 @@ import {
   shouldShowPastDateWarning,
   isDateLockedForEdit,
 } from '../../../utils/staffAttendanceValidation';
-import { FilterBar, Icon } from '../../../components/ds';
+import { FilterBar, Button, Icon } from '../../../components/ds';
 
 interface StaffAttendanceToolbarProps {
   date: string;
@@ -120,6 +120,17 @@ export const StaffAttendanceToolbar: React.FC<StaffAttendanceToolbarProps> = ({
             })),
           },
         ]}
+        actions={
+          <div className="flex items-center gap-2">
+            <Button
+              variant="secondary"
+              icon="download"
+              onClick={() => alert('Đang xuất sổ điểm danh nhân viên ra file Excel...')}
+            >
+              Xuất Excel
+            </Button>
+          </div>
+        }
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
           <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', fontWeight: 'var(--font-semibold)' }}>

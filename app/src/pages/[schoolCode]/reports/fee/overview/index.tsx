@@ -54,15 +54,6 @@ export default function FeeReportOverviewPage() {
         <PageHeader
           title="Báo Cáo Học Phí — Tổng Quan Theo Lớp"
           description="Tổng hợp tỉ lệ hoàn thành thu học phí theo từng lớp trong kỳ, tách riêng học sinh lưu trữ"
-          actions={
-            <Button
-              variant="primary"
-              icon="download"
-              onClick={handleExportExcel}
-            >
-              Xuất Excel
-            </Button>
-          }
         />
 
         {/* KPI Summary Cards */}

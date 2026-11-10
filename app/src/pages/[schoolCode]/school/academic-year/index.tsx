@@ -84,15 +84,6 @@ export default function AcademicYearPage() {
         <PageHeader
           title="Quản Lý Năm Học"
           description="Cấu hình danh mục năm học, phân kỳ học kỳ và xác định năm học hiện tại áp dụng cho toàn trường."
-          actions={
-            <Button
-              variant="primary"
-              icon="plus"
-              onClick={handleOpenCreateModal}
-            >
-              Thêm năm học mới
-            </Button>
-          }
         />
 
         {/* Toolbar */}

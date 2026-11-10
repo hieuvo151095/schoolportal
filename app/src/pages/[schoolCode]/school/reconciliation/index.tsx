@@ -73,16 +73,6 @@ export default function ReconciliationOverviewPage() {
         <PageHeader
           title="Đối Soát Thanh Toán Điện Tử"
           description="Theo dõi, đối chiếu các giao dịch thanh toán học phí qua cổng Ví FinViet và QR Ecopay với hóa đơn Học Phí"
-          actions={
-            <Button
-              variant="primary"
-              icon="download"
-              onClick={handleExportAll}
-              disabled={filteredSessions.length === 0}
-            >
-              Xuất Excel tất cả
-            </Button>
-          }
         />
 
         {/* Top KPI Metrics Strip */}

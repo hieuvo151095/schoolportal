@@ -124,15 +124,6 @@ export default function TeacherDirectoryPage() {
         <PageHeader
           title="Danh Sách Giáo Viên"
           description="Quản lý đội ngũ giảng dạy, phân công chủ nhiệm, tài khoản đăng nhập và phân quyền kiểm duyệt."
-          actions={
-            <Button
-              variant="primary"
-              icon="plus"
-              onClick={() => setIsCreateOpen(true)}
-            >
-              Thêm giáo viên
-            </Button>
-          }
         />
 
         {/* 5-Card Statistical Overview Bar (1:1 with DS TeacherListPage) */}
@@ -175,6 +166,7 @@ export default function TeacherDirectoryPage() {
           <TeacherToolbar
             schoolCode={currentSchoolCode}
             onOpenExtendedFilter={() => setIsExtendedFilterOpen(true)}
+            onOpenCreate={() => setIsCreateOpen(true)}
           />
 
           {/* Master Table */}
