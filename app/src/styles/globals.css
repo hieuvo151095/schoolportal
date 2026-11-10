@@ -180,6 +180,14 @@ html, body, #__next {
     width: 100% !important;
     justify-content: center !important;
   }
+  .ecomd-table-card .ecomd-filterbar {
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-radius: 0 !important;
+    border-top: 1px solid var(--border-default) !important;
+    border-bottom: 1px solid var(--border-default) !important;
+    background: transparent !important;
+  }
 }
 
 /* ==========================================================================
@@ -243,6 +251,16 @@ html, body, #__next {
     margin-left: auto !important;
     flex: 0 0 auto !important;
     white-space: nowrap !important;
+  }
+
+  /* Seamless integration of FilterBar when placed inside a TableCard */
+  .ecomd-table-card .ecomd-filterbar {
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-radius: 0 !important;
+    border-top: 1px solid var(--border-default) !important;
+    border-bottom: 1px solid var(--border-default) !important;
+    background: transparent !important;
   }
 }
 

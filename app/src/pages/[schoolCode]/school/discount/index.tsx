@@ -83,15 +83,6 @@ export default function DiscountPage() {
         <PageHeader
           title="Chính Sách Miễn Giảm Học Phí & Khoản Thu"
           description="Thiết lập mức miễn giảm linh hoạt (theo % hoặc số tiền cố định), chỉ định phạm vi theo Lớp hoặc từng Học sinh cụ thể."
-          actions={
-            <Button
-              variant="primary"
-              icon="plus"
-              onClick={() => dispatch(openCreateModal())}
-            >
-              Thêm chính sách miễn giảm
-            </Button>
-          }
         />
 
         {/* 2. 4 StatCards KPI Summary */}
