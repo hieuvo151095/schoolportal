@@ -275,6 +275,7 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
       ref={rootRef}
       className={cx(
         'ecomd-dropdown relative inline-block text-left',
+        isOpen ? 'z-40' : '',
         fullWidth && 'w-full',
         p.className
       )}

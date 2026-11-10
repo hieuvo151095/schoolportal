@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Icon } from '@/components/ds';
 
 const Container = styled.div`
   display: flex;
@@ -199,7 +200,9 @@ export const TimetableFileView: React.FC<TimetableFileViewProps> = ({
     <Container>
       <FileInfoCard>
         <FileMeta>
-          <FileIcon>📑</FileIcon>
+          <FileIcon>
+            <Icon name="file-pdf" size={24} className="text-[#006FDA]" />
+          </FileIcon>
           <FileDetails>
             <FileName>{fileName}</FileName>
             <FileSub>
@@ -207,24 +210,28 @@ export const TimetableFileView: React.FC<TimetableFileViewProps> = ({
               <span>•</span>
               <span>Định dạng: PDF Document</span>
               <span>•</span>
-              <span style={{ color: '#15803d', fontWeight: 600 }}>✓ Đã đính kèm</span>
+              <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
+                <Icon name="check" size={12} />
+                <span>Đã đính kèm</span>
+              </span>
             </FileSub>
           </FileDetails>
         </FileMeta>
 
         <ActionGroup>
           <ActionButton onClick={handleZoomOut} title="Thu nhỏ">
-            <span>➖</span>
+            <Icon name="minus" size={12} />
           </ActionButton>
           <ActionButton onClick={handleResetZoom} title="Mặc định">
             <span>{Math.round(scale * 100)}%</span>
           </ActionButton>
           <ActionButton onClick={handleZoomIn} title="Phóng to">
-            <span>➕</span>
+            <Icon name="plus" size={12} />
           </ActionButton>
 
           <DownloadButton href={fileUrl} download={fileName} target="_blank" rel="noreferrer">
-            <span>⬇️</span> Tải tệp xuống
+            <Icon name="arrow-down-to-bracket" size={13} />
+            <span>Tải tệp xuống</span>
           </DownloadButton>
         </ActionGroup>
       </FileInfoCard>

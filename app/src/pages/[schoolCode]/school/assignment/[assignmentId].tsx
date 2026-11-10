@@ -11,6 +11,7 @@ import { SubmissionRosterTable } from '../../../../modules/academics/assignment/
 import { AssignmentDiscussionTab } from '../../../../modules/academics/assignment/AssignmentDiscussionTab';
 import { SubmitGradingModal } from '../../../../modules/academics/assignment/SubmitGradingModal';
 import { ManageStudentsModal } from '../../../../modules/academics/assignment/ManageStudentsModal';
+import { Icon } from '@/components/ds';
 
 const Container = styled.div`
   display: flex;
@@ -385,12 +386,16 @@ export default function AssignmentDetailPage() {
                 passHref
                 legacyBehavior
               >
-                <SecondaryBtn>✏ Chỉnh sửa bài tập</SecondaryBtn>
+                <SecondaryBtn className="inline-flex items-center gap-1.5">
+                  <Icon name="pen" size={13} />
+                  <span>Chỉnh sửa bài tập</span>
+                </SecondaryBtn>
               </Link>
 
               {assignment.status !== 'da_gui' && (
-                <PrimaryBtn onClick={handleSendNotification}>
-                  🚀 Gửi thông báo
+                <PrimaryBtn onClick={handleSendNotification} className="inline-flex items-center gap-1.5">
+                  <Icon name="paper-plane" size={13} />
+                  <span>Gửi thông báo</span>
                 </PrimaryBtn>
               )}
             </ActionButtonsRow>
@@ -437,7 +442,8 @@ export default function AssignmentDetailPage() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    📎 {att.name}
+                    <Icon name="paperclip" size={13} />
+                    <span>{att.name}</span>
                   </AttachmentItem>
                 ))}
               </AttachmentList>

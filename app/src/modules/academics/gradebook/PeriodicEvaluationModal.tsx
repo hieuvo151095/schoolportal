@@ -172,7 +172,7 @@ export const PeriodicEvaluationModal: React.FC = () => {
       icon="award"
       width={640}
       primaryAction={{
-        label: savedSuccess ? '✓ Đã lưu thành công' : 'Lưu phiếu đánh giá',
+        label: savedSuccess ? 'Đã lưu thành công' : 'Lưu phiếu đánh giá',
         icon: 'check',
         onClick: handleSave,
       }}

@@ -71,15 +71,15 @@ export const ExtendedScheduleFilterModal: React.FC = () => {
 
   const typeOptions = [
     { value: 'all', label: 'Tất cả định dạng' },
-    { value: 'grid', label: '📊 Dạng lưới (Grid Matrix)' },
-    { value: 'file', label: '📄 Dạng file đính kèm (PDF / Image)' },
+    { value: 'grid', label: 'Dạng lưới (Grid Matrix)', icon: 'layer-group' },
+    { value: 'file', label: 'Dạng file đính kèm (PDF / Image)', icon: 'file-pdf' },
   ];
 
   const statusOptions = [
     { value: 'all', label: 'Tất cả trạng thái' },
-    { value: 'published', label: '● Đã phát hành' },
-    { value: 'updated', label: '★ Cập nhật (Đã gửi điều chỉnh)' },
-    { value: 'draft', label: '○ Bản nháp' },
+    { value: 'published', label: 'Đã phát hành' },
+    { value: 'updated', label: 'Cập nhật (Đã gửi điều chỉnh)' },
+    { value: 'draft', label: 'Bản nháp' },
   ];
 
   return (

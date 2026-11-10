@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { createAssignment } from '../../../../../store/slices/assignmentSlice';
 import { validateAssignmentForm } from '../../../../../utils/assignmentValidation';
 import { AudienceType } from '../../../../../types/assignment';
-import { Dropdown } from '@/components/ds';
+import { Dropdown, Icon } from '@/components/ds';
 
 const Container = styled.div`
   max-width: 860px;
@@ -89,22 +89,6 @@ const TextInput = styled.input`
   font-size: 14px;
   color: #1e293b;
   outline: none;
-
-  &:focus {
-    border-color: #0070ce;
-    box-shadow: 0 0 0 3px rgba(0, 112, 206, 0.12);
-  }
-`;
-
-const SelectBox = styled.select`
-  padding: 10px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  background-color: #ffffff;
-  font-size: 14px;
-  color: #1e293b;
-  outline: none;
-  cursor: pointer;
 
   &:focus {
     border-color: #0070ce;
@@ -532,7 +516,10 @@ export default function CreateAssignmentPage() {
                   fontSize: '13px',
                 }}
               >
-                <span>📎 {fileName}</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Icon name="paperclip" size={13} />
+                  <span>{fileName}</span>
+                </span>
                 <button
                   type="button"
                   onClick={() => setFileName('')}
@@ -542,15 +529,19 @@ export default function CreateAssignmentPage() {
                     color: '#ef4444',
                     cursor: 'pointer',
                   }}
+                  className="inline-flex items-center gap-1"
                 >
-                  ✕ Gỡ file
+                  <Icon name="xmark" size={11} />
+                  <span>Gỡ file</span>
                 </button>
               </div>
             ) : (
               <FileUploadBox
                 onClick={() => setFileName('Phieu_Bai_Tap_Mau.pdf')}
               >
-                <div style={{ fontSize: '24px', marginBottom: '4px' }}>📄</div>
+                <div className="flex justify-center mb-1 text-[#006FDA]">
+                  <Icon name="cloud-arrow-up" size={28} />
+                </div>
                 <div
                   style={{
                     fontSize: '14px',

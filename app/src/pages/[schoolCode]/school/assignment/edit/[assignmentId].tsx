@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { updateAssignment } from '../../../../../store/slices/assignmentSlice';
 import { validateAssignmentForm } from '../../../../../utils/assignmentValidation';
 import { AudienceType } from '../../../../../types/assignment';
+import { Dropdown } from '@/components/ds';
 
 const Container = styled.div`
   max-width: 860px;
@@ -102,22 +103,6 @@ const TextInput = styled.input<{ $disabled?: boolean }>`
     border-color: ${(props) => (props.$disabled ? '#cbd5e1' : '#0070ce')};
     box-shadow: ${(props) =>
       props.$disabled ? 'none' : '0 0 0 3px rgba(0, 112, 206, 0.12)'};
-  }
-`;
-
-const SelectBox = styled.select`
-  padding: 10px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  background-color: #ffffff;
-  font-size: 14px;
-  color: #1e293b;
-  outline: none;
-  cursor: pointer;
-
-  &:focus {
-    border-color: #0070ce;
-    box-shadow: 0 0 0 3px rgba(0, 112, 206, 0.12);
   }
 `;
 
@@ -379,16 +364,20 @@ export default function EditAssignmentPage() {
               <Label>
                 Lớp học<RequiredStar>*</RequiredStar>
               </Label>
-              <SelectBox
+              <Dropdown
+                searchable
+                fullWidth
                 value={classId}
-                onChange={(e) => {
-                  setClassId(e.target.value);
+                onChange={(val) => {
+                  setClassId(val);
                   setTargetStudentIds([]);
                 }}
-              >
-                <option value="1a1">Lớp 1A1</option>
-                <option value="2a2">Lớp 2A2</option>
-              </SelectBox>
+                options={[
+                  { value: '1a1', label: 'Lớp 1A1' },
+                  { value: '2a2', label: 'Lớp 2A2' },
+                ]}
+                placeholder="-- Chọn lớp học --"
+              />
               {errors.classId && <ErrorText>{errors.classId}</ErrorText>}
             </FormGroup>
 
@@ -396,16 +385,14 @@ export default function EditAssignmentPage() {
               <Label>
                 Môn học<RequiredStar>*</RequiredStar>
               </Label>
-              <SelectBox
+              <Dropdown
+                searchable
+                fullWidth
                 value={subjectId}
-                onChange={(e) => setSubjectId(e.target.value)}
-              >
-                {subjects.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name}
-                  </option>
-                ))}
-              </SelectBox>
+                onChange={(val) => setSubjectId(val)}
+                options={subjects.map((s) => ({ value: s.id, label: s.name }))}
+                placeholder="-- Chọn môn học --"
+              />
               {errors.subjectId && <ErrorText>{errors.subjectId}</ErrorText>}
             </FormGroup>
           </RowGroup>

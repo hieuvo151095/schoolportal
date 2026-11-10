@@ -164,8 +164,9 @@ export const SendHistoryModal: React.FC = () => {
                   <div className="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-[var(--border-subtle)]">
                     <div className="flex items-center gap-2">
                       {getChannelBadge(entry.channel)}
-                      <span className="text-emerald-700 font-semibold font-numeric">
-                        ✓ {entry.recipientsCount} phụ huynh
+                      <span className="text-emerald-700 font-semibold font-numeric inline-flex items-center gap-1">
+                        <Icon name="check" size={11} />
+                        <span>{entry.recipientsCount} phụ huynh</span>
                       </span>
                     </div>
                   </div>

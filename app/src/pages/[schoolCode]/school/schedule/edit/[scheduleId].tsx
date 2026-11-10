@@ -9,6 +9,7 @@ import { updateSchedule } from '../../../../../store/slices/scheduleSlice';
 import { validateSemesterInterval } from '../../../../../utils/scheduleValidation';
 import { DayOfWeek, TimeSlotRow, TimetableCell } from '../../../../../types/schedule';
 import { TimetableGridView } from '../../../../../modules/academics/schedule/TimetableGridView';
+import { Dropdown, Icon } from '@/components/ds';
 
 const PageContainer = styled.div`
   display: flex;
@@ -73,21 +74,6 @@ const Label = styled.label`
   font-size: 13px;
   font-weight: 600;
   color: #334155;
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #1e293b;
-  background: #ffffff;
-  outline: none;
-
-  &:focus {
-    border-color: #0070ce;
-  }
 `;
 
 const Input = styled.input`
@@ -300,27 +286,29 @@ export default function EditSchedulePage() {
           <FormGrid>
             <FormGroup>
               <Label>Lớp học áp dụng</Label>
-              <Select value={classId} onChange={(e) => setClassId(e.target.value)}>
-                {classes.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </Select>
+              <Dropdown
+                searchable
+                fullWidth
+                value={classId}
+                onChange={(val) => setClassId(val)}
+                options={classes.map((c) => ({ value: c.id, label: c.name }))}
+                placeholder="-- Chọn lớp học --"
+              />
             </FormGroup>
 
             <FormGroup>
               <Label>Học kỳ áp dụng</Label>
-              <Select
+              <Dropdown
+                searchable
+                fullWidth
                 value={semesterId}
-                onChange={(e) => setSemesterId(e.target.value)}
-              >
-                {semesters.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name} ({s.academicYear})
-                  </option>
-                ))}
-              </Select>
+                onChange={(val) => setSemesterId(val)}
+                options={semesters.map((s) => ({
+                  value: s.id,
+                  label: `${s.name} (${s.academicYear})`,
+                }))}
+                placeholder="-- Chọn học kỳ --"
+              />
             </FormGroup>
 
             <FormGroup>
@@ -370,7 +358,9 @@ export default function EditSchedulePage() {
             </div>
           ) : (
             <div style={{ padding: '24px', background: '#f8fafc', borderRadius: '8px', textAlign: 'center' }}>
-              <div style={{ fontSize: '24px', marginBottom: '8px' }}>📄</div>
+              <div className="flex justify-center mb-2 text-[#006FDA]">
+                <Icon name="file-pdf" size={32} />
+              </div>
               <div style={{ fontWeight: 600 }}>Tệp thời khóa biểu hiện tại: {targetSchedule.fileName}</div>
               <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
                 Thời khóa biểu dạng file không chỉnh sửa được từng tiết học. Bạn có thể thay thế tệp hoặc quay lại danh sách.

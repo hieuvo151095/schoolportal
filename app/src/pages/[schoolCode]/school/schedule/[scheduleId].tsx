@@ -12,6 +12,7 @@ import {
 import { TimetableGridView } from '../../../../modules/academics/schedule/TimetableGridView';
 import { TimetableFileView } from '../../../../modules/academics/schedule/TimetableFileView';
 import { SendHistoryModal } from '../../../../modules/academics/schedule/SendHistoryModal';
+import { Icon } from '@/components/ds';
 
 const PageContainer = styled.div`
   display: flex;
@@ -285,12 +286,12 @@ export default function ScheduleDetailPage() {
         <HeaderCard>
           <TitleArea>
             <MainTitle>
-              <span>{schedule.type === 'grid' ? '📊' : '📄'}</span>
+              <Icon name={schedule.type === 'grid' ? 'layer-group' : 'file-pdf'} size={18} className="text-[#006FDA]" />
               {schedule.title}
               <StatusBadge $status={schedule.status}>
-                {schedule.status === 'published' && '● Đã phát hành'}
-                {schedule.status === 'updated' && '★ Cập nhật'}
-                {schedule.status === 'draft' && '○ Bản nháp'}
+                {schedule.status === 'published' && 'Đã phát hành'}
+                {schedule.status === 'updated' && 'Cập nhật'}
+                {schedule.status === 'draft' && 'Bản nháp'}
               </StatusBadge>
             </MainTitle>
             <MetaList>
@@ -308,7 +309,8 @@ export default function ScheduleDetailPage() {
           <ButtonGroup>
             {/* Action: Gửi phụ huynh (Opens confirmation modal) */}
             <ActionButton onClick={() => setIsSendConfirmOpen(true)}>
-              <span>📢</span> Gửi phụ huynh
+              <Icon name="paper-plane" size={13} />
+              <span>Gửi phụ huynh</span>
             </ActionButton>
 
             {/* Action: Lịch sử gửi */}
@@ -319,7 +321,8 @@ export default function ScheduleDetailPage() {
                 )
               }
             >
-              <span>🕒</span> Lịch sử gửi ({schedule.sendHistory.length})
+              <Icon name="clock-rotate-left" size={13} />
+              <span>Lịch sử gửi ({schedule.sendHistory.length})</span>
             </ActionButton>
 
             {/* Action: Chỉnh sửa */}
@@ -329,7 +332,8 @@ export default function ScheduleDetailPage() {
               legacyBehavior
             >
               <ActionButton as="a" $primary>
-                <span>✏️</span> Chỉnh sửa
+                <Icon name="pen" size={13} />
+                <span>Chỉnh sửa</span>
               </ActionButton>
             </Link>
           </ButtonGroup>
@@ -357,7 +361,10 @@ export default function ScheduleDetailPage() {
         {isSendConfirmOpen && (
           <ModalOverlay onClick={() => setIsSendConfirmOpen(false)}>
             <ModalBox onClick={(e) => e.stopPropagation()}>
-              <ModalTitle>📢 Xác nhận gửi thời khóa biểu</ModalTitle>
+              <ModalTitle className="flex items-center gap-2">
+                <Icon name="paper-plane" size={16} />
+                <span>Xác nhận gửi thời khóa biểu</span>
+              </ModalTitle>
               <ModalText>
                 Bạn có chắc chắn muốn gửi thời khóa biểu{' '}
                 <strong>{schedule.title}</strong> của lớp{' '}

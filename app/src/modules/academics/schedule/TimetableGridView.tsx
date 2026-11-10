@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { DayOfWeek, TimeSlotRow, TimetableCell } from '../../../types/schedule';
 import { mockSubjects } from '../../../services/mockScheduleData';
+import { Dropdown, Icon } from '@/components/ds';
 
 const GridWrapper = styled.div`
   background: #ffffff;
@@ -10,6 +11,8 @@ const GridWrapper = styled.div`
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  min-height: 380px;
+  padding-bottom: 40px;
 `;
 
 const HeaderRow = styled.div`
@@ -113,18 +116,40 @@ const TimeInputGroup = styled.div`
 `;
 
 const TimeInput = styled.input`
-  width: 68px;
-  padding: 3px 4px;
-  border: 1px solid #cbd5e1;
+  width: 72px;
+  padding: 4px 6px;
+  border: 1px solid var(--border-default, #cbd5e1);
   border-radius: 6px;
-  font-size: 11px;
-  font-family: monospace;
+  font-size: 12px;
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
   text-align: center;
-  background: #ffffff;
+  background: var(--bg-surface, #ffffff);
+  color: var(--text-heading, #1e293b);
   outline: none;
+  transition: all 0.15s ease;
+
+  /* HIDE NATIVE WEB-KIT CLOCK PICKER INDICATOR SO IT NEVER OBSCURS DIGITS */
+  &::-webkit-calendar-picker-indicator {
+    display: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    margin: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-clear-button {
+    display: none !important;
+    -webkit-appearance: none !important;
+  }
 
   &:focus {
-    border-color: #0070ce;
+    border-color: var(--color-primary-500, #0070ce);
+    box-shadow: 0 0 0 2px rgba(0, 112, 206, 0.12);
   }
 `;
 
@@ -135,9 +160,12 @@ const RemoveSlotBtn = styled.button`
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  padding: 2px 6px;
+  padding: 3px 6px;
   border-radius: 4px;
-  margin-top: 2px;
+  margin-top: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   transition: all 0.15s ease;
 
   &:hover {
@@ -151,6 +179,7 @@ const DayCell = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
 
   &:last-child {
     border-right: none;
@@ -181,7 +210,9 @@ const TeacherText = styled.div`
 `;
 
 const RoomBadge = styled.span`
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
   font-size: 11px;
   padding: 1px 6px;
   border-radius: 4px;
@@ -201,34 +232,21 @@ const EmptyCellPlaceholder = styled.div`
   font-style: italic;
 `;
 
-const CellSelect = styled.select`
-  width: 100%;
-  padding: 4px 6px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 4px;
-  outline: none;
-
-  &:focus {
-    border-color: #0070ce;
-  }
-`;
-
 const CellInput = styled.input`
   width: 100%;
-  padding: 3px 6px;
-  border: 1px solid #e2e8f0;
-  border-radius: 4px;
+  padding: 4px 6px;
+  border: 1px solid var(--border-default, #e2e8f0);
+  border-radius: 6px;
   font-size: 11px;
-  color: #334155;
+  color: var(--text-heading, #1e293b);
+  background: var(--bg-surface, #ffffff);
   margin-bottom: 2px;
   outline: none;
+  transition: all 0.15s ease;
 
   &:focus {
-    border-color: #0070ce;
+    border-color: var(--color-primary-500, #0070ce);
+    box-shadow: 0 0 0 2px rgba(0, 112, 206, 0.12);
   }
 `;
 
@@ -372,6 +390,22 @@ export const TimetableGridView: React.FC<TimetableGridViewProps> = ({
 }) => {
   const [selectedDay, setSelectedDay] = useState<DayOfWeek | 'all'>('monday');
 
+  const subjectOptions = useMemo(
+    () => [
+      { value: '', label: '-- Trống --' },
+      ...mockSubjects.map((s) => ({ value: s.id, label: s.name })),
+    ],
+    []
+  );
+
+  const subjectOptionsMobile = useMemo(
+    () => [
+      { value: '', label: '-- Trống / Nghỉ --' },
+      ...mockSubjects.map((s) => ({ value: s.id, label: s.name })),
+    ],
+    []
+  );
+
   const getSubjectColor = (subjectId?: string) => {
     const found = mockSubjects.find((s) => s.id === subjectId);
     return found?.color || '#0070CE';
@@ -381,10 +415,9 @@ export const TimetableGridView: React.FC<TimetableGridViewProps> = ({
     slotId: string,
     day: DayOfWeek,
     currentCell: TimetableCell | undefined,
-    e: React.ChangeEvent<HTMLSelectElement>
+    val: string
   ) => {
     if (!onCellChange) return;
-    const val = e.target.value;
     if (!val) {
       onCellChange(slotId, day, undefined);
       return;
@@ -474,7 +507,8 @@ export const TimetableGridView: React.FC<TimetableGridViewProps> = ({
                               onClick={() => onRemoveSlot(slot.slotId)}
                               title="Xóa tiết này"
                             >
-                              🗑️ Xóa
+                              <Icon name="trash" size={11} />
+                              <span>Xóa</span>
                             </RemoveSlotBtn>
                           )}
                         </div>
@@ -505,16 +539,15 @@ export const TimetableGridView: React.FC<TimetableGridViewProps> = ({
                   {isEditable ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       <label style={{ fontSize: '11px', fontWeight: 600, color: '#64748b' }}>Môn học:</label>
-                      <CellSelect
+                      <Dropdown
+                        size="md"
                         value={cell?.subjectId || ''}
-                        onChange={(e) => handleSubjectSelect(slot.slotId, selectedDay, cell, e)}
-                        style={{ minHeight: '38px' }}
-                      >
-                        <option value="">-- Trống / Nghỉ --</option>
-                        {mockSubjects.map((s) => (
-                          <option key={s.id} value={s.id}>{s.name}</option>
-                        ))}
-                      </CellSelect>
+                        onChange={(val) => handleSubjectSelect(slot.slotId, selectedDay, cell, val)}
+                        options={subjectOptionsMobile}
+                        placeholder="-- Trống / Nghỉ --"
+                        searchable
+                        fullWidth
+                      />
 
                       {cell && (
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
@@ -548,11 +581,16 @@ export const TimetableGridView: React.FC<TimetableGridViewProps> = ({
                           <SubjectName $color={color} style={{ fontSize: '14px' }}>{cell.subjectName}</SubjectName>
                           {cell.teacherName && (
                             <TeacherText style={{ fontSize: '13px', marginTop: '4px' }}>
-                              <span>👤</span>
+                              <Icon name="user" size={11} className="text-slate-400" />
                               <span>{cell.teacherName}</span>
                             </TeacherText>
                           )}
-                          {cell.room && <RoomBadge style={{ marginTop: '6px' }}>📍 {cell.room}</RoomBadge>}
+                          {cell.room && (
+                            <RoomBadge style={{ marginTop: '6px' }}>
+                              <Icon name="location-dot" size={10} className="text-slate-400" />
+                              <span>{cell.room}</span>
+                            </RoomBadge>
+                          )}
                         </SubjectBadge>
                       ) : (
                         <div style={{ color: '#94a3b8', fontSize: '13px', fontStyle: 'italic', padding: '8px 0' }}>
@@ -567,7 +605,7 @@ export const TimetableGridView: React.FC<TimetableGridViewProps> = ({
 
             {isEditable && onAddSlot && (
               <AddSlotButton type="button" onClick={onAddSlot} style={{ width: '100%', justifyContent: 'center' }}>
-                <span>[+]</span>
+                <Icon name="plus" size={13} />
                 <span>Thêm tiết học</span>
               </AddSlotButton>
             )}
@@ -621,7 +659,8 @@ export const TimetableGridView: React.FC<TimetableGridViewProps> = ({
                         onClick={() => onRemoveSlot(slot.slotId)}
                         title="Xóa tiết này"
                       >
-                        🗑️ Xóa dòng
+                        <Icon name="trash" size={11} />
+                        <span>Xóa dòng</span>
                       </RemoveSlotBtn>
                     )}
                   </TimeCol>
@@ -641,19 +680,19 @@ export const TimetableGridView: React.FC<TimetableGridViewProps> = ({
                   if (isEditable) {
                     return (
                       <DayCell key={day.key}>
-                        <CellSelect
+                        <Dropdown
+                          size="sm"
                           value={cell?.subjectId || ''}
-                          onChange={(e) =>
-                            handleSubjectSelect(slot.slotId, day.key, cell, e)
+                          onChange={(val) =>
+                            handleSubjectSelect(slot.slotId, day.key, cell, val)
                           }
-                        >
-                          <option value="">-- Trống --</option>
-                          {mockSubjects.map((s) => (
-                            <option key={s.id} value={s.id}>
-                              {s.name}
-                            </option>
-                          ))}
-                        </CellSelect>
+                          options={subjectOptions}
+                          placeholder="-- Trống --"
+                          searchable={false}
+                          fullWidth
+                          menuStyle={{ minWidth: '160px', width: 'max-content', maxWidth: '220px' }}
+                          className="mb-1"
+                        />
 
                         {cell && (
                           <>
@@ -686,11 +725,16 @@ export const TimetableGridView: React.FC<TimetableGridViewProps> = ({
                           <SubjectName $color={color}>{cell.subjectName}</SubjectName>
                           {cell.teacherName && (
                             <TeacherText>
-                              <span>👤</span>
+                              <Icon name="user" size={11} className="text-slate-400" />
                               <span>{cell.teacherName}</span>
                             </TeacherText>
                           )}
-                          {cell.room && <RoomBadge>📍 {cell.room}</RoomBadge>}
+                          {cell.room && (
+                            <RoomBadge>
+                              <Icon name="location-dot" size={10} className="text-slate-400" />
+                              <span>{cell.room}</span>
+                            </RoomBadge>
+                          )}
                         </SubjectBadge>
                       ) : (
                         <EmptyCellPlaceholder>—</EmptyCellPlaceholder>
@@ -705,7 +749,7 @@ export const TimetableGridView: React.FC<TimetableGridViewProps> = ({
           {isEditable && onAddSlot && (
             <AddSlotBar>
               <AddSlotButton type="button" onClick={onAddSlot}>
-                <span>[+]</span>
+                <Icon name="plus" size={13} />
                 <span>Thêm tiết học</span>
               </AddSlotButton>
             </AddSlotBar>

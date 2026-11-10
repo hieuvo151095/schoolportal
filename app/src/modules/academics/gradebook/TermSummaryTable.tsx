@@ -8,6 +8,7 @@ import {
 } from '../../../store/slices/gradebookSlice';
 import { calculateClassSummaryRate, getTermActionInfo } from '../../../utils/gradebookValidation';
 import type { AcademicResultLevel, ConductResultLevel } from '../../../types/gradebook';
+import { Dropdown, Icon } from '@/components/ds';
 
 interface TermSummaryTableProps {
   schoolCode: string;
@@ -63,11 +64,24 @@ export const TermSummaryTable: React.FC<TermSummaryTableProps> = ({
     );
     setSuccessToast(
       actionInfo.isPublished
-        ? '✓ Đã cập nhật kết quả đánh giá thành công!'
-        : '✓ Đã công bố bảng điểm & đánh giá đến phụ huynh!'
+        ? 'Đã cập nhật kết quả đánh giá thành công!'
+        : 'Đã công bố bảng điểm & đánh giá đến phụ huynh!'
     );
     setTimeout(() => setSuccessToast(''), 3000);
   };
+
+  const academicOptions = [
+    { value: 'hoan_thanh_tot', label: 'Hoàn thành tốt (HTT)' },
+    { value: 'hoan_thanh', label: 'Hoàn thành (HT)' },
+    { value: 'chua_hoan_thanh', label: 'Chưa hoàn thành (CHT)' },
+  ];
+
+  const conductOptions = [
+    { value: 'tot', label: 'Tốt' },
+    { value: 'kha', label: 'Khá' },
+    { value: 'dat', label: 'Đạt' },
+    { value: 'can_co_gang', label: 'Cần cố gắng' },
+  ];
 
   return (
     <Container>
@@ -92,10 +106,16 @@ export const TermSummaryTable: React.FC<TermSummaryTableProps> = ({
         </div>
 
         <TopActions>
-          {successToast && <ToastMessage>{successToast}</ToastMessage>}
+          {successToast && (
+            <ToastMessage>
+              <Icon name="check" size={13} />
+              <span>{successToast}</span>
+            </ToastMessage>
+          )}
 
           <PublishButton onClick={handlePublishOrUpdate}>
-            {actionInfo.isPublished ? '✓ Cập Nhật Công Bố' : '📢 Công Bố Kết Quả'}
+            <Icon name={actionInfo.isPublished ? 'check' : 'bullhorn'} size={13} />
+            <span>{actionInfo.isPublished ? 'Cập Nhật Công Bố' : 'Công Bố Kết Quả'}</span>
           </PublishButton>
         </TopActions>
       </HeaderCard>
@@ -136,7 +156,8 @@ export const TermSummaryTable: React.FC<TermSummaryTableProps> = ({
             active={isBulkEdit}
             onClick={() => setIsBulkEdit(!isBulkEdit)}
           >
-            ✏️ {isBulkEdit ? 'Hoàn tất chỉnh sửa nhanh' : 'Bật chỉnh sửa hàng loạt'}
+            <Icon name="pen" size={12} />
+            <span>{isBulkEdit ? 'Hoàn tất chỉnh sửa nhanh' : 'Bật chỉnh sửa hàng loạt'}</span>
           </BulkEditBtn>
         </TableControls>
 
@@ -163,27 +184,26 @@ export const TermSummaryTable: React.FC<TermSummaryTableProps> = ({
 
                   {/* KQ Học Tập */}
                   <td>
-                    <SelectField
+                    <Dropdown
+                      size="sm"
                       value={student.academicResult}
-                      onChange={e => handleFieldChange(student.studentId, 'academic', e.target.value)}
-                    >
-                      <option value="hoan_thanh_tot">Hoàn thành tốt (HTT)</option>
-                      <option value="hoan_thanh">Hoàn thành (HT)</option>
-                      <option value="chua_hoan_thanh">Chưa hoàn thành (CHT)</option>
-                    </SelectField>
+                      onChange={(val) => handleFieldChange(student.studentId, 'academic', val)}
+                      options={academicOptions}
+                      searchable={false}
+                      fullWidth
+                    />
                   </td>
 
                   {/* KQ Rèn Luyện */}
                   <td>
-                    <SelectField
+                    <Dropdown
+                      size="sm"
                       value={student.conductResult}
-                      onChange={e => handleFieldChange(student.studentId, 'conduct', e.target.value)}
-                    >
-                      <option value="tot">Tốt</option>
-                      <option value="kha">Khá</option>
-                      <option value="dat">Đạt</option>
-                      <option value="can_co_gang">Cần cố gắng</option>
-                    </SelectField>
+                      onChange={(val) => handleFieldChange(student.studentId, 'conduct', val)}
+                      options={conductOptions}
+                      searchable={false}
+                      fullWidth
+                    />
                   </td>
 
                   {/* Số ngày nghỉ */}
@@ -445,20 +465,6 @@ const StudentCode = styled.div`
   font-size: 12px;
   font-family: monospace;
   color: var(--text-subtle);
-`;
-
-const SelectField = styled.select`
-  width: 100%;
-  padding: 6px 10px;
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-6);
-  font-size: 13px;
-  color: var(--text-heading);
-  background: var(--bg-surface);
-  outline: none;
-  &:focus {
-    border-color: var(--eco-blue-strong);
-  }
 `;
 
 const AbsenceInputGroup = styled.div`

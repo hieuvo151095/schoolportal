@@ -4,6 +4,7 @@ import { useAppDispatch } from '../../../store';
 import { addAssignmentComment } from '../../../store/slices/assignmentSlice';
 import { formatAssignmentDate } from '../../../utils/assignmentValidation';
 import { HomeworkAssignment } from '../../../types/assignment';
+import { Icon } from '@/components/ds';
 
 const Container = styled.div`
   background: #ffffff;
@@ -218,7 +219,9 @@ export const AssignmentDiscussionTab: React.FC<
     <Container>
       {assignment.comments.length === 0 ? (
         <EmptyNotice>
-          <div style={{ fontSize: '24px', marginBottom: '6px' }}>💬</div>
+          <div className="flex justify-center mb-1 text-slate-400">
+            <Icon name="comment" size={28} />
+          </div>
           <div>Chưa có thảo luận nào quanh bài tập này.</div>
           <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>
             Giáo viên và phụ huynh có thể trao đổi thắc mắc tại đây.

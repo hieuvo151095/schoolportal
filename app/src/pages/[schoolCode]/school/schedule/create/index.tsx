@@ -12,7 +12,7 @@ import {
 } from '../../../../../utils/scheduleValidation';
 import { DayOfWeek, ScheduleType, TimeSlotRow, TimetableCell } from '../../../../../types/schedule';
 import { TimetableGridView } from '../../../../../modules/academics/schedule/TimetableGridView';
-import { Dropdown } from '@/components/ds';
+import { Dropdown, Icon } from '@/components/ds';
 
 const PageContainer = styled.div`
   display: flex;
@@ -77,21 +77,6 @@ const Label = styled.label`
   font-size: 13px;
   font-weight: 600;
   color: #334155;
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #1e293b;
-  background: #ffffff;
-  outline: none;
-
-  &:focus {
-    border-color: #0070ce;
-  }
 `;
 
 const Input = styled.input`
@@ -466,7 +451,7 @@ export default function CreateSchedulePage() {
 
           {dateValidation.warning && (
             <WarningBox>
-              <span>⚠️</span>
+              <Icon name="triangle-exclamation" size={16} />
               <span>{dateValidation.warning}</span>
             </WarningBox>
           )}
@@ -478,7 +463,9 @@ export default function CreateSchedulePage() {
                 $active={scheduleType === 'grid'}
                 onClick={() => setScheduleType('grid')}
               >
-                <div style={{ fontSize: '24px' }}>📊</div>
+                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50 text-[#006FDA]">
+                  <Icon name="layer-group" size={20} />
+                </div>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: '14px', color: '#0f172a' }}>
                     Dạng lưới (Grid Matrix)
@@ -493,7 +480,9 @@ export default function CreateSchedulePage() {
                 $active={scheduleType === 'file'}
                 onClick={() => setScheduleType('file')}
               >
-                <div style={{ fontSize: '24px' }}>📄</div>
+                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50 text-[#006FDA]">
+                  <Icon name="file-pdf" size={20} />
+                </div>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: '14px', color: '#0f172a' }}>
                     Dạng tệp đính kèm (PDF / Hình ảnh)
@@ -512,7 +501,9 @@ export default function CreateSchedulePage() {
               <DropZone $hasFile={Boolean(fileName)} onClick={handleSimulateFile}>
                 {fileName ? (
                   <div>
-                    <div style={{ fontSize: '32px', marginBottom: '4px' }}>📄</div>
+                    <div className="flex justify-center mb-1 text-emerald-600">
+                      <Icon name="file-pdf" size={32} />
+                    </div>
                     <div style={{ fontWeight: 700, color: '#15803d' }}>{fileName}</div>
                     <div style={{ fontSize: '12px', color: '#64748b' }}>
                       {(fileSize / 1024 / 1024).toFixed(2)} MB • Nhấp để thay đổi
@@ -520,7 +511,9 @@ export default function CreateSchedulePage() {
                   </div>
                 ) : (
                   <div>
-                    <div style={{ fontSize: '32px', marginBottom: '4px' }}>📁</div>
+                    <div className="flex justify-center mb-1 text-[#006FDA]">
+                      <Icon name="cloud-arrow-up" size={32} />
+                    </div>
                     <div style={{ fontWeight: 600, color: '#0070ce' }}>
                       Nhấp để chọn tệp PDF / Hình ảnh thời khóa biểu
                     </div>

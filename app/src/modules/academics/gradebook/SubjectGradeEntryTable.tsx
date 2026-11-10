@@ -9,6 +9,7 @@ import {
 } from '../../../store/slices/gradebookSlice';
 import { mockGradebookSubjects } from '../../../services/mockGradebookData';
 import { validateScoreInput } from '../../../utils/gradebookValidation';
+import { Dropdown, Icon } from '@/components/ds';
 
 interface SubjectGradeEntryTableProps {
   schoolCode: string;
@@ -126,7 +127,12 @@ export const SubjectGradeEntryTable: React.FC<SubjectGradeEntryTableProps> = ({
         </div>
 
         <ActionControls>
-          {savedSuccess && <SuccessToast>✓ Đã lưu bảng điểm thành công!</SuccessToast>}
+          {savedSuccess && (
+            <SuccessToast className="inline-flex items-center gap-1.5">
+              <Icon name="check" size={13} />
+              <span>Đã lưu bảng điểm thành công!</span>
+            </SuccessToast>
+          )}
           <SaveButton onClick={handleSave}>Lưu Bảng Điểm</SaveButton>
         </ActionControls>
       </HeaderCard>
@@ -135,19 +141,21 @@ export const SubjectGradeEntryTable: React.FC<SubjectGradeEntryTableProps> = ({
       <ToolbarBox>
         <SubjectSelectorGroup>
           <SelectorLabel>MÔN HỌC:</SelectorLabel>
-          <SubjectSelect
+          <Dropdown
             value={currentSubjectId}
-            onChange={e => dispatch(setSelectedSubjectId(e.target.value))}
-          >
-            {classSubjects.map(sub => (
-              <option key={sub.id} value={sub.id}>
-                {sub.name} ({sub.gradeLevel})
-              </option>
-            ))}
-          </SubjectSelect>
+            onChange={(val) => dispatch(setSelectedSubjectId(val))}
+            options={classSubjects.map((sub) => ({
+              value: sub.id,
+              label: `${sub.name} (${sub.gradeLevel})`,
+            }))}
+            searchable
+            size="sm"
+            className="min-w-[200px]"
+          />
 
-          <NoticePill>
-            ✓ Đã kết nối danh mục môn học khối {currentClass?.gradeLevel} (BR03 Fix)
+          <NoticePill className="inline-flex items-center gap-1.5">
+            <Icon name="check" size={12} />
+            <span>Đã kết nối danh mục môn học khối {currentClass?.gradeLevel} (BR03 Fix)</span>
           </NoticePill>
         </SubjectSelectorGroup>
 
@@ -167,7 +175,9 @@ export const SubjectGradeEntryTable: React.FC<SubjectGradeEntryTableProps> = ({
       <TableWrapper>
         {studentRoster.length === 0 ? (
           <EmptyTableState>
-            <div style={{ fontSize: '24px', marginBottom: '8px' }}>📚</div>
+            <div className="flex justify-center mb-2 text-slate-400">
+              <Icon name="book-open" size={32} />
+            </div>
             <div style={{ fontWeight: 700, color: '#0f172a' }}>Chưa có học sinh nào trong lớp này</div>
           </EmptyTableState>
         ) : (
@@ -399,19 +409,6 @@ const SelectorLabel = styled.span`
   font-size: 12px;
   font-weight: 600;
   color: var(--text-subtle);
-`;
-
-const SubjectSelect = styled.select`
-  padding: 7px 14px;
-  min-height: 38px;
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-8);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--eco-blue-strong);
-  background: var(--bg-surface);
-  outline: none;
-  cursor: pointer;
 `;
 
 const NoticePill = styled.span`

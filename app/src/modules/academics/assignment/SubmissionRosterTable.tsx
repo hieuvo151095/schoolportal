@@ -11,6 +11,7 @@ import {
   AssignmentSubmission,
   HomeworkAssignment,
 } from '../../../types/assignment';
+import { Icon } from '@/components/ds';
 
 const Container = styled.div`
   background: #ffffff;
@@ -354,13 +355,15 @@ export const SubmissionRosterTable: React.FC<SubmissionRosterTableProps> = ({
               alert('Tính năng xuất danh sách bảng điểm (Excel/PDF) đã sẵn sàng tải về!');
             }}
           >
-            📊 Xuất danh sách
+            <Icon name="arrow-down-to-bracket" size={13} />
+            <span>Xuất danh sách</span>
           </SecondaryButton>
 
           <PrimaryButton
             onClick={() => dispatch(openManageStudentsModal(assignment.id))}
           >
-            + Thêm học sinh
+            <Icon name="plus" size={13} />
+            <span>Thêm học sinh</span>
           </PrimaryButton>
         </ActionsGroup>
       </Toolbar>
@@ -421,7 +424,8 @@ export const SubmissionRosterTable: React.FC<SubmissionRosterTableProps> = ({
                     {isSubmitted ? (
                       <div>
                         <StatusPill $status="submitted">
-                          ✓ Đã nộp bài
+                          <Icon name="check" size={11} />
+                          <span>Đã nộp bài</span>
                         </StatusPill>
                         {sub.isLate && (
                           <LateWarningPill>Nộp muộn</LateWarningPill>
@@ -460,7 +464,8 @@ export const SubmissionRosterTable: React.FC<SubmissionRosterTableProps> = ({
                           textDecoration: 'none',
                         }}
                       >
-                        📄 {sub.submissionFile.name}
+                        <Icon name="file-lines" size={13} />
+                        <span>{sub.submissionFile.name}</span>
                       </a>
                     ) : (
                       <span style={{ color: '#94a3b8' }}>Chưa có file</span>
@@ -516,7 +521,8 @@ export const SubmissionRosterTable: React.FC<SubmissionRosterTableProps> = ({
                                 )
                               }
                             >
-                              ✕ Xóa học sinh
+                              <Icon name="trash" size={12} className="text-red-500 mr-1" />
+                              <span>Xóa học sinh</span>
                             </DropdownItem>
                           </MoreDropdown>
                         )}
