@@ -1512,13 +1512,17 @@ export interface PopupModalAction {
   icon?: IconName;
   onClick?: (e: MouseEvent<any>) => void;
   disabled?: boolean;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'text';
+  tone?: 'neutral' | 'danger' | 'brand' | 'success' | 'warning' | 'info';
 }
 
 export interface PopupModalProps {
   open?: boolean;
+  isOpen?: boolean;
   icon?: IconName;
   title: ReactNode;
   description?: ReactNode;
+  subtitle?: ReactNode;
   onClose?: ((e?: any) => void) | false;
   primaryAction?: PopupModalAction;
   secondaryAction?: PopupModalAction | null;
@@ -1535,7 +1539,7 @@ export interface PopupModalProps {
 let _mid = 0;
 export function PopupModal(p: PopupModalProps) {
   const idRef = useRef('ecomd-modal-' + ++_mid);
-  const open = p.open === undefined ? true : !!p.open;
+  const open = p.isOpen !== undefined ? !!p.isOpen : (p.open === undefined ? true : !!p.open);
 
   useEffect(() => {
     if (!open || !p.onClose) return;
@@ -1550,7 +1554,7 @@ export function PopupModal(p: PopupModalProps) {
 
   if (!open) return null;
   const id = idRef.current;
-  const sec = p.secondaryAction === undefined ? { label: 'Đóng', onClick: p.onClose as any } : p.secondaryAction;
+  const sec: PopupModalAction | null = p.secondaryAction === undefined ? { label: 'Đóng', onClick: p.onClose as any } : p.secondaryAction;
   const pri = p.primaryAction;
   const ext = p.extraAction;
   const hasFooter = p.footer || pri || sec || ext;
@@ -1558,13 +1562,15 @@ export function PopupModal(p: PopupModalProps) {
     p.footer ||
     (hasFooter ? (
       <div className="ecomd-modal__footer">
-        <div>{ext ? <Button variant="text" icon={ext.icon} onClick={ext.onClick}>{ext.label}</Button> : null}</div>
+        <div>{ext ? <Button variant={ext.variant || 'text'} icon={ext.icon} onClick={ext.onClick}>{ext.label}</Button> : null}</div>
         <div className="ecomd-modal__actions">
-          {sec ? <Button variant="ghost" onClick={sec.onClick}>{sec.label}</Button> : null}
-          {pri ? <Button icon={pri.icon} onClick={pri.onClick} disabled={pri.disabled}>{pri.label}</Button> : null}
+          {sec ? <Button variant={sec.variant || 'ghost'} onClick={sec.onClick}>{sec.label}</Button> : null}
+          {pri ? <Button variant={pri.variant} icon={pri.icon} onClick={pri.onClick} disabled={pri.disabled}>{pri.label}</Button> : null}
         </div>
       </div>
     ) : null);
+
+  const desc = p.description || p.subtitle;
 
   return (
     <div
@@ -1593,7 +1599,7 @@ export function PopupModal(p: PopupModalProps) {
               <h3 id={id + '-t'} className="ecomd-modal__title title-md">
                 {p.title}
               </h3>
-              {p.description ? <p className="ecomd-modal__desc body-xs">{p.description}</p> : null}
+              {desc ? <p className="ecomd-modal__desc body-xs">{desc}</p> : null}
             </div>
           </div>
           {p.onClose !== false && (

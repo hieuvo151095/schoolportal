@@ -1,16 +1,13 @@
 /**
  * Finance Expenses & Disbursements Detail Page
  * Route: /[schoolCode]/school/expenses/[expenseId]
- * Governance: Marcus Fleet V34 / Constitution V1.0.0
- * References: docs_legacy/operating-portal/tai-chinh/khoan-chi.md (BR03-BR05)
+ * Design System: [DS] ECO ME DASHBOARD v1.1.0
  */
 
 import React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import PortalLayout from '../../../../components/layout/PortalLayout';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import {
@@ -22,6 +19,7 @@ import {
 } from '../../../../store/slices/expenseSlice';
 import { ExpenseDetailView } from '../../../../modules/finance/expenses/ExpenseDetailView';
 import { CancelVoucherModal } from '../../../../modules/finance/expenses/CancelVoucherModal';
+import { Icon } from '@/components/ds';
 
 export default function ExpenseDetailPage() {
   const router = useRouter();
@@ -56,17 +54,17 @@ export default function ExpenseDetailPage() {
       {!voucher ? (
         <div className="bg-white rounded-2xl p-12 border border-slate-200 text-center space-y-4 max-w-lg mx-auto mt-12">
           <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center mx-auto text-2xl">
-            <FontAwesomeIcon icon={faExclamationTriangle} />
+            <Icon name="alert-triangle" size={32} />
           </div>
-          <h2 className="text-xl font-bold text-slate-900">Không tìm thấy phiếu chi</h2>
-          <p className="text-sm text-slate-500">
+          <h2 className="text-xl font-bold text-slate-900 m-0">Không tìm thấy phiếu chi</h2>
+          <p className="text-sm text-slate-500 m-0">
             Mã phiếu chi <span className="font-mono font-medium text-slate-700">{expenseId}</span> không tồn tại hoặc đã bị xóa khỏi hệ thống.
           </p>
           <Link
             href={`/${schoolCode}/school/expenses`}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#0070CE] text-white text-sm font-medium hover:bg-blue-700 transition-colors"
           >
-            <FontAwesomeIcon icon={faArrowLeft} />
+            <Icon name="arrow-left" size={14} />
             <span>Quay về danh sách</span>
           </Link>
         </div>

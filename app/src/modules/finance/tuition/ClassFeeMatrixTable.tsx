@@ -111,20 +111,9 @@ export const ClassFeeMatrixTable: React.FC = () => {
 
       {/* Top Header Card */}
       <div
-        style={{
-          background: 'var(--bg-surface)',
-          padding: 'var(--space-4) var(--space-5)',
-          borderRadius: 'var(--radius-lg)',
-          border: '1px solid var(--border-neutral)',
-          boxShadow: 'var(--shadow-sm)',
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 'var(--space-4)',
-        }}
+        className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4 sm:p-5 rounded-xl border border-[var(--border-neutral)] bg-[var(--bg-surface)] shadow-xs"
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+        <div className="flex items-center gap-3">
           <Button
             variant="secondary"
             icon="arrow-left"
@@ -135,20 +124,20 @@ export const ClassFeeMatrixTable: React.FC = () => {
           </Button>
 
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-              <h2 className="h4" style={{ margin: 0, color: 'var(--text-primary)' }}>
+            <div className="flex items-center gap-2">
+              <h2 className="h4 m-0 text-[var(--text-primary)]">
                 Danh sách khoản phí theo lớp
               </h2>
               <Tag variant="code">Lớp {classId}</Tag>
             </div>
-            <p className="body-xs" style={{ margin: '2px 0 0', color: 'var(--text-secondary)' }}>
+            <p className="body-xs mt-0.5 mb-0 text-[var(--text-secondary)]">
               Quản lý ma trận số tiền theo từng học sinh, hỗ trợ miễn giảm và điều chỉnh riêng biệt
             </p>
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
-          <div style={{ width: '240px' }}>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div className="w-full sm:w-60">
             <SearchField
               placeholder="Tìm tên hoặc mã HS..."
               value={studentSearch}
@@ -572,7 +561,7 @@ export const ClassFeeMatrixTable: React.FC = () => {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
-            <Icon name="triangle-exclamation" size={18} color="var(--semantic-warning)" />
+            <Icon name="alert-triangle" size={18} color="var(--semantic-warning)" />
             <div>
               <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--font-bold)', color: '#fff' }}>
                 Thay đổi của bạn chưa được lưu.

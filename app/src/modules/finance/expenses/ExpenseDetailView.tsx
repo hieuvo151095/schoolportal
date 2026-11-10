@@ -1,22 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faCheck,
-  faBan,
-  faDownload,
-  faCheckCircle,
-  faInfoCircle,
-  faUserGraduate,
-  faUserTie,
-  faFileInvoice,
-  faHistory,
-  faCalendarCheck,
-  faExclamationTriangle,
-} from '@fortawesome/free-solid-svg-icons';
 import { ExpenseVoucher } from '../../../types/expense';
 import { formatExpenseAmount, getLifecycleStatusMeta } from '../../../utils/expenseValidation';
+import { Icon } from '@/components/ds';
 
 interface ExpenseDetailViewProps {
   voucher: ExpenseVoucher;
@@ -47,14 +33,14 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
         <div>
           <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
             <Link href={`/${schoolCode}/school/expenses`} className="hover:underline flex items-center gap-1">
-              <FontAwesomeIcon icon={faArrowLeft} />
+              <Icon name="arrow-left" size={12} />
               <span>Khoản chi</span>
             </Link>
             <span>/</span>
             <span className="font-mono text-slate-700">{voucher.voucherCode}</span>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-xl font-bold text-slate-900">{voucher.title}</h1>
+            <h1 className="text-xl font-bold text-slate-900 m-0">{voucher.title}</h1>
             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${statusMeta.badgeClass}`}>
               <span className={`w-2 h-2 rounded-full ${statusMeta.dotColor}`} />
               {statusMeta.label}
@@ -67,9 +53,9 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
           {/* Trở về button */}
           <Link
             href={`/${schoolCode}/school/expenses`}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 font-medium text-sm transition-all shadow-sm active:scale-98"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 font-medium text-sm transition-all shadow-sm cursor-pointer"
           >
-            <FontAwesomeIcon icon={faArrowLeft} className="text-xs" />
+            <Icon name="arrow-left" size={14} />
             <span>Trở về</span>
           </Link>
 
@@ -77,9 +63,9 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
           {(voucher.status === 'da_tao' || voucher.status === 'da_duyet') && (
             <button
               onClick={() => onOpenCancelModal(voucher.id)}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-700 font-medium text-sm transition-all shadow-sm active:scale-98"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-700 font-medium text-sm transition-all shadow-sm cursor-pointer"
             >
-              <FontAwesomeIcon icon={faBan} />
+              <Icon name="ban" size={14} />
               <span>Hủy phiếu chi</span>
             </button>
           )}
@@ -88,9 +74,9 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
           {voucher.status === 'da_tao' && (
             <button
               onClick={() => onApproveVoucher(voucher.id)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-all shadow-sm active:scale-98"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0070CE] hover:bg-blue-700 text-white font-medium text-sm transition-all shadow-sm cursor-pointer"
             >
-              <FontAwesomeIcon icon={faCheck} />
+              <Icon name="check" size={14} />
               <span>Duyệt chi</span>
             </button>
           )}
@@ -99,9 +85,9 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
           {voucher.status === 'da_duyet' && (
             <button
               onClick={() => onConfirmDisbursement(voucher.id)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm transition-all shadow-sm active:scale-98"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm transition-all shadow-sm cursor-pointer"
             >
-              <FontAwesomeIcon icon={faCheckCircle} />
+              <Icon name="check" size={14} />
               <span>Xác nhận chi</span>
             </button>
           )}
@@ -109,9 +95,9 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
           {/* Tải phiếu chi button (Always available) */}
           <button
             onClick={handleDownload}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 font-medium text-sm transition-all shadow-sm active:scale-98"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 font-medium text-sm transition-all shadow-sm cursor-pointer"
           >
-            <FontAwesomeIcon icon={faDownload} className="text-slate-500 text-xs" />
+            <Icon name="download" size={14} className="text-slate-500" />
             <span>Tải phiếu chi</span>
           </button>
         </div>
@@ -120,7 +106,7 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
       {/* Cancellation Reason Banner (If da_huy) */}
       {voucher.status === 'da_huy' && (
         <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 text-rose-800 flex items-start gap-3">
-          <FontAwesomeIcon icon={faExclamationTriangle} className="text-rose-500 text-lg mt-0.5" />
+          <Icon name="alert-triangle" size={18} className="text-rose-500 shrink-0 mt-0.5" />
           <div className="text-sm">
             <div className="font-semibold text-rose-900">Phiếu chi đã bị hủy</div>
             <div className="mt-1">
@@ -138,8 +124,8 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
         {/* Card 1: Thông tin phiếu chi */}
         <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm space-y-4">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-            <FontAwesomeIcon icon={faFileInvoice} className="text-blue-600" />
-            <h2 className="font-bold text-slate-800 text-base">Thông tin phiếu chi</h2>
+            <Icon name="file" size={16} className="text-[#0070CE]" />
+            <h2 className="font-bold text-slate-800 text-base m-0">Thông tin phiếu chi</h2>
           </div>
 
           <div className="space-y-3 text-sm">
@@ -159,7 +145,7 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
             </div>
             {voucher.voucherType === 'hoan_tien' && (
               <div className="p-2.5 rounded-lg bg-blue-50 border border-blue-100 text-xs text-blue-700 flex items-center gap-1.5">
-                <FontAwesomeIcon icon={faInfoCircle} />
+                <Icon name="info" size={13} className="shrink-0" />
                 <span>*Phiếu chi sẽ gửi thông báo cho phụ huynh</span>
               </div>
             )}
@@ -170,7 +156,7 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
             {voucher.notes && (
               <div className="pt-2 border-t border-slate-100">
                 <span className="text-slate-500 block text-xs mb-1">Ghi chú nội bộ:</span>
-                <p className="text-slate-700 text-xs italic bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                <p className="text-slate-700 text-xs italic bg-slate-50 p-2.5 rounded-lg border border-slate-100 m-0">
                   {voucher.notes}
                 </p>
               </div>
@@ -181,8 +167,8 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
         {/* Card 2: Chi cho (BR03: Dynamic Student vs Staff) */}
         <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm space-y-4">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-            <FontAwesomeIcon icon={isStudent ? faUserGraduate : faUserTie} className="text-amber-500" />
-            <h2 className="font-bold text-slate-800 text-base">Thông tin đối tượng chi</h2>
+            <Icon name={isStudent ? 'graduation-cap' : 'user'} size={16} className="text-amber-500" />
+            <h2 className="font-bold text-slate-800 text-base m-0">Thông tin đối tượng chi</h2>
           </div>
 
           <div className="space-y-3 text-sm">
@@ -208,7 +194,7 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
                 </div>
                 <div className="flex justify-between pt-2 border-t border-slate-100">
                   <span className="text-slate-500">Người nhận tiền (Phụ huynh):</span>
-                  <span className="font-bold text-blue-700">{voucher.recipientName}</span>
+                  <span className="font-bold text-[#0070CE]">{voucher.recipientName}</span>
                 </div>
                 {voucher.recipientPhone && (
                   <div className="flex justify-between">
@@ -248,8 +234,8 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="px-5 py-4 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <FontAwesomeIcon icon={faFileInvoice} className="text-blue-600" />
-            <h2 className="font-bold text-slate-800 text-base">Bảng hoạch toán chi phí</h2>
+            <Icon name="file" size={16} className="text-[#0070CE]" />
+            <h2 className="font-bold text-slate-800 text-base m-0">Bảng hoạch toán chi phí</h2>
           </div>
           <span className="text-xs text-slate-500">
             {voucher.lineItems.length} mục chi phí
@@ -291,7 +277,7 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
                 <td colSpan={5} className="py-4 px-4 text-right font-bold text-slate-800 uppercase text-xs tracking-wider">
                   Tổng tiền chi:
                 </td>
-                <td className="py-4 px-4 text-right font-bold text-xl text-blue-700">
+                <td className="py-4 px-4 text-right font-bold text-xl text-[#0070CE]">
                   {formatExpenseAmount(voucher.totalAmount)}
                 </td>
               </tr>
@@ -303,8 +289,8 @@ export const ExpenseDetailView: React.FC<ExpenseDetailViewProps> = ({
       {/* Audit Trail Card (NFR03) */}
       <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm">
         <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
-          <FontAwesomeIcon icon={faHistory} className="text-slate-500" />
-          <h2 className="font-bold text-slate-800 text-base">Nhật ký xử lý & Phê duyệt</h2>
+          <Icon name="clock" size={16} className="text-slate-500" />
+          <h2 className="font-bold text-slate-800 text-base m-0">Nhật ký xử lý & Phê duyệt</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

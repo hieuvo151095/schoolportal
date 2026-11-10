@@ -1,9 +1,9 @@
 /**
  * Fee Report Filter Toolbar
- * Design System: [DS] ECO ME DASHBOARD v1.1.0
+ * Design System: [DS] ECO ME DASHBOARD v1.1.0 (Dropdown + Button + Tag + Icon)
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   setDateRange,
@@ -12,7 +12,7 @@ import {
 } from '../../../store/slices/feeReportSlice';
 import { mockFeeReportClasses } from '../../../services/mockFeeReportData';
 import type { FeeReportTab } from '../../../types/feeReport';
-import { Button, Tag, Icon } from '../../../components/ds';
+import { Button, Tag, Icon, Dropdown, DropdownOption } from '../../../components/ds';
 
 interface FeeReportToolbarProps {
   currentTab: FeeReportTab;
@@ -29,6 +29,14 @@ export const FeeReportToolbar: React.FC<FeeReportToolbarProps> = ({
   const { filters } = useAppSelector((state) => state.feeReport);
 
   const isPaidTab = currentTab === 'paid';
+
+  const classOptions: DropdownOption[] = useMemo(() => [
+    { value: 'tat_ca', label: 'Tất cả lớp học' },
+    ...mockFeeReportClasses.map((cls) => ({
+      value: cls.id,
+      label: cls.name,
+    })),
+  ], []);
 
   return (
     <div
@@ -98,29 +106,16 @@ export const FeeReportToolbar: React.FC<FeeReportToolbarProps> = ({
           />
         </div>
 
-        {/* Class Filter */}
-        <select
-          value={filters.classId}
-          onChange={(e) => dispatch(setClassFilter(e.target.value))}
-          style={{
-            height: '34px',
-            padding: '0 var(--space-8)',
-            background: 'var(--bg-surface)',
-            border: '1px solid var(--border-default)',
-            borderRadius: 'var(--radius-8)',
-            fontSize: '12px',
-            fontWeight: 500,
-            color: 'var(--text-heading)',
-            cursor: 'pointer',
-          }}
-        >
-          <option value="tat_ca">Tất cả lớp học</option>
-          {mockFeeReportClasses.map((cls) => (
-            <option key={cls.id} value={cls.id}>
-              {cls.name}
-            </option>
-          ))}
-        </select>
+        {/* Class Filter Dropdown */}
+        <div className="w-48">
+          <Dropdown
+            options={classOptions}
+            value={filters.classId}
+            onChange={(val) => dispatch(setClassFilter(val))}
+            size="sm"
+            fullWidth
+          />
+        </div>
 
         {/* Reset Filter Button */}
         <button
@@ -128,7 +123,7 @@ export const FeeReportToolbar: React.FC<FeeReportToolbarProps> = ({
           onClick={() => dispatch(resetFilters())}
           className="body-xs text-[var(--text-subtle)] hover:text-[var(--text-heading)] inline-flex items-center gap-1 cursor-pointer bg-transparent border-0 underline"
         >
-          <Icon name="arrow-rotate-left" size={12} />
+          <Icon name="arrow-rotate-right" size={12} />
           <span>Đặt lại</span>
         </button>
       </div>

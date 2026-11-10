@@ -12,23 +12,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faPrint,
-  faEdit,
-  faPaperPlane,
-  faMoneyBillWave,
-  faBan,
-  faCheckCircle,
-  faQrcode,
-  faCopy,
-  faHistory,
-  faUtensils,
-  faFileInvoice,
-  faExclamationTriangle,
-  faClock,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@/components/ds';
 import { useAppDispatch } from '../../../store';
 import {
   setPaymentModalOpen,
@@ -71,14 +55,14 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
       case 'da_thanh_toan':
         return (
           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-300">
-            <FontAwesomeIcon icon={faCheckCircle} className="mr-1.5 text-emerald-600" />
+            <Icon name="circle-check" size={13} className="mr-1.5 text-emerald-600" />
             Đã thanh toán đủ
           </span>
         );
       case 'thanh_toan_mot_phan':
         return (
           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-300">
-            <FontAwesomeIcon icon={faClock} className="mr-1.5 text-amber-600" />
+            <Icon name="clock" size={13} className="mr-1.5 text-amber-600" />
             Thanh toán một phần ({formatVND(invoice.paidAmount)} / {formatVND(invoice.totalAmount)})
           </span>
         );
@@ -99,7 +83,7 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
       case 'qua_han':
         return (
           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-300">
-            <FontAwesomeIcon icon={faExclamationTriangle} className="mr-1.5 text-rose-600" />
+            <Icon name="triangle-exclamation" size={13} className="mr-1.5 text-rose-600" />
             Quá hạn thanh toán
           </span>
         );
@@ -124,7 +108,7 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
               href={`/${schoolCode}/school/fee`}
               className="h-10 px-3.5 border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 flex items-center gap-2"
             >
-              <FontAwesomeIcon icon={faArrowLeft} className="text-slate-500 text-xs" />
+              <Icon name="arrow-left" size={13} className="text-slate-500" />
               <span>Trở về</span>
             </Link>
 
@@ -150,7 +134,7 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
                 href={`/${schoolCode}/school/fee/edit/${invoice.id}`}
                 className="h-10 px-3.5 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-300 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors"
               >
-                <FontAwesomeIcon icon={faEdit} />
+                <Icon name="pen" size={13} />
                 <span>Chỉnh sửa</span>
               </Link>
             )}
@@ -159,9 +143,9 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
             {permittedActions.includes('send') && (
               <button
                 onClick={() => dispatch(sendInvoices([invoice.id]))}
-                className="h-10 px-4 bg-[#0070CE] hover:bg-blue-700 text-white rounded-lg text-sm font-bold shadow-sm flex items-center gap-2 transition-colors"
+                className="h-10 px-4 bg-[#0070CE] hover:bg-blue-700 text-white rounded-lg text-sm font-bold shadow-sm flex items-center gap-2 transition-colors cursor-pointer"
               >
-                <FontAwesomeIcon icon={faPaperPlane} />
+                <Icon name="paper-plane" size={13} />
                 <span>Gửi hóa đơn</span>
               </button>
             )}
@@ -172,9 +156,9 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
                 onClick={() =>
                   dispatch(setPaymentModalOpen({ isOpen: true, invoice }))
                 }
-                className="h-10 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-bold shadow-sm flex items-center gap-2 transition-colors"
+                className="h-10 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-bold shadow-sm flex items-center gap-2 transition-colors cursor-pointer"
               >
-                <FontAwesomeIcon icon={faMoneyBillWave} />
+                <Icon name="coins" size={13} />
                 <span>Xác nhận thanh toán</span>
               </button>
             )}
@@ -182,9 +166,9 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
             {/* Print Button */}
             <button
               onClick={() => window.print()}
-              className="h-10 px-3.5 border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 flex items-center gap-2"
+              className="h-10 px-3.5 border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 flex items-center gap-2 cursor-pointer"
             >
-              <FontAwesomeIcon icon={faPrint} className="text-slate-500" />
+              <Icon name="print" size={13} className="text-slate-500" />
               <span>In phiếu</span>
             </button>
 
@@ -194,9 +178,9 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
                 onClick={() =>
                   dispatch(setCancelModalOpen({ isOpen: true, invoice }))
                 }
-                className="h-10 px-3.5 border border-slate-300 rounded-lg text-sm font-semibold text-rose-600 bg-white hover:bg-rose-50 flex items-center gap-2"
+                className="h-10 px-3.5 border border-slate-300 rounded-lg text-sm font-semibold text-rose-600 bg-white hover:bg-rose-50 flex items-center gap-2 cursor-pointer"
               >
-                <FontAwesomeIcon icon={faBan} />
+                <Icon name="ban" size={13} />
                 <span>Hủy HĐ</span>
               </button>
             )}
@@ -207,7 +191,7 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
       {/* Cancellation Notice Banner (if cancelled) */}
       {invoice.status === 'da_huy' && (
         <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 flex items-start gap-3">
-          <FontAwesomeIcon icon={faBan} className="text-rose-500 text-lg mt-0.5" />
+          <Icon name="ban" size={18} className="text-rose-500 mt-0.5" />
           <div>
             <div className="font-bold text-rose-900 text-sm">
               Hóa đơn này đã bị hủy bỏ
@@ -302,7 +286,7 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
                         {/* Attendance-linked meal deduction indicator (TASK-FIN-002) */}
                         {item.isMealFee && item.excusedAbsenceDays !== undefined && item.excusedAbsenceDays > 0 && (
                           <span className="inline-flex items-center gap-1 mt-1 text-[11px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-                            <FontAwesomeIcon icon={faUtensils} className="text-[10px]" />
+                            <Icon name="utensils" size={11} />
                             Đã trừ {item.excusedAbsenceDays} ngày nghỉ phép có phép từ Báo cáo điểm danh
                           </span>
                         )}
@@ -320,7 +304,7 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
                         <div className="font-bold text-slate-900">{formatVND(item.amount)}</div>
                         {item.description?.includes('Khấu trừ hoàn') && (
                           <div className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 mt-1 inline-flex items-center gap-1 shadow-2xs">
-                            <FontAwesomeIcon icon={faUtensils} className="text-[9px] text-emerald-600" />
+                            <Icon name="utensils" size={10} className="text-emerald-600" />
                             <span>Hoàn tiền: -{formatVND(item.discountAmount)}</span>
                           </div>
                         )}
@@ -376,7 +360,7 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200">
               <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faQrcode} className="text-[#0070CE]" />
+                <Icon name="qrcode" size={16} className="text-[#0070CE]" />
                 <h3 className="font-bold text-slate-900 text-sm">Thanh toán VietQR</h3>
               </div>
               <span className="text-xs font-bold text-[#0070CE]">MB Bank</span>
@@ -385,7 +369,7 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
             {/* Dynamic Status Banner (Resolves BR09 / ISSUE-INV-002) */}
             {invoice.status === 'da_thanh_toan' ? (
               <div className="mt-4 bg-emerald-50 border border-emerald-300 rounded-xl p-5 text-center">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-4xl mb-2" />
+                <Icon name="circle-check" size={36} className="text-emerald-600 mx-auto mb-2" />
                 <h4 className="font-bold text-emerald-900 text-base">ĐÃ THANH TOÁN ĐỦ</h4>
                 <p className="text-xs text-emerald-700 mt-1">
                   Hóa đơn đã được quyết toán hoàn toàn. Cảm ơn Quý phụ huynh!
@@ -456,7 +440,7 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({ invoice })
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200">
               <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faHistory} className="text-[#0070CE]" />
+                <Icon name="clock-rotate-left" size={16} className="text-[#0070CE]" />
                 <h3 className="font-bold text-slate-900 text-sm">Lịch sử thanh toán</h3>
               </div>
               <span className="text-xs font-semibold text-slate-500">

@@ -1,25 +1,10 @@
 /**
  * Create & Edit Modal for Tuition Exemption & Fee Discount Policies
  * Finance Domain - Finviet / SOHA School Operating Portal
- * Governance: Marcus Fleet V34 / Constitution V1.0.0
+ * Design System: [DS] ECO ME DASHBOARD v1.1.0 (PopupModal + Dropdown + Icon)
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faSave,
-  faPlus,
-  faPercent,
-  faCoins,
-  faGraduationCap,
-  faUserGraduate,
-  faCalendarAlt,
-  faInfoCircle,
-  faCheck,
-  faBell,
-  faExclamationTriangle,
-} from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   createDiscountPolicy,
@@ -48,6 +33,7 @@ import {
 } from '../../../utils/discountValidation';
 import { StudentPickerModal } from './StudentPickerModal';
 import { ClassPickerModal } from './ClassPickerModal';
+import { PopupModal, Dropdown, DropdownOption, Icon } from '@/components/ds';
 
 interface CreateDiscountPolicyModalProps {
   isOpen: boolean;
@@ -64,6 +50,20 @@ const COMMON_REASONS = [
   'Học sinh khuyết tật có hoàn cảnh khó khăn',
 ];
 
+const ACADEMIC_YEAR_OPTIONS: DropdownOption[] = [
+  { value: 'ay-2025-2026', label: 'Năm học 2025 - 2026' },
+  { value: 'ay-2026-2027', label: 'Năm học 2026 - 2027' },
+  { value: 'ay-2027-2028', label: 'Năm học 2027 - 2028' },
+];
+
+const MONTH_OPTIONS: DropdownOption[] = [
+  { value: '2026-09', label: 'Tháng 09/2026' },
+  { value: '2026-10', label: 'Tháng 10/2026' },
+  { value: '2026-11', label: 'Tháng 11/2026' },
+  { value: '2026-12', label: 'Tháng 12/2026' },
+  { value: '2027-05', label: 'Tháng 05/2027' },
+];
+
 export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps> = ({
   isOpen,
   editingPolicy,
@@ -74,11 +74,11 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
   // Form states
   const [name, setName] = useState('');
   const [scopeType, setScopeType] = useState<DiscountScopeType>('class');
-  const [selectedClassIds, setSelectedClassIds] = useState<string[]>(['class-10a1']);
+  const [selectedClassIds, setSelectedClassIds] = useState<string[]>([]);
   const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
-  const [feeItemId, setFeeItemId] = useState('fee-sys-001');
+  const [feeItemId, setFeeItemId] = useState('');
   const [discountType, setDiscountType] = useState<DiscountCalculationType>('percent');
-  const [discountValue, setDiscountValue] = useState<number>(20);
+  const [discountValue, setDiscountValue] = useState<number>(0);
   const [validityType, setValidityType] = useState<DiscountValidityType>('academic_year');
   const [academicYearId, setAcademicYearId] = useState('ay-2026-2027');
   const [fromMonth, setFromMonth] = useState('2026-09');
@@ -99,9 +99,16 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
     return getApplicableFeeItemsForTargets(scopeType, targetIds, AVAILABLE_STUDENTS_FOR_DISCOUNT);
   }, [scopeType, targetIds]);
 
+  const feeItemOptions: DropdownOption[] = useMemo(() => {
+    return applicableFeeItems.map((item) => ({
+      value: item.id,
+      label: `[Khoản ${item.feeNumber}] ${item.name} (${item.code}) — Mức chuẩn: ${formatCurrency(item.defaultAmount)}`,
+    }));
+  }, [applicableFeeItems]);
+
   // Keep feeItemId synchronized with applicableFeeItems intersection
   useEffect(() => {
-    if (applicableFeeItems.length > 0) {
+    if (applicableFeeItems.length > 0 && feeItemId) {
       const isCurrentValid = applicableFeeItems.some(
         (f) => f.id === feeItemId || feeIdsMatch(f.id, feeItemId)
       );
@@ -176,12 +183,11 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
     } else {
       setName('');
       setScopeType('class');
-      setSelectedClassIds(['class-10a1']);
+      setSelectedClassIds([]);
       setSelectedStudentIds([]);
-      const defaultFees = getApplicableFeeItemsForTargets('class', ['class-10a1']);
-      setFeeItemId(defaultFees[0]?.id || 'fee-sys-001');
+      setFeeItemId('');
       setDiscountType('percent');
-      setDiscountValue(20);
+      setDiscountValue(0);
       setValidityType('academic_year');
       setAcademicYearId('ay-2026-2027');
       setFromMonth('2026-09');
@@ -194,8 +200,15 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const isSubmitDisabled =
+    !name.trim() ||
+    targetIds.length === 0 ||
+    !feeItemId ||
+    discountValue <= 0 ||
+    (studentConflicts.length > 0 && !confirmReplacement);
+
+  const handleSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
 
     if (targetIds.length === 0) {
       setErrors({ targetIds: 'Vui lòng chọn ít nhất một lớp học hoặc học sinh áp dụng' });
@@ -271,552 +284,511 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
 
   return (
     <>
-      <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full flex flex-col max-h-[92vh] overflow-hidden border border-slate-100 animate-fadeIn">
-          {/* Modal Header */}
-          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0070CE] flex items-center justify-center">
-                <FontAwesomeIcon icon={editingPolicy ? faSave : faPlus} className="text-base" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-slate-800">
-                  {editingPolicy ? 'Chỉnh sửa chính sách miễn giảm' : 'Thiết lập chính sách miễn giảm mới'}
-                </h2>
-                <p className="text-xs text-slate-500">
-                  Cấu hình đối tượng, khoản phí biểu mẫu và mức ưu đãi áp dụng vào hóa đơn thu phí
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={onClose}
-              className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-colors"
-            >
-              <FontAwesomeIcon icon={faTimes} />
-            </button>
+      <PopupModal
+        isOpen={isOpen}
+        onClose={onClose}
+        title={editingPolicy ? 'Chỉnh sửa chính sách miễn giảm' : 'Thiết lập chính sách miễn giảm mới'}
+        subtitle="Cấu hình đối tượng, khoản phí biểu mẫu và mức ưu đãi áp dụng vào hóa đơn thu phí"
+        icon={editingPolicy ? 'edit' : 'plus'}
+        width={680}
+        primaryAction={{
+          label: editingPolicy ? 'Lưu thay đổi' : 'Tạo chính sách',
+          onClick: () => handleSubmit(),
+          disabled: isSubmitDisabled,
+          icon: 'check',
+        }}
+        secondaryAction={{
+          label: 'Hủy',
+          onClick: onClose,
+        }}
+      >
+        <div className="space-y-5 text-left">
+          {/* 1. Policy Name */}
+          <div>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              Tên chính sách miễn giảm <span className="text-rose-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+                if (errors.name) setErrors({ ...errors, name: '' });
+              }}
+              placeholder="VD: Miễn giảm 50% học phí diện chính sách"
+              className={`w-full px-3.5 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 ${
+                errors.name
+                  ? 'border-rose-300 focus:ring-rose-200 bg-rose-50/30'
+                  : 'border-slate-300 focus:ring-[#0070CE]/20 focus:border-[#0070CE]'
+              }`}
+            />
+            {errors.name && <p className="text-xs text-rose-500 mt-1">{errors.name}</p>}
           </div>
 
-          {/* Form Body */}
-          <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-5">
-            {/* 1. Policy Name */}
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                Tên chính sách miễn giảm <span className="text-rose-500">*</span>
+          {/* 2. Scope Selection */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Nhóm áp dụng <span className="text-rose-500">*</span>
               </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                  if (errors.name) setErrors({ ...errors, name: '' });
-                }}
-                placeholder="VD: Miễn giảm 50% học phí diện chính sách"
-                className={`w-full px-3.5 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 ${
-                  errors.name
-                    ? 'border-rose-300 focus:ring-rose-200 bg-rose-50/30'
-                    : 'border-slate-300 focus:ring-[#0070CE]/20 focus:border-[#0070CE]'
+              <span className="text-[11px] text-slate-500 font-medium">
+                {scopeType === 'class'
+                  ? `${selectedClassIds.length} lớp đã chọn`
+                  : `${selectedStudentIds.length} học sinh đã chọn`}
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <button
+                type="button"
+                onClick={() => setScopeType('class')}
+                className={`py-2.5 px-3 rounded-xl text-xs font-bold border flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  scopeType === 'class'
+                    ? 'bg-blue-50 border-[#0070CE] text-[#0070CE] ring-1 ring-[#0070CE]'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
-              />
-              {errors.name && <p className="text-xs text-rose-500 mt-1">{errors.name}</p>}
+              >
+                <Icon name="graduation-cap" size={14} />
+                <span>Theo lớp học (Nhiều lớp)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setScopeType('student')}
+                className={`py-2.5 px-3 rounded-xl text-xs font-bold border flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  scopeType === 'student'
+                    ? 'bg-blue-50 border-[#0070CE] text-[#0070CE] ring-1 ring-[#0070CE]'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                <Icon name="user" size={14} />
+                <span>Theo học sinh cụ thể</span>
+              </button>
             </div>
 
-            {/* 2. Scope Selection (Nhóm áp dụng - Placed FIRST before Khoản phí) */}
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Nhóm áp dụng <span className="text-rose-500">*</span>
-                </label>
-                <span className="text-[11px] text-slate-500 font-medium">
-                  {scopeType === 'class'
-                    ? `${selectedClassIds.length} lớp đã chọn`
-                    : `${selectedStudentIds.length} học sinh đã chọn`}
-                </span>
-              </div>
-              <div className="grid grid-cols-2 gap-3 mb-3">
-                <button
-                  type="button"
-                  onClick={() => setScopeType('class')}
-                  className={`py-2.5 px-3 rounded-xl text-xs font-bold border flex items-center justify-center gap-2 transition-all ${
-                    scopeType === 'class'
-                      ? 'bg-blue-50 border-[#0070CE] text-[#0070CE] ring-1 ring-[#0070CE]'
-                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faGraduationCap} />
-                  <span>Theo lớp học (Nhiều lớp)</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setScopeType('student')}
-                  className={`py-2.5 px-3 rounded-xl text-xs font-bold border flex items-center justify-center gap-2 transition-all ${
-                    scopeType === 'student'
-                      ? 'bg-blue-50 border-[#0070CE] text-[#0070CE] ring-1 ring-[#0070CE]'
-                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faUserGraduate} />
-                  <span>Theo học sinh cụ thể</span>
-                </button>
-              </div>
-
-              {/* Class Scope Selector */}
-              {scopeType === 'class' ? (
-                <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-xs font-semibold text-slate-700">
-                        Danh sách lớp học được chỉ định:
-                      </div>
-                      <div className="text-[11px] text-slate-500">
-                        {selectedClassIds.length === 0
-                          ? 'Chưa chọn lớp nào'
-                          : `Đã chọn ${selectedClassIds.length} lớp học`}
-                      </div>
+            {/* Class Scope Selector */}
+            {scopeType === 'class' ? (
+              <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-xs font-semibold text-slate-700">
+                      Danh sách lớp học được chỉ định:
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setIsClassPickerOpen(true)}
-                      className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:border-[#0070CE] text-[#0070CE] text-xs font-bold shadow-sm transition-all"
-                    >
-                      + Chọn lớp học
-                    </button>
+                    <div className="text-[11px] text-slate-500">
+                      {selectedClassIds.length === 0
+                        ? 'Chưa chọn lớp nào'
+                        : `Đã chọn ${selectedClassIds.length} lớp học`}
+                    </div>
                   </div>
-
-                  {selectedClassesData.length > 0 && (
-                    <div className="max-h-28 overflow-y-auto divide-y divide-slate-100 bg-white rounded-lg border border-slate-200 p-2">
-                      {selectedClassesData.map((cls) => (
-                        <div
-                          key={cls.id}
-                          className="py-1 px-1 flex items-center justify-between text-xs"
-                        >
-                          <span className="font-medium text-slate-800">
-                            {cls.name}{' '}
-                            <span className="text-slate-400 font-normal">
-                              ({cls.grade} • {cls.studentCount} HS)
-                            </span>
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setSelectedClassIds(
-                                selectedClassIds.filter((id) => id !== cls.id)
-                              )
-                            }
-                            className="text-slate-400 hover:text-rose-500 p-0.5"
-                          >
-                            <FontAwesomeIcon icon={faTimes} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {errors.targetIds && (
-                    <p className="text-xs text-rose-500">{errors.targetIds}</p>
-                  )}
-                </div>
-              ) : (
-                /* Student Scope Selector */
-                <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-xs font-semibold text-slate-700">
-                        Danh sách học sinh được chỉ định:
-                      </div>
-                      <div className="text-[11px] text-slate-500">
-                        {selectedStudentIds.length === 0
-                          ? 'Chưa chọn học sinh nào'
-                          : `Đã chọn ${selectedStudentIds.length} học sinh`}
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setIsStudentPickerOpen(true)}
-                      className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:border-[#0070CE] text-[#0070CE] text-xs font-bold shadow-sm transition-all"
-                    >
-                      + Chọn học sinh
-                    </button>
-                  </div>
-
-                  {selectedStudentsData.length > 0 && (
-                    <div className="max-h-28 overflow-y-auto divide-y divide-slate-100 bg-white rounded-lg border border-slate-200 p-2">
-                      {selectedStudentsData.map((s) => (
-                        <div
-                          key={s.id}
-                          className="py-1 px-1 flex items-center justify-between text-xs"
-                        >
-                          <span className="font-medium text-slate-800">
-                            {s.name}{' '}
-                            <span className="text-slate-400 font-normal">({s.className})</span>
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setSelectedStudentIds(
-                                selectedStudentIds.filter((id) => id !== s.id)
-                              )
-                            }
-                            className="text-slate-400 hover:text-rose-500 p-0.5"
-                          >
-                            <FontAwesomeIcon icon={faTimes} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {errors.targetIds && (
-                    <p className="text-xs text-rose-500">{errors.targetIds}</p>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* 3. Applicable Fee Item (Dynamically filtered by Group/Scope intersection) */}
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Khoản phí áp dụng <span className="text-rose-500">*</span>
-                </label>
-                {targetIds.length > 0 && applicableFeeItems.length > 0 && (
-                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#0070CE] border border-blue-200/60">
-                    {applicableFeeItems.length} khoản phí chung hợp lệ
-                  </span>
-                )}
-              </div>
-
-              {targetIds.length === 0 ? (
-                <div className="p-3 bg-amber-50/80 border border-amber-200 rounded-lg text-xs text-amber-800 flex items-center gap-2">
-                  <FontAwesomeIcon icon={faInfoCircle} className="text-amber-500" />
-                  <span>
-                    Vui lòng chọn <strong>Nhóm áp dụng</strong> ở trên trước để hệ thống tải danh mục các khoản phí áp dụng tương ứng.
-                  </span>
-                </div>
-              ) : applicableFeeItems.length === 0 ? (
-                <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-700 flex items-center gap-2">
-                  <FontAwesomeIcon icon={faExclamationTriangle} className="text-rose-500" />
-                  <span>
-                    Không tìm thấy khoản phí chung nào giữa các đối tượng đã chọn (giao danh mục khoản phí = rỗng). Vui lòng chọn lại nhóm áp dụng.
-                  </span>
-                </div>
-              ) : (
-                <>
-                  <select
-                    value={feeItemId}
-                    onChange={(e) => setFeeItemId(e.target.value)}
-                    className="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#0070CE]/20 focus:border-[#0070CE]"
+                  <button
+                    type="button"
+                    onClick={() => setIsClassPickerOpen(true)}
+                    className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:border-[#0070CE] text-[#0070CE] text-xs font-bold shadow-sm transition-all cursor-pointer"
                   >
-                    {applicableFeeItems.map((item) => (
-                      <option key={item.id} value={item.id}>
-                        [Khoản {item.feeNumber}] {item.name} ({item.code}) — Mức chuẩn: {formatCurrency(item.defaultAmount)}
-                      </option>
+                    + Chọn lớp học
+                  </button>
+                </div>
+
+                {selectedClassesData.length > 0 && (
+                  <div className="max-h-28 overflow-y-auto divide-y divide-slate-100 bg-white rounded-lg border border-slate-200 p-2">
+                    {selectedClassesData.map((cls) => (
+                      <div
+                        key={cls.id}
+                        className="py-1 px-1 flex items-center justify-between text-xs"
+                      >
+                        <span className="font-medium text-slate-800">
+                          {cls.name}{' '}
+                          <span className="text-slate-400 font-normal">
+                            ({cls.grade} • {cls.studentCount} HS)
+                          </span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setSelectedClassIds(
+                              selectedClassIds.filter((id) => id !== cls.id)
+                            )
+                          }
+                          className="text-slate-400 hover:text-rose-500 p-0.5 cursor-pointer"
+                        >
+                          <Icon name="x" size={12} />
+                        </button>
+                      </div>
                     ))}
-                  </select>
-                  <p className="text-[11px] text-slate-500 mt-1">
-                    Chỉ hiển thị các khoản phí chung mà tất cả các lớp/học sinh đã chọn đều tham gia đóng (lọc từ 24 khoản phí toàn trường).
-                  </p>
-                </>
-              )}
-              {errors.feeItemId && (
-                <p className="text-xs text-rose-500 mt-1">{errors.feeItemId}</p>
-              )}
-            </div>
-
-            {/* 4. Calculation Type & Value */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Loại miễn giảm <span className="text-rose-500">*</span>
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDiscountType('percent');
-                      if (discountValue > 100) setDiscountValue(20);
-                    }}
-                    className={`py-2 px-3 rounded-lg text-xs font-bold border flex items-center justify-center gap-1.5 transition-all ${
-                      discountType === 'percent'
-                        ? 'bg-blue-50 border-[#0070CE] text-[#0070CE] ring-1 ring-[#0070CE]'
-                        : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                    }`}
-                  >
-                    <FontAwesomeIcon icon={faPercent} />
-                    <span>Giảm theo %</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDiscountType('fixed_amount');
-                      if (discountValue <= 100) setDiscountValue(500000);
-                    }}
-                    className={`py-2 px-3 rounded-lg text-xs font-bold border flex items-center justify-center gap-1.5 transition-all ${
-                      discountType === 'fixed_amount'
-                        ? 'bg-blue-50 border-[#0070CE] text-[#0070CE] ring-1 ring-[#0070CE]'
-                        : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                    }`}
-                  >
-                    <FontAwesomeIcon icon={faCoins} />
-                    <span>Giảm số tiền</span>
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Mức miễn giảm {discountType === 'percent' ? '(%)' : '(VNĐ)'}{' '}
-                  <span className="text-rose-500">*</span>
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min={discountType === 'percent' ? 1 : 1000}
-                    max={discountType === 'percent' ? 100 : undefined}
-                    step={discountType === 'percent' ? 1 : 10000}
-                    value={discountValue}
-                    onChange={(e) => {
-                      setDiscountValue(Number(e.target.value));
-                      if (errors.discountValue) setErrors({ ...errors, discountValue: '' });
-                    }}
-                    className={`w-full px-3.5 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 font-bold ${
-                      errors.discountValue
-                        ? 'border-rose-300 focus:ring-rose-200 bg-rose-50/30 text-rose-700'
-                        : 'border-slate-300 focus:ring-[#0070CE]/20 focus:border-[#0070CE] text-[#0070CE]'
-                    }`}
-                  />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400">
-                    {discountType === 'percent' ? '%' : 'VNĐ'}
                   </div>
-                </div>
-                {errors.discountValue && (
-                  <p className="text-xs text-rose-500 mt-1">{errors.discountValue}</p>
+                )}
+
+                {errors.targetIds && (
+                  <p className="text-xs text-rose-500">{errors.targetIds}</p>
                 )}
               </div>
-            </div>
-
-            {/* 5. Existing Policy Conflict Notification & Replacement Confirmation */}
-            {studentConflicts.length > 0 && (
-              <div className="p-4 bg-amber-50/90 border-2 border-amber-300 rounded-xl space-y-3 animate-fadeIn">
-                <div className="flex items-center gap-2 text-amber-900 font-bold text-xs uppercase tracking-wide">
-                  <FontAwesomeIcon icon={faBell} className="text-amber-500 text-sm" />
-                  <span>Cảnh báo: Phát hiện {studentConflicts.length} học sinh đã có chính sách miễn giảm cho khoản phí này</span>
-                </div>
-                <p className="text-xs text-amber-800 leading-relaxed">
-                  Quy định hệ thống: Mỗi học sinh chỉ áp dụng <strong>DUY NHẤT 01</strong> chính sách miễn giảm cho cùng một khoản thu. Nếu xác nhận thay thế, chính sách mới này sẽ có hiệu lực và chính sách cũ sẽ không còn áp dụng cho học sinh đó.
-                </p>
-                <div className="space-y-2 text-xs max-h-48 overflow-y-auto">
-                  {studentConflicts.map((c) => (
-                    <div
-                      key={c.studentId}
-                      className="p-3 bg-white rounded-lg border border-amber-200/80 shadow-xs space-y-2"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-slate-800">
-                          {c.studentName}{' '}
-                          <span className="text-slate-500 font-normal">({c.className})</span>
-                        </span>
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-[#0070CE] border border-blue-100">
-                          {c.feeItemName}
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-                        <div>
-                          <span className="text-slate-500 block">Chính sách hiện tại:</span>
-                          <span className="font-semibold text-slate-800">{c.existingPolicy.name}</span>
-                          <span className="text-amber-700 font-bold block mt-0.5">
-                            Mức giảm: {c.existingDeductionFormatted}{' '}
-                            <span className="font-normal text-slate-500">
-                              ({c.existingPolicy.scopeType === 'class' ? 'áp dụng theo cả lớp' : 'áp dụng riêng cá nhân'})
-                            </span>
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-slate-500 block">Chính sách mới đang thiết lập:</span>
-                          <span className="font-semibold text-slate-800">{name || 'Chính sách mới'}</span>
-                          <span className="text-[#0070CE] font-bold block mt-0.5">
-                            Mức giảm: {c.newDeductionFormatted}
-                          </span>
-                        </div>
-                      </div>
+            ) : (
+              /* Student Scope Selector */
+              <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-xs font-semibold text-slate-700">
+                      Danh sách học sinh được chỉ định:
                     </div>
-                  ))}
+                    <div className="text-[11px] text-slate-500">
+                      {selectedStudentIds.length === 0
+                        ? 'Chưa chọn học sinh nào'
+                        : `Đã chọn ${selectedStudentIds.length} học sinh`}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsStudentPickerOpen(true)}
+                    className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:border-[#0070CE] text-[#0070CE] text-xs font-bold shadow-sm transition-all cursor-pointer"
+                  >
+                    + Chọn học sinh
+                  </button>
                 </div>
 
-                {/* Replacement Confirmation Checkbox */}
-                <label className="flex items-start gap-2.5 p-3 bg-white border border-amber-300 rounded-lg cursor-pointer hover:bg-amber-50/50 transition-colors">
-                  <input
-                    type="checkbox"
-                    checked={confirmReplacement}
-                    onChange={(e) => {
-                      setConfirmReplacement(e.target.checked);
-                      if (errors.conflict) setErrors((prev) => ({ ...prev, conflict: '' }));
-                    }}
-                    className="mt-0.5 w-4 h-4 text-[#0070CE] rounded border-slate-300 focus:ring-[#0070CE]"
-                  />
-                  <div className="text-xs">
-                    <span className="font-bold text-slate-800 block">
-                      Tôi xác nhận thay thế chính sách cũ bằng chính sách mới này cho các học sinh bị trùng lặp nêu trên.
-                    </span>
-                    <span className="text-slate-600 text-[11px]">
-                      Chính sách cũ đối với khoản thu này sẽ không còn áp dụng cho các học sinh này nữa; chỉ chính sách mới được ghi nhận khi lập hóa đơn.
-                    </span>
+                {selectedStudentsData.length > 0 && (
+                  <div className="max-h-28 overflow-y-auto divide-y divide-slate-100 bg-white rounded-lg border border-slate-200 p-2">
+                    {selectedStudentsData.map((s) => (
+                      <div
+                        key={s.id}
+                        className="py-1 px-1 flex items-center justify-between text-xs"
+                      >
+                        <span className="font-medium text-slate-800">
+                          {s.name}{' '}
+                          <span className="text-slate-400 font-normal">({s.className})</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setSelectedStudentIds(
+                              selectedStudentIds.filter((id) => id !== s.id)
+                            )
+                          }
+                          className="text-slate-400 hover:text-rose-500 p-0.5 cursor-pointer"
+                        >
+                          <Icon name="x" size={12} />
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                </label>
-                {errors.conflict && (
-                  <p className="text-xs text-rose-600 font-semibold">{errors.conflict}</p>
+                )}
+
+                {errors.targetIds && (
+                  <p className="text-xs text-rose-500">{errors.targetIds}</p>
                 )}
               </div>
             )}
+          </div>
 
-            {/* 6. Time Validity Period */}
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                Thời gian áp dụng <span className="text-rose-500">*</span>
+          {/* 3. Applicable Fee Item */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Khoản phí áp dụng <span className="text-rose-500">*</span>
               </label>
-              <div className="grid grid-cols-2 gap-3 mb-3">
-                <button
-                  type="button"
-                  onClick={() => setValidityType('academic_year')}
-                  className={`py-2 px-3 rounded-lg text-xs font-bold border flex items-center justify-center gap-2 transition-all ${
-                    validityType === 'academic_year'
-                      ? 'bg-blue-50 border-[#0070CE] text-[#0070CE] ring-1 ring-[#0070CE]'
-                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faCalendarAlt} />
-                  <span>Theo cả năm học</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setValidityType('month_range')}
-                  className={`py-2 px-3 rounded-lg text-xs font-bold border flex items-center justify-center gap-2 transition-all ${
-                    validityType === 'month_range'
-                      ? 'bg-blue-50 border-[#0070CE] text-[#0070CE] ring-1 ring-[#0070CE]'
-                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faCalendarAlt} />
-                  <span>Theo khoảng tháng</span>
-                </button>
-              </div>
-
-              {validityType === 'academic_year' ? (
-                <div>
-                  <select
-                    value={academicYearId}
-                    onChange={(e) => setAcademicYearId(e.target.value)}
-                    className="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#0070CE]/20 focus:border-[#0070CE]"
-                  >
-                    <option value="ay-2025-2026">Năm học 2025 - 2026</option>
-                    <option value="ay-2026-2027">Năm học 2026 - 2027</option>
-                    <option value="ay-2027-2028">Năm học 2027 - 2028</option>
-                  </select>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-[11px] text-slate-500 mb-1">Từ tháng</label>
-                    <select
-                      value={fromMonth}
-                      onChange={(e) => setFromMonth(e.target.value)}
-                      className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#0070CE]/20 focus:border-[#0070CE]"
-                    >
-                      <option value="2026-09">Tháng 09/2026</option>
-                      <option value="2026-10">Tháng 10/2026</option>
-                      <option value="2026-11">Tháng 11/2026</option>
-                      <option value="2026-12">Tháng 12/2026</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-[11px] text-slate-500 mb-1">Đến tháng</label>
-                    <select
-                      value={toMonth}
-                      onChange={(e) => setToMonth(e.target.value)}
-                      className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#0070CE]/20 focus:border-[#0070CE]"
-                    >
-                      <option value="2026-09">Tháng 09/2026</option>
-                      <option value="2026-10">Tháng 10/2026</option>
-                      <option value="2026-11">Tháng 11/2026</option>
-                      <option value="2026-12">Tháng 12/2026</option>
-                      <option value="2027-05">Tháng 05/2027</option>
-                    </select>
-                  </div>
-                </div>
+              {targetIds.length > 0 && applicableFeeItems.length > 0 && (
+                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#0070CE] border border-blue-200/60">
+                  {applicableFeeItems.length} khoản phí chung hợp lệ
+                </span>
               )}
             </div>
 
-            {/* 7. Reason */}
+            {targetIds.length === 0 ? (
+              <div className="p-3 bg-amber-50/80 border border-amber-200 rounded-lg text-xs text-amber-800 flex items-center gap-2">
+                <Icon name="info" size={14} className="text-amber-500 shrink-0" />
+                <span>
+                  Vui lòng chọn <strong>Nhóm áp dụng</strong> ở trên trước để hệ thống tải danh mục các khoản phí áp dụng tương ứng.
+                </span>
+              </div>
+            ) : applicableFeeItems.length === 0 ? (
+              <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-700 flex items-center gap-2">
+                <Icon name="alert-triangle" size={14} className="text-rose-500 shrink-0" />
+                <span>
+                  Không tìm thấy khoản phí chung nào giữa các đối tượng đã chọn (giao danh mục khoản phí = rỗng). Vui lòng chọn lại nhóm áp dụng.
+                </span>
+              </div>
+            ) : (
+              <div>
+                <Dropdown
+                  value={feeItemId}
+                  onChange={(val) => {
+                    setFeeItemId(val);
+                    if (errors.feeItemId) setErrors({ ...errors, feeItemId: '' });
+                  }}
+                  options={feeItemOptions}
+                  placeholder="-- Chọn khoản phí áp dụng --"
+                  fullWidth
+                />
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Chỉ hiển thị các khoản phí chung mà tất cả các lớp/học sinh đã chọn đều tham gia đóng (lọc từ 24 khoản phí toàn trường).
+                </p>
+              </div>
+            )}
+            {errors.feeItemId && (
+              <p className="text-xs text-rose-500 mt-1">{errors.feeItemId}</p>
+            )}
+          </div>
+
+          {/* 4. Calculation Type & Value */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                Lý do miễn giảm <span className="text-rose-500">*</span>
+                Loại miễn giảm <span className="text-rose-500">*</span>
               </label>
-              <div className="flex flex-wrap gap-1.5 mb-2">
-                {COMMON_REASONS.map((r, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => {
-                      setReason(r);
-                      if (errors.reason) setErrors({ ...errors, reason: '' });
-                    }}
-                    className="text-[11px] px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors"
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDiscountType('percent');
+                    if (discountValue > 100) setDiscountValue(20);
+                  }}
+                  className={`py-2 px-3 rounded-lg text-xs font-bold border flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                    discountType === 'percent'
+                      ? 'bg-blue-50 border-[#0070CE] text-[#0070CE] ring-1 ring-[#0070CE]'
+                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
+                  <Icon name="percent" size={12} />
+                  <span>Giảm theo %</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDiscountType('fixed_amount');
+                    if (discountValue <= 100) setDiscountValue(500000);
+                  }}
+                  className={`py-2 px-3 rounded-lg text-xs font-bold border flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                    discountType === 'fixed_amount'
+                      ? 'bg-blue-50 border-[#0070CE] text-[#0070CE] ring-1 ring-[#0070CE]'
+                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
+                  <Icon name="credit-card" size={12} />
+                  <span>Giảm số tiền</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Mức miễn giảm {discountType === 'percent' ? '(%)' : '(VNĐ)'}{' '}
+                <span className="text-rose-500">*</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  min={discountType === 'percent' ? 1 : 1000}
+                  max={discountType === 'percent' ? 100 : undefined}
+                  step={discountType === 'percent' ? 1 : 10000}
+                  value={discountValue || ''}
+                  onChange={(e) => {
+                    setDiscountValue(Number(e.target.value));
+                    if (errors.discountValue) setErrors({ ...errors, discountValue: '' });
+                  }}
+                  placeholder="0"
+                  className={`w-full px-3.5 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 font-bold ${
+                    errors.discountValue
+                      ? 'border-rose-300 focus:ring-rose-200 bg-rose-50/30 text-rose-700'
+                      : 'border-slate-300 focus:ring-[#0070CE]/20 focus:border-[#0070CE] text-[#0070CE]'
+                  }`}
+                />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400">
+                  {discountType === 'percent' ? '%' : 'VNĐ'}
+                </div>
+              </div>
+              {errors.discountValue && (
+                <p className="text-xs text-rose-500 mt-1">{errors.discountValue}</p>
+              )}
+            </div>
+          </div>
+
+          {/* 5. Existing Policy Conflict Notification & Replacement Confirmation */}
+          {studentConflicts.length > 0 && (
+            <div className="p-4 bg-amber-50/90 border-2 border-amber-300 rounded-xl space-y-3 animate-fadeIn">
+              <div className="flex items-center gap-2 text-amber-900 font-bold text-xs uppercase tracking-wide">
+                <Icon name="bell" size={14} className="text-amber-500" />
+                <span>Cảnh báo: Phát hiện {studentConflicts.length} học sinh đã có chính sách miễn giảm cho khoản phí này</span>
+              </div>
+              <p className="text-xs text-amber-800 leading-relaxed">
+                Quy định hệ thống: Mỗi học sinh chỉ áp dụng <strong>DUY NHẤT 01</strong> chính sách miễn giảm cho cùng một khoản thu. Nếu xác nhận thay thế, chính sách mới này sẽ có hiệu lực và chính sách cũ sẽ không còn áp dụng cho học sinh đó.
+              </p>
+              <div className="space-y-2 text-xs max-h-48 overflow-y-auto">
+                {studentConflicts.map((c) => (
+                  <div
+                    key={c.studentId}
+                    className="p-3 bg-white rounded-lg border border-amber-200/80 shadow-xs space-y-2"
                   >
-                    + {r}
-                  </button>
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-slate-800">
+                        {c.studentName}{' '}
+                        <span className="text-slate-500 font-normal">({c.className})</span>
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-[#0070CE] border border-blue-100">
+                        {c.feeItemName}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                      <div>
+                        <span className="text-slate-500 block">Chính sách hiện tại:</span>
+                        <span className="font-semibold text-slate-800">{c.existingPolicy.name}</span>
+                        <span className="text-amber-700 font-bold block mt-0.5">
+                          Mức giảm: {c.existingDeductionFormatted}{' '}
+                          <span className="font-normal text-slate-500">
+                            ({c.existingPolicy.scopeType === 'class' ? 'áp dụng theo cả lớp' : 'áp dụng riêng cá nhân'})
+                          </span>
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-slate-500 block">Chính sách mới đang thiết lập:</span>
+                        <span className="font-semibold text-slate-800">{name || 'Chính sách mới'}</span>
+                        <span className="text-[#0070CE] font-bold block mt-0.5">
+                          Mức giảm: {c.newDeductionFormatted}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
-              <textarea
-                rows={3}
-                value={reason}
-                onChange={(e) => {
-                  setReason(e.target.value);
-                  if (errors.reason) setErrors({ ...errors, reason: '' });
-                }}
-                placeholder="Nhập chi tiết căn cứ pháp lý, văn bản hoặc lý do miễn giảm..."
-                className={`w-full px-3.5 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 ${
-                  errors.reason
-                    ? 'border-rose-300 focus:ring-rose-200 bg-rose-50/30'
-                    : 'border-slate-300 focus:ring-[#0070CE]/20 focus:border-[#0070CE]'
+
+              {/* Replacement Confirmation Checkbox */}
+              <label className="flex items-start gap-2.5 p-3 bg-white border border-amber-300 rounded-lg cursor-pointer hover:bg-amber-50/50 transition-colors">
+                <input
+                  type="checkbox"
+                  checked={confirmReplacement}
+                  onChange={(e) => {
+                    setConfirmReplacement(e.target.checked);
+                    if (errors.conflict) setErrors((prev) => ({ ...prev, conflict: '' }));
+                  }}
+                  className="mt-0.5 w-4 h-4 text-[#0070CE] rounded border-slate-300 focus:ring-[#0070CE]"
+                />
+                <div className="text-xs">
+                  <span className="font-bold text-slate-800 block">
+                    Tôi xác nhận thay thế chính sách cũ bằng chính sách mới này cho các học sinh bị trùng lặp nêu trên.
+                  </span>
+                  <span className="text-slate-600 text-[11px]">
+                    Chính sách cũ đối với khoản thu này sẽ không còn áp dụng cho các học sinh này nữa; chỉ chính sách mới được ghi nhận khi lập hóa đơn.
+                  </span>
+                </div>
+              </label>
+              {errors.conflict && (
+                <p className="text-xs text-rose-600 font-semibold">{errors.conflict}</p>
+              )}
+            </div>
+          )}
+
+          {/* 6. Time Validity Period */}
+          <div>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              Thời gian áp dụng <span className="text-rose-500">*</span>
+            </label>
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <button
+                type="button"
+                onClick={() => setValidityType('academic_year')}
+                className={`py-2 px-3 rounded-lg text-xs font-bold border flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  validityType === 'academic_year'
+                    ? 'bg-blue-50 border-[#0070CE] text-[#0070CE] ring-1 ring-[#0070CE]'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
-              />
-              {errors.reason && <p className="text-xs text-rose-500 mt-1">{errors.reason}</p>}
+              >
+                <Icon name="calendar" size={12} />
+                <span>Theo cả năm học</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setValidityType('month_range')}
+                className={`py-2 px-3 rounded-lg text-xs font-bold border flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  validityType === 'month_range'
+                    ? 'bg-blue-50 border-[#0070CE] text-[#0070CE] ring-1 ring-[#0070CE]'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                <Icon name="calendar" size={12} />
+                <span>Theo khoảng tháng</span>
+              </button>
             </div>
 
-            {/* 8. Business Rule Note */}
-            <div className="p-3 bg-blue-50/60 border border-blue-200 rounded-xl text-xs text-blue-900 flex items-start gap-2.5">
-              <FontAwesomeIcon icon={faInfoCircle} className="text-blue-500 mt-0.5" />
+            {validityType === 'academic_year' ? (
               <div>
-                <span className="font-bold">Quy tắc 01 chính sách miễn giảm cho mỗi khoản thu:</span> Mỗi học sinh
-                chỉ được thụ hưởng duy nhất 01 chính sách miễn giảm cho cùng một khoản thu (ví dụ: Học phí chính khóa).
-                Khi tạo hoặc cập nhật chính sách mới cho cùng khoản thu, hệ thống sẽ kiểm tra trùng lặp, yêu cầu người dùng
-                xác nhận thay thế và tự động loại bỏ áp dụng chính sách cũ đối với học sinh đó. Danh mục khoản phí hiển thị
-                được tự động lấy theo tập giao các khoản thu chung giữa các lớp hoặc học sinh đã chọn.
+                <Dropdown
+                  value={academicYearId}
+                  onChange={(val) => setAcademicYearId(val)}
+                  options={ACADEMIC_YEAR_OPTIONS}
+                  fullWidth
+                />
               </div>
-            </div>
-          </form>
+            ) : (
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] text-slate-500 mb-1">Từ tháng</label>
+                  <Dropdown
+                    value={fromMonth}
+                    onChange={(val) => setFromMonth(val)}
+                    options={MONTH_OPTIONS}
+                    fullWidth
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] text-slate-500 mb-1">Đến tháng</label>
+                  <Dropdown
+                    value={toMonth}
+                    onChange={(val) => setToMonth(val)}
+                    options={MONTH_OPTIONS}
+                    fullWidth
+                  />
+                </div>
+              </div>
+            )}
+          </div>
 
-          {/* Modal Footer */}
-          <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-end gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
-            >
-              Hủy
-            </button>
-            <button
-              type="button"
-              onClick={handleSubmit}
-              className="px-5 py-2 text-xs font-bold text-white bg-[#0070CE] hover:bg-blue-700 rounded-lg shadow-sm transition-colors flex items-center gap-1.5"
-            >
-              <FontAwesomeIcon icon={faSave} />
-              <span>{editingPolicy ? 'Lưu thay đổi' : 'Tạo chính sách'}</span>
-            </button>
+          {/* 7. Reason */}
+          <div>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              Lý do miễn giảm <span className="text-rose-500">*</span>
+            </label>
+            <div className="flex flex-wrap gap-1.5 mb-2">
+              {COMMON_REASONS.map((r, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => {
+                    setReason(r);
+                    if (errors.reason) setErrors({ ...errors, reason: '' });
+                  }}
+                  className="text-[11px] px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors cursor-pointer"
+                >
+                  + {r}
+                </button>
+              ))}
+            </div>
+            <textarea
+              rows={3}
+              value={reason}
+              onChange={(e) => {
+                setReason(e.target.value);
+                if (errors.reason) setErrors({ ...errors, reason: '' });
+              }}
+              placeholder="Nhập chi tiết căn cứ pháp lý, văn bản hoặc lý do miễn giảm..."
+              className={`w-full px-3.5 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 ${
+                errors.reason
+                  ? 'border-rose-300 focus:ring-rose-200 bg-rose-50/30'
+                  : 'border-slate-300 focus:ring-[#0070CE]/20 focus:border-[#0070CE]'
+              }`}
+            />
+            {errors.reason && <p className="text-xs text-rose-500 mt-1">{errors.reason}</p>}
+          </div>
+
+          {/* 8. Business Rule Note */}
+          <div className="p-3 bg-blue-50/60 border border-blue-200 rounded-xl text-xs text-blue-900 flex items-start gap-2.5">
+            <Icon name="info" size={14} className="text-blue-500 mt-0.5 shrink-0" />
+            <div>
+              <span className="font-bold">Quy tắc 01 chính sách miễn giảm cho mỗi khoản thu:</span> Mỗi học sinh
+              chỉ được thụ hưởng duy nhất 01 chính sách miễn giảm cho cùng một khoản thu (ví dụ: Học phí chính khóa).
+              Khi tạo hoặc cập nhật chính sách mới cho cùng khoản thu, hệ thống sẽ kiểm tra trùng lặp, yêu cầu người dùng
+              xác nhận thay thế và tự động loại bỏ áp dụng chính sách cũ đối với học sinh đó. Danh mục khoản phí hiển thị
+              được tự động lấy theo tập giao các khoản thu chung giữa các lớp hoặc học sinh đã chọn.
+            </div>
           </div>
         </div>
-      </div>
+      </PopupModal>
 
       {/* Student Picker Sub-modal */}
       <StudentPickerModal

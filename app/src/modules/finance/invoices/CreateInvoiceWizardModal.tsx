@@ -8,20 +8,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faPlus,
-  faTrash,
-  faUtensils,
-  faInfoCircle,
-  faCalculator,
-  faPercent,
-  faUsers,
-  faGraduationCap,
-  faSyncAlt,
-  faEye,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown, DropdownOption } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { createBatchInvoices } from '../../../store/slices/invoiceSlice';
 import { mockFeeClasses } from '../../../services/mockInvoiceData';
@@ -1087,13 +1074,13 @@ export const CreateInvoiceWizard: React.FC = () => {
             onClick={() => router.push(`/${schoolCode}/school/fee`)}
             className="text-slate-400 hover:text-slate-600 p-2"
           >
-            <FontAwesomeIcon icon={faTimes} className="text-lg" />
+            <Icon name="xmark" size={18} />
           </button>
         </div>
 
         {/* BR05 Info Alert */}
         <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start gap-2.5 text-xs text-blue-800">
-          <FontAwesomeIcon icon={faInfoCircle} className="text-blue-500 mt-0.5" />
+          <Icon name="circle-info" size={16} className="text-blue-500 shrink-0 mt-0.5" />
           <div>
             <span className="font-bold">Quy tắc nghiệp vụ hệ thống (BR05):</span> Hệ thống sẽ{' '}
             <span className="font-semibold">tự động bỏ qua</span> học sinh đã có hóa đơn hoặc đã thanh toán đủ học phí + tiền ăn trong tháng đang chọn để tránh lập trùng. Tiền ăn bán trú được tự động đối soát trừ ngày nghỉ phép hợp lệ từ Báo cáo Điểm danh.
@@ -1137,18 +1124,19 @@ export const CreateInvoiceWizard: React.FC = () => {
               <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Chọn khối lớp <span className="text-rose-500">*</span>
               </label>
-              <select
+              <Dropdown
                 value={gradeLevel}
-                onChange={(e) => setGradeLevel(e.target.value)}
-                className="w-full h-10 px-3 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800"
-              >
-                <option value="Khối 6">Khối 6</option>
-                <option value="Khối 7">Khối 7</option>
-                <option value="Khối 10">Khối 10</option>
-                <option value="Khối 11">Khối 11</option>
-                <option value="Khối 12">Khối 12</option>
-                <option value="Mầm non">Mầm non</option>
-              </select>
+                onChange={(val) => setGradeLevel(val)}
+                options={[
+                  { value: 'Khối 6', label: 'Khối 6' },
+                  { value: 'Khối 7', label: 'Khối 7' },
+                  { value: 'Khối 10', label: 'Khối 10' },
+                  { value: 'Khối 11', label: 'Khối 11' },
+                  { value: 'Khối 12', label: 'Khối 12' },
+                  { value: 'Mầm non', label: 'Mầm non' },
+                ]}
+                fullWidth
+              />
             </div>
           )}
 
@@ -1168,8 +1156,8 @@ export const CreateInvoiceWizard: React.FC = () => {
                   onClick={() => setIsClassPickerOpen(true)}
                   className="px-3.5 py-1.5 bg-blue-50 text-[#0070CE] hover:bg-blue-100 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-blue-200 shrink-0 self-start sm:self-auto"
                 >
-                  <FontAwesomeIcon icon={faUsers} />
-                  <span>+ Chọn lớp học</span>
+                  <Icon name="users" size={14} />
+                  <span>Chọn lớp học</span>
                 </button>
               </div>
 
@@ -1177,7 +1165,7 @@ export const CreateInvoiceWizard: React.FC = () => {
               <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 min-h-[50px] flex flex-wrap items-center gap-2">
                 {selectedClassIds.length === 0 ? (
                   <span className="text-xs text-slate-400 italic">
-                    Chưa chọn lớp học nào. Nhấn &quot;+ Chọn lớp học&quot; để thêm Lớp 10A1, Lớp 10A2...
+                    Chưa chọn lớp học nào. Nhấn &quot;Chọn lớp học&quot; để thêm Lớp 10A1, Lớp 10A2...
                   </span>
                 ) : (
                   selectedClassIds.map((cid) => {
@@ -1189,7 +1177,7 @@ export const CreateInvoiceWizard: React.FC = () => {
                         key={cid}
                         className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-800 text-xs font-semibold shadow-2xs group hover:border-blue-300 transition"
                       >
-                        <FontAwesomeIcon icon={faGraduationCap} className="text-[#0070CE]" />
+                        <Icon name="graduation-cap" size={13} className="text-[#0070CE]" />
                         <span>{cls?.name || cid}</span>
                         {cls && 'studentCount' in cls && (
                           <span className="text-[10px] text-slate-400">
@@ -1214,7 +1202,7 @@ export const CreateInvoiceWizard: React.FC = () => {
                           className="text-slate-400 hover:text-rose-500 transition ml-0.5"
                           title="Gỡ lớp này"
                         >
-                          <FontAwesomeIcon icon={faTimes} className="text-xs" />
+                          <Icon name="xmark" size={12} />
                         </button>
                       </span>
                     );
@@ -1224,9 +1212,10 @@ export const CreateInvoiceWizard: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setIsClassPickerOpen(true)}
-                    className="text-xs text-[#0070CE] hover:text-blue-700 font-bold px-2 py-1"
+                    className="text-xs text-[#0070CE] hover:text-blue-700 font-bold px-2 py-1 inline-flex items-center gap-1"
                   >
-                    + Thêm lớp
+                    <Icon name="plus" size={12} />
+                    <span>Thêm lớp</span>
                   </button>
                 )}
               </div>
@@ -1240,10 +1229,9 @@ export const CreateInvoiceWizard: React.FC = () => {
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Lọc theo lớp học
                   </label>
-                  <select
+                  <Dropdown
                     value={selectedClassFilterForStudent}
-                    onChange={(e) => {
-                      const newClass = e.target.value;
+                    onChange={(newClass) => {
                       setSelectedClassFilterForStudent(newClass);
                       const matching =
                         newClass === 'all'
@@ -1253,34 +1241,34 @@ export const CreateInvoiceWizard: React.FC = () => {
                         handleStudentChange(matching[0].studentId);
                       }
                     }}
-                    className="w-full h-10 px-3 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800 font-medium"
-                  >
-                    <option value="all">Tất cả lớp học ({students.length} học sinh)</option>
-                    {mockFeeClasses.map((c) => {
-                      const count = students.filter((s) => s.classId === c.id).length;
-                      return (
-                        <option key={c.id} value={c.id}>
-                          {c.name} ({c.gradeLevel}) {count > 0 ? `— ${count} HS` : ''}
-                        </option>
-                      );
-                    })}
-                  </select>
+                    options={[
+                      { value: 'all', label: `Tất cả lớp học (${students.length} học sinh)` },
+                      ...mockFeeClasses.map((c) => {
+                        const count = students.filter((s) => s.classId === c.id).length;
+                        return {
+                          value: c.id,
+                          label: `${c.name} (${c.gradeLevel})${count > 0 ? ` — ${count} HS` : ''}`,
+                        };
+                      }),
+                    ]}
+                    searchable
+                    fullWidth
+                  />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Chọn học sinh <span className="text-rose-500">*</span>
                   </label>
-                  <select
+                  <Dropdown
                     value={studentId}
-                    onChange={(e) => handleStudentChange(e.target.value)}
-                    className="w-full h-10 px-3 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800 font-medium"
-                  >
-                    {filteredStudentsForSelection.map((s) => (
-                      <option key={s.studentId} value={s.studentId}>
-                        {s.studentName} ({s.studentCode} - {s.className})
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(val) => handleStudentChange(val)}
+                    options={filteredStudentsForSelection.map((s) => ({
+                      value: s.studentId,
+                      label: `${s.studentName} (${s.studentCode} - ${s.className})`,
+                    }))}
+                    searchable
+                    fullWidth
+                  />
                 </div>
               </div>
             </div>
@@ -1290,7 +1278,7 @@ export const CreateInvoiceWizard: React.FC = () => {
           <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between">
             <div className="pr-4">
               <div className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                <FontAwesomeIcon icon={faPercent} className="text-[#0070CE]" />
+                <Icon name="percent" size={13} className="text-[#0070CE]" />
                 <span>Tự động áp dụng chính sách miễn giảm</span>
                 <span className="px-2 py-0.5 text-[10px] rounded-full bg-emerald-100 text-emerald-700 font-bold">
                   Mặc định BẬT
@@ -1323,16 +1311,17 @@ export const CreateInvoiceWizard: React.FC = () => {
               <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Kỳ thu (Tháng hóa đơn) <span className="text-rose-500">*</span>
               </label>
-              <select
+              <Dropdown
                 value={billingMonth}
-                onChange={handleMonthChange}
-                className="w-full h-10 px-3 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800"
-              >
-                <option value="2026-09">Tháng 09/2026</option>
-                <option value="2026-10">Tháng 10/2026</option>
-                <option value="2026-11">Tháng 11/2026</option>
-                <option value="2026-12">Tháng 12/2026</option>
-              </select>
+                onChange={(val) => handleMonthChange({ target: { value: val } } as any)}
+                options={[
+                  { value: '2026-09', label: 'Tháng 09/2026' },
+                  { value: '2026-10', label: 'Tháng 10/2026' },
+                  { value: '2026-11', label: 'Tháng 11/2026' },
+                  { value: '2026-12', label: 'Tháng 12/2026' },
+                ]}
+                fullWidth
+              />
             </div>
 
             <div>
@@ -1429,7 +1418,7 @@ export const CreateInvoiceWizard: React.FC = () => {
                 className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition border border-slate-200"
                 title="Tải lại các khoản thu mặc định theo lớp học đã chọn"
               >
-                <FontAwesomeIcon icon={faSyncAlt} className="text-slate-500" />
+                <Icon name="rotate" size={12} className="text-slate-500" />
                 <span>Tải lại theo lớp</span>
               </button>
               <button
@@ -1437,7 +1426,7 @@ export const CreateInvoiceWizard: React.FC = () => {
                 onClick={handleAddItem}
                 className="px-3.5 py-1.5 bg-blue-50 text-[#0070CE] hover:bg-blue-100 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-blue-200"
               >
-                <FontAwesomeIcon icon={faPlus} />
+                <Icon name="plus" size={12} />
                 <span>Thêm dòng thu</span>
               </button>
             </div>
@@ -1449,7 +1438,7 @@ export const CreateInvoiceWizard: React.FC = () => {
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-md bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
-                    <FontAwesomeIcon icon={faUtensils} className="w-3.5 h-3.5" />
+                    <Icon name="utensils" size={13} />
                   </div>
                   <span className="text-xs font-bold text-slate-800 uppercase tracking-wide">
                     Giảm trừ hoàn tiền khi nghỉ học tháng {currentStudentMealRefund.reconciledMonth} (Tự động kết chuyển vào kỳ {billingMonth})
@@ -1502,7 +1491,7 @@ export const CreateInvoiceWizard: React.FC = () => {
               </div>
 
               <div className="text-[11px] text-emerald-900 bg-white/60 p-2 rounded-md flex items-center gap-2">
-                <FontAwesomeIcon icon={faInfoCircle} className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <Icon name="circle-info" size={14} className="text-emerald-600 shrink-0" />
                 <span>
                   Hệ thống tự động trừ trực tiếp <strong>{formatVND(currentStudentMealRefund.totalMealRefund)}</strong> vào các dòng khoản thu tương ứng của học sinh khi tạo hóa đơn và ghi chú rõ ràng trên phiếu báo gửi phụ huynh.
                 </span>
@@ -1515,7 +1504,7 @@ export const CreateInvoiceWizard: React.FC = () => {
             <div className="p-3.5 bg-gradient-to-r from-amber-50/90 via-orange-50/40 to-amber-50/90 border border-amber-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-amber-900 shadow-2xs">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 font-bold shadow-2xs">
-                  <FontAwesomeIcon icon={faUtensils} className="w-3.5 h-3.5" />
+                  <Icon name="utensils" size={14} />
                 </div>
                 <div>
                   <div className="font-bold text-slate-800 flex items-center gap-2">
@@ -1537,7 +1526,7 @@ export const CreateInvoiceWizard: React.FC = () => {
                 onClick={() => setIsBatchMealRefundModalOpen(true)}
                 className="px-3.5 py-1.5 bg-white hover:bg-amber-100/80 text-[#0070CE] font-bold border border-amber-300 hover:border-amber-400 rounded-lg shrink-0 flex items-center gap-1.5 transition shadow-xs text-xs self-end sm:self-auto"
               >
-                <FontAwesomeIcon icon={faEye} />
+                <Icon name="eye" size={13} />
                 <span>Xem chi tiết ({eligibleRefundStudents.length})</span>
               </button>
             </div>
@@ -1560,10 +1549,32 @@ export const CreateInvoiceWizard: React.FC = () => {
                 {items.map((item, idx) => {
                   const calc = lineCalculations[idx];
                   const candidates = getItemCandidates(item);
+
+                  const feeOptions: DropdownOption[] = [
+                    ...applicableFees.map((af) => ({
+                      value: af.id,
+                      label: `${af.name} (${formatVND(af.defaultAmount)})`,
+                      badge: 'Theo lớp',
+                      badgeTone: 'primary' as const,
+                    })),
+                    ...allCatalogFees
+                      .filter((f) => !applicableFees.some((af) => af.id === f.id))
+                      .map((f) => ({
+                        value: f.id,
+                        label: `${f.name} (${formatVND(f.defaultAmount)})`,
+                        badge: 'Toàn trường',
+                        badgeTone: 'neutral' as const,
+                      })),
+                    {
+                      value: 'custom',
+                      label: 'Tùy chỉnh / Khoản thu khác',
+                    },
+                  ];
+
                   return (
                     <tr key={idx} className="hover:bg-slate-50/50">
-                      <td className="py-2.5 px-3 min-w-[220px]">
-                        <select
+                      <td className="py-2.5 px-3 min-w-[240px]">
+                        <Dropdown
                           value={
                             (item as any).feeItemId ||
                             allCatalogFees.find(
@@ -1571,33 +1582,18 @@ export const CreateInvoiceWizard: React.FC = () => {
                             )?.id ||
                             'custom'
                           }
-                          onChange={(e) => {
-                            if (e.target.value === 'custom') {
+                          onChange={(val) => {
+                            if (val === 'custom') {
                               handleUpdateItem(idx, 'feeItemId', undefined);
                             } else {
-                              handleFeeSelect(idx, e.target.value);
+                              handleFeeSelect(idx, val);
                             }
                           }}
-                          className="w-full h-8 px-2 bg-slate-50 border border-slate-300 rounded text-xs text-slate-800 font-semibold focus:border-[#0070CE]"
-                        >
-                          <optgroup label="⭐ Khoản thu theo lớp đã chọn">
-                            {applicableFees.map((af) => (
-                              <option key={af.id} value={af.id}>
-                                {af.name} ({formatVND(af.defaultAmount)})
-                              </option>
-                            ))}
-                          </optgroup>
-                          <optgroup label="📋 Danh mục khoản phí toàn trường">
-                            {allCatalogFees.filter(
-                              (f) => !applicableFees.some((af) => af.id === f.id)
-                            ).map((f) => (
-                              <option key={f.id} value={f.id}>
-                                {f.name} ({formatVND(f.defaultAmount)})
-                              </option>
-                            ))}
-                          </optgroup>
-                          <option value="custom">✏️ Tùy chỉnh / Khoản thu khác</option>
-                        </select>
+                          options={feeOptions}
+                          size="sm"
+                          searchable
+                          fullWidth
+                        />
                         <input
                           type="text"
                           value={item.name}
@@ -1605,7 +1601,7 @@ export const CreateInvoiceWizard: React.FC = () => {
                             handleUpdateItem(idx, 'name', e.target.value)
                           }
                           placeholder="Tên dòng khoản thu"
-                          className="w-full h-7 px-2 mt-1 bg-white border border-slate-200 rounded text-xs text-slate-800"
+                          className="w-full h-7 px-2 mt-1.5 bg-white border border-slate-200 rounded text-xs text-slate-800"
                         />
                       </td>
                       <td className="py-2.5 px-3">
@@ -1656,20 +1652,19 @@ export const CreateInvoiceWizard: React.FC = () => {
                               onChange={(e) => handleDiscountValueChange(idx, e.target.value)}
                               className="w-full h-8 px-2 bg-transparent text-xs text-right text-emerald-600 font-bold focus:outline-none"
                             />
-                            <select
-                              value={item.discountType || 'percent'}
-                              onChange={(e) =>
+                            <button
+                              type="button"
+                              onClick={() =>
                                 handleSwitchDiscountType(
                                   idx,
-                                  e.target.value as 'percent' | 'fixed_amount'
+                                  item.discountType === 'fixed_amount' ? 'percent' : 'fixed_amount'
                                 )
                               }
-                              className="h-8 px-1.5 bg-slate-50 hover:bg-slate-100 text-xs font-bold text-slate-700 border-l border-slate-200 cursor-pointer focus:outline-none shrink-0"
-                              title="Chuyển đổi đơn vị giảm trừ (% hoặc đ)"
+                              className="h-8 px-2.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 border-l border-slate-200 cursor-pointer transition-colors shrink-0"
+                              title="Chuyển đổi đơn vị (% hoặc đ)"
                             >
-                              <option value="percent">%</option>
-                              <option value="fixed_amount">đ</option>
-                            </select>
+                              {item.discountType === 'fixed_amount' ? 'đ' : '%'}
+                            </button>
                           </div>
                           {calc && calc.discountAmount > 0 && (
                             <span className="text-[11px] font-semibold text-emerald-600 tracking-tight whitespace-nowrap">
@@ -1685,7 +1680,7 @@ export const CreateInvoiceWizard: React.FC = () => {
                           </span>
                           {calc?.refundAmount && calc.refundAmount > 0 ? (
                             <div className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 mt-1 inline-flex items-center gap-1 shadow-2xs">
-                              <FontAwesomeIcon icon={faUtensils} className="text-[9px] text-emerald-600" />
+                              <Icon name="utensils" size={11} className="text-emerald-600" />
                               <span>Hoàn tiền: -{formatVND(calc.refundAmount)}</span>
                             </div>
                           ) : null}
@@ -1698,7 +1693,7 @@ export const CreateInvoiceWizard: React.FC = () => {
                             onClick={() => handleRemoveItem(idx)}
                             className="text-slate-400 hover:text-rose-600 p-1"
                           >
-                            <FontAwesomeIcon icon={faTrash} />
+                            <Icon name="trash" size={13} />
                           </button>
                         )}
                       </td>
@@ -1741,8 +1736,9 @@ export const CreateInvoiceWizard: React.FC = () => {
                 </div>
               )}
               {autoApplyDiscount && scope !== 'hoc_sinh' && (
-                <div className="text-[11px] text-emerald-700 py-1 bg-emerald-50/70 rounded px-2 text-left border border-emerald-100">
-                  ✓ Tự động áp dụng chính sách miễn giảm cho các học sinh thuộc diện thụ hưởng.
+                <div className="text-[11px] text-emerald-700 py-1 bg-emerald-50/70 rounded px-2 text-left border border-emerald-100 flex items-center gap-1.5">
+                  <Icon name="check" size={12} className="text-emerald-600 shrink-0" />
+                  <span>Tự động áp dụng chính sách miễn giảm cho các học sinh thuộc diện thụ hưởng.</span>
                 </div>
               )}
               <div className="flex justify-between text-sm font-bold text-slate-900 border-t border-slate-200 pt-1.5">
@@ -1757,7 +1753,7 @@ export const CreateInvoiceWizard: React.FC = () => {
           <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xs">
             <div className="flex items-start gap-3">
               <div className="w-9 h-9 rounded-lg bg-blue-100 text-[#0070CE] flex items-center justify-center font-bold shrink-0 mt-0.5 shadow-2xs">
-                <FontAwesomeIcon icon={faInfoCircle} className="w-4 h-4" />
+                <Icon name="circle-info" size={16} />
               </div>
               <div className="space-y-1">
                 <div className="text-xs font-bold text-slate-800">

@@ -2,8 +2,6 @@ import React, { useMemo } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faCalendarTimes } from '@fortawesome/free-solid-svg-icons';
 import { PortalLayout } from '../../../../components/layout/PortalLayout';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import {
@@ -18,6 +16,7 @@ import {
 import { SessionDetailHeader } from '../../../../modules/finance/reconciliation/SessionDetailHeader';
 import { SessionDetailToolbar } from '../../../../modules/finance/reconciliation/SessionDetailToolbar';
 import { TransactionRosterTable } from '../../../../modules/finance/reconciliation/TransactionRosterTable';
+import { Icon } from '@/components/ds';
 
 export default function ReconciliationSessionDetailPage() {
   const router = useRouter();
@@ -69,7 +68,7 @@ export default function ReconciliationSessionDetailPage() {
         <div className="p-8 max-w-4xl mx-auto text-center">
           <div className="bg-white rounded-2xl border border-slate-200 p-12 shadow-xs">
             <div className="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FontAwesomeIcon icon={faCalendarTimes} className="w-8 h-8" />
+              <Icon name="calendar" size={32} />
             </div>
             <h2 className="text-xl font-bold text-slate-800 mb-2 font-heading">
               Không Tìm Thấy Phiên Đối Soát
@@ -79,9 +78,9 @@ export default function ReconciliationSessionDetailPage() {
             </p>
             <Link
               href={`/${schoolCode}/school/reconciliation`}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-[#0070CE] hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors"
             >
-              <FontAwesomeIcon icon={faArrowLeft} className="w-4 h-4" />
+              <Icon name="arrow-left" size={14} />
               <span>Quay lại danh sách phiên</span>
             </Link>
           </div>

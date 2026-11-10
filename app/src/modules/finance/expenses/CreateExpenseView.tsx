@@ -1,18 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faPlus,
-  faTrash,
-  faInfoCircle,
-  faCheck,
-  faSave,
-  faUserGraduate,
-  faUserTie,
-  faExclamationCircle,
-} from '@fortawesome/free-solid-svg-icons';
 import {
   ExpenseCategory,
   VoucherType,
@@ -26,7 +14,7 @@ import {
   formatExpenseAmount,
   validateCreateVoucher,
 } from '../../../utils/expenseValidation';
-import { Dropdown } from '@/components/ds';
+import { Dropdown, Icon } from '@/components/ds';
 
 interface CreateExpenseViewProps {
   categories: ExpenseCategory[];
@@ -193,28 +181,29 @@ export const CreateExpenseView: React.FC<CreateExpenseViewProps> = ({
   return (
     <div className="max-w-5xl mx-auto space-y-6 pb-12">
       {/* Header */}
-      <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+      <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
           <button
             onClick={handleCancel}
-            className="w-9 h-9 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 flex items-center justify-center transition-colors"
+            className="w-9 h-9 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 flex items-center justify-center transition-colors cursor-pointer"
+            aria-label="Quay lại"
           >
-            <FontAwesomeIcon icon={faArrowLeft} />
+            <Icon name="arrow-left" size={16} />
           </button>
           <div>
-            <h1 className="text-xl font-bold text-slate-900">Tạo phiếu chi mới</h1>
-            <p className="text-xs text-slate-500">
+            <h1 className="text-xl font-bold text-slate-900 m-0">Tạo phiếu chi mới</h1>
+            <p className="text-xs text-slate-500 m-0 mt-0.5">
               Lập phiếu chi hoàn tiền học phí hoặc chi tiêu nội bộ trường học
             </p>
           </div>
         </div>
 
         {/* Action Buttons (BR06) */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 flex-wrap">
           <button
             type="button"
             onClick={handleCancel}
-            className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 font-medium text-sm transition-all"
+            className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 font-medium text-sm transition-all cursor-pointer"
           >
             Hủy bỏ
           </button>
@@ -222,18 +211,18 @@ export const CreateExpenseView: React.FC<CreateExpenseViewProps> = ({
           <button
             type="button"
             onClick={() => handleFormSubmit(false)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-blue-600 bg-blue-50 text-blue-700 hover:bg-blue-100 font-medium text-sm transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[#0070CE] bg-blue-50 text-[#0070CE] hover:bg-blue-100 font-medium text-sm transition-all cursor-pointer"
           >
-            <FontAwesomeIcon icon={faSave} />
+            <Icon name="save" size={14} />
             <span>Lưu nháp</span>
           </button>
 
           <button
             type="button"
             onClick={() => handleFormSubmit(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-all shadow-sm active:scale-98"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0070CE] hover:bg-blue-700 text-white font-medium text-sm transition-all shadow-sm cursor-pointer"
           >
-            <FontAwesomeIcon icon={faCheck} />
+            <Icon name="check" size={14} />
             <span>Lưu & Duyệt chi</span>
           </button>
         </div>
@@ -242,7 +231,7 @@ export const CreateExpenseView: React.FC<CreateExpenseViewProps> = ({
       {/* Validation Alert */}
       {Object.keys(errors).length > 0 && (
         <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 text-rose-800 flex items-start gap-3">
-          <FontAwesomeIcon icon={faExclamationCircle} className="text-rose-500 text-lg mt-0.5" />
+          <Icon name="alert-triangle" size={18} className="text-rose-500 shrink-0 mt-0.5" />
           <div>
             <div className="font-semibold text-rose-900">Vui lòng kiểm tra lại thông tin:</div>
             <ul className="list-disc list-inside text-xs mt-1 space-y-0.5">
@@ -358,7 +347,7 @@ export const CreateExpenseView: React.FC<CreateExpenseViewProps> = ({
             {/* BR01 Helper notice for Hoàn tiền */}
             {voucherType === 'hoan_tien' && (
               <div className="mt-2 p-2.5 rounded-lg bg-blue-50 border border-blue-100 text-xs text-blue-700 flex items-center gap-1.5">
-                <FontAwesomeIcon icon={faInfoCircle} />
+                <Icon name="info" size={13} className="shrink-0" />
                 <span>*Phiếu chi sẽ gửi thông báo cho phụ huynh</span>
               </div>
             )}
@@ -392,7 +381,7 @@ export const CreateExpenseView: React.FC<CreateExpenseViewProps> = ({
                   className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm font-medium text-slate-800 flex items-center gap-1.5">
-                  <FontAwesomeIcon icon={faUserGraduate} className="text-amber-500 text-xs" />
+                  <Icon name="graduation-cap" size={13} className="text-amber-500" />
                   <span>Học sinh</span>
                 </span>
               </label>
@@ -412,7 +401,7 @@ export const CreateExpenseView: React.FC<CreateExpenseViewProps> = ({
                   className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm font-medium text-slate-800 flex items-center gap-1.5">
-                  <FontAwesomeIcon icon={faUserTie} className="text-indigo-500 text-xs" />
+                  <Icon name="user" size={13} className="text-indigo-500" />
                   <span>Nhân viên / Giáo viên</span>
                 </span>
               </label>
@@ -581,12 +570,12 @@ export const CreateExpenseView: React.FC<CreateExpenseViewProps> = ({
                         type="button"
                         onClick={() => handleRemoveRow(index)}
                         disabled={lineItems.length <= 1}
-                        className={`p-1.5 rounded hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors ${
+                        className={`p-1.5 rounded hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer ${
                           lineItems.length <= 1 ? 'opacity-30 cursor-not-allowed' : ''
                         }`}
                         title="Xóa dòng"
                       >
-                        <FontAwesomeIcon icon={faTrash} className="text-xs" />
+                        <Icon name="trash" size={13} />
                       </button>
                     </td>
                   </tr>
@@ -599,10 +588,10 @@ export const CreateExpenseView: React.FC<CreateExpenseViewProps> = ({
                   <button
                     type="button"
                     onClick={handleAddRow}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed border-blue-400 text-blue-600 hover:bg-blue-50 text-xs font-semibold transition-all"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed border-blue-400 text-[#0070CE] hover:bg-blue-50 text-xs font-semibold transition-all cursor-pointer"
                   >
-                    <FontAwesomeIcon icon={faPlus} />
-                    <span>+ Thêm dòng chi phí</span>
+                    <Icon name="plus" size={13} />
+                    <span>Thêm dòng chi phí</span>
                   </button>
                 </td>
               </tr>

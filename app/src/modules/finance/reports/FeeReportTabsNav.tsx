@@ -1,6 +1,7 @@
 /**
  * Fee Report Tabs Navigation
  * Design System: [DS] ECO ME DASHBOARD v1.1.0
+ * Mobile Rules: overflow-x auto, -webkit-overflow-scrolling touch, scrollbar-width none, flex-shrink 0, whitespace-nowrap
  */
 
 import React from 'react';
@@ -32,6 +33,7 @@ export const FeeReportTabsNav: React.FC<FeeReportTabsNavProps> = ({ schoolCode }
 
   return (
     <div
+      className="no-scrollbar"
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -40,6 +42,8 @@ export const FeeReportTabsNav: React.FC<FeeReportTabsNavProps> = ({ schoolCode }
         background: 'var(--bg-surface)',
         padding: 'var(--space-3) var(--space-4) 0',
         overflowX: 'auto',
+        WebkitOverflowScrolling: 'touch',
+        scrollbarWidth: 'none',
       }}
     >
       {tabs.map((tab) => {
@@ -65,6 +69,8 @@ export const FeeReportTabsNav: React.FC<FeeReportTabsNavProps> = ({ schoolCode }
               borderBottom: isActive ? '2px solid var(--eco-blue-strong)' : '2px solid transparent',
               textDecoration: 'none',
               whiteSpace: 'nowrap',
+              flexShrink: 0,
+              flexGrow: 0,
               transition: 'all 0.15s ease',
             }}
           >

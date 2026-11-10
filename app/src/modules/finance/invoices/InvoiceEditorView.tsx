@@ -9,14 +9,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faPlus,
-  faTrash,
-  faSave,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon, Dropdown, DropdownOption } from '@/components/ds';
 import { useAppDispatch } from '../../../store';
 import { updateDraftInvoice } from '../../../store/slices/invoiceSlice';
 import { InvoiceRecord, InvoiceLineItem, InvoiceLineItemCategory } from '../../../types/invoice';
@@ -41,7 +34,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({ invoice })
   if (invoice.status !== 'da_tao') {
     return (
       <div className="bg-white rounded-xl border border-slate-200 p-8 text-center max-w-lg mx-auto">
-        <FontAwesomeIcon icon={faInfoCircle} className="text-amber-500 text-3xl mb-3" />
+        <Icon name="circle-info" size={32} className="text-amber-500 mx-auto mb-3" />
         <h2 className="text-lg font-bold text-slate-800">Không thể chỉnh sửa</h2>
         <p className="text-xs text-slate-500 mt-2">
           Hóa đơn này đang ở trạng thái &quot;{invoice.status}&quot;. Hệ thống chỉ cho phép cập nhật khi hóa đơn còn ở trạng thái Bản nháp (Đã tạo).
@@ -213,7 +206,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({ invoice })
               href={`/${schoolCode}/school/fee/${invoice.id}`}
               className="h-10 px-3.5 border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 flex items-center gap-2"
             >
-              <FontAwesomeIcon icon={faArrowLeft} className="text-slate-500 text-xs" />
+              <Icon name="arrow-left" size={13} className="text-slate-500" />
               <span>Hủy bỏ</span>
             </Link>
             <div>
@@ -227,9 +220,9 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({ invoice })
           </div>
           <button
             onClick={handleSave}
-            className="h-10 px-5 bg-[#0070CE] hover:bg-blue-700 text-white rounded-lg text-sm font-bold shadow-sm flex items-center gap-2 transition-colors"
+            className="h-10 px-5 bg-[#0070CE] hover:bg-blue-700 text-white rounded-lg text-sm font-bold shadow-sm flex items-center gap-2 transition-colors cursor-pointer"
           >
-            <FontAwesomeIcon icon={faSave} />
+            <Icon name="check" size={14} />
             <span>Lưu thay đổi</span>
           </button>
         </div>
@@ -286,9 +279,9 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({ invoice })
           <button
             type="button"
             onClick={handleAddItem}
-            className="text-xs font-bold text-[#0070CE] hover:text-blue-700 flex items-center gap-1.5"
+            className="text-xs font-bold text-[#0070CE] hover:text-blue-700 flex items-center gap-1.5 cursor-pointer"
           >
-            <FontAwesomeIcon icon={faPlus} />
+            <Icon name="plus" size={12} />
             <span>Thêm dòng thu</span>
           </button>
         </div>
@@ -307,122 +300,127 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({ invoice })
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-xs">
-              {items.map((item, idx) => (
-                <tr key={item.id} className="hover:bg-slate-50/50">
-                  <td className="py-2.5 px-3">
-                    <select
-                      value={item.category}
-                      onChange={(e) =>
-                        handleUpdateItem(idx, 'category', e.target.value as InvoiceLineItemCategory)
-                      }
-                      className="w-full h-8 px-2 bg-slate-50 border border-slate-300 rounded text-xs text-slate-800 font-semibold"
-                    >
-                      <option value="hoc_phi">Học phí</option>
-                      <option value="tien_an">Tiền ăn</option>
-                      <option value="co_so_vat_chat">Cơ sở vật chất</option>
-                      <option value="ngoai_khoa">Ngoại khóa</option>
-                      <option value="phi_tra_tre">Phí trả học sinh trễ</option>
-                      <option value="khac">Khoản khác</option>
-                    </select>
-                    <input
-                      type="text"
-                      value={item.name}
-                      onChange={(e) => handleUpdateItem(idx, 'name', e.target.value)}
-                      className="w-full h-7 px-2 mt-1 bg-white border border-slate-200 rounded text-xs text-slate-800"
-                    />
-                  </td>
-                  <td className="py-2.5 px-3">
-                    <input
-                      type="text"
-                      value={item.description || ''}
-                      placeholder="Ghi chú dòng"
-                      onChange={(e) =>
-                        handleUpdateItem(idx, 'description', e.target.value)
-                      }
-                      className="w-full h-8 px-2 bg-white border border-slate-200 rounded text-xs text-slate-600"
-                    />
-                  </td>
-                  <td className="py-2.5 px-3 text-right">
-                    <input
-                      type="text"
-                      value={item.unitPrice === 0 ? '' : formatCurrencyNumber(item.unitPrice)}
-                      placeholder="0"
-                      onChange={(e) => {
-                        const val = parseCurrencyNumber(e.target.value);
-                        handleUpdateItem(idx, 'unitPrice', val);
-                      }}
-                      className="w-full h-8 px-2 bg-white border border-slate-200 rounded text-xs text-right font-medium focus:border-[#0070CE] focus:ring-1 focus:ring-[#0070CE]"
-                    />
-                  </td>
-                  <td className="py-2.5 px-3 text-center">
-                    <input
-                      type="number"
-                      value={item.quantity}
-                      disabled={item.isMealFee}
-                      title={item.isMealFee ? 'Tiền ăn tự khóa số ngày học thực tế' : ''}
-                      onChange={(e) =>
-                        handleUpdateItem(idx, 'quantity', Number(e.target.value))
-                      }
-                      className={`w-full h-8 px-2 border rounded text-xs text-center font-bold ${
-                        item.isMealFee
-                          ? 'bg-slate-100 border-slate-200 text-slate-500 cursor-not-allowed'
-                          : 'bg-white border-slate-200 text-slate-800'
-                      }`}
-                    />
-                  </td>
-                  <td className="py-2.5 px-3 text-right">
-                    <div className="flex flex-col items-end gap-1">
-                      <div className="flex items-center justify-end w-32 bg-white border border-slate-200 rounded overflow-hidden focus-within:border-[#0070CE] focus-within:ring-1 focus-within:ring-[#0070CE]">
-                        <input
-                          type="text"
-                          value={
-                            item.discountType === 'fixed_amount'
-                              ? (item.discountAmount === 0 || item.discountAmount === undefined)
-                                ? '0'
-                                : formatCurrencyNumber(item.discountAmount)
-                              : (item.discountPercent ?? 0)
-                          }
-                          onChange={(e) => handleDiscountValueChange(idx, e.target.value)}
-                          className="w-full h-8 px-2 bg-transparent text-xs text-right text-emerald-600 font-bold focus:outline-none"
-                        />
-                        <select
-                          value={item.discountType || 'percent'}
-                          onChange={(e) =>
-                            handleSwitchDiscountType(
-                              idx,
-                              e.target.value as 'percent' | 'fixed_amount'
-                            )
-                          }
-                          className="h-8 px-1.5 bg-slate-50 hover:bg-slate-100 text-xs font-bold text-slate-700 border-l border-slate-200 cursor-pointer focus:outline-none shrink-0"
-                          title="Chuyển đổi đơn vị giảm trừ (% hoặc đ)"
-                        >
-                          <option value="percent">%</option>
-                          <option value="fixed_amount">đ</option>
-                        </select>
+              {items.map((item, idx) => {
+                const categoryOptions: DropdownOption<InvoiceLineItemCategory>[] = [
+                  { value: 'hoc_phi', label: 'Học phí' },
+                  { value: 'tien_an', label: 'Tiền ăn' },
+                  { value: 'co_so_vat_chat', label: 'Cơ sở vật chất' },
+                  { value: 'ngoai_khoa', label: 'Ngoại khóa' },
+                  { value: 'phi_tra_tre', label: 'Phí trả học sinh trễ' },
+                  { value: 'khac', label: 'Khoản khác' },
+                ];
+
+                return (
+                  <tr key={item.id} className="hover:bg-slate-50/50">
+                    <td className="py-2.5 px-3 min-w-[190px]">
+                      <Dropdown
+                        value={item.category}
+                        onChange={(val) =>
+                          handleUpdateItem(idx, 'category', val)
+                        }
+                        options={categoryOptions}
+                        size="sm"
+                        fullWidth
+                      />
+                      <input
+                        type="text"
+                        value={item.name}
+                        onChange={(e) => handleUpdateItem(idx, 'name', e.target.value)}
+                        className="w-full h-7 px-2 mt-1.5 bg-white border border-slate-200 rounded text-xs text-slate-800"
+                      />
+                    </td>
+                    <td className="py-2.5 px-3">
+                      <input
+                        type="text"
+                        value={item.description || ''}
+                        placeholder="Ghi chú dòng"
+                        onChange={(e) =>
+                          handleUpdateItem(idx, 'description', e.target.value)
+                        }
+                        className="w-full h-8 px-2 bg-white border border-slate-200 rounded text-xs text-slate-600"
+                      />
+                    </td>
+                    <td className="py-2.5 px-3 text-right">
+                      <input
+                        type="text"
+                        value={item.unitPrice === 0 ? '' : formatCurrencyNumber(item.unitPrice)}
+                        placeholder="0"
+                        onChange={(e) => {
+                          const val = parseCurrencyNumber(e.target.value);
+                          handleUpdateItem(idx, 'unitPrice', val);
+                        }}
+                        className="w-full h-8 px-2 bg-white border border-slate-200 rounded text-xs text-right font-medium focus:border-[#0070CE] focus:ring-1 focus:ring-[#0070CE]"
+                      />
+                    </td>
+                    <td className="py-2.5 px-3 text-center">
+                      <input
+                        type="number"
+                        value={item.quantity}
+                        disabled={item.isMealFee}
+                        title={item.isMealFee ? 'Tiền ăn tự khóa số ngày học thực tế' : ''}
+                        onChange={(e) =>
+                          handleUpdateItem(idx, 'quantity', Number(e.target.value))
+                        }
+                        className={`w-full h-8 px-2 border rounded text-xs text-center font-bold ${
+                          item.isMealFee
+                            ? 'bg-slate-100 border-slate-200 text-slate-500 cursor-not-allowed'
+                            : 'bg-white border-slate-200 text-slate-800'
+                        }`}
+                      />
+                    </td>
+                    <td className="py-2.5 px-3 text-right">
+                      <div className="flex flex-col items-end gap-1">
+                        <div className="flex items-center justify-end w-32 bg-white border border-slate-200 rounded overflow-hidden focus-within:border-[#0070CE] focus-within:ring-1 focus-within:ring-[#0070CE]">
+                          <input
+                            type="text"
+                            value={
+                              item.discountType === 'fixed_amount'
+                                ? (item.discountAmount === 0 || item.discountAmount === undefined)
+                                  ? '0'
+                                  : formatCurrencyNumber(item.discountAmount)
+                                : (item.discountPercent ?? 0)
+                            }
+                            onChange={(e) => handleDiscountValueChange(idx, e.target.value)}
+                            className="w-full h-8 px-2 bg-transparent text-xs text-right text-emerald-600 font-bold focus:outline-none"
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleSwitchDiscountType(
+                                idx,
+                                item.discountType === 'fixed_amount' ? 'percent' : 'fixed_amount'
+                              )
+                            }
+                            className="h-8 px-2.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 border-l border-slate-200 cursor-pointer transition-colors shrink-0"
+                            title="Chuyển đổi đơn vị (% hoặc đ)"
+                          >
+                            {item.discountType === 'fixed_amount' ? 'đ' : '%'}
+                          </button>
+                        </div>
+                        {item.discountAmount > 0 && (
+                          <span className="text-[11px] font-semibold text-emerald-600 tracking-tight whitespace-nowrap">
+                            -{formatVND(item.discountAmount)}
+                          </span>
+                        )}
                       </div>
-                      {item.discountAmount > 0 && (
-                        <span className="text-[11px] font-semibold text-emerald-600 tracking-tight whitespace-nowrap">
-                          -{formatVND(item.discountAmount)}
-                        </span>
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-bold text-slate-900">
+                      {formatVND(item.amount)}
+                    </td>
+                    <td className="py-2.5 px-2 text-center">
+                      {!item.isRequired && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveItem(idx)}
+                          className="text-slate-400 hover:text-rose-600 p-1 cursor-pointer"
+                        >
+                          <Icon name="trash" size={13} />
+                        </button>
                       )}
-                    </div>
-                  </td>
-                  <td className="py-2.5 px-3 text-right font-bold text-slate-900">
-                    {formatVND(item.amount)}
-                  </td>
-                  <td className="py-2.5 px-2 text-center">
-                    {!item.isRequired && (
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveItem(idx)}
-                        className="text-slate-400 hover:text-rose-600 p-1"
-                      >
-                        <FontAwesomeIcon icon={faTrash} />
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
