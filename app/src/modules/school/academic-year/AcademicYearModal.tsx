@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AcademicYear, AcademicYearFormData } from '@/types/academicYear';
 import { validateAcademicYearForm } from '@/utils/academicYearValidation';
-import { PopupModal, Icon } from '@/components/ds';
+import { SlideOver } from '@/components/ds';
 
 interface AcademicYearModalProps {
   isOpen: boolean;
@@ -56,11 +56,11 @@ export const AcademicYearModal: React.FC<AcademicYearModalProps> = ({
   };
 
   return (
-    <PopupModal
-      isOpen={isOpen}
+    <SlideOver
+      open={isOpen}
       onClose={onClose}
       title={mode === 'create' ? 'Tạo năm học mới' : 'Chỉnh sửa năm học'}
-      subtitle="Cấu hình thời gian niên khóa chuẩn áp dụng đồng bộ toàn hệ thống"
+      description="Cấu hình thời gian niên khóa chuẩn áp dụng đồng bộ toàn hệ thống"
       icon="calendar"
       width={520}
       primaryAction={{
@@ -138,6 +138,6 @@ export const AcademicYearModal: React.FC<AcademicYearModalProps> = ({
           </div>
         </div>
       </form>
-    </PopupModal>
+    </SlideOver>
   );
 };

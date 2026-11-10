@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
@@ -27,6 +27,12 @@ export default function ClassDetailPage() {
     useAppSelector((state) => state.class);
 
   const currentClass = classes.find((c) => c.id === classId);
+
+  useEffect(() => {
+    if (router.query.edit === 'true' && currentClass) {
+      dispatch(openEditModal(currentClass.id));
+    }
+  }, [router.query.edit, currentClass, dispatch]);
   const enrolledStudents = classId ? MOCK_STUDENT_ENROLLMENTS[classId] || [] : [];
 
   const handleEditSubmit = (data: ClassFormData) => {

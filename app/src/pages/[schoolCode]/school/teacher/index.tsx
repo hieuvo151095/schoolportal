@@ -16,6 +16,7 @@ import { AssignClassModal } from '../../../../modules/school/teacher/AssignClass
 import { ChangeEmailModal } from '../../../../modules/school/teacher/ChangeEmailModal';
 import { DeleteTeacherModal } from '../../../../modules/school/teacher/DeleteTeacherModal';
 import { ExtendedTeacherFilterModal } from '../../../../modules/school/teacher/ExtendedTeacherFilterModal';
+import { CreateTeacherSlideOver } from '../../../../modules/school/teacher/CreateTeacherSlideOver';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import type { Teacher, TeacherPermissionTier, TeacherWorkingStatus } from '../../../../types/teacher';
 import { matchesTeacherFilter } from '../../../../utils/teacherValidation';
@@ -52,6 +53,13 @@ export default function TeacherDirectoryPage() {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const [isExtendedFilterOpen, setIsExtendedFilterOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+  React.useEffect(() => {
+    if (router.query.create === 'true') {
+      setIsCreateOpen(true);
+    }
+  }, [router.query.create]);
 
   // Stats calculation matching DS TeacherListPage
   const stats = useMemo(() => {
@@ -120,7 +128,7 @@ export default function TeacherDirectoryPage() {
             <Button
               variant="primary"
               icon="plus"
-              onClick={() => router.push(`/${currentSchoolCode}/school/teacher/create`)}
+              onClick={() => setIsCreateOpen(true)}
             >
               Thêm giáo viên
             </Button>
@@ -224,6 +232,17 @@ export default function TeacherDirectoryPage() {
         <ExtendedTeacherFilterModal
           isOpen={isExtendedFilterOpen}
           onClose={() => setIsExtendedFilterOpen(false)}
+        />
+
+        <CreateTeacherSlideOver
+          isOpen={isCreateOpen}
+          onClose={() => {
+            setIsCreateOpen(false);
+            if (router.query.create) {
+              router.replace(`/${currentSchoolCode}/school/teacher`, undefined, { shallow: true });
+            }
+          }}
+          schoolCode={currentSchoolCode}
         />
       </div>
     </PortalLayout>

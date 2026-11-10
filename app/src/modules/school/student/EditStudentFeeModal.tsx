@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Icon, Dropdown } from '@/components/ds';
+import { Icon, Dropdown, SlideOver } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { updateStudentFees } from '../../../store/slices/studentSlice';
 import { addToast } from '../../../store/slices/toastSlice';
@@ -273,36 +273,24 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
-        {/* Header */}
-        <div className="px-6 py-4.5 bg-white border-b border-slate-100 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
-              <Icon name="coins" size={20} />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-800">
-                Cập nhật học phí học sinh
-              </h2>
-              <p className="text-xs text-slate-500 font-medium">
-                {student.fullName} — <span className="text-amber-700 font-semibold">{student.className || 'Lớp 11A1'}</span>
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-            aria-label="Đóng"
-          >
-            <Icon name="xmark" size={14} />
-          </button>
-        </div>
-
-        {/* Scrollable Body */}
-        <div className="p-6 overflow-y-auto space-y-5 text-sm">
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title="Cập nhật học phí học sinh"
+      description={`${student.fullName} — ${student.className || 'Lớp 11A1'}`}
+      icon="coins"
+      width={640}
+      primaryAction={{
+        label: 'Cập nhật',
+        icon: 'circle-check',
+        onClick: () => setIsConfirmOpen(true),
+      }}
+      secondaryAction={{
+        label: 'Hủy bỏ',
+        onClick: onClose,
+      }}
+    >
+      <div className="space-y-5 text-sm">
           {/* 1. Mandatory Fees */}
           <div className="space-y-3">
             {/* Học phí cơ bản */}
@@ -482,24 +470,6 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
           </div>
         </div>
 
-        {/* Footer Actions */}
-        <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-5 py-2 text-xs font-semibold text-slate-600 bg-white hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors"
-          >
-            Hủy bỏ
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsConfirmOpen(true)}
-            className="px-5 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-lg shadow-2xs transition-colors"
-          >
-            Cập nhật
-          </button>
-        </div>
-
         {/* Confirmation Modal overlay */}
         {isConfirmOpen && (
           <div className="absolute inset-0 z-60 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-2xs animate-in fade-in duration-150">
@@ -521,14 +491,14 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsConfirmOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
                 >
                   Hủy bỏ
                 </button>
                 <button
                   type="button"
                   onClick={handleExecuteSave}
-                  className="px-4 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-lg transition-colors"
+                  className="px-4 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-lg transition-colors cursor-pointer"
                 >
                   Xác nhận
                 </button>
@@ -536,7 +506,6 @@ export const EditStudentFeeModal: React.FC<EditStudentFeeModalProps> = ({
             </div>
           </div>
         )}
-      </div>
-    </div>
+    </SlideOver>
   );
 };

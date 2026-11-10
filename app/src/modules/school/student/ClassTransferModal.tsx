@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Icon, Dropdown } from '@/components/ds';
+import { Icon, Dropdown, SlideOver } from '@/components/ds';
 import { Student } from '../../../types/student';
 import { useAppDispatch } from '../../../store';
 import { transferStudents } from '../../../store/slices/studentSlice';
@@ -88,173 +88,148 @@ export const ClassTransferModal: React.FC<ClassTransferModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-      <div className="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-semibold text-sm">
-              <Icon name="rotate-right" size={16} />
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title={showConfirmStep ? 'Xác nhận chuyển lớp' : 'Chuyển lớp học'}
+      description={
+        showConfirmStep
+          ? `${students.length} học sinh sẵn sàng chuyển`
+          : 'Chọn lớp chuyển đến và ngày áp dụng'
+      }
+      icon="rotate-right"
+      width={560}
+      primaryAction={{
+        label: showConfirmStep ? 'Xác nhận chuyển ngay' : 'Tiếp tục',
+        icon: showConfirmStep ? 'circle-check' : 'arrow-right',
+        disabled: !showConfirmStep && !targetClassId,
+        onClick: showConfirmStep ? handleExecuteTransfer : handleProceed,
+      }}
+      secondaryAction={{
+        label: showConfirmStep ? 'Quay lại' : 'Hủy bỏ',
+        onClick: showConfirmStep ? () => setShowConfirmStep(false) : onClose,
+      }}
+    >
+      <div className="space-y-4">
+        {!showConfirmStep ? (
+          <>
+            {/* Target Students List summary */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                Danh sách học sinh ({students.length})
+              </label>
+              <div className="max-h-36 overflow-y-auto border border-slate-200 rounded-lg p-2.5 space-y-1.5 bg-slate-50">
+                {students.map((st) => (
+                  <div
+                    key={st.id}
+                    className="flex items-center justify-between text-xs py-1.5 px-2.5 rounded bg-white border border-slate-100"
+                  >
+                    <span className="font-medium text-slate-800">{st.fullName}</span>
+                    <span className="text-slate-500">
+                      {st.studentCode || 'Chưa có mã'} • {st.className}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <h3 className="text-base font-bold text-slate-800">
-              {showConfirmStep ? 'Xác nhận chuyển lớp' : 'Chuyển lớp học'}
-            </h3>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-            aria-label="Đóng"
-          >
-            <Icon name="xmark" size={14} />
-          </button>
-        </div>
 
-        {/* Content */}
-        <div className="p-6 space-y-4">
-          {!showConfirmStep ? (
-            <>
-              {/* Target Students List summary */}
+            {/* Source & Destination */}
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                  Danh sách học sinh ({students.length})
+                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                  Lớp hiện tại
                 </label>
-                <div className="max-h-32 overflow-y-auto border border-slate-200 rounded-lg p-2.5 space-y-1.5 bg-slate-50">
-                  {students.map((st) => (
-                    <div
-                      key={st.id}
-                      className="flex items-center justify-between text-xs py-1 px-2 rounded bg-white border border-slate-100"
-                    >
-                      <span className="font-medium text-slate-800">{st.fullName}</span>
-                      <span className="text-slate-500">
-                        {st.studentCode || 'Chưa có mã'} • {st.className}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                <input
+                  type="text"
+                  disabled
+                  value={sourceClassName}
+                  className="w-full px-3 py-2 text-sm bg-slate-100 border border-slate-200 rounded-lg text-slate-600 cursor-not-allowed font-medium"
+                />
               </div>
 
-              {/* Source & Destination */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                    Lớp hiện tại
-                  </label>
-                  <input
-                    type="text"
-                    disabled
-                    value={sourceClassName}
-                    className="w-full px-3 py-2 text-sm bg-slate-100 border border-slate-200 rounded-lg text-slate-600 cursor-not-allowed font-medium"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                    Lớp chuyển đến *
-                  </label>
-                  <Dropdown
-                    value={targetClassId}
-                    onChange={(val) => setTargetClassId(val)}
-                    options={[
-                      { value: '', label: '-- Chọn lớp chuyển đến --' },
-                      ...AVAILABLE_CLASSES.map((c) => ({
-                        value: c.id,
-                        label: c.name,
-                      })),
-                    ]}
-                    placeholder="-- Chọn lớp chuyển đến --"
-                    fullWidth
-                  />
-                </div>
-              </div>
-
-              {/* Effective Date */}
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                  Ngày áp dụng chuyển lớp *
+                  Lớp chuyển đến *
                 </label>
-                <div className="relative">
-                  <input
-                    type="date"
-                    value={effectiveDate}
-                    onChange={(e) => setEffectiveDate(e.target.value)}
-                    className="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#0070CE] focus:outline-hidden text-slate-800"
-                  />
-                </div>
-              </div>
-
-              {/* Automated Cascade Warning Box (ADR-009) */}
-              <div className="p-3.5 bg-amber-50/80 border border-amber-200 rounded-xl space-y-2">
-                <div className="flex items-center gap-2 text-amber-800 font-semibold text-xs">
-                  <Icon name="triangle-exclamation" size={14} />
-                  <span>3 Quy tắc hệ thống tự động áp dụng (ADR-009):</span>
-                </div>
-                <ul className="text-xs text-amber-900 space-y-1 pl-5 list-disc">
-                  <li>Biểu phí học phí sẽ tự động được liên kết theo lớp học mới.</li>
-                  <li>Tự động thêm phụ huynh vào nhóm chat trao đổi của lớp mới.</li>
-                  <li>Bảo lưu lịch sử điểm số và đánh giá các môn học đã ghi nhận.</li>
-                </ul>
-              </div>
-
-              {error && (
-                <div className="p-2.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg">
-                  {error}
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="space-y-4 py-2">
-              <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto text-xl">
-                <Icon name="triangle-exclamation" size={24} />
-              </div>
-              <div className="text-center space-y-1">
-                <h4 className="text-base font-bold text-slate-800">Xác nhận chuyển lớp học sinh?</h4>
-                <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-                  Bạn đang chuẩn bị chuyển{' '}
-                  <span className="font-semibold text-slate-900">{students.length} học sinh</span> từ{' '}
-                  <span className="font-semibold text-slate-900">{sourceClassName}</span> sang{' '}
-                  <span className="font-semibold text-[#0070CE]">{targetClass?.name}</span>, áp dụng
-                  từ ngày {effectiveDate}.
-                </p>
-              </div>
-
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-600 space-y-1">
-                <div className="flex items-center gap-1.5 text-emerald-700 font-medium">
-                  <Icon name="circle-check" size={14} />
-                  <span>Biểu phí học phí lớp mới đã sẵn sàng kích hoạt</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-emerald-700 font-medium">
-                  <Icon name="circle-check" size={14} />
-                  <span>Kênh trao đổi phụ huynh sẽ tự động phân quyền</span>
-                </div>
+                <Dropdown
+                  value={targetClassId}
+                  onChange={(val) => setTargetClassId(val)}
+                  options={[
+                    { value: '', label: '-- Chọn lớp chuyển đến --' },
+                    ...AVAILABLE_CLASSES.map((c) => ({
+                      value: c.id,
+                      label: c.name,
+                    })),
+                  ]}
+                  placeholder="-- Chọn lớp chuyển đến --"
+                  fullWidth
+                />
               </div>
             </div>
-          )}
-        </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50/50">
-          <button
-            type="button"
-            onClick={showConfirmStep ? () => setShowConfirmStep(false) : onClose}
-            className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-200/60 rounded-lg transition-colors cursor-pointer"
-          >
-            {showConfirmStep ? 'Quay lại' : 'Hủy bỏ'}
-          </button>
-          <button
-            type="button"
-            disabled={!showConfirmStep && !targetClassId}
-            onClick={showConfirmStep ? handleExecuteTransfer : handleProceed}
-            className={`px-4 py-2 text-sm font-semibold text-white rounded-lg transition-colors shadow-xs ${
-              !showConfirmStep && !targetClassId
-                ? 'bg-slate-300 cursor-not-allowed text-slate-500'
-                : 'bg-[#0070CE] hover:bg-[#005ba8] cursor-pointer'
-            }`}
-          >
-            {showConfirmStep ? 'Xác nhận chuyển ngay' : 'Tiếp tục'}
-          </button>
-        </div>
+            {/* Effective Date */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                Ngày áp dụng chuyển lớp *
+              </label>
+              <div className="relative">
+                <input
+                  type="date"
+                  value={effectiveDate}
+                  onChange={(e) => setEffectiveDate(e.target.value)}
+                  className="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#0070CE] focus:outline-hidden text-slate-800"
+                />
+              </div>
+            </div>
+
+            {/* Automated Cascade Warning Box (ADR-009) */}
+            <div className="p-3.5 bg-amber-50/80 border border-amber-200 rounded-xl space-y-2">
+              <div className="flex items-center gap-2 text-amber-800 font-semibold text-xs">
+                <Icon name="triangle-exclamation" size={14} />
+                <span>3 Quy tắc hệ thống tự động áp dụng (ADR-009):</span>
+              </div>
+              <ul className="text-xs text-amber-900 space-y-1 pl-5 list-disc">
+                <li>Biểu phí học phí sẽ tự động được liên kết theo lớp học mới.</li>
+                <li>Tự động thêm phụ huynh vào nhóm chat trao đổi của lớp mới.</li>
+                <li>Bảo lưu lịch sử điểm số và đánh giá các môn học đã ghi nhận.</li>
+              </ul>
+            </div>
+
+            {error && (
+              <div className="p-2.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg">
+                {error}
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="space-y-4 py-2">
+            <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto text-xl">
+              <Icon name="triangle-exclamation" size={24} />
+            </div>
+            <div className="text-center space-y-1">
+              <h4 className="text-base font-bold text-slate-800">Xác nhận chuyển lớp học sinh?</h4>
+              <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
+                Bạn đang chuẩn bị chuyển{' '}
+                <span className="font-semibold text-slate-900">{students.length} học sinh</span> từ{' '}
+                <span className="font-semibold text-slate-900">{sourceClassName}</span> sang{' '}
+                <span className="font-semibold text-[#0070CE]">{targetClass?.name}</span>, áp dụng
+                từ ngày {effectiveDate}.
+              </p>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-600 space-y-1">
+              <div className="flex items-center gap-1.5 text-emerald-700 font-medium">
+                <Icon name="circle-check" size={14} />
+                <span>Biểu phí học phí lớp mới đã sẵn sàng kích hoạt</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-emerald-700 font-medium">
+                <Icon name="circle-check" size={14} />
+                <span>Kênh trao đổi phụ huynh sẽ tự động phân quyền</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+    </SlideOver>
   );
 };

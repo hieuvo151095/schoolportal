@@ -3,7 +3,7 @@ import { useAppSelector } from '@/store';
 import { mockTeachers } from '@/services/mockTeacherData';
 import { getUnassignedTeachers, normalizeVietnameseText } from '@/utils/subjectValidation';
 import type { SchoolSubject, AssignTeacherPayload } from '@/types/subject';
-import { PopupModal, Icon } from '@/components/ds';
+import { SlideOver, Icon } from '@/components/ds';
 
 interface AssignTeacherModalProps {
   isOpen: boolean;
@@ -16,7 +16,7 @@ export const AssignTeacherModal: React.FC<AssignTeacherModalProps> = ({
   isOpen,
   subject,
   onClose,
-  onAssign
+  onAssign,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTeacherId, setSelectedTeacherId] = useState<string>('');
@@ -59,7 +59,7 @@ export const AssignTeacherModal: React.FC<AssignTeacherModalProps> = ({
       avatarUrl: targetTeacher.avatar,
       phone: targetTeacher.phone,
       email: targetTeacher.email,
-      assignedClasses: selectedClassIds
+      assignedClasses: selectedClassIds,
     });
 
     // Reset local state
@@ -71,11 +71,11 @@ export const AssignTeacherModal: React.FC<AssignTeacherModalProps> = ({
   const selectedTeacher = allTeachers.find((t) => t.id === selectedTeacherId);
 
   return (
-    <PopupModal
-      isOpen={isOpen}
+    <SlideOver
+      open={isOpen}
       onClose={onClose}
       title="Phân công giáo viên giảng dạy"
-      subtitle={`Môn: ${subject.name} (${subject.code})`}
+      description={`Môn: ${subject.name} (${subject.code})`}
       icon="user-plus"
       width={560}
       primaryAction={{
@@ -189,7 +189,7 @@ export const AssignTeacherModal: React.FC<AssignTeacherModalProps> = ({
             <label className="block text-xs font-bold text-slate-700">
               2. Chọn lớp phụ trách dạy (Tùy chọn)
             </label>
-            <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto p-2 bg-slate-50 rounded-lg border border-slate-200">
+            <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-2 bg-slate-50 rounded-lg border border-slate-200">
               {reduxClasses.map((cls) => {
                 const isClassSelected = selectedClassIds.includes(cls.id);
                 return (
@@ -218,6 +218,6 @@ export const AssignTeacherModal: React.FC<AssignTeacherModalProps> = ({
           </div>
         )}
       </div>
-    </PopupModal>
+    </SlideOver>
   );
 };

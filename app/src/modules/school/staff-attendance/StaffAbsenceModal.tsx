@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Icon } from '@/components/ds';
+import { Icon, SlideOver } from '@/components/ds';
 import { StaffProfile, StaffAttendanceRecord, AbsenceType } from '../../../types/staffAttendance';
 
 interface StaffAbsenceModalProps {
@@ -61,31 +61,36 @@ export const StaffAbsenceModal: React.FC<StaffAbsenceModalProps> = ({
   };
 
   return (
-    <div
-      data-testid="staff-absence-modal"
-      className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200"
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title="Báo vắng nhân viên"
+      description={`Ngày điểm danh: ${date}`}
+      icon="user-xmark"
+      width={520}
+      primaryAction={{
+        label: 'Lưu',
+        icon: 'check',
+        onClick: handleSave,
+      }}
+      secondaryAction={{
+        label: 'Đóng',
+        onClick: onClose,
+      }}
+      extraAction={
+        isAlreadyAbsent
+          ? {
+              label: 'Hủy báo vắng',
+              icon: 'rotate-right',
+              tone: 'danger',
+              onClick: handleClearAbsence,
+            }
+          : undefined
+      }
     >
-      <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 transform transition-all">
-        {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-gray-100">
-          <div>
-            <h3 className="text-lg font-bold text-gray-900">Báo vắng nhân viên</h3>
-            <p className="text-xs text-gray-500 mt-0.5">
-              Ngày điểm danh: <span className="font-semibold text-gray-700">{date}</span>
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-            aria-label="Đóng"
-          >
-            <Icon name="xmark" size={14} />
-          </button>
-        </div>
-
+      <div data-testid="staff-absence-modal" className="space-y-4">
         {/* Staff Summary Card */}
-        <div className="flex items-center gap-3.5 my-4 p-3 bg-gray-50 rounded-xl border border-gray-200/70">
+        <div className="flex items-center gap-3.5 p-3.5 bg-gray-50 rounded-xl border border-gray-200/70">
           {staff.avatar ? (
             <img
               src={staff.avatar}
@@ -114,7 +119,7 @@ export const StaffAbsenceModal: React.FC<StaffAbsenceModalProps> = ({
         {(hasCheckIn || hasCheckOut) && (
           <div
             data-testid="warning-dd03"
-            className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2.5 text-xs text-amber-800"
+            className="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2.5 text-xs text-amber-800"
           >
             <Icon name="triangle-exclamation" size={16} className="text-amber-500 mt-0.5 shrink-0" />
             <div>
@@ -139,7 +144,7 @@ export const StaffAbsenceModal: React.FC<StaffAbsenceModalProps> = ({
         )}
 
         {/* Absence Type Selector (BR05) */}
-        <div className="space-y-3 mb-4">
+        <div className="space-y-2">
           <label className="block text-xs font-semibold uppercase tracking-wider text-gray-600">
             Hình thức vắng mặt:
           </label>
@@ -148,15 +153,17 @@ export const StaffAbsenceModal: React.FC<StaffAbsenceModalProps> = ({
               type="button"
               data-testid="absence-type-cophep"
               onClick={() => setAbsenceType('co_phep')}
-              className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border text-sm font-semibold transition-all ${
+              className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border text-sm font-semibold transition-all cursor-pointer ${
                 absenceType === 'co_phep'
                   ? 'bg-amber-50 border-amber-500 text-amber-800 shadow-xs'
                   : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
               }`}
             >
-              <span className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
-                absenceType === 'co_phep' ? 'border-amber-500 bg-amber-500 text-white' : 'border-gray-400'
-              }`}>
+              <span
+                className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
+                  absenceType === 'co_phep' ? 'border-amber-500 bg-amber-500 text-white' : 'border-gray-400'
+                }`}
+              >
                 {absenceType === 'co_phep' && <span className="w-1.5 h-1.5 bg-white rounded-full" />}
               </span>
               Có phép
@@ -166,15 +173,17 @@ export const StaffAbsenceModal: React.FC<StaffAbsenceModalProps> = ({
               type="button"
               data-testid="absence-type-khongphep"
               onClick={() => setAbsenceType('khong_phep')}
-              className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border text-sm font-semibold transition-all ${
+              className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border text-sm font-semibold transition-all cursor-pointer ${
                 absenceType === 'khong_phep'
                   ? 'bg-rose-50 border-rose-500 text-rose-800 shadow-xs'
                   : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
               }`}
             >
-              <span className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
-                absenceType === 'khong_phep' ? 'border-rose-500 bg-rose-500 text-white' : 'border-gray-400'
-              }`}>
+              <span
+                className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
+                  absenceType === 'khong_phep' ? 'border-rose-500 bg-rose-500 text-white' : 'border-gray-400'
+                }`}
+              >
                 {absenceType === 'khong_phep' && <span className="w-1.5 h-1.5 bg-white rounded-full" />}
               </span>
               Không phép
@@ -183,7 +192,7 @@ export const StaffAbsenceModal: React.FC<StaffAbsenceModalProps> = ({
         </div>
 
         {/* Reason Note */}
-        <div className="space-y-1.5 mb-5">
+        <div className="space-y-1.5">
           <label className="block text-xs font-semibold uppercase tracking-wider text-gray-600">
             Lý do / Ghi chú vắng:
           </label>
@@ -196,43 +205,7 @@ export const StaffAbsenceModal: React.FC<StaffAbsenceModalProps> = ({
             className="w-full px-3 py-2 text-sm bg-gray-50 border border-gray-300 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
           />
         </div>
-
-        {/* Action Buttons */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <div>
-            {isAlreadyAbsent && (
-              <button
-                type="button"
-                data-testid="absence-cancel-button"
-                onClick={handleClearAbsence}
-                className="px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-xl transition-colors inline-flex items-center gap-1.5"
-              >
-                <Icon name="rotate-right" size={12} />
-                Hủy báo vắng
-              </button>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              data-testid="absence-modal-cancel"
-              onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
-            >
-              Đóng
-            </button>
-            <button
-              type="button"
-              data-testid="absence-modal-submit"
-              onClick={handleSave}
-              className="px-5 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-xs transition-colors inline-flex items-center gap-1.5"
-            >
-              <Icon name="check" size={14} />
-              Lưu
-            </button>
-          </div>
-        </div>
       </div>
-    </div>
+    </SlideOver>
   );
 };

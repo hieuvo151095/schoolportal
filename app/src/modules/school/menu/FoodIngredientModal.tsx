@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Icon, Dropdown } from '../../../components/ds';
+import { Icon, Dropdown, SlideOver } from '../../../components/ds';
 import { FoodIngredient, DishItem } from '../../../types/menu';
 import {
   lookupSupplierByGTIN,
@@ -87,35 +87,24 @@ export const FoodIngredientModal: React.FC<FoodIngredientModalProps> = ({
   const datChuanCount = ingredients.filter((i) => i.status === 'dat_chuan').length;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[92vh]">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-emerald-50/70 to-teal-50/30">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-emerald-600/10 flex items-center justify-center text-emerald-600">
-              <Icon name="utensils" className="w-4 h-4 text-emerald-600" />
-            </div>
-            <div>
-              <h3 className="text-base font-semibold text-gray-900">
-                Khai báo nguyên liệu thực phẩm &amp; Mã vạch GTIN
-              </h3>
-              <p className="text-xs text-gray-500">
-                Món ăn: <span className="font-semibold text-emerald-800">{dish.name}</span>
-                {dish.calories ? ` (${dish.calories} kcal)` : ''}
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-white/60 transition-colors"
-          >
-            <Icon name="xmark" className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-4 flex-1">
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title="Khai báo nguyên liệu thực phẩm"
+      description={`Món ăn: ${dish.name} ${dish.calories ? `(${dish.calories} kcal)` : ''}`}
+      icon="utensils"
+      width={640}
+      primaryAction={{
+        label: `Lưu thay đổi (${ingredients.length} nguyên liệu)`,
+        icon: 'circle-check',
+        onClick: handleSave,
+      }}
+      secondaryAction={{
+        label: 'Hủy',
+        onClick: onClose,
+      }}
+    >
+      <div className="space-y-4">
           {/* Summary / Guideline banner */}
           <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-between text-xs">
             <div className="flex items-center gap-2 text-gray-700">
@@ -287,25 +276,6 @@ export const FoodIngredientModal: React.FC<FoodIngredientModalProps> = ({
             </div>
           )}
         </div>
-
-        {/* Footer */}
-        <div className="px-6 py-3.5 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-2.5">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 rounded-xl transition-colors"
-          >
-            Hủy
-          </button>
-          <button
-            type="button"
-            onClick={handleSave}
-            className="px-5 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-sm transition-all"
-          >
-            Lưu thay đổi ({ingredients.length} nguyên liệu)
-          </button>
-        </div>
-      </div>
-    </div>
+    </SlideOver>
   );
 };

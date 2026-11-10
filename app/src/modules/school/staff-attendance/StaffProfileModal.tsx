@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Icon } from '../../../components/ds';
+import { Icon, SlideOver } from '../../../components/ds';
 import { StaffProfile } from '../../../types/staffAttendance';
 import {
   formatMissingField,
@@ -26,32 +26,21 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
   const modalTitle = isAdmin ? 'Thông tin Quản Trị' : 'Thông tin người dùng';
 
   return (
-    <div
-      data-testid="staff-profile-modal"
-      className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200"
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title={modalTitle}
+      description={`Hồ sơ cán bộ nhân viên • ${staff.nickname}`}
+      icon="id-badge"
+      width={520}
+      primaryAction={{
+        label: 'Đóng',
+        onClick: onClose,
+      }}
     >
-      <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 transform transition-all">
-        {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-gray-100">
-          <div className="flex items-center gap-2">
-            <Icon name="shield-halved" className="w-5 h-5 text-blue-600" />
-            <h3 data-testid="staff-profile-title" className="text-lg font-bold text-gray-900">
-              {modalTitle}
-            </h3>
-          </div>
-          <button
-            type="button"
-            data-testid="staff-profile-close"
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-            aria-label="Đóng"
-          >
-            <Icon name="xmark" className="w-4 h-4" />
-          </button>
-        </div>
-
+      <div data-testid="staff-profile-modal" className="space-y-4">
         {/* Profile Card Summary */}
-        <div className="flex items-center gap-4 my-5 p-4 bg-gradient-to-r from-blue-50/50 to-indigo-50/30 rounded-2xl border border-blue-100/60">
+        <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-blue-50/50 to-indigo-50/30 rounded-2xl border border-blue-100/60">
           {staff.avatar ? (
             <img
               src={staff.avatar}
@@ -112,9 +101,7 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
           {/* Email */}
           <div className="flex items-center justify-between py-2 border-b border-gray-100">
             <span className="text-gray-500 flex items-center gap-2">
-              <svg className="w-4 h-4 text-gray-400 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
+              <Icon name="envelope" className="w-4 h-4 text-gray-400" />
               Email:
             </span>
             <span
@@ -194,9 +181,6 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
                           Chủ nhiệm
                         </span>
                       )}
-                      <svg className="w-3 h-3 opacity-70 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
                     </Link>
                   ))}
                 </div>
@@ -206,18 +190,7 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
             </div>
           )}
         </div>
-
-        {/* Footer */}
-        <div className="pt-5 mt-3 border-t border-gray-100 flex justify-end">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-5 py-2 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors"
-          >
-            Đóng
-          </button>
-        </div>
       </div>
-    </div>
+    </SlideOver>
   );
 };

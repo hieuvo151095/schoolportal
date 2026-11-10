@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Icon, Dropdown } from '@/components/ds';
+import { Icon, Dropdown, SlideOver } from '@/components/ds';
 import {
   ClassFormData,
   ClassItem,
@@ -164,31 +164,41 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
     setFormData({ ...formData, instructors: updated });
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-2xl my-8 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-          <div>
-            <h3 className="text-lg font-bold text-slate-800">
-              {mode === 'create' ? 'Thêm lớp học mới' : `Chỉnh sửa lớp: ${initialData?.name}`}
-            </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Năm học áp dụng: <span className="font-semibold text-slate-700">{formData.academicYear}</span>
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-            aria-label="Đóng"
-          >
-            <Icon name="xmark" size={14} />
-          </button>
-        </div>
+  if (!isOpen) return null;
 
-        {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+  const isFormValid = Boolean(
+    formData.name.trim() &&
+    formData.code.trim() &&
+    (formData.taxonomy === 'ngoai_khoa' || formData.gradeLevelId)
+  );
+
+  return (
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title={mode === 'create' ? 'Thêm lớp học mới' : `Chỉnh sửa lớp: ${initialData?.name}`}
+      description={
+        <span>
+          Năm học áp dụng: <strong className="text-slate-700">{formData.academicYear}</strong>
+        </span>
+      }
+      icon={mode === 'create' ? 'plus' : 'edit'}
+      width={640}
+      primaryAction={{
+        label: mode === 'create' ? 'Lưu lớp học' : 'Cập nhật thay đổi',
+        icon: 'check',
+        disabled: !isFormValid,
+        onClick: () => {
+          const form = document.getElementById('class-form-modal') as HTMLFormElement;
+          if (form) form.requestSubmit();
+        },
+      }}
+      secondaryAction={{
+        label: 'Hủy',
+        onClick: onClose,
+      }}
+    >
+      <form id="class-form-modal" onSubmit={handleSubmit} className="space-y-5">
           {/* Dual Taxonomy Switcher */}
           <div>
             <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
@@ -469,36 +479,7 @@ export const ClassFormModal: React.FC<ClassFormModalProps> = ({
             />
           </div>
 
-          {/* Footer Actions */}
-          <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-sm font-semibold transition-colors"
-            >
-              Hủy
-            </button>
-            <button
-              type="submit"
-              disabled={
-                !formData.name.trim() ||
-                !formData.code.trim() ||
-                (formData.taxonomy === 'chinh_khoa' && !formData.gradeLevelId)
-              }
-              className={`flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold shadow-sm transition-colors ${
-                !formData.name.trim() ||
-                !formData.code.trim() ||
-                (formData.taxonomy === 'chinh_khoa' && !formData.gradeLevelId)
-                  ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white cursor-pointer'
-              }`}
-            >
-              <Icon name="check" size={14} />
-              <span>{mode === 'create' ? 'Lưu lớp học' : 'Cập nhật thay đổi'}</span>
-            </button>
-          </div>
         </form>
-      </div>
-    </div>
+    </SlideOver>
   );
 };

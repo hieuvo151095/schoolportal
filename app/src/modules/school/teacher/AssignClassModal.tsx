@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Icon, Dropdown } from '@/components/ds';
+import { Icon, Dropdown, SlideOver } from '@/components/ds';
 import type { Teacher, AssignedClassItem } from '../../../types/teacher';
 import { checkHomeroomConflict } from '../../../utils/teacherValidation';
 import { useAppDispatch, useAppSelector } from '../../../store';
@@ -90,114 +90,91 @@ export const AssignClassModal: React.FC<AssignClassModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-150">
-        {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#0070CE]">
-              <Icon name="chalkboard-user" size={20} />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-slate-800">Phân công lớp học</h3>
-              <p className="text-xs text-slate-500">{teacher.fullName}</p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Đóng cửa sổ"
-            className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-colors"
-          >
-            <Icon name="xmark" size={14} />
-          </button>
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title="Phân công lớp học"
+      description={teacher.fullName}
+      icon="chalkboard-user"
+      width={560}
+      primaryAction={{
+        label: 'Lưu phân công',
+        icon: 'circle-check',
+        onClick: () => {
+          const form = document.getElementById('assign-class-form') as HTMLFormElement;
+          if (form) form.requestSubmit();
+        },
+      }}
+      secondaryAction={{
+        label: 'Hủy',
+        onClick: onClose,
+      }}
+    >
+      <form id="assign-class-form" onSubmit={handleSave} className="space-y-5">
+        {/* Homeroom Assignment */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            Lớp chủ nhiệm
+          </label>
+          <Dropdown
+            value={selectedHomeroom}
+            onChange={setSelectedHomeroom}
+            options={homeroomOptions}
+            fullWidth
+          />
+          <p className="text-xs text-slate-400 mt-1">
+            Giáo viên chủ nhiệm có toàn quyền quản lý điểm danh, hoạt động và trao đổi của lớp.
+          </p>
         </div>
 
-        {/* Modal Body */}
-        <form onSubmit={handleSave} className="p-6 space-y-5">
-          {/* Homeroom Assignment */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Lớp chủ nhiệm
-            </label>
-            <Dropdown
-              value={selectedHomeroom}
-              onChange={setSelectedHomeroom}
-              options={homeroomOptions}
-              fullWidth
+        {/* Resolution K006: Homeroom Conflict Warning Banner */}
+        {conflict.hasConflict && (
+          <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 flex items-start gap-3 text-xs">
+            <Icon
+              name="triangle-exclamation"
+              size={16}
+              className="text-amber-600 mt-0.5 shrink-0"
             />
-            <p className="text-xs text-slate-400 mt-1">
-              Giáo viên chủ nhiệm có toàn quyền quản lý điểm danh, hoạt động và trao đổi của lớp.
-            </p>
-          </div>
-
-          {/* Resolution K006: Homeroom Conflict Warning Banner */}
-          {conflict.hasConflict && (
-            <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 flex items-start gap-3 text-xs">
-              <Icon
-                name="triangle-exclamation"
-                size={16}
-                className="text-amber-600 mt-0.5 shrink-0"
-              />
-              <div>
-                <div className="font-bold text-amber-900">Cảnh báo trùng lặp chủ nhiệm</div>
-                <div className="mt-0.5 leading-relaxed">{conflict.warningMessage}</div>
-              </div>
+            <div>
+              <div className="font-bold text-amber-900">Cảnh báo trùng lặp chủ nhiệm</div>
+              <div className="mt-0.5 leading-relaxed">{conflict.warningMessage}</div>
             </div>
-          )}
-
-          {/* Assigned Teaching Classes */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Lớp phụ trách / Giảng dạy bộ môn
-            </label>
-            <div className="grid grid-cols-2 gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl">
-              {AVAILABLE_CLASSES.map((c) => {
-                const isChecked = selectedAssigned.includes(c.id);
-                return (
-                  <label
-                    key={c.id}
-                    className={`flex items-center gap-2.5 p-2 rounded-lg border transition-colors cursor-pointer select-none ${
-                      isChecked
-                        ? 'bg-blue-50/70 border-blue-200 text-blue-900 font-medium'
-                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100/60'
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={() => toggleAssignedClass(c.id)}
-                      className="rounded border-slate-300 text-[#0070CE] focus:ring-[#0070CE]"
-                    />
-                    <span className="text-xs">{c.name}</span>
-                  </label>
-                );
-              })}
-            </div>
-            <p className="text-xs text-slate-400 mt-1">
-              Giáo viên sẽ được cấp quyền xem danh sách và tạo nhật ký học tập cho các lớp được phân công.
-            </p>
           </div>
+        )}
 
-          {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
-            >
-              Hủy
-            </button>
-            <button
-              type="submit"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-lg transition-colors shadow-xs"
-            >
-              <Icon name="circle-check" size={14} />
-              <span>Lưu phân công</span>
-            </button>
+        {/* Assigned Teaching Classes */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            Lớp phụ trách / Giảng dạy bộ môn
+          </label>
+          <div className="grid grid-cols-2 gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+            {AVAILABLE_CLASSES.map((c) => {
+              const isChecked = selectedAssigned.includes(c.id);
+              return (
+                <label
+                  key={c.id}
+                  className={`flex items-center gap-2.5 p-2 rounded-lg border transition-colors cursor-pointer select-none ${
+                    isChecked
+                      ? 'bg-blue-50/70 border-blue-200 text-blue-900 font-medium'
+                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100/60'
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={() => toggleAssignedClass(c.id)}
+                    className="rounded border-slate-300 text-[#0070CE] focus:ring-[#0070CE]"
+                  />
+                  <span className="text-xs">{c.name}</span>
+                </label>
+              );
+            })}
           </div>
-        </form>
-      </div>
-    </div>
+          <p className="text-xs text-slate-400 mt-1">
+            Giáo viên sẽ được cấp quyền xem danh sách và tạo nhật ký học tập cho các lớp được phân công.
+          </p>
+        </div>
+      </form>
+    </SlideOver>
   );
 };

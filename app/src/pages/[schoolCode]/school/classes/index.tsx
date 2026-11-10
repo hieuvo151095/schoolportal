@@ -5,7 +5,7 @@
  * Design System: [DS] ECO ME DASHBOARD v1.1.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '../../../../store';
@@ -53,6 +53,12 @@ export default function ClassManagementPage() {
   } = useAppSelector((state) => state.class);
 
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    if (router.query.create === 'true') {
+      dispatch(openCreateModal());
+    }
+  }, [router.query.create, dispatch]);
 
   // Compute filtered classes using pure business engine
   const filteredClasses = filterClassesList(classes, filterCriteria);

@@ -16,6 +16,7 @@ import { ClassTransferModal } from '../../../../modules/school/student/ClassTran
 import { StudentNotesModal } from '../../../../modules/school/student/StudentNotesModal';
 import { PhysicalGrowthModal } from '../../../../modules/school/student/PhysicalGrowthModal';
 import { TuitionOverrideModal } from '../../../../modules/school/student/TuitionOverrideModal';
+import { CreateStudentSlideOver } from '../../../../modules/school/student/CreateStudentSlideOver';
 import { useAppSelector } from '../../../../store';
 import { Student } from '../../../../types/student';
 import { matchesStudentFilter } from '../../../../utils/studentValidation';
@@ -48,6 +49,13 @@ export default function StudentDirectoryPage() {
 
   const [activeTuitionStudent, setActiveTuitionStudent] = useState<Student | null>(null);
   const [isTuitionOpen, setIsTuitionOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+  React.useEffect(() => {
+    if (router.query.create === 'true') {
+      setIsCreateOpen(true);
+    }
+  }, [router.query.create]);
 
   // Stats
   const stats = useMemo(() => {
@@ -109,7 +117,7 @@ export default function StudentDirectoryPage() {
             <Button
               variant="primary"
               icon="plus"
-              onClick={() => router.push(`/${currentSchoolCode}/school/kid/create`)}
+              onClick={() => setIsCreateOpen(true)}
             >
               Thêm học sinh
             </Button>
@@ -212,6 +220,17 @@ export default function StudentDirectoryPage() {
             setIsTuitionOpen(false);
             setActiveTuitionStudent(null);
           }}
+        />
+
+        <CreateStudentSlideOver
+          isOpen={isCreateOpen}
+          onClose={() => {
+            setIsCreateOpen(false);
+            if (router.query.create) {
+              router.replace(`/${currentSchoolCode}/school/kid`, undefined, { shallow: true });
+            }
+          }}
+          schoolCode={currentSchoolCode}
         />
       </div>
     </PortalLayout>
