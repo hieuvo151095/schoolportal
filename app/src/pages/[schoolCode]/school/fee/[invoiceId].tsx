@@ -9,16 +9,22 @@ import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import type { GetServerSideProps } from 'next';
 import PortalLayout from '../../../../components/layout/PortalLayout';
 import { useAppSelector } from '../../../../store';
 import { InvoiceDetailView } from '../../../../modules/finance/invoices/InvoiceDetailView';
 import { ManualPaymentModal } from '../../../../modules/finance/invoices/ManualPaymentModal';
 import { CancelInvoiceModal } from '../../../../modules/finance/invoices/CancelInvoiceModal';
 
-export default function InvoiceDetailPage() {
+interface InvoiceDetailPageProps {
+  initialInvoiceId?: string;
+  initialSchoolCode?: string;
+}
+
+export default function InvoiceDetailPage({ initialInvoiceId, initialSchoolCode }: InvoiceDetailPageProps) {
   const router = useRouter();
-  const schoolCode = (router.query.schoolCode as string) || 'demo';
-  const rawInvoiceId = router.query.invoiceId as string;
+  const schoolCode = (router.query.schoolCode as string) || initialSchoolCode || 'demo';
+  const rawInvoiceId = (router.query.invoiceId as string) || initialInvoiceId;
   const pathParts = router.asPath.split('?')[0].split('/');
   const fallbackId = pathParts[pathParts.length - 1];
   const invoiceId = rawInvoiceId || (fallbackId && fallbackId !== '[invoiceId]' ? fallbackId : '');
@@ -74,3 +80,14 @@ export default function InvoiceDetailPage() {
     </PortalLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const rawId = context.params?.invoiceId || context.query?.invoiceId || null;
+  const rawSchool = context.params?.schoolCode || context.query?.schoolCode || 'demo';
+  return {
+    props: {
+      initialInvoiceId: typeof rawId === 'string' ? rawId : '',
+      initialSchoolCode: typeof rawSchool === 'string' ? rawSchool : 'demo',
+    },
+  };
+};
