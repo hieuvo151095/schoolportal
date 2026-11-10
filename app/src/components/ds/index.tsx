@@ -294,7 +294,7 @@ export function SelectField(p: SelectFieldProps) {
       searchPlaceholder={p.searchPlaceholder}
       clearable={p.clearable}
       emptyText={p.emptyText}
-      fullWidth={p.fullWidth !== false}
+      fullWidth={p.fullWidth !== undefined ? p.fullWidth : false}
       aria-label={p['aria-label'] || p.label || (opts[0] && opts[0].label)}
     />
   );
@@ -566,7 +566,12 @@ export function FilterBar(p: FilterBarProps) {
       <div className="ecomd-filterbar__filters">
         {p.search !== false && <SearchField className="ecomd-filterbar__search" {...(p.search || {})} />}
         {(p.filters || []).map((f, i) => (
-          <SelectField key={'f' + i} {...f} />
+          <SelectField
+            key={'f' + i}
+            {...f}
+            fullWidth={f.fullWidth ?? false}
+            className={cx('ecomd-filterbar__select', f.className)}
+          />
         ))}
         {p.advanced && (
           <Button

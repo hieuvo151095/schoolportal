@@ -136,6 +136,130 @@ html, body, #__next {
     text-align: right !important;
     margin-left: auto !important;
   }
+
+  /* Mobile FilterBar & Toolbar responsive wrapping */
+  .ecomd-filterbar,
+  .ecomd-table-card__toolbar {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: var(--space-12) !important;
+    gap: var(--space-8) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .ecomd-filterbar__filters {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: var(--space-8) !important;
+    width: 100% !important;
+  }
+  .ecomd-filterbar__search {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  .ecomd-filterbar__filters .ecomd-dropdown,
+  .ecomd-filterbar__filters .ecomd-select-wrap,
+  .ecomd-filterbar__filters .ecomd-filterbar__select,
+  .ecomd-table-card__toolbar .ecomd-dropdown,
+  .ecomd-table-card__toolbar .ecomd-select-wrap {
+    flex: 1 1 calc(50% - var(--space-6)) !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  .ecomd-filterbar__filters .ecomd-dropdown > div[role="combobox"],
+  .ecomd-table-card__toolbar .ecomd-dropdown > div[role="combobox"] {
+    width: 100% !important;
+  }
+  .ecomd-filterbar__actions,
+  .ecomd-filterbar__actions .ecomd-btn {
+    display: flex !important;
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* ==========================================================================
+   FilterBar & Table Toolbar Desktop Web Layout SSOT
+   Desktop Web First: Compact, single-row layout with proportional filter widths.
+   ========================================================================== */
+@media (min-width: 768px) {
+  .ecomd-filterbar,
+  .ecomd-table-card__toolbar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: var(--space-12) !important;
+    flex-wrap: nowrap !important;
+    padding: var(--space-12) var(--space-16) !important;
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: var(--radius-12) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .ecomd-filterbar__filters {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: var(--space-12) !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  .ecomd-filterbar__search {
+    flex: 0 1 260px !important;
+    width: 260px !important;
+    min-width: 180px !important;
+    max-width: 320px !important;
+  }
+
+  .ecomd-filterbar__filters .ecomd-dropdown,
+  .ecomd-filterbar__filters .ecomd-select-wrap,
+  .ecomd-filterbar__filters .ecomd-filterbar__select,
+  .ecomd-table-card__toolbar .ecomd-dropdown,
+  .ecomd-table-card__toolbar .ecomd-select-wrap {
+    width: auto !important;
+    min-width: 140px !important;
+    max-width: 220px !important;
+    flex: 0 0 auto !important;
+  }
+
+  .ecomd-filterbar__filters .ecomd-dropdown > div[role="combobox"],
+  .ecomd-table-card__toolbar .ecomd-dropdown > div[role="combobox"] {
+    min-width: 140px !important;
+    height: 38px !important;
+    width: 100% !important;
+  }
+
+  .ecomd-filterbar__actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: var(--space-8) !important;
+    margin-left: auto !important;
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* Modals & Forms: Ensure dropdowns fill their form field containers */
+.ecomd-field .ecomd-dropdown,
+.ecomd-form .ecomd-dropdown,
+.ecomd-modal .ecomd-dropdown:not(.ecomd-filterbar__select),
+.ecomd-slideover .ecomd-dropdown:not(.ecomd-filterbar__select) {
+  width: 100% !important;
+  display: block !important;
+}
+
+.ecomd-field .ecomd-dropdown > div[role="combobox"],
+.ecomd-form .ecomd-dropdown > div[role="combobox"],
+.ecomd-modal .ecomd-dropdown:not(.ecomd-filterbar__select) > div[role="combobox"],
+.ecomd-slideover .ecomd-dropdown:not(.ecomd-filterbar__select) > div[role="combobox"] {
+  width: 100% !important;
 }
 
 /* ==========================================================================

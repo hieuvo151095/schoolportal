@@ -268,7 +268,7 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
     ),
   }[variant];
 
-  const fullWidth = p.fullWidth !== false;
+  const fullWidth = Boolean(p.fullWidth);
 
   return (
     <div
