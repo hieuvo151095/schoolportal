@@ -92,7 +92,7 @@ export const MenuToolbar: React.FC<MenuToolbarProps> = ({
         }}
         filters={[
           {
-            label: 'Đối tượng',
+            placeholder: 'Chọn đối tượng',
             value: filters.classId,
             onChange: (val) => onFilterChange({ classId: val }),
             options: [

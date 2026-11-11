@@ -612,6 +612,15 @@ export function FilterBar(p: FilterBarProps) {
           <SelectField
             key={'f' + i}
             {...f}
+            label={undefined}
+            placeholder={
+              f.placeholder ||
+              (f.label
+                ? f.label.startsWith('Chọn')
+                  ? f.label
+                  : `Chọn ${f.label.toLowerCase()}`
+                : undefined)
+            }
             fullWidth={f.fullWidth ?? false}
             className={cx('ecomd-filterbar__select', f.className)}
           />

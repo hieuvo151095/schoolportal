@@ -48,7 +48,7 @@ export const AnnouncementToolbar: React.FC<AnnouncementToolbarProps> = ({
 
   const selectFilters: SelectFieldProps[] = [
     {
-      label: 'Danh mục',
+      placeholder: 'Chọn danh mục',
       value: filters.categoryFilter,
       onChange: (val) => onFilterChange({ categoryFilter: val as any }),
       options: [
@@ -63,7 +63,7 @@ export const AnnouncementToolbar: React.FC<AnnouncementToolbarProps> = ({
       className: 'min-w-[140px]',
     },
     {
-      label: 'Kênh gửi',
+      placeholder: 'Chọn kênh gửi',
       value: filters.channelFilter,
       onChange: (val) => onFilterChange({ channelFilter: val as any }),
       options: [

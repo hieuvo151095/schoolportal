@@ -40,7 +40,7 @@ export const HandbookToolbar: React.FC<HandbookToolbarProps> = ({
         }}
         filters={[
           {
-            label: 'Trạng thái',
+            placeholder: 'Chọn trạng thái',
             value: statusFilter,
             onChange: (val) => onStatusChange(val as any),
             options: [

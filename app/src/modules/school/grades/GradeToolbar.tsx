@@ -49,14 +49,15 @@ export const GradeToolbar: React.FC<GradeToolbarProps> = ({
 
   const filters: SelectFieldProps[] = [
     {
-      label: 'Niên khóa',
+      placeholder: 'Chọn niên khóa',
       value: selectedAcademicYear,
+      defaultValue: '2026-2027',
       onChange: (val) => onSelectAcademicYear(val),
       options: ACADEMIC_YEARS.map((yr) => ({
-        label: `Niên khóa: ${yr}`,
+        label: yr,
         value: yr,
       })),
-      className: 'min-w-[150px]',
+      className: 'min-w-[140px]',
     },
   ];
 

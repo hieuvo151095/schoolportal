@@ -102,7 +102,7 @@ export const StaffAttendanceToolbar: React.FC<StaffAttendanceToolbarProps> = ({
         }}
         filters={[
           {
-            label: 'Lớp học',
+            placeholder: 'Chọn lớp học',
             value: classId,
             onChange: (val) => onClassChange(val),
             options: MOCK_CLASS_OPTIONS.map((c) => ({
@@ -111,7 +111,7 @@ export const StaffAttendanceToolbar: React.FC<StaffAttendanceToolbarProps> = ({
             })),
           },
           {
-            label: 'Vai trò',
+            placeholder: 'Chọn vai trò',
             value: role,
             onChange: (val) => onRoleChange(val as any),
             options: MOCK_ROLE_OPTIONS.map((r) => ({

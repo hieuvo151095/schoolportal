@@ -130,6 +130,24 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
     );
   }, [normalizedOptions, currentValue]);
 
+  const isDefaultOrEmpty = useMemo(() => {
+    if (!selectedOption) return true;
+    const strVal = String(selectedOption.value);
+    if (strVal === '' || strVal === 'all' || strVal === 'tat_ca') return true;
+    if (p.defaultValue !== undefined && strVal === String(p.defaultValue)) return true;
+    if (selectedOption.isPlaceholder) return true;
+    return false;
+  }, [selectedOption, p.defaultValue]);
+
+  const isPlaceholderActive = !selectedOption || (Boolean(p.placeholder) && isDefaultOrEmpty);
+
+  const displayLabel = useMemo(() => {
+    if (p.placeholder && isDefaultOrEmpty) {
+      return p.placeholder;
+    }
+    return selectedOption ? selectedOption.label : p.placeholder || 'Chọn...';
+  }, [selectedOption, p.placeholder, isDefaultOrEmpty]);
+
   // Determine if searchable
   const isSearchable =
     p.searchable === true ||
@@ -336,10 +354,10 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
             <span
               className={cx(
                 'truncate font-normal block',
-                !selectedOption ? 'text-slate-400' : 'text-slate-800 font-medium'
+                isPlaceholderActive ? 'text-slate-400' : 'text-slate-800 font-medium'
               )}
             >
-              {selectedOption ? selectedOption.label : p.placeholder || 'Chọn...'}
+              {displayLabel}
             </span>
           </div>
 

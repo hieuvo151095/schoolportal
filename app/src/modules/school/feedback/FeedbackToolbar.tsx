@@ -29,14 +29,15 @@ export default function FeedbackToolbar() {
 
   const selectFilters: SelectFieldProps[] = [
     {
-      label: 'Năm học',
+      placeholder: 'Chọn năm học',
       value: filters.schoolYear,
+      defaultValue: '2026 - 2027',
       onChange: (val) => dispatch(setSchoolYearFilter(String(val))),
       options: schoolYears.map((year) => ({ value: year, label: year })),
       className: 'min-w-[130px]',
     },
     {
-      label: 'Loại góp ý',
+      placeholder: 'Chọn loại góp ý',
       value: filters.category,
       onChange: (val) =>
         dispatch(
@@ -54,7 +55,7 @@ export default function FeedbackToolbar() {
       className: 'min-w-[130px]',
     },
     {
-      label: 'Độ ưu tiên',
+      placeholder: 'Chọn độ ưu tiên',
       value: filters.priority,
       onChange: (val) =>
         dispatch(

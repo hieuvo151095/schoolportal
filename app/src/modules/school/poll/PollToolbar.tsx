@@ -67,6 +67,7 @@ export const PollToolbar: React.FC<PollToolbarProps> = ({
         }}
         filters={[
           {
+            placeholder: 'Chọn lớp học',
             options: classOptions,
             value: filterState.classId,
             onChange: (val) => onClassChange(val),

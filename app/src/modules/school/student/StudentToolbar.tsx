@@ -36,6 +36,7 @@ export const StudentToolbar: React.FC<StudentToolbarProps> = ({
       }}
       filters={[
         {
+          placeholder: 'Chọn lớp học',
           options: [
             { label: 'Tất cả lớp học', value: 'all' },
             { label: 'Lớp 10A1', value: 'class-10a1' },
@@ -46,6 +47,7 @@ export const StudentToolbar: React.FC<StudentToolbarProps> = ({
           onChange: (val) => dispatch(setFilter({ classId: val })),
         },
         {
+          placeholder: 'Chọn trạng thái',
           options: [
             { label: 'Tất cả trạng thái', value: 'all' },
             { label: 'Đang học', value: 'active' },

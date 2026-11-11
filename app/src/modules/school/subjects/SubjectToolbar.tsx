@@ -47,14 +47,15 @@ export const SubjectToolbar: React.FC<SubjectToolbarProps> = ({
 
   const filters: SelectFieldProps[] = [
     {
-      label: 'Năm học',
+      placeholder: 'Chọn năm học',
       value: selectedAcademicYear,
+      defaultValue: '2025-2026',
       onChange: (val) => onSelectAcademicYear(val),
-      options: ACADEMIC_YEARS.map((y) => ({ value: y, label: `Năm học ${y}` })),
-      className: 'min-w-[130px]',
+      options: ACADEMIC_YEARS.map((y) => ({ value: y, label: y })),
+      className: 'min-w-[140px]',
     },
     {
-      label: 'Khối lớp',
+      placeholder: 'Chọn khối lớp',
       value: filterCriteria.gradeLevel,
       onChange: (val) => onUpdateFilter({ gradeLevel: val }),
       options: [
@@ -64,7 +65,7 @@ export const SubjectToolbar: React.FC<SubjectToolbarProps> = ({
       className: 'min-w-[130px]',
     },
     {
-      label: 'Phân loại',
+      placeholder: 'Chọn phân loại',
       value: filterCriteria.classification,
       onChange: (val) => onUpdateFilter({ classification: val as any }),
       options: [
@@ -77,7 +78,7 @@ export const SubjectToolbar: React.FC<SubjectToolbarProps> = ({
       className: 'min-w-[130px]',
     },
     {
-      label: 'Loại môn',
+      placeholder: 'Chọn loại môn',
       value: filterCriteria.type,
       onChange: (val) => onUpdateFilter({ type: val as any }),
       options: [

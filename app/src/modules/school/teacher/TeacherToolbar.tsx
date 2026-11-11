@@ -32,6 +32,7 @@ export const TeacherToolbar: React.FC<TeacherToolbarProps> = ({
       }}
       filters={[
         {
+          placeholder: 'Chọn lớp học',
           options: [
             { label: 'Tất cả lớp học', value: 'all' },
             { label: 'Lớp 1A1', value: 'lop-1a1' },
@@ -43,6 +44,7 @@ export const TeacherToolbar: React.FC<TeacherToolbarProps> = ({
           onChange: (val) => dispatch(setFilter({ classId: val })),
         },
         {
+          placeholder: 'Chọn phân quyền',
           options: [
             { label: 'Tất cả phân quyền', value: 'all' },
             { label: 'Giáo viên chính', value: 'chinh' },
@@ -52,6 +54,7 @@ export const TeacherToolbar: React.FC<TeacherToolbarProps> = ({
           onChange: (val) => dispatch(setFilter({ permissionTier: val })),
         },
         {
+          placeholder: 'Chọn trạng thái',
           options: [
             { label: 'Tất cả trạng thái', value: 'all' },
             { label: 'Đang làm việc', value: 'dang_lam_viec' },

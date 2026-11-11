@@ -65,6 +65,7 @@ export const FeeReportToolbar: React.FC<FeeReportToolbarProps> = ({
         { value: 'the_pos', label: 'Thẻ POS' },
       ],
       value: filters.paymentMethod || 'all',
+      placeholder: 'Chọn phương thức',
       onChange: (val) => dispatch(setPaymentMethodFilter(val)),
     });
   }
@@ -77,6 +78,7 @@ export const FeeReportToolbar: React.FC<FeeReportToolbarProps> = ({
         { value: 'da_gui', label: 'Đã phát hành' },
       ],
       value: filters.unpaidStatus || 'all',
+      placeholder: 'Chọn trạng thái',
       onChange: (val) => dispatch(setUnpaidStatusFilter(val as any)),
     });
   }
