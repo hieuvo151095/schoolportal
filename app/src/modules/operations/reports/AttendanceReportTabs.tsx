@@ -51,6 +51,8 @@ export const AttendanceReportTabs: React.FC = () => {
               {/* Class Select */}
               <div className="w-full sm:w-[180px]">
                 <SelectField
+                  placeholder="Chọn lớp học"
+                  defaultValue="lop-1a2"
                   value={selectedClassId}
                   onChange={(val) => dispatch(setAttendanceFilters({ classId: val }))}
                   options={[
@@ -66,6 +68,8 @@ export const AttendanceReportTabs: React.FC = () => {
               {/* Month Select */}
               <div className="w-full sm:w-[160px]">
                 <SelectField
+                  placeholder="Chọn tháng"
+                  defaultValue="9"
                   value={String(selectedMonth)}
                   onChange={(val) => dispatch(setAttendanceFilters({ month: parseInt(val, 10) }))}
                   options={[
@@ -94,6 +98,8 @@ export const AttendanceReportTabs: React.FC = () => {
               {/* Role Select */}
               <div className="w-full sm:w-[180px]">
                 <SelectField
+                  placeholder="Chọn vai trò"
+                  defaultValue="all"
                   value={selectedRole}
                   onChange={(val) => dispatch(setAttendanceFilters({ role: val }))}
                   options={[
@@ -111,6 +117,8 @@ export const AttendanceReportTabs: React.FC = () => {
               {/* Month Select */}
               <div className="w-full sm:w-[160px]">
                 <SelectField
+                  placeholder="Chọn tháng"
+                  defaultValue="9"
                   value={String(selectedMonth)}
                   onChange={(val) => dispatch(setAttendanceFilters({ month: parseInt(val, 10) }))}
                   options={[

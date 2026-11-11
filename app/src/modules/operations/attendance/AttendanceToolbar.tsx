@@ -103,6 +103,8 @@ export const AttendanceToolbar: React.FC<AttendanceToolbarProps> = ({
           {/* Class Select */}
           <div className="w-full sm:w-44 flex-shrink-0 min-w-0">
             <SelectField
+              placeholder="Chọn lớp học"
+              defaultValue="c-1a1"
               value={selectedClassId}
               onChange={onSelectClassId}
               options={CLASSES_LIST.map((c) => ({ value: c.id, label: c.name }))}

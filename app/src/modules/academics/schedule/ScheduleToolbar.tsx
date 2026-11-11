@@ -75,6 +75,7 @@ export const ScheduleToolbar: React.FC<ScheduleToolbarProps> = ({ schoolCode, on
         }}
         filters={[
           {
+            placeholder: 'Chọn lớp học',
             options: [
               { value: 'all', label: 'Tất cả các lớp' },
               ...classes.map((cls) => ({ value: cls.id, label: cls.name })),

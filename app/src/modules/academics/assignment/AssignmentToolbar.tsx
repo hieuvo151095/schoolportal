@@ -5,7 +5,7 @@ import {
   setFilterDrawerOpen,
   resetFilterCriteria,
 } from '../../../store/slices/assignmentSlice';
-import { Button, SearchField, SelectField, CountedTabs, FilterBar } from '@/components/ds';
+import { Button, CountedTabs, FilterBar } from '@/components/ds';
 
 interface AssignmentToolbarProps {
   schoolCode: string;
@@ -89,6 +89,7 @@ export const AssignmentToolbar: React.FC<AssignmentToolbarProps> = ({ schoolCode
         }}
         filters={[
           {
+            placeholder: 'Chọn lớp học',
             options: [
               { value: 'all', label: 'Tất cả lớp học' },
               { value: '1a1', label: 'Lớp 1A1' },
@@ -98,6 +99,7 @@ export const AssignmentToolbar: React.FC<AssignmentToolbarProps> = ({ schoolCode
             onChange: (val) => dispatch(setFilterCriteria({ classId: val })),
           },
           {
+            placeholder: 'Chọn môn học',
             options: [
               { value: 'all', label: 'Tất cả môn học' },
               ...subjects.map((s) => ({ value: s.id, label: s.name })),

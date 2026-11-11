@@ -208,6 +208,7 @@ export const ScoreboardOverviewGrid: React.FC<ScoreboardOverviewGridProps> = ({
         }}
         filters={[
           {
+            placeholder: 'Chọn khối lớp',
             options: [
               { value: 'Tất cả khối', label: 'Tất cả khối lớp' },
               { value: 'Khối 1', label: 'Khối 1' },
@@ -220,10 +221,12 @@ export const ScoreboardOverviewGrid: React.FC<ScoreboardOverviewGridProps> = ({
             onChange: (val) => dispatch(setFilterCriteria({ gradeLevel: val })),
           },
           {
+            placeholder: 'Chọn năm học',
+            defaultValue: 'Năm học 2025 - 2026',
             options: [
-              { value: 'Năm học 2025 - 2026', label: 'Năm học 2025 - 2026 (Hiện tại)' },
-              { value: 'Năm học 2024 - 2025', label: 'Năm học 2024 - 2025' },
-              { value: 'Kỳ 1 năm học 2026 - 2027', label: 'Kỳ 1 năm học 2026 - 2027' },
+              { value: 'Năm học 2025 - 2026', label: '2025 - 2026 (Hiện tại)' },
+              { value: 'Năm học 2024 - 2025', label: '2024 - 2025' },
+              { value: 'Kỳ 1 năm học 2026 - 2027', label: 'Kỳ 1 (2026 - 2027)' },
             ],
             value: filterCriteria.academicYear,
             onChange: (val) => dispatch(setFilterCriteria({ academicYear: val })),

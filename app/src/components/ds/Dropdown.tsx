@@ -133,7 +133,18 @@ export function Dropdown<T = string>(p: DropdownProps<T>) {
   const isDefaultOrEmpty = useMemo(() => {
     if (!selectedOption) return true;
     const strVal = String(selectedOption.value);
-    if (strVal === '' || strVal === 'all' || strVal === 'tat_ca') return true;
+    const strLabel = String(selectedOption.label);
+    const foldedVal = foldText(strVal);
+    const foldedLabel = foldText(strLabel);
+    if (
+      strVal === '' ||
+      strVal === 'all' ||
+      strVal === 'tat_ca' ||
+      foldedVal.startsWith('tat ca') ||
+      foldedLabel.startsWith('tat ca')
+    ) {
+      return true;
+    }
     if (p.defaultValue !== undefined && strVal === String(p.defaultValue)) return true;
     if (selectedOption.isPlaceholder) return true;
     return false;

@@ -240,6 +240,7 @@ export const ClassFeeScheduleTable: React.FC = () => {
           }}
           filters={[
             {
+              placeholder: 'Chọn khối lớp',
               options: GRADE_LEVEL_OPTIONS,
               value: gradeLevelFilter,
               onChange: handleGradeLevelChange,

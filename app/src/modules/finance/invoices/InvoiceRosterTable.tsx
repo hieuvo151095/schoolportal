@@ -260,6 +260,8 @@ export const InvoiceRosterTable: React.FC = () => {
           }}
           filters={[
             {
+              placeholder: 'Chọn lớp học',
+              defaultValue: 'lop-6a1',
               options: mockFeeClasses.map((cls) => ({
                 label: `${cls.name} (${cls.gradeLevel})`,
                 value: cls.id,

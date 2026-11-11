@@ -391,6 +391,7 @@ export const FeeCatalogTable: React.FC = () => {
         }}
         filters={[
           {
+            placeholder: 'Chọn danh mục thu',
             options: [
               { value: 'all', label: 'Tất cả danh mục' },
               ...revenueCategories.map((cat) => ({
@@ -402,6 +403,7 @@ export const FeeCatalogTable: React.FC = () => {
             onChange: handleRevenueCategoryFilterChange,
           },
           {
+            placeholder: 'Chọn xuất HĐĐT',
             options: [
               { value: 'all', label: 'Tất cả HĐĐT' },
               { value: 'yes', label: 'Có xuất HĐĐT' },
@@ -411,6 +413,7 @@ export const FeeCatalogTable: React.FC = () => {
             onChange: handleInvoiceFilterChange,
           },
           {
+            placeholder: 'Chọn đơn vị tính',
             options: [
               { value: 'all', label: 'Tất cả đơn vị' },
               ...FEE_UNIT_OPTIONS.map((opt) => ({

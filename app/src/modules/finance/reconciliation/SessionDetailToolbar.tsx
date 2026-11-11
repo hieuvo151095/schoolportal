@@ -31,6 +31,7 @@ export const SessionDetailToolbar: React.FC<SessionDetailToolbarProps> = ({
         }}
         filters={[
           {
+            placeholder: 'Chọn cổng thanh toán',
             options: [
               { value: 'all', label: 'Tất cả cổng thanh toán' },
               { value: 'finviet', label: 'Ví FinViet' },

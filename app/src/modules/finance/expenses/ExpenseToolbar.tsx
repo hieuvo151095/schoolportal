@@ -51,6 +51,8 @@ export const ExpenseToolbar: React.FC<ExpenseToolbarProps> = ({
       }}
       filters={[
         {
+          placeholder: 'Chọn tháng',
+          defaultValue: '2025-12',
           options: [
             { label: 'Tháng 12/2025', value: '2025-12' },
             { label: 'Tháng 09/2026', value: '2026-09' },
@@ -61,6 +63,7 @@ export const ExpenseToolbar: React.FC<ExpenseToolbarProps> = ({
           onChange: (val) => onMonthChange(val),
         },
         {
+          placeholder: 'Chọn loại phiếu',
           options: [
             { label: 'Tất cả loại phiếu', value: 'all' },
             { label: 'Hoàn tiền học sinh', value: 'hoan_tien' },
@@ -70,6 +73,7 @@ export const ExpenseToolbar: React.FC<ExpenseToolbarProps> = ({
           onChange: (val) => onTypeChange(val as any),
         },
         {
+          placeholder: 'Chọn trạng thái',
           options: [
             { label: 'Tất cả trạng thái', value: 'all' },
             { label: 'Bản nháp', value: 'da_tao' },
