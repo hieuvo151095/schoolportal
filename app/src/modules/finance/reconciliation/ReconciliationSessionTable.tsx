@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { ReconciliationSession } from '../../../types/reconciliation';
 import { formatReconciliationAmount } from '../../../utils/reconciliationValidation';
-import { Tag, StatusTag, Button, Icon } from '../../../components/ds';
+import { Tag, StatusTag, Button, Icon, EmptyState } from '../../../components/ds';
 
 interface ReconciliationSessionTableProps {
   sessions: ReconciliationSession[];
@@ -24,65 +24,18 @@ export const ReconciliationSessionTable: React.FC<ReconciliationSessionTableProp
 
   if (sessions.length === 0) {
     return (
-      <div
-        style={{
-          background: 'var(--bg-surface)',
-          borderRadius: 'var(--radius-lg)',
-          border: '1px solid var(--border-neutral)',
-          padding: 'var(--space-8) var(--space-4)',
-          textAlign: 'center',
-          boxShadow: 'var(--shadow-sm)',
-        }}
-      >
-        <div
-          style={{
-            width: '48px',
-            height: '48px',
-            background: 'var(--bg-secondary)',
-            borderRadius: 'var(--radius-full)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: '0 auto var(--space-3)',
-            color: 'var(--text-secondary)',
-          }}
-        >
-          <Icon name="calendar" size={24} />
-        </div>
-        <h3 className="h5" style={{ margin: '0 0 var(--space-1)', color: 'var(--text-primary)' }}>
-          Không có phiên đối soát nào trong khoảng thời gian đã chọn
-        </h3>
-        <p className="body-sm" style={{ margin: 0, color: 'var(--text-secondary)' }}>
-          Vui lòng mở rộng khoảng thời gian hoặc bấm nút &quot;12 ngày gần nhất&quot; để tìm các phiên đối soát đã đồng bộ.
-        </p>
+      <div className="p-8">
+        <EmptyState
+          icon="calendar"
+          title="Không có phiên đối soát nào trong khoảng thời gian đã chọn"
+          description="Vui lòng mở rộng khoảng thời gian hoặc bấm nút '12 ngày gần nhất' để tìm các phiên đối soát đã đồng bộ."
+        />
       </div>
     );
   }
 
   return (
-    <div className="ecomd-table-card">
-      <div
-        style={{
-          padding: 'var(--space-14) var(--space-20)',
-          borderBottom: '1px solid var(--border-default)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          background: 'var(--bg-subtle)',
-        }}
-      >
-        <div>
-          <h3 className="body-sm-bold text-[var(--text-heading)] m-0">
-            Danh Sách Phiên Đối Soát Điện Tử
-          </h3>
-          <p className="body-xs text-[var(--text-subtle)] mt-0.5 m-0">
-            Mỗi phiên là 1 đợt đồng bộ giao dịch từ cổng thanh toán Ví FinViet và QR Ecopay
-          </p>
-        </div>
-        <Tag variant="code">{sessions.length} phiên ghi nhận</Tag>
-      </div>
-
-      <div className="ecomd-table-scroll">
+    <div className="ecomd-table-scroll">
         <table className="ecomd-table ecomd-table--dense w-full">
           <thead>
             <tr>
@@ -233,6 +186,5 @@ export const ReconciliationSessionTable: React.FC<ReconciliationSessionTableProp
           </tbody>
         </table>
       </div>
-    </div>
   );
 };

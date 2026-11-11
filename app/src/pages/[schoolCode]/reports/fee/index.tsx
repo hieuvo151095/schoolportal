@@ -39,27 +39,25 @@ export default function PaidFeeReportsPage() {
       </Head>
 
       <div className="space-y-6">
-        {/* 4-Tab Navigation (BR01) */}
-        <FeeReportTabsNav schoolCode={schoolCode} />
-
         {/* Page Header */}
         <PageHeader
-          title="Hóa Đơn Đã Thanh Toán"
-          description="Danh sách hóa đơn đã thu hoàn tất, lọc theo ngày xác nhận thanh toán và phương thức giao dịch (BR03)"
+          title="Báo Cáo Học Phí"
+          description="Danh sách hóa đơn đã thu hoàn tất, lọc theo ngày xác nhận thanh toán và phương thức giao dịch"
         />
 
-        {/* Filter Toolbar with Paid-specific Payment Method Filter */}
-        <FeeReportToolbar
-          currentTab="paid"
-          recordCount={filteredPaidInvoices.length}
-          onExportExcel={handleExportExcel}
-        />
-
-        {/* Paid Invoices Table */}
-        <PaidInvoicesTable
-          invoices={filteredPaidInvoices}
-          schoolCode={schoolCode}
-        />
+        {/* Master Table Card: CountedTabs + FilterBar + DataTable */}
+        <div className="ecomd-table-card">
+          <FeeReportTabsNav schoolCode={schoolCode} />
+          <FeeReportToolbar
+            currentTab="paid"
+            recordCount={filteredPaidInvoices.length}
+            onExportExcel={handleExportExcel}
+          />
+          <PaidInvoicesTable
+            invoices={filteredPaidInvoices}
+            schoolCode={schoolCode}
+          />
+        </div>
       </div>
     </PortalLayout>
   );

@@ -47,31 +47,29 @@ export default function FeeReportOverviewPage() {
       </Head>
 
       <div className="space-y-6">
-        {/* 4-Tab Navigation */}
-        <FeeReportTabsNav schoolCode={schoolCode} />
-
         {/* Page Header */}
         <PageHeader
-          title="Báo Cáo Học Phí — Tổng Quan Theo Lớp"
+          title="Báo Cáo Học Phí"
           description="Tổng hợp tỉ lệ hoàn thành thu học phí theo từng lớp trong kỳ, tách riêng học sinh lưu trữ"
         />
 
         {/* KPI Summary Cards */}
         <FeeReportSummaryCards kpis={kpis} />
 
-        {/* Filter Toolbar */}
-        <FeeReportToolbar
-          currentTab="overview"
-          recordCount={rows.length}
-          onExportExcel={handleExportExcel}
-        />
-
-        {/* Class Overview Matrix */}
-        <FeeOverviewTable
-          rows={rows}
-          totals={totals}
-          schoolCode={schoolCode}
-        />
+        {/* Master Table Card: CountedTabs + FilterBar + DataTable */}
+        <div className="ecomd-table-card">
+          <FeeReportTabsNav schoolCode={schoolCode} />
+          <FeeReportToolbar
+            currentTab="overview"
+            recordCount={rows.length}
+            onExportExcel={handleExportExcel}
+          />
+          <FeeOverviewTable
+            rows={rows}
+            totals={totals}
+            schoolCode={schoolCode}
+          />
+        </div>
       </div>
     </PortalLayout>
   );

@@ -54,28 +54,26 @@ export default function PartialFeeReportsPage() {
       </Head>
 
       <div className="space-y-6">
-        {/* 4-Tab Navigation (BR01) */}
-        <FeeReportTabsNav schoolCode={schoolCode} />
-
         {/* Page Header */}
         <PageHeader
-          title="Hóa Đơn Thanh Toán Một Phần"
-          description="Theo dõi hóa đơn đang thu nhiều đợt, hiển thị số tiền còn thiếu (BR04) và lịch sử thanh toán chi tiết (BR06)"
+          title="Báo Cáo Học Phí"
+          description="Theo dõi hóa đơn đang thu nhiều đợt, hiển thị số tiền còn thiếu và lịch sử thanh toán chi tiết"
         />
 
-        {/* Filter Toolbar */}
-        <FeeReportToolbar
-          currentTab="partial"
-          recordCount={filteredPartialInvoices.length}
-          onExportExcel={handleExportExcel}
-        />
-
-        {/* Partial Invoices Table (BR04, BR06) */}
-        <PartialInvoicesTable
-          invoices={filteredPartialInvoices}
-          schoolCode={schoolCode}
-          onViewHistory={handleOpenHistory}
-        />
+        {/* Master Table Card: CountedTabs + FilterBar + DataTable */}
+        <div className="ecomd-table-card">
+          <FeeReportTabsNav schoolCode={schoolCode} />
+          <FeeReportToolbar
+            currentTab="partial"
+            recordCount={filteredPartialInvoices.length}
+            onExportExcel={handleExportExcel}
+          />
+          <PartialInvoicesTable
+            invoices={filteredPartialInvoices}
+            schoolCode={schoolCode}
+            onViewHistory={handleOpenHistory}
+          />
+        </div>
 
         {/* Payment History Modal (BR06) */}
         <PaymentHistoryModal

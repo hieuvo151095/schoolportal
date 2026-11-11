@@ -84,21 +84,21 @@ export default function ReconciliationOverviewPage() {
           endDate={endDate}
         />
 
-        {/* Filter Toolbar (BR05 Date Range Picker) */}
-        <ReconciliationToolbar
-          startDate={startDate}
-          endDate={endDate}
-          onDateChange={handleDateChange}
-          sessionCount={filteredSessions.length}
-          onExport={handleExportAll}
-        />
-
-        {/* Sessions Roster Table */}
-        <ReconciliationSessionTable
-          sessions={filteredSessions}
-          schoolCode={schoolCode}
-          onExportSession={handleExportSession}
-        />
+        {/* Unified Master Table Card: FilterBar + Sessions Table */}
+        <div className="ecomd-table-card">
+          <ReconciliationToolbar
+            startDate={startDate}
+            endDate={endDate}
+            onDateChange={handleDateChange}
+            sessionCount={filteredSessions.length}
+            onExport={handleExportAll}
+          />
+          <ReconciliationSessionTable
+            sessions={filteredSessions}
+            schoolCode={schoolCode}
+            onExportSession={handleExportSession}
+          />
+        </div>
       </div>
     </PortalLayout>
   );

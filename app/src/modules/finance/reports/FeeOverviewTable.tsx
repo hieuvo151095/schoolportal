@@ -21,9 +21,8 @@ export const FeeOverviewTable: React.FC<FeeOverviewTableProps> = ({
   schoolCode,
 }) => {
   return (
-    <div className="ecomd-table-card">
-      <div className="ecomd-table-scroll">
-        <table className="ecomd-table ecomd-table--dense w-full">
+    <div className="ecomd-table-scroll">
+      <table className="ecomd-table ecomd-table--dense w-full">
           <thead>
             {/* Top Multi-Header Row */}
             <tr
@@ -269,7 +268,6 @@ export const FeeOverviewTable: React.FC<FeeOverviewTableProps> = ({
           </tfoot>
         </table>
       </div>
-    </div>
   );
 };
 

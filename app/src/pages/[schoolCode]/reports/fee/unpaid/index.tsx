@@ -39,27 +39,25 @@ export default function UnpaidFeeReportsPage() {
       </Head>
 
       <div className="space-y-6">
-        {/* 4-Tab Navigation (BR01) */}
-        <FeeReportTabsNav schoolCode={schoolCode} />
-
         {/* Page Header */}
         <PageHeader
-          title="Hóa Đơn Chưa Thanh Toán"
-          description="Đôn đốc thu học phí, lọc riêng trạng thái Đã tạo/Đã gửi và hóa đơn quá hạn nộp (BR05)"
+          title="Báo Cáo Học Phí"
+          description="Đôn đốc thu học phí, lọc riêng trạng thái Đã tạo/Đã gửi và hóa đơn quá hạn nộp"
         />
 
-        {/* Filter Toolbar with Unpaid-specific Status Dropdown & Overdue Checkbox (BR05) */}
-        <FeeReportToolbar
-          currentTab="unpaid"
-          recordCount={filteredUnpaidInvoices.length}
-          onExportExcel={handleExportExcel}
-        />
-
-        {/* Unpaid Invoices Table (BR05) */}
-        <UnpaidInvoicesTable
-          invoices={filteredUnpaidInvoices}
-          schoolCode={schoolCode}
-        />
+        {/* Master Table Card: CountedTabs + FilterBar + DataTable */}
+        <div className="ecomd-table-card">
+          <FeeReportTabsNav schoolCode={schoolCode} />
+          <FeeReportToolbar
+            currentTab="unpaid"
+            recordCount={filteredUnpaidInvoices.length}
+            onExportExcel={handleExportExcel}
+          />
+          <UnpaidInvoicesTable
+            invoices={filteredUnpaidInvoices}
+            schoolCode={schoolCode}
+          />
+        </div>
       </div>
     </PortalLayout>
   );

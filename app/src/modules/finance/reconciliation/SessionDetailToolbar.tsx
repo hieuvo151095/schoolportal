@@ -40,16 +40,17 @@ export const SessionDetailToolbar: React.FC<SessionDetailToolbarProps> = ({
             onChange: (val) => onChannelChange(val as any),
           },
         ]}
-      >
-        <Button
-          variant="secondary"
-          icon="download"
-          onClick={onExport}
-          disabled={isExportDisabled}
-        >
-          Xuất bảng đối soát Excel
-        </Button>
-      </FilterBar>
+        actions={
+          <Button
+            variant="secondary"
+            icon="download"
+            onClick={onExport}
+            disabled={isExportDisabled}
+          >
+            Xuất bảng đối soát Excel
+          </Button>
+        }
+      />
     </div>
   );
 };

@@ -26,18 +26,19 @@ export const UnpaidInvoicesTable: React.FC<UnpaidInvoicesTableProps> = ({
 
   if (invoices.length === 0) {
     return (
-      <EmptyState
-        icon="circle-check"
-        title="Không có hóa đơn chưa thanh toán"
-        description="Tuyệt vời! Toàn bộ hóa đơn trong khoảng thời gian đã chọn đều đã được thu đầy đủ."
-      />
+      <div className="p-8">
+        <EmptyState
+          icon="circle-check"
+          title="Không có hóa đơn chưa thanh toán"
+          description="Tuyệt vời! Toàn bộ hóa đơn trong khoảng thời gian đã chọn đều đã được thu đầy đủ."
+        />
+      </div>
     );
   }
 
   return (
-    <div className="ecomd-table-card">
-      <div className="ecomd-table-scroll">
-        <table className="ecomd-table ecomd-table--dense w-full">
+    <div className="ecomd-table-scroll">
+      <table className="ecomd-table ecomd-table--dense w-full">
           <thead>
             <tr>
               <th className="body-xs-semibold text-[var(--text-subtle)]" style={{ width: '48px', textAlign: 'center' }}>
@@ -107,7 +108,6 @@ export const UnpaidInvoicesTable: React.FC<UnpaidInvoicesTableProps> = ({
           </tbody>
         </table>
       </div>
-    </div>
   );
 };
 

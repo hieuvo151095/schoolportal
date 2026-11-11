@@ -26,7 +26,7 @@ import { AddClassFeeModal } from './AddClassFeeModal';
 import {
   Button,
   IconButton,
-  SearchField,
+  FilterBar,
   Tag,
   Icon,
 } from '../../../components/ds';
@@ -135,36 +135,37 @@ export const ClassFeeMatrixTable: React.FC = () => {
             </p>
           </div>
         </div>
-
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <div className="w-full sm:w-60">
-            <SearchField
-              placeholder="Tìm tên hoặc mã HS..."
-              value={studentSearch}
-              onChange={(val) => setStudentSearch(val)}
-            />
-          </div>
-
-          <Button
-            variant="secondary"
-            icon="download"
-            onClick={() => alert(`Đang xuất bảng ma trận học phí lớp ${classId} ra file Excel...`)}
-          >
-            Xuất Excel
-          </Button>
-
-          <Button
-            variant="primary"
-            icon="plus"
-            onClick={() => dispatch(openAddFeeModal())}
-          >
-            Thêm khoản phí
-          </Button>
-        </div>
       </div>
 
       {/* 2D Matrix Table */}
       <div className="ecomd-table-card">
+        {/* Canonical FilterBar */}
+        <FilterBar
+          search={{
+            placeholder: 'Tìm tên hoặc mã HS...',
+            value: studentSearch,
+            onChange: (val) => setStudentSearch(val),
+          }}
+          actions={
+            <div className="flex items-center gap-2">
+              <Tag variant="code">{filteredStudents.length} học sinh</Tag>
+              <Button
+                variant="secondary"
+                icon="download"
+                onClick={() => alert(`Đang xuất bảng ma trận học phí lớp ${classId} ra file Excel...`)}
+              >
+                Xuất Excel
+              </Button>
+              <Button
+                variant="primary"
+                icon="plus"
+                onClick={() => dispatch(openAddFeeModal())}
+              >
+                Thêm khoản phí
+              </Button>
+            </div>
+          }
+        />
         <div className="ecomd-table-scroll" style={{ maxHeight: '70vh' }}>
           <table className="ecomd-table w-full">
             <thead
