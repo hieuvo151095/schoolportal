@@ -1,7 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
-import { EcoDialog } from '../../../components/eco';
+import { SlideOver, Icon } from '@/components/ds';
 
 interface UnsavedChangesModalProps {
   isOpen: boolean;
@@ -14,32 +12,39 @@ export const UnsavedChangesModal: React.FC<UnsavedChangesModalProps> = ({
   onCancel,
   onConfirm,
 }) => {
-  if (!isOpen) return null;
-
   return (
-    <EcoDialog
+    <SlideOver
       open={isOpen}
       onClose={onCancel}
-      onCancel={onCancel}
-      onConfirm={onConfirm}
       title="Chưa lưu thay đổi"
-      confirmLabel="Xác nhận rời khỏi"
-      cancelLabel="Hủy bỏ"
-      confirmVariant="danger"
+      description="Cảnh báo rời khỏi màn hình khi có chỉnh sửa chưa được lưu"
+      icon="triangle-exclamation"
+      width={460}
+      primaryAction={{
+        label: 'Xác nhận rời khỏi',
+        icon: 'arrow-right-from-bracket',
+        tone: 'danger',
+        onClick: onConfirm,
+      }}
+      secondaryAction={{
+        label: 'Ở lại chỉnh sửa',
+        onClick: onCancel,
+      }}
     >
-      <div className="flex items-start gap-4 py-2">
-        <div className="w-10 h-10 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
-          <FontAwesomeIcon icon={faTriangleExclamation} className="text-lg" />
-        </div>
-        <div>
-          <p className="text-sm text-gray-700 leading-relaxed font-medium">
+      <div className="space-y-4 py-2">
+        <div className="p-3.5 bg-amber-50 border border-amber-200/80 rounded-xl flex items-start gap-2.5 text-xs text-amber-900">
+          <Icon name="triangle-exclamation" size={14} className="text-amber-600 shrink-0 mt-0.5" />
+          <p className="leading-relaxed font-medium">
             Thay đổi của bạn chưa được lưu. Vui lòng xác nhận rời khỏi khi chưa lưu!
           </p>
-          <p className="text-xs text-gray-500 mt-1">
-            Các thông tin đã nhập trên biểu mẫu sẽ bị hủy bỏ nếu bạn rời khỏi màn hình này.
-          </p>
         </div>
+
+        <p className="text-xs text-slate-500">
+          Các thông tin đã nhập trên biểu mẫu sẽ bị hủy bỏ nếu bạn rời khỏi màn hình này.
+        </p>
       </div>
-    </EcoDialog>
+    </SlideOver>
   );
 };
+
+export default UnsavedChangesModal;

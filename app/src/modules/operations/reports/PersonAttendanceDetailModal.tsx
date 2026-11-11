@@ -1,9 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
-import { DailyAttendanceRecord } from '../../../types/reports';
-import { Icon } from '@/components/ds';
+import { SlideOver, Icon, Avatar } from '@/components/ds';
 
-interface PersonDetailData {
+export interface PersonDetailData {
   name: string;
   code: string;
   roleOrClass: string;
@@ -17,7 +15,7 @@ interface PersonDetailData {
   records: Record<string, any>;
 }
 
-interface Props {
+export interface PersonAttendanceDetailModalProps {
   person: PersonDetailData;
   days: Array<{ date: string; dayNumber: number; weekday: string }>;
   month: number;
@@ -25,185 +23,7 @@ interface Props {
   onClose: () => void;
 }
 
-const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background-color: rgba(15, 23, 42, 0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 60;
-  backdrop-filter: blur(2px);
-  padding: 16px;
-`;
-
-const Card = styled.div`
-  background: white;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  overflow: hidden;
-  border: 1px solid #e2e8f0;
-`;
-
-const Header = styled.div`
-  padding: 16px 20px;
-  border-bottom: 1px solid #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #f8fafc;
-`;
-
-const HeaderInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-`;
-
-const Avatar = styled.div<{ $src?: string }>`
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: ${(props) => (props.$src ? `url(${props.$src}) center/cover no-repeat` : '#e2e8f0')};
-  color: #64748b;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  flex-shrink: 0;
-  border: 1px solid #cbd5e1;
-`;
-
-const CloseButton = styled.button`
-  background: none;
-  border: none;
-  color: #64748b;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 6px;
-  line-height: 1;
-
-  &:hover {
-    background: #e2e8f0;
-    color: #0f172a;
-  }
-`;
-
-const Body = styled.div`
-  padding: 16px 20px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const StatGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-
-  @media (max-width: 640px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-`;
-
-const StatCard = styled.div<{ $bg: string; $color: string; $border: string }>`
-  background: ${(props) => props.$bg};
-  border: 1px solid ${(props) => props.$border};
-  border-radius: 10px;
-  padding: 10px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-
-  .label {
-    font-size: 11px;
-    font-weight: 600;
-    color: #64748b;
-  }
-
-  .value {
-    font-size: 18px;
-    font-weight: 800;
-    color: ${(props) => props.$color};
-  }
-`;
-
-const HistoryTable = styled.div`
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  overflow: hidden;
-`;
-
-const HistoryHeader = styled.div`
-  padding: 10px 14px;
-  background: #f8fafc;
-  font-size: 12px;
-  font-weight: 700;
-  color: #334155;
-  border-bottom: 1px solid #e2e8f0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const RecordRow = styled.div<{ $isWeekend?: boolean }>`
-  padding: 10px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  border-bottom: 1px solid #f1f5f9;
-  background: ${(props) => (props.$isWeekend ? '#fafafa' : '#ffffff')};
-  font-size: 12px;
-
-  &:last-child {
-    border-bottom: none;
-  }
-`;
-
-const StatusPill = styled.span<{ $type: string }>`
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  border-radius: 9999px;
-  font-size: 11px;
-  font-weight: 700;
-  background: ${(props) => {
-    switch (props.$type) {
-      case 'present':
-        return '#dcfce7';
-      case 'absent_excused':
-        return '#e0f2fe';
-      case 'absent_unexcused':
-        return '#fee2e2';
-      default:
-        return '#f1f5f9';
-    }
-  }};
-  color: ${(props) => {
-    switch (props.$type) {
-      case 'present':
-        return '#15803d';
-      case 'absent_excused':
-        return '#0369a1';
-      case 'absent_unexcused':
-        return '#b91c1c';
-      default:
-        return '#64748b';
-    }
-  }};
-`;
-
-export const PersonAttendanceDetailModal: React.FC<Props> = ({
+export const PersonAttendanceDetailModal: React.FC<PersonAttendanceDetailModalProps> = ({
   person,
   days,
   month,
@@ -213,56 +33,73 @@ export const PersonAttendanceDetailModal: React.FC<Props> = ({
   const monthDisplay = month < 10 ? `0${month}` : `${month}`;
 
   return (
-    <Overlay onClick={onClose}>
-      <Card onClick={(e) => e.stopPropagation()}>
-        <Header>
-          <HeaderInfo>
-            <Avatar $src={person.avatarUrl}>{!person.avatarUrl && '👤'}</Avatar>
-            <div>
-              <div style={{ fontSize: '15px', fontWeight: 800, color: '#0f172a' }}>
-                {person.name}
-              </div>
-              <div style={{ fontSize: '11px', color: '#64748b' }}>
-                {person.roleOrClass} • Mã: {person.code}
-              </div>
-            </div>
-          </HeaderInfo>
-          <CloseButton onClick={onClose} title="Đóng">
-            ✕
-          </CloseButton>
-        </Header>
+    <SlideOver
+      open={Boolean(person)}
+      onClose={onClose}
+      icon="user"
+      title={person.name}
+      description={`${person.roleOrClass} • Mã: ${person.code}`}
+      width={560}
+      primaryAction={{
+        label: 'Đóng',
+        onClick: onClose,
+      }}
+      secondaryAction={null}
+    >
+      <div className="space-y-5">
+        {/* Person Brief Card */}
+        <div className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl">
+          <Avatar
+            name={person.name}
+            src={person.avatarUrl}
+            size="md"
+          />
+          <div className="min-w-0 flex-1">
+            <h4 className="text-sm font-bold text-slate-900 truncate">{person.name}</h4>
+            <p className="text-xs text-slate-500 mt-0.5">
+              {person.roleOrClass} • Mã định danh: <span className="font-mono font-semibold">{person.code}</span>
+            </p>
+            {person.phone && (
+              <p className="text-xs text-slate-500 mt-0.5">
+                Điện thoại: <span className="font-mono">{person.phone}</span>
+              </p>
+            )}
+          </div>
+        </div>
 
-        <Body>
-          {/* 4 Stat Overview Cards */}
-          <StatGrid>
-            <StatCard $bg="#f0fdf4" $color="#15803d" $border="#bbf7d0">
-              <span className="label">Có mặt</span>
-              <span className="value">{person.totalPresent} ngày</span>
-            </StatCard>
+        {/* 4 Stat Overview Cards */}
+        <div className="grid grid-cols-2 gap-2.5">
+          <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200/80 flex flex-col">
+            <span className="text-[11px] font-semibold text-emerald-800 uppercase tracking-wider">Có mặt</span>
+            <span className="text-lg font-bold text-emerald-700 mt-1">{person.totalPresent} ngày</span>
+          </div>
 
-            <StatCard $bg="#f0f9ff" $color="#0369a1" $border="#bae6fd">
-              <span className="label">Vắng có phép</span>
-              <span className="value">{person.totalAbsentExcused} ngày</span>
-            </StatCard>
+          <div className="p-3 rounded-xl bg-sky-50 border border-sky-200/80 flex flex-col">
+            <span className="text-[11px] font-semibold text-sky-800 uppercase tracking-wider">Vắng có phép</span>
+            <span className="text-lg font-bold text-sky-700 mt-1">{person.totalAbsentExcused} ngày</span>
+          </div>
 
-            <StatCard $bg="#fef2f2" $color="#b91c1c" $border="#fecaca">
-              <span className="label">Vắng không phép</span>
-              <span className="value">{person.totalAbsentUnexcused} ngày</span>
-            </StatCard>
+          <div className="p-3 rounded-xl bg-rose-50 border border-rose-200/80 flex flex-col">
+            <span className="text-[11px] font-semibold text-rose-800 uppercase tracking-wider">Vắng không phép</span>
+            <span className="text-lg font-bold text-rose-700 mt-1">{person.totalAbsentUnexcused} ngày</span>
+          </div>
 
-            <StatCard $bg="#fffbeb" $color="#b45309" $border="#fde68a">
-              <span className="label">Đi / Về muộn</span>
-              <span className="value">{person.totalLate} lần</span>
-            </StatCard>
-          </StatGrid>
+          <div className="p-3 rounded-xl bg-amber-50 border border-amber-200/80 flex flex-col">
+            <span className="text-[11px] font-semibold text-amber-800 uppercase tracking-wider">Đi / Về muộn</span>
+            <span className="text-lg font-bold text-amber-700 mt-1">{person.totalLate} lần</span>
+          </div>
+        </div>
 
-          {/* Daily Records List */}
-          <HistoryTable>
-            <HistoryHeader>
-              <span>Nhật ký điểm danh tháng {monthDisplay}/{year}</span>
-              <span style={{ fontSize: '11px', color: '#64748b' }}>Tổng: {days.length} ngày</span>
-            </HistoryHeader>
+        {/* Daily Records List */}
+        <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-xs">
+          <div className="bg-slate-50 px-3.5 py-2.5 border-b border-slate-200 flex items-center justify-between text-xs">
+            <span className="font-bold text-slate-800">
+              Nhật ký điểm danh tháng {monthDisplay}/{year}
+            </span>
+            <span className="text-slate-500 font-medium">Tổng: {days.length} ngày</span>
+          </div>
 
+          <div className="divide-y divide-slate-100 max-h-[380px] overflow-y-auto">
             {days.map((d) => {
               const isWeekend = d.weekday === 'T7' || d.weekday === 'CN';
               const rec = person.records[d.date];
@@ -270,39 +107,49 @@ export const PersonAttendanceDetailModal: React.FC<Props> = ({
               const status = rec?.status || (isPresent ? 'present' : isWeekend ? 'weekend' : 'unmarked');
 
               return (
-                <RecordRow key={d.date} $isWeekend={isWeekend}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: '95px' }}>
+                <div
+                  key={d.date}
+                  className={`flex items-center justify-between px-3.5 py-2 text-xs transition-colors ${
+                    isWeekend ? 'bg-slate-50/60' : 'hover:bg-slate-50/50'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 min-w-[100px]">
                     <span
-                      style={{
-                        fontSize: '11px',
-                        fontWeight: 700,
-                        color: isWeekend ? '#ef4444' : '#64748b',
-                        width: '24px',
-                      }}
+                      className={`text-[11px] font-bold w-6 ${
+                        isWeekend ? 'text-rose-500' : 'text-slate-400'
+                      }`}
                     >
                       {d.weekday}
                     </span>
-                    <span style={{ fontWeight: 600, color: '#1e293b' }}>
+                    <span className="font-medium text-slate-700">
                       {d.dayNumber}/{monthDisplay}
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div className="flex items-center gap-2">
                     {isWeekend ? (
-                      <span style={{ color: '#94a3b8', fontSize: '11px', fontStyle: 'italic' }}>
-                        Nghỉ cuối tuần
-                      </span>
+                      <span className="text-[11px] text-slate-400 italic">Nghỉ cuối tuần</span>
                     ) : (
                       <>
-                        <StatusPill $type={status}>
-                          {status === 'present' && '✓ Có mặt'}
-                          {status === 'absent_excused' && '⭕ Vắng CP'}
-                          {status === 'absent_unexcused' && '⭕ Vắng KP'}
+                        <span
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+                            status === 'present'
+                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                              : status === 'absent_excused'
+                              ? 'bg-sky-50 text-sky-700 border border-sky-200'
+                              : status === 'absent_unexcused'
+                              ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                              : 'bg-slate-100 text-slate-600 border border-slate-200'
+                          }`}
+                        >
+                          {status === 'present' && <><Icon name="check" size={10} /> Có mặt</>}
+                          {status === 'absent_excused' && <><Icon name="clock" size={10} /> Vắng CP</>}
+                          {status === 'absent_unexcused' && <><Icon name="triangle-exclamation" size={10} /> Vắng KP</>}
                           {status === 'unmarked' && 'Chưa ghi nhận'}
-                        </StatusPill>
+                        </span>
 
                         {rec?.checkInTime && (
-                          <span style={{ fontSize: '11px', color: '#475569', fontFamily: 'monospace' }}>
+                          <span className="text-[11px] text-slate-600 font-mono">
                             {rec.checkInTime}
                             {rec.checkOutTime ? ` - ${rec.checkOutTime}` : ''}
                           </span>
@@ -311,14 +158,7 @@ export const PersonAttendanceDetailModal: React.FC<Props> = ({
                         {(rec?.isLateArrival || rec?.isLateDeparture) && (
                           <span
                             title="Đi hoặc về muộn"
-                            style={{
-                              fontSize: '10px',
-                              background: '#fef3c7',
-                              color: '#b45309',
-                              padding: '1px 5px',
-                              borderRadius: '4px',
-                              fontWeight: 700,
-                            }}
+                            className="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-md font-bold"
                           >
                             Muộn
                           </span>
@@ -326,12 +166,14 @@ export const PersonAttendanceDetailModal: React.FC<Props> = ({
                       </>
                     )}
                   </div>
-                </RecordRow>
+                </div>
               );
             })}
-          </HistoryTable>
-        </Body>
-      </Card>
-    </Overlay>
+          </div>
+        </div>
+      </div>
+    </SlideOver>
   );
 };
+
+export default PersonAttendanceDetailModal;

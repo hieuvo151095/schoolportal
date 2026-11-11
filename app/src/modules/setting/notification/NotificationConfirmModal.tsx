@@ -1,6 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTriangleExclamation, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { SlideOver, Icon } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   closeConfirmModal,
@@ -24,56 +23,37 @@ export const NotificationConfirmModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-fadeIn">
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-confirm-title"
-        className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md overflow-hidden animate-scaleUp"
-      >
-        {/* Modal Header */}
-        <div className="p-6 text-center space-y-3">
-          <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto">
-            <FontAwesomeIcon icon={faTriangleExclamation} className="text-xl" />
-          </div>
-
-          <h3
-            id="modal-confirm-title"
-            className="text-base font-bold text-slate-900 leading-snug"
-          >
-            Xác nhận thay đổi cấu hình thông báo
-          </h3>
-
-          <p className="text-sm text-slate-600 leading-relaxed font-medium">
-            Vui lòng xác nhận thay đổi cấu hình thông báo của trường!
-          </p>
-
-          <p className="text-xs text-slate-400 leading-normal">
+    <SlideOver
+      open={isConfirmModalOpen}
+      onClose={handleCancel}
+      title="Xác nhận thay đổi cấu hình thông báo"
+      description="Vui lòng xác nhận áp dụng các thiết lập thông báo cho toàn trường"
+      icon="triangle-exclamation"
+      width={460}
+      primaryAction={{
+        label: 'Xác nhận lưu',
+        icon: 'check',
+        onClick: handleConfirm,
+      }}
+      secondaryAction={{
+        label: 'Hủy bỏ',
+        onClick: handleCancel,
+      }}
+    >
+      <div className="space-y-4 py-2">
+        <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2.5 text-xs text-amber-900">
+          <Icon name="triangle-exclamation" size={14} className="text-amber-600 shrink-0 mt-0.5" />
+          <p className="leading-relaxed">
             Thay đổi sẽ có hiệu lực ngay lập tức trên toàn trường và đồng bộ tới ứng dụng di động của giáo viên và phụ huynh.
           </p>
         </div>
 
-        {/* Modal Footer Actions */}
-        <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center gap-1.5 cursor-pointer"
-          >
-            <FontAwesomeIcon icon={faXmark} className="text-xs" />
-            Hủy bỏ
-          </button>
-
-          <button
-            type="button"
-            onClick={handleConfirm}
-            className="px-4 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005bb0] rounded-lg shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
-          >
-            <FontAwesomeIcon icon={faCheck} className="text-xs" />
-            Xác nhận
-          </button>
-        </div>
+        <p className="text-xs text-slate-600">
+          Vui lòng kiểm tra kỹ các kênh thông báo đã chọn (Zalo, App push, SMS) trước khi hoàn tất.
+        </p>
       </div>
-    </div>
+    </SlideOver>
   );
 };
+
+export default NotificationConfirmModal;

@@ -14,6 +14,7 @@ import {
 import { AbsenceMessageCard } from './AbsenceMessageCard';
 import { MessageCategory, ChatMessage } from '../../../types/conversation';
 import { filterMessagesByCategory } from '../../../utils/conversationValidation';
+import { SlideOver } from '@/components/ds';
 
 interface Props {
   onOpenGroupDetails: () => void;
@@ -1509,57 +1510,46 @@ export const ChatThread: React.FC<Props> = ({
         </InputRow>
       </ComposerContainer>
 
-      {/* Pin Conflict Modal (Max 3 Pinned Enforcement) */}
-      {pinConflictModalOpen && (
-        <ModalOverlay onClick={() => setPinConflictModalOpen(false)}>
-          <ModalCard onClick={(e) => e.stopPropagation()}>
-            <ModalHeader>
-              <div className="icon">📌</div>
-              <div>
-                <h4>Đã đạt giới hạn ghim (3 tin nhắn)</h4>
-                <p>
-                  Mỗi cuộc trò chuyện chỉ có thể ghim tối đa 3 tin nhắn. Vui lòng chọn 1 tin nhắn bên dưới để bỏ ghim trước khi ghim tin mới:
-                </p>
+      {/* Pin Conflict SlideOver (Max 3 Pinned Enforcement) */}
+      <SlideOver
+        open={pinConflictModalOpen}
+        onClose={() => {
+          setPinConflictModalOpen(false);
+          setPendingPinMessageId(null);
+        }}
+        icon="thumbtack"
+        title="Đã Đạt Giới Hạn Ghim (3 tin nhắn)"
+        description="Mỗi cuộc trò chuyện chỉ có thể ghim tối đa 3 tin nhắn. Vui lòng chọn 1 tin nhắn bên dưới để bỏ ghim trước khi ghim tin mới:"
+        width={480}
+        secondaryAction={{
+          label: 'Đóng',
+          onClick: () => {
+            setPinConflictModalOpen(false);
+            setPendingPinMessageId(null);
+          },
+        }}
+      >
+        <div className="space-y-3">
+          {pinnedMessages.map((pMsg) => (
+            <div
+              key={pMsg.id}
+              className="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-start justify-between gap-3"
+            >
+              <div className="flex-1 min-w-0">
+                <div className="text-xs font-bold text-slate-800">{pMsg.senderName}</div>
+                <div className="text-xs text-slate-600 mt-1 line-clamp-2">{pMsg.content}</div>
               </div>
-            </ModalHeader>
-
-            <PinnedListInModal>
-              {pinnedMessages.map((pMsg) => (
-                <PinnedItemRow key={pMsg.id}>
-                  <div className="content-col">
-                    <div className="sender">{pMsg.senderName}</div>
-                    <div className="text">{pMsg.content}</div>
-                  </div>
-                  <button onClick={() => handleUnpinAndPinNew(pMsg.id)}>
-                    Bỏ ghim tin này
-                  </button>
-                </PinnedItemRow>
-              ))}
-            </PinnedListInModal>
-
-            <ModalActions>
               <button
-                style={{
-                  background: '#f1f5f9',
-                  border: '1px solid #cbd5e1',
-                  color: '#475569',
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
-                onClick={() => {
-                  setPinConflictModalOpen(false);
-                  setPendingPinMessageId(null);
-                }}
+                type="button"
+                className="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 shrink-0 transition"
+                onClick={() => handleUnpinAndPinNew(pMsg.id)}
               >
-                Đóng
+                Bỏ ghim tin này
               </button>
-            </ModalActions>
-          </ModalCard>
-        </ModalOverlay>
-      )}
+            </div>
+          ))}
+        </div>
+      </SlideOver>
     </ThreadContainer>
   );
 };

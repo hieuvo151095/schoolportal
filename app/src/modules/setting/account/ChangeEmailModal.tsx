@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { EcoDialog, EcoInput } from '../../../components/eco';
+import { SlideOver, Icon } from '@/components/ds';
+import { EcoInput } from '../../../components/eco';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { closeChangeEmailModal, confirmChangeEmail } from '../../../store/slices/accountSlice';
 import { validateEmailPayload } from '../../../utils/accountValidation';
@@ -38,53 +37,56 @@ export const ChangeEmailModal: React.FC = () => {
   };
 
   return (
-    <EcoDialog
+    <SlideOver
       open={isChangeEmailOpen}
       onClose={() => dispatch(closeChangeEmailModal())}
-      onCancel={() => dispatch(closeChangeEmailModal())}
-      onConfirm={handleSubmit}
-      confirmLabel="Xác nhận thay đổi"
-      cancelLabel="Hủy bỏ"
       title="Thay đổi email tài khoản"
-      maxWidth="480px"
+      description={`Cập nhật email đăng nhập cho người dùng ${targetEmailUser.fullName}`}
+      icon="envelope"
+      width={480}
+      primaryAction={{
+        label: 'Xác nhận thay đổi',
+        icon: 'check',
+        onClick: handleSubmit,
+      }}
+      secondaryAction={{
+        label: 'Hủy bỏ',
+        onClick: () => dispatch(closeChangeEmailModal()),
+      }}
     >
       <div className="space-y-4 py-2">
-        <div className="p-3.5 bg-blue-50 border border-blue-100 rounded-lg text-xs text-blue-800 flex items-start gap-2.5">
-          <FontAwesomeIcon icon={faEnvelope} className="text-sm mt-0.5 text-blue-600 shrink-0" />
+        <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg text-xs text-gray-600">
           <p>
-            Email này sẽ được sử dụng làm tên đăng nhập và nhận các thông báo điều hành từ cổng thông tin trường học.
+            Email hiện tại:{' '}
+            <span className="font-semibold text-gray-800">{targetEmailUser.email}</span>
           </p>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-gray-700 mb-1">
-            Email hiện tại
-          </label>
-          <input
-            type="text"
-            readOnly
-            value={targetEmailUser.email}
-            className="w-full px-3 py-2 text-sm bg-gray-100 text-gray-600 border border-gray-200 rounded-lg cursor-not-allowed select-none"
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold text-gray-700 mb-1">
-            Email mới <span className="text-red-500">*</span>
-          </label>
           <EcoInput
+            label="Địa chỉ email mới"
+            required
             type="email"
             value={newEmail}
             onChange={(e) => {
               setNewEmail(e.target.value);
               if (error) setError(null);
             }}
-            placeholder="vd: ten.nguyen@ecoschool.edu.vn"
+            placeholder="nhap.email.moi@domain.com"
             error={error || undefined}
-            autoFocus
           />
         </div>
+
+        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-800">
+          <p className="font-semibold">Lưu ý quan trọng (BR06):</p>
+          <p className="mt-0.5">
+            Email mới sẽ được dùng để đăng nhập hệ thống. Đảm bảo người dùng có quyền truy cập hòm
+            thư này.
+          </p>
+        </div>
       </div>
-    </EcoDialog>
+    </SlideOver>
   );
 };
+
+export default ChangeEmailModal;

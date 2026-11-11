@@ -1,29 +1,13 @@
-/**
- * Batch Invoice Creation Wizard Page
- * Route: /[schoolCode]/school/fee/create
- * Governance: Marcus Fleet V34 / Constitution V1.0.0
- * References: docs_legacy/operating-portal/tai-chinh/hoc-phi.md (BR05, BR07) & TASK-FIN-002
- */
-
-import React from 'react';
-import Head from 'next/head';
-import PortalLayout from '../../../../../components/layout/PortalLayout';
-import { CreateInvoiceWizard } from '../../../../../modules/finance/invoices/CreateInvoiceWizardModal';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 export default function CreateInvoicePage() {
-  return (
-    <PortalLayout>
-      <Head>
-        <title>Tạo Hóa Đơn Học Phí — Finviet School Portal</title>
-        <meta
-          name="description"
-          content="Tạo hóa đơn học phí hàng loạt cho toàn trường, khối, lớp hoặc học sinh."
-        />
-      </Head>
+  const router = useRouter();
+  const schoolCode = (router.query.schoolCode as string) || 'demo';
 
-      <div className="space-y-6">
-        <CreateInvoiceWizard />
-      </div>
-    </PortalLayout>
-  );
+  useEffect(() => {
+    router.replace(`/${schoolCode}/school/fee?create=true`);
+  }, [router, schoolCode]);
+
+  return null;
 }

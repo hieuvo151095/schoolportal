@@ -20,6 +20,7 @@ import {
   EcoRadio,
   EcoSwitch,
 } from '../../../components/eco';
+import { SlideOver } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   closeUserFormModal,
@@ -210,17 +211,27 @@ export const UserAccountForm: React.FC = () => {
   const hasStaffOrTeacherRole = roles.includes('nhan_vien') || roles.includes('giao_vien');
 
   return (
-    <EcoDialog
+    <SlideOver
       open={isUserFormOpen}
       onClose={() => dispatch(closeUserFormModal())}
-      onCancel={() => dispatch(closeUserFormModal())}
-      onConfirm={handleSubmit}
       title={isCreate ? 'Thêm người dùng mới' : 'Chỉnh sửa tài khoản người dùng'}
-      confirmLabel={isCreate ? 'Tạo người dùng' : 'Cập nhật'}
-      cancelLabel="Hủy bỏ"
-      maxWidth="720px"
+      description="Cấu hình thông tin tài khoản, phân quyền và chức năng công tác"
+      icon={isCreate ? 'user-plus' : 'user'}
+      width={720}
+      primaryAction={{
+        label: isCreate ? 'Tạo người dùng' : 'Cập nhật',
+        icon: 'check',
+        onClick: () => {
+          const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
+          handleSubmit(fakeEvent);
+        },
+      }}
+      secondaryAction={{
+        label: 'Hủy bỏ',
+        onClick: () => dispatch(closeUserFormModal()),
+      }}
     >
-      <form onSubmit={handleSubmit} className="space-y-5 py-2 max-h-[75vh] overflow-y-auto px-1">
+      <form onSubmit={handleSubmit} className="space-y-5 py-2">
         {/* CSDL Sở Warning Banner (BR05) */}
         {isCsldSo && (
           <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900 flex items-start gap-2.5">
@@ -613,6 +624,6 @@ export const UserAccountForm: React.FC = () => {
           </div>
         )}
       </form>
-    </EcoDialog>
+    </SlideOver>
   );
 };

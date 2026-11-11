@@ -7,7 +7,7 @@
  * References: docs_legacy/operating-portal/tai-chinh/hoc-phi.md (BR01, BR02, BR03, BR04, BR11)
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '../../../store';
@@ -48,6 +48,7 @@ import {
   Icon,
 } from '../../../components/ds';
 import { addToast } from '../../../store/slices/toastSlice';
+import { CreateInvoiceSlideOver } from './CreateInvoiceWizardModal';
 
 export const InvoiceRosterTable: React.FC = () => {
   const router = useRouter();
@@ -63,6 +64,13 @@ export const InvoiceRosterTable: React.FC = () => {
   } = useAppSelector((state) => state.invoice);
 
   const [isDateRangeOpen, setIsDateRangeOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+  useEffect(() => {
+    if (router.query.create === 'true') {
+      setIsCreateOpen(true);
+    }
+  }, [router.query.create]);
 
   const formatDateDisplay = (dateStr?: string) => {
     if (!dateStr) return '';
@@ -281,7 +289,7 @@ export const InvoiceRosterTable: React.FC = () => {
               <Button
                 variant="primary"
                 icon="plus"
-                onClick={() => router.push(`/${schoolCode}/school/fee/create`)}
+                onClick={() => setIsCreateOpen(true)}
               >
                 Tạo hóa đơn
               </Button>
@@ -538,12 +546,13 @@ export const InvoiceRosterTable: React.FC = () => {
                               <span className="body-xs text-[var(--text-subtle)] italic">
                                 Không có hóa đơn
                               </span>
-                              <Link
-                                href={`/${schoolCode}/school/fee/create`}
-                                className="body-xs-semibold text-[var(--eco-blue-strong)] bg-[var(--bg-muted)] px-2 py-0.5 rounded hover:underline"
+                              <button
+                                type="button"
+                                onClick={() => setIsCreateOpen(true)}
+                                className="body-xs-semibold text-[var(--eco-blue-strong)] bg-[var(--bg-muted)] px-2 py-0.5 rounded hover:underline cursor-pointer"
                               >
                                 + Lập HĐ
-                              </Link>
+                              </button>
                             </div>
                           )}
                         </div>
@@ -745,6 +754,12 @@ export const InvoiceRosterTable: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Create Invoice SlideOver */}
+      <CreateInvoiceSlideOver
+        isOpen={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
+      />
     </div>
   );
 };

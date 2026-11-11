@@ -1,7 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
-import { EcoDialog } from '../../../components/eco';
+import { SlideOver } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   closeConfirmUpdateModal,
@@ -15,29 +13,33 @@ export const AccountActionConfirmModal: React.FC = () => {
   if (!isConfirmUpdateOpen) return null;
 
   return (
-    <EcoDialog
+    <SlideOver
       open={isConfirmUpdateOpen}
       onClose={() => dispatch(closeConfirmUpdateModal())}
-      onCancel={() => dispatch(closeConfirmUpdateModal())}
-      onConfirm={() => dispatch(confirmUserUpdate())}
-      confirmLabel="Xác nhận"
-      cancelLabel="Hủy bỏ"
-      title="Xác nhận cập nhật"
-      maxWidth="440px"
+      title="Xác nhận cập nhật tài khoản"
+      description="Vui lòng xác nhận lưu các thay đổi cho tài khoản người dùng"
+      icon="circle-question"
+      width={460}
+      primaryAction={{
+        label: 'Xác nhận',
+        icon: 'check',
+        onClick: () => dispatch(confirmUserUpdate()),
+      }}
+      secondaryAction={{
+        label: 'Hủy bỏ',
+        onClick: () => dispatch(closeConfirmUpdateModal()),
+      }}
     >
-      <div className="flex flex-col items-center text-center py-4 space-y-3">
-        <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
-          <FontAwesomeIcon icon={faCircleQuestion} className="text-2xl" />
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-gray-800">
-            Vui lòng xác nhận cập nhật tài khoản này!
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            Các thay đổi về vai trò và thông tin cá nhân sẽ được áp dụng ngay sau khi xác nhận.
-          </p>
-        </div>
+      <div className="space-y-4 py-2">
+        <p className="text-sm font-semibold text-gray-800">
+          Vui lòng xác nhận cập nhật tài khoản này!
+        </p>
+        <p className="text-xs text-gray-600 leading-relaxed">
+          Các thay đổi về vai trò, thông tin cá nhân và quyền truy cập sẽ được áp dụng ngay sau khi xác nhận.
+        </p>
       </div>
-    </EcoDialog>
+    </SlideOver>
   );
 };
+
+export default AccountActionConfirmModal;

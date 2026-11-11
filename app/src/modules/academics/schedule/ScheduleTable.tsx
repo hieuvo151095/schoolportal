@@ -14,7 +14,7 @@ import {
   DropdownMenu,
   Icon,
   Button,
-  PopupModal,
+  SlideOver,
   EmptyState,
 } from '@/components/ds';
 
@@ -312,49 +312,52 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({ schoolCode }) => {
         </div>
       )}
 
-      {/* Send to Parents Confirmation Modal */}
-      {sendConfirmSchedule && (
-        <PopupModal
-          title="Xác nhận gửi thời khóa biểu"
-          description={`Phát hành thông báo thời khóa biểu ${sendConfirmSchedule.title} của lớp ${sendConfirmSchedule.className} đến phụ huynh.`}
-          icon="paper-plane"
-          onClose={() => setSendConfirmSchedule(null)}
-          primaryAction={{
-            label: 'Xác nhận gửi',
-            onClick: handleConfirmSend,
-          }}
-          secondaryAction={{
-            label: 'Hủy bỏ',
-            onClick: () => setSendConfirmSchedule(null),
-          }}
-        >
-          <div className="text-sm text-[var(--text-body)]">
-            Thông báo sẽ được chuyển đến tất cả phụ huynh qua ứng dụng và tin nhắn Zalo.
-          </div>
-        </PopupModal>
-      )}
+      {/* Send to Parents Confirmation SlideOver */}
+      <SlideOver
+        open={Boolean(sendConfirmSchedule)}
+        title="Xác nhận gửi thời khóa biểu"
+        description={sendConfirmSchedule ? `Phát hành thông báo thời khóa biểu ${sendConfirmSchedule.title} của lớp ${sendConfirmSchedule.className} đến phụ huynh.` : ''}
+        icon="paper-plane"
+        onClose={() => setSendConfirmSchedule(null)}
+        width={460}
+        primaryAction={{
+          label: 'Xác nhận gửi',
+          icon: 'paper-plane',
+          onClick: handleConfirmSend,
+        }}
+        secondaryAction={{
+          label: 'Hủy bỏ',
+          onClick: () => setSendConfirmSchedule(null),
+        }}
+      >
+        <div className="text-sm text-[var(--text-body)]">
+          Thông báo sẽ được chuyển đến tất cả phụ huynh qua ứng dụng và tin nhắn Zalo.
+        </div>
+      </SlideOver>
 
-      {/* Delete Confirmation Modal */}
-      {deleteConfirmSchedule && (
-        <PopupModal
-          title="Xác nhận xóa thời khóa biểu"
-          description={`Bạn có chắc chắn muốn xóa thời khóa biểu ${deleteConfirmSchedule.title} (Mã: ${deleteConfirmSchedule.id}) không?`}
-          icon="trash"
-          onClose={() => setDeleteConfirmSchedule(null)}
-          primaryAction={{
-            label: 'Xác nhận xóa',
-            onClick: handleConfirmDelete,
-          }}
-          secondaryAction={{
-            label: 'Hủy bỏ',
-            onClick: () => setDeleteConfirmSchedule(null),
-          }}
-        >
-          <div className="text-sm text-[var(--text-danger)] font-medium">
-            Thao tác này không thể hoàn tác sau khi thực hiện.
-          </div>
-        </PopupModal>
-      )}
+      {/* Delete Confirmation SlideOver */}
+      <SlideOver
+        open={Boolean(deleteConfirmSchedule)}
+        title="Xác nhận xóa thời khóa biểu"
+        description={deleteConfirmSchedule ? `Bạn có chắc chắn muốn xóa thời khóa biểu ${deleteConfirmSchedule.title} (Mã: ${deleteConfirmSchedule.id}) không?` : ''}
+        icon="trash"
+        onClose={() => setDeleteConfirmSchedule(null)}
+        width={460}
+        primaryAction={{
+          label: 'Xác nhận xóa',
+          icon: 'trash',
+          tone: 'danger',
+          onClick: handleConfirmDelete,
+        }}
+        secondaryAction={{
+          label: 'Hủy bỏ',
+          onClick: () => setDeleteConfirmSchedule(null),
+        }}
+      >
+        <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-sm text-rose-700 font-medium">
+          Thao tác này không thể hoàn tác sau khi thực hiện.
+        </div>
+      </SlideOver>
     </>
   );
 };

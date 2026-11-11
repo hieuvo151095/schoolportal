@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
-import { Icon, Dropdown } from '../../../../components/ds';
+import { Icon, Dropdown, SlideOver } from '../../../../components/ds';
 import { PortalLayout } from '../../../../components/layout/PortalLayout';
 import { useAppDispatch } from '../../../../store';
 import { createMenu } from '../../../../store/slices/menuSlice';
@@ -417,43 +417,40 @@ export default function CreateSchoolMenuPage() {
           />
         )}
 
-        {/* Discard Warning Modal (BR10, TD-04) */}
-        {showDiscardModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden p-6 space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
-                  <Icon name="triangle-exclamation" className="w-5 h-5 text-amber-600" />
-                </div>
-                <div>
-                  <h3 className="text-base font-semibold text-gray-900">Xác nhận rời khỏi trang</h3>
-                  <p className="text-xs text-gray-600 mt-1 leading-relaxed">
-                    Thay đổi của bạn chưa được lưu. Vui lòng xác nhận rời khỏi khi chưa lưu!
-                  </p>
-                </div>
-              </div>
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowDiscardModal(false)}
-                  className="px-4 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50"
-                >
-                  Ở lại chỉnh sửa
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowDiscardModal(false);
-                    router.push(`/${schoolCode}/school/menu`);
-                  }}
-                  className="px-4 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-sm"
-                >
-                  Xác nhận rời đi
-                </button>
-              </div>
+        {/* Discard Warning SlideOver (BR10, TD-04) */}
+        <SlideOver
+          open={showDiscardModal}
+          onClose={() => setShowDiscardModal(false)}
+          title="Xác nhận rời khỏi trang"
+          description="Cảnh báo khi có thay đổi chưa được lưu"
+          icon="triangle-exclamation"
+          width={460}
+          primaryAction={{
+            label: 'Xác nhận rời đi',
+            icon: 'arrow-right-from-bracket',
+            tone: 'danger',
+            onClick: () => {
+              setShowDiscardModal(false);
+              router.push(`/${schoolCode}/school/menu`);
+            },
+          }}
+          secondaryAction={{
+            label: 'Ở lại chỉnh sửa',
+            onClick: () => setShowDiscardModal(false),
+          }}
+        >
+          <div className="space-y-4 py-2">
+            <div className="p-3.5 bg-amber-50 border border-amber-200/80 rounded-xl flex items-start gap-2.5 text-xs text-amber-900">
+              <Icon name="triangle-exclamation" size={14} className="text-amber-600 shrink-0 mt-0.5" />
+              <p className="leading-relaxed font-medium">
+                Thay đổi của bạn chưa được lưu. Vui lòng xác nhận rời khỏi khi chưa lưu!
+              </p>
             </div>
+            <p className="text-xs text-gray-500">
+              Các thông tin thực đơn đang soạn thảo sẽ bị hủy bỏ nếu bạn rời khỏi trang này.
+            </p>
           </div>
-        )}
+        </SlideOver>
 
         {/* Publish Selection Modal (BR06, TD-03) */}
         <PublishMenuModal

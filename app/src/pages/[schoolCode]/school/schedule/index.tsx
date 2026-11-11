@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { PortalLayout } from '../../../../components/layout/PortalLayout';
@@ -15,6 +15,12 @@ export default function ScheduleCatalogPage() {
   const router = useRouter();
   const schoolCode = (router.query.schoolCode as string) || 'demo';
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+  useEffect(() => {
+    if (router.query.create === 'true') {
+      setIsCreateOpen(true);
+    }
+  }, [router.query.create]);
 
   return (
     <PortalLayout>

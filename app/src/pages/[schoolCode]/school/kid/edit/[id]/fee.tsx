@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Icon, Dropdown } from '@/components/ds';
+import { Icon, Dropdown, SlideOver } from '@/components/ds';
 import { PortalLayout } from '../../../../../../components/layout/PortalLayout';
 import { useAppDispatch, useAppSelector } from '../../../../../../store';
 import { updateStudentFees } from '../../../../../../store/slices/studentSlice';
@@ -482,60 +482,30 @@ export default function EditStudentFeePage() {
         </div>
       </div>
 
-      {/* Confirmation Modal - Matching Screenshot 4 */}
-      {isConfirmModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-sm p-6 text-center space-y-5 animate-in fade-in zoom-in-95 duration-150">
-            {/* Close button */}
-            <div className="flex justify-end -mt-2 -mr-2">
-              <button
-                type="button"
-                onClick={() => setIsConfirmModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-slate-600 rounded-lg"
-              >
-                <Icon name="xmark" size={14} />
-              </button>
-            </div>
-
-            {/* Illustration: Clipboard with dollar & green checkmark badge */}
-            <div className="mx-auto w-16 h-20 relative flex items-center justify-center">
-              <div className="w-14 h-18 bg-amber-50 border-2 border-amber-300 rounded-lg flex flex-col items-center pt-2 shadow-xs">
-                <div className="w-6 h-2 bg-amber-200 rounded-full mb-2" />
-                <div className="w-8 h-1 bg-amber-200 rounded-full mb-1" />
-                <div className="w-8 h-1 bg-amber-200 rounded-full mb-1" />
-                <div className="w-5 h-1 bg-amber-200 rounded-full" />
-              </div>
-              <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center border-2 border-white shadow-xs">
-                <Icon name="circle-check" size={14} />
-              </div>
-            </div>
-
-            {/* Title / Question */}
-            <p className="text-sm font-semibold text-slate-800">
-              Vui lòng xác nhận thay đổi học phí của học sinh!
-            </p>
-
-            {/* Action buttons */}
-            <div className="flex items-center justify-center gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => setIsConfirmModalOpen(false)}
-                className="w-24 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
-              >
-                Hủy bỏ
-              </button>
-
-              <button
-                type="button"
-                onClick={handleConfirmSave}
-                className="w-24 py-2 text-xs font-semibold text-white bg-[#0070CE] hover:bg-[#005ba8] rounded-xl transition-colors shadow-xs"
-              >
-                Xác nhận
-              </button>
-            </div>
+      {/* Confirmation SlideOver */}
+      <SlideOver
+        open={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+        title="Xác nhận thay đổi học phí"
+        description="Lưu thiết lập học phí tùy chỉnh cho học sinh"
+        icon="circle-check"
+        width={460}
+        primaryAction={{
+          label: 'Xác nhận lưu',
+          icon: 'check',
+          onClick: handleConfirmSave,
+        }}
+        secondaryAction={{
+          label: 'Hủy bỏ',
+          onClick: () => setIsConfirmModalOpen(false),
+        }}
+      >
+        <div className="space-y-4 py-2">
+          <div className="p-3.5 bg-blue-50 border border-blue-200/80 rounded-xl text-xs text-blue-900 leading-relaxed">
+            Vui lòng xác nhận thay đổi học phí của học sinh! Các khoản thu đã điều chỉnh sẽ được áp dụng vào kỳ thu phí kế tiếp.
           </div>
         </div>
-      )}
+      </SlideOver>
     </PortalLayout>
   );
 }

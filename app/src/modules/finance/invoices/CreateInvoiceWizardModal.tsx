@@ -8,7 +8,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Icon, Dropdown, DropdownOption } from '@/components/ds';
+import { Icon, Dropdown, DropdownOption, SlideOver } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { createBatchInvoices } from '../../../store/slices/invoiceSlice';
 import { mockFeeClasses } from '../../../services/mockInvoiceData';
@@ -40,7 +40,11 @@ import { BatchMealRefundListModal, BatchMealRefundItem } from './BatchMealRefund
 import { getStudentAbsenceBreakdown } from '../../../services/mockMealRefundData';
 import { calculateMealRefundForStudent, getPreviousMonthKey } from '../../../utils/mealRefundCalculation';
 
-export const CreateInvoiceWizard: React.FC = () => {
+export interface CreateInvoiceWizardProps {
+  onClose?: () => void;
+}
+
+export const CreateInvoiceWizard: React.FC<CreateInvoiceWizardProps> = ({ onClose }) => {
   const router = useRouter();
   const schoolCode = (router.query.schoolCode as string) || 'demo';
   const dispatch = useAppDispatch();
@@ -1054,7 +1058,11 @@ export const CreateInvoiceWizard: React.FC = () => {
     );
 
     alert('Đã tạo thành công hóa đơn học phí theo danh sách chỉ định!');
-    router.push(`/${schoolCode}/school/fee`);
+    if (onClose) {
+      onClose();
+    } else {
+      router.push(`/${schoolCode}/school/fee`);
+    }
   };
 
   return (
@@ -1071,8 +1079,8 @@ export const CreateInvoiceWizard: React.FC = () => {
             </p>
           </div>
           <button
-            onClick={() => router.push(`/${schoolCode}/school/fee`)}
-            className="text-slate-400 hover:text-slate-600 p-2"
+            onClick={() => (onClose ? onClose() : router.push(`/${schoolCode}/school/fee`))}
+            className="text-slate-400 hover:text-slate-600 p-2 cursor-pointer"
           >
             <Icon name="xmark" size={18} />
           </button>
@@ -1785,8 +1793,8 @@ export const CreateInvoiceWizard: React.FC = () => {
         <div className="flex items-center justify-end gap-3 pt-2">
           <button
             type="button"
-            onClick={() => router.push(`/${schoolCode}/school/fee`)}
-            className="px-5 py-2.5 border border-slate-300 rounded-lg text-sm font-bold text-slate-700 bg-white hover:bg-slate-50"
+            onClick={() => (onClose ? onClose() : router.push(`/${schoolCode}/school/fee`))}
+            className="px-5 py-2.5 border border-slate-300 rounded-lg text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 cursor-pointer"
           >
             Hủy bỏ
           </button>
@@ -1857,5 +1865,25 @@ export const CreateInvoiceWizard: React.FC = () => {
         }}
       />
     </div>
+  );
+};
+
+export const CreateInvoiceSlideOver: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
+  isOpen,
+  onClose,
+}) => {
+  return (
+    <SlideOver
+      open={isOpen}
+      onClose={onClose}
+      title="Tạo mới hóa đơn học phí"
+      description="Khởi tạo hóa đơn thu phí hàng loạt theo Toàn trường, Khối lớp, Lớp học, hoặc từng Học sinh."
+      icon="file-invoice-dollar"
+      width={840}
+    >
+      <div className="py-2">
+        <CreateInvoiceWizard onClose={onClose} />
+      </div>
+    </SlideOver>
   );
 };
