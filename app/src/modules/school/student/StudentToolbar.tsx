@@ -44,6 +44,7 @@ export const StudentToolbar: React.FC<StudentToolbarProps> = ({
             { label: 'Lớp 10A3', value: 'class-10a3' },
           ],
           value: filter.classId || 'all',
+          defaultValue: 'all',
           onChange: (val) => dispatch(setFilter({ classId: val })),
         },
         {
@@ -56,6 +57,7 @@ export const StudentToolbar: React.FC<StudentToolbarProps> = ({
             { label: 'Đã tốt nghiệp', value: 'graduated' },
           ],
           value: filter.status || 'all',
+          defaultValue: 'all',
           onChange: (val) => dispatch(setFilter({ status: val })),
         },
       ]}

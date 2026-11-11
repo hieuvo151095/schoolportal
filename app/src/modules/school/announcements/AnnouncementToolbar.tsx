@@ -50,6 +50,7 @@ export const AnnouncementToolbar: React.FC<AnnouncementToolbarProps> = ({
     {
       placeholder: 'Chọn danh mục',
       value: filters.categoryFilter,
+      defaultValue: 'all',
       onChange: (val) => onFilterChange({ categoryFilter: val as any }),
       options: [
         { value: 'all', label: 'Tất cả danh mục' },
@@ -65,6 +66,7 @@ export const AnnouncementToolbar: React.FC<AnnouncementToolbarProps> = ({
     {
       placeholder: 'Chọn kênh gửi',
       value: filters.channelFilter,
+      defaultValue: 'all',
       onChange: (val) => onFilterChange({ channelFilter: val as any }),
       options: [
         { value: 'all', label: 'Tất cả kênh gửi' },

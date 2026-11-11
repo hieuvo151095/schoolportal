@@ -41,6 +41,7 @@ export const TeacherToolbar: React.FC<TeacherToolbarProps> = ({
             { label: 'Lớp Vẽ Sáng Tạo', value: 'lop-nk-ve' },
           ],
           value: filter.classId || 'all',
+          defaultValue: 'all',
           onChange: (val) => dispatch(setFilter({ classId: val })),
         },
         {
@@ -51,6 +52,7 @@ export const TeacherToolbar: React.FC<TeacherToolbarProps> = ({
             { label: 'Giáo viên hỗ trợ', value: 'ho_tro' },
           ],
           value: filter.permissionTier || 'all',
+          defaultValue: 'all',
           onChange: (val) => dispatch(setFilter({ permissionTier: val })),
         },
         {
@@ -62,6 +64,7 @@ export const TeacherToolbar: React.FC<TeacherToolbarProps> = ({
             { label: 'Đã nghỉ việc', value: 'da_nghi_viec' },
           ],
           value: filter.status || 'all',
+          defaultValue: 'all',
           onChange: (val) => dispatch(setFilter({ status: val })),
         },
       ]}

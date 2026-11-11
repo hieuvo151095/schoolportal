@@ -94,6 +94,7 @@ export const MenuToolbar: React.FC<MenuToolbarProps> = ({
           {
             placeholder: 'Chọn đối tượng',
             value: filters.classId,
+            defaultValue: 'all',
             onChange: (val) => onFilterChange({ classId: val }),
             options: [
               { value: 'all', label: 'Tất cả đối tượng' },

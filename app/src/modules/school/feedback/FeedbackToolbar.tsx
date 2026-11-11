@@ -39,6 +39,7 @@ export default function FeedbackToolbar() {
     {
       placeholder: 'Chọn loại góp ý',
       value: filters.category,
+      defaultValue: 'all',
       onChange: (val) =>
         dispatch(
           setAdvancedFilters({
@@ -57,6 +58,7 @@ export default function FeedbackToolbar() {
     {
       placeholder: 'Chọn độ ưu tiên',
       value: filters.priority,
+      defaultValue: 'all',
       onChange: (val) =>
         dispatch(
           setAdvancedFilters({

@@ -57,6 +57,7 @@ export const ClassToolbar: React.FC<ClassToolbarProps> = ({
     filters.push({
       options: gradeOptions,
       value: filterCriteria.gradeLevelId || '',
+      defaultValue: '',
       onChange: (val) => onUpdateFilter({ gradeLevelId: val || undefined }),
       placeholder: 'Chọn khối lớp',
     });

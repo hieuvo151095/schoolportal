@@ -42,6 +42,7 @@ export const HandbookToolbar: React.FC<HandbookToolbarProps> = ({
           {
             placeholder: 'Chọn trạng thái',
             value: statusFilter,
+            defaultValue: 'all',
             onChange: (val) => onStatusChange(val as any),
             options: [
               { value: 'all', label: 'Tất cả trạng thái' },

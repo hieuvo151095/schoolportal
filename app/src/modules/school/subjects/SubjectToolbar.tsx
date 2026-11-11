@@ -57,6 +57,7 @@ export const SubjectToolbar: React.FC<SubjectToolbarProps> = ({
     {
       placeholder: 'Chọn khối lớp',
       value: filterCriteria.gradeLevel,
+      defaultValue: 'all',
       onChange: (val) => onUpdateFilter({ gradeLevel: val }),
       options: [
         { value: 'all', label: 'Tất cả khối lớp' },
@@ -67,6 +68,7 @@ export const SubjectToolbar: React.FC<SubjectToolbarProps> = ({
     {
       placeholder: 'Chọn phân loại',
       value: filterCriteria.classification,
+      defaultValue: 'all',
       onChange: (val) => onUpdateFilter({ classification: val as any }),
       options: [
         { value: 'all', label: 'Tất cả phân loại' },
@@ -80,6 +82,7 @@ export const SubjectToolbar: React.FC<SubjectToolbarProps> = ({
     {
       placeholder: 'Chọn loại môn',
       value: filterCriteria.type,
+      defaultValue: 'all',
       onChange: (val) => onUpdateFilter({ type: val as any }),
       options: [
         { value: 'all', label: 'Tất cả hình thức' },
