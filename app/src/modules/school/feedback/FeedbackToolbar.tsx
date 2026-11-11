@@ -53,7 +53,7 @@ export default function FeedbackToolbar() {
           label,
         })),
       ],
-      className: 'min-w-[130px]',
+      className: 'min-w-[145px]',
     },
     {
       placeholder: 'Chọn độ ưu tiên',
@@ -72,7 +72,7 @@ export default function FeedbackToolbar() {
           label: item.label,
         })),
       ],
-      className: 'min-w-[130px]',
+      className: 'min-w-[145px]',
     },
   ];
 

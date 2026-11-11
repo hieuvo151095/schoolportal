@@ -43,6 +43,7 @@ export const TeacherToolbar: React.FC<TeacherToolbarProps> = ({
           value: filter.classId || 'all',
           defaultValue: 'all',
           onChange: (val) => dispatch(setFilter({ classId: val })),
+          className: 'min-w-[130px]',
         },
         {
           placeholder: 'Chọn phân quyền',
@@ -54,6 +55,7 @@ export const TeacherToolbar: React.FC<TeacherToolbarProps> = ({
           value: filter.permissionTier || 'all',
           defaultValue: 'all',
           onChange: (val) => dispatch(setFilter({ permissionTier: val })),
+          className: 'min-w-[140px]',
         },
         {
           placeholder: 'Chọn trạng thái',
@@ -66,6 +68,7 @@ export const TeacherToolbar: React.FC<TeacherToolbarProps> = ({
           value: filter.status || 'all',
           defaultValue: 'all',
           onChange: (val) => dispatch(setFilter({ status: val })),
+          className: 'min-w-[140px]',
         },
       ]}
       actions={

@@ -61,7 +61,7 @@ export const AnnouncementToolbar: React.FC<AnnouncementToolbarProps> = ({
         { value: 'hoc_tap', label: 'Học tập & Thi cử' },
         { value: 'nghi_le', label: 'Nghỉ lễ & Nghỉ hè' },
       ],
-      className: 'min-w-[140px]',
+      className: 'min-w-[150px]',
     },
     {
       placeholder: 'Chọn kênh gửi',
@@ -75,7 +75,7 @@ export const AnnouncementToolbar: React.FC<AnnouncementToolbarProps> = ({
         { value: 'sms', label: 'SMS' },
         { value: 'push', label: 'Mobile Push' },
       ],
-      className: 'min-w-[130px]',
+      className: 'min-w-[135px]',
     },
   ];
 
