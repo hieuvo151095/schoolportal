@@ -7,6 +7,7 @@ import {
   faUsers,
   faChalkboardUser,
 } from '@fortawesome/free-solid-svg-icons';
+import { Dropdown } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   updateAttendanceToggle,
@@ -165,22 +166,20 @@ export const AttendanceNotificationCard: React.FC = () => {
 
             {/* Scope Selector Dropdown (BR07, K101) */}
             <div className="flex items-center gap-2 self-start sm:self-auto">
-              <label htmlFor="extracurricular-scope-select" className="text-xs text-slate-600 font-medium whitespace-nowrap">
-                Áp dụng cho:
-              </label>
-              <select
-                id="extracurricular-scope-select"
+              <Dropdown
+                placeholder="Chọn phạm vi áp dụng"
+                options={[
+                  { value: 'all', label: 'Tất cả lớp ngoại khóa' },
+                  ...extracurricularClasses.map((cls) => ({
+                    value: cls.id,
+                    label: cls.name,
+                  })),
+                ]}
                 value={attendance.extracurricular.scope}
-                onChange={(e) => dispatch(updateExtracurricularScope(e.target.value))}
-                className="text-xs font-medium text-slate-800 bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#0070CE]"
-              >
-                <option value="all">Tất cả lớp ngoại khóa</option>
-                {extracurricularClasses.map((cls) => (
-                  <option key={cls.id} value={cls.id}>
-                    {cls.name}
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => dispatch(updateExtracurricularScope(val))}
+                size="sm"
+                className="min-w-[190px]"
+              />
             </div>
           </div>
 

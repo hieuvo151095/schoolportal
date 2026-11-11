@@ -1,14 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faUserGraduate,
-  faPlus,
-  faEdit,
-  faCloudArrowDown,
-  faInbox,
-  faCheckCircle,
-  faCircleXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { StatusTag, Icon, DropdownMenu, Avatar, IconButton } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   openCreateStudentModal,
@@ -23,11 +14,11 @@ export const StudentAccountsTable: React.FC = () => {
   const filteredStudents = filterStudentAccounts(studentAccounts, studentFilters);
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+    <div className="ecomd-table-card overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs">
+        <table className="ecomd-table w-full text-left text-xs">
           {/* Table Header */}
-          <thead className="bg-gray-50 border-b border-gray-100 text-gray-500 uppercase tracking-wider font-semibold">
+          <thead className="bg-[var(--bg-subtle)] border-b border-[var(--border-default)] text-[var(--text-subtle)] uppercase tracking-wider font-semibold">
             <tr>
               <th className="py-3.5 px-4 w-12 text-center">STT</th>
               <th className="py-3.5 px-4 w-28">Mã HS</th>
@@ -35,139 +26,135 @@ export const StudentAccountsTable: React.FC = () => {
               <th className="py-3.5 px-4 w-28">Lớp</th>
               <th className="py-3.5 px-4">Tên tài khoản</th>
               <th className="py-3.5 px-4 w-32 text-center">Trạng thái</th>
-              <th className="py-3.5 px-4 w-24 text-center">Hành động</th>
+              <th className="py-3.5 px-4 w-20 text-center">Thao tác</th>
             </tr>
           </thead>
 
           {/* Table Body */}
-          <tbody className="divide-y divide-gray-100 text-gray-700">
+          <tbody className="divide-y divide-[var(--border-default)] text-[var(--text-heading)]">
             {filteredStudents.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-12 text-center text-gray-400">
+                <td colSpan={7} className="py-12 text-center text-[var(--text-subtle)]">
                   <div className="flex flex-col items-center justify-center space-y-2">
-                    <FontAwesomeIcon icon={faInbox} className="text-3xl text-gray-300" />
+                    <Icon name="inbox" size={32} color="var(--text-subtle)" />
                     <p className="text-sm font-medium">Không tìm thấy tài khoản học sinh phù hợp</p>
-                    <p className="text-xs text-gray-400">Thử thay đổi lớp học hoặc bộ lọc trạng thái tài khoản.</p>
+                    <p className="text-xs text-[var(--text-subtle)]">Thử thay đổi lớp học hoặc bộ lọc trạng thái tài khoản.</p>
                   </div>
                 </td>
               </tr>
             ) : (
-              filteredStudents.map((item, idx) => (
-                <tr
-                  key={item.studentId}
-                  className="hover:bg-blue-50/20 transition-colors group"
-                >
-                  {/* STT */}
-                  <td className="py-3.5 px-4 text-center text-gray-400 font-medium">
-                    {idx + 1}
-                  </td>
+              filteredStudents.map((item, idx) => {
+                const menuItems = !item.hasAccount
+                  ? [
+                      {
+                        id: 'create',
+                        label: 'Cấp tài khoản mới',
+                        icon: 'plus' as const,
+                        onClick: () => dispatch(openCreateStudentModal(item.studentId)),
+                      },
+                    ]
+                  : [
+                      {
+                        id: 'edit',
+                        label: 'Chỉnh sửa tài khoản',
+                        icon: 'pen' as const,
+                        onClick: () => dispatch(openEditStudentModal(item.studentId)),
+                      },
+                    ];
 
-                  {/* Mã học sinh */}
-                  <td className="py-3.5 px-4 font-mono font-medium text-gray-800">
-                    {item.studentCode}
-                  </td>
+                return (
+                  <tr
+                    key={item.studentId}
+                    className="hover:bg-blue-50/20 transition-colors group"
+                  >
+                    {/* STT */}
+                    <td className="py-3.5 px-4 text-center text-[var(--text-subtle)] font-medium">
+                      {idx + 1}
+                    </td>
 
-                  {/* Họ và tên & CSDL Sở */}
-                  <td className="py-3.5 px-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs shrink-0">
-                        {item.studentName.charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                            {item.studentName}
-                          </span>
-                          {item.isSyncedCsdlSo && (
-                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-                              <FontAwesomeIcon icon={faCloudArrowDown} className="text-[9px]" />
-                              CSDL Sở
+                    {/* Mã học sinh */}
+                    <td className="py-3.5 px-4 font-mono font-medium text-slate-800">
+                      {item.studentCode}
+                    </td>
+
+                    {/* Họ và tên & CSDL Sở */}
+                    <td className="py-3.5 px-4">
+                      <div className="flex items-center gap-3">
+                        <Avatar name={item.studentName} size="sm" />
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-slate-900 group-hover:text-[#0070CE] transition-colors">
+                              {item.studentName}
                             </span>
-                          )}
+                            {item.isSyncedCsdlSo && (
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-[#0070CE] border border-blue-200">
+                                <Icon name="cloud" size={10} />
+                                <span>CSDL Sở</span>
+                              </span>
+                            )}
+                          </div>
                         </div>
-                        <p className="text-[11px] text-gray-400">
-                          {item.gender === 'nam' ? 'Nam' : 'Nữ'} • {item.birthDate}
-                        </p>
                       </div>
-                    </div>
-                  </td>
+                    </td>
 
-                  {/* Lớp */}
-                  <td className="py-3.5 px-4">
-                    <span className="px-2 py-0.5 rounded bg-gray-100 text-gray-700 font-medium text-[11px]">
+                    {/* Lớp */}
+                    <td className="py-3.5 px-4 font-medium text-slate-800">
                       {item.className}
-                    </span>
-                  </td>
+                    </td>
 
-                  {/* Tên tài khoản */}
-                  <td className="py-3.5 px-4">
-                    {item.hasAccount && item.username ? (
-                      <span className="font-mono text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">
-                        {item.username}
-                      </span>
-                    ) : (
-                      <span className="text-gray-400 italic">Chưa cấp tài khoản</span>
-                    )}
-                  </td>
-
-                  {/* Trạng thái */}
-                  <td className="py-3.5 px-4 text-center">
-                    {item.hasAccount ? (
-                      item.status === 'active' ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          <FontAwesomeIcon icon={faCheckCircle} className="text-[10px]" />
-                          Hoạt động
-                        </span>
+                    {/* Tên tài khoản */}
+                    <td className="py-3.5 px-4 font-mono text-[11px]">
+                      {item.username ? (
+                        <span className="text-slate-800 font-semibold">{item.username}</span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-100 text-gray-600 border border-gray-200">
-                          <FontAwesomeIcon icon={faCircleXmark} className="text-[10px]" />
-                          Tạm khóa
-                        </span>
-                      )
-                    ) : (
-                      <span className="text-[11px] text-gray-400">
-                        Chưa kích hoạt
-                      </span>
-                    )}
-                  </td>
+                        <span className="text-slate-400 italic">Chưa cấp</span>
+                      )}
+                    </td>
 
-                  {/* Hành động (BR19: + icon to create, BR20: pencil icon to edit) */}
-                  <td className="py-3.5 px-4 text-center">
-                    {!item.hasAccount ? (
-                      <button
-                        type="button"
-                        onClick={() => dispatch(openCreateStudentModal(item.studentId))}
-                        title="Cấp tài khoản học sinh mới"
-                        className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors"
-                      >
-                        <FontAwesomeIcon icon={faPlus} className="text-xs" />
-                        <span>Cấp TK</span>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => dispatch(openEditStudentModal(item.studentId))}
-                        title="Chỉnh sửa tài khoản học sinh"
-                        className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                      >
-                        <FontAwesomeIcon icon={faEdit} className="text-sm" />
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))
+                    {/* Trạng thái */}
+                    <td className="py-3.5 px-4 text-center">
+                      {item.hasAccount ? (
+                        item.status === 'active' ? (
+                          <StatusTag tone="success">Đang hoạt động</StatusTag>
+                        ) : (
+                          <StatusTag tone="warning">Tạm khóa</StatusTag>
+                        )
+                      ) : (
+                        <StatusTag tone="neutral">Chưa kích hoạt</StatusTag>
+                      )}
+                    </td>
+
+                    {/* Thao tác */}
+                    <td className="py-3.5 px-4 text-center">
+                      <DropdownMenu
+                        align="right"
+                        trigger={
+                          <IconButton
+                            icon="ellipsis-vertical"
+                            label="Thao tác"
+                            size="sm"
+                          />
+                        }
+                        items={menuItems}
+                      />
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
       </div>
 
       {/* Table Footer */}
-      <div className="bg-gray-50/80 px-4 py-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
-        <span>Tổng: <strong className="text-gray-800 font-bold">{filteredStudents.length}</strong> học sinh</span>
-        <span className="text-[11px] text-gray-400">
-          Danh sách tài khoản đăng nhập học sinh đồng bộ từ hồ sơ học sinh
+      <div className="bg-[var(--bg-subtle)] px-4 py-3 border-t border-[var(--border-default)] flex items-center justify-between text-xs text-[var(--text-subtle)]">
+        <span>Tổng: <strong className="text-slate-800 font-bold">{filteredStudents.length}</strong> học sinh</span>
+        <span className="text-[11px] text-slate-400">
+          Danh sách tài khoản học sinh phục vụ tra cứu điểm và nộp bài
         </span>
       </div>
     </div>
   );
 };
+
+export default StudentAccountsTable;

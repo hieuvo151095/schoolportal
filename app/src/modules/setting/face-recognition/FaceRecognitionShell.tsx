@@ -21,7 +21,7 @@ import { RegisterFaceModal } from './RegisterFaceModal';
 import { EditFaceModal } from './EditFaceModal';
 import { DeleteFaceConfirmModal } from './DeleteFaceConfirmModal';
 import { FacePhotoLightboxModal } from './FacePhotoLightboxModal';
-import { PageHeader, StatCard } from '@/components/ds';
+import { PageHeader, StatCard, IconButton } from '@/components/ds';
 
 export const FaceRecognitionShell: React.FC = () => {
   const router = useRouter();
@@ -135,37 +135,23 @@ export const FaceRecognitionShell: React.FC = () => {
 
         {/* Pagination Controls */}
         <div className="flex items-center gap-1.5">
-          <button
-            type="button"
+          <IconButton
+            icon="chevron-left"
+            label="Trang trước"
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage <= 1}
-            className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs transition ${
-              currentPage <= 1
-                ? 'text-gray-300 bg-gray-50 cursor-not-allowed'
-                : 'text-gray-600 bg-gray-100 hover:bg-gray-200 cursor-pointer'
-            }`}
-            title="Trang trước"
-          >
-            <FontAwesomeIcon icon={faChevronLeft} />
-          </button>
+          />
 
-          <span className="text-xs text-gray-600 px-2 font-medium">
-            Trang <strong className="text-gray-900">{currentPage}</strong> / {totalPages}
+          <span className="text-xs text-slate-600 px-2 font-medium">
+            Trang <strong className="text-slate-900">{currentPage}</strong> / {totalPages}
           </span>
 
-          <button
-            type="button"
+          <IconButton
+            icon="chevron-right"
+            label="Trang sau"
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage >= totalPages}
-            className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs transition ${
-              currentPage >= totalPages
-                ? 'text-gray-300 bg-gray-50 cursor-not-allowed'
-                : 'text-gray-600 bg-gray-100 hover:bg-gray-200 cursor-pointer'
-            }`}
-            title="Trang sau"
-          >
-            <FontAwesomeIcon icon={faChevronRight} />
-          </button>
+          />
         </div>
       </div>
 

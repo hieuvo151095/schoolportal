@@ -7,6 +7,7 @@ import {
   faCalendarDay,
   faClock,
 } from '@fortawesome/free-solid-svg-icons';
+import { Dropdown } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   updateBirthdaySchedule,
@@ -54,28 +55,26 @@ export const BirthdayNotificationCard: React.FC = () => {
           <div className="flex items-center gap-3 self-start sm:self-auto shrink-0">
             {/* Day of Month Selector (1-31) */}
             <div className="flex items-center gap-1.5">
-              <FontAwesomeIcon icon={faCalendarDay} className="text-xs text-slate-400" />
-              <label htmlFor="birthday-day-select" className="text-xs text-slate-600 font-medium">
+              <span className="text-xs text-slate-600 font-medium">
                 Ngày:
-              </label>
-              <select
-                id="birthday-day-select"
-                value={birthday.broadcastSchedule.dayOfMonth}
-                onChange={(e) =>
+              </span>
+              <Dropdown
+                placeholder="Chọn ngày"
+                options={Array.from({ length: 31 }, (_, i) => i + 1).map((day) => ({
+                  value: String(day),
+                  label: `Ngày ${day}`,
+                }))}
+                value={String(birthday.broadcastSchedule.dayOfMonth)}
+                onChange={(val) =>
                   dispatch(
                     updateBirthdaySchedule({
-                      dayOfMonth: parseInt(e.target.value, 10),
+                      dayOfMonth: parseInt(val, 10),
                     })
                   )
                 }
-                className="text-xs font-semibold text-slate-800 bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#0070CE]"
-              >
-                {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
-                  <option key={day} value={day}>
-                    {day}
-                  </option>
-                ))}
-              </select>
+                size="sm"
+                className="min-w-[120px]"
+              />
             </div>
 
             {/* Time Picker */}

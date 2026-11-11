@@ -39,6 +39,7 @@ import {
 } from '@/store/slices/settingFeeSlice';
 import { formatCurrencyVND } from '@/utils/settingFeeValidation';
 import { addToast } from '@/store/slices/toastSlice';
+import { Dropdown } from '@/components/ds';
 import { AddRefundableFeeModal } from './AddRefundableFeeModal';
 import type { RefundableFeeConfigItem } from '@/types/settingFee';
 import type { FeeItem } from '@/types/schoolFee';
@@ -378,23 +379,23 @@ export const LatePickupAndRefundBlock: React.FC = () => {
                   <label className="block text-xs font-bold text-slate-700 mb-1.5">
                     Thời gian trả trễ (Block tính phí)
                   </label>
-                  <select
-                    value={latePickup.fixedIntervalMinutes}
-                    onChange={(e) =>
+                  <Dropdown
+                    placeholder="Chọn block tính phí"
+                    options={FIXED_INTERVAL_OPTIONS.map((min) => ({
+                      value: String(min),
+                      label: `${min} phút`,
+                    }))}
+                    value={String(latePickup.fixedIntervalMinutes)}
+                    onChange={(val) =>
                       dispatch(
                         updateDraftLatePickup({
-                          fixedIntervalMinutes: parseInt(e.target.value, 10)
+                          fixedIntervalMinutes: parseInt(val, 10),
                         })
                       )
                     }
-                    className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0070CE]"
-                  >
-                    {FIXED_INTERVAL_OPTIONS.map((min) => (
-                      <option key={min} value={min}>
-                        {min} phút
-                      </option>
-                    ))}
-                  </select>
+                    size="sm"
+                    fullWidth
+                  />
                 </div>
 
                 <div>

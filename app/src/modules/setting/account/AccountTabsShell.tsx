@@ -25,7 +25,7 @@ import { ChangeEmailModal } from './ChangeEmailModal';
 import { StudentAccountsToolbar } from './StudentAccountsToolbar';
 import { StudentAccountsTable } from './StudentAccountsTable';
 import { StudentAccountModal } from './StudentAccountModal';
-import { PageHeader } from '@/components/ds';
+import { PageHeader, CountedTabs } from '@/components/ds';
 
 export const AccountTabsShell: React.FC = () => {
   const router = useRouter();
@@ -33,7 +33,7 @@ export const AccountTabsShell: React.FC = () => {
   const { schoolCode, tab } = router.query;
   const sCode = (schoolCode as string) || 'demo';
 
-  const { activeTab, errorBanner, toast } = useAppSelector((state) => state.account);
+  const { activeTab, errorBanner, toast, users, studentAccounts } = useAppSelector((state) => state.account);
 
   // Synchronize route query with activeTab state
   useEffect(() => {
@@ -177,61 +177,14 @@ export const AccountTabsShell: React.FC = () => {
       )}
 
       {/* Two-Tab Routed Navigation Bar (K076, BR01) */}
-      <div
-        style={{
-          borderBottom: '1px solid var(--border-neutral)',
-          background: 'var(--bg-surface)',
-          padding: '0 var(--space-4)',
-          borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0',
-          boxShadow: 'var(--shadow-xs)',
-        }}
-      >
-        <div style={{ display: 'flex', gap: 'var(--space-8)' }}>
-          <button
-            type="button"
-            onClick={() => handleTabClick('users')}
-            style={{
-              padding: 'var(--space-4) var(--space-2)',
-              fontSize: 'var(--text-sm)',
-              fontWeight: activeTab === 'users' ? 700 : 500,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--space-2)',
-              border: 'none',
-              borderBottom: activeTab === 'users' ? '2px solid var(--eco-blue-strong, #0070CE)' : '2px solid transparent',
-              background: 'transparent',
-              color: activeTab === 'users' ? 'var(--eco-blue-strong, #0070CE)' : 'var(--text-secondary)',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease',
-            }}
-          >
-            <FontAwesomeIcon icon={faUsers} />
-            <span>Người Dùng</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleTabClick('students')}
-            style={{
-              padding: 'var(--space-4) var(--space-2)',
-              fontSize: 'var(--text-sm)',
-              fontWeight: activeTab === 'students' ? 700 : 500,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--space-2)',
-              border: 'none',
-              borderBottom: activeTab === 'students' ? '2px solid var(--eco-blue-strong, #0070CE)' : '2px solid transparent',
-              background: 'transparent',
-              color: activeTab === 'students' ? 'var(--eco-blue-strong, #0070CE)' : 'var(--text-secondary)',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease',
-            }}
-          >
-            <FontAwesomeIcon icon={faGraduationCap} />
-            <span>Học Sinh</span>
-          </button>
-        </div>
-      </div>
+      <CountedTabs
+        tabs={[
+          { id: 'users', label: 'Người Dùng', count: users.length, icon: 'users' },
+          { id: 'students', label: 'Học Sinh', count: studentAccounts.length, icon: 'graduation-cap' },
+        ]}
+        activeId={activeTab}
+        onChange={(id) => handleTabClick(id as 'users' | 'students')}
+      />
 
       {/* Tab Panels */}
       {activeTab === 'users' ? (

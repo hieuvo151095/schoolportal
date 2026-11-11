@@ -20,7 +20,7 @@ import { OperatingHoursForm } from './OperatingHoursForm';
 import { AttendanceRulesForm } from './AttendanceRulesForm';
 import { CameraAttendanceForm } from './CameraAttendanceForm';
 import { UnsavedChangesModal } from './UnsavedChangesModal';
-import { EcoButton } from '../../../components/eco';
+import { PageHeader, Button, CountedTabs } from '@/components/ds';
 
 export const SchoolEditContainer: React.FC = () => {
   const router = useRouter();
@@ -130,77 +130,38 @@ export const SchoolEditContainer: React.FC = () => {
         </div>
       )}
 
-      {/* Breadcrumb & Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-        <div>
-          <nav className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-            <span>Cấu hình</span>
-            <span>/</span>
-            <Link
-              href={`/${sCode}/setting/school`}
-              onClick={(e) => {
-                if (isDirty) {
-                  e.preventDefault();
-                  handleBackToOverview();
-                }
-              }}
-              className="hover:underline"
-            >
-              Trường
-            </Link>
-            <span>/</span>
-            <span className="text-gray-800 font-medium">Chỉnh sửa</span>
-          </nav>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handleBackToOverview}
-              className="w-9 h-9 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 flex items-center justify-center transition-colors"
-              title="Quay lại tổng quan"
-            >
-              <FontAwesomeIcon icon={faArrowLeft} className="text-sm" />
-            </button>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900 tracking-tight">
-                Chỉnh sửa thông tin trường
-              </h1>
-              <p className="text-xs text-gray-500 mt-0.5">
-                Cập nhật thông tin nhận diện, thời gian mở/đóng cửa và quy định điểm danh
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Page Header */}
+      <PageHeader
+        title="Chỉnh sửa thông tin trường"
+        description="Cập nhật thông tin nhận diện, thời gian mở/đóng cửa và quy định điểm danh"
+        actions={
+          <Button
+            variant="secondary"
+            icon="arrow-left"
+            onClick={handleBackToOverview}
+          >
+            Quay lại tổng quan
+          </Button>
+        }
+      />
 
       {/* Two-Tab Navigation Bar (K070) */}
-      <div className="flex items-center border-b border-gray-200 bg-white px-6 rounded-t-xl">
-        <button
-          onClick={() => handleTabClick('info')}
-          className={`py-3.5 px-4 text-sm font-bold border-b-2 flex items-center gap-2 transition-all ${
-            activeTab === 'info'
-              ? 'border-eco-blue text-eco-blue'
-              : 'border-transparent text-gray-500 hover:text-gray-800'
-          }`}
-        >
-          <FontAwesomeIcon icon={faSchool} />
-          Thông tin trường
-          {isDirtyInfo && <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />}
-        </button>
-
-        <button
-          onClick={() => handleTabClick('weekdays')}
-          className={`py-3.5 px-4 text-sm font-bold border-b-2 flex items-center gap-2 transition-all ${
-            activeTab === 'weekdays'
-              ? 'border-eco-blue text-eco-blue'
-              : 'border-transparent text-gray-500 hover:text-gray-800'
-          }`}
-        >
-          <FontAwesomeIcon icon={faClock} />
-          Giờ hoạt động
-          {(isDirtyHours || isDirtyRules || isDirtyCamera) && (
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-          )}
-        </button>
-      </div>
+      <CountedTabs
+        activeId={activeTab}
+        onChange={(k) => handleTabClick(k as 'info' | 'weekdays')}
+        tabs={[
+          {
+            id: 'info',
+            label: isDirtyInfo ? 'Thông tin trường •' : 'Thông tin trường',
+            icon: 'school',
+          },
+          {
+            id: 'weekdays',
+            label: (isDirtyHours || isDirtyRules || isDirtyCamera) ? 'Giờ hoạt động •' : 'Giờ hoạt động',
+            icon: 'clock',
+          },
+        ]}
+      />
 
       {/* Tab Panels */}
       {activeTab === 'info' ? (

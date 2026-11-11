@@ -17,6 +17,7 @@ import { OtherNotificationCard } from './OtherNotificationCard';
 import { ParentNotificationCard } from './ParentNotificationCard';
 import { NotificationActionBar } from './NotificationActionBar';
 import { NotificationConfirmModal } from './NotificationConfirmModal';
+import { PageHeader } from '@/components/ds';
 
 export const NotificationSettingsShell: React.FC = () => {
   const router = useRouter();
@@ -58,32 +59,10 @@ export const NotificationSettingsShell: React.FC = () => {
       )}
 
       {/* Header & Breadcrumbs */}
-      <div>
-        <nav className="flex items-center gap-2 text-xs text-slate-500 mb-1.5 font-medium">
-          <Link
-            href={`/${schoolCode}/setting/school`}
-            className="hover:text-[#0070CE] transition-colors"
-          >
-            Cấu hình
-          </Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-slate-400" />
-          <span className="text-slate-800 font-semibold">Thông báo</span>
-        </nav>
-
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2.5">
-              <span className="w-8 h-8 rounded-lg bg-blue-100 text-[#0070CE] flex items-center justify-center shrink-0 text-sm">
-                <FontAwesomeIcon icon={faBell} />
-              </span>
-              Cấu hình thông báo
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1 leading-relaxed">
-              Quản lý và kích hoạt các luồng thông báo tự động, lời nhắc định kỳ và phân phối đa kênh toàn trường
-            </p>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        title="Cấu hình thông báo"
+        description="Quản lý và kích hoạt các luồng thông báo tự động, lời nhắc định kỳ và phân phối đa kênh toàn trường"
+      />
 
       {/* Top Policy Banner (BR03, K097) */}
       <NotificationPolicyBanner />

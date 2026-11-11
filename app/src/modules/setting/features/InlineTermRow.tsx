@@ -1,10 +1,10 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faPen,
   faCheck,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
+import { DropdownMenu, IconButton } from '@/components/ds';
 import {
   AcademicTerm,
   InlineTermDraft,
@@ -142,21 +142,27 @@ export const InlineTermRow: React.FC<InlineTermRowProps> = ({
         {term.notes || '-'}
       </td>
 
-      {/* Action Column: Only Edit icon; Zero Delete icons (BR09, K094) */}
+      {/* Action Column: Standard 3-dots DropdownMenu (BR09, K094) */}
       <td className="px-4 py-3 text-center whitespace-nowrap">
-        <button
-          type="button"
-          disabled={isLocked}
-          onClick={onEdit}
-          title={isLocked ? 'Đang có học kỳ khác được chỉnh sửa' : 'Chỉnh sửa học kỳ'}
-          className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-            isLocked
-              ? 'bg-slate-100 text-slate-300 cursor-not-allowed'
-              : 'bg-blue-50 text-[#0070CE] hover:bg-blue-100 active:scale-95'
-          }`}
-        >
-          <FontAwesomeIcon icon={faPen} className="text-xs" />
-        </button>
+        <DropdownMenu
+          align="right"
+          trigger={
+            <IconButton
+              icon="ellipsis-vertical"
+              label="Thao tác"
+              size="sm"
+              disabled={isLocked}
+            />
+          }
+          items={[
+            {
+              icon: 'edit',
+              label: 'Chỉnh sửa học kỳ',
+              disabled: isLocked,
+              onClick: onEdit,
+            },
+          ]}
+        />
       </td>
     </tr>
   );

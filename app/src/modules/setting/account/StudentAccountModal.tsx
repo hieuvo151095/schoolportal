@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faUserGraduate,
-  faEye,
-  faEyeSlash,
-  faCheckCircle,
-} from '@fortawesome/free-solid-svg-icons';
-import { EcoDialog, EcoInput, EcoSwitch } from '../../../components/eco';
+import { SlideOver, Icon, Avatar } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   closeStudentModal,
@@ -68,41 +61,46 @@ export const StudentAccountModal: React.FC = () => {
   };
 
   return (
-    <EcoDialog
+    <SlideOver
       open={isStudentModalOpen}
       onClose={() => dispatch(closeStudentModal())}
-      onCancel={() => dispatch(closeStudentModal())}
-      onConfirm={handleSubmit}
-      confirmLabel="Lưu tài khoản"
-      cancelLabel="Hủy bỏ"
       title={isCreate ? 'Cấp tài khoản học sinh' : 'Chỉnh sửa tài khoản học sinh'}
-      maxWidth="500px"
+      description={`Học sinh: ${selectedStudent.studentName} (Mã: ${selectedStudent.studentCode})`}
+      icon="user-graduate"
+      width={520}
+      primaryAction={{
+        label: isCreate ? 'Cấp tài khoản' : 'Lưu tài khoản',
+        onClick: handleSubmit,
+      }}
+      secondaryAction={{
+        label: 'Hủy bỏ',
+        onClick: () => dispatch(closeStudentModal()),
+      }}
     >
       <div className="space-y-4 py-2">
         {/* Student Context Card */}
-        <div className="p-3.5 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between text-xs text-gray-700">
+        <div className="p-3.5 bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded-xl flex items-center justify-between text-xs text-slate-700">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
-              <FontAwesomeIcon icon={faUserGraduate} className="text-base" />
-            </div>
+            <Avatar name={selectedStudent.studentName} size="md" />
             <div>
-              <p className="font-semibold text-gray-900 text-sm">{selectedStudent.studentName}</p>
-              <p className="text-gray-500">Mã HS: {selectedStudent.studentCode} • Lớp: {selectedStudent.className}</p>
+              <p className="font-semibold text-slate-900 text-sm">{selectedStudent.studentName}</p>
+              <p className="text-[var(--text-subtle)]">Mã HS: {selectedStudent.studentCode} • Lớp: {selectedStudent.className}</p>
             </div>
           </div>
           {selectedStudent.isSyncedCsdlSo && (
-            <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200">
-              CSDL Sở
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-[#0070CE] border border-blue-200">
+              <Icon name="cloud" size={12} />
+              <span>CSDL Sở</span>
             </span>
           )}
         </div>
 
         {/* Username Field */}
         <div>
-          <label className="block text-xs font-semibold text-gray-700 mb-1">
+          <label className="block text-xs font-semibold text-slate-700 mb-1">
             Tên tài khoản <span className="text-red-500">*</span>
           </label>
-          <EcoInput
+          <input
             type="text"
             value={username}
             onChange={(e) => {
@@ -110,32 +108,38 @@ export const StudentAccountModal: React.FC = () => {
               if (errors.username) setErrors((prev) => ({ ...prev, username: '' }));
             }}
             placeholder="vd: an.nguyen2018"
-            error={errors.username || undefined}
+            className={`w-full px-3.5 py-2 text-xs bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0070CE] ${
+              errors.username ? 'border-red-500' : 'border-[var(--border-default)]'
+            }`}
           />
-          <p className="text-[11px] text-emerald-600 mt-1 flex items-center gap-1 font-medium">
-            <FontAwesomeIcon icon={faCheckCircle} className="text-xs" />
-            Tên đăng nhập chỉ chứa chữ cái, số, dấu gạch dưới, gạch ngang hoặc chấm.
-          </p>
+          {errors.username ? (
+            <p className="text-[11px] text-red-500 mt-1 font-medium">{errors.username}</p>
+          ) : (
+            <p className="text-[11px] text-emerald-600 mt-1 flex items-center gap-1 font-medium">
+              <Icon name="check" size={12} />
+              <span>Tên đăng nhập chỉ chứa chữ cái, số, dấu gạch dưới, gạch ngang hoặc chấm.</span>
+            </p>
+          )}
         </div>
 
         {/* Password Fields */}
         <div className="space-y-3 pt-1">
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="block text-xs font-semibold text-gray-700">
+              <label className="block text-xs font-semibold text-slate-700">
                 {isCreate ? 'Mật khẩu' : 'Mật khẩu mới (bỏ trống nếu không đổi)'}{' '}
                 {isCreate && <span className="text-red-500">*</span>}
               </label>
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-xs text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                className="text-xs text-[#0070CE] hover:underline font-medium flex items-center gap-1"
               >
-                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                <Icon name={showPassword ? 'eye-slash' : 'eye'} size={12} />
                 <span>{showPassword ? 'Ẩn' : 'Hiện'}</span>
               </button>
             </div>
-            <EcoInput
+            <input
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => {
@@ -143,15 +147,20 @@ export const StudentAccountModal: React.FC = () => {
                 if (errors.password) setErrors((prev) => ({ ...prev, password: '' }));
               }}
               placeholder="Ít nhất 6 ký tự"
-              error={errors.password || undefined}
+              className={`w-full px-3.5 py-2 text-xs bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0070CE] ${
+                errors.password ? 'border-red-500' : 'border-[var(--border-default)]'
+              }`}
             />
+            {errors.password && (
+              <p className="text-[11px] text-red-500 mt-1 font-medium">{errors.password}</p>
+            )}
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               Xác nhận mật khẩu {isCreate && <span className="text-red-500">*</span>}
             </label>
-            <EcoInput
+            <input
               type={showPassword ? 'text' : 'password'}
               value={confirmPassword}
               onChange={(e) => {
@@ -159,20 +168,35 @@ export const StudentAccountModal: React.FC = () => {
                 if (errors.confirmPassword) setErrors((prev) => ({ ...prev, confirmPassword: '' }));
               }}
               placeholder="Nhập lại mật khẩu"
-              error={errors.confirmPassword || undefined}
+              className={`w-full px-3.5 py-2 text-xs bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0070CE] ${
+                errors.confirmPassword ? 'border-red-500' : 'border-[var(--border-default)]'
+              }`}
             />
+            {errors.confirmPassword && (
+              <p className="text-[11px] text-red-500 mt-1 font-medium">{errors.confirmPassword}</p>
+            )}
           </div>
         </div>
 
         {/* Status Switch */}
-        <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+        <div className="flex items-center justify-between pt-3 border-t border-[var(--border-default)]">
           <div>
-            <p className="text-xs font-semibold text-gray-800">Trạng thái hoạt động</p>
-            <p className="text-[11px] text-gray-500">Cho phép học sinh đăng nhập vào hệ thống</p>
+            <p className="text-xs font-semibold text-slate-800">Trạng thái hoạt động</p>
+            <p className="text-[11px] text-[var(--text-subtle)]">Cho phép học sinh đăng nhập vào hệ thống</p>
           </div>
-          <EcoSwitch checked={isActive} onChange={(val) => setIsActive(val)} />
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={isActive}
+              onChange={(e) => setIsActive(e.target.checked)}
+              className="sr-only peer"
+            />
+            <div className="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#0070CE]"></div>
+          </label>
         </div>
       </div>
-    </EcoDialog>
+    </SlideOver>
   );
 };
+
+export default StudentAccountModal;

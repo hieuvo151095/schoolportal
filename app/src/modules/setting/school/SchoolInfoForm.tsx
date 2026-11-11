@@ -23,6 +23,7 @@ import {
   SchoolInfoValidationErrors,
   NotificationLanguage,
 } from '../../../types/schoolProfile';
+import { Dropdown } from '@/components/ds';
 import { EcoButton, EcoInput } from '../../../components/eco';
 
 interface SchoolInfoFormProps {
@@ -211,16 +212,19 @@ export const SchoolInfoForm: React.FC<SchoolInfoFormProps> = ({ onCancelRequest 
             <label className="block text-xs font-semibold text-gray-700">
               Ngôn ngữ thông báo mặc định
             </label>
-            <select
+            <Dropdown
+              placeholder="Chọn ngôn ngữ"
+              options={[
+                { value: 'vi', label: 'Tiếng Việt (vi)' },
+                { value: 'en', label: 'English (en)' },
+              ]}
               value={formData.defaultLanguage}
-              onChange={(e) =>
-                handleChange('defaultLanguage', e.target.value as NotificationLanguage)
+              onChange={(val) =>
+                handleChange('defaultLanguage', val as NotificationLanguage)
               }
-              className="w-full px-3.5 py-2 text-sm rounded-lg border border-gray-200 focus:border-eco-blue focus:ring-1 focus:ring-eco-blue focus:outline-none bg-white"
-            >
-              <option value="vi">Tiếng Việt (vi)</option>
-              <option value="en">English (en)</option>
-            </select>
+              fullWidth
+              size="md"
+            />
           </div>
 
           {/* Địa chỉ * (TR-01) */}

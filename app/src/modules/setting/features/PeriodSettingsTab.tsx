@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faPlus,
   faCalendarCheck,
   faCheckCircle,
   faExclamationCircle,
 } from '@fortawesome/free-solid-svg-icons';
+import { Dropdown, Button } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   selectAcademicYear,
@@ -117,30 +117,28 @@ export const PeriodSettingsTab: React.FC = () => {
         {/* Toolbar: Academic Year Selector & Add Term Action */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <label
-              htmlFor="select-academic-year"
-              className="text-sm font-semibold text-slate-700 whitespace-nowrap"
-            >
-              Năm học:
-            </label>
-            <select
-              id="select-academic-year"
+            <Dropdown
+              placeholder="Chọn năm học"
+              options={academicYears.map((year) => ({
+                value: year.id,
+                label: `${year.name}${year.isCurrent ? ' (Hiện tại)' : ''}`,
+              }))}
               value={selectedAcademicYearId}
-              onChange={handleYearChange}
-              className="px-3.5 py-2 text-sm bg-white border border-slate-300 rounded-xl font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0070CE] focus:border-transparent min-w-[220px]"
-            >
-              {academicYears.map((year) => (
-                <option key={year.id} value={year.id}>
-                  {year.name} {year.isCurrent ? '(Hiện tại)' : ''}
-                </option>
-              ))}
-            </select>
+              defaultValue={academicYears.find((y) => y.isCurrent)?.id || 'year-2026-2027'}
+              onChange={(val) => {
+                dispatch(selectAcademicYear(val));
+                setDateValidationError(null);
+              }}
+              size="md"
+              className="min-w-[220px]"
+            />
           </div>
 
           {/* "+ Thêm học kỳ" Button (BR05, BR08, K092) */}
           <div className="flex items-center gap-2">
-            <button
-              type="button"
+            <Button
+              variant="primary"
+              icon="plus"
               disabled={addLocked}
               onClick={handleStartAdd}
               title={
@@ -150,15 +148,9 @@ export const PeriodSettingsTab: React.FC = () => {
                   ? 'Đang có học kỳ khác được chỉnh sửa'
                   : 'Thêm học kỳ mới'
               }
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 ${
-                addLocked
-                  ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
-                  : 'bg-[#0070CE] text-white hover:bg-blue-700 active:scale-95 shadow-sm'
-              }`}
             >
-              <FontAwesomeIcon icon={faPlus} className="text-xs" />
-              <span>Thêm học kỳ</span>
-            </button>
+              Thêm học kỳ
+            </Button>
           </div>
         </div>
 

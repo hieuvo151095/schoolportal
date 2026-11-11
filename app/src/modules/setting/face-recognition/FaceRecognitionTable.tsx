@@ -1,16 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPlus,
-  faPen,
-  faTimes,
-  faInbox,
-  faCamera,
-  faUserGraduate,
-  faEye,
-} from '@fortawesome/free-solid-svg-icons';
+import { StatusTag, Icon, DropdownMenu, Avatar, IconButton } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   openRegisterModal,
@@ -45,31 +36,32 @@ export const FaceRecognitionTable: React.FC<FaceRecognitionTableProps> = ({
   const paginatedRecords = filteredRecords.slice(startIndex, startIndex + pageSize);
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+    <div className="ecomd-table-card overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs">
+        <table className="ecomd-table w-full text-left text-xs">
           {/* Table Header */}
-          <thead className="bg-gray-50 border-b border-gray-100 text-gray-500 uppercase tracking-wider font-semibold">
+          <thead className="bg-[var(--bg-subtle)] border-b border-[var(--border-default)] text-[var(--text-subtle)] uppercase tracking-wider font-semibold">
             <tr>
               <th className="py-3.5 px-4 w-12 text-center">STT</th>
               <th className="py-3.5 px-4 w-28">Mã HS</th>
               <th className="py-3.5 px-4 min-w-[200px]">Họ và tên</th>
               <th className="py-3.5 px-4 w-28">Lớp</th>
               <th className="py-3.5 px-4 w-32 text-center">Ảnh nhận diện</th>
+              <th className="py-3.5 px-4 w-32 text-center">Trạng thái</th>
               <th className="py-3.5 px-4 w-32 text-center">Ngày ghi nhận</th>
-              <th className="py-3.5 px-4 w-28 text-center">Thao tác</th>
+              <th className="py-3.5 px-4 w-20 text-center">Thao tác</th>
             </tr>
           </thead>
 
           {/* Table Body */}
-          <tbody className="divide-y divide-gray-100 text-gray-700">
+          <tbody className="divide-y divide-[var(--border-default)] text-[var(--text-heading)]">
             {paginatedRecords.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-12 text-center text-gray-400">
+                <td colSpan={8} className="py-12 text-center text-[var(--text-subtle)]">
                   <div className="flex flex-col items-center justify-center space-y-2">
-                    <FontAwesomeIcon icon={faInbox} className="text-3xl text-gray-300" />
+                    <Icon name="inbox" size={32} color="var(--text-subtle)" />
                     <p className="text-sm font-medium">Không tìm thấy dữ liệu học sinh phù hợp</p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-[var(--text-subtle)]">
                       Thử thay đổi lớp học hoặc bộ lọc trạng thái nhận diện.
                     </p>
                   </div>
@@ -81,41 +73,62 @@ export const FaceRecognitionTable: React.FC<FaceRecognitionTableProps> = ({
                 const photoDisplay = formatPhotoDisplay(item);
                 const dateDisplay = formatRegistrationDate(item.registeredDate, item.isRegistered);
 
+                const menuItems = !item.isRegistered
+                  ? [
+                      {
+                        id: 'register',
+                        label: 'Đăng ký ảnh nhận diện',
+                        icon: 'camera' as const,
+                        onClick: () => dispatch(openRegisterModal(item)),
+                      },
+                    ]
+                  : [
+                      {
+                        id: 'edit',
+                        label: 'Cập nhật ảnh khuôn mặt',
+                        icon: 'pen' as const,
+                        onClick: () => dispatch(openEditModal(item)),
+                      },
+                      {
+                        id: 'preview',
+                        label: 'Xem ảnh phóng to',
+                        icon: 'eye' as const,
+                        onClick: () => onPreviewPhoto?.(item.facePhotoUrl!, item.fullName),
+                      },
+                      {
+                        id: 'delete',
+                        label: 'Xóa ảnh khuôn mặt',
+                        icon: 'trash' as const,
+                        tone: 'danger' as const,
+                        onClick: () => dispatch(openDeleteModal(item)),
+                      },
+                    ];
+
                 return (
                   <tr
                     key={item.studentId}
                     className="hover:bg-blue-50/20 transition-colors group"
                   >
                     {/* STT */}
-                    <td className="py-3.5 px-4 text-center text-gray-400 font-medium">
+                    <td className="py-3.5 px-4 text-center text-[var(--text-subtle)] font-medium">
                       {globalIndex}
                     </td>
 
                     {/* Mã HS */}
-                    <td className="py-3.5 px-4 font-mono font-medium text-gray-800">
+                    <td className="py-3.5 px-4 font-mono font-medium text-slate-800">
                       {item.studentCode}
                     </td>
 
                     {/* Họ và tên & Nickname */}
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0 text-slate-500 font-semibold text-xs overflow-hidden">
-                          {item.facePhotoUrl ? (
-                            <img
-                              src={item.facePhotoUrl}
-                              alt={item.fullName}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <FontAwesomeIcon icon={faUserGraduate} className="text-slate-400" />
-                          )}
-                        </div>
+                        <Avatar name={item.fullName} size="sm" />
                         <div className="flex flex-col">
-                          <span className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                          <span className="font-semibold text-slate-900 group-hover:text-[#0070CE] transition-colors">
                             {item.fullName}
                           </span>
                           {item.nickname && (
-                            <span className="text-[11px] text-gray-500 font-normal">
+                            <span className="text-[11px] text-[var(--text-subtle)] font-normal">
                               ({item.nickname})
                             </span>
                           )}
@@ -127,7 +140,7 @@ export const FaceRecognitionTable: React.FC<FaceRecognitionTableProps> = ({
                     <td className="py-3.5 px-4 font-medium">
                       <Link
                         href={`/${schoolCode}/school/classes/${item.classId}`}
-                        className="text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1"
+                        className="text-[#0070CE] hover:underline inline-flex items-center gap-1 font-semibold"
                         title={`Xem chi tiết ${item.className}`}
                       >
                         {item.className}
@@ -148,67 +161,43 @@ export const FaceRecognitionTable: React.FC<FaceRecognitionTableProps> = ({
                             <img
                               src={item.facePhotoUrl}
                               alt={`Ảnh nhận diện ${item.fullName}`}
-                              className="w-10 h-10 object-cover rounded-lg border border-slate-200 shadow-2xs group-hover/photo:ring-2 group-hover/photo:ring-blue-400 transition"
+                              className="w-9 h-9 object-cover rounded-lg border border-[var(--border-default)] shadow-xs group-hover/photo:ring-2 group-hover/photo:ring-[#0070CE] transition"
                             />
                             <div className="absolute inset-0 bg-black/30 rounded-lg opacity-0 group-hover/photo:opacity-100 flex items-center justify-center text-white text-xs transition">
-                              <FontAwesomeIcon icon={faEye} />
+                              <Icon name="eye" size={12} />
                             </div>
                           </div>
                         </div>
                       ) : (
-                        <span className="text-gray-400 font-mono text-sm">-</span>
+                        <span className="text-slate-400 font-mono text-xs italic">Chưa có</span>
                       )}
                     </td>
 
-                    {/* Ngày ghi nhận */}
+                    {/* Trạng thái */}
                     <td className="py-3.5 px-4 text-center">
-                      {item.isRegistered ? (
-                        <span className="inline-block px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-                          {dateDisplay}
-                        </span>
-                      ) : (
-                        <span className="text-gray-400 font-mono text-sm">-</span>
-                      )}
+                      <StatusTag tone={item.isRegistered ? 'success' : 'neutral'}>
+                        {item.isRegistered ? 'Đã đăng ký' : 'Chưa đăng ký'}
+                      </StatusTag>
+                    </td>
+
+                    {/* Ngày ghi nhận */}
+                    <td className="py-3.5 px-4 text-center text-slate-600 font-mono text-[11px]">
+                      {dateDisplay}
                     </td>
 
                     {/* Thao tác */}
                     <td className="py-3.5 px-4 text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        {!item.isRegistered ? (
-                          /* Unregistered: Single circular + button (BR02, K087) */
-                          <button
-                            type="button"
-                            onClick={() => dispatch(openRegisterModal(item))}
-                            className="w-8 h-8 rounded-full bg-[#0070CE] hover:bg-[#005bb5] text-white flex items-center justify-center transition shadow-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
-                            title="Đăng ký ảnh nhận diện"
-                            aria-label="Đăng ký ảnh nhận diện"
-                          >
-                            <FontAwesomeIcon icon={faPlus} className="text-xs" />
-                          </button>
-                        ) : (
-                          /* Registered: Two circular buttons (pencil + X) (BR02, K087) */
-                          <>
-                            <button
-                              type="button"
-                              onClick={() => dispatch(openEditModal(item))}
-                              className="w-8 h-8 rounded-full bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center transition shadow-xs focus:outline-none focus:ring-2 focus:ring-amber-300"
-                              title="Chỉnh sửa ảnh nhận diện"
-                              aria-label="Chỉnh sửa ảnh nhận diện"
-                            >
-                              <FontAwesomeIcon icon={faPen} className="text-xs" />
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => dispatch(openDeleteModal(item))}
-                              className="w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition shadow-xs focus:outline-none focus:ring-2 focus:ring-red-300"
-                              title="Xóa ảnh nhận diện"
-                              aria-label="Xóa ảnh nhận diện"
-                            >
-                              <FontAwesomeIcon icon={faTimes} className="text-xs" />
-                            </button>
-                          </>
-                        )}
-                      </div>
+                      <DropdownMenu
+                        align="right"
+                        trigger={
+                          <IconButton
+                            icon="ellipsis-vertical"
+                            label="Thao tác"
+                            size="sm"
+                          />
+                        }
+                        items={menuItems}
+                      />
                     </td>
                   </tr>
                 );
@@ -217,6 +206,16 @@ export const FaceRecognitionTable: React.FC<FaceRecognitionTableProps> = ({
           </tbody>
         </table>
       </div>
+
+      {/* Table Footer */}
+      <div className="bg-[var(--bg-subtle)] px-4 py-3 border-t border-[var(--border-default)] flex items-center justify-between text-xs text-[var(--text-subtle)]">
+        <span>Tổng: <strong className="text-slate-800 font-bold">{filteredRecords.length}</strong> học sinh</span>
+        <span className="text-[11px] text-slate-400">
+          Dữ liệu nhận diện khuôn mặt đồng bộ tự động tới Camera AI cổng trường
+        </span>
+      </div>
     </div>
   );
 };
+
+export default FaceRecognitionTable;

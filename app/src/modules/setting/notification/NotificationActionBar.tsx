@@ -1,6 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFloppyDisk, faRotateLeft, faClockRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { Button, Icon } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   openConfirmModal,
@@ -27,10 +26,10 @@ export const NotificationActionBar: React.FC = () => {
   };
 
   return (
-    <div className="sticky bottom-0 z-20 bg-white/95 backdrop-blur-md border-t border-slate-200 py-3.5 px-4 sm:px-6 shadow-lg rounded-b-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div className="sticky bottom-0 z-20 bg-white/95 backdrop-blur-md border-t border-[var(--border-default)] py-3 px-4 sm:px-6 shadow-lg rounded-b-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       {/* Last Updated Timestamp */}
-      <div className="flex items-center gap-2 text-xs text-slate-500">
-        <FontAwesomeIcon icon={faClockRotateLeft} className="text-slate-400" />
+      <div className="flex items-center gap-2 text-xs text-[var(--text-subtle)]">
+        <Icon name="clock" size={14} color="var(--text-subtle)" />
         {currentSettings.updatedAt ? (
           <span>
             Lần cập nhật gần nhất:{' '}
@@ -53,30 +52,26 @@ export const NotificationActionBar: React.FC = () => {
       {/* Action Buttons */}
       <div className="flex items-center gap-2.5 self-end sm:self-auto">
         {isDirty && (
-          <button
-            type="button"
+          <Button
+            variant="secondary"
+            icon="rotate-right"
             onClick={handleResetClick}
-            className="px-3.5 py-2 text-xs font-medium text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
           >
-            <FontAwesomeIcon icon={faRotateLeft} className="text-xs" />
             Khôi phục
-          </button>
+          </Button>
         )}
 
-        <button
-          type="button"
+        <Button
+          variant="primary"
+          icon="check"
           disabled={!isDirty}
           onClick={handleUpdateClick}
-          className={`px-5 py-2 text-xs font-semibold rounded-lg shadow-xs flex items-center gap-2 transition-all duration-150 cursor-pointer ${
-            isDirty
-              ? 'bg-[#0070CE] hover:bg-[#005bb0] text-white active:scale-98 shadow-blue-500/20'
-              : 'bg-slate-200 text-slate-400 cursor-not-allowed select-none'
-          }`}
         >
-          <FontAwesomeIcon icon={faFloppyDisk} className="text-xs" />
-          Cập nhật
-        </button>
+          Cập nhật cấu hình
+        </Button>
       </div>
     </div>
   );
 };
+
+export default NotificationActionBar;

@@ -8,6 +8,7 @@ import {
   faUsers,
   faUserShield,
 } from '@fortawesome/free-solid-svg-icons';
+import { Dropdown } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   updateTuitionChangeToggle,
@@ -168,27 +169,26 @@ export const TuitionNotificationCard: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-2 pt-2 border-t border-slate-200/60">
-              <label htmlFor="tuition-grace-day" className="text-xs text-slate-600 font-medium whitespace-nowrap">
-                Gửi nhắc vào ngày:
-              </label>
-              <select
-                id="tuition-grace-day"
-                value={tuition.gracePeriod.dayOfMonth}
-                onChange={(e) =>
+              <span className="text-xs text-slate-600 font-medium whitespace-nowrap">
+                Gửi nhắc vào:
+              </span>
+              <Dropdown
+                placeholder="Chọn ngày gửi"
+                options={Array.from({ length: 31 }, (_, i) => i + 1).map((day) => ({
+                  value: String(day),
+                  label: `Ngày ${day} hàng tháng`,
+                }))}
+                value={String(tuition.gracePeriod.dayOfMonth)}
+                onChange={(val) =>
                   dispatch(
                     updateTuitionGracePeriod({
-                      dayOfMonth: parseInt(e.target.value, 10),
+                      dayOfMonth: parseInt(val, 10),
                     })
                   )
                 }
-                className="text-xs font-semibold text-slate-800 bg-white border border-slate-300 rounded-lg px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-[#0070CE]"
-              >
-                {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
-                  <option key={day} value={day}>
-                    Ngày {day} hàng tháng
-                  </option>
-                ))}
-              </select>
+                size="sm"
+                className="min-w-[170px]"
+              />
             </div>
           </div>
 
@@ -235,21 +235,23 @@ export const TuitionNotificationCard: React.FC = () => {
             </div>
 
             <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200/60">
-              <select
-                aria-label="Chọn hướng nhắc nhở học phí"
+              <Dropdown
+                placeholder="Chọn thời điểm nhắc"
+                options={[
+                  { value: 'before', label: 'Trước hạn đóng học phí' },
+                  { value: 'after', label: 'Sau hạn đóng học phí' },
+                ]}
                 value={tuition.dueReminder.timing}
-                onChange={(e) =>
+                onChange={(val) =>
                   dispatch(
                     updateTuitionDueReminder({
-                      timing: e.target.value as TuitionDueTiming,
+                      timing: val as TuitionDueTiming,
                     })
                   )
                 }
-                className="text-xs font-semibold text-slate-800 bg-white border border-slate-300 rounded-lg px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-[#0070CE]"
-              >
-                <option value="before">Trước hạn đóng học phí</option>
-                <option value="after">Sau hạn đóng học phí</option>
-              </select>
+                size="sm"
+                className="min-w-[190px]"
+              />
 
               <div className="flex items-center gap-1.5">
                 <input
