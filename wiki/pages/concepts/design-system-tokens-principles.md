@@ -37,6 +37,13 @@ Kiến trúc giao diện của School Operating Portal được xây dựng theo
    - **Thanh công cụ tác vụ (Toolbar):** Bộ lọc xếp cột hoặc co giãn linh hoạt; nút tác vụ nhanh cuộn ngang mượt mà (`overflow-x: auto no-scrollbar`), cấm cắt cụt chữ nhãn nút (như 'Báo...').
    - **Lưới thẻ (StatCard Grid):** Lưới 2 cột cân đối hoặc auto-fit, nội dung chữ co giãn kèm thanh tiến trình nhỏ gọn, không để card tràn ra ngoài màn hình.
    - **Vùng chạm công thái học (Touch Target):** Đạt tối thiểu 40px – 44px chuẩn Accessibility. Đệm mép trang `var(--space-16)` (16px), khoảng cách giữa các khối `var(--space-16)` (16px).
+6. **Chuẩn thanh công cụ và trường lọc (Single Frame Line & Placeholder Guide Text):**
+   - **Single Frame Line (38px):** Trên desktop, `FilterBar` nằm trên đúng một đường thẳng cao 38px: Ô tìm kiếm bên trái (`w-[200px-280px]`), các dropdown bộ lọc ở giữa, các action buttons (Xuất Excel, Thêm mới...) nằm cân phải.
+   - **CẤM nhãn trôi nổi (No Floating Labels):** Tuyệt đối cấm thêm `<label>` trôi nổi bên trên các ô lọc làm vỡ hàng frame line và tốn diện tích dọc.
+   - **Chữ xám hướng dẫn (Placeholder Guide):** Toàn bộ ô lọc (Dropdown/SelectField) hiển thị chữ xám hướng dẫn bên trong khung (`placeholder="Chọn năm học"`, `placeholder="Chọn lớp học"`, `placeholder="Chọn trạng thái"`...) với style `text-slate-400 font-normal`.
+   - **Bảo lưu giá trị mặc định:** Giữ nguyên giá trị chọn mặc định bên trong; trên trigger hiển thị chữ xám hướng dẫn để giao diện thoáng, tinh gọn và tránh cắt cụt nhãn.
+7. **Chuẩn Right-Sheet (SlideOver) cho thao tác Tạo mới / Chỉnh sửa:**
+   - Mọi tác vụ Tạo mới và Chỉnh sửa bắt buộc mở ngăn kéo trượt bên phải (`<SlideOver>`), cấm mở modal popup giữa màn hình gây đè layer, cấm chuyển trang full-page `/create`, `/edit`. Có Header nút đóng, body cuộn độc lập và Footer cố định 2 nút "Hủy" và "Lưu / Tạo mới".
 
 ## Áp dụng ở đâu
 - [Tổng quan dự án](../overview/project-overview.md)

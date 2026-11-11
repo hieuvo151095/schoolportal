@@ -40,12 +40,14 @@ Tài liệu này tổng hợp toàn bộ các nguyên tắc thiết kế và thi
   - Mọi nút tab item bắt buộc phải có `flex: none` (`flex-shrink: 0`) và `white-space: nowrap`.
   - Không được để tab bị co ép làm mất số đếm hoặc đứt gãy viền active indicator.
 
-### 2.2. Bộ Lọc & Thanh Tìm Kiếm (Toolbar & Filter Bar)
-- **Lỗi phổ biến trước đây:** Ô tìm kiếm bị co ngắn hơn dropdown bên trên, hoặc các nút xếp chồng không thẳng hàng.
+### 2.2. Bộ Lọc & Thanh Tìm Kiếm (Toolbar & Filter Bar SSOT)
+- **Lỗi phổ biến trước đây:** Ô tìm kiếm bị co ngắn hơn dropdown bên trên, các nút xếp chồng không thẳng hàng, hoặc tự ý thêm `<label>` trôi nổi phía trên làm vỡ layout 1 hàng.
 - **Quy chuẩn bắt buộc:**
-  - Trên mobile: Dàn xếp linh hoạt theo cột `flex-col sm:flex-row`.
-  - Ô tìm kiếm và ô chọn lớp/môn phải có độ rộng đồng nhất (`w-full sm:w-auto` hoặc `w-full` khi ở chế độ mobile).
-  - Khoảng cách giữa các hàng bộ lọc là `var(--space-12)` hoặc `gap-3`.
+  - **Single Frame Line (Desktop 38px):** Trên desktop, `FilterBar` nằm trên đúng một đường thẳng cao 38px: Ô tìm kiếm bên trái (`w-[200px-280px]`), các dropdown lọc ở giữa, các nút tác vụ (Xuất Excel, Thêm mới...) nằm cân phải.
+  - **Tuyệt đối CẤM Nhãn Trôi Nổi (No Floating Labels):** Không đặt `<label>` bên trên dropdown/input trong FilterBar.
+  - **Chữ Xám Hướng Dẫn Bên Trong Khung (Placeholder Guide Text):** Toàn bộ các dropdown lọc hiển thị text xám hướng dẫn (`placeholder="Chọn năm học"`, `placeholder="Chọn lớp học"`, `placeholder="Chọn trạng thái"`...) với style `text-slate-400 font-normal`.
+  - **Bảo Lưu Giá Trị Mặc Định:** Trạng thái mặc định vẫn lưu giá trị chọn (như năm 2025-2026), nhưng trên trigger hiển thị chữ xám hướng dẫn để giao diện tinh gọn, không bị cắt xén chữ ("Năm học 20...").
+  - **Trên mobile:** Dàn xếp linh hoạt theo cột `flex-col sm:flex-row`. Ô tìm kiếm và ô chọn lớp/môn chiếm 100% bề rộng (`w-full`), khoảng cách `gap-3`.
 
 ### 2.3. Thanh Tác Vụ Nhanh (Action Bar & Bulk Actions)
 - **Lỗi phổ biến trước đây:** Nút thao tác hàng loạt bị cắt cụt chữ (ví dụ: "Đón hàng loạt" thành "Đón...").
