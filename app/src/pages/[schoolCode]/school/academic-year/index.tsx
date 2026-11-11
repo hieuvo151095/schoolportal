@@ -86,18 +86,21 @@ export default function AcademicYearPage() {
           description="Cấu hình danh mục năm học, phân kỳ học kỳ và xác định năm học hiện tại áp dụng cho toàn trường."
         />
 
-        {/* Toolbar */}
-        <AcademicYearToolbar
-          searchQuery={searchQuery}
-          onSearchChange={handleSearchChange}
-          onOpenCreateModal={handleOpenCreateModal}
-        />
+        {/* Unified Master Table Card */}
+        <div className="ecomd-table-card">
+          {/* Toolbar */}
+          <AcademicYearToolbar
+            searchQuery={searchQuery}
+            onSearchChange={handleSearchChange}
+            onOpenCreateModal={handleOpenCreateModal}
+          />
 
-        {/* Master Table */}
-        <AcademicYearTable
-          items={displayItems}
-          onEdit={handleOpenEditModal}
-        />
+          {/* Master Table */}
+          <AcademicYearTable
+            items={displayItems}
+            onEdit={handleOpenEditModal}
+          />
+        </div>
 
         {/* Add / Edit Minimalist 3-Field Modal */}
         <AcademicYearModal

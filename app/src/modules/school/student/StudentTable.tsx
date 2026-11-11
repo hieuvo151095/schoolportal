@@ -62,7 +62,7 @@ export const StudentTable: React.FC<StudentTableProps> = ({
   };
 
   return (
-    <div className="ecomd-table-card">
+    <>
       <div className="ecomd-table-scroll">
         <table className="ecomd-table ecomd-table--dense w-full">
           <thead>
@@ -270,6 +270,6 @@ export const StudentTable: React.FC<StudentTableProps> = ({
           )}
         </div>
       )}
-    </div>
+    </>
   );
 };

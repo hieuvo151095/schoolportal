@@ -108,7 +108,7 @@ export const AnnouncementTable: React.FC<AnnouncementTableProps> = ({
   };
 
   return (
-    <div className="ecomd-table-card">
+    <>
       <div className="ecomd-table-scroll">
         <table className="ecomd-table ecomd-table--dense w-full">
           <thead>
@@ -324,7 +324,7 @@ export const AnnouncementTable: React.FC<AnnouncementTableProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

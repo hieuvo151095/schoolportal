@@ -3,7 +3,7 @@
  * Design System: [DS] ECO ME DASHBOARD v1.1.0 (PageHeader, FilterBar, DataTable)
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { PortalLayout } from '../../../../components/layout/PortalLayout';
@@ -17,6 +17,7 @@ import {
 } from '../../../../store/slices/menuSlice';
 import { MenuToolbar } from '../../../../modules/school/menu/MenuToolbar';
 import { MenuTable } from '../../../../modules/school/menu/MenuTable';
+import { CreateMenuSlideOver } from '../../../../modules/school/menu/CreateMenuSlideOver';
 import { PageHeader } from '../../../../components/ds';
 
 export default function SchoolMenuPage() {
@@ -24,6 +25,18 @@ export default function SchoolMenuPage() {
   const schoolCode = (router.query.schoolCode as string) || 'demo';
   const dispatch = useAppDispatch();
   const { menus, filters } = useAppSelector((state) => state.menu);
+
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [createMode, setCreateMode] = useState<'grid' | 'file'>('grid');
+  const [createTemplate, setCreateTemplate] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (router.query.create === 'true') {
+      setIsCreateOpen(true);
+      if (router.query.mode === 'file') setCreateMode('file');
+      if (router.query.template === 'ai') setCreateTemplate('ai');
+    }
+  }, [router.query]);
 
   // Filtered menus
   const filteredMenus = useMemo(() => {
@@ -87,35 +100,62 @@ export default function SchoolMenuPage() {
           description="Soạn và công bố thực đơn ăn uống nội trú toàn trường và từng lớp học kèm truy xuất nguồn gốc Suất ăn minh bạch"
         />
 
-        {/* Toolbar & Filter Notices */}
-        <MenuToolbar
-          filters={filters}
-          onFilterChange={(newFilters) => dispatch(setFilters(newFilters))}
-          onResetFilters={() => dispatch(resetFilters())}
-          schoolCode={schoolCode}
-        />
+        {/* Unified Table Card */}
+        <div className="ecomd-table-card">
+          {/* Toolbar & Filter Notices */}
+          <MenuToolbar
+            filters={filters}
+            onFilterChange={(newFilters) => dispatch(setFilters(newFilters))}
+            onResetFilters={() => dispatch(resetFilters())}
+            schoolCode={schoolCode}
+            onOpenCreate={() => {
+              setCreateMode('grid');
+              setCreateTemplate(undefined);
+              setIsCreateOpen(true);
+            }}
+            onOpenCreateFile={() => {
+              setCreateMode('file');
+              setCreateTemplate(undefined);
+              setIsCreateOpen(true);
+            }}
+            onApplyAISchedule={() => {
+              setCreateMode('grid');
+              setCreateTemplate('ai');
+              setIsCreateOpen(true);
+            }}
+          />
 
-        {/* Master Menu Roster Table */}
-        <MenuTable
-          menus={filteredMenus}
+          {/* Master Menu Roster Table */}
+          <MenuTable
+            menus={filteredMenus}
+            schoolCode={schoolCode}
+            onPublish={(menuId, viaAnnouncement) => {
+              dispatch(publishMenu({ id: menuId, viaAnnouncement }));
+            }}
+            onClone={(sourceId, targetWeek, targetYear, start, end) => {
+              dispatch(
+                cloneMenu({
+                  sourceMenuId: sourceId,
+                  targetWeekNumber: targetWeek,
+                  targetYear,
+                  targetStartDate: start,
+                  targetEndDate: end,
+                })
+              );
+            }}
+            onDelete={(menuId) => {
+              dispatch(deleteMenu(menuId));
+            }}
+          />
+        </div>
+
+        {/* Create Menu SlideOver */}
+        <CreateMenuSlideOver
+          isOpen={isCreateOpen}
+          onClose={() => setIsCreateOpen(false)}
+          initialMode={createMode}
+          initialTemplate={createTemplate}
           schoolCode={schoolCode}
-          onPublish={(menuId, viaAnnouncement) => {
-            dispatch(publishMenu({ id: menuId, viaAnnouncement }));
-          }}
-          onClone={(sourceId, targetWeek, targetYear, start, end) => {
-            dispatch(
-              cloneMenu({
-                sourceMenuId: sourceId,
-                targetWeekNumber: targetWeek,
-                targetYear,
-                targetStartDate: start,
-                targetEndDate: end,
-              })
-            );
-          }}
-          onDelete={(menuId) => {
-            dispatch(deleteMenu(menuId));
-          }}
         />
       </div>
     </PortalLayout>

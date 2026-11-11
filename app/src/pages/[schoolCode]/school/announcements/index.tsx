@@ -198,35 +198,38 @@ export default function SchoolAnnouncementsPage() {
         {/* 4 Summary KPI Cards */}
         <AnnouncementSummaryCards kpis={kpis} />
 
-        {/* Filter and Search Toolbar */}
-        <AnnouncementToolbar
-          schoolCode={schoolCode}
-          filters={filters}
-          kpis={kpis}
-          onFilterChange={handleFilterChange}
-          onResetFilters={handleResetFilters}
-          selectedCount={selectedIdsForBulk.length}
-          onBulkDelete={handleOpenBulkDelete}
-          onOpenCreate={() => {
-            setEditingAnnouncement(null);
-            setIsSlideOverOpen(true);
-          }}
-        />
+        {/* Unified Table Card */}
+        <div className="ecomd-table-card">
+          {/* Filter and Search Toolbar */}
+          <AnnouncementToolbar
+            schoolCode={schoolCode}
+            filters={filters}
+            kpis={kpis}
+            onFilterChange={handleFilterChange}
+            onResetFilters={handleResetFilters}
+            selectedCount={selectedIdsForBulk.length}
+            onBulkDelete={handleOpenBulkDelete}
+            onOpenCreate={() => {
+              setEditingAnnouncement(null);
+              setIsSlideOverOpen(true);
+            }}
+          />
 
-        {/* 8-Column Data Table */}
-        <AnnouncementTable
-          schoolCode={schoolCode}
-          announcements={filteredList}
-          selectedIds={selectedIdsForBulk}
-          onToggleSelect={id => dispatch(toggleSelectForBulk(id))}
-          onSelectAll={ids => dispatch(selectAllForBulk(ids))}
-          onTogglePin={handleTogglePin}
-          onOpenDeleteModal={handleOpenSingleDelete}
-          onOpenEdit={(announcement) => {
-            setEditingAnnouncement(announcement);
-            setIsSlideOverOpen(true);
-          }}
-        />
+          {/* 8-Column Data Table */}
+          <AnnouncementTable
+            schoolCode={schoolCode}
+            announcements={filteredList}
+            selectedIds={selectedIdsForBulk}
+            onToggleSelect={id => dispatch(toggleSelectForBulk(id))}
+            onSelectAll={ids => dispatch(selectAllForBulk(ids))}
+            onTogglePin={handleTogglePin}
+            onOpenDeleteModal={handleOpenSingleDelete}
+            onOpenEdit={(announcement) => {
+              setEditingAnnouncement(announcement);
+              setIsSlideOverOpen(true);
+            }}
+          />
+        </div>
 
         {/* Delete Confirmation Modal */}
         <DeleteAnnouncementModal

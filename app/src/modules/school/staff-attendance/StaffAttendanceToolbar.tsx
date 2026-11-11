@@ -132,8 +132,9 @@ export const StaffAttendanceToolbar: React.FC<StaffAttendanceToolbarProps> = ({
           </div>
         }
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', fontWeight: 'var(--font-semibold)' }}>
+        <div className="inline-flex items-center gap-1.5 h-[38px] px-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-[13px] flex-none">
+          <Icon name="calendar" size={14} color="var(--text-subtle)" />
+          <span className="text-[12px] font-medium text-[var(--text-subtle)] whitespace-nowrap">
             Ngày:
           </span>
           <input
@@ -142,17 +143,7 @@ export const StaffAttendanceToolbar: React.FC<StaffAttendanceToolbarProps> = ({
             max={todayStr}
             value={date}
             onChange={(e) => onDateChange(e.target.value)}
-            style={{
-              padding: 'var(--space-1) var(--space-2)',
-              borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--border-neutral)',
-              background: 'var(--bg-surface)',
-              fontSize: 'var(--text-xs)',
-              fontWeight: 'var(--font-bold)',
-              color: 'var(--text-primary)',
-              cursor: 'pointer',
-              outline: 'none',
-            }}
+            className="h-[28px] w-[120px] bg-transparent border-0 text-[12px] font-semibold text-[var(--text-heading)] focus:outline-none cursor-pointer p-0"
           />
         </div>
       </FilterBar>

@@ -89,23 +89,26 @@ export default function SchoolGradesPage() {
         {/* 4 Summary KPI Cards */}
         <GradeSummaryCards kpis={kpis} />
 
-        {/* Filter and Search Toolbar */}
-        <GradeToolbar
-          selectedStage={selectedStage}
-          onSelectStage={(stage) => dispatch(setSelectedStage(stage))}
-          stageCounts={stageCounts}
-          selectedAcademicYear={selectedAcademicYear}
-          onSelectAcademicYear={(year) => dispatch(setSelectedAcademicYear(year))}
-          searchQuery={searchQuery}
-          onSearchChange={(q) => dispatch(setSearchQuery(q))}
-          onClearSearch={() => dispatch(clearSearchQuery())}
-        />
+        {/* Unified Table Card */}
+        <div className="ecomd-table-card">
+          {/* Filter and Search Toolbar */}
+          <GradeToolbar
+            selectedStage={selectedStage}
+            onSelectStage={(stage) => dispatch(setSelectedStage(stage))}
+            stageCounts={stageCounts}
+            selectedAcademicYear={selectedAcademicYear}
+            onSelectAcademicYear={(year) => dispatch(setSelectedAcademicYear(year))}
+            searchQuery={searchQuery}
+            onSearchChange={(q) => dispatch(setSearchQuery(q))}
+            onClearSearch={() => dispatch(clearSearchQuery())}
+          />
 
-        {/* Main Grade Table */}
-        <GradeTable
-          grades={rolledUpGrades}
-          onSelectGrade={handleSelectGrade}
-        />
+          {/* Main Grade Table */}
+          <GradeTable
+            grades={rolledUpGrades}
+            onSelectGrade={handleSelectGrade}
+          />
+        </div>
       </div>
     </PortalLayout>
   );

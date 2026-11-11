@@ -45,7 +45,7 @@ export const TeacherTable: React.FC<TeacherTableProps> = ({
   const allSelected = teachers.length > 0 && selectedIds.length === teachers.length;
 
   return (
-    <div className="ecomd-table-card">
+    <>
       <div className="ecomd-table-scroll">
         <table className="ecomd-table ecomd-table--dense w-full">
           <thead>
@@ -285,6 +285,6 @@ export const TeacherTable: React.FC<TeacherTableProps> = ({
           )}
         </div>
       )}
-    </div>
+    </>
   );
 };

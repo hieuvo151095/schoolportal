@@ -57,7 +57,7 @@ export const MenuTable: React.FC<MenuTableProps> = ({
   };
 
   return (
-    <div className="ecomd-table-card">
+    <>
       <div className="ecomd-table-scroll">
         <table className="ecomd-table ecomd-table--dense w-full">
           <thead>
@@ -288,6 +288,6 @@ export const MenuTable: React.FC<MenuTableProps> = ({
         menu={selectedForHistory}
         onClose={() => setSelectedForHistory(null)}
       />
-    </div>
+    </>
   );
 };

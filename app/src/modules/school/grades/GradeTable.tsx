@@ -15,11 +15,13 @@ interface GradeTableProps {
 export const GradeTable: React.FC<GradeTableProps> = ({ grades, onSelectGrade }) => {
   if (grades.length === 0) {
     return (
-      <EmptyState
-        icon="layer-group"
-        title="Không tìm thấy khối lớp phù hợp"
-        description="Vui lòng thử điều chỉnh lại bộ lọc cấp học hoặc từ khóa tìm kiếm."
-      />
+      <div className="p-8">
+        <EmptyState
+          icon="layer-group"
+          title="Không tìm thấy khối lớp phù hợp"
+          description="Vui lòng thử điều chỉnh lại bộ lọc cấp học hoặc từ khóa tìm kiếm."
+        />
+      </div>
     );
   }
 
@@ -39,7 +41,7 @@ export const GradeTable: React.FC<GradeTableProps> = ({ grades, onSelectGrade })
   };
 
   return (
-    <div className="ecomd-table-card">
+    <>
       <div className="ecomd-table-scroll">
         <table className="ecomd-table ecomd-table--dense w-full">
           <thead>
@@ -206,6 +208,6 @@ export const GradeTable: React.FC<GradeTableProps> = ({ grades, onSelectGrade })
           Chuẩn hóa danh mục khối lớp Bộ GD&ĐT (Thông tư 28/2020 & 32/2020)
         </div>
       </div>
-    </div>
+    </>
   );
 };

@@ -1,11 +1,11 @@
 /**
  * Grade Toolbar Component
- * Design System: [DS] ECO ME DASHBOARD v1.1.0 (FilterBar, SearchField, SelectField, DS Tokens)
+ * Design System: [DS] ECO ME DASHBOARD v2.6.0 (CountedTabs & FilterBar SSOT)
  */
 
 import React from 'react';
 import type { EducationStage } from '@/types/grade';
-import { FilterBar, Button } from '@/components/ds';
+import { FilterBar, Button, CountedTabs, CountedTabItem, SelectFieldProps } from '@/components/ds';
 
 interface GradeToolbarProps {
   selectedStage: 'ALL' | EducationStage;
@@ -36,94 +36,62 @@ export const GradeToolbar: React.FC<GradeToolbarProps> = ({
   onSelectAcademicYear,
   searchQuery,
   onSearchChange,
+  onClearSearch,
 }) => {
+  const isFilterActive = searchQuery !== '' || selectedStage !== 'ALL';
+
+  const tabs: CountedTabItem[] = STAGE_OPTIONS.map((opt) => ({
+    id: opt.id,
+    label: opt.label,
+    count: stageCounts[opt.id] || 0,
+    icon: opt.id === 'ALL' ? 'layer-group' : 'graduation-cap',
+  }));
+
+  const filters: SelectFieldProps[] = [
+    {
+      label: 'Niên khóa',
+      value: selectedAcademicYear,
+      onChange: (val) => onSelectAcademicYear(val),
+      options: ACADEMIC_YEARS.map((yr) => ({
+        label: `Niên khóa: ${yr}`,
+        value: yr,
+      })),
+      className: 'min-w-[150px]',
+    },
+  ];
+
   return (
-    <div
-      style={{
-        background: 'var(--bg-surface)',
-        borderRadius: 'var(--radius-lg)',
-        border: '1px solid var(--border-neutral)',
-        padding: 'var(--space-4)',
-        boxShadow: 'var(--shadow-xs)',
-        marginBottom: 'var(--space-4)',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 'var(--space-3)',
-      }}
-    >
-      {/* Stage Filter Tabs */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 'var(--space-2)',
-          overflowX: 'auto',
-          paddingBottom: 'var(--space-2)',
-          borderBottom: '1px solid var(--border-light)',
-        }}
-      >
-        {STAGE_OPTIONS.map((opt) => {
-          const isActive = selectedStage === opt.id;
-          const count = stageCounts[opt.id] || 0;
+    <div>
+      {/* 1. CountedTabs on top */}
+      <CountedTabs
+        tabs={tabs}
+        activeId={selectedStage}
+        onChange={(id) => onSelectStage(id as 'ALL' | EducationStage)}
+      />
 
-          return (
-            <button
-              key={opt.id}
-              type="button"
-              onClick={() => onSelectStage(opt.id)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--space-2)',
-                padding: 'var(--space-2) var(--space-3)',
-                borderRadius: 'var(--radius-md)',
-                fontSize: 'var(--text-xs)',
-                fontWeight: isActive ? 'var(--font-bold)' : 'var(--font-medium)',
-                background: isActive ? 'var(--color-primary-50)' : 'transparent',
-                color: isActive ? 'var(--eco-blue-strong)' : 'var(--text-secondary)',
-                border: isActive ? '1px solid var(--eco-blue-border, #bfdbfe)' : '1px solid transparent',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease',
-              }}
-            >
-              <span>{opt.label}</span>
-              <span
-                style={{
-                  fontSize: '10px',
-                  fontWeight: 'var(--font-bold)',
-                  padding: '1px 6px',
-                  borderRadius: 'var(--radius-full)',
-                  background: isActive ? 'var(--eco-blue-strong)' : 'var(--bg-secondary)',
-                  color: isActive ? '#ffffff' : 'var(--text-secondary)',
-                }}
-              >
-                {count}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* FilterBar with Search and Academic Year */}
+      {/* 2. FilterBar with Search and Select Filters */}
       <FilterBar
         search={{
           placeholder: 'Tìm kiếm khối lớp (VD: Khối 1, K10, THCS)...',
           value: searchQuery,
           onChange: (val) => onSearchChange(val),
         }}
-        filters={[
-          {
-            label: 'Niên khóa',
-            value: selectedAcademicYear,
-            onChange: (val) => onSelectAcademicYear(val),
-            options: ACADEMIC_YEARS.map((yr) => ({
-              label: `Niên khóa: ${yr}`,
-              value: yr,
-            })),
-          },
-        ]}
+        filters={filters}
         actions={
           <div className="flex items-center gap-2">
+            {isFilterActive && (
+              <Button
+                variant="ghost"
+                size="sm"
+                icon="rotate-right"
+                onClick={() => {
+                  onClearSearch();
+                  onSelectStage('ALL');
+                }}
+              >
+                Đặt lại
+              </Button>
+            )}
             <Button
               variant="secondary"
               icon="download"

@@ -49,16 +49,18 @@ export const ArchiveTable: React.FC<ArchiveTableProps> = ({
 
   if (students.length === 0) {
     return (
-      <EmptyState
-        icon="box-archive"
-        title="Không tìm thấy học sinh lưu trữ nào"
-        description="Không có kết quả nào phù hợp với bộ lọc tìm kiếm hoặc chưa có học sinh nào được lưu trữ."
-      />
+      <div className="p-8">
+        <EmptyState
+          icon="box-archive"
+          title="Không tìm thấy học sinh lưu trữ nào"
+          description="Không có kết quả nào phù hợp với bộ lọc tìm kiếm hoặc chưa có học sinh nào được lưu trữ."
+        />
+      </div>
     );
   }
 
   return (
-    <div className="ecomd-table-card mt-4">
+    <>
       <div className="ecomd-table-scroll">
         <table className="ecomd-table ecomd-table--dense w-full">
           <thead>
@@ -257,6 +259,6 @@ export const ArchiveTable: React.FC<ArchiveTableProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };

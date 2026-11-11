@@ -19,7 +19,7 @@ export const AcademicYearTable: React.FC<AcademicYearTableProps> = ({
   onEdit,
 }) => {
   return (
-    <div className="ecomd-table-card">
+    <>
       <div className="ecomd-table-scroll">
         <table className="ecomd-table ecomd-table--dense w-full">
           <thead>
@@ -155,6 +155,6 @@ export const AcademicYearTable: React.FC<AcademicYearTableProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };

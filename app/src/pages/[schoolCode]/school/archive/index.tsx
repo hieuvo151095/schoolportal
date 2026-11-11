@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
-import { Icon } from '@/components/ds';
+import { Icon, PageHeader } from '@/components/ds';
 import { PortalLayout } from '@/components/layout/PortalLayout';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
@@ -32,118 +31,19 @@ import { RestoreConfirmModal } from '@/modules/school/archive/RestoreConfirmModa
 import { PermanentDeleteModal } from '@/modules/school/archive/PermanentDeleteModal';
 import type { ArchivedStudent, ArchiveStaffOperator, ArchiveSortField } from '@/types/archive';
 
-const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-`;
-
-const Breadcrumbs = styled.nav`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  color: #64748b;
-
-  .active {
-    color: #0f172a;
-    font-weight: 500;
-  }
-`;
-
-const PageHeader = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-`;
-
-const PageTitle = styled.h1`
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #0f172a;
-  letter-spacing: -0.025em;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-`;
-
-const PageSubtitle = styled.p`
-  font-size: 0.875rem;
-  color: #64748b;
-  margin: 0;
-`;
-
-const NotificationBanner = styled.div<{ $type: 'success' | 'warning' | 'error' | 'info' }>`
-  padding: 0.875rem 1.25rem;
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  animation: slideDown 0.2s ease-out;
-
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  ${(props) =>
-    props.$type === 'success' &&
-    `
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    color: #166534;
-  `}
-
-  ${(props) =>
-    props.$type === 'warning' &&
-    `
-    background: #fffbeb;
-    border: 1px solid #fde68a;
-    color: #92400e;
-  `}
-`;
-
-const DismissButton = styled.button`
-  background: none;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-  padding: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.25rem;
-  opacity: 0.7;
-
-  &:hover {
-    opacity: 1;
-  }
-`;
-
 export default function SchoolArchivePage() {
   const router = useRouter();
   const schoolCode = (router.query.schoolCode as string) || 'demo';
-
   const dispatch = useAppDispatch();
+
   const {
     students,
     activeClasses,
     filter,
     sort,
+    activeModal,
     selectedStudent,
     selectedStaff,
-    activeModal,
     notification,
   } = useAppSelector((state) => state.archive);
 
@@ -258,60 +158,59 @@ export default function SchoolArchivePage() {
         />
       </Head>
 
-      <PageContainer>
-        <Breadcrumbs aria-label="Breadcrumbs">
-          <span>Nhà trường</span>
-          <Icon name="chevron-right" size={12} className="text-slate-400" />
-          <span className="active">Lưu trữ</span>
-        </Breadcrumbs>
-
-        <PageHeader>
-          <PageTitle>
-            <Icon name="box-archive" size={22} className="text-[#0070ce]" />
-            <span>Lưu trữ học sinh</span>
-          </PageTitle>
-          <PageSubtitle>
-            Quản lý hồ sơ học sinh đã chuyển trường, thôi học hoặc tốt nghiệp (Cold Storage)
-          </PageSubtitle>
-        </PageHeader>
+      <div className="space-y-6">
+        <PageHeader
+          title="Lưu Trữ Học Sinh"
+          description="Quản lý hồ sơ học sinh đã chuyển trường, thôi học hoặc tốt nghiệp (Cold Storage)"
+        />
 
         {notification && (
-          <NotificationBanner $type={notification.type}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div
+            className={`p-3.5 rounded-lg flex items-center justify-between gap-3 text-sm font-medium ${
+              notification.type === 'success'
+                ? 'bg-[#f0fdf4] border border-[#bbf7d0] text-[#166534]'
+                : 'bg-[#fffbeb] border border-[#fde68a] text-[#92400e]'
+            }`}
+          >
+            <div className="flex items-center gap-2">
               <Icon
                 name={notification.type === 'success' ? 'circle-check' : 'triangle-exclamation'}
                 size={16}
               />
               <span>{notification.message}</span>
             </div>
-            <DismissButton
+            <button
               type="button"
               onClick={() => dispatch(clearNotification())}
               aria-label="Đóng thông báo"
+              className="p-1 rounded opacity-70 hover:opacity-100 cursor-pointer"
             >
               <Icon name="xmark" size={14} />
-            </DismissButton>
-          </NotificationBanner>
+            </button>
+          </div>
         )}
 
-        <ArchiveToolbar
-          searchQuery={filter.searchQuery}
-          onSearchChange={handleSearchChange}
-          archivePeriodMonth={filter.archivePeriodMonth}
-          onMonthChange={handleMonthChange}
-          onExportExcel={handleExportExcel}
-          totalCount={displayStudents.length}
-        />
+        {/* Unified Table Card */}
+        <div className="ecomd-table-card">
+          <ArchiveToolbar
+            searchQuery={filter.searchQuery}
+            onSearchChange={handleSearchChange}
+            archivePeriodMonth={filter.archivePeriodMonth}
+            onMonthChange={handleMonthChange}
+            onExportExcel={handleExportExcel}
+            totalCount={displayStudents.length}
+          />
 
-        <ArchiveTable
-          students={displayStudents}
-          sort={sort}
-          onToggleSort={handleToggleSort}
-          onOpenDetailModal={handleOpenDetailModal}
-          onOpenStaffModal={handleOpenStaffModal}
-          onOpenRestoreModal={handleOpenRestoreModal}
-          onOpenPurgeModal={handleOpenPurgeModal}
-        />
+          <ArchiveTable
+            students={displayStudents}
+            sort={sort}
+            onToggleSort={handleToggleSort}
+            onOpenDetailModal={handleOpenDetailModal}
+            onOpenStaffModal={handleOpenStaffModal}
+            onOpenRestoreModal={handleOpenRestoreModal}
+            onOpenPurgeModal={handleOpenPurgeModal}
+          />
+        </div>
 
         <ArchivedStudentDetailModal
           student={selectedStudent}
@@ -340,7 +239,7 @@ export default function SchoolArchivePage() {
           onClose={handleCloseModal}
           onConfirmPurge={handleConfirmPurge}
         />
-      </PageContainer>
+      </div>
     </PortalLayout>
   );
 }

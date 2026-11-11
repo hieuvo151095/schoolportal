@@ -126,29 +126,31 @@ export default function ClassManagementPage() {
         {/* 4 KPI Summary Cards */}
         <ClassSummaryCards classes={classes} />
 
-        {/* Toolbar (Tabs, Search, Grade selector, Action CTA) */}
-        <ClassToolbar
-          activeTaxonomy={activeTaxonomy}
-          onSelectTaxonomy={(tax) => dispatch(setActiveTaxonomy(tax))}
-          curricularCount={curricularCount}
-          extracurricularCount={extracurricularCount}
-          gradeLevels={gradeLevels}
-          filterCriteria={filterCriteria}
-          onUpdateFilter={(f) => dispatch(setFilterCriteria(f))}
-          onResetFilter={() => dispatch(resetFilterCriteria())}
-          onOpenCreate={() => dispatch(openCreateModal())}
-          onOpenFilterDrawer={() => setIsFilterDrawerOpen(true)}
-          activeFilterCount={activeFilterCount}
-        />
+        {/* Master Table Card: CountedTabs + FilterBar + DataTable */}
+        <div className="ecomd-table-card">
+          <ClassToolbar
+            activeTaxonomy={activeTaxonomy}
+            onSelectTaxonomy={(tax) => dispatch(setActiveTaxonomy(tax))}
+            curricularCount={curricularCount}
+            extracurricularCount={extracurricularCount}
+            gradeLevels={gradeLevels}
+            filterCriteria={filterCriteria}
+            onUpdateFilter={(f) => dispatch(setFilterCriteria(f))}
+            onResetFilter={() => dispatch(resetFilterCriteria())}
+            onOpenCreate={() => dispatch(openCreateModal())}
+            onOpenFilterDrawer={() => setIsFilterDrawerOpen(true)}
+            activeFilterCount={activeFilterCount}
+          />
 
-        {/* Class Table */}
-        <ClassTable
-          classes={filteredClasses}
-          taxonomy={activeTaxonomy}
-          schoolCode={schoolCode}
-          onEditClass={(id) => dispatch(openEditModal(id))}
-          onDeleteClass={(id) => dispatch(openDeleteModal(id))}
-        />
+          {/* Class Table */}
+          <ClassTable
+            classes={filteredClasses}
+            taxonomy={activeTaxonomy}
+            schoolCode={schoolCode}
+            onEditClass={(id) => dispatch(openEditModal(id))}
+            onDeleteClass={(id) => dispatch(openDeleteModal(id))}
+          />
+        </div>
 
         {/* Creation & Edit Modal */}
         <ClassFormModal

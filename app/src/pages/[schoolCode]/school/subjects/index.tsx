@@ -135,29 +135,32 @@ export default function SchoolSubjectsPage() {
         {/* 4 Summary KPI Cards */}
         <SubjectSummaryCards kpis={kpis} />
 
-        {/* Filter and Stage Toolbar */}
-        <SubjectToolbar
-          activeStage={activeStage}
-          onSelectStage={(stage) => dispatch(setActiveStage(stage))}
-          stageCounts={stageCounts}
-          selectedAcademicYear={selectedAcademicYear}
-          onSelectAcademicYear={(year) => dispatch(setSelectedAcademicYear(year))}
-          filterCriteria={filter}
-          onUpdateFilter={(updates) => {
-            if (updates.searchQuery !== undefined) dispatch(setSearchQuery(updates.searchQuery));
-            if (updates.gradeLevel !== undefined) dispatch(setGradeLevelFilter(updates.gradeLevel));
-            if (updates.classification !== undefined) dispatch(setClassificationFilter(updates.classification));
-            if (updates.type !== undefined) dispatch(setTypeFilter(updates.type));
-          }}
-          onResetFilter={() => dispatch(resetFilters())}
-        />
+        {/* Unified Table Card */}
+        <div className="ecomd-table-card">
+          {/* Filter and Stage Toolbar */}
+          <SubjectToolbar
+            activeStage={activeStage}
+            onSelectStage={(stage) => dispatch(setActiveStage(stage))}
+            stageCounts={stageCounts}
+            selectedAcademicYear={selectedAcademicYear}
+            onSelectAcademicYear={(year) => dispatch(setSelectedAcademicYear(year))}
+            filterCriteria={filter}
+            onUpdateFilter={(updates) => {
+              if (updates.searchQuery !== undefined) dispatch(setSearchQuery(updates.searchQuery));
+              if (updates.gradeLevel !== undefined) dispatch(setGradeLevelFilter(updates.gradeLevel));
+              if (updates.classification !== undefined) dispatch(setClassificationFilter(updates.classification));
+              if (updates.type !== undefined) dispatch(setTypeFilter(updates.type));
+            }}
+            onResetFilter={() => dispatch(resetFilters())}
+          />
 
-        {/* Main Subject Table */}
-        <SubjectTable
-          subjects={filteredSubjects}
-          onViewDetail={(id) => dispatch(openDetailDrawer(id))}
-          onAssignTeacher={(id) => dispatch(openAssignTeacherModal(id))}
-        />
+          {/* Main Subject Table */}
+          <SubjectTable
+            subjects={filteredSubjects}
+            onViewDetail={(id) => dispatch(openDetailDrawer(id))}
+            onAssignTeacher={(id) => dispatch(openAssignTeacherModal(id))}
+          />
+        </div>
 
         {/* Subject Detail Drawer */}
         <SubjectDetailDrawer

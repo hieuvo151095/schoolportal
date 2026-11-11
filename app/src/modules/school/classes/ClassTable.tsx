@@ -27,11 +27,13 @@ export const ClassTable: React.FC<ClassTableProps> = ({
 }) => {
   if (classes.length === 0) {
     return (
-      <EmptyState
-        icon="chalkboard"
-        title="Không tìm thấy lớp học nào"
-        description="Không có lớp học nào phù hợp với bộ lọc hiện tại. Vui lòng thay đổi từ khóa tìm kiếm hoặc điều chỉnh điều kiện lọc."
-      />
+      <div className="p-8">
+        <EmptyState
+          icon="chalkboard"
+          title="Không tìm thấy lớp học nào"
+          description="Không có lớp học nào phù hợp với bộ lọc hiện tại. Vui lòng thay đổi từ khóa tìm kiếm hoặc điều chỉnh điều kiện lọc."
+        />
+      </div>
     );
   }
 
@@ -49,7 +51,7 @@ export const ClassTable: React.FC<ClassTableProps> = ({
   };
 
   return (
-    <div className="ecomd-table-card">
+    <>
       <div className="ecomd-table-scroll">
         <table className="ecomd-table ecomd-table--dense w-full">
           <thead>
@@ -226,6 +228,6 @@ export const ClassTable: React.FC<ClassTableProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };

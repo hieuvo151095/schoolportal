@@ -16,6 +16,9 @@ interface MenuToolbarProps {
   onFilterChange: (filters: Partial<MenuFilterState>) => void;
   onResetFilters: () => void;
   schoolCode: string;
+  onOpenCreate?: () => void;
+  onOpenCreateFile?: () => void;
+  onApplyAISchedule?: () => void;
 }
 
 export const MenuToolbar: React.FC<MenuToolbarProps> = ({
@@ -23,6 +26,9 @@ export const MenuToolbar: React.FC<MenuToolbarProps> = ({
   onFilterChange,
   onResetFilters,
   schoolCode,
+  onOpenCreate,
+  onOpenCreateFile,
+  onApplyAISchedule,
 }) => {
   const router = useRouter();
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -119,15 +125,22 @@ export const MenuToolbar: React.FC<MenuToolbarProps> = ({
             </Button>
             <Button
               variant="secondary"
+              icon="download"
+              onClick={() => alert('Đang xuất danh sách thực đơn ra file Excel...')}
+            >
+              Xuất Excel
+            </Button>
+            <Button
+              variant="secondary"
               icon="file-lines"
-              href={`/${schoolCode}/school/menu/create?mode=file`}
+              onClick={onOpenCreateFile || (() => router.push(`/${schoolCode}/school/menu/create?mode=file`))}
             >
               Tạo bằng file
             </Button>
             <Button
               variant="primary"
               icon="plus"
-              href={`/${schoolCode}/school/menu/create`}
+              onClick={onOpenCreate || (() => router.push(`/${schoolCode}/school/menu/create`))}
             >
               Tạo thực đơn
             </Button>
@@ -148,7 +161,11 @@ export const MenuToolbar: React.FC<MenuToolbarProps> = ({
         isOpen={isAIModalOpen}
         onClose={() => setIsAIModalOpen(false)}
         onApplySchedule={() => {
-          router.push(`/${schoolCode}/school/menu/create?template=ai`);
+          if (onApplyAISchedule) {
+            onApplyAISchedule();
+          } else {
+            router.push(`/${schoolCode}/school/menu/create?template=ai`);
+          }
         }}
       />
     </div>

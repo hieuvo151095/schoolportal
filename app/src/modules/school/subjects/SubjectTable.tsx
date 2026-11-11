@@ -24,16 +24,18 @@ export const SubjectTable: React.FC<SubjectTableProps> = ({
 }) => {
   if (subjects.length === 0) {
     return (
-      <EmptyState
-        icon="book-open"
-        title="Không tìm thấy môn học nào"
-        description="Không có môn học nào phù hợp với điều kiện tìm kiếm hoặc bộ lọc hiện tại. Vui lòng thử lại với từ khóa hoặc tùy chọn khác."
-      />
+      <div className="p-8">
+        <EmptyState
+          icon="book-open"
+          title="Không tìm thấy môn học nào"
+          description="Không có môn học nào phù hợp với điều kiện tìm kiếm hoặc bộ lọc hiện tại. Vui lòng thử lại với từ khóa hoặc tùy chọn khác."
+        />
+      </div>
     );
   }
 
   return (
-    <div className="ecomd-table-card">
+    <>
       <div className="ecomd-table-scroll">
         <table className="ecomd-table ecomd-table--dense w-full">
           <thead>
@@ -252,6 +254,6 @@ export const SubjectTable: React.FC<SubjectTableProps> = ({
           Nhấp vào môn học để xem cấu hình đánh giá 4 học kỳ
         </div>
       </div>
-    </div>
+    </>
   );
 };

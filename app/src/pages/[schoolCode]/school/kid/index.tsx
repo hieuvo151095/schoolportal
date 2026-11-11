@@ -143,8 +143,8 @@ export default function StudentDirectoryPage() {
           />
         </div>
 
-        {/* Content Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+        {/* Content Section - Unified Table Card */}
+        <div className="ecomd-table-card">
           {/* Toolbar */}
           <StudentToolbar
             schoolCode={currentSchoolCode}
