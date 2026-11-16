@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faComments,
   faShieldHalved,
-  faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
@@ -12,6 +11,7 @@ import {
   saveActivitySettings,
   clearToast,
 } from '../../../store/slices/featureFlagsSlice';
+import { addToast } from '@/store/slices/toastSlice';
 import { isActivitySettingsDirty } from '../../../utils/featureFlagsValidation';
 
 export const ActivitySettingsTab: React.FC = () => {
@@ -24,12 +24,17 @@ export const ActivitySettingsTab: React.FC = () => {
     savedActivitySettings
   );
 
+  // Sync toast with Design System GlobalToastContainer (top-5 right-5)
   useEffect(() => {
     if (toastMessage) {
-      const timer = setTimeout(() => {
-        dispatch(clearToast());
-      }, 3500);
-      return () => clearTimeout(timer);
+      dispatch(
+        addToast({
+          type: 'success',
+          title: 'Cấu hình tính năng',
+          message: toastMessage,
+        })
+      );
+      dispatch(clearToast());
     }
   }, [toastMessage, dispatch]);
 
@@ -58,14 +63,6 @@ export const ActivitySettingsTab: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-5 right-5 z-50 flex items-center gap-3 bg-emerald-600 text-white px-5 py-3 rounded-xl shadow-lg animate-fade-in text-sm font-medium">
-          <FontAwesomeIcon icon={faCheckCircle} className="text-base" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
-
       {/* Main Settings Card */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
         <div className="border-b border-slate-100 pb-4 mb-6">

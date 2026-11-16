@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarCheck,
-  faCheckCircle,
   faExclamationCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown, Button } from '@/components/ds';
@@ -17,6 +16,7 @@ import {
   clearToast,
   clearError,
 } from '../../../store/slices/featureFlagsSlice';
+import { addToast } from '@/store/slices/toastSlice';
 import {
   isAddTermLocked,
   isTermEditingLocked,
@@ -38,13 +38,17 @@ export const PeriodSettingsTab: React.FC = () => {
 
   const [dateValidationError, setDateValidationError] = useState<string | null>(null);
 
-  // Auto-dismiss toast
+  // Sync toast with Design System GlobalToastContainer (top-5 right-5)
   useEffect(() => {
     if (toastMessage) {
-      const timer = setTimeout(() => {
-        dispatch(clearToast());
-      }, 3500);
-      return () => clearTimeout(timer);
+      dispatch(
+        addToast({
+          type: 'success',
+          title: 'Cấu hình học kỳ',
+          message: toastMessage,
+        })
+      );
+      dispatch(clearToast());
     }
   }, [toastMessage, dispatch]);
 
@@ -99,14 +103,6 @@ export const PeriodSettingsTab: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-5 right-5 z-50 flex items-center gap-3 bg-emerald-600 text-white px-5 py-3 rounded-xl shadow-lg animate-fade-in text-sm font-medium">
-          <FontAwesomeIcon icon={faCheckCircle} className="text-base" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
-
       {/* Main Content Card */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
         {/* Toolbar: Academic Year Selector & Add Term Action */}

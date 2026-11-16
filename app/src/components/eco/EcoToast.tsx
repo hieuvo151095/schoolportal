@@ -76,9 +76,8 @@ export const EcoToast: React.FC<EcoToastProps> = ({
       className={`eco-toast eco-toast--${type} ${className}`}
       style={{
         position: 'fixed',
-        bottom: '24px',
-        left: '50%',
-        transform: 'translateX(-50%)',
+        top: '20px',
+        right: '20px',
         zIndex: 10000,
         display: 'inline-flex',
         alignItems: 'center',

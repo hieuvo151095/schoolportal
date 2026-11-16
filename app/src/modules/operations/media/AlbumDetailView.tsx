@@ -266,7 +266,7 @@ export const AlbumDetailView: React.FC<AlbumDetailViewProps> = ({
 
       {/* Download Progress Toast */}
       {downloadNotice && (
-        <div className="fixed bottom-6 right-6 bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-2xl z-50 flex items-center gap-2 border border-slate-700 animate-fadeIn">
+        <div className="fixed top-5 right-5 bg-slate-900/95 backdrop-blur-md text-white text-xs px-4 py-3 rounded-xl shadow-2xl z-[9999] flex items-center gap-2.5 border border-slate-700 animate-in slide-in-from-top-3 fade-in duration-200">
           <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
           <span>{downloadNotice}</span>
         </div>
