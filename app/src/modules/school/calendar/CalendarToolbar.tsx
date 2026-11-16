@@ -99,36 +99,31 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
           onChange: onSearchChange,
         }}
         actions={
-          <div className="flex items-center gap-2">
-            {onOpenCreate && (
-              <Button
-                variant="primary"
-                icon="plus"
-                onClick={onOpenCreate}
-              >
-                Thêm sự kiện
-              </Button>
-            )}
-          </div>
+          onOpenCreate ? (
+            <Button
+              variant="primary"
+              icon="plus"
+              onClick={onOpenCreate}
+            >
+              Thêm sự kiện
+            </Button>
+          ) : undefined
         }
       >
         {/* Year Controller */}
-        <div className="inline-flex items-center gap-1 h-[38px] px-2 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-[13px] flex-none">
-          <span className="text-xs font-medium text-[var(--text-subtle)] uppercase px-1">
-            Năm:
-          </span>
+        <div className="inline-flex items-center gap-1 flex-none">
           <IconButton
             icon="chevron-left"
             size="sm"
             label="Năm trước"
             onClick={() => onYearChange(selectedYear - 1)}
           />
-          <div className="w-[84px]">
+          <div className="w-[125px]">
             <Dropdown
-              size="sm"
+              size="md"
               value={String(selectedYear)}
               onChange={(val) => onYearChange(Number(val))}
-              options={availableYears.map((yr) => ({ value: String(yr), label: `${yr}` }))}
+              options={availableYears.map((yr) => ({ value: String(yr), label: `Năm ${yr}` }))}
             />
           </div>
           <IconButton
@@ -141,36 +136,32 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
 
         {/* Month Controller (shown when activeViewMode === 'thang') */}
         {activeViewMode === 'thang' && (
-          <div className="inline-flex items-center gap-2 flex-none">
-            <div className="inline-flex items-center gap-1 h-[38px] px-2 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-[13px]">
-              <span className="text-xs font-medium text-[var(--text-subtle)] uppercase px-1">
-                Tháng:
-              </span>
-              <IconButton
-                icon="chevron-left"
-                size="sm"
-                label="Tháng trước"
-                onClick={onPrevMonth}
-              />
-              <div className="w-[110px]">
-                <Dropdown
-                  size="sm"
-                  value={String(selectedMonth)}
-                  onChange={(val) => onMonthChange(Number(val))}
-                  options={monthNames.map((name, idx) => ({ value: String(idx + 1), label: name }))}
-                />
-              </div>
-              <IconButton
-                icon="chevron-right"
-                size="sm"
-                label="Tháng sau"
-                onClick={onNextMonth}
+          <div className="inline-flex items-center gap-1 flex-none">
+            <IconButton
+              icon="chevron-left"
+              size="sm"
+              label="Tháng trước"
+              onClick={onPrevMonth}
+            />
+            <div className="w-[130px]">
+              <Dropdown
+                size="md"
+                value={String(selectedMonth)}
+                onChange={(val) => onMonthChange(Number(val))}
+                options={monthNames.map((name, idx) => ({ value: String(idx + 1), label: name }))}
               />
             </div>
+            <IconButton
+              icon="chevron-right"
+              size="sm"
+              label="Tháng sau"
+              onClick={onNextMonth}
+            />
             <Button
               variant="secondary"
               size="sm"
               onClick={onTodayClick}
+              className="ml-1"
             >
               Hôm nay
             </Button>
@@ -179,21 +170,16 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
 
         {/* Agenda Scope Filter (shown when activeViewMode === 'su_kien') */}
         {activeViewMode === 'su_kien' && (
-          <div className="inline-flex items-center gap-2 flex-none">
-            <Button
-              variant={eventScopeFilter === 'sap_toi' ? 'primary' : 'secondary'}
-              size="sm"
-              onClick={() => onScopeFilterChange('sap_toi')}
-            >
-              Sự kiện sắp tới
-            </Button>
-            <Button
-              variant={eventScopeFilter === 'tat_ca' ? 'primary' : 'secondary'}
-              size="sm"
-              onClick={() => onScopeFilterChange('tat_ca')}
-            >
-              Tất cả sự kiện
-            </Button>
+          <div className="w-[170px] flex-none">
+            <Dropdown
+              size="md"
+              value={eventScopeFilter}
+              onChange={(val) => onScopeFilterChange(val as EventScopeFilter)}
+              options={[
+                { value: 'sap_toi', label: 'Sự kiện sắp tới' },
+                { value: 'tat_ca', label: 'Tất cả sự kiện' },
+              ]}
+            />
           </div>
         )}
       </FilterBar>
