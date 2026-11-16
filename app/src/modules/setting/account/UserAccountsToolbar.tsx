@@ -54,7 +54,9 @@ export const UserAccountsToolbar: React.FC = () => {
       placeholder: 'Chọn vai trò',
       options: roleOptions,
       value: userFilters.roleFilter,
+      defaultValue: 'all',
       onChange: (val) => dispatch(setUserFilters({ roleFilter: val as 'all' | UserRole })),
+      className: 'min-w-[140px]',
     },
     {
       placeholder: 'Chọn trạng thái',
@@ -62,12 +64,15 @@ export const UserAccountsToolbar: React.FC = () => {
       options: statusOptions,
       value: userFilters.statusFilter,
       onChange: (val) => dispatch(setUserFilters({ statusFilter: val as 'all' | AccountStatus })),
+      className: 'min-w-[140px]',
     },
     {
       placeholder: 'Chọn nguồn dữ liệu',
       options: csdlSoOptions,
       value: userFilters.csdlSoFilter,
+      defaultValue: 'all',
       onChange: (val) => dispatch(setUserFilters({ csdlSoFilter: val as 'all' | 'yes' | 'no' })),
+      className: 'min-w-[160px]',
     },
   ];
 

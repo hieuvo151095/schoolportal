@@ -32,6 +32,7 @@ export const SessionDetailToolbar: React.FC<SessionDetailToolbarProps> = ({
         filters={[
           {
             placeholder: 'Chọn cổng thanh toán',
+            defaultValue: 'all',
             options: [
               { value: 'all', label: 'Tất cả cổng thanh toán' },
               { value: 'finviet', label: 'Ví FinViet' },
@@ -39,6 +40,7 @@ export const SessionDetailToolbar: React.FC<SessionDetailToolbarProps> = ({
             ],
             value: selectedChannel,
             onChange: (val) => onChannelChange(val as any),
+            className: 'min-w-[160px]',
           },
         ]}
         actions={

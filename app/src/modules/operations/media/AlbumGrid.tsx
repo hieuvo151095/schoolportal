@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PhotoAlbum, MediaGalleryViewMode } from '../../../types/media';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
-import { StatusTag, Tag, EmptyState, IconButton, Icon } from '@/components/ds';
+import { StatusTag, Tag, EmptyState, IconButton, Icon, DropdownMenu } from '@/components/ds';
 
 interface AlbumGridProps {
   albums: PhotoAlbum[];
@@ -132,22 +132,35 @@ export const AlbumGrid: React.FC<AlbumGridProps> = ({
                         </span>
                       </div>
                     </td>
-                    <td className="is-actions sm:pr-5">
-                      <div className="ecomd-cell__value">
-                        {!album.isSystem && onDeleteAlbum && (
-                          <button
-                            type="button"
-                            className="w-8 h-8 rounded-lg bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-600 flex items-center justify-center border border-slate-200 hover:border-red-200 transition-colors shadow-2xs"
-                            aria-label="Xóa album"
-                            title="Xóa album"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setAlbumToDelete(album);
-                            }}
-                          >
-                            <Icon name="trash" size={13} />
-                          </button>
-                        )}
+                    <td className="is-actions sm:pr-5" style={{ textAlign: 'right' }}>
+                      <div className="ecomd-cell__value flex items-center justify-end">
+                        <DropdownMenu
+                          trigger={
+                            <IconButton
+                              icon="ellipsis-vertical"
+                              size="sm"
+                              label="Thao tác"
+                            />
+                          }
+                          align="right"
+                          items={[
+                            {
+                              label: 'Mở album',
+                              icon: 'eye',
+                              onClick: () => onSelectAlbum(album.id),
+                            },
+                            ...(!album.isSystem && onDeleteAlbum
+                              ? [
+                                  {
+                                    label: 'Xóa album',
+                                    icon: 'trash',
+                                    tone: 'danger' as const,
+                                    onClick: () => setAlbumToDelete(album),
+                                  },
+                                ]
+                              : []),
+                          ]}
+                        />
                       </div>
                     </td>
                   </tr>

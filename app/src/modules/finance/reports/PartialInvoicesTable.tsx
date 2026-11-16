@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import type { InvoiceRecord } from '../../../types/invoice';
 import { formatFeeReportCurrency } from '../../../utils/feeReportValidation';
-import { Tag, Button, EmptyState } from '../../../components/ds';
+import { Tag, Button, EmptyState, IconButton, DropdownMenu } from '../../../components/ds';
 
 interface PartialInvoicesTableProps {
   invoices: InvoiceRecord[];
@@ -50,8 +50,8 @@ export const PartialInvoicesTable: React.FC<PartialInvoicesTableProps> = ({
               <th className="body-xs-semibold text-[var(--text-subtle)] is-right" style={{ textAlign: 'right', minWidth: '160px' }}>
                 Số tiền (đ)
               </th>
-              <th className="body-xs-semibold text-[var(--text-subtle)] is-right is-actions" style={{ textAlign: 'center', width: '120px' }}>
-                Lịch sử
+              <th className="body-xs-semibold text-[var(--text-subtle)] is-right is-actions" style={{ textAlign: 'right', width: '70px' }}>
+                Thao tác
               </th>
             </tr>
           </thead>
@@ -99,15 +99,26 @@ export const PartialInvoicesTable: React.FC<PartialInvoicesTableProps> = ({
                     Còn lại: {formatFeeReportCurrency(inv.remainingAmount)}
                   </div>
                 </td>
-                <td className="body-sm is-right is-actions" style={{ textAlign: 'center' }}>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    icon="clock-rotate-left"
-                    onClick={() => onViewHistory(inv)}
-                  >
-                    Lịch sử
-                  </Button>
+                <td className="body-sm is-right is-actions" style={{ textAlign: 'right' }}>
+                  <div className="ecomd-cell__value flex items-center justify-end">
+                    <DropdownMenu
+                      trigger={
+                        <IconButton
+                          icon="ellipsis-vertical"
+                          size="sm"
+                          label="Thao tác"
+                        />
+                      }
+                      align="right"
+                      items={[
+                        {
+                          label: 'Lịch sử thanh toán',
+                          icon: 'clock-rotate-left',
+                          onClick: () => onViewHistory(inv),
+                        },
+                      ]}
+                    />
+                  </div>
                 </td>
               </tr>
             ))}

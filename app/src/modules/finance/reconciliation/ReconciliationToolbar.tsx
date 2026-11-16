@@ -64,7 +64,7 @@ export const ReconciliationToolbar: React.FC<ReconciliationToolbarProps> = ({
           value={startDate}
           max={endDate || maxDate}
           onChange={(e) => onDateChange(e.target.value, endDate)}
-          className="h-[28px] bg-transparent border-0 text-[13px] font-semibold text-[var(--text-heading)] focus:outline-none cursor-pointer p-0"
+          className="h-[28px] bg-transparent border-0 text-[13px] font-medium text-[var(--text-heading)] focus:outline-none cursor-pointer p-0"
           title="Từ ngày"
         />
         <span className="text-[var(--text-subtle)] text-[13px]">—</span>
@@ -74,7 +74,7 @@ export const ReconciliationToolbar: React.FC<ReconciliationToolbarProps> = ({
           min={startDate}
           max={maxDate}
           onChange={(e) => onDateChange(startDate, e.target.value)}
-          className="h-[28px] bg-transparent border-0 text-[13px] font-semibold text-[var(--text-heading)] focus:outline-none cursor-pointer p-0"
+          className="h-[28px] bg-transparent border-0 text-[13px] font-medium text-[var(--text-heading)] focus:outline-none cursor-pointer p-0"
           title="Đến ngày"
         />
       </div>

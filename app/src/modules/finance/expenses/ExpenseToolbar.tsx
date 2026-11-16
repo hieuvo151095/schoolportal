@@ -61,9 +61,11 @@ export const ExpenseToolbar: React.FC<ExpenseToolbarProps> = ({
           ],
           value: selectedMonth,
           onChange: (val) => onMonthChange(val),
+          className: 'min-w-[130px]',
         },
         {
           placeholder: 'Chọn loại phiếu',
+          defaultValue: 'all',
           options: [
             { label: 'Tất cả loại phiếu', value: 'all' },
             { label: 'Hoàn tiền học sinh', value: 'hoan_tien' },
@@ -71,9 +73,11 @@ export const ExpenseToolbar: React.FC<ExpenseToolbarProps> = ({
           ],
           value: selectedType,
           onChange: (val) => onTypeChange(val as any),
+          className: 'min-w-[140px]',
         },
         {
           placeholder: 'Chọn trạng thái',
+          defaultValue: 'all',
           options: [
             { label: 'Tất cả trạng thái', value: 'all' },
             { label: 'Bản nháp', value: 'da_tao' },
@@ -83,6 +87,7 @@ export const ExpenseToolbar: React.FC<ExpenseToolbarProps> = ({
           ],
           value: selectedStatus,
           onChange: (val) => onStatusChange(val as any),
+          className: 'min-w-[140px]',
         },
       ]}
       actions={

@@ -58,13 +58,17 @@ export const FaceRecognitionToolbar: React.FC = () => {
       placeholder: 'Chọn lớp học',
       options: classOptions,
       value: filterState.classId,
+      defaultValue: 'all',
       onChange: handleClassChange,
+      className: 'min-w-[140px]',
     },
     {
       placeholder: 'Chọn trạng thái nhận diện',
       options: statusOptions,
       value: filterState.registrationStatus,
+      defaultValue: 'all',
       onChange: handleStatusChange,
+      className: 'min-w-[170px]',
     },
   ];
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Icon, Dropdown, IconName, SlideOver } from '@/components/ds';
+import { Icon, Dropdown, IconName, SlideOver, IconButton, DropdownMenu } from '@/components/ds';
 import { Student } from '../../../types/student';
 import {
   formatLegacyField,
@@ -322,14 +322,25 @@ export const StudentDetailHub: React.FC<StudentDetailHubProps> = ({
                         <span className="line-clamp-2">{item.reason}</span>
                       </td>
                       <td className="py-3.5 px-3.5 text-right whitespace-nowrap">
-                        <button
-                          onClick={() => handleOpenEdit(item)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-[#0070CE] bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-200/60 shadow-2xs cursor-pointer"
-                          title="Chỉnh sửa chương trình miễn giảm này"
-                        >
-                          <Icon name="pen" size={11} />
-                          <span>Sửa</span>
-                        </button>
+                        <div className="flex justify-end">
+                          <DropdownMenu
+                            trigger={
+                              <IconButton
+                                icon="ellipsis-vertical"
+                                size="sm"
+                                label="Thao tác"
+                              />
+                            }
+                            align="right"
+                            items={[
+                              {
+                                label: 'Chỉnh sửa chính sách',
+                                icon: 'pen',
+                                onClick: () => handleOpenEdit(item),
+                              },
+                            ]}
+                          />
+                        </div>
                       </td>
                     </tr>
                   );

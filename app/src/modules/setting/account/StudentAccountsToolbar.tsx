@@ -43,18 +43,22 @@ export const StudentAccountsToolbar: React.FC = () => {
       placeholder: 'Chọn lớp học',
       options: classOptions,
       value: studentFilters.classFilter,
+      defaultValue: 'all',
       onChange: (val) => dispatch(setStudentFilters({ classFilter: val })),
+      className: 'min-w-[140px]',
     },
     {
       placeholder: 'Chọn trạng thái tài khoản',
       options: statusOptions,
       value: studentFilters.accountStatusFilter,
+      defaultValue: 'all',
       onChange: (val) =>
         dispatch(
           setStudentFilters({
             accountStatusFilter: val as StudentAccountStatusFilter,
           })
         ),
+      className: 'min-w-[170px]',
     },
   ];
 

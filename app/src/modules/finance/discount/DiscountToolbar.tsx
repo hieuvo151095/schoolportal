@@ -84,7 +84,9 @@ export const DiscountToolbar: React.FC<DiscountToolbarProps> = ({
             placeholder: 'Chọn khoản phí áp dụng',
             options: feeOptions,
             value: filters.feeItemIdFilter || 'all',
+            defaultValue: 'all',
             onChange: (val) => dispatch(setFilter({ feeItemIdFilter: val })),
+            className: 'min-w-[170px]',
           },
         ]}
         actions={

@@ -50,8 +50,10 @@ export const FeeReportToolbar: React.FC<FeeReportToolbarProps> = ({
     {
       options: classOptions,
       value: filters.classId,
+      defaultValue: 'tat_ca',
       onChange: (val) => dispatch(setClassFilter(val)),
       placeholder: 'Chọn lớp học',
+      className: 'min-w-[140px]',
     },
   ];
 
@@ -65,8 +67,10 @@ export const FeeReportToolbar: React.FC<FeeReportToolbarProps> = ({
         { value: 'the_pos', label: 'Thẻ POS' },
       ],
       value: filters.paymentMethod || 'all',
+      defaultValue: 'all',
       placeholder: 'Chọn phương thức',
       onChange: (val) => dispatch(setPaymentMethodFilter(val)),
+      className: 'min-w-[155px]',
     });
   }
 
@@ -78,8 +82,10 @@ export const FeeReportToolbar: React.FC<FeeReportToolbarProps> = ({
         { value: 'da_gui', label: 'Đã phát hành' },
       ],
       value: filters.unpaidStatus || 'all',
+      defaultValue: 'all',
       placeholder: 'Chọn trạng thái',
       onChange: (val) => dispatch(setUnpaidStatusFilter(val as any)),
+      className: 'min-w-[145px]',
     });
   }
 
@@ -112,10 +118,10 @@ export const FeeReportToolbar: React.FC<FeeReportToolbarProps> = ({
         </div>
       }
     >
-      {/* Date Range Picker with uniform Design System height (38px) & font (12-13px) */}
+      {/* Date Range Picker with uniform Design System height (38px) & font (13px) */}
       <div className="inline-flex items-center gap-1.5 h-[38px] px-2.5 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-8)] text-[13px] flex-none">
         <Icon name="calendar" size={14} color="var(--text-subtle)" />
-        <span className="text-[12px] font-medium text-[var(--text-subtle)] whitespace-nowrap">
+        <span className="text-[13px] font-medium text-[var(--text-subtle)] whitespace-nowrap">
           {isPaidTab ? 'Ngày TT:' : 'Kỳ:'}
         </span>
         <input
@@ -124,17 +130,17 @@ export const FeeReportToolbar: React.FC<FeeReportToolbarProps> = ({
           onChange={(e) =>
             dispatch(setDateRange({ dateFrom: e.target.value, dateTo: filters.dateTo }))
           }
-          className="h-[28px] w-[110px] bg-transparent border-0 text-[12px] font-semibold text-[var(--text-heading)] focus:outline-none cursor-pointer p-0"
+          className="h-[28px] w-[115px] bg-transparent border-0 text-[13px] font-medium text-[var(--text-heading)] focus:outline-none cursor-pointer p-0"
           title="Từ ngày"
         />
-        <span className="text-[var(--text-subtle)] text-[12px]">—</span>
+        <span className="text-[var(--text-subtle)] text-[13px]">—</span>
         <input
           type="date"
           value={filters.dateTo}
           onChange={(e) =>
             dispatch(setDateRange({ dateFrom: filters.dateFrom, dateTo: e.target.value }))
           }
-          className="h-[28px] w-[110px] bg-transparent border-0 text-[12px] font-semibold text-[var(--text-heading)] focus:outline-none cursor-pointer p-0"
+          className="h-[28px] w-[115px] bg-transparent border-0 text-[13px] font-medium text-[var(--text-heading)] focus:outline-none cursor-pointer p-0"
           title="Đến ngày"
         />
       </div>

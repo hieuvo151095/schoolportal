@@ -6,7 +6,7 @@
 import React from 'react';
 import Link from 'next/link';
 import type { GradeClassItem } from '@/types/grade';
-import { Tag, StatusTag, Avatar, Button, EmptyState } from '@/components/ds';
+import { Tag, StatusTag, Avatar, Button, EmptyState, IconButton, DropdownMenu } from '@/components/ds';
 
 interface GradeClassTableProps {
   schoolCode: string;
@@ -77,8 +77,8 @@ export const GradeClassTable: React.FC<GradeClassTableProps> = ({
               <th className="body-xs-semibold text-[var(--text-subtle)]" style={{ width: '130px', textAlign: 'center' }}>
                 Trạng thái
               </th>
-              <th className="body-xs-semibold text-[var(--text-subtle)] is-right is-actions" style={{ width: '180px', textAlign: 'right' }}>
-                Lối tắt
+              <th className="body-xs-semibold text-[var(--text-subtle)] is-right is-actions" style={{ width: '70px', textAlign: 'right' }}>
+                Thao tác
               </th>
             </tr>
           </thead>
@@ -194,23 +194,31 @@ export const GradeClassTable: React.FC<GradeClassTableProps> = ({
                     </div>
                   </td>
 
-                  {/* 8. Lối tắt */}
+                  {/* 8. Thao tác: Standardized Three-Dots DropdownMenu */}
                   <td className="body-sm is-right is-actions" style={{ textAlign: 'right' }}>
-                    <div className="ecomd-cell__value flex items-center justify-end gap-1.5">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        href={`/${schoolCode}/class/${cls.id}/attendance`}
-                      >
-                        Điểm danh
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        href={`/${schoolCode}/school/classes/${cls.id}`}
-                      >
-                        Chi tiết
-                      </Button>
+                    <div className="ecomd-cell__value flex items-center justify-end">
+                      <DropdownMenu
+                        trigger={
+                          <IconButton
+                            icon="ellipsis-vertical"
+                            size="sm"
+                            label="Thao tác"
+                          />
+                        }
+                        align="right"
+                        items={[
+                          {
+                            label: 'Chi tiết lớp học',
+                            icon: 'eye',
+                            href: `/${schoolCode}/school/classes/${cls.id}`,
+                          },
+                          {
+                            label: 'Sổ điểm danh',
+                            icon: 'clipboard-user',
+                            href: `/${schoolCode}/class/${cls.id}/attendance`,
+                          },
+                        ]}
+                      />
                     </div>
                   </td>
                 </tr>

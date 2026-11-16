@@ -96,7 +96,9 @@ export const AssignmentToolbar: React.FC<AssignmentToolbarProps> = ({ schoolCode
               { value: '2a2', label: 'Lớp 2A2' },
             ],
             value: filterCriteria.classId,
+            defaultValue: 'all',
             onChange: (val) => dispatch(setFilterCriteria({ classId: val })),
+            className: 'min-w-[140px]',
           },
           {
             placeholder: 'Chọn môn học',
@@ -105,7 +107,9 @@ export const AssignmentToolbar: React.FC<AssignmentToolbarProps> = ({ schoolCode
               ...subjects.map((s) => ({ value: s.id, label: s.name })),
             ],
             value: filterCriteria.subjectId,
+            defaultValue: 'all',
             onChange: (val) => dispatch(setFilterCriteria({ subjectId: val })),
+            className: 'min-w-[140px]',
           },
         ]}
         advanced={{

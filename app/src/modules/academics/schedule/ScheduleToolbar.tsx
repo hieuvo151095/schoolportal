@@ -81,7 +81,9 @@ export const ScheduleToolbar: React.FC<ScheduleToolbarProps> = ({ schoolCode, on
               ...classes.map((cls) => ({ value: cls.id, label: cls.name })),
             ],
             value: filterCriteria.classId,
+            defaultValue: 'all',
             onChange: handleClassChange,
+            className: 'min-w-[150px]',
           },
         ]}
         advanced={{

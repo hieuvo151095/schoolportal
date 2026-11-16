@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Icon, Dropdown, SlideOver } from '@/components/ds';
+import { Icon, Dropdown, SlideOver, IconButton, DropdownMenu } from '@/components/ds';
 import type { Student } from '../../../types/student';
 import type { InvoiceRecord, InvoiceLineItem } from '../../../types/invoice';
 import { useAppSelector } from '../../../store';
@@ -536,18 +536,25 @@ export const StudentTuitionTab: React.FC<StudentTuitionTabProps> = ({
 
                   {/* Actions */}
                   <td className="py-3.5 px-4 text-center">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedInvoiceForDetail(inv)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-[#0070CE] hover:bg-blue-50 rounded-lg transition-colors"
-                      title="Xem chi tiết hóa đơn"
-                    >
-                      <svg className="w-3.5 h-3.5 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                      <span>Chi tiết</span>
-                    </button>
+                    <div className="flex justify-center">
+                      <DropdownMenu
+                        trigger={
+                          <IconButton
+                            icon="ellipsis-vertical"
+                            size="sm"
+                            label="Thao tác"
+                          />
+                        }
+                        align="right"
+                        items={[
+                          {
+                            label: 'Xem chi tiết',
+                            icon: 'eye',
+                            onClick: () => setSelectedInvoiceForDetail(inv),
+                          },
+                        ]}
+                      />
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -99,7 +99,7 @@ export const INITIAL_MOCK_POLLS: Poll[] = [
     title: 'Khảo sát nhu cầu sử dụng dịch vụ xe đưa đón học sinh (Bus)',
     description:
       'Để tối ưu hóa các tuyến xe buýt đưa đón học sinh an toàn và đúng giờ trong học kỳ II, kính mời quý phụ huynh đăng ký nhu cầu tuyến đường và khung giờ đưa đón.',
-    deadline: '2026-11-15T17:00:00',
+    deadline: '2027-06-30T17:00:00',
     options: [
       { id: 'opt-401', title: 'Đăng ký tuyến 2 chiều (Sáng đi - Chiều về)', voteCount: 0, percentage: 0, color: POLL_CHART_COLORS[0] },
       { id: 'opt-402', title: 'Đăng ký 1 chiều buổi sáng', voteCount: 0, percentage: 0, color: POLL_CHART_COLORS[1] },

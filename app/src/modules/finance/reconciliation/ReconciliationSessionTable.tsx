@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { ReconciliationSession } from '../../../types/reconciliation';
 import { formatReconciliationAmount } from '../../../utils/reconciliationValidation';
-import { Tag, StatusTag, Button, Icon, EmptyState } from '../../../components/ds';
+import { Tag, StatusTag, Button, Icon, EmptyState, IconButton, DropdownMenu, DropdownMenuItem } from '../../../components/ds';
 
 interface ReconciliationSessionTableProps {
   sessions: ReconciliationSession[];
@@ -20,7 +20,6 @@ export const ReconciliationSessionTable: React.FC<ReconciliationSessionTableProp
   schoolCode,
   onExportSession,
 }) => {
-  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
 
   if (sessions.length === 0) {
     return (
@@ -159,24 +158,30 @@ export const ReconciliationSessionTable: React.FC<ReconciliationSessionTableProp
                     </div>
                   </td>
 
-                  {/* Actions */}
+                  {/* Actions: Standardized Three-Dots DropdownMenu */}
                   <td className="body-sm is-right is-actions" style={{ textAlign: 'right' }}>
-                    <div className="ecomd-cell__value flex items-center justify-end gap-1.5">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        href={detailHref}
-                      >
-                        Chi tiết
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        icon="download"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onExportSession(session);
-                        }}
+                    <div className="ecomd-cell__value flex items-center justify-end">
+                      <DropdownMenu
+                        trigger={
+                          <IconButton
+                            icon="ellipsis-vertical"
+                            size="sm"
+                            label="Thao tác"
+                          />
+                        }
+                        align="right"
+                        items={[
+                          {
+                            label: 'Xem chi tiết',
+                            icon: 'eye',
+                            href: detailHref,
+                          },
+                          {
+                            label: 'Xuất dữ liệu phiên',
+                            icon: 'download',
+                            onClick: () => onExportSession(session),
+                          },
+                        ]}
                       />
                     </div>
                   </td>
