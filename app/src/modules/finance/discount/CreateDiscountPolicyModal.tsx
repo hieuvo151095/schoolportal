@@ -32,7 +32,6 @@ import {
   ExistingStudentDiscountConflict,
 } from '../../../utils/discountValidation';
 import { StudentPickerModal } from './StudentPickerModal';
-import { ClassPickerModal } from './ClassPickerModal';
 import { SlideOver, Dropdown, DropdownOption, Icon } from '@/components/ds';
 
 interface CreateDiscountPolicyModalProps {
@@ -87,7 +86,46 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
   const [confirmReplacement, setConfirmReplacement] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isStudentPickerOpen, setIsStudentPickerOpen] = useState(false);
-  const [isClassPickerOpen, setIsClassPickerOpen] = useState(false);
+  const [isClassDropdownOpen, setIsClassDropdownOpen] = useState(false);
+  const [classSearchQuery, setClassSearchQuery] = useState('');
+  const [classGradeFilter, setClassGradeFilter] = useState('all');
+  const classDropdownRef = React.useRef<HTMLDivElement>(null);
+
+  // Close class dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        classDropdownRef.current &&
+        !classDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsClassDropdownOpen(false);
+      }
+    }
+    if (isClassDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isClassDropdownOpen]);
+
+  const uniqueClassGrades = useMemo(() => {
+    const set = new Set<string>();
+    AVAILABLE_CLASSES_FOR_DISCOUNT.forEach((c) => set.add(c.grade));
+    return Array.from(set);
+  }, []);
+
+  const filteredAvailableClasses = useMemo(() => {
+    const q = classSearchQuery.toLowerCase().trim();
+    return AVAILABLE_CLASSES_FOR_DISCOUNT.filter((cls) => {
+      const matchGrade = classGradeFilter === 'all' || cls.grade === classGradeFilter;
+      const matchQuery =
+        !q ||
+        cls.name.toLowerCase().includes(q) ||
+        cls.grade.toLowerCase().includes(q);
+      return matchGrade && matchQuery;
+    });
+  }, [classSearchQuery, classGradeFilter]);
 
   const allPolicies = useAppSelector((state) => state.discount.policies);
 
@@ -180,6 +218,9 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
       setReason(editingPolicy.reason);
       setConfirmReplacement(false);
       setErrors({});
+      setIsClassDropdownOpen(false);
+      setClassSearchQuery('');
+      setClassGradeFilter('all');
     } else {
       setName('');
       setScopeType('class');
@@ -195,6 +236,9 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
       setReason('');
       setConfirmReplacement(false);
       setErrors({});
+      setIsClassDropdownOpen(false);
+      setClassSearchQuery('');
+      setClassGradeFilter('all');
     }
   }, [editingPolicy, isOpen]);
 
@@ -364,54 +408,249 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
               </button>
             </div>
 
-            {/* Class Scope Selector */}
+            {/* Class Scope Selector - Inline Multi-Select Dropdown */}
             {scopeType === 'class' ? (
-              <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 space-y-2">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-xs font-semibold text-slate-700">
-                      Danh sách lớp học được chỉ định:
+              <div className="space-y-2">
+                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                  Chọn lớp học áp dụng <span className="text-rose-500">*</span>
+                </label>
+
+                <div ref={classDropdownRef} className="relative">
+                  {/* Trigger Box */}
+                  <div
+                    role="combobox"
+                    aria-expanded={isClassDropdownOpen}
+                    onClick={() => setIsClassDropdownOpen(!isClassDropdownOpen)}
+                    className={`min-h-[42px] px-3.5 py-2 bg-white border rounded-xl flex items-center justify-between cursor-pointer transition-all select-none ${
+                      isClassDropdownOpen
+                        ? 'border-[#0070CE] ring-2 ring-[#0070CE]/20 shadow-sm'
+                        : errors.targetIds
+                        ? 'border-rose-300 bg-rose-50/20'
+                        : 'border-slate-300 hover:border-slate-400'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
+                      <span className="text-slate-400 shrink-0">
+                        <Icon name="graduation-cap" size={14} />
+                      </span>
+                      {selectedClassIds.length === 0 ? (
+                        <span className="text-slate-400 font-normal text-sm">
+                          Chọn các lớp học áp dụng...
+                        </span>
+                      ) : (
+                        <div className="flex items-center gap-2 truncate">
+                          <span className="text-[#0070CE] font-semibold text-sm">
+                            Đã chọn {selectedClassIds.length} lớp học
+                          </span>
+                          <span className="text-slate-400 text-xs truncate">
+                            ({selectedClassesData.map((c) => c.name).join(', ')})
+                          </span>
+                        </div>
+                      )}
                     </div>
-                    <div className="text-[11px] text-slate-500">
-                      {selectedClassIds.length === 0
-                        ? 'Chưa chọn lớp nào'
-                        : `Đã chọn ${selectedClassIds.length} lớp học`}
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {selectedClassIds.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedClassIds([]);
+                          }}
+                          className="p-1 text-slate-400 hover:text-slate-600 rounded transition-colors"
+                          title="Xóa tất cả lớp đã chọn"
+                        >
+                          <Icon name="xmark" size={12} />
+                        </button>
+                      )}
+                      <span
+                        className={`text-slate-400 transition-transform duration-200 ${
+                          isClassDropdownOpen ? 'rotate-180 text-[#0070CE]' : ''
+                        }`}
+                      >
+                        <Icon name="chevron-down" size={12} />
+                      </span>
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsClassPickerOpen(true)}
-                    className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:border-[#0070CE] text-[#0070CE] text-xs font-bold shadow-sm transition-all cursor-pointer"
-                  >
-                    + Chọn lớp học
-                  </button>
-                </div>
 
-                {selectedClassesData.length > 0 && (
-                  <div className="max-h-28 overflow-y-auto divide-y divide-slate-100 bg-white rounded-lg border border-slate-200 p-2">
-                    {selectedClassesData.map((cls) => (
-                      <div
-                        key={cls.id}
-                        className="py-1 px-1 flex items-center justify-between text-xs"
-                      >
-                        <span className="font-medium text-slate-800">
-                          {cls.name}{' '}
-                          <span className="text-slate-400 font-normal">
-                            ({cls.grade} • {cls.studentCount} HS)
-                          </span>
+                  {/* Inline Dropdown Popover */}
+                  {isClassDropdownOpen && (
+                    <div className="absolute top-full left-0 right-0 z-50 mt-1.5 bg-white rounded-xl border border-slate-200 shadow-xl overflow-hidden">
+                      {/* Search Bar & Quick Toggles */}
+                      <div className="p-2.5 border-b border-slate-100 bg-slate-50/80 space-y-2">
+                        <div className="flex items-center px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus-within:border-[#0070CE] focus-within:ring-1 focus-within:ring-[#0070CE]/20">
+                          <Icon name="search" size={13} className="text-slate-400 mr-2 shrink-0" />
+                          <input
+                            type="text"
+                            value={classSearchQuery}
+                            onChange={(e) => setClassSearchQuery(e.target.value)}
+                            placeholder="Tìm tên lớp, khối lớp..."
+                            className="w-full text-xs text-slate-800 placeholder-slate-400 bg-transparent outline-none"
+                            autoFocus
+                          />
+                          {classSearchQuery && (
+                            <button
+                              type="button"
+                              onClick={() => setClassSearchQuery('')}
+                              className="text-slate-400 hover:text-slate-600 p-0.5"
+                            >
+                              <Icon name="xmark" size={11} />
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Grade Filter Pills & Actions */}
+                        <div className="flex items-center justify-between text-xs pt-0.5">
+                          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+                            <button
+                              type="button"
+                              onClick={() => setClassGradeFilter('all')}
+                              className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors ${
+                                classGradeFilter === 'all'
+                                  ? 'bg-blue-100 text-[#0070CE] font-semibold'
+                                  : 'text-slate-500 hover:bg-slate-200/60'
+                              }`}
+                            >
+                              Tất cả
+                            </button>
+                            {uniqueClassGrades.map((g) => (
+                              <button
+                                key={g}
+                                type="button"
+                                onClick={() => setClassGradeFilter(g)}
+                                className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors whitespace-nowrap ${
+                                  classGradeFilter === g
+                                    ? 'bg-blue-100 text-[#0070CE] font-semibold'
+                                    : 'text-slate-500 hover:bg-slate-200/60'
+                                }`}
+                              >
+                                {g}
+                              </button>
+                            ))}
+                          </div>
+
+                          <div className="flex items-center gap-2 shrink-0 pl-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newIds = Array.from(
+                                  new Set([...selectedClassIds, ...filteredAvailableClasses.map((c) => c.id)])
+                                );
+                                setSelectedClassIds(newIds);
+                                if (errors.targetIds) setErrors({ ...errors, targetIds: '' });
+                              }}
+                              className="text-[11px] font-semibold text-[#0070CE] hover:underline"
+                            >
+                              Chọn tất cả
+                            </button>
+                            <span className="text-slate-300">•</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const removeSet = new Set(filteredAvailableClasses.map((c) => c.id));
+                                setSelectedClassIds(selectedClassIds.filter((id) => !removeSet.has(id)));
+                              }}
+                              className="text-[11px] font-semibold text-slate-500 hover:underline"
+                            >
+                              Bỏ chọn
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Class List with Checkboxes */}
+                      <div className="max-h-56 overflow-y-auto p-1 divide-y divide-slate-50">
+                        {filteredAvailableClasses.length === 0 ? (
+                          <div className="px-4 py-6 text-center text-xs text-slate-400">
+                            Không tìm thấy lớp học nào phù hợp
+                          </div>
+                        ) : (
+                          filteredAvailableClasses.map((cls) => {
+                            const isChecked = selectedClassIds.includes(cls.id);
+                            return (
+                              <div
+                                key={cls.id}
+                                onClick={() => {
+                                  if (isChecked) {
+                                    setSelectedClassIds(selectedClassIds.filter((id) => id !== cls.id));
+                                  } else {
+                                    setSelectedClassIds([...selectedClassIds, cls.id]);
+                                    if (errors.targetIds) setErrors({ ...errors, targetIds: '' });
+                                  }
+                                }}
+                                className={`px-3 py-2 text-xs flex items-center justify-between cursor-pointer rounded-lg transition-colors select-none mx-0.5 my-0.5 ${
+                                  isChecked
+                                    ? 'bg-blue-50/80 text-[#0070CE]'
+                                    : 'hover:bg-slate-50 text-slate-700'
+                                }`}
+                              >
+                                <div className="flex items-center gap-2.5 min-w-0">
+                                  <input
+                                    type="checkbox"
+                                    checked={isChecked}
+                                    readOnly
+                                    className="w-4 h-4 rounded text-[#0070CE] focus:ring-[#0070CE] border-slate-300 cursor-pointer pointer-events-none"
+                                  />
+                                  <div>
+                                    <div className="font-semibold text-slate-800 flex items-center gap-1.5">
+                                      <span>{cls.name}</span>
+                                      {isChecked && (
+                                        <span className="text-2xs px-1.5 py-0.2 rounded bg-blue-100 text-[#0070CE] font-bold">
+                                          Đã chọn
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="text-[11px] text-slate-400 font-normal">
+                                      {cls.grade} • {cls.studentCount} học sinh
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <span className="text-2xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">
+                                  {cls.studentCount} HS
+                                </span>
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+
+                      {/* Footer Actions */}
+                      <div className="p-2 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-xs">
+                        <span className="text-slate-500 font-medium">
+                          Đã chọn <strong className="text-[#0070CE]">{selectedClassIds.length}</strong> lớp
                         </span>
                         <button
                           type="button"
-                          onClick={() =>
-                            setSelectedClassIds(
-                              selectedClassIds.filter((id) => id !== cls.id)
-                            )
-                          }
-                          className="text-slate-400 hover:text-rose-500 p-0.5 cursor-pointer"
+                          onClick={() => setIsClassDropdownOpen(false)}
+                          className="px-3 py-1 rounded-lg bg-[#0070CE] text-white font-semibold text-xs hover:bg-[#005bb5] transition-colors"
                         >
-                          <Icon name="x" size={12} />
+                          Xong
                         </button>
                       </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Selected Classes Chips */}
+                {selectedClassesData.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {selectedClassesData.map((cls) => (
+                      <span
+                        key={cls.id}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 text-[#0070CE] text-xs font-medium border border-blue-200 shadow-2xs"
+                      >
+                        <span className="font-semibold">{cls.name}</span>
+                        <span className="text-blue-400 text-[11px]">({cls.studentCount} HS)</span>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedClassIds(selectedClassIds.filter((id) => id !== cls.id))}
+                          className="text-blue-400 hover:text-rose-600 transition-colors p-0.5 rounded"
+                          title={`Bỏ chọn ${cls.name}`}
+                        >
+                          <Icon name="xmark" size={10} />
+                        </button>
+                      </span>
                     ))}
                   </div>
                 )}
@@ -801,16 +1040,7 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
         }}
       />
 
-      {/* Class Picker Sub-modal */}
-      <ClassPickerModal
-        isOpen={isClassPickerOpen}
-        onClose={() => setIsClassPickerOpen(false)}
-        selectedClassIds={selectedClassIds}
-        onConfirm={(ids) => {
-          setSelectedClassIds(ids);
-          if (errors.targetIds) setErrors({ ...errors, targetIds: '' });
-        }}
-      />
+
     </>
   );
 };

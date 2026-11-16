@@ -476,7 +476,6 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
             groups={navGroups}
             footer={[
               { label: 'Niên khóa:', value: '2026 - 2027' },
-              { label: 'Học kỳ:', value: 'Học kỳ I', tone: 'success' },
             ]}
           />
         </div>

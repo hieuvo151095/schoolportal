@@ -7,7 +7,7 @@
 export interface AcademicYear {
   id: string;
   schoolCode: string;
-  name: string; // Tên năm học / kỳ học, e.g. "Năm học 2026 - 2027", "Kỳ 1 năm học 2026 - 2027"
+  name: string; // Tên năm học (Niên khóa), e.g. "Năm học 2026 - 2027"
   startDate: string; // Ngày bắt đầu (ISO date string YYYY-MM-DD)
   endDate: string; // Ngày kết thúc (ISO date string YYYY-MM-DD)
   isCurrent?: boolean; // Tự động xác định: ngày hiện tại nằm trong khoảng [startDate, endDate] (BR01)

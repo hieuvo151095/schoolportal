@@ -11,7 +11,7 @@ import {
   validateOperatingHours,
 } from '../../../utils/schoolProfileValidation';
 import { DayOperatingHour } from '../../../types/schoolProfile';
-import { EcoButton } from '../../../components/eco';
+import { Dropdown, Button } from '@/components/ds';
 
 interface OperatingHoursFormProps {
   onCancelRequest?: () => void;
@@ -94,35 +94,29 @@ export const OperatingHoursForm: React.FC<OperatingHoursFormProps> = ({ onCancel
               {day.isOpen ? (
                 <div className="flex items-center gap-3 flex-1 sm:justify-end">
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-500 font-medium">Mở cửa:</span>
-                    <select
-                      value={day.openTime || '07:00'}
-                      onChange={(e) => handleTimeChange(day.dayOfWeek, 'openTime', e.target.value)}
-                      className="px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white font-medium text-gray-800 focus:outline-none focus:border-eco-blue focus:ring-1 focus:ring-eco-blue"
-                    >
-                      {timeOptions.map((time) => (
-                        <option key={time} value={time}>
-                          {time}
-                        </option>
-                      ))}
-                    </select>
+                    <span className="text-gray-500 font-medium text-xs">Mở cửa:</span>
+                    <div className="w-28">
+                      <Dropdown
+                        options={timeOptions.map((time) => ({ value: time, label: time }))}
+                        value={day.openTime || '07:00'}
+                        onChange={(val) => handleTimeChange(day.dayOfWeek, 'openTime', val)}
+                        size="sm"
+                      />
+                    </div>
                   </div>
 
                   <span className="text-gray-400 font-bold">—</span>
 
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-500 font-medium">Đóng cửa:</span>
-                    <select
-                      value={day.closeTime || '17:30'}
-                      onChange={(e) => handleTimeChange(day.dayOfWeek, 'closeTime', e.target.value)}
-                      className="px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white font-medium text-gray-800 focus:outline-none focus:border-eco-blue focus:ring-1 focus:ring-eco-blue"
-                    >
-                      {timeOptions.map((time) => (
-                        <option key={time} value={time}>
-                          {time}
-                        </option>
-                      ))}
-                    </select>
+                    <span className="text-gray-500 font-medium text-xs">Đóng cửa:</span>
+                    <div className="w-28">
+                      <Dropdown
+                        options={timeOptions.map((time) => ({ value: time, label: time }))}
+                        value={day.closeTime || '17:30'}
+                        onChange={(val) => handleTimeChange(day.dayOfWeek, 'closeTime', val)}
+                        size="sm"
+                      />
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -142,9 +136,9 @@ export const OperatingHoursForm: React.FC<OperatingHoursFormProps> = ({ onCancel
           <span className="text-xs text-gray-400 italic">
             *Lưu giờ hoạt động hoàn toàn độc lập với biểu mẫu quy định điểm danh
           </span>
-          <EcoButton type="submit" variant="primary" leadingIcon={<FontAwesomeIcon icon={faCheck} />}>
+          <Button type="submit" variant="primary" icon="check">
             Cập nhật giờ hoạt động
-          </EcoButton>
+          </Button>
         </div>
       </div>
     </form>

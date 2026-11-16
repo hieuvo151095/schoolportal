@@ -42,13 +42,13 @@ const mockYears = [
     updatedAt: '2026-06-01T08:00:00Z',
   },
   {
-    id: 'ay-semester-1',
+    id: 'ay-2024',
     schoolCode: 'demo',
-    name: 'Kỳ 1 năm học 2026 - 2027',
-    startDate: '2026-08-15',
-    endDate: '2027-01-15',
-    createdAt: '2026-06-01T08:30:00Z',
-    updatedAt: '2026-06-01T08:30:00Z',
+    name: 'Năm học 2024 - 2025',
+    startDate: '2024-08-15',
+    endDate: '2025-05-31',
+    createdAt: '2024-06-01T08:00:00Z',
+    updatedAt: '2024-06-01T08:00:00Z',
   },
   {
     id: 'ay-past',
@@ -159,15 +159,15 @@ describe('School Academic Year (Năm Học) Test Suite', () => {
 
   describe('3. Flexible Free-Text Naming & Diacritic Search Filtering (BR02, BR05, K061)', () => {
     test('matches annual school years by number', () => {
-      const filtered = filterAcademicYears(mockYears, '2025');
+      const filtered = filterAcademicYears(mockYears, '2024');
       assert.strictEqual(filtered.length, 1);
-      assert.strictEqual(filtered[0].id, 'ay-past');
+      assert.strictEqual(filtered[0].id, 'ay-2024');
     });
 
-    test('matches semester sub-periods by keyword', () => {
-      const filtered = filterAcademicYears(mockYears, 'Kỳ 1');
+    test('matches school years by keyword', () => {
+      const filtered = filterAcademicYears(mockYears, '2027 - 2028');
       assert.strictEqual(filtered.length, 1);
-      assert.strictEqual(filtered[0].id, 'ay-semester-1');
+      assert.strictEqual(filtered[0].id, 'ay-future');
     });
 
     test('filters case-insensitively and diacritic-insensitively', () => {
@@ -194,9 +194,9 @@ describe('School Academic Year (Năm Học) Test Suite', () => {
 
     test('sorts current active year to the top', () => {
       const sorted = sortAcademicYears(mockYears, '2026-10-09');
-      // The current years ('ay-current' and 'ay-semester-1') should be at the top
+      // The current year ('ay-current') should be at the top
       assert.strictEqual(isCurrentAcademicYear(sorted[0], '2026-10-09'), true);
-      assert.strictEqual(isCurrentAcademicYear(sorted[1], '2026-10-09'), true);
+      assert.strictEqual(sorted[0].id, 'ay-current');
     });
   });
 

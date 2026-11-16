@@ -20,8 +20,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { loadSchoolByCode } from '../../../store/slices/schoolProfileSlice';
-import { EcoButton, EcoBadge } from '../../../components/eco';
-import { PageHeader, Button } from '@/components/ds';
+import { PageHeader, Button, Tag, StatusTag } from '@/components/ds';
 
 export const SchoolOverviewView: React.FC = () => {
   const router = useRouter();
@@ -64,9 +63,9 @@ export const SchoolOverviewView: React.FC = () => {
                 <FontAwesomeIcon icon={faSchool} className="text-eco-blue text-sm" />
                 <h2 className="text-base font-bold text-gray-900">Thông tin cơ bản</h2>
               </div>
-              <EcoBadge variant="info" size="sm">
+              <Tag variant="default">
                 Mã: {profile.schoolCode}
-              </EcoBadge>
+              </Tag>
             </div>
 
             {/* School Brand Header */}
@@ -93,9 +92,9 @@ export const SchoolOverviewView: React.FC = () => {
                 <div className="flex flex-wrap items-center gap-2 pt-1">
                   <span className="text-xs text-gray-500 font-medium">Cấp đào tạo:</span>
                   {profile.educationStages.map((stage) => (
-                    <EcoBadge key={stage} variant="neutral" size="sm">
+                    <Tag key={stage} variant="default">
                       {stage}
-                    </EcoBadge>
+                    </Tag>
                   ))}
                   <span className="text-[11px] text-gray-400 italic">
                     (Liên hệ Eco School để thay đổi)
@@ -176,9 +175,9 @@ export const SchoolOverviewView: React.FC = () => {
                   <FontAwesomeIcon icon={faLanguage} className="text-gray-400 text-xs" />
                   Ngôn ngữ thông báo mặc định
                 </span>
-                <EcoBadge variant="neutral" size="sm">
+                <Tag variant="default">
                   {profile.defaultLanguage === 'vi' ? 'Tiếng Việt (vi)' : 'English (en)'}
-                </EcoBadge>
+                </Tag>
               </div>
             </div>
           </div>
@@ -240,9 +239,9 @@ export const SchoolOverviewView: React.FC = () => {
               <div className="p-3 bg-blue-50/50 rounded-lg border border-blue-100/60 space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600 font-medium">Hình thức điểm danh:</span>
-                  <EcoBadge variant="info" size="sm">
+                  <Tag variant="default">
                     {attendanceRules.attendanceMode}
-                  </EcoBadge>
+                  </Tag>
                 </div>
                 <div className="text-gray-500 text-[11px] pt-1">
                   <span>Khung giờ: </span>
@@ -260,13 +259,13 @@ export const SchoolOverviewView: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-gray-700 font-semibold">Quy định đến muộn:</span>
                   {attendanceRules.lateArrivalEnabled ? (
-                    <EcoBadge variant="warning" size="sm">
+                    <Tag variant="warning">
                       Bật ({attendanceRules.lateArrivalThresholdMinutes} phút)
-                    </EcoBadge>
+                    </Tag>
                   ) : (
-                    <EcoBadge variant="neutral" size="sm">
+                    <Tag variant="default">
                       Đang tắt
-                    </EcoBadge>
+                    </Tag>
                   )}
                 </div>
                 <p className="text-gray-500 text-[11px]">
@@ -280,13 +279,13 @@ export const SchoolOverviewView: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-gray-700 font-semibold">Quy định về muộn:</span>
                   {attendanceRules.lateDepartureEnabled ? (
-                    <EcoBadge variant="warning" size="sm">
+                    <Tag variant="warning">
                       Đang bật
-                    </EcoBadge>
+                    </Tag>
                   ) : (
-                    <EcoBadge variant="neutral" size="sm">
+                    <Tag variant="default">
                       Đang tắt
-                    </EcoBadge>
+                    </Tag>
                   )}
                 </div>
                 <p className="text-gray-500 text-[11px] leading-relaxed">
@@ -314,14 +313,13 @@ export const SchoolOverviewView: React.FC = () => {
                 <FontAwesomeIcon icon={faCamera} className="text-eco-blue text-sm" />
                 <h2 className="text-base font-bold text-gray-900">Giờ đón/trả bằng Camera</h2>
               </div>
-              <EcoBadge
-                variant={cameraAttendanceRules.educationalType === 'mam_non' ? 'info' : 'neutral'}
-                size="sm"
+              <Tag
+                variant={cameraAttendanceRules.educationalType === 'mam_non' ? 'default' : 'code'}
               >
                 {cameraAttendanceRules.educationalType === 'mam_non'
                   ? 'Mầm non (1 buổi)'
                   : 'K12 (2 buổi)'}
-              </EcoBadge>
+              </Tag>
             </div>
 
             <div className="space-y-3 text-xs">

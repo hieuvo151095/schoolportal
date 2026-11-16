@@ -15,7 +15,8 @@ import {
 } from '../../../store/slices/schoolProfileSlice';
 import { generateLateArrivalOptions } from '../../../utils/schoolProfileValidation';
 import { AttendanceRulesFormData } from '../../../types/schoolProfile';
-import { EcoButton, EcoSwitch, EcoBadge } from '../../../components/eco';
+import { EcoSwitch, EcoBadge } from '../../../components/eco';
+import { Dropdown, Button } from '@/components/ds';
 
 interface AttendanceRulesFormProps {
   onCancelRequest?: () => void;
@@ -119,18 +120,18 @@ export const AttendanceRulesForm: React.FC<AttendanceRulesFormProps> = ({ onCanc
             <span className="text-xs text-gray-600 font-medium">
               Đánh dấu đến muộn sau giờ mở cửa:
             </span>
-            <select
-              value={formData.lateArrivalThresholdMinutes}
-              disabled={!formData.lateArrivalEnabled}
-              onChange={(e) => handleSelectMinutes(Number(e.target.value))}
-              className="px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-xs font-semibold text-gray-800 focus:outline-none focus:border-eco-blue focus:ring-1 focus:ring-eco-blue"
-            >
-              {lateOptions.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt} phút
-                </option>
-              ))}
-            </select>
+            <div className="w-32">
+              <Dropdown
+                options={lateOptions.map((opt) => ({
+                  value: String(opt),
+                  label: `${opt} phút`,
+                }))}
+                value={String(formData.lateArrivalThresholdMinutes)}
+                onChange={(val) => handleSelectMinutes(Number(val))}
+                disabled={!formData.lateArrivalEnabled}
+                size="sm"
+              />
+            </div>
             <span className="text-xs text-gray-400 italic">
               (Học sinh đến sau mốc này sẽ tự động gắn nhãn "Đến muộn")
             </span>
@@ -178,9 +179,9 @@ export const AttendanceRulesForm: React.FC<AttendanceRulesFormProps> = ({ onCanc
           <span className="text-xs text-gray-400 italic">
             *Lưu quy định điểm danh độc lập với biểu mẫu giờ hoạt động trường
           </span>
-          <EcoButton type="submit" variant="primary" leadingIcon={<FontAwesomeIcon icon={faCheck} />}>
+          <Button type="submit" variant="primary" icon="check">
             Cập nhật quy định điểm danh
-          </EcoButton>
+          </Button>
         </div>
       </div>
     </form>

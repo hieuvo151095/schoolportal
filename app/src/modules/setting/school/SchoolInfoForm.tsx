@@ -23,8 +23,7 @@ import {
   SchoolInfoValidationErrors,
   NotificationLanguage,
 } from '../../../types/schoolProfile';
-import { Dropdown } from '@/components/ds';
-import { EcoButton, EcoInput } from '../../../components/eco';
+import { Dropdown, Button } from '@/components/ds';
 
 interface SchoolInfoFormProps {
   onCancelRequest: () => void;
@@ -326,12 +325,12 @@ export const SchoolInfoForm: React.FC<SchoolInfoFormProps> = ({ onCancelRequest 
 
         {/* Submit Actions Bar */}
         <div className="pt-4 border-t border-gray-100 flex items-center justify-end gap-3">
-          <EcoButton type="button" variant="secondary" onClick={onCancelRequest}>
+          <Button type="button" variant="secondary" onClick={onCancelRequest}>
             Hủy bỏ
-          </EcoButton>
-          <EcoButton type="submit" variant="primary" leadingIcon={<FontAwesomeIcon icon={faCheck} />}>
+          </Button>
+          <Button type="submit" variant="primary" icon="check">
             Cập nhật
-          </EcoButton>
+          </Button>
         </div>
       </div>
     </form>

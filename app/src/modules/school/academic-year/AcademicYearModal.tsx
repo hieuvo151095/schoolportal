@@ -85,7 +85,7 @@ export const AcademicYearModal: React.FC<AcademicYearModalProps> = ({
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             onBlur={() => setTouched({ ...touched, name: true })}
-            placeholder="VD: Năm học 2026 - 2027 hoặc Kỳ 1 năm học 2026 - 2027"
+            placeholder="VD: Năm học 2026 - 2027"
             className="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0070CE]/20 focus:border-[#0070CE]"
             autoFocus
           />

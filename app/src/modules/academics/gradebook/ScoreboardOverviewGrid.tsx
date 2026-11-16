@@ -226,7 +226,7 @@ export const ScoreboardOverviewGrid: React.FC<ScoreboardOverviewGridProps> = ({
             options: [
               { value: 'Năm học 2025 - 2026', label: '2025 - 2026 (Hiện tại)' },
               { value: 'Năm học 2024 - 2025', label: '2024 - 2025' },
-              { value: 'Kỳ 1 năm học 2026 - 2027', label: 'Kỳ 1 (2026 - 2027)' },
+              { value: 'Năm học 2026 - 2027', label: '2026 - 2027' },
             ],
             value: filterCriteria.academicYear,
             onChange: (val) => dispatch(setFilterCriteria({ academicYear: val })),

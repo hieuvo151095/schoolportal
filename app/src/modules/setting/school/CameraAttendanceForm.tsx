@@ -25,7 +25,8 @@ import type {
   CameraTimeWindow,
   SchoolEducationalType,
 } from '../../../types/schoolProfile';
-import { EcoButton, EcoSwitch, EcoBadge } from '../../../components/eco';
+import { EcoSwitch, EcoBadge } from '../../../components/eco';
+import { Dropdown, Button } from '@/components/ds';
 
 interface CameraAttendanceFormProps {
   onCancelRequest?: () => void;
@@ -109,46 +110,30 @@ export const CameraAttendanceForm: React.FC<CameraAttendanceFormProps> = ({ onCa
           window.enabled ? 'opacity-100' : 'opacity-40 pointer-events-none'
         }`}
       >
-        {/* Start Time Box */}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:border-gray-300 focus-within:border-eco-blue focus-within:ring-1 focus-within:ring-eco-blue transition-colors shadow-xs">
-          <span className="text-amber-500 text-xs flex items-center justify-center w-4">
-            <FontAwesomeIcon icon={faClock} />
-          </span>
-          <select
+        {/* Start Time Dropdown */}
+        <div className="w-32">
+          <Dropdown
+            options={timeOptions.map((time) => ({ value: time, label: time }))}
             value={window.startTime}
+            onChange={(val) => handleTimeChange(windowKey, 'startTime', val)}
             disabled={!window.enabled}
-            onChange={(e) => handleTimeChange(windowKey, 'startTime', e.target.value)}
-            className="bg-transparent text-xs font-semibold text-gray-800 focus:outline-none cursor-pointer pr-1"
-            aria-label="Giờ bắt đầu"
-          >
-            {timeOptions.map((time) => (
-              <option key={`start-${time}`} value={time}>
-                {time}
-              </option>
-            ))}
-          </select>
+            prefix={<FontAwesomeIcon icon={faClock} className="text-amber-500 text-xs" />}
+            size="sm"
+          />
         </div>
 
         <span className="text-gray-400 text-xs font-medium">—</span>
 
-        {/* End Time Box */}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:border-gray-300 focus-within:border-eco-blue focus-within:ring-1 focus-within:ring-eco-blue transition-colors shadow-xs">
-          <span className="text-amber-500 text-xs flex items-center justify-center w-4">
-            <FontAwesomeIcon icon={faClock} />
-          </span>
-          <select
+        {/* End Time Dropdown */}
+        <div className="w-32">
+          <Dropdown
+            options={timeOptions.map((time) => ({ value: time, label: time }))}
             value={window.endTime}
+            onChange={(val) => handleTimeChange(windowKey, 'endTime', val)}
             disabled={!window.enabled}
-            onChange={(e) => handleTimeChange(windowKey, 'endTime', e.target.value)}
-            className="bg-transparent text-xs font-semibold text-gray-800 focus:outline-none cursor-pointer pr-1"
-            aria-label="Giờ kết thúc"
-          >
-            {timeOptions.map((time) => (
-              <option key={`end-${time}`} value={time}>
-                {time}
-              </option>
-            ))}
-          </select>
+            prefix={<FontAwesomeIcon icon={faClock} className="text-amber-500 text-xs" />}
+            size="sm"
+          />
         </div>
       </div>
     );
@@ -439,21 +424,21 @@ export const CameraAttendanceForm: React.FC<CameraAttendanceFormProps> = ({ onCa
           </span>
           <div className="flex items-center gap-2 self-end sm:self-auto">
             {onCancelRequest && (
-              <button
+              <Button
                 type="button"
+                variant="secondary"
                 onClick={onCancelRequest}
-                className="px-4 py-2 text-xs font-semibold text-gray-600 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
               >
                 Hủy bỏ
-              </button>
+              </Button>
             )}
-            <EcoButton
+            <Button
               type="submit"
               variant="primary"
-              leadingIcon={<FontAwesomeIcon icon={faCheck} />}
+              icon="check"
             >
               Cập nhật
-            </EcoButton>
+            </Button>
           </div>
         </div>
       </div>

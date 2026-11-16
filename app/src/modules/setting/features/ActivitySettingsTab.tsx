@@ -5,6 +5,7 @@ import {
   faShieldHalved,
   faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
+import { Button } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   setActivityToggle,
@@ -166,18 +167,15 @@ export const ActivitySettingsTab: React.FC = () => {
               : 'Cấu hình đang đồng bộ với hệ thống'}
           </span>
 
-          <button
+          <Button
             type="button"
+            variant="primary"
+            icon="check"
             disabled={!isDirty}
             onClick={handleSave}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 shadow-sm ${
-              isDirty
-                ? 'bg-[#0070CE] text-white hover:bg-blue-700 active:scale-[0.98]'
-                : 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200 shadow-none'
-            }`}
           >
             Cập nhật
-          </button>
+          </Button>
         </div>
       </div>
     </div>

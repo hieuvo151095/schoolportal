@@ -58,11 +58,6 @@ export const PeriodSettingsTab: React.FC = () => {
     currentYearTerms.length
   );
 
-  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(selectAcademicYear(e.target.value));
-    setDateValidationError(null);
-  };
-
   const handleStartAdd = () => {
     if (addLocked) return;
     setDateValidationError(null);
