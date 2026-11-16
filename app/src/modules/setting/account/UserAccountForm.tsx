@@ -20,7 +20,7 @@ import {
   EcoRadio,
   EcoSwitch,
 } from '../../../components/eco';
-import { SlideOver } from '@/components/ds';
+import { SlideOver, Dropdown } from '@/components/ds';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import {
   closeUserFormModal,
@@ -113,20 +113,9 @@ export const UserAccountForm: React.FC = () => {
 
   const isCsldSo = !isCreate && !!selectedUser?.isSyncedCsdlSo;
 
-  const toggleRole = (role: UserRole) => {
-    if (role === 'admin') return; // Cannot toggle admin
-
-    setRoles((prev) => {
-      const exists = prev.includes(role);
-      let updated: UserRole[];
-      if (exists) {
-        updated = prev.filter((r) => r !== role);
-      } else {
-        updated = [...prev, role];
-      }
-      if (errors.roles) setErrors((e) => ({ ...e, roles: '' }));
-      return updated;
-    });
+  const handleRoleChange = (role: UserRole) => {
+    setRoles([role]);
+    if (errors.roles) setErrors((e) => ({ ...e, roles: '' }));
   };
 
   const toggleStaffFunction = (fn: StaffFunction) => {
@@ -245,89 +234,29 @@ export const UserAccountForm: React.FC = () => {
           </div>
         )}
 
-        {/* Roles Multi-Select (BR02, BR04, K077) */}
-        <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-          <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+        {/* Roles Select Dropdown */}
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
             Vai trò người dùng <span className="text-red-500">*</span>
           </label>
-          <p className="text-xs text-gray-500 mb-3">
-            Một người dùng có thể đảm nhận nhiều vai trò cùng lúc (ví dụ: Giáo viên kiêm Phụ huynh).
-          </p>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {/* Admin Role Checkbox (Permanently Locked on Create) */}
-            <div
-              className={`flex items-center gap-2 p-2.5 rounded-lg border text-xs transition-colors ${
-                roles.includes('admin')
-                  ? 'bg-red-50 border-red-200 text-red-900 font-semibold'
-                  : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-60'
-              }`}
-            >
-              <input
-                type="checkbox"
-                checked={roles.includes('admin')}
-                disabled={true}
-                className="w-4 h-4 text-red-600 rounded border-gray-300 cursor-not-allowed"
-                readOnly
-              />
-              <div className="flex flex-col">
-                <span className="flex items-center gap-1.5">
-                  <FontAwesomeIcon icon={faShieldHalved} className="text-red-600 text-xs" />
-                  Quản trị viên
-                </span>
-                <span className="text-[10px] text-gray-500 font-normal">
-                  {isCreate ? 'Bị khóa khi tạo' : 'Quyền cấp cao'}
-                </span>
-              </div>
-            </div>
-
-            {/* Quản lý Role Checkbox */}
-            <label className="flex items-center gap-2 p-2.5 rounded-lg border text-xs cursor-pointer hover:bg-purple-50/50 transition-colors border-gray-200">
-              <input
-                type="checkbox"
-                checked={roles.includes('quan_ly')}
-                onChange={() => toggleRole('quan_ly')}
-                className="w-4 h-4 text-purple-600 rounded border-gray-300"
-              />
-              <span className="font-medium text-gray-800">Quản lý</span>
-            </label>
-
-            {/* Giáo viên Role Checkbox */}
-            <label className="flex items-center gap-2 p-2.5 rounded-lg border text-xs cursor-pointer hover:bg-blue-50/50 transition-colors border-gray-200">
-              <input
-                type="checkbox"
-                checked={roles.includes('giao_vien')}
-                onChange={() => toggleRole('giao_vien')}
-                className="w-4 h-4 text-blue-600 rounded border-gray-300"
-              />
-              <span className="font-medium text-gray-800">Giáo viên</span>
-            </label>
-
-            {/* Nhân viên Role Checkbox */}
-            <label className="flex items-center gap-2 p-2.5 rounded-lg border text-xs cursor-pointer hover:bg-amber-50/50 transition-colors border-gray-200">
-              <input
-                type="checkbox"
-                checked={roles.includes('nhan_vien')}
-                onChange={() => toggleRole('nhan_vien')}
-                className="w-4 h-4 text-amber-600 rounded border-gray-300"
-              />
-              <span className="font-medium text-gray-800">Nhân viên</span>
-            </label>
-
-            {/* Phụ huynh Role Checkbox */}
-            <label className="flex items-center gap-2 p-2.5 rounded-lg border text-xs cursor-pointer hover:bg-emerald-50/50 transition-colors border-gray-200">
-              <input
-                type="checkbox"
-                checked={roles.includes('phu_huynh')}
-                onChange={() => toggleRole('phu_huynh')}
-                className="w-4 h-4 text-emerald-600 rounded border-gray-300"
-              />
-              <span className="font-medium text-gray-800">Phụ huynh</span>
-            </label>
-          </div>
-
+          <Dropdown
+            placeholder="Chọn vai trò người dùng"
+            options={[
+              ...(selectedUser?.roles.includes('admin')
+                ? [{ value: 'admin', label: 'Quản trị viên (Bị khóa)', disabled: true }]
+                : []),
+              { value: 'giao_vien', label: 'Giáo viên' },
+              { value: 'nhan_vien', label: 'Nhân viên' },
+              { value: 'quan_ly', label: 'Quản lý' },
+            ]}
+            value={roles[0] || 'giao_vien'}
+            onChange={(val) => handleRoleChange(val as UserRole)}
+            fullWidth
+            size="md"
+            disabled={!isCreate && selectedUser?.roles.includes('admin')}
+          />
           {errors.roles && (
-            <p className="text-xs text-red-600 mt-2 font-medium">{errors.roles}</p>
+            <p className="text-xs text-red-600 mt-1 font-medium">{errors.roles}</p>
           )}
         </div>
 

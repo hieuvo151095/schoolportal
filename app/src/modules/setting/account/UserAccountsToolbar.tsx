@@ -17,7 +17,6 @@ export const UserAccountsToolbar: React.FC = () => {
     { value: 'quan_ly', label: 'Quản lý' },
     { value: 'giao_vien', label: 'Giáo viên' },
     { value: 'nhan_vien', label: 'Nhân viên' },
-    { value: 'phu_huynh', label: 'Phụ huynh' },
   ];
 
   const statusOptions = [
