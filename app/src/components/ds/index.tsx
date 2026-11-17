@@ -1589,20 +1589,74 @@ export function DropdownMenu(p: DropdownMenuProps) {
     if (p.open === undefined) setInternalOpen(v);
   };
   const ref = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const [coords, setCoords] = useState<{ top: number; left?: number; right?: number; placement: 'bottom' | 'top' }>({
+    top: 0,
+    placement: 'bottom',
+  });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const updatePosition = () => {
+    if (!ref.current || typeof window === 'undefined') return;
+    const rect = ref.current.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    const estimatedHeight = 190;
+    const shouldOpenUp = spaceBelow < estimatedHeight && spaceAbove > spaceBelow;
+
+    if (p.align === 'left') {
+      setCoords({
+        top: shouldOpenUp ? Math.max(8, rect.top - 4) : Math.min(window.innerHeight - 8, rect.bottom + 4),
+        left: Math.max(8, rect.left),
+        placement: shouldOpenUp ? 'top' : 'bottom',
+      });
+    } else {
+      setCoords({
+        top: shouldOpenUp ? Math.max(8, rect.top - 4) : Math.min(window.innerHeight - 8, rect.bottom + 4),
+        right: Math.max(8, window.innerWidth - rect.right),
+        placement: shouldOpenUp ? 'top' : 'bottom',
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (open) {
+      updatePosition();
+    }
+  }, [open, p.align]);
 
   useEffect(() => {
     if (!open || !p.trigger) return;
     function onDoc(e: any) {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+      if (
+        panelRef.current &&
+        !panelRef.current.contains(e.target) &&
+        ref.current &&
+        !ref.current.contains(e.target)
+      ) {
+        setOpen(false);
+      }
     }
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') setOpen(false);
     }
+    function onScrollOrResize() {
+      setOpen(false);
+    }
+
     document.addEventListener('mousedown', onDoc);
     document.addEventListener('keydown', onKey);
+    window.addEventListener('scroll', onScrollOrResize, true);
+    window.addEventListener('resize', onScrollOrResize);
     return () => {
       document.removeEventListener('mousedown', onDoc);
       document.removeEventListener('keydown', onKey);
+      window.removeEventListener('scroll', onScrollOrResize, true);
+      window.removeEventListener('resize', onScrollOrResize);
     };
   }, [open]);
 
@@ -1641,15 +1695,28 @@ export function DropdownMenu(p: DropdownMenuProps) {
 
   const panel = (
     <div
+      ref={panelRef}
       className={cx(
         'ecomd-menu',
         p.trigger && 'is-floating',
+        coords.placement === 'top' ? 'is-up' : 'is-down',
         p.align === 'left' ? 'is-left' : 'is-right',
-        '!z-[1000] shadow-2xl',
+        '!z-[99999] shadow-2xl',
         !p.trigger && p.className
       )}
       role="menu"
-      style={p.trigger ? undefined : p.style}
+      style={{
+        ...(p.trigger
+          ? {
+              position: 'fixed',
+              top: coords.placement === 'top' ? 'auto' : `${coords.top}px`,
+              bottom: coords.placement === 'top' ? `${Math.max(8, window.innerHeight - coords.top)}px` : 'auto',
+              left: coords.left !== undefined ? `${coords.left}px` : 'auto',
+              right: coords.right !== undefined ? `${coords.right}px` : 'auto',
+            }
+          : {}),
+        ...p.style,
+      }}
     >
       {items}
     </div>
@@ -1670,14 +1737,16 @@ export function DropdownMenu(p: DropdownMenuProps) {
     <div
       ref={ref}
       className={cx(
-        'ecomd-menu-wrap relative',
+        'ecomd-menu-wrap relative inline-block',
         open ? 'z-[950] is-open' : 'z-auto',
         p.className
       )}
       style={p.style}
     >
       {trig}
-      {open ? panel : null}
+      {open && mounted && typeof document !== 'undefined'
+        ? createPortal(panel, document.body)
+        : null}
     </div>
   );
 }

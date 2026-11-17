@@ -32,6 +32,11 @@ export const AssignmentTable: React.FC<AssignmentTableProps> = ({ schoolCode }) 
   );
 
   const filteredAssignments = filterAssignments(assignments, filterCriteria);
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSend = (id: string) => {
     if (confirm('Bạn có chắc chắn muốn gửi bài tập này đến học sinh/phụ huynh?')) {
@@ -55,7 +60,7 @@ export const AssignmentTable: React.FC<AssignmentTableProps> = ({ schoolCode }) 
     );
   }
 
-  const now = Date.now();
+  const now = mounted ? Date.now() : 1794900000000;
 
   return (
     <div className="ecomd-table-scroll">
