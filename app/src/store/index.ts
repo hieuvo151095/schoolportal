@@ -38,6 +38,7 @@ import notificationSettingsReducer from './slices/notificationSettingsSlice';
 import revenueCategoryReducer from './slices/revenueCategorySlice';
 import toastReducer from './slices/toastSlice';
 import nutritionReducer from './slices/nutritionSlice';
+import rewardReducer from './slices/rewardSlice';
 
 export const store = configureStore({
   reducer: {
@@ -79,6 +80,7 @@ export const store = configureStore({
     notificationSettings: notificationSettingsReducer,
     toast: toastReducer,
     nutrition: nutritionReducer,
+    reward: rewardReducer,
   },
 });
 

@@ -161,6 +161,12 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
           active: router.asPath.includes('/nutrition'),
         },
         {
+          label: 'Phiếu bé ngoan',
+          icon: 'certificate',
+          href: `/${schoolCode}/class/lop-1a1/reward`,
+          active: router.asPath.includes('/reward'),
+        },
+        {
           label: 'Thư viện ảnh',
           icon: 'images',
           href: `/${schoolCode}/class/lop-1a1/media`,

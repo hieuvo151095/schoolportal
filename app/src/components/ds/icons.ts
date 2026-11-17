@@ -119,6 +119,8 @@ export const ALIASES: Record<string, string> = {
   'calendar-day': 'calendar-days',
   'heart-pulse': 'utensils',
   'care': 'utensils',
+  award: 'circle-check',
+  certificate: 'calendar-check',
 };
 
 export function resolveIcon(name: string): string | null {
