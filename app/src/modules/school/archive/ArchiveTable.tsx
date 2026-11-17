@@ -11,7 +11,7 @@ import type {
   ArchiveSortState,
 } from '@/types/archive';
 import { formatArchiveDate, formatGender } from '@/utils/archiveValidation';
-import { EmptyState, Tag, Icon } from '@/components/ds';
+import { EmptyState, Tag, Icon, DropdownMenu, IconButton } from '@/components/ds';
 
 interface ArchiveTableProps {
   students: ArchivedStudent[];
@@ -221,25 +221,32 @@ export const ArchiveTable: React.FC<ArchiveTableProps> = ({
 
                 {/* Actions */}
                 <td className="body-sm is-right is-actions" style={{ textAlign: 'center' }}>
-                  <div className="ecomd-cell__value flex items-center justify-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => onOpenRestoreModal(student)}
-                      title={`Phục hồi học sinh ${student.fullName}`}
-                      aria-label={`Phục hồi học sinh ${student.fullName}`}
-                      className="p-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--eco-blue-strong)] hover:bg-[var(--bg-muted)] cursor-pointer inline-flex items-center justify-center min-w-[32px] min-h-[32px]"
-                    >
-                      <Icon name="rotate-right" size={14} />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onOpenPurgeModal(student)}
-                      title={`Xoá vĩnh viễn học sinh ${student.fullName}`}
-                      aria-label={`Xoá vĩnh viễn học sinh ${student.fullName}`}
-                      className="p-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--semantic-danger)] hover:bg-rose-50 cursor-pointer inline-flex items-center justify-center min-w-[32px] min-h-[32px]"
-                    >
-                      <Icon name="trash" size={14} />
-                    </button>
+                  <div className="ecomd-cell__value flex items-center justify-center">
+                    <DropdownMenu
+                      trigger={
+                        <IconButton
+                          icon="ellipsis-vertical"
+                          size="sm"
+                          label={`Thao tác cho học sinh ${student.fullName}`}
+                        />
+                      }
+                      align="right"
+                      items={[
+                        {
+                          label: 'Xem chi tiết',
+                          onClick: () => onOpenDetailModal(student),
+                        },
+                        {
+                          label: 'Phục hồi hồ sơ',
+                          onClick: () => onOpenRestoreModal(student),
+                        },
+                        {
+                          label: 'Xoá vĩnh viễn',
+                          tone: 'danger',
+                          onClick: () => onOpenPurgeModal(student),
+                        },
+                      ]}
+                    />
                   </div>
                 </td>
               </tr>

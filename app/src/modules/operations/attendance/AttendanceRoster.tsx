@@ -4,7 +4,7 @@ import {
   HealthCondition,
   HEALTH_CONDITIONS,
 } from '@/types/attendance';
-import { StatusTag, Tag, Avatar, EmptyValue, IconButton, Icon } from '@/components/ds';
+import { StatusTag, Tag, Avatar, EmptyValue, IconButton, Icon, Dropdown } from '@/components/ds';
 
 interface AttendanceRosterProps {
   students: StudentAttendance[];
@@ -521,40 +521,24 @@ export const AttendanceRoster: React.FC<AttendanceRosterProps> = ({
                           </div>
 
                           {/* Health condition select */}
-                          <select
-                            value={student.healthCondition}
-                            onChange={(e) =>
-                              onUpdateHealth(
-                                student.studentId,
-                                student.temperature,
-                                e.target.value as HealthCondition
-                              )
-                            }
-                            style={{
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              padding: '2px 8px',
-                              borderRadius: 'var(--radius-4)',
-                              border: '1px solid var(--border-default)',
-                              background:
-                                student.healthCondition === 'Bình thường'
-                                  ? 'var(--bg-surface)'
-                                  : 'var(--semantic-warning-soft)',
-                              color:
-                                student.healthCondition === 'Bình thường'
-                                  ? 'var(--text-body)'
-                                  : 'var(--semantic-warning-strong)',
-                              cursor: 'pointer',
-                              textAlign: 'right',
-                              direction: 'ltr',
-                            }}
-                          >
-                            {HEALTH_CONDITIONS.map((cond) => (
-                              <option key={cond} value={cond}>
-                                {cond}
-                              </option>
-                            ))}
-                          </select>
+                          <div className="w-28">
+                            <Dropdown
+                              value={student.healthCondition}
+                              onChange={(val) =>
+                                onUpdateHealth(
+                                  student.studentId,
+                                  student.temperature,
+                                  val as HealthCondition
+                                )
+                              }
+                              options={HEALTH_CONDITIONS.map((cond) => ({
+                                value: cond,
+                                label: cond,
+                              }))}
+                              size="sm"
+                              fullWidth
+                            />
+                          </div>
                         </div>
                       </div>
                     </td>

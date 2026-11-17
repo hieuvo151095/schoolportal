@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Icon, Dropdown } from '@/components/ds';
+import { Icon, Dropdown, DropdownMenu, IconButton } from '@/components/ds';
 import { useAppDispatch } from '@/store';
 import {
   updatePriority,
@@ -270,25 +270,31 @@ export default function FeedbackRow({ item }: FeedbackRowProps) {
 
       {/* Actions */}
       <td className="py-3 px-3 text-right whitespace-nowrap">
-        <div className="flex items-center justify-end space-x-1.5">
-          <Link
-            href={`/${schoolCode}/school/feedback/${item.id}`}
-            className="p-1 text-slate-500 hover:text-blue-600 rounded transition-colors"
-            title="Xem chi tiết & thảo luận"
-          >
-            <Icon name="eye" className="w-3.5 h-3.5" />
-          </Link>
-
-          {item.status !== 'completed' && (
-            <button
-              type="button"
-              onClick={() => dispatch(openClosureModal(item.id))}
-              className="p-1 text-slate-500 hover:text-emerald-600 rounded transition-colors"
-              title="Đóng góp ý (Hoàn tất)"
-            >
-              <Icon name="circle-check" className="w-3.5 h-3.5" />
-            </button>
-          )}
+        <div className="flex items-center justify-end">
+          <DropdownMenu
+            trigger={
+              <IconButton
+                icon="ellipsis-vertical"
+                size="sm"
+                label={`Thao tác cho góp ý ${item.code}`}
+              />
+            }
+            align="right"
+            items={[
+              {
+                label: 'Xem chi tiết & thảo luận',
+                onClick: () => router.push(`/${schoolCode}/school/feedback/${item.id}`),
+              },
+              ...(item.status !== 'completed'
+                ? [
+                    {
+                      label: 'Đóng góp ý (Hoàn tất)',
+                      onClick: () => dispatch(openClosureModal(item.id)),
+                    },
+                  ]
+                : []),
+            ]}
+          />
         </div>
       </td>
     </tr>

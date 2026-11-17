@@ -31,7 +31,6 @@ import {
   findStudentDiscountConflicts,
   ExistingStudentDiscountConflict,
 } from '../../../utils/discountValidation';
-import { StudentPickerModal } from './StudentPickerModal';
 import { SlideOver, Dropdown, DropdownOption, Icon } from '@/components/ds';
 
 interface CreateDiscountPolicyModalProps {
@@ -85,13 +84,17 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
   const [reason, setReason] = useState('');
   const [confirmReplacement, setConfirmReplacement] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isStudentPickerOpen, setIsStudentPickerOpen] = useState(false);
   const [isClassDropdownOpen, setIsClassDropdownOpen] = useState(false);
   const [classSearchQuery, setClassSearchQuery] = useState('');
   const [classGradeFilter, setClassGradeFilter] = useState('all');
   const classDropdownRef = React.useRef<HTMLDivElement>(null);
 
-  // Close class dropdown on click outside
+  const [isStudentDropdownOpen, setIsStudentDropdownOpen] = useState(false);
+  const [studentSearchQuery, setStudentSearchQuery] = useState('');
+  const [studentClassFilter, setStudentClassFilter] = useState('all');
+  const studentDropdownRef = React.useRef<HTMLDivElement>(null);
+
+  // Close class & student dropdowns on click outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -100,18 +103,30 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
       ) {
         setIsClassDropdownOpen(false);
       }
+      if (
+        studentDropdownRef.current &&
+        !studentDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsStudentDropdownOpen(false);
+      }
     }
-    if (isClassDropdownOpen) {
+    if (isClassDropdownOpen || isStudentDropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isClassDropdownOpen]);
+  }, [isClassDropdownOpen, isStudentDropdownOpen]);
 
   const uniqueClassGrades = useMemo(() => {
     const set = new Set<string>();
     AVAILABLE_CLASSES_FOR_DISCOUNT.forEach((c) => set.add(c.grade));
+    return Array.from(set);
+  }, []);
+
+  const uniqueStudentClasses = useMemo(() => {
+    const set = new Set<string>();
+    AVAILABLE_STUDENTS_FOR_DISCOUNT.forEach((s) => set.add(s.className));
     return Array.from(set);
   }, []);
 
@@ -126,6 +141,20 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
       return matchGrade && matchQuery;
     });
   }, [classSearchQuery, classGradeFilter]);
+
+  const filteredAvailableStudents = useMemo(() => {
+    const q = studentSearchQuery.toLowerCase().trim();
+    return AVAILABLE_STUDENTS_FOR_DISCOUNT.filter((s) => {
+      const matchClass =
+        studentClassFilter === 'all' || s.className === studentClassFilter;
+      const matchQuery =
+        !q ||
+        s.name.toLowerCase().includes(q) ||
+        s.code.toLowerCase().includes(q) ||
+        s.className.toLowerCase().includes(q);
+      return matchClass && matchQuery;
+    });
+  }, [studentSearchQuery, studentClassFilter]);
 
   const allPolicies = useAppSelector((state) => state.discount.policies);
 
@@ -660,51 +689,222 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
                 )}
               </div>
             ) : (
-              /* Student Scope Selector */
-              <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 space-y-2">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-xs font-semibold text-slate-700">
-                      Danh sách học sinh được chỉ định:
-                    </div>
-                    <div className="text-[11px] text-slate-500">
-                      {selectedStudentIds.length === 0
-                        ? 'Chưa chọn học sinh nào'
-                        : `Đã chọn ${selectedStudentIds.length} học sinh`}
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsStudentPickerOpen(true)}
-                    className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:border-[#0070CE] text-[#0070CE] text-xs font-bold shadow-sm transition-all cursor-pointer"
-                  >
-                    + Chọn học sinh
-                  </button>
-                </div>
+              /* Student Scope Selector - Inline Multi-Select Dropdown */
+              <div className="space-y-2">
+                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                  Chọn học sinh áp dụng <span className="text-rose-500">*</span>
+                </label>
 
-                {selectedStudentsData.length > 0 && (
-                  <div className="max-h-28 overflow-y-auto divide-y divide-slate-100 bg-white rounded-lg border border-slate-200 p-2">
-                    {selectedStudentsData.map((s) => (
-                      <div
-                        key={s.id}
-                        className="py-1 px-1 flex items-center justify-between text-xs"
-                      >
-                        <span className="font-medium text-slate-800">
-                          {s.name}{' '}
-                          <span className="text-slate-400 font-normal">({s.className})</span>
+                <div ref={studentDropdownRef} className="relative">
+                  {/* Trigger Box */}
+                  <div
+                    role="combobox"
+                    aria-expanded={isStudentDropdownOpen}
+                    onClick={() => setIsStudentDropdownOpen(!isStudentDropdownOpen)}
+                    className={`min-h-[42px] px-3.5 py-2 bg-white border rounded-xl flex items-center justify-between cursor-pointer transition-all select-none ${
+                      isStudentDropdownOpen
+                        ? 'border-[#0070CE] ring-2 ring-[#0070CE]/20 shadow-sm'
+                        : errors.targetIds
+                        ? 'border-rose-300 bg-rose-50/20'
+                        : 'border-slate-300 hover:border-slate-400'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
+                      <span className="text-slate-400 shrink-0">
+                        <Icon name="user" size={14} />
+                      </span>
+                      {selectedStudentIds.length === 0 ? (
+                        <span className="text-slate-400 font-normal text-sm">
+                          Chọn các học sinh áp dụng...
+                        </span>
+                      ) : (
+                        <div className="flex items-center gap-2 truncate">
+                          <span className="text-[#0070CE] font-semibold text-sm">
+                            Đã chọn {selectedStudentIds.length} học sinh
+                          </span>
+                          <span className="text-slate-400 text-xs truncate">
+                            ({selectedStudentsData.map((s) => s.name).join(', ')})
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <Icon
+                      name="chevron-down"
+                      size={14}
+                      className={`text-slate-400 transition-transform duration-200 shrink-0 ${
+                        isStudentDropdownOpen ? 'rotate-180 text-[#0070CE]' : ''
+                      }`}
+                    />
+                  </div>
+
+                  {/* Dropdown Popover */}
+                  {isStudentDropdownOpen && (
+                    <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+                      {/* Search & Class Filter */}
+                      <div className="p-2.5 border-b border-slate-100 bg-slate-50/70 space-y-2">
+                        <div className="relative">
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400">
+                            <Icon name="magnifying-glass" size={13} />
+                          </span>
+                          <input
+                            type="text"
+                            value={studentSearchQuery}
+                            onChange={(e) => setStudentSearchQuery(e.target.value)}
+                            placeholder="Tìm tên hoặc mã học sinh..."
+                            className="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-[#0070CE] focus:ring-1 focus:ring-[#0070CE] text-slate-800 placeholder:text-slate-400"
+                            autoFocus
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        </div>
+
+                        {/* Class Pills & Bulk Actions */}
+                        <div className="flex items-center justify-between text-xs pt-0.5">
+                          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar max-w-[260px]">
+                            <button
+                              type="button"
+                              onClick={() => setStudentClassFilter('all')}
+                              className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors whitespace-nowrap ${
+                                studentClassFilter === 'all'
+                                  ? 'bg-[#0070CE] text-white font-semibold'
+                                  : 'text-slate-600 hover:bg-slate-200/60'
+                              }`}
+                            >
+                              Tất cả lớp
+                            </button>
+                            {uniqueStudentClasses.map((cName) => (
+                              <button
+                                key={cName}
+                                type="button"
+                                onClick={() => setStudentClassFilter(cName)}
+                                className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors whitespace-nowrap ${
+                                  studentClassFilter === cName
+                                    ? 'bg-blue-100 text-[#0070CE] font-semibold'
+                                    : 'text-slate-500 hover:bg-slate-200/60'
+                                }`}
+                              >
+                                {cName}
+                              </button>
+                            ))}
+                          </div>
+
+                          <div className="flex items-center gap-2 shrink-0 pl-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newIds = Array.from(
+                                  new Set([...selectedStudentIds, ...filteredAvailableStudents.map((s) => s.id)])
+                                );
+                                setSelectedStudentIds(newIds);
+                                if (errors.targetIds) setErrors({ ...errors, targetIds: '' });
+                              }}
+                              className="text-[11px] font-semibold text-[#0070CE] hover:underline"
+                            >
+                              Chọn tất cả
+                            </button>
+                            <span className="text-slate-300">•</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const removeSet = new Set(filteredAvailableStudents.map((s) => s.id));
+                                setSelectedStudentIds(selectedStudentIds.filter((id) => !removeSet.has(id)));
+                              }}
+                              className="text-[11px] font-semibold text-slate-500 hover:underline"
+                            >
+                              Bỏ chọn
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Student List with Checkboxes */}
+                      <div className="max-h-56 overflow-y-auto p-1 divide-y divide-slate-50">
+                        {filteredAvailableStudents.length === 0 ? (
+                          <div className="px-4 py-6 text-center text-xs text-slate-400">
+                            Không tìm thấy học sinh nào phù hợp
+                          </div>
+                        ) : (
+                          filteredAvailableStudents.map((st) => {
+                            const isChecked = selectedStudentIds.includes(st.id);
+                            return (
+                              <div
+                                key={st.id}
+                                onClick={() => {
+                                  if (isChecked) {
+                                    setSelectedStudentIds(selectedStudentIds.filter((id) => id !== st.id));
+                                  } else {
+                                    setSelectedStudentIds([...selectedStudentIds, st.id]);
+                                    if (errors.targetIds) setErrors({ ...errors, targetIds: '' });
+                                  }
+                                }}
+                                className={`px-3 py-2 rounded-lg flex items-center justify-between cursor-pointer transition-colors ${
+                                  isChecked ? 'bg-blue-50/70 hover:bg-blue-50' : 'hover:bg-slate-50'
+                                }`}
+                              >
+                                <div className="flex items-center gap-2.5 min-w-0">
+                                  <input
+                                    type="checkbox"
+                                    checked={isChecked}
+                                    onChange={() => {}}
+                                    className="w-4 h-4 text-[#0070CE] rounded border-slate-300 focus:ring-[#0070CE] cursor-pointer"
+                                  />
+                                  <div className="w-7 h-7 rounded-full bg-blue-100 text-[#0070CE] font-bold text-xs flex items-center justify-center shrink-0">
+                                    {st.name.charAt(0)}
+                                  </div>
+                                  <div className="min-w-0">
+                                    <div className="text-xs font-semibold text-slate-800 truncate">
+                                      {st.name}
+                                    </div>
+                                    <div className="text-[11px] text-slate-400 font-normal">
+                                      {st.code} • {st.className}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <span className="text-2xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">
+                                  {st.className}
+                                </span>
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+
+                      {/* Footer Actions */}
+                      <div className="p-2 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-xs">
+                        <span className="text-slate-500 font-medium">
+                          Đã chọn <strong className="text-[#0070CE]">{selectedStudentIds.length}</strong> học sinh
                         </span>
                         <button
                           type="button"
-                          onClick={() =>
-                            setSelectedStudentIds(
-                              selectedStudentIds.filter((id) => id !== s.id)
-                            )
-                          }
-                          className="text-slate-400 hover:text-rose-500 p-0.5 cursor-pointer"
+                          onClick={() => setIsStudentDropdownOpen(false)}
+                          className="px-3 py-1 rounded-lg bg-[#0070CE] text-white font-semibold text-xs hover:bg-[#005bb5] transition-colors"
                         >
-                          <Icon name="x" size={12} />
+                          Xong
                         </button>
                       </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Selected Students Chips */}
+                {selectedStudentsData.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {selectedStudentsData.map((st) => (
+                      <span
+                        key={st.id}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 text-[#0070CE] text-xs font-medium border border-blue-200 shadow-2xs"
+                      >
+                        <span className="font-semibold">{st.name}</span>
+                        <span className="text-blue-400 text-[11px]">({st.className})</span>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedStudentIds(selectedStudentIds.filter((id) => id !== st.id))}
+                          className="text-blue-400 hover:text-rose-600 transition-colors p-0.5 rounded"
+                          title={`Bỏ chọn ${st.name}`}
+                        >
+                          <Icon name="xmark" size={10} />
+                        </button>
+                      </span>
                     ))}
                   </div>
                 )}
@@ -1028,19 +1228,6 @@ export const CreateDiscountPolicyModal: React.FC<CreateDiscountPolicyModalProps>
           </div>
         </div>
       </SlideOver>
-
-      {/* Student Picker Sub-modal */}
-      <StudentPickerModal
-        isOpen={isStudentPickerOpen}
-        onClose={() => setIsStudentPickerOpen(false)}
-        selectedStudentIds={selectedStudentIds}
-        onConfirm={(ids) => {
-          setSelectedStudentIds(ids);
-          if (errors.targetIds) setErrors({ ...errors, targetIds: '' });
-        }}
-      />
-
-
     </>
   );
 };
