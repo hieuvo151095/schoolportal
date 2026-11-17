@@ -37,6 +37,7 @@ import featureFlagsReducer from './slices/featureFlagsSlice';
 import notificationSettingsReducer from './slices/notificationSettingsSlice';
 import revenueCategoryReducer from './slices/revenueCategorySlice';
 import toastReducer from './slices/toastSlice';
+import nutritionReducer from './slices/nutritionSlice';
 
 export const store = configureStore({
   reducer: {
@@ -77,6 +78,7 @@ export const store = configureStore({
     featureFlags: featureFlagsReducer,
     notificationSettings: notificationSettingsReducer,
     toast: toastReducer,
+    nutrition: nutritionReducer,
   },
 });
 

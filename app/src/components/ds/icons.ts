@@ -116,7 +116,9 @@ export const ALIASES: Record<string, string> = {
   hourglass: 'user-clock',
   logout: 'right-from-bracket',
   'sign-out': 'right-from-bracket',
-  'calendar-day': 'calendar-days'
+  'calendar-day': 'calendar-days',
+  'heart-pulse': 'utensils',
+  'care': 'utensils',
 };
 
 export function resolveIcon(name: string): string | null {

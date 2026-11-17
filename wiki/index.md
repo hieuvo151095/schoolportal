@@ -130,6 +130,7 @@
 ### M2: Vận Hành
 - [Màn hình điểm danh](pages/screens/m2-sm1-diem-danh.md) — Điểm danh đón/trả và sức khỏe
 - [Màn hình hoạt động](pages/screens/m2-sm2-hoat-dong.md) — Bảng tin hoạt động lớp học
+- [Màn hình chăm sóc](pages/screens/m2-sm7-cham-soc.md) — Chăm sóc trẻ, dinh dưỡng bữa ăn, giấc ngủ và vệ sinh
 - [Màn hình thư viện](pages/screens/m2-sm3-thu-vien.md) — Thư viện ảnh và AI nhận diện
 - [Màn hình trao đổi](pages/screens/m2-sm4-trao-doi.md) — Kênh trò chuyện với phụ huynh
 - [Màn hình báo cáo điểm danh](pages/screens/m2-sm5-bao-cao-diem-danh.md) — Lưới điểm danh tháng

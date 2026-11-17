@@ -155,6 +155,12 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
             !router.asPath.includes('/setting/'),
         },
         {
+          label: 'Chăm sóc',
+          icon: 'heart-pulse',
+          href: `/${schoolCode}/class/lop-1a1/nutrition`,
+          active: router.asPath.includes('/nutrition'),
+        },
+        {
           label: 'Thư viện ảnh',
           icon: 'images',
           href: `/${schoolCode}/class/lop-1a1/media`,
