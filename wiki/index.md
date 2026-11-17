@@ -136,6 +136,7 @@
 - [Màn hình trao đổi](pages/screens/m2-sm4-trao-doi.md) — Kênh trò chuyện với phụ huynh
 - [Màn hình báo cáo điểm danh](pages/screens/m2-sm5-bao-cao-diem-danh.md) — Lưới điểm danh tháng
 - [Màn hình báo cáo mở rộng](pages/screens/m2-sm6-bao-cao-mo-rong.md) — Báo cáo thống kê chuyên sâu
+- [Màn hình báo cáo phiếu bé ngoan](pages/screens/m2-sm9-bao-cao-phieu-be-ngoan.md) — Ma trận phiếu bé ngoan theo tuần và tháng
 
 ### M3: Học Tập
 - [Màn hình thời khóa biểu](pages/screens/m3-sm1-thoi-khoa-bieu.md) — Ma trận lịch học tuần

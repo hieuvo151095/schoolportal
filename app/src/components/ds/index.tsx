@@ -1014,6 +1014,7 @@ export interface SidebarNavItem {
   href?: string;
   active?: boolean;
   onClick?: (e: MouseEvent<any>) => void;
+  children?: SidebarNavItem[];
 }
 
 export interface SidebarNavGroup {
@@ -1053,6 +1054,15 @@ export function SidebarNav(p: SidebarNavProps) {
     return initial;
   });
 
+  const [expandedSubItems, setExpandedSubItems] = useState<Record<string, boolean>>({});
+
+  const toggleSubItem = (subKey: string) => {
+    setExpandedSubItems((prev) => ({
+      ...prev,
+      [subKey]: !prev[subKey],
+    }));
+  };
+
   // Hydrate user preference from localStorage after client mount
   useEffect(() => {
     try {
@@ -1089,15 +1099,38 @@ export function SidebarNav(p: SidebarNavProps) {
   // ensure its parent group is expanded so the active sub-module is clearly displayed on UI
   useEffect(() => {
     const activeGroupKeys: string[] = [];
+    const activeSubKeys: string[] = [];
     (p.groups || []).forEach((g, gi) => {
       const groupKey = g.key || g.label || `group_${gi}`;
-      const hasActive = (g.items || []).some(
-        (it) => it.active || (p.activeKey != null && (it.key || it.label) === p.activeKey)
-      );
-      if (hasActive) {
+      let groupHasActive = false;
+      (g.items || []).forEach((it) => {
+        const isSelfActive = it.active || (p.activeKey != null && (it.key || it.label) === p.activeKey);
+        const hasChildActive = it.children && it.children.some((c) => c.active || (p.activeKey != null && (c.key || c.label) === p.activeKey));
+        if (isSelfActive || hasChildActive) {
+          groupHasActive = true;
+        }
+        if (hasChildActive) {
+          activeSubKeys.push(it.key || it.label);
+        }
+      });
+      if (groupHasActive) {
         activeGroupKeys.push(groupKey);
       }
     });
+
+    if (activeSubKeys.length > 0) {
+      setExpandedSubItems((prev) => {
+        let changed = false;
+        const next = { ...prev };
+        activeSubKeys.forEach((k) => {
+          if (!next[k]) {
+            next[k] = true;
+            changed = true;
+          }
+        });
+        return changed ? next : prev;
+      });
+    }
 
     if (activeGroupKeys.length > 0) {
       setExpandedGroups((prev) => {
@@ -1234,6 +1267,83 @@ export function SidebarNav(p: SidebarNavProps) {
               {(isExpanded || p.collapsed) && (
                 <div className="ecomd-sidebar__items">
                   {(g.items || []).map((it, ii) => {
+                    // Check if item has children sub-items (e.g. Báo cáo -> BC Điểm danh, BC Mở rộng, BC Phiếu bé ngoan)
+                    if (it.children && it.children.length > 0) {
+                      const subKey = it.key || it.label || `sub_${ii}`;
+                      const hasActiveChild = it.children.some(
+                        (c) => c.active || (p.activeKey != null && (c.key || c.label) === p.activeKey)
+                      );
+                      const isSubExpanded = expandedSubItems[subKey] !== undefined ? expandedSubItems[subKey] : hasActiveChild;
+
+                      return (
+                        <div key={ii} className="flex flex-col">
+                          <button
+                            type="button"
+                            className={cx(
+                              'ecomd-nav-item',
+                              hasActiveChild ? 'body-sm-semibold text-[var(--eco-blue-strong)] font-semibold' : 'body-sm-medium',
+                              'w-full flex items-center justify-between cursor-pointer'
+                            )}
+                            onClick={() => toggleSubItem(subKey)}
+                            aria-expanded={isSubExpanded}
+                            title={p.collapsed ? it.label : undefined}
+                          >
+                            <div className="flex items-center gap-2">
+                              <Icon name={it.icon} size={16} />
+                              {p.collapsed ? null : <span>{it.label}</span>}
+                            </div>
+                            {!p.collapsed && (
+                              <span
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  color: 'var(--text-subtle)',
+                                  transition: 'transform 0.2s ease',
+                                  transform: isSubExpanded ? 'rotate(0deg)' : 'rotate(-90deg)',
+                                }}
+                              >
+                                <Icon name="chevron-down" size={10} />
+                              </span>
+                            )}
+                          </button>
+
+                          {(isSubExpanded || p.collapsed) && (
+                            <div
+                              className={cx(
+                                'flex flex-col gap-0.5 mt-0.5 mb-1',
+                                !p.collapsed && 'pl-3.5 border-l-2 border-slate-200 ml-4'
+                              )}
+                            >
+                              {it.children.map((child, ci) => {
+                                const childActive =
+                                  child.active ||
+                                  (p.activeKey != null && (child.key || child.label) === p.activeKey);
+                                const childCls = cx(
+                                  'ecomd-nav-item',
+                                  childActive ? 'body-sm-semibold is-active' : 'body-sm-medium text-slate-600 hover:text-slate-900',
+                                  '!py-1.5 !text-[12.5px]'
+                                );
+                                return (
+                                  <Link
+                                    key={ci}
+                                    href={child.href || '#'}
+                                    scroll={false}
+                                    className={childCls}
+                                    aria-current={childActive ? 'page' : undefined}
+                                    title={p.collapsed ? child.label : undefined}
+                                    onClick={child.onClick}
+                                  >
+                                    <Icon name={child.icon} size={14} />
+                                    {p.collapsed ? null : <span>{child.label}</span>}
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
+
                     const active =
                       it.active ||
                       (p.activeKey != null && (it.key || it.label) === p.activeKey);

@@ -164,7 +164,9 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
           label: 'Phiếu bé ngoan',
           icon: 'certificate',
           href: `/${schoolCode}/class/lop-1a1/reward`,
-          active: router.asPath.includes('/reward'),
+          active:
+            router.asPath.includes('/reward') &&
+            !router.asPath.includes('/reports/reward'),
         },
         {
           label: 'Thư viện ảnh',
@@ -179,16 +181,28 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
           active: router.asPath.includes('/conversations'),
         },
         {
-          label: 'BC Điểm danh',
+          label: 'Báo cáo',
           icon: 'chart-pie',
-          href: `/${schoolCode}/reports/attendance`,
-          active: router.asPath.includes('/reports/attendance'),
-        },
-        {
-          label: 'BC Mở rộng',
-          icon: 'file-lines',
-          href: `/${schoolCode}/reports/extended`,
-          active: router.asPath.includes('/reports/extended'),
+          children: [
+            {
+              label: 'BC Điểm danh',
+              icon: 'calendar-check',
+              href: `/${schoolCode}/reports/attendance`,
+              active: router.asPath.includes('/reports/attendance'),
+            },
+            {
+              label: 'BC Mở rộng',
+              icon: 'file-lines',
+              href: `/${schoolCode}/reports/extended`,
+              active: router.asPath.includes('/reports/extended'),
+            },
+            {
+              label: 'BC Phiếu bé ngoan',
+              icon: 'certificate',
+              href: `/${schoolCode}/reports/reward`,
+              active: router.asPath.includes('/reports/reward'),
+            },
+          ],
         },
       ],
     },
