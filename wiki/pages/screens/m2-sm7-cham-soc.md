@@ -24,6 +24,7 @@ Cho phép giáo viên theo dõi, đánh giá và ghi nhận toàn diện việc 
 - **Vệ sinh cá nhân & Đại tiện**: Vệ sinh chung (Rửa tay, Thay quần áo, Lau dọn; Hành vi: Chủ động, GV gợi ý, GV hỗ trợ) và Đại tiện tại trường (Chủ động & Tự đi, Chủ động & GV hỗ trợ, GV khuyến khích, Không đi).
 - **Ghi chú chung gửi phụ huynh**: Dặn dò tổng quan và phản hồi tương tác tới phụ huynh.
 - **Chăm sóc hàng loạt (Bulk Care)**: Cho phép giáo viên chọn nhiều trẻ cùng lúc (qua checkbox) và cập nhật đồng loạt các chỉ số hoặc áp dụng nhanh mẫu chuẩn 1-chạm.
+- **Điều kiện tiên quyết điểm danh (Attendance Prerequisite)**: Bảng chăm sóc chỉ hiển thị những học sinh đã được điểm danh đón vào lớp (`status === 'present'` và có `arrivalTime`). Nếu lớp chưa có học sinh nào được điểm danh trong ngày, bảng chăm sóc hiển thị trạng thái rỗng kèm cảnh báo hướng dẫn và nút điều hướng tới màn hình Điểm danh.
 
 ## App / route / file code
 | App | Route | File |

@@ -7,9 +7,11 @@ import {
   createDefaultMealCare,
   createDefaultSleepCare,
 } from '../../src/utils/nutritionValidation.ts';
+import { getCareRecordsForDateAndClass } from '../../src/services/mockNutritionData.ts';
 import nutritionReducer, {
   setSelectedDate,
   setSelectedClassId,
+  syncWithAttendance,
   setSearchQuery,
   setStatusFilter,
   setMealFilter,
@@ -203,6 +205,156 @@ describe('Vận Hành - Chăm Sóc Trẻ (Nutrition & Daily Care Unit Tests)', (
       state = nutritionReducer(state, resetStudentCare(firstStudent.studentId));
       const found = state.records.find((r) => r.studentId === firstStudent.studentId);
       assert.equal(found.isEvaluated, false);
+    });
+  });
+
+  describe('Business Rule: Điểm danh đón vào lớp là điều kiện tiên quyết cho Chăm sóc (Attendance Prerequisite)', () => {
+    test('returns empty array when NO students have checked in for the day (all unmarked or absent)', () => {
+      const emptyAttendance = [
+        {
+          studentId: 'st-001',
+          studentCode: 'HS-001',
+          fullName: 'Nguyễn Minh Khang',
+          avatarUrl: '',
+          gender: 'male',
+          arrivalTime: null,
+          departureTime: null,
+          status: 'unmarked',
+          isLate: false,
+          temperature: 37,
+          healthCondition: 'Bình thường',
+          notes: '',
+          pickupGuardianId: null,
+          pickupGuardianName: null,
+          refundEligible: false,
+          guardians: [],
+        },
+        {
+          studentId: 'st-002',
+          studentCode: 'HS-002',
+          fullName: 'Trần Bảo Ngọc',
+          avatarUrl: '',
+          gender: 'female',
+          arrivalTime: null,
+          departureTime: null,
+          status: 'excused_absent',
+          isLate: false,
+          temperature: 37,
+          healthCondition: 'Cảm sốt',
+          notes: '',
+          pickupGuardianId: null,
+          pickupGuardianName: null,
+          refundEligible: true,
+          guardians: [],
+        },
+      ];
+
+      const careRecords = getCareRecordsForDateAndClass('2026-11-20', 'lop-1a1', emptyAttendance);
+      assert.equal(careRecords.length, 0, 'Care roster must be empty when no student is present/checked-in');
+    });
+
+    test('strictly filters care roster to ONLY include students with status=present and arrivalTime', () => {
+      const mixedAttendance = [
+        {
+          studentId: 'st-001',
+          studentCode: 'HS-001',
+          fullName: 'Nguyễn Minh Khang',
+          avatarUrl: '',
+          gender: 'male',
+          arrivalTime: '07:45',
+          departureTime: null,
+          status: 'present',
+          isLate: false,
+          temperature: 36.8,
+          healthCondition: 'Bình thường',
+          notes: '',
+          pickupGuardianId: null,
+          pickupGuardianName: null,
+          refundEligible: false,
+          guardians: [],
+        },
+        {
+          studentId: 'st-002',
+          studentCode: 'HS-002',
+          fullName: 'Trần Bảo Ngọc',
+          avatarUrl: '',
+          gender: 'female',
+          arrivalTime: null,
+          departureTime: null,
+          status: 'excused_absent',
+          isLate: false,
+          temperature: 37,
+          healthCondition: 'Bình thường',
+          notes: '',
+          pickupGuardianId: null,
+          pickupGuardianName: null,
+          refundEligible: true,
+          guardians: [],
+        },
+      ];
+
+      const careRecords = getCareRecordsForDateAndClass('2026-11-17', 'lop-1a1', mixedAttendance);
+      assert.equal(careRecords.length, 1);
+      assert.equal(careRecords[0].studentId, 'st-001');
+      assert.equal(careRecords[0].arrivalTime, '07:45');
+      assert.equal(careRecords[0].attendanceStatus, 'present');
+    });
+
+    test('syncWithAttendance updates the care records when attendance changes dynamically', () => {
+      let state = nutritionReducer(undefined, { type: 'unknown' });
+
+      // Simulate student 2 arriving late and getting checked in
+      const updatedAttendance = [
+        {
+          studentId: 'st-001',
+          studentCode: 'HS-001',
+          fullName: 'Nguyễn Minh Khang',
+          avatarUrl: '',
+          gender: 'male',
+          arrivalTime: '07:35',
+          departureTime: null,
+          status: 'present',
+          isLate: false,
+          temperature: 36.8,
+          healthCondition: 'Bình thường',
+          notes: '',
+          pickupGuardianId: null,
+          pickupGuardianName: null,
+          refundEligible: false,
+          guardians: [],
+        },
+        {
+          studentId: 'st-002',
+          studentCode: 'HS-002',
+          fullName: 'Trần Bảo Ngọc',
+          avatarUrl: '',
+          gender: 'female',
+          arrivalTime: '08:30',
+          departureTime: null,
+          status: 'present',
+          isLate: true,
+          temperature: 37,
+          healthCondition: 'Bình thường',
+          notes: '',
+          pickupGuardianId: null,
+          pickupGuardianName: null,
+          refundEligible: false,
+          guardians: [],
+        },
+      ];
+
+      state = nutritionReducer(
+        state,
+        syncWithAttendance({
+          attendanceList: updatedAttendance,
+          date: '2026-11-17',
+          classId: 'lop-1a1',
+        })
+      );
+
+      assert.equal(state.records.length, 2);
+      assert.ok(state.records.some((r) => r.studentId === 'st-001'));
+      assert.ok(state.records.some((r) => r.studentId === 'st-002' && r.arrivalTime === '08:30'));
     });
   });
 });

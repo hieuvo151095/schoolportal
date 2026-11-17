@@ -16,6 +16,7 @@ import {
   saveStudentCareRecord,
   saveBulkCareRecord,
   resetStudentCare,
+  syncWithAttendance,
 } from '@/store/slices/nutritionSlice';
 import { addToast } from '@/store/slices/toastSlice';
 import PortalLayout from '@/components/layout/PortalLayout';
@@ -46,6 +47,23 @@ export default function NutritionPage() {
     activeStudentId,
     isBulkMode,
   } = useAppSelector((state) => state.nutrition);
+
+  const attendanceStudents = useAppSelector((state) => state.attendance.students);
+  const attendanceDate = useAppSelector((state) => state.attendance.selectedDate);
+  const attendanceClassId = useAppSelector((state) => state.attendance.selectedClassId);
+
+  // Sync attendance into nutrition when date and class match
+  useEffect(() => {
+    if (attendanceDate === selectedDate && attendanceClassId === selectedClassId && attendanceStudents.length > 0) {
+      dispatch(
+        syncWithAttendance({
+          attendanceList: attendanceStudents,
+          date: selectedDate,
+          classId: selectedClassId,
+        })
+      );
+    }
+  }, [attendanceDate, attendanceClassId, attendanceStudents, selectedDate, selectedClassId, dispatch]);
 
   // Sync route param with redux state on mount or browser navigation
   useEffect(() => {
@@ -249,6 +267,7 @@ export default function NutritionPage() {
           onOpenSingleCare={(id) => dispatch(openSingleStudentCare(id))}
           onQuickStandardCare={handleQuickStandardCare}
           onResetCare={handleResetCare}
+          onGoToAttendance={() => router.push(`/${schoolCode}/class/${selectedClassId}/attendance`)}
         />
 
         {/* Right-Sheet SlideOver for Single or Multi-Student Care */}

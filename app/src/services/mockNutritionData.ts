@@ -1,5 +1,7 @@
 import type { StudentCareRecord } from '../types/nutrition.ts';
+import type { StudentAttendance } from '../types/attendance.ts';
 import { createEmptyCareRecord } from '../utils/nutritionValidation.ts';
+import { getAttendanceForDateAndClass } from './mockAttendanceData.ts';
 
 export interface ClassCareInfo {
   id: string;
@@ -255,19 +257,59 @@ export const INITIAL_NUTRITION_RECORDS: StudentCareRecord[] = [
   },
 ];
 
-export function getCareRecordsForDateAndClass(date: string, classId: string): StudentCareRecord[] {
-  // Find raw students for this class or fallback to class 1a1
-  const classStudents = RAW_MOCK_STUDENTS.filter((s) => s.classId === classId);
-  const studentsToUse = classStudents.length > 0 ? classStudents : RAW_MOCK_STUDENTS.filter((s) => s.classId === 'lop-1a1');
+export function getCareRecordsForDateAndClass(
+  date: string,
+  classId: string,
+  customAttendance?: StudentAttendance[]
+): StudentCareRecord[] {
+  // 1. Get attendance records for this date and class
+  const attendanceList = customAttendance || getAttendanceForDateAndClass(date, classId);
 
-  // Check if matching records exist in INITIAL_NUTRITION_RECORDS
-  return studentsToUse.map((student) => {
+  // 2. CRITICAL BUSINESS RULE: Only students who have been checked in (status === 'present' and arrivalTime exists)
+  // are eligible for daily child care (meals, sleep, hydration, hygiene) at school!
+  const presentAttendance = attendanceList.filter(
+    (att) => att.status === 'present' && Boolean(att.arrivalTime)
+  );
+
+  // If no students are checked in on this date, the care roster is empty
+  if (presentAttendance.length === 0) {
+    return [];
+  }
+
+  // 3. Map present attendance to care records
+  return presentAttendance.map((att) => {
+    const raw = RAW_MOCK_STUDENTS.find((s) => s.studentId === att.studentId);
+    const parent = att.guardians && att.guardians[0];
+    const studentInfo = {
+      studentId: att.studentId,
+      studentCode: att.studentCode,
+      fullName: att.fullName,
+      nickname: raw?.nickname,
+      avatarUrl: att.avatarUrl,
+      gender: att.gender,
+      parentName: raw?.parentName || parent?.fullName || 'Phụ huynh',
+      parentPhone: raw?.parentPhone || parent?.phoneNumber || '0901234567',
+      classId,
+    };
+
     const existing = INITIAL_NUTRITION_RECORDS.find(
-      (r) => r.studentId === student.studentId && r.date === date
+      (r) => r.studentId === att.studentId && r.date === date
     );
+
     if (existing) {
-      return { ...existing, classId };
+      return {
+        ...existing,
+        classId,
+        arrivalTime: att.arrivalTime,
+        attendanceStatus: att.status,
+      };
     }
-    return createEmptyCareRecord(student, date);
+
+    const created = createEmptyCareRecord(studentInfo, date);
+    return {
+      ...created,
+      arrivalTime: att.arrivalTime,
+      attendanceStatus: att.status,
+    };
   });
 }

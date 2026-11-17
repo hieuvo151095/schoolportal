@@ -56,6 +56,8 @@ export interface StudentCareRecord {
   parentPhone: string;
   classId: string;
   date: string;
+  arrivalTime?: string | null;
+  attendanceStatus?: 'present' | 'excused_absent' | 'unexcused_absent' | 'unmarked';
   isEvaluated: boolean;
   updatedAt?: string;
   updatedBy?: string;

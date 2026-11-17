@@ -4,6 +4,7 @@ import type {
   NutritionSummary,
   BulkCarePayload,
 } from '../../types/nutrition.ts';
+import type { StudentAttendance } from '../../types/attendance.ts';
 import {
   INITIAL_NUTRITION_RECORDS,
   getCareRecordsForDateAndClass,
@@ -83,6 +84,22 @@ export const nutritionSlice = createSlice({
       }
       state.summary = calculateNutritionSummary(state.records);
       state.selectedStudentIds = [];
+    },
+
+    syncWithAttendance: (
+      state,
+      action: PayloadAction<{ attendanceList: StudentAttendance[]; date?: string; classId?: string }>
+    ) => {
+      const { attendanceList, date, classId } = action.payload;
+      const targetDate = date || state.selectedDate;
+      const targetClassId = classId || state.selectedClassId;
+      const loaded = getCareRecordsForDateAndClass(targetDate, targetClassId, attendanceList);
+      state.records = loaded;
+      state.summary = calculateNutritionSummary(loaded);
+      state.selectedStudentIds = [];
+      const key = `${targetClassId}_${targetDate}`;
+      if (!state.recordsCache) state.recordsCache = {};
+      state.recordsCache[key] = loaded;
     },
 
     setSearchQuery: (state, action: PayloadAction<string>) => {
@@ -184,6 +201,7 @@ export const nutritionSlice = createSlice({
 export const {
   setSelectedDate,
   setSelectedClassId,
+  syncWithAttendance,
   setSearchQuery,
   setStatusFilter,
   setMealFilter,
