@@ -158,10 +158,6 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
               </th>
               {weekdays.map((day) => {
                 const dateLabel = getWeekdayDateLabel(startDate, day);
-                const daySchedule = schedule?.[day];
-                const dayTickCount = mealTypes.filter(
-                  (m) => Boolean(daySchedule?.tickXanh?.[m]?.url && daySchedule.tickXanh[m].url.trim().length > 0)
-                ).length;
 
                 return (
                   <th
@@ -172,37 +168,6 @@ export const MenuGridEditor: React.FC<MenuGridEditorProps> = ({
                     {dateLabel && (
                       <div className="text-[11px] font-normal text-gray-500 mt-0.5">({dateLabel})</div>
                     )}
-                    <div className="mt-1.5 flex justify-center">
-                      {dayTickCount === 3 ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 shadow-2xs">
-                          <Icon name="circle-check" className="w-2.5 h-2.5 text-emerald-600" />
-                          Tick Xanh (3/3)
-                        </span>
-                      ) : !readOnly ? (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setActiveTickXanhModal({
-                              day,
-                              meal: 'breakfast',
-                              initialApplyToAll: true,
-                            })
-                          }
-                          className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-dashed border-emerald-400 transition-all cursor-pointer shadow-2xs group"
-                          title="Bấm để khai báo hoặc gán nhanh link Tick Xanh cho tất cả bữa ăn trong ngày"
-                        >
-                          <Icon
-                            name="plus"
-                            className="w-2.5 h-2.5 text-emerald-600 group-hover:scale-125 transition-transform"
-                          />
-                          <span>Gán Tick Xanh ({dayTickCount}/3)</span>
-                        </button>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-normal text-gray-400 bg-gray-50 border border-gray-200">
-                          Tick Xanh ({dayTickCount}/3)
-                        </span>
-                      )}
-                    </div>
                   </th>
                 );
               })}
