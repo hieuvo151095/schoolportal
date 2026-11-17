@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SlideOver, Button, StatusTag } from '@/components/ds';
+import { SlideOver, Button, StatusTag, Icon } from '@/components/ds';
 import type {
   StudentCareRecord,
   BulkCarePayload,
@@ -30,6 +30,37 @@ interface CareSlideOverProps {
   onSaveSingle: (record: StudentCareRecord) => void;
   onSaveBulk: (payload: BulkCarePayload) => void;
 }
+
+const MEAL_QUICK_NOTES = [
+  'Tự xúc ăn hết suất cơm trưa',
+  'Ăn ngoan, biết mời cô và các bạn',
+  'Cần cô động viên và xúc thêm',
+  'Ăn chậm, chưa ăn hết phần rau',
+  'Hôm nay kén ăn, ăn được nửa suất',
+];
+
+const SLEEP_QUICK_NOTES = [
+  'Ngủ ngoan, ngủ say suốt giấc',
+  'Dễ ngủ, tự giác vào chỗ nằm',
+  'Khó ngủ, trằn trọc khoảng 30 phút',
+  'Thỉnh thoảng giật mình thức giấc',
+  'Dậy đúng giờ, tỉnh táo vui vẻ',
+];
+
+const HYDRATION_QUICK_NOTES = [
+  'Chủ động uống nước',
+  'Uống đủ nước sau khi vận động',
+  'Cần cô nhắc nhở uống thêm nước',
+  'Uống ít nước, thích uống từng ngụm nhỏ',
+];
+
+const HYGIENE_QUICK_NOTES = [
+  'Biết tự gọi cô khi muốn đi vệ sinh',
+  'Tự giác rửa tay sạch bằng xà phòng',
+  'Đại tiện bình thường, phân khuôn',
+  'Có đi tiêu lỏng 1 lần, đã theo dõi',
+  'Cần cô hỗ trợ lau chùi và thay đồ',
+];
 
 export default function CareSlideOver({
   open,
@@ -75,6 +106,7 @@ export default function CareSlideOver({
           note: activeStudent.hygiene.general.note,
         },
         poop: { ...activeStudent.hygiene.poop },
+        note: activeStudent.hygiene.note || activeStudent.hygiene.general.note || '',
       });
       setGeneralNote(activeStudent.generalNote || '');
     } else {
@@ -103,8 +135,55 @@ export default function CareSlideOver({
     setHygiene({
       general: { activities: ['rua_tay', 'thay_quan_ao'], behavior: 'chu_dong', note: 'Tự rửa tay sạch trước sau ăn' },
       poop: { behavior: 'chu_dong_tu_di', note: 'Đã đi tiêu tốt trong ngày' },
+      note: 'Biết tự gọi cô khi muốn đi vệ sinh, rửa tay sạch bằng xà phòng',
     });
   };
+
+  const handleAppendNote = (
+    current: string,
+    phrase: string,
+    setter: (val: string) => void
+  ) => {
+    if (!current || !current.trim()) {
+      setter(phrase);
+    } else if (current.includes(phrase)) {
+      // already included
+    } else {
+      setter(`${current.trim()} - ${phrase}`);
+    }
+  };
+
+  const renderQuickChips = (
+    suggestions: string[],
+    currentValue: string,
+    onSelect: (phrase: string) => void
+  ) => (
+    <div className="pt-2">
+      <div className="flex items-center gap-1.5 text-[11.5px] text-slate-500 font-medium mb-1.5">
+        <Icon name="bolt" size={12} className="text-amber-500 shrink-0" />
+        <span>Gợi ý nhận xét nhanh:</span>
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        {suggestions.map((phrase) => {
+          const isSelected = currentValue.includes(phrase);
+          return (
+            <button
+              key={phrase}
+              type="button"
+              onClick={() => onSelect(phrase)}
+              className={`inline-flex items-center text-xs px-2.5 py-1 rounded-full border transition-all text-left cursor-pointer ${
+                isSelected
+                  ? 'bg-teal-50 border-teal-300 text-teal-800 font-medium shadow-2xs'
+                  : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-teal-50/70 hover:border-teal-200 hover:text-teal-900'
+              }`}
+            >
+              <span>{phrase}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
 
   const handleToggleActivity = (act: HygieneActivity) => {
     const current = hygiene.general.activities;
@@ -187,13 +266,6 @@ export default function CareSlideOver({
               <span className="text-xs font-semibold text-teal-900 uppercase tracking-wide">
                 Học sinh đang được chọn ({selectedStudents.length})
               </span>
-              <button
-                type="button"
-                onClick={handleApplyPreset}
-                className="text-xs font-medium text-teal-700 hover:text-teal-900 underline flex items-center gap-1"
-              >
-                <span>⚡ Áp dụng mẫu chuẩn nhanh</span>
-              </button>
             </div>
             <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
               {selectedStudents.map((s) => (
@@ -396,6 +468,17 @@ export default function CareSlideOver({
                 placeholder="Nhập ghi chú chi tiết món ăn hoặc biểu hiện ăn uống của trẻ..."
                 className="w-full p-2.5 text-[13px] border border-[var(--border-default)] rounded-[var(--radius-8)] focus:outline-none focus:border-teal-600 transition-colors"
               />
+              {renderQuickChips(
+                MEAL_QUICK_NOTES,
+                currentMeal.note,
+                (phrase) =>
+                  handleAppendNote(currentMeal.note, phrase, (val) =>
+                    setMeals({
+                      ...meals,
+                      [mealTab]: { ...currentMeal, note: val },
+                    })
+                  )
+              )}
             </div>
           </div>
         </section>
@@ -480,6 +563,14 @@ export default function CareSlideOver({
                 placeholder="Ghi nhận giờ ngủ, dậy hoặc biểu hiện giật mình, khó ngủ..."
                 className="w-full p-2.5 text-[13px] border border-[var(--border-default)] rounded-[var(--radius-8)] focus:outline-none focus:border-amber-600 transition-colors"
               />
+              {renderQuickChips(
+                SLEEP_QUICK_NOTES,
+                sleep.note,
+                (phrase) =>
+                  handleAppendNote(sleep.note, phrase, (val) =>
+                    setSleep({ ...sleep, note: val })
+                  )
+              )}
             </div>
           </div>
         </section>
@@ -496,38 +587,40 @@ export default function CareSlideOver({
           </div>
 
           <div className="p-4 space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <span className="block text-xs font-semibold text-slate-700 uppercase tracking-wide mb-2">
-                  Hành vi
-                </span>
-                <div className="grid grid-cols-3 gap-1.5">
-                  {[
-                    { value: 'chu_dong', label: 'Chủ động' },
-                    { value: 'gv_goi_y', label: 'GV gợi ý' },
-                    { value: 'khong_uong', label: 'Không uống' },
-                  ].map((opt) => (
-                    <button
-                      key={opt.value}
-                      type="button"
-                      onClick={() => setHydration({ ...hydration, behavior: opt.value as HydrationBehavior })}
-                      className={`py-2 px-1 text-xs font-medium rounded-[var(--radius-8)] border text-center transition-all ${
-                        hydration.behavior === opt.value
-                          ? 'border-blue-500 bg-blue-50 text-blue-900 font-semibold ring-1 ring-blue-500'
-                          : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
+            {/* Hydration Behavior (Row 1) */}
+            <div>
+              <span className="block text-xs font-semibold text-slate-700 uppercase tracking-wide mb-2">
+                Hành vi uống nước
+              </span>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { value: 'chu_dong', label: 'Chủ động' },
+                  { value: 'gv_goi_y', label: 'GV gợi ý' },
+                  { value: 'khong_uong', label: 'Không uống' },
+                ].map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => setHydration({ ...hydration, behavior: opt.value as HydrationBehavior })}
+                    className={`py-2 px-3 text-xs font-medium rounded-[var(--radius-8)] border text-center transition-all ${
+                      hydration.behavior === opt.value
+                        ? 'border-blue-500 bg-blue-50 text-blue-900 font-semibold ring-1 ring-blue-500'
+                        : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
               </div>
+            </div>
 
+            {/* Hydration Amount (Row 2) */}
+            {hydration.behavior !== 'khong_uong' && (
               <div>
                 <span className="block text-xs font-semibold text-slate-700 uppercase tracking-wide mb-2">
-                  Định lượng
+                  Định lượng uống nước
                 </span>
-                <div className="grid grid-cols-3 gap-1.5">
+                <div className="grid grid-cols-3 gap-2">
                   {[
                     { value: 'thuong_xuyen', label: 'Thường xuyên' },
                     { value: 'thinh_thoang', label: 'Thỉnh thoảng' },
@@ -537,7 +630,7 @@ export default function CareSlideOver({
                       key={opt.value}
                       type="button"
                       onClick={() => setHydration({ ...hydration, amount: opt.value as HydrationAmount })}
-                      className={`py-2 px-1 text-xs font-medium rounded-[var(--radius-8)] border text-center transition-all ${
+                      className={`py-2 px-3 text-xs font-medium rounded-[var(--radius-8)] border text-center transition-all ${
                         hydration.amount === opt.value
                           ? 'border-blue-500 bg-blue-50 text-blue-900 font-semibold ring-1 ring-blue-500'
                           : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
@@ -548,8 +641,9 @@ export default function CareSlideOver({
                   ))}
                 </div>
               </div>
-            </div>
+            )}
 
+            {/* Hydration Note */}
             <div>
               <span className="block text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1.5">
                 Nhận xét uống nước
@@ -557,10 +651,18 @@ export default function CareSlideOver({
               <textarea
                 value={hydration.note}
                 onChange={(e) => setHydration({ ...hydration, note: e.target.value })}
-                rows={1}
-                placeholder="Ghi chú lượng nước uống hoặc nhu cầu thêm nước..."
+                rows={2}
+                placeholder="Ghi chú lượng nước uống hoặc nhu cầu thêm nước của trẻ..."
                 className="w-full p-2.5 text-[13px] border border-[var(--border-default)] rounded-[var(--radius-8)] focus:outline-none focus:border-blue-600 transition-colors"
               />
+              {renderQuickChips(
+                HYDRATION_QUICK_NOTES,
+                hydration.note,
+                (phrase) =>
+                  handleAppendNote(hydration.note, phrase, (val) =>
+                    setHydration({ ...hydration, note: val })
+                  )
+              )}
             </div>
           </div>
         </section>
@@ -665,6 +767,28 @@ export default function CareSlideOver({
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Hygiene Note */}
+            <div className="pt-2 border-t border-slate-100">
+              <span className="block text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1.5">
+                Nhận xét vệ sinh &amp; đại tiện
+              </span>
+              <textarea
+                value={hygiene.note || ''}
+                onChange={(e) => setHygiene({ ...hygiene, note: e.target.value })}
+                rows={2}
+                placeholder="Ghi chú thêm về nề nếp vệ sinh hoặc tình trạng tiêu hóa của trẻ..."
+                className="w-full p-2.5 text-[13px] border border-[var(--border-default)] rounded-[var(--radius-8)] focus:outline-none focus:border-emerald-600 transition-colors"
+              />
+              {renderQuickChips(
+                HYGIENE_QUICK_NOTES,
+                hygiene.note || '',
+                (phrase) =>
+                  handleAppendNote(hygiene.note || '', phrase, (val) =>
+                    setHygiene({ ...hygiene, note: val })
+                  )
+              )}
             </div>
           </div>
         </section>

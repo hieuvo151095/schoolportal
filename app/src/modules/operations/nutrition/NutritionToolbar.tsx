@@ -15,7 +15,7 @@ interface NutritionToolbarProps {
   onMealFilterChange: (meal: 'all' | 'an_het_suat' | 'can_ho_tro' | 'bo_bua') => void;
   selectedCount: number;
   onOpenBulkCare: () => void;
-  onQuickEvaluateAll: () => void;
+  onQuickEvaluateAll?: () => void;
 }
 
 export default function NutritionToolbar({
@@ -121,7 +121,7 @@ export default function NutritionToolbar({
 
         {/* Right Action Buttons */}
         <div className="flex items-center gap-2 self-end lg:self-center shrink-0">
-          {selectedCount > 0 ? (
+          {selectedCount > 0 && (
             <Button
               variant="primary"
               icon="heart-pulse"
@@ -129,15 +129,6 @@ export default function NutritionToolbar({
               className="h-[38px] whitespace-nowrap !bg-teal-600 hover:!bg-teal-700 !border-teal-600"
             >
               Chăm sóc hàng loạt ({selectedCount} trẻ)
-            </Button>
-          ) : (
-            <Button
-              variant="secondary"
-              icon="circle-check"
-              onClick={onQuickEvaluateAll}
-              className="h-[38px] whitespace-nowrap"
-            >
-              Đánh giá nhanh cả lớp
             </Button>
           )}
         </div>

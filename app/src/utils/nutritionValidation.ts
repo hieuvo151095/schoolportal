@@ -36,6 +36,7 @@ export const createDefaultHygieneCare = (): HygieneCare => ({
     behavior: 'chu_dong_tu_di',
     note: '',
   },
+  note: '',
 });
 
 export const createEmptyCareRecord = (
@@ -148,6 +149,7 @@ export function applyBulkCareToRecords(
           ...rec.hygiene.poop,
           ...(payload.hygiene?.poop || {}),
         },
+        note: payload.hygiene?.note !== undefined ? payload.hygiene.note : (rec.hygiene.note || ''),
       },
       generalNote: payload.generalNote !== undefined ? payload.generalNote : rec.generalNote,
     };

@@ -43,6 +43,7 @@ export interface HygienePoopCare {
 export interface HygieneCare {
   general: HygieneGeneralCare;
   poop: HygienePoopCare;
+  note?: string;
 }
 
 export interface StudentCareRecord {
@@ -92,6 +93,7 @@ export interface BulkCarePayload {
   hygiene?: {
     general?: Partial<HygieneGeneralCare>;
     poop?: Partial<HygienePoopCare>;
+    note?: string;
   };
   generalNote?: string;
 }
