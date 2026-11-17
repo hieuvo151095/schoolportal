@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dropdown, type DropdownOption } from '@/components/ds';
+import { Button, CountedTabs, Dropdown, type DropdownOption } from '@/components/ds';
 import { REWARD_CLASSES_LIST, REWARD_WEEKS_LIST } from '@/services/mockRewardData';
 import type { RewardStatusFilter } from '@/types/reward';
 
@@ -19,6 +19,11 @@ interface RewardToolbarProps {
   onBulkUnaward: () => void;
   onSaveChanges: () => void;
   onPublish: () => void;
+  statusCounts?: {
+    all: number;
+    awarded: number;
+    unawarded: number;
+  };
 }
 
 export default function RewardToolbar({
@@ -37,83 +42,85 @@ export default function RewardToolbar({
   onBulkUnaward,
   onSaveChanges,
   onPublish,
+  statusCounts = { all: 0, awarded: 0, unawarded: 0 },
 }: RewardToolbarProps) {
   const classOptions: DropdownOption[] = REWARD_CLASSES_LIST.map((c) => ({
     value: c.id,
     label: c.name,
   }));
 
+  // Clean, concise week labels preventing field overflow and text collision
   const weekOptions: DropdownOption[] = REWARD_WEEKS_LIST.map((w) => ({
     value: String(w.weekNumber),
-    label: w.label,
+    label: `Tuần ${w.weekNumber} (${w.weekRange.split('/2026')[0]})`,
   }));
 
-  const statusOptions: DropdownOption[] = [
-    { value: 'all', label: 'Tất cả trạng thái' },
-    { value: 'awarded', label: 'Đã nhận phiếu' },
-    { value: 'unawarded', label: 'Chưa nhận phiếu' },
+  const tabItems = [
+    { id: 'all', label: 'Tất cả', count: statusCounts.all },
+    { id: 'awarded', label: 'Đã nhận phiếu', count: statusCounts.awarded },
+    { id: 'unawarded', label: 'Chưa nhận phiếu', count: statusCounts.unawarded },
   ];
 
   return (
-    <div className="bg-white rounded-[var(--radius-8)] border border-[var(--border-default)] p-3 mb-5 shadow-sm">
-      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
-        {/* Left & Middle Filters - Single Frame Line 38px */}
-        <div className="flex flex-wrap items-center gap-2 flex-grow min-w-0">
-          {/* Search Field */}
-          <div className="relative w-full sm:w-[180px] lg:w-[200px]">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Tìm kiếm trẻ, mã..."
-              className="w-full h-[38px] pl-9 pr-3 text-[13px] bg-white border border-[var(--border-default)] rounded-[var(--radius-8)] text-[var(--text-heading)] placeholder:text-slate-400 focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-1 focus:ring-[var(--eco-blue-strong)] transition-all"
-            />
-            <svg
-              className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
+    <div>
+      {/* 1. CountedTabs on top of card */}
+      <CountedTabs
+        tabs={tabItems}
+        activeId={statusFilter}
+        onChange={(id) => onStatusFilterChange(id as RewardStatusFilter)}
+      />
 
-          {/* Week Selector Dropdown */}
-          <div className="w-full sm:w-[210px]">
-            <Dropdown
-              options={weekOptions}
-              value={String(selectedWeekNumber)}
-              onChange={(val) => onWeekChange(Number(val))}
-              placeholder="Chọn tuần học"
-              triggerClassName="h-[38px] text-[13px] rounded-[var(--radius-8)]"
-            />
-          </div>
-
+      {/* 2. Single Frame Line 38px Filter Controls */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-3 sm:p-4 border-b border-[var(--border-default)] bg-[var(--bg-surface)] w-full max-w-full min-w-0">
+        <div className="flex flex-col sm:flex-row sm:items-center flex-wrap gap-2.5 sm:gap-3 w-full lg:w-auto min-w-0">
           {/* Class Selector Dropdown */}
-          <div className="w-full sm:w-[160px]">
+          <div className="w-full sm:w-44 flex-shrink-0 min-w-0">
             <Dropdown
               options={classOptions}
               value={selectedClassId}
               onChange={(val) => onClassChange(val as string)}
               placeholder="Chọn lớp học"
+              fullWidth
               triggerClassName="h-[38px] text-[13px] rounded-[var(--radius-8)]"
             />
           </div>
 
-          {/* Status Dropdown */}
-          <div className="w-full sm:w-[150px]">
+          {/* Week Selector Dropdown */}
+          <div className="w-full sm:w-56 flex-shrink-0 min-w-0">
             <Dropdown
-              options={statusOptions}
-              value={statusFilter}
-              onChange={(val) => onStatusFilterChange(val as any)}
-              placeholder="Chọn trạng thái"
+              options={weekOptions}
+              value={String(selectedWeekNumber)}
+              onChange={(val) => onWeekChange(Number(val))}
+              placeholder="Chọn tuần học"
+              fullWidth
               triggerClassName="h-[38px] text-[13px] rounded-[var(--radius-8)]"
             />
+          </div>
+
+          {/* Search Field */}
+          <div className="w-full sm:w-60 md:w-72 flex-1 min-w-0">
+            <div className="relative w-full">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => onSearchChange(e.target.value)}
+                placeholder="Tìm kiếm trẻ, mã..."
+                className="w-full h-[38px] pl-9 pr-3 text-[13px] bg-white border border-[var(--border-default)] rounded-[var(--radius-8)] text-[var(--text-heading)] placeholder:text-slate-400 focus:outline-none focus:border-[var(--eco-blue-strong)] focus:ring-1 focus:ring-[var(--eco-blue-strong)] transition-all"
+              />
+              <svg
+                className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
           </div>
         </div>
 
         {/* Right Action Buttons */}
-        <div className="flex items-center gap-2 self-end lg:self-center shrink-0">
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full lg:w-auto pt-1 lg:pt-0 min-w-0 flex-nowrap shrink-0">
           {selectedCount > 0 ? (
             <>
               <Button

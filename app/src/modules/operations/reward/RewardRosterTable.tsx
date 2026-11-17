@@ -41,9 +41,9 @@ export default function RewardRosterTable({
   }
 
   return (
-    <div className="bg-white rounded-[var(--radius-8)] border border-[var(--border-default)] shadow-sm overflow-hidden mb-6">
+    <div className="w-full max-w-full min-w-0">
       {/* Desktop & Tablet Table (>=768px) */}
-      <div className="hidden md:block overflow-x-auto">
+      <div className="hidden md:block overflow-x-auto ecomd-table-scroll">
         <table className="w-full text-left border-collapse text-[13px]">
           <thead>
             <tr className="bg-[var(--bg-subtle)] border-b border-[var(--border-default)] text-slate-600 font-semibold sticky top-0 z-10">

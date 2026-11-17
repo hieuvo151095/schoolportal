@@ -33,12 +33,35 @@ export default function RewardReportToolbar({
   }));
 
   return (
-    <div className="bg-white rounded-[var(--radius-8)] border border-[var(--border-default)] p-3 mb-5 shadow-sm">
-      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
-        {/* Left & Middle Filters - Single Frame Line 38px */}
-        <div className="flex flex-wrap items-center gap-2.5 flex-grow">
-          {/* Search Input */}
-          <div className="relative w-full sm:w-[220px]">
+    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-3 sm:p-4 border-b border-[var(--border-default)] bg-[var(--bg-surface)] w-full max-w-full min-w-0">
+      <div className="flex flex-col sm:flex-row sm:items-center flex-wrap gap-2.5 sm:gap-3 w-full lg:w-auto min-w-0">
+        {/* Class Selector Dropdown */}
+        <div className="w-full sm:w-44 flex-shrink-0 min-w-0">
+          <Dropdown
+            options={classOptions}
+            value={selectedClassId}
+            onChange={(val) => onClassChange(val as string)}
+            placeholder="Chọn lớp học"
+            fullWidth
+            triggerClassName="h-[38px] text-[13px] rounded-[var(--radius-8)]"
+          />
+        </div>
+
+        {/* Month Selector Dropdown */}
+        <div className="w-full sm:w-44 flex-shrink-0 min-w-0">
+          <Dropdown
+            options={monthOptions}
+            value={selectedMonth}
+            onChange={(val) => onMonthChange(val as string)}
+            placeholder="Chọn tháng báo cáo"
+            fullWidth
+            triggerClassName="h-[38px] text-[13px] rounded-[var(--radius-8)]"
+          />
+        </div>
+
+        {/* Search Input */}
+        <div className="w-full sm:w-60 md:w-72 flex-1 min-w-0">
+          <div className="relative w-full">
             <input
               type="text"
               value={searchQuery}
@@ -55,41 +78,19 @@ export default function RewardReportToolbar({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
-
-          {/* Class Selector Dropdown */}
-          <div className="w-full sm:w-[190px]">
-            <Dropdown
-              options={classOptions}
-              value={selectedClassId}
-              onChange={(val) => onClassChange(val as string)}
-              placeholder="Chọn lớp học"
-              triggerClassName="h-[38px] text-[13px] rounded-[var(--radius-8)]"
-            />
-          </div>
-
-          {/* Month Selector Dropdown */}
-          <div className="w-full sm:w-[180px]">
-            <Dropdown
-              options={monthOptions}
-              value={selectedMonth}
-              onChange={(val) => onMonthChange(val as string)}
-              placeholder="Chọn tháng báo cáo"
-              triggerClassName="h-[38px] text-[13px] rounded-[var(--radius-8)]"
-            />
-          </div>
         </div>
+      </div>
 
-        {/* Right Action Button - Export Excel */}
-        <div className="flex items-center gap-2 self-end lg:self-center shrink-0">
-          <Button
-            variant="secondary"
-            icon="download"
-            onClick={onExport}
-            className="h-[38px] whitespace-nowrap text-slate-700 hover:text-slate-900 border-[var(--border-default)] hover:bg-slate-50"
-          >
-            Xuất báo cáo
-          </Button>
-        </div>
+      {/* Right Action Button - Export Excel */}
+      <div className="flex items-center gap-2 self-end lg:self-center shrink-0">
+        <Button
+          variant="secondary"
+          icon="download"
+          onClick={onExport}
+          className="h-[38px] whitespace-nowrap text-slate-700 hover:text-slate-900 border-[var(--border-default)] hover:bg-slate-50"
+        >
+          Xuất báo cáo
+        </Button>
       </div>
     </div>
   );

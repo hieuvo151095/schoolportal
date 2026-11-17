@@ -82,12 +82,12 @@ export default function NutritionRosterTable({
   }
 
   return (
-    <div className="bg-white rounded-[var(--radius-8)] border border-[var(--border-default)] shadow-sm overflow-hidden">
+    <div className="w-full max-w-full min-w-0">
       {/* Desktop Table View */}
-      <div className="hidden md:block overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+      <div className="hidden md:block overflow-x-auto ecomd-table-scroll">
+        <table className="w-full text-left border-collapse text-[13px]">
           <thead>
-            <tr className="border-b border-[var(--border-default)] bg-[var(--bg-subtle)] text-[12px] font-semibold text-[var(--text-subtle)] uppercase tracking-wider">
+            <tr className="border-b border-[var(--border-default)] bg-[var(--bg-subtle)] text-[12px] font-semibold text-[var(--text-subtle)] uppercase tracking-wider sticky top-0 z-10">
               <th className="py-3 px-4 w-12 text-center">
                 <input
                   type="checkbox"

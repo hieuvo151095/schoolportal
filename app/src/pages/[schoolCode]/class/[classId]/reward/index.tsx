@@ -185,7 +185,7 @@ export default function RewardPage() {
         <title>Phiếu bé ngoan - {currentClass.name} | ECO School Portal</title>
       </Head>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-6">
+      <div className="space-y-5">
         {/* Page Header */}
         <PageHeader
           title={`Phiếu bé ngoan — ${currentClass.name}`}
@@ -195,37 +195,44 @@ export default function RewardPage() {
         {/* 4 Stat Cards */}
         <RewardSummaryCards summary={summary} />
 
-        {/* Single Frame Line 38px FilterBar */}
-        <RewardToolbar
-          selectedClassId={selectedClassId}
-          onClassChange={handleSelectClassId}
-          selectedWeekNumber={selectedWeekNumber}
-          onWeekChange={handleSelectWeekNumber}
-          searchQuery={searchQuery}
-          onSearchChange={(q) => dispatch(setSearchQuery(q))}
-          statusFilter={statusFilter}
-          onStatusFilterChange={(s: RewardStatusFilter) => dispatch(setStatusFilter(s))}
-          selectedCount={selectedStudentIds.length}
-          hasUnsavedChanges={hasUnsavedChanges}
-          isCurrentWeekPublished={summary.publishedCount > 0}
-          onBulkAward={handleBulkAward}
-          onBulkUnaward={handleBulkUnaward}
-          onSaveChanges={handleSaveChanges}
-          onPublish={handlePublish}
-        />
+        {/* Unified Table Card: CountedTabs + Filter Controls + Data Table */}
+        <div className="ecomd-table-card overflow-hidden w-full max-w-full">
+          <RewardToolbar
+            selectedClassId={selectedClassId}
+            onClassChange={handleSelectClassId}
+            selectedWeekNumber={selectedWeekNumber}
+            onWeekChange={handleSelectWeekNumber}
+            searchQuery={searchQuery}
+            onSearchChange={(q) => dispatch(setSearchQuery(q))}
+            statusFilter={statusFilter}
+            onStatusFilterChange={(s: RewardStatusFilter) => dispatch(setStatusFilter(s))}
+            selectedCount={selectedStudentIds.length}
+            hasUnsavedChanges={hasUnsavedChanges}
+            isCurrentWeekPublished={summary.publishedCount > 0}
+            onBulkAward={handleBulkAward}
+            onBulkUnaward={handleBulkUnaward}
+            onSaveChanges={handleSaveChanges}
+            onPublish={handlePublish}
+            statusCounts={{
+              all: records.length,
+              awarded: summary.awardedCount,
+              unawarded: summary.unawardedCount,
+            }}
+          />
 
-        {/* Interactive Roster Table with 1-Click Sun character toggle */}
-        <RewardRosterTable
-          records={filteredRecords}
-          selectedIds={selectedStudentIds}
-          onToggleSelect={(id) => dispatch(toggleSelectStudent(id))}
-          onSelectAll={handleToggleSelectAll}
-          onToggleReward={handleToggleReward}
-          onOpenDetail={(record) => dispatch(openDetailSlideOver(record.studentId))}
-          onUpdateComment={(studentId, comment) =>
-            dispatch(updateTeacherComment({ studentId, comment }))
-          }
-        />
+          {/* Interactive Roster Table with 1-Click Sun character toggle */}
+          <RewardRosterTable
+            records={filteredRecords}
+            selectedIds={selectedStudentIds}
+            onToggleSelect={(id) => dispatch(toggleSelectStudent(id))}
+            onSelectAll={handleToggleSelectAll}
+            onToggleReward={handleToggleReward}
+            onOpenDetail={(record) => dispatch(openDetailSlideOver(record.studentId))}
+            onUpdateComment={(studentId, comment) =>
+              dispatch(updateTeacherComment({ studentId, comment }))
+            }
+          />
+        </div>
 
         {/* Right-Sheet SlideOver for Certificate Preview and Detailed Review */}
         <RewardDetailSlideOver

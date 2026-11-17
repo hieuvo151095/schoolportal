@@ -47,45 +47,21 @@ export const StaffAttendanceToolbar: React.FC<StaffAttendanceToolbarProps> = ({
       {isPastDate && (
         <div
           data-testid="warning-banner-dd02"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--space-3)',
-            padding: 'var(--space-3) var(--space-4)',
-            background: '#fffbeb',
-            border: '1px solid #fde68a',
-            borderRadius: 'var(--radius-lg)',
-            color: '#92400e',
-            fontSize: 'var(--text-sm)',
-            boxShadow: 'var(--shadow-xs)',
-          }}
+          className="flex items-center gap-3 px-4 py-3 bg-amber-50/80 border border-amber-200 rounded-[var(--radius-8)] text-[13px] text-amber-900 shadow-2xs"
         >
-          <div style={{ color: 'var(--semantic-amber)', flexShrink: 0 }}>
+          <div className="text-amber-600 shrink-0">
             <Icon name="triangle-exclamation" size={16} />
           </div>
-          <div style={{ flex: 1, fontWeight: 'var(--font-medium)' }}>
+          <div className="flex-1 font-medium">
             <span>Chỉ được cập nhật thông tin điểm danh trong vòng 45 ngày kể từ hôm nay.</span>
             {isLocked && (
-              <span style={{ display: 'block', marginTop: '2px', fontSize: 'var(--text-xs)', color: 'var(--semantic-red)', fontWeight: 'var(--font-semibold)' }}>
+              <span className="block mt-0.5 text-xs text-[var(--semantic-red)] font-semibold">
                 (Dữ liệu điểm danh ngày {date} đã quá 45 ngày và chỉ có thể xem ở chế độ chỉ đọc, không thể chỉnh sửa).
               </span>
             )}
           </div>
           {isLocked && (
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 'var(--space-1)',
-                padding: '4px 8px',
-                borderRadius: 'var(--radius-md)',
-                background: '#fee2e2',
-                color: 'var(--semantic-red)',
-                fontSize: 'var(--text-xs)',
-                fontWeight: 'var(--font-bold)',
-                flexShrink: 0,
-              }}
-            >
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-[var(--radius-6)] bg-red-100 text-[var(--semantic-red)] text-xs font-bold shrink-0">
               <Icon name="lock" size={12} />
               Khóa chỉnh sửa
             </span>

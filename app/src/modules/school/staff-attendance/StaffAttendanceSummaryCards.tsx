@@ -19,7 +19,8 @@ export const StaffAttendanceSummaryCards: React.FC<StaffAttendanceSummaryCardsPr
   return (
     <div
       data-testid="attendance-summary-cards"
-      className="ecomd-stat-group grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-4"
+      className="ecomd-stat-group mb-4"
+      style={{ '--ecomd-cols': 3 } as React.CSSProperties}
     >
       {/* 1. Tham dự */}
       <StatCard

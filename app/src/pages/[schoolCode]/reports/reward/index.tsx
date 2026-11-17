@@ -115,7 +115,7 @@ export default function RewardReportPage() {
         <title>Báo Cáo Phiếu Bé Ngoan | ECO School Portal</title>
       </Head>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-6">
+      <div className="space-y-5">
         {/* Page Header */}
         <PageHeader
           title={`Báo cáo phiếu bé ngoan — ${report.className}`}
@@ -128,23 +128,25 @@ export default function RewardReportPage() {
           monthLabel={report.monthLabel}
         />
 
-        {/* FilterBar SSOT 38px */}
-        <RewardReportToolbar
-          selectedClassId={selectedClassId}
-          onClassChange={(id) => setSelectedClassId(id)}
-          selectedMonth={selectedMonth}
-          onMonthChange={(m) => setSelectedMonth(m)}
-          searchQuery={searchQuery}
-          onSearchChange={(q) => setSearchQuery(q)}
-          onExport={handleExport}
-        />
+        {/* Unified Table Card: Single Frame Line Toolbar + Matrix Table */}
+        <div className="ecomd-table-card overflow-hidden w-full max-w-full">
+          <RewardReportToolbar
+            selectedClassId={selectedClassId}
+            onClassChange={(id) => setSelectedClassId(id)}
+            selectedMonth={selectedMonth}
+            onMonthChange={(m) => setSelectedMonth(m)}
+            searchQuery={searchQuery}
+            onSearchChange={(q) => setSearchQuery(q)}
+            onExport={handleExport}
+          />
 
-        {/* Matrix Table with Sun character indicators */}
-        <RewardReportMatrixTable
-          report={report}
-          searchQuery={searchQuery}
-          onOpenDetail={handleOpenDetail}
-        />
+          {/* Matrix Table with Sun character indicators */}
+          <RewardReportMatrixTable
+            report={report}
+            searchQuery={searchQuery}
+            onOpenDetail={handleOpenDetail}
+          />
+        </div>
 
         {/* Certificate Preview SlideOver */}
         <RewardDetailSlideOver

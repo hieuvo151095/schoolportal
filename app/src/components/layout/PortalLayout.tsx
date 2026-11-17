@@ -185,19 +185,19 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
           icon: 'chart-pie',
           children: [
             {
-              label: 'BC Điểm danh',
+              label: 'Điểm danh',
               icon: 'calendar-check',
               href: `/${schoolCode}/reports/attendance`,
               active: router.asPath.includes('/reports/attendance'),
             },
             {
-              label: 'BC Mở rộng',
+              label: 'Mở rộng',
               icon: 'file-lines',
               href: `/${schoolCode}/reports/extended`,
               active: router.asPath.includes('/reports/extended'),
             },
             {
-              label: 'BC Phiếu bé ngoan',
+              label: 'Phiếu bé ngoan',
               icon: 'certificate',
               href: `/${schoolCode}/reports/reward`,
               active: router.asPath.includes('/reports/reward'),

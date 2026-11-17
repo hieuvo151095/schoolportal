@@ -35,54 +35,7 @@ export const MenuToolbar: React.FC<MenuToolbarProps> = ({
   const [isAIModalOpen, setIsAIModalOpen] = useState(false);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
-      {/* 2 Sticky Business Rules Notice Banners */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-3)' }}>
-        <div
-          style={{
-            background: '#fffbeb',
-            border: '1px solid #fde68a',
-            borderRadius: 'var(--radius-lg)',
-            padding: 'var(--space-3)',
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: 'var(--space-3)',
-            fontSize: 'var(--text-xs)',
-            color: '#92400e',
-          }}
-        >
-          <div style={{ color: '#d97706', marginTop: '2px', flexShrink: 0 }}>
-            <Icon name="circle-info" size={14} />
-          </div>
-          <div>
-            <strong style={{ fontWeight: 'var(--font-bold)' }}>Giới hạn thời gian:</strong> Hệ thống chỉ cho tạo
-            trước thực đơn tối đa <b>8 tuần</b> kể từ tuần hiện tại.
-          </div>
-        </div>
-
-        <div
-          style={{
-            background: '#eff6ff',
-            border: '1px solid #bfdbfe',
-            borderRadius: 'var(--radius-lg)',
-            padding: 'var(--space-3)',
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: 'var(--space-3)',
-            fontSize: 'var(--text-xs)',
-            color: '#1e40af',
-          }}
-        >
-          <div style={{ color: 'var(--eco-blue-strong)', marginTop: '2px', flexShrink: 0 }}>
-            <Icon name="school" size={14} />
-          </div>
-          <div>
-            <strong style={{ fontWeight: 'var(--font-bold)' }}>Quy tắc mặc định:</strong> Toàn trường chỉ có 1 thực
-            đơn/tuần. Lớp không có thực đơn riêng sẽ <b>tự động dùng thực đơn toàn trường</b>.
-          </div>
-        </div>
-      </div>
-
+    <>
       {/* Main FilterBar with Search, Class Selector, Advanced Filter, AI Suggestion & Create Actions */}
       <FilterBar
         search={{
@@ -116,11 +69,6 @@ export const MenuToolbar: React.FC<MenuToolbarProps> = ({
               variant="secondary"
               icon="sliders"
               onClick={() => setIsAIModalOpen(true)}
-              style={{
-                color: '#7e22ce',
-                background: '#faf5ff',
-                borderColor: '#e9d5ff',
-              }}
             >
               Gợi ý AI
             </Button>
@@ -169,6 +117,6 @@ export const MenuToolbar: React.FC<MenuToolbarProps> = ({
           }
         }}
       />
-    </div>
+    </>
   );
 };

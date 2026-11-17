@@ -18,7 +18,7 @@ import {
 import { MenuToolbar } from '../../../../modules/school/menu/MenuToolbar';
 import { MenuTable } from '../../../../modules/school/menu/MenuTable';
 import { CreateMenuSlideOver } from '../../../../modules/school/menu/CreateMenuSlideOver';
-import { PageHeader } from '../../../../components/ds';
+import { PageHeader, Icon } from '../../../../components/ds';
 
 export default function SchoolMenuPage() {
   const router = useRouter();
@@ -93,12 +93,31 @@ export default function SchoolMenuPage() {
         <title>Quản lý Thực đơn | Cổng Vận Hành Trường Học</title>
       </Head>
 
-      <div className="space-y-6">
+      <div className="space-y-5">
         {/* Page Header */}
         <PageHeader
           title="Thực Đơn Hàng Tuần"
           description="Soạn và công bố thực đơn ăn uống nội trú toàn trường và từng lớp học kèm truy xuất nguồn gốc Suất ăn minh bạch"
         />
+
+        {/* Business Rules Guidance Banners */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="flex items-start gap-2.5 p-3 rounded-[var(--radius-8)] bg-amber-50/80 border border-amber-200 text-[13px] text-amber-900 shadow-2xs">
+            <Icon name="clock" size={15} className="text-amber-600 shrink-0 mt-0.5" />
+            <div className="leading-snug">
+              <strong className="font-semibold text-amber-950">Giới hạn thời gian:</strong> Hệ thống chỉ cho tạo
+              trước thực đơn tối đa <b>8 tuần</b> kể từ tuần hiện tại.
+            </div>
+          </div>
+
+          <div className="flex items-start gap-2.5 p-3 rounded-[var(--radius-8)] bg-blue-50/80 border border-blue-200 text-[13px] text-blue-900 shadow-2xs">
+            <Icon name="school" size={15} className="text-[var(--eco-blue-strong)] shrink-0 mt-0.5" />
+            <div className="leading-snug">
+              <strong className="font-semibold text-blue-950">Quy tắc mặc định:</strong> Toàn trường chỉ có 1 thực
+              đơn/tuần. Lớp không có thực đơn riêng sẽ <b>tự động dùng thực đơn toàn trường</b>.
+            </div>
+          </div>
+        </div>
 
         {/* Unified Table Card */}
         <div className="ecomd-table-card">

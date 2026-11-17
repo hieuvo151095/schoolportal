@@ -232,7 +232,7 @@ export default function NutritionPage() {
         <title>Chăm sóc trẻ - {currentClass.name} | ECO School Portal</title>
       </Head>
 
-      <div className="w-full max-w-[1600px] mx-auto p-4 sm:p-6">
+      <div className="space-y-5">
         <PageHeader
           title="Chăm sóc trẻ"
           description={`Quản lý dinh dưỡng bữa ăn, giấc ngủ, uống nước và vệ sinh hàng ngày — ${currentClass.name}`}
@@ -241,34 +241,40 @@ export default function NutritionPage() {
         {/* Top Summary Cards */}
         <NutritionSummaryCards summary={summary} />
 
-        {/* Single Frame Line 38px FilterBar */}
-        <NutritionToolbar
-          selectedDate={selectedDate}
-          onDateChange={(date) => dispatch(setSelectedDate(date))}
-          selectedClassId={selectedClassId}
-          onClassChange={handleSelectClassId}
-          searchQuery={searchQuery}
-          onSearchChange={(q) => dispatch(setSearchQuery(q))}
-          statusFilter={statusFilter}
-          onStatusFilterChange={(s) => dispatch(setStatusFilter(s))}
-          mealFilter={mealFilter}
-          onMealFilterChange={(m) => dispatch(setMealFilter(m))}
-          selectedCount={selectedStudentIds.length}
-          onOpenBulkCare={() => dispatch(openBulkCare())}
-          onQuickEvaluateAll={handleQuickEvaluateAll}
-        />
+        {/* Unified Table Card: CountedTabs + Single Frame Line Toolbar + Data Table */}
+        <div className="ecomd-table-card overflow-hidden w-full max-w-full">
+          <NutritionToolbar
+            selectedDate={selectedDate}
+            onDateChange={(date) => dispatch(setSelectedDate(date))}
+            selectedClassId={selectedClassId}
+            onClassChange={handleSelectClassId}
+            searchQuery={searchQuery}
+            onSearchChange={(q) => dispatch(setSearchQuery(q))}
+            statusFilter={statusFilter}
+            onStatusFilterChange={(s) => dispatch(setStatusFilter(s))}
+            mealFilter={mealFilter}
+            onMealFilterChange={(m) => dispatch(setMealFilter(m))}
+            selectedCount={selectedStudentIds.length}
+            onOpenBulkCare={() => dispatch(openBulkCare())}
+            statusCounts={{
+              all: records.length,
+              evaluated: summary.evaluatedCount,
+              pending: summary.pendingCount,
+            }}
+          />
 
-        {/* Student Roster Table with Multi-Student Support */}
-        <NutritionRosterTable
-          records={filteredRecords}
-          selectedStudentIds={selectedStudentIds}
-          onToggleSelectStudent={(id) => dispatch(toggleSelectStudent(id))}
-          onToggleSelectAll={handleToggleSelectAll}
-          onOpenSingleCare={(id) => dispatch(openSingleStudentCare(id))}
-          onQuickStandardCare={handleQuickStandardCare}
-          onResetCare={handleResetCare}
-          onGoToAttendance={() => router.push(`/${schoolCode}/class/${selectedClassId}/attendance`)}
-        />
+          {/* Student Roster Table with Multi-Student Support */}
+          <NutritionRosterTable
+            records={filteredRecords}
+            selectedStudentIds={selectedStudentIds}
+            onToggleSelectStudent={(id) => dispatch(toggleSelectStudent(id))}
+            onToggleSelectAll={handleToggleSelectAll}
+            onOpenSingleCare={(id) => dispatch(openSingleStudentCare(id))}
+            onQuickStandardCare={handleQuickStandardCare}
+            onResetCare={handleResetCare}
+            onGoToAttendance={() => router.push(`/${schoolCode}/class/${selectedClassId}/attendance`)}
+          />
+        </div>
 
         {/* Right-Sheet SlideOver for Single or Multi-Student Care */}
         <CareSlideOver
