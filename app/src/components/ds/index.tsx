@@ -1264,7 +1264,7 @@ export function SidebarNav(p: SidebarNavProps) {
                 </button>
               ) : null}
 
-              {(isExpanded || p.collapsed) && (
+              {(isExpanded || !g.label || p.collapsed) && (
                 <div className="ecomd-sidebar__items">
                   {(g.items || []).map((it, ii) => {
                     // Check if item has children sub-items (e.g. Báo cáo -> BC Điểm danh, BC Mở rộng, BC Phiếu bé ngoan)

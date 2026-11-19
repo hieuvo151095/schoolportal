@@ -135,6 +135,17 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
 
   const navGroups: SidebarNavGroup[] = [
     {
+      key: 'overview',
+      items: [
+        {
+          label: 'Tổng quan',
+          icon: 'chart-pie',
+          href: `/${schoolCode}/dashboard`,
+          active: router.asPath.includes('/dashboard'),
+        },
+      ],
+    },
+    {
       label: 'Vận hành',
       items: [
         {

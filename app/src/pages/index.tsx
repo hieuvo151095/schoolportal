@@ -21,7 +21,7 @@ export default function Home() {
       };
       saveSession(demoSession, true);
     }
-    router.replace('/demo/school/subjects');
+    router.replace('/demo/dashboard');
   }, [router]);
 
   return (

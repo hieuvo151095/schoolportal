@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -18,7 +18,7 @@ import { ActivityComposer } from '@/modules/operations/activity/ActivityComposer
 import { ActivityFeed } from '@/modules/operations/activity/ActivityFeed';
 import { LessonContextPanel } from '@/modules/operations/activity/LessonContextPanel';
 import { filterActivityPosts } from '@/utils/activityValidation';
-import { AudienceScope, ActivityMedia } from '@/types/activity';
+import { AudienceScope, ActivityMedia, ModerationStatus } from '@/types/activity';
 import { CLASSES_LIST, CLASS_STUDENTS_REGISTRY } from '@/services/mockAttendanceData';
 import { PageHeader } from '@/components/ds';
 
@@ -36,6 +36,27 @@ export default function ActivityPage() {
     sentenceTemplates,
     mentionableStudents,
   } = useAppSelector((state) => state.activity);
+
+  // Sync URL query ?tab=cho_duyet (e.g. deep link from Tổng quan -> Trung tâm kiểm duyệt)
+  useEffect(() => {
+    if (!router.isReady) return;
+    const tabParam = router.query.tab as string | undefined;
+    if (
+      tabParam === 'all' ||
+      tabParam === 'approved' ||
+      tabParam === 'cho_duyet' ||
+      tabParam === 'pinned'
+    ) {
+      dispatch(setStatusFilter(tabParam as 'all' | ModerationStatus));
+    }
+  }, [router.isReady, router.query.tab, dispatch]);
+
+  const handleClassChange = (newClassId: string) => {
+    router.push({
+      pathname: `/${schoolCode}/class/${newClassId}/activity`,
+      query: statusFilter !== 'all' ? { tab: statusFilter } : {},
+    });
+  };
 
   const currentClassInfo = useMemo(() => {
     return CLASSES_LIST.find((c) => c.id === classId) || CLASSES_LIST[0];
@@ -128,6 +149,8 @@ export default function ActivityPage() {
 
         {/* Toolbar & Filter Bar */}
         <ActivityToolbar
+          selectedClassId={classId}
+          onClassChange={handleClassChange}
           statusFilter={statusFilter}
           onStatusFilterChange={(s) => dispatch(setStatusFilter(s))}
           searchQuery={searchQuery}

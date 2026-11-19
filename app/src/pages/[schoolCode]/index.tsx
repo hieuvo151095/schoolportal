@@ -8,7 +8,7 @@ export default function SchoolCodeHome() {
   useEffect(() => {
     const code = typeof schoolCode === 'string' && schoolCode ? schoolCode : 'demo';
     if (code.includes('.')) return;
-    router.replace(`/${code}/class/lop-1a1/attendance`);
+    router.replace(`/${code}/dashboard`);
   }, [router, schoolCode]);
 
   return (
@@ -16,7 +16,7 @@ export default function SchoolCodeHome() {
       <div className="text-center">
         <div className="w-10 h-10 border-4 border-[#0070CE] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
         <p className="text-sm font-semibold text-slate-600">
-          Đang chuyển hướng tới phân hệ Điểm Danh...
+          Đang chuyển hướng tới Tổng Quan Điều Hành...
         </p>
       </div>
     </div>

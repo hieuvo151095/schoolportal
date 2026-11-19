@@ -39,9 +39,11 @@ import revenueCategoryReducer from './slices/revenueCategorySlice';
 import toastReducer from './slices/toastSlice';
 import nutritionReducer from './slices/nutritionSlice';
 import rewardReducer from './slices/rewardSlice';
+import dashboardReducer from './slices/dashboardSlice';
 
 export const store = configureStore({
   reducer: {
+    dashboard: dashboardReducer,
     attendance: attendanceReducer,
     activity: activityReducer,
     media: mediaReducer,

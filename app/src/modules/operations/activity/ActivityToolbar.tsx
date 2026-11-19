@@ -1,8 +1,11 @@
 import React from 'react';
 import { ModerationStatus } from '../../../types/activity';
-import { CountedTabs, SearchField } from '@/components/ds';
+import { CLASSES_LIST } from '@/services/mockAttendanceData';
+import { CountedTabs, SearchField, SelectField } from '@/components/ds';
 
 interface ActivityToolbarProps {
+  selectedClassId?: string;
+  onClassChange?: (classId: string) => void;
   statusFilter: 'all' | ModerationStatus;
   onStatusFilterChange: (status: 'all' | ModerationStatus) => void;
   searchQuery: string;
@@ -14,6 +17,8 @@ interface ActivityToolbarProps {
 }
 
 export const ActivityToolbar: React.FC<ActivityToolbarProps> = ({
+  selectedClassId = 'lop-1a1',
+  onClassChange,
   statusFilter,
   onStatusFilterChange,
   searchQuery,
@@ -39,19 +44,33 @@ export const ActivityToolbar: React.FC<ActivityToolbarProps> = ({
         onChange={(id) => onStatusFilterChange(id as 'all' | ModerationStatus)}
       />
 
-      {/* 2. Search Toolbar */}
+      {/* 2. Integrated Class Filter & Search Toolbar (Single Frame Line 38px) */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 sm:px-5 sm:py-3 bg-[var(--bg-surface)] w-full min-w-0">
-        <div className="w-full sm:w-80 flex-1 min-w-0">
-          <SearchField
-            value={searchQuery}
-            onChange={onSearchQueryChange}
-            placeholder="Tìm kiếm hoạt động, tên bé, môn học..."
-            block
-            className="w-full"
-          />
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto flex-1 min-w-0">
+          <div className="w-full sm:w-64 min-w-0">
+            <SearchField
+              value={searchQuery}
+              onChange={onSearchQueryChange}
+              placeholder="Tìm kiếm hoạt động, tên bé, môn học..."
+              block
+              className="w-full"
+            />
+          </div>
+
+          {onClassChange && (
+            <div className="w-full sm:w-48 flex-shrink-0 min-w-0">
+              <SelectField
+                placeholder="Chọn lớp học"
+                defaultValue="lop-1a1"
+                value={selectedClassId}
+                onChange={onClassChange}
+                options={CLASSES_LIST.map((c) => ({ value: c.id, label: c.name }))}
+              />
+            </div>
+          )}
         </div>
 
-        <div className="body-xs hidden sm:block text-[var(--text-subtle)]">
+        <div className="body-xs hidden lg:block text-[var(--text-subtle)] whitespace-nowrap">
           Hiển thị nhật ký học tập và sinh hoạt hàng ngày của học sinh
         </div>
       </div>
